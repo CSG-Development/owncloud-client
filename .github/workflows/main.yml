@@ -64,9 +64,6 @@ jobs:
         path: ~/cache
         key: ${{ runner.os }}-${{ matrix.target }}-${{ env.PYTHON_VERSION }}
 
-    - name: Clone CraftMaster
-      run: git clone --depth=1 https://invent.kde.org/kde/craftmaster.git "$env:HOME/craft/CraftMaster/CraftMaster"
-
     - name: Setup Craft
       shell: pwsh
       run: |
@@ -84,11 +81,17 @@ jobs:
         Write-Host "=== DEBUG: Installing Python dependencies ==="
         python -m pip install --upgrade pip
         python -m pip install --upgrade setuptools wheel
-        python -m pip install craftmaster --no-deps
         
-        # DEBUG: Check if craftmaster is installed
-        Write-Host "=== DEBUG: Checking craftmaster installation ==="
-        python -c "import craftmaster; print('CraftMaster version:', craftmaster.__version__)" || Write-Host "WARNING: Failed to import craftmaster"
+        # Clone CraftMaster
+        Write-Host "=== DEBUG: Cloning CraftMaster ==="
+        $craftMasterDir = Join-Path ${env:HOME} "craft/CraftMaster"
+        New-Item -ItemType Directory -Force -Path $craftMasterDir
+        git clone --depth=1 https://invent.kde.org/kde/craftmaster.git $craftMasterDir
+        
+        # Add CraftMaster to PYTHONPATH
+        Write-Host "=== DEBUG: Setting up Python path ==="
+        $env:PYTHONPATH = "$craftMasterDir;$env:PYTHONPATH"
+        Write-Host "Updated PYTHONPATH: $env:PYTHONPATH"
         
         # Setup Craft
         Write-Host "=== DEBUG: Setting up Craft ==="
