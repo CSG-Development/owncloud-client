@@ -157,18 +157,31 @@ jobs:
         # This step will be extended later to create proper installers for each platform
 
     - name: Prepare artifacts
+      shell: pwsh
       run: |
         # Create binaries directory if it doesn't exist
-        New-Item -ItemType Directory -Path "${env:GITHUB_WORKSPACE}/binaries/" -Force
-        # Copy executables from build directory
-        Copy-Item "$env:BUILD_DIR/bin/*.exe" "${env:GITHUB_WORKSPACE}/binaries/" -ErrorAction SilentlyContinue
-        # Copy DLLs from build directory
-        Copy-Item "$env:BUILD_DIR/bin/*.dll" "${env:GITHUB_WORKSPACE}/binaries/" -ErrorAction SilentlyContinue
-        # Copy craft binaries if they exist
-        Copy-Item "$env:HOME/craft/binaries/*" "${env:GITHUB_WORKSPACE}/binaries/" -ErrorAction SilentlyContinue
+        New-Item -ItemType Directory -Force -Path "${env:GITHUB_WORKSPACE}/binaries"
+        
+        # List contents of build directory
+        Write-Host "Contents of build directory:"
+        Get-ChildItem -Path $env:BUILD_DIR -Recurse | Select-Object FullName
+        
+        # List contents of craft binaries directory
+        Write-Host "Contents of craft binaries directory:"
+        Get-ChildItem -Path "$env:HOME/craft/binaries" -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
+        
+        # Copy executables and DLLs from build directory
+        Write-Host "Copying files from build directory..."
+        Copy-Item -Path "$env:BUILD_DIR/*.exe" -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force -ErrorAction SilentlyContinue
+        Copy-Item -Path "$env:BUILD_DIR/*.dll" -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force -ErrorAction SilentlyContinue
+        
+        # Copy craft binaries
+        Write-Host "Copying files from craft binaries..."
+        Copy-Item -Path "$env:HOME/craft/binaries/*" -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force -ErrorAction SilentlyContinue
+        
         # List contents of binaries directory
-        Write-Host "Contents of binaries directory:"
-        Get-ChildItem "${env:GITHUB_WORKSPACE}/binaries/" -Recurse
+        Write-Host "Contents of binaries directory after copy:"
+        Get-ChildItem -Path "${env:GITHUB_WORKSPACE}/binaries" -Recurse | Select-Object FullName
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
