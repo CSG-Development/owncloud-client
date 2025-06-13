@@ -112,13 +112,19 @@ jobs:
         #     }
         # }
 
+    - name: Set build directory
+      shell: pwsh
+      run: |
+        $env:BUILD_DIR = Join-Path $env:GITHUB_WORKSPACE "build"
+        Write-Host "Set build directory to: $env:BUILD_DIR"
+        # Create build directory if it doesn't exist
+        New-Item -ItemType Directory -Force -Path $env:BUILD_DIR
+        Write-Host "Created build directory at: $env:BUILD_DIR"
+
     - name: Build
       run: |
         # Configure the build
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --configure
-        # Set build directory
-        $env:BUILD_DIR = Join-Path $env:GITHUB_WORKSPACE "build"
-        Write-Host "Build directory set to: $env:BUILD_DIR"
         # Run the build
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run pwsh "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build
         # Install the package
