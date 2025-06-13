@@ -190,10 +190,21 @@ jobs:
             }
         }
         
-        Write-Host "=== Running build with Sonar wrapper ==="
+        Write-Host "=== DEBUG: Checking CraftMaster.py ==="
+        $craftMasterPath = "${env:USERPROFILE}/craft/CraftMaster/CraftMaster.py"
+        if (Test-Path $craftMasterPath) {
+            Write-Host "CraftMaster.py exists at: $($craftMasterPath)"
+            Write-Host "Contents of CraftMaster directory:"
+            Get-ChildItem -Path (Split-Path $craftMasterPath) -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
+        } else {
+            Write-Host "ERROR: CraftMaster.py not found at: $($craftMasterPath)"
+            exit 1
+        }
+        
+        Write-Host "=== Running build with Craft ==="
         try {
-            # Run the build and capture output
-            $buildOutput = & "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build 2>&1
+            # Run the build directly with Craft
+            $buildOutput = & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --install --qmerge 2>&1
             Write-Host "=== Build output ==="
             Write-Host $buildOutput
             
@@ -218,7 +229,6 @@ jobs:
             "${env:GITHUB_WORKSPACE}/build",
             "${env:USERPROFILE}/craft/build",
             "${env:USERPROFILE}/craft/binaries",
-            "${env:GITHUB_WORKSPACE}/bw-output",
             "${env:GITHUB_WORKSPACE}/binaries"
         )
         
