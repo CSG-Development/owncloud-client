@@ -205,15 +205,18 @@ jobs:
                 exit 1
             }
             
-            # Then run the build
+            # Then run the build using .craft.ps1
             Write-Host "Executing build command..."
-            $env:PYTHONPATH = "$env:USERPROFILE/craft/CraftMaster"
-            $buildOutput = & "$env:pythonLocation/python.exe" "$env:USERPROFILE/craft/CraftMaster/CraftMaster.py" `
-                --config "$env:GITHUB_WORKSPACE/.craft.ini" `
-                --config-override "$env:GITHUB_WORKSPACE/.github/workflows/craft_override.ini" `
-                --target "$env:CRAFT_TARGET" `
-                --variables "WORKSPACE=$env:USERPROFILE/craft" 2>&1
+            $craftScript = Join-Path $env:GITHUB_WORKSPACE ".github/workflows/.craft.ps1"
+            Write-Host "Using Craft script: $craftScript"
             
+            if (-not (Test-Path $craftScript)) {
+                Write-Host "ERROR: Craft script not found at: $craftScript"
+                exit 1
+            }
+            
+            # Run the script with arguments
+            $buildOutput = & $craftScript -c --no-cache --src-dir $env:GITHUB_WORKSPACE --install --qmerge 2>&1
             Write-Host "Build output:"
             Write-Host $buildOutput
             
