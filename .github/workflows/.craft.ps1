@@ -1,3 +1,10 @@
+Write-Host "=== CRAFT.PS1 START ==="
+Write-Host "Python: $python"
+Write-Host "RepoRoot: $RepoRoot"
+Write-Host "CraftMaster: $craftMasterPath"
+Write-Host "Workspace: $workspacePath"
+Write-Host "Command: $command"
+
 if ($IsWindows) {
     $python = (Get-Item "C:\hostedtoolcache\windows\Python\3.11*\x64\python.exe").FullName
 } elseif ($IsMacOS) {
@@ -16,9 +23,11 @@ $command = @($craftMasterPath,
              "--target", "${env:CRAFT_TARGET}",
              "--variables", "WORKSPACE=$workspacePath") + $args
 
-Write-Host "Exec: ${python} ${command}"
+Write-Host "Executing: ${python} ${command}"
+Write-Host "=== CRAFT.PS1 END ==="
 
 & $python @command
 if ($LASTEXITCODE -ne 0) {
+    Write-Host "ERROR: Craft script failed with exit code $LASTEXITCODE"
     exit 1
 }
