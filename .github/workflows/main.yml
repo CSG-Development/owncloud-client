@@ -65,14 +65,8 @@ jobs:
       run: |
         New-Item -Path ~/cache -ItemType Directory -ErrorAction SilentlyContinue
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" --setup
-
-    - name: Craft unshelve
-      run: |
-        if (Test-Path "${env:GITHUB_WORKSPACE}/.craft.shelf") {
-            & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --unshelve "${env:GITHUB_WORKSPACE}/.craft.shelf"
-        } else {
-            Write-Host "No .craft.shelf file found, skipping unshelve step"
-        }
+        # Initialize craft environment
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --init
 
     - name: Prepare
       run: |
@@ -115,8 +109,6 @@ jobs:
     - name: Prepare artifacts
       run: |
         Copy-Item "$env:HOME/craft/binaries/*" "${env:GITHUB_WORKSPACE}/binaries/" -ErrorAction SilentlyContinue
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --shelve "${env:GITHUB_WORKSPACE}/.craft.shelf"
-        Copy-Item "${env:GITHUB_WORKSPACE}/.craft.shelf" "${env:GITHUB_WORKSPACE}/binaries/"
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
