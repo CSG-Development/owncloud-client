@@ -145,10 +145,21 @@ jobs:
 
     - name: Prepare artifacts
       run: |
+        # Create binaries directory if it doesn't exist
+        New-Item -ItemType Directory -Path "${env:GITHUB_WORKSPACE}/binaries/" -Force
+        # Copy executables from build directory
+        Copy-Item "$env:BUILD_DIR/bin/*.exe" "${env:GITHUB_WORKSPACE}/binaries/" -ErrorAction SilentlyContinue
+        # Copy DLLs from build directory
+        Copy-Item "$env:BUILD_DIR/bin/*.dll" "${env:GITHUB_WORKSPACE}/binaries/" -ErrorAction SilentlyContinue
+        # Copy craft binaries if they exist
         Copy-Item "$env:HOME/craft/binaries/*" "${env:GITHUB_WORKSPACE}/binaries/" -ErrorAction SilentlyContinue
+        # List contents of binaries directory
+        Write-Host "Contents of binaries directory:"
+        Get-ChildItem "${env:GITHUB_WORKSPACE}/binaries/" -Recurse
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.name }}
-        path: ${{ github.workspace }}/binaries/*
+        path: ${{ github.workspace }}/binaries/
+        if-no-files-found: warn
