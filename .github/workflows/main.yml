@@ -138,6 +138,12 @@ jobs:
         Write-Host "CRAFT_TARGET: ${env:CRAFT_TARGET}"
         Write-Host "HOME: ${env:HOME}"
         
+        # Create binaries directory
+        Write-Host "=== DEBUG: Creating binaries directory ==="
+        $binariesDir = Join-Path ${env:GITHUB_WORKSPACE} "binaries"
+        New-Item -ItemType Directory -Force -Path $binariesDir
+        Write-Host "Created binaries directory at: $binariesDir"
+        
         # Run the build with debug output
         Write-Host "=== DEBUG: Starting build ==="
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build
@@ -158,11 +164,11 @@ jobs:
         
         foreach ($dir in $craftDirs) {
             if (Test-Path $dir) {
-                Write-Host "Directory exists: $dir"
+                Write-Host "Directory exists: ${dir}"
                 Write-Host "Contents of ${dir}:"
                 Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
             } else {
-                Write-Host "Directory not found: $dir"
+                Write-Host "Directory not found: ${dir}"
             }
         }
         
@@ -186,6 +192,16 @@ jobs:
         # DEBUG: List all executables and DLLs
         Write-Host "=== DEBUG: All executables and DLLs ==="
         Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host "Found: $($_.FullName)" }
+        
+        # DEBUG: Check if binaries directory is empty
+        Write-Host "=== DEBUG: Checking binaries directory ==="
+        $binariesContents = Get-ChildItem -Path $binariesDir -Recurse -ErrorAction SilentlyContinue
+        if ($binariesContents) {
+            Write-Host "Binaries directory contains:"
+            $binariesContents | ForEach-Object { Write-Host "  $($_.FullName)" }
+        } else {
+            Write-Host "WARNING: Binaries directory is empty"
+        }
 
     - name: Run tests
       run: |
