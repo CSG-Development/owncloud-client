@@ -197,22 +197,23 @@ jobs:
         # Run build with proper PowerShell syntax
         Write-Host "Running build..."
         try {
-            $pythonExe = "$env:pythonLocation/python.exe"
-            Write-Host "Using Python: $pythonExe"
+            # First verify Python
+            Write-Host "Verifying Python installation..."
+            & "$env:pythonLocation/python.exe" --version
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "ERROR: Python verification failed"
+                exit 1
+            }
             
-            # Build the command as an array
-            $cmdArgs = @(
-                $craftMasterPath,
-                "--config", ".craft.ini",
-                "--config-override", ".github/workflows/craft_override.ini",
-                "--target", $env:CRAFT_TARGET,
-                "--variables", "WORKSPACE=$env:USERPROFILE/craft"
-            )
+            # Then run the build
+            Write-Host "Executing build command..."
+            $env:PYTHONPATH = "$env:USERPROFILE/craft/CraftMaster"
+            $buildOutput = & "$env:pythonLocation/python.exe" "$env:USERPROFILE/craft/CraftMaster/CraftMaster.py" `
+                --config "$env:GITHUB_WORKSPACE/.craft.ini" `
+                --config-override "$env:GITHUB_WORKSPACE/.github/workflows/craft_override.ini" `
+                --target "$env:CRAFT_TARGET" `
+                --variables "WORKSPACE=$env:USERPROFILE/craft" 2>&1
             
-            Write-Host "Command arguments: $cmdArgs"
-            
-            # Execute the command
-            $buildOutput = & $pythonExe $cmdArgs 2>&1
             Write-Host "Build output:"
             Write-Host $buildOutput
             
