@@ -116,7 +116,10 @@ jobs:
       run: |
         # Configure the build
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --configure
-        $env:BUILD_DIR = $(& "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --get buildDir -q)
+        # Set build directory
+        $env:BUILD_DIR = Join-Path $env:GITHUB_WORKSPACE "build"
+        Write-Host "Build directory set to: $env:BUILD_DIR"
+        # Run the build
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run pwsh "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build
         # Install the package
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --install --qmerge
