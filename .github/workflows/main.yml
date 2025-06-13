@@ -79,12 +79,16 @@ jobs:
     - name: Prepare
       run: |
         New-Item -ItemType Directory "${env:GITHUB_WORKSPACE}/binaries/"
-        # Initialize the package first
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --init owncloud-client
+        # First update the craft environment
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --update
+        # Then set the force asserts
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --set forceAsserts=true owncloud-client
 
     - name: Install dependencies
       run: |
+        # First resolve dependencies
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --resolve-deps owncloud-client
+        # Then install them
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --install-deps owncloud-client
         if ($IsWindows) {
             # Install NSIS using winget
@@ -94,9 +98,11 @@ jobs:
 
     - name: Build
       run: |
+        # Configure the build
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --configure owncloud-client
         $env:BUILD_DIR = $(& "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --get buildDir -q owncloud-client)
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run pwsh "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build
+        # Install the package
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --install --qmerge owncloud-client
 
     - name: Run tests
