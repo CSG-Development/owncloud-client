@@ -172,21 +172,35 @@ jobs:
         
         # Copy executables and DLLs from build directory
         Write-Host "Copying files from build directory..."
-        # Look for executables in the build directory and its subdirectories, excluding the binaries directory
-        Get-ChildItem -Path $env:BUILD_DIR -Recurse -Include "*.exe" | Where-Object { $_.DirectoryName -notlike "*\binaries*" } | ForEach-Object {
-            Write-Host "Found executable: $($_.FullName)"
-            Copy-Item -Path $_.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force
+        
+        # Look for main executables
+        $mainExecutables = @(
+            "owncloud.exe",
+            "owncloudcmd.exe"
+        )
+        
+        foreach ($exe in $mainExecutables) {
+            $found = Get-ChildItem -Path $env:BUILD_DIR -Recurse -Filter $exe | Select-Object -First 1
+            if ($found) {
+                Write-Host "Found main executable: $($found.FullName)"
+                Copy-Item -Path $found.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force
+            } else {
+                Write-Host "Warning: Could not find $exe"
+            }
         }
         
-        # Copy DLLs, excluding the binaries directory
-        Get-ChildItem -Path $env:BUILD_DIR -Recurse -Include "*.dll" | Where-Object { $_.DirectoryName -notlike "*\binaries*" } | ForEach-Object {
-            Write-Host "Found DLL: $($_.FullName)"
-            Copy-Item -Path $_.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force
-        }
+        # Copy DLLs from the same directory as the executables
+        $exeDirs = Get-ChildItem -Path $env:BUILD_DIR -Recurse -Include "*.exe" | 
+            Where-Object { $_.DirectoryName -notlike "*\binaries*" } | 
+            Select-Object -ExpandProperty DirectoryName -Unique
         
-        # Copy craft binaries
-        Write-Host "Copying files from craft binaries..."
-        Copy-Item -Path "$env:HOME/craft/binaries/*" -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force -ErrorAction SilentlyContinue
+        foreach ($dir in $exeDirs) {
+            Write-Host "Copying DLLs from: $dir"
+            Get-ChildItem -Path $dir -Filter "*.dll" | ForEach-Object {
+                Write-Host "Found DLL: $($_.FullName)"
+                Copy-Item -Path $_.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force
+            }
+        }
         
         # List contents of binaries directory
         Write-Host "Contents of binaries directory after copy:"
