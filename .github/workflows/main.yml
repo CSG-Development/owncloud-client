@@ -169,7 +169,15 @@ jobs:
         # Copy main executables and their dependencies
         $executables = @(
             "${env:BUILD_DIR}/bin/owncloud.exe",
-            "${env:BUILD_DIR}/bin/owncloudcmd.exe"
+            "${env:BUILD_DIR}/bin/owncloudcmd.exe",
+            "${env:BUILD_DIR}/bin/owncloud.exe",
+            "${env:BUILD_DIR}/bin/owncloudcmd.exe",
+            "${env:BUILD_DIR}/owncloud.exe",
+            "${env:BUILD_DIR}/owncloudcmd.exe",
+            "${env:BUILD_DIR}/Release/owncloud.exe",
+            "${env:BUILD_DIR}/Release/owncloudcmd.exe",
+            "${env:BUILD_DIR}/Debug/owncloud.exe",
+            "${env:BUILD_DIR}/Debug/owncloudcmd.exe"
         )
         
         foreach ($exe in $executables) {
