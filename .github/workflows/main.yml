@@ -90,26 +90,27 @@ jobs:
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --resolve-deps "${env:GITHUB_WORKSPACE}"
         # Then install them
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --install-deps
-        if ($IsWindows) {
-            # Install NSIS using direct download
-            $nsisUrl = "https://github.com/NSIS-Dev/nsis/releases/download/v3.09/nsis-3.09-setup.exe"
-            $nsisInstaller = "$env:TEMP\nsis-setup.exe"
-            Write-Host "Downloading NSIS installer..."
-            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-            Invoke-WebRequest -Uri $nsisUrl -OutFile $nsisInstaller -UseBasicParsing
-            if (Test-Path $nsisInstaller) {
-                Write-Host "NSIS installer downloaded successfully"
-                Write-Host "Installing NSIS..."
-                Start-Process -FilePath $nsisInstaller -ArgumentList "/S" -Wait -NoNewWindow
-                Write-Host "NSIS installation completed"
-                # Add NSIS to PATH
-                $env:Path = "C:\Program Files (x86)\NSIS;$env:Path"
-                Write-Host "NSIS added to PATH"
-            } else {
-                Write-Host "Failed to download NSIS installer"
-                exit 1
-            }
-        }
+        # Temporarily skipping NSIS installation
+        # if ($IsWindows) {
+        #     # Install NSIS using direct download
+        #     $nsisUrl = "https://github.com/NSIS-Dev/nsis/releases/download/v3.09/nsis-3.09-setup.exe"
+        #     $nsisInstaller = "$env:TEMP\nsis-setup.exe"
+        #     Write-Host "Downloading NSIS installer..."
+        #     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        #     Invoke-WebRequest -Uri $nsisUrl -OutFile $nsisInstaller -UseBasicParsing
+        #     if (Test-Path $nsisInstaller) {
+        #         Write-Host "NSIS installer downloaded successfully"
+        #         Write-Host "Installing NSIS..."
+        #         Start-Process -FilePath $nsisInstaller -ArgumentList "/S" -Wait -NoNewWindow
+        #         Write-Host "NSIS installation completed"
+        #         # Add NSIS to PATH
+        #         $env:Path = "C:\Program Files (x86)\NSIS;$env:Path"
+        #         Write-Host "NSIS added to PATH"
+        #     } else {
+        #         Write-Host "Failed to download NSIS installer"
+        #         exit 1
+        #     }
+        # }
 
     - name: Build
       run: |
