@@ -42,10 +42,16 @@ jobs:
       CRAFT_TARGET: ${{ matrix.target }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      PYTHON_VERSION: "3.9"  # Use a more stable Python version
 
     container: ${{ matrix.container }}
 
     steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
     - name: Check out source code
       uses: actions/checkout@v4
       with:
@@ -56,7 +62,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/cache
-        key: ${{ runner.os }}-${{ matrix.target }}
+        key: ${{ runner.os }}-${{ matrix.target }}-${{ env.PYTHON_VERSION }}
 
     - name: Clone CraftMaster
       run: git clone --depth=1 https://invent.kde.org/kde/craftmaster.git "$env:HOME/craft/CraftMaster/CraftMaster"
@@ -64,6 +70,8 @@ jobs:
     - name: Craft setup
       run: |
         New-Item -Path ~/cache -ItemType Directory -ErrorAction SilentlyContinue
+        python -m pip install --upgrade pip
+        python -m pip install craftmaster
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" --setup
         # Initialize craft environment
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --init
