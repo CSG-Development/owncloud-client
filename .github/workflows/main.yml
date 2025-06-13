@@ -300,3 +300,120 @@ jobs:
         name: ${{ matrix.name }}
         path: ${{ github.workspace }}/binaries/
         if-no-files-found: warn
+
+    - name: Debug - Find Executables
+      shell: pwsh
+      run: |
+        Write-Host "=== DEBUG: Searching for ownCloud executables ==="
+        
+        # List all possible locations
+        $searchPaths = @(
+            "${env:GITHUB_WORKSPACE}",
+            "${env:USERPROFILE}/craft",
+            "${env:USERPROFILE}/craft/binaries",
+            "${env:USERPROFILE}/craft/build",
+            "${env:GITHUB_WORKSPACE}/build",
+            "${env:GITHUB_WORKSPACE}/binaries",
+            "${env:GITHUB_WORKSPACE}/src/cmd",
+            "${env:GITHUB_WORKSPACE}/src/gui",
+            "${env:GITHUB_WORKSPACE}/src/sync",
+            "${env:GITHUB_WORKSPACE}/src/libsync",
+            "${env:GITHUB_WORKSPACE}/src/libsync/bin",
+            "${env:GITHUB_WORKSPACE}/src/libsync/lib",
+            "${env:GITHUB_WORKSPACE}/src/libsync/build",
+            "${env:GITHUB_WORKSPACE}/src/libsync/install"
+        )
+        
+        # Search for specific executables
+        $targetExecutables = @(
+            "owncloud.exe",
+            "owncloudcmd.exe",
+            "owncloudsync.exe"
+        )
+        
+        # First, check each path for existence
+        Write-Host "=== Checking directory existence ==="
+        foreach ($path in $searchPaths) {
+            if (Test-Path $path) {
+                Write-Host "Directory exists: $path"
+                Write-Host "Contents:"
+                Get-ChildItem -Path $path -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
+            } else {
+                Write-Host "Directory not found: $path"
+            }
+        }
+        
+        # Then, search for specific executables
+        Write-Host "=== Searching for specific executables ==="
+        foreach ($exe in $targetExecutables) {
+            Write-Host "Looking for $exe:"
+            foreach ($path in $searchPaths) {
+                if (Test-Path $path) {
+                    $found = Get-ChildItem -Path $path -Recurse -Filter $exe -ErrorAction SilentlyContinue
+                    if ($found) {
+                        Write-Host "  Found in $path:"
+                        $found | ForEach-Object { Write-Host "    $($_.FullName)" }
+                    }
+                }
+            }
+        }
+        
+        # List all executables and DLLs
+        Write-Host "=== All executables and DLLs ==="
+        foreach ($path in $searchPaths) {
+            if (Test-Path $path) {
+                Write-Host "In $path:"
+                Get-ChildItem -Path $path -Recurse -ErrorAction SilentlyContinue | 
+                    Where-Object { $_.Name -match '\.(exe|dll)$' } | 
+                    ForEach-Object { Write-Host "  $($_.FullName)" }
+            }
+        }
+        
+        # Check build output
+        Write-Host "=== Build output directories ==="
+        $buildDirs = @(
+            "${env:GITHUB_WORKSPACE}/build",
+            "${env:USERPROFILE}/craft/build",
+            "${env:USERPROFILE}/craft/binaries"
+        )
+        
+        foreach ($dir in $buildDirs) {
+            if (Test-Path $dir) {
+                Write-Host "Build directory: $dir"
+                Write-Host "Contents:"
+                Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
+            }
+        }
+        
+        # Check CMake install directories
+        Write-Host "=== CMake install directories ==="
+        $cmakeDirs = @(
+            "${env:GITHUB_WORKSPACE}/install",
+            "${env:USERPROFILE}/craft/install",
+            "${env:GITHUB_WORKSPACE}/src/cmd/install",
+            "${env:GITHUB_WORKSPACE}/src/gui/install"
+        )
+        
+        foreach ($dir in $cmakeDirs) {
+            if (Test-Path $dir) {
+                Write-Host "CMake install directory: $dir"
+                Write-Host "Contents:"
+                Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
+            }
+        }
+        
+        # Check environment variables
+        Write-Host "=== Environment variables ==="
+        Write-Host "GITHUB_WORKSPACE: ${env:GITHUB_WORKSPACE}"
+        Write-Host "USERPROFILE: ${env:USERPROFILE}"
+        Write-Host "BUILD_DIR: ${env:BUILD_DIR}"
+        Write-Host "CRAFT_TARGET: ${env:CRAFT_TARGET}"
+        
+        # Check if binaries directory exists and is empty
+        $binariesDir = "${env:GITHUB_WORKSPACE}/binaries"
+        if (Test-Path $binariesDir) {
+            Write-Host "=== Binaries directory contents ==="
+            Get-ChildItem -Path $binariesDir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
+        } else {
+            Write-Host "WARNING: Binaries directory not found at: $binariesDir"
+        }
