@@ -33,17 +33,17 @@ jobs:
               os: windows-latest
               fetch-depth: 0
               container:
-            # TODO: align the target with the name
-            - name: macos-clang-arm64
-              target: macos-clang-arm64
-              os: macos-latest
-              fetch-depth: 1
-              container:
-            - name: macos-clang-arm64-debug
-              target: macos-clang-arm64-debug
-              os: macos-latest
-              fetch-depth: 1
-              container:
+            # Mac OS builds temporarily disabled
+            # - name: macos-clang-arm64
+            #   target: macos-clang-arm64
+            #   os: macos-latest
+            #   fetch-depth: 1
+            #   container:
+            # - name: macos-clang-arm64-debug
+            #   target: macos-clang-arm64-debug
+            #   os: macos-latest
+            #   fetch-depth: 1
+            #   container:
 
     name: ${{ matrix.name }}
 
