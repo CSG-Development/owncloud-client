@@ -135,6 +135,12 @@ jobs:
       run: |
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --package owncloud/owncloud-client
 
+    - name: Create Installer (Dummy)
+      run: |
+        Write-Host "Installer creation will be implemented in the future"
+        # TODO: Implement installer creation
+        # This step will be extended later to create proper installers for each platform
+
     - name: Prepare artifacts
       run: |
         Copy-Item "$env:HOME/craft/binaries/*" "${env:GITHUB_WORKSPACE}/binaries/" -ErrorAction SilentlyContinue
