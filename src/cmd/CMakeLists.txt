@@ -1,3 +1,8 @@
+message(STATUS "=== CMD CMakeLists.txt START ===")
+message(STATUS "Building CMD component: ${CMAKE_CURRENT_SOURCE_DIR}")
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "Output directory: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+
 add_executable(cmd
     cmd.cpp
     httpcredentialstext.cpp

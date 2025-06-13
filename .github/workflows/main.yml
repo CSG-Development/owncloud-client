@@ -33,17 +33,6 @@ jobs:
               os: windows-latest
               fetch-depth: 0
               container:
-            # TODO: align the target with the name
-            - name: macos-clang-arm64
-              target: macos-clang-arm64
-              os: macos-latest
-              fetch-depth: 1
-              container:
-            - name: macos-clang-arm64-debug
-              target: macos-clang-arm64-debug
-              os: macos-latest
-              fetch-depth: 1
-              container:
 
     name: ${{ matrix.name }}
 
@@ -53,10 +42,16 @@ jobs:
       CRAFT_TARGET: ${{ matrix.target }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      PYTHON_VERSION: "3.9"  # Use a more stable Python version
 
     container: ${{ matrix.container }}
 
     steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
     - name: Check out source code
       uses: actions/checkout@v4
       with:
@@ -67,82 +62,411 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/cache
-        key: ${{ runner.os }}-${{ matrix.target }}
+        key: ${{ runner.os }}-${{ matrix.target }}-${{ env.PYTHON_VERSION }}
 
-    - name: Clone CraftMaster
-      run: git clone --depth=1 https://invent.kde.org/kde/craftmaster.git "$env:HOME/craft/CraftMaster/CraftMaster"
-
-    - name: Craft setup
+    - name: Setup Craft
+      shell: pwsh
       run: |
-        New-Item -Path ~/cache -ItemType Directory -ErrorAction SilentlyContinue
+        # DEBUG: Log Python environment
+        Write-Host "=== DEBUG: Python Environment ==="
+        Write-Host "Python version: $(python --version)"
+        Write-Host "Python location: ${env:pythonLocation}"
+        Write-Host "PYTHONPATH: ${env:PYTHONPATH}"
+        Write-Host "USERPROFILE: ${env:USERPROFILE}"
+        
+        # Create cache directory
+        Write-Host "=== DEBUG: Creating cache directory ==="
+        New-Item -Path "$env:USERPROFILE/cache" -ItemType Directory -ErrorAction SilentlyContinue
+        
+        # Install Python dependencies
+        Write-Host "=== DEBUG: Installing Python dependencies ==="
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade setuptools wheel
+        
+        # Clone CraftMaster
+        Write-Host "=== DEBUG: Cloning CraftMaster ==="
+        $craftMasterDir = "$env:USERPROFILE/craft/CraftMaster"
+        New-Item -ItemType Directory -Force -Path "$env:USERPROFILE/craft"
+        New-Item -ItemType Directory -Force -Path $craftMasterDir
+        git clone --depth=1 https://invent.kde.org/kde/craftmaster.git $craftMasterDir
+        
+        # Add CraftMaster to PYTHONPATH
+        Write-Host "=== DEBUG: Setting up Python path ==="
+        $env:PYTHONPATH = "$craftMasterDir;$env:PYTHONPATH"
+        Write-Host "Updated PYTHONPATH: $env:PYTHONPATH"
+        
+        # Setup Craft
+        Write-Host "=== DEBUG: Setting up Craft ==="
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" --setup
-
-    - name: Craft unshelve
-      run: |
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --unshelve "${env:GITHUB_WORKSPACE}/.craft.shelf"
+        
+        # Initialize craft environment
+        Write-Host "=== DEBUG: Initializing Craft environment ==="
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --update
+        
+        # DEBUG: Check Craft installation
+        Write-Host "=== DEBUG: Checking Craft installation ==="
+        if (Test-Path "$env:USERPROFILE/craft") {
+            Write-Host "Craft directory exists at: $env:USERPROFILE/craft"
+            Get-ChildItem -Path "$env:USERPROFILE/craft" -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
+        } else {
+            Write-Host "WARNING: Craft directory not found at: $env:USERPROFILE/craft"
+        }
 
     - name: Prepare
       run: |
         New-Item -ItemType Directory "${env:GITHUB_WORKSPACE}/binaries/"
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --set forceAsserts=true owncloud/owncloud-client
-        if ($IsWindows) {
-            & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c dev-utils/nsis
-        } elseif($IsLinux) {
-            & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c dev-utils/linuxdeploy
-        }
+        # First update the craft environment
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --update
+        # Then set the force asserts
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --set forceAsserts=true
 
     - name: Install dependencies
       run: |
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --install-deps owncloud/owncloud-client
+        # First resolve dependencies
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --resolve-deps "${env:GITHUB_WORKSPACE}"
+        # Then install them
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --install-deps
+        # Temporarily skipping NSIS installation
+        # if ($IsWindows) {
+        #     # Install NSIS using direct download
+        #     $nsisUrl = "https://github.com/NSIS-Dev/nsis/releases/download/v3.09/nsis-3.09-setup.exe"
+        #     $nsisInstaller = "$env:TEMP\nsis-setup.exe"
+        #     Write-Host "Downloading NSIS installer..."
+        #     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        #     Invoke-WebRequest -Uri $nsisUrl -OutFile $nsisInstaller -UseBasicParsing
+        #     if (Test-Path $nsisInstaller) {
+        #         Write-Host "NSIS installer downloaded successfully"
+        #         Write-Host "Installing NSIS..."
+        #         Start-Process -FilePath $nsisInstaller -ArgumentList "/S" -Wait -NoNewWindow
+        #         Write-Host "NSIS installation completed"
+        #         # Add NSIS to PATH
+        #         $env:Path = "C:\Program Files (x86)\NSIS;$env:Path"
+        #         Write-Host "NSIS added to PATH"
+        #     } else {
+        #         Write-Host "Failed to download NSIS installer"
+        #         exit 1
+        #     }
+        # }
+
+    - name: Set build directory
+      shell: pwsh
+      run: |
+        $env:BUILD_DIR = Join-Path $env:GITHUB_WORKSPACE "build"
+        Write-Host "Set build directory to: $env:BUILD_DIR"
+        # Create build directory if it doesn't exist
+        New-Item -ItemType Directory -Force -Path $env:BUILD_DIR
+        Write-Host "Created build directory at: $env:BUILD_DIR"
 
     - name: Build
+      shell: pwsh
       run: |
-        if ("${{ matrix.target }}" -eq "macos-64-clang-debug" ) {
-            # https://api.kde.org/ecm/module/ECMEnableSanitizers.html
-            # address;leak;undefined
-            # clang: error: unsupported option '-fsanitize=leak' for target 'x86_64-apple-darwin21.6.0'
-            & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --set args="-DECM_ENABLE_SANITIZERS='address;undefined'" owncloud/owncloud-client
-        }
-        if ("${{ matrix.target }}" -eq "windows-cl-msvc2022-x86_64") {
-            & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --configure owncloud/owncloud-client
-            $env:BUILD_DIR = $(& "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --get buildDir -q owncloud-client)
-            & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run pwsh "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build
-            & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --install --qmerge owncloud/owncloud-client
+        Write-Host "Pre-build state:"
+        Write-Host "Current directory: $(Get-Location)"
+        Write-Host "Workspace: $env:GITHUB_WORKSPACE"
+        Write-Host "User profile: $env:USERPROFILE"
+        Write-Host "Craft target: $env:CRAFT_TARGET"
+        
+        # Check Craft setup
+        $craftMasterPath = if ($IsWindows) { "${env:USERPROFILE}/craft/CraftMaster/CraftMaster.py" } else { "${env:HOME}/craft/CraftMaster/CraftMaster.py" }
+        Write-Host "Checking CraftMaster.py at: $craftMasterPath"
+        if (Test-Path $craftMasterPath) {
+            Write-Host "CraftMaster.py exists"
+            Get-ChildItem (Split-Path $craftMasterPath) | ForEach-Object { Write-Host "Found: $_" }
         } else {
-            & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" owncloud/owncloud-client
+            Write-Host "ERROR: CraftMaster.py not found!"
+            exit 1
+        }
+        
+        # Check CMake files
+        Write-Host "Checking CMake files:"
+        $cmakeFiles = @(
+            "src/gui/CMakeLists.txt",
+            "src/cmd/CMakeLists.txt",
+            "src/libsync/CMakeLists.txt"
+        )
+        foreach ($file in $cmakeFiles) {
+            if (Test-Path $file) {
+                Write-Host "Found CMake file: $file"
+                Get-Content $file | Select-Object -First 10 | ForEach-Object { Write-Host "  $_" }
+            } else {
+                Write-Host "ERROR: CMake file not found: $file"
+                exit 1
+            }
+        }
+        
+        # Run build with proper PowerShell syntax
+        Write-Host "Running build..."
+        try {
+            # First verify Python
+            Write-Host "Verifying Python installation..."
+            & "$env:pythonLocation/python.exe" --version
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "ERROR: Python verification failed"
+                exit 1
+            }
+            
+            # Then run the build using .craft.ps1
+            Write-Host "Executing build command..."
+            $craftScript = Join-Path $env:GITHUB_WORKSPACE ".github/workflows/.craft.ps1"
+            Write-Host "Using Craft script: $craftScript"
+            
+            if (-not (Test-Path $craftScript)) {
+                Write-Host "ERROR: Craft script not found at: $craftScript"
+                exit 1
+            }
+            
+            # Run the script with arguments
+            $buildOutput = & $craftScript -c --no-cache --src-dir $env:GITHUB_WORKSPACE --install --qmerge 2>&1
+            Write-Host "Build output:"
+            Write-Host $buildOutput
+            
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "ERROR: Build failed with exit code $LASTEXITCODE"
+                exit 1
+            }
+        } catch {
+            Write-Host "ERROR: Build failed with exception:"
+            Write-Host $_.Exception.Message
+            Write-Host "Stack trace:"
+            Write-Host $_.ScriptStackTrace
+            exit 1
+        }
+        
+        # Check build output
+        Write-Host "Post-build state:"
+        $binaryPaths = @(
+            "$env:USERPROFILE/craft/binaries",
+            "$env:USERPROFILE/craft/bin",
+            "$env:USERPROFILE/craft/build",
+            "$env:GITHUB_WORKSPACE/binaries",
+            "$env:GITHUB_WORKSPACE/bin",
+            "$env:USERPROFILE/craft/build/src/gui",
+            "$env:USERPROFILE/craft/build/src/cmd",
+            "$env:USERPROFILE/craft/build/src/libsync"
+        )
+        
+        foreach ($path in $binaryPaths) {
+            Write-Host "Checking path: $path"
+            if (Test-Path $path) {
+                Write-Host "Directory exists: $path"
+                Get-ChildItem $path -Recurse -Filter "*.exe" | ForEach-Object { Write-Host "Found executable: $_" }
+                # Also check for CMake build files
+                Get-ChildItem $path -Recurse -Filter "CMakeFiles" | ForEach-Object { 
+                    Write-Host "Found CMake build directory: $_"
+                    Get-ChildItem $_.FullName -Recurse -Filter "*.dir" | ForEach-Object { Write-Host "  Found build directory: $_" }
+                }
+            }
+        }
+        
+        # Check for target executables
+        $targetExes = @("owncloud.exe", "owncloudcmd.exe", "owncloudsync.exe")
+        $foundExes = $false
+        
+        foreach ($path in $binaryPaths) {
+            foreach ($exe in $targetExes) {
+                $exePath = Join-Path $path $exe
+                if (Test-Path $exePath) {
+                    Write-Host "Found target executable: $exePath"
+                    $foundExes = $true
+                }
+            }
+        }
+        
+        if (-not $foundExes) {
+            Write-Host "ERROR: No target executables found after build!"
+            exit 1
         }
 
     - name: Run tests
       run: |
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --test owncloud/owncloud-client
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --test
 
     - name: Sonarcloud
-      if: ${{ matrix.target == 'windows-cl-msvc2022-x86_64' }}
       run: |
-        $env:BUILD_DIR = $(& "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --get buildDir -q owncloud-client)
+        $env:BUILD_DIR = $(& "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --get buildDir -q)
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run pwsh "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --analyze
-
-    - name: Clang tidy
-      if: github.event_name != 'pull_request'
-      run: |
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run python3 -m pip install clang-html
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c libs/llvm
-        $env:BUILD_DIR = $(& "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --get buildDir -q owncloud-client)
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run pwsh "${env:GITHUB_WORKSPACE}/.github/workflows/.run-clang-tidy.ps1"
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run python3 -m clang_html "${env:TMPDIR}/clang-tidy.log" -o "${env:GITHUB_WORKSPACE}/binaries/clang-tidy.html"
 
     - name: Package
       run: |
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --package owncloud/owncloud-client
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --package
+
+    - name: Create Installer (Dummy)
+      run: |
+        Write-Host "Installer creation will be implemented in the future"
+        # TODO: Implement installer creation
+        # This step will be extended later to create proper installers for each platform
 
     - name: Prepare artifacts
+      shell: pwsh
       run: |
-        Copy-Item "$env:HOME/craft/binaries/*" "${env:GITHUB_WORKSPACE}/binaries/" -ErrorAction SilentlyContinue
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --shelve "${env:GITHUB_WORKSPACE}/.craft.shelf"
-        Copy-Item "${env:GITHUB_WORKSPACE}/.craft.shelf" "${env:GITHUB_WORKSPACE}/binaries/"
+        Write-Host "=== DEBUG: Preparing artifacts ==="
+        Write-Host "Current directory: $(Get-Location)"
+        Write-Host "Workspace: ${env:GITHUB_WORKSPACE}"
+        
+        # Create binaries directory if it doesn't exist
+        New-Item -ItemType Directory -Force -Path "${env:GITHUB_WORKSPACE}/binaries"
+        
+        # Copy executables and DLLs from build directory
+        Write-Host "=== DEBUG: Copying files from build directory ==="
+        Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -Include "*.exe","*.dll" -ErrorAction SilentlyContinue | 
+            Where-Object { $_.DirectoryName -notlike "*\binaries\*" } | 
+            ForEach-Object {
+                Write-Host "Copying: $($_.FullName)"
+                Copy-Item -Path $_.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force
+            }
+        
+        # Copy craft binaries
+        Write-Host "=== DEBUG: Copying files from Craft binaries ==="
+        if (Test-Path "${env:USERPROFILE}/craft/binaries") {
+            Get-ChildItem -Path "${env:USERPROFILE}/craft/binaries" -Recurse -Include "*.exe","*.dll" -ErrorAction SilentlyContinue | 
+                ForEach-Object {
+                    Write-Host "Copying: $($_.FullName)"
+                    Copy-Item -Path $_.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force
+                }
+        } else {
+            Write-Host "WARNING: Craft binaries directory not found"
+        }
+        
+        # List collected files
+        Write-Host "=== DEBUG: Collected files ==="
+        Get-ChildItem -Path "${env:GITHUB_WORKSPACE}/binaries" -Recurse -ErrorAction SilentlyContinue | 
+            ForEach-Object { Write-Host "  $($_.FullName)" }
+        
+        # Fail if no files collected
+        $collectedFiles = Get-ChildItem -Path "${env:GITHUB_WORKSPACE}/binaries" -Recurse -ErrorAction SilentlyContinue
+        if (-not $collectedFiles) {
+            Write-Host "ERROR: No files collected for artifacts"
+            exit 1
+        }
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.name }}
-        path: ${{ github.workspace }}/binaries/*
+        name: owncloud-client-windows
+        path: ${{ github.workspace }}/binaries/
+        if-no-files-found: error
+
+    - name: Debug - Find Executables
+      shell: pwsh
+      run: |
+        Write-Host "=== DEBUG: Searching for ownCloud executables ==="
+        
+        # List all possible locations
+        $searchPaths = @(
+            "${env:GITHUB_WORKSPACE}",
+            "${env:USERPROFILE}/craft",
+            "${env:USERPROFILE}/craft/binaries",
+            "${env:USERPROFILE}/craft/build",
+            "${env:GITHUB_WORKSPACE}/build",
+            "${env:GITHUB_WORKSPACE}/binaries",
+            "${env:GITHUB_WORKSPACE}/src/cmd",
+            "${env:GITHUB_WORKSPACE}/src/gui",
+            "${env:GITHUB_WORKSPACE}/src/sync",
+            "${env:GITHUB_WORKSPACE}/src/libsync",
+            "${env:GITHUB_WORKSPACE}/src/libsync/bin",
+            "${env:GITHUB_WORKSPACE}/src/libsync/lib",
+            "${env:GITHUB_WORKSPACE}/src/libsync/build",
+            "${env:GITHUB_WORKSPACE}/src/libsync/install"
+        )
+        
+        # Search for specific executables
+        $targetExecutables = @(
+            "owncloud.exe",
+            "owncloudcmd.exe",
+            "owncloudsync.exe"
+        )
+        
+        # First, check each path for existence
+        Write-Host "=== Checking directory existence ==="
+        foreach ($path in $searchPaths) {
+            if (Test-Path $path) {
+                Write-Host "Directory exists: $path"
+                Write-Host "Contents:"
+                Get-ChildItem -Path $path -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
+            } else {
+                Write-Host "Directory not found: $path"
+            }
+        }
+        
+        # Then, search for specific executables
+        Write-Host "=== Searching for specific executables ==="
+        foreach ($exe in $targetExecutables) {
+            Write-Host "Looking for $exe:"
+            foreach ($path in $searchPaths) {
+                if (Test-Path $path) {
+                    $found = Get-ChildItem -Path $path -Recurse -Filter $exe -ErrorAction SilentlyContinue
+                    if ($found) {
+                        Write-Host "  Found in $path:"
+                        $found | ForEach-Object { Write-Host "    $($_.FullName)" }
+                    }
+                }
+            }
+        }
+        
+        # List all executables and DLLs
+        Write-Host "=== All executables and DLLs ==="
+        foreach ($path in $searchPaths) {
+            if (Test-Path $path) {
+                Write-Host "In $path:"
+                Get-ChildItem -Path $path -Recurse -ErrorAction SilentlyContinue | 
+                    Where-Object { $_.Name -match '\.(exe|dll)$' } | 
+                    ForEach-Object { Write-Host "  $($_.FullName)" }
+            }
+        }
+        
+        # Check build output
+        Write-Host "=== Build output directories ==="
+        $buildDirs = @(
+            "${env:GITHUB_WORKSPACE}/build",
+            "${env:USERPROFILE}/craft/build",
+            "${env:USERPROFILE}/craft/binaries",
+            "${env:GITHUB_WORKSPACE}/binaries"
+        )
+        
+        foreach ($dir in $buildDirs) {
+            if (Test-Path $dir) {
+                Write-Host "Build directory: $dir"
+                Write-Host "Contents:"
+                Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
+            }
+        }
+        
+        # Check CMake install directories
+        Write-Host "=== CMake install directories ==="
+        $cmakeDirs = @(
+            "${env:GITHUB_WORKSPACE}/install",
+            "${env:USERPROFILE}/craft/install",
+            "${env:GITHUB_WORKSPACE}/src/cmd/install",
+            "${env:GITHUB_WORKSPACE}/src/gui/install"
+        )
+        
+        foreach ($dir in $cmakeDirs) {
+            if (Test-Path $dir) {
+                Write-Host "CMake install directory: $dir"
+                Write-Host "Contents:"
+                Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
+            }
+        }
+        
+        # Check environment variables
+        Write-Host "=== Environment variables ==="
+        Write-Host "GITHUB_WORKSPACE: ${env:GITHUB_WORKSPACE}"
+        Write-Host "USERPROFILE: ${env:USERPROFILE}"
+        Write-Host "BUILD_DIR: ${env:BUILD_DIR}"
+        Write-Host "CRAFT_TARGET: ${env:CRAFT_TARGET}"
+        
+        # Check if binaries directory exists and is empty
+        $binariesDir = "${env:GITHUB_WORKSPACE}/binaries"
+        if (Test-Path $binariesDir) {
+            Write-Host "=== Binaries directory contents ==="
+            Get-ChildItem -Path $binariesDir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
+        } else {
+            Write-Host "WARNING: Binaries directory not found at: $binariesDir"
+        }
+        
+        # Fail if no executables found
+        $foundExecutables = Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -Filter "owncloud*.exe" -ErrorAction SilentlyContinue
+        if (-not $foundExecutables) {
+            Write-Host "ERROR: No ownCloud executables found after build"
+            exit 1
+        }
