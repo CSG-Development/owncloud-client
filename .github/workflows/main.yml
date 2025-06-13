@@ -160,127 +160,63 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        Write-Host "=== DEBUG: Pre-build state ==="
+        Write-Host "Pre-build state:"
         Write-Host "Current directory: $(Get-Location)"
-        Write-Host "Workspace: ${env:GITHUB_WORKSPACE}"
-        Write-Host "USERPROFILE: ${env:USERPROFILE}"
-        Write-Host "CRAFT_TARGET: ${env:CRAFT_TARGET}"
+        Write-Host "Workspace: $env:GITHUB_WORKSPACE"
+        Write-Host "User profile: $env:USERPROFILE"
+        Write-Host "Craft target: $env:CRAFT_TARGET"
         
-        Write-Host "=== DEBUG: Python setup ==="
-        Write-Host "Python version:"
-        python --version
-        Write-Host "Python location:"
-        Get-Command python | Select-Object -ExpandProperty Source
-        Write-Host "Python environment:"
-        python -c "import sys; print(sys.executable)"
-        
-        Write-Host "=== DEBUG: Craft setup ==="
-        Write-Host "Checking Craft directories:"
-        $craftDirs = @(
-            "${env:USERPROFILE}/craft",
-            "${env:USERPROFILE}/craft/CraftMaster"
-        )
-        foreach ($dir in $craftDirs) {
-            if (Test-Path $dir) {
-                Write-Host "Craft directory exists: $($dir)"
-                Write-Host "Contents:"
-                Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
-            } else {
-                Write-Host "Craft directory not found: $($dir)"
-            }
-        }
-        
-        Write-Host "=== DEBUG: Checking CraftMaster.py ==="
-        $craftMasterPath = "${env:USERPROFILE}/craft/CraftMaster/CraftMaster.py"
+        # Check Craft setup
+        $craftMasterPath = if ($IsWindows) { "${env:USERPROFILE}/craft/CraftMaster/CraftMaster.py" } else { "${env:HOME}/craft/CraftMaster/CraftMaster.py" }
+        Write-Host "Checking CraftMaster.py at: $craftMasterPath"
         if (Test-Path $craftMasterPath) {
-            Write-Host "CraftMaster.py exists at: $($craftMasterPath)"
-            Write-Host "Contents of CraftMaster directory:"
-            Get-ChildItem -Path (Split-Path $craftMasterPath) -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
+            Write-Host "CraftMaster.py exists"
+            Get-ChildItem (Split-Path $craftMasterPath) | ForEach-Object { Write-Host "Found: $_" }
         } else {
-            Write-Host "ERROR: CraftMaster.py not found at: $($craftMasterPath)"
+            Write-Host "ERROR: CraftMaster.py not found!"
             exit 1
         }
         
-        Write-Host "=== Running build with Craft ==="
-        try {
-            # Run the build directly with Craft
-            $buildOutput = & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --install --qmerge 2>&1
-            Write-Host "=== Build output ==="
-            Write-Host $buildOutput
-            
-            if ($LASTEXITCODE -ne 0) {
-                Write-Host "ERROR: Build failed with exit code $LASTEXITCODE"
-                exit 1
-            }
-        } catch {
-            Write-Host "ERROR: Build failed with exception:"
-            Write-Host $_.Exception.Message
-            Write-Host "Stack trace:"
-            Write-Host $_.ScriptStackTrace
-            exit 1
-        }
+        # Run build
+        Write-Host "Running build..."
+        $buildOutput = & $python $craftMasterPath --config .craft.ini --config-override .github/workflows/craft_override.ini --target $env:CRAFT_TARGET --variables "WORKSPACE=$env:USERPROFILE/craft" 2>&1
+        Write-Host "Build output:"
+        Write-Host $buildOutput
         
-        Write-Host "=== DEBUG: Post-build state ==="
-        Write-Host "Current directory: $(Get-Location)"
-        Write-Host "Workspace: ${env:GITHUB_WORKSPACE}"
-        
-        Write-Host "=== DEBUG: Checking build output ==="
-        $buildDirs = @(
-            "${env:GITHUB_WORKSPACE}/build",
-            "${env:USERPROFILE}/craft/build",
-            "${env:USERPROFILE}/craft/binaries",
-            "${env:GITHUB_WORKSPACE}/binaries"
+        # Check build output
+        Write-Host "Post-build state:"
+        $binaryPaths = @(
+            "$env:USERPROFILE/craft/binaries",
+            "$env:USERPROFILE/craft/bin",
+            "$env:USERPROFILE/craft/build",
+            "$env:GITHUB_WORKSPACE/binaries",
+            "$env:GITHUB_WORKSPACE/bin"
         )
         
-        foreach ($dir in $buildDirs) {
-            if (Test-Path $dir) {
-                Write-Host "Build directory: $($dir)"
-                Write-Host "Contents:"
-                Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
-            } else {
-                Write-Host "Build directory not found: $($dir)"
+        foreach ($path in $binaryPaths) {
+            Write-Host "Checking path: $path"
+            if (Test-Path $path) {
+                Write-Host "Directory exists: $path"
+                Get-ChildItem $path -Recurse -Filter "*.exe" | ForEach-Object { Write-Host "Found executable: $_" }
             }
         }
         
-        Write-Host "=== DEBUG: Checking for executables ==="
-        $targetExecutables = @(
-            "owncloud.exe",
-            "owncloudcmd.exe",
-            "owncloudsync.exe"
-        )
+        # Check for target executables
+        $targetExes = @("owncloud.exe", "owncloudcmd.exe", "owncloudsync.exe")
+        $foundExes = $false
         
-        foreach ($exe in $targetExecutables) {
-            Write-Host "Looking for $($exe):"
-            $found = Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -Filter $exe -ErrorAction SilentlyContinue
-            if ($found) {
-                Write-Host "  Found:"
-                $found | ForEach-Object { Write-Host "    $($_.FullName)" }
-            } else {
-                Write-Host "  Not found"
+        foreach ($path in $binaryPaths) {
+            foreach ($exe in $targetExes) {
+                $exePath = Join-Path $path $exe
+                if (Test-Path $exePath) {
+                    Write-Host "Found target executable: $exePath"
+                    $foundExes = $true
+                }
             }
         }
         
-        Write-Host "=== DEBUG: Checking Craft directories ==="
-        $craftDirs = @(
-            "${env:USERPROFILE}/craft",
-            "${env:USERPROFILE}/craft/binaries",
-            "${env:USERPROFILE}/craft/build"
-        )
-        
-        foreach ($dir in $craftDirs) {
-            if (Test-Path $dir) {
-                Write-Host "Craft directory: $($dir)"
-                Write-Host "Contents:"
-                Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
-            } else {
-                Write-Host "Craft directory not found: $($dir)"
-            }
-        }
-        
-        # Fail if no executables found
-        $foundExecutables = Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -Filter "owncloud*.exe" -ErrorAction SilentlyContinue
-        if (-not $foundExecutables) {
-            Write-Host "ERROR: No ownCloud executables found after build"
+        if (-not $foundExes) {
+            Write-Host "ERROR: No target executables found after build!"
             exit 1
         }
 
