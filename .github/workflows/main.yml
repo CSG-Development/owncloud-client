@@ -172,8 +172,17 @@ jobs:
         
         # Copy executables and DLLs from build directory
         Write-Host "Copying files from build directory..."
-        Copy-Item -Path "$env:BUILD_DIR/*.exe" -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force -ErrorAction SilentlyContinue
-        Copy-Item -Path "$env:BUILD_DIR/*.dll" -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force -ErrorAction SilentlyContinue
+        # Look for executables in the build directory and its subdirectories
+        Get-ChildItem -Path $env:BUILD_DIR -Recurse -Include "*.exe" | ForEach-Object {
+            Write-Host "Found executable: $($_.FullName)"
+            Copy-Item -Path $_.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force
+        }
+        
+        # Copy DLLs
+        Get-ChildItem -Path $env:BUILD_DIR -Recurse -Include "*.dll" | ForEach-Object {
+            Write-Host "Found DLL: $($_.FullName)"
+            Copy-Item -Path $_.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force
+        }
         
         # Copy craft binaries
         Write-Host "Copying files from craft binaries..."
