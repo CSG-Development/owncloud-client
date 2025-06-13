@@ -80,13 +80,15 @@ jobs:
       run: |
         New-Item -ItemType Directory "${env:GITHUB_WORKSPACE}/binaries/"
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --set forceAsserts=true owncloud/owncloud-client
-        if ($IsWindows) {
-            & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c dev-utils/_windows/nsis
-        }
 
     - name: Install dependencies
       run: |
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --install-deps owncloud/owncloud-client
+        if ($IsWindows) {
+            # Install NSIS using winget
+            winget install -e --id NSIS.NullsoftScriptableInstallSystem
+            $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+        }
 
     - name: Build
       run: |
