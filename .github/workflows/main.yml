@@ -125,6 +125,15 @@ jobs:
       run: |
         # Configure the build
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --configure
+        
+        # Set build directory and ensure it exists
+        $env:BUILD_DIR = Join-Path $env:GITHUB_WORKSPACE "build"
+        New-Item -ItemType Directory -Force -Path $env:BUILD_DIR
+        Write-Host "Build directory set to: $env:BUILD_DIR"
+        
+        # Run CMake configure
+        cmake -B $env:BUILD_DIR -S $env:GITHUB_WORKSPACE
+        
         # Run the build
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run pwsh "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build
         # Install the package
