@@ -162,19 +162,29 @@ jobs:
         # Create binaries directory if it doesn't exist
         New-Item -ItemType Directory -Force -Path "${env:GITHUB_WORKSPACE}/binaries"
         
-        # List contents of build directory for debugging
-        Write-Host "Contents of build directory:"
-        Get-ChildItem -Path "${env:BUILD_DIR}" -Recurse | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host $_.FullName }
+        # Debug environment variables
+        Write-Host "Environment variables:"
+        Write-Host "GITHUB_WORKSPACE: ${env:GITHUB_WORKSPACE}"
+        Write-Host "HOME: ${env:HOME}"
+        Write-Host "BUILD_DIR: ${env:BUILD_DIR}"
         
-        # List contents of Craft binaries directory
-        Write-Host "Contents of Craft binaries directory:"
-        Get-ChildItem -Path "${env:HOME}/craft/binaries" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host $_.FullName }
+        # List contents of various directories for debugging
+        Write-Host "Contents of GITHUB_WORKSPACE:"
+        Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host $_.FullName }
+        
+        Write-Host "Contents of HOME/craft:"
+        Get-ChildItem -Path "${env:HOME}/craft" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host $_.FullName }
         
         # Copy files from Craft binaries directory
         Write-Host "Copying files from Craft binaries directory..."
-        Get-ChildItem -Path "${env:HOME}/craft/binaries" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object {
-            Write-Host "Copying: $($_.FullName)"
-            Copy-Item $_.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/"
+        $craftBinaries = "${env:HOME}/craft/binaries"
+        if (Test-Path $craftBinaries) {
+            Get-ChildItem -Path $craftBinaries -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object {
+                Write-Host "Copying: $($_.FullName)"
+                Copy-Item $_.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/"
+            }
+        } else {
+            Write-Host "Warning: Craft binaries directory not found: $craftBinaries"
         }
         
         # List collected files
