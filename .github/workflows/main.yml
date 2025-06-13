@@ -192,24 +192,13 @@ jobs:
         
         Write-Host "=== Running build with Sonar wrapper ==="
         try {
-            # Create a temporary file to capture the build output
-            $tempFile = [System.IO.Path]::GetTempFileName()
-            
-            # Run the build and capture both stdout and stderr
-            $process = Start-Process -FilePath "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" -ArgumentList "--build" -NoNewWindow -Wait -PassThru -RedirectStandardOutput $tempFile -RedirectStandardError "$tempFile.err"
-            
-            # Read and display the output
+            # Run the build and capture output
+            $buildOutput = & "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build 2>&1
             Write-Host "=== Build output ==="
-            Get-Content $tempFile
-            Write-Host "=== Build errors ==="
-            Get-Content "$tempFile.err"
+            Write-Host $buildOutput
             
-            # Clean up
-            Remove-Item $tempFile
-            Remove-Item "$tempFile.err"
-            
-            if ($process.ExitCode -ne 0) {
-                Write-Host "ERROR: Build failed with exit code $($process.ExitCode)"
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "ERROR: Build failed with exit code $LASTEXITCODE"
                 exit 1
             }
         } catch {
