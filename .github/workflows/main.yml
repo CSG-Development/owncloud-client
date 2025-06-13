@@ -74,7 +74,7 @@ jobs:
         python -m pip install craftmaster
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" --setup
         # Initialize craft environment
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --init
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --update
 
     - name: Prepare
       run: |
