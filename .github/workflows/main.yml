@@ -172,7 +172,7 @@ jobs:
         foreach ($dir in $craftDirs) {
             if (Test-Path $dir) {
                 Write-Host "Directory exists: $dir"
-                Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host "Found in $dir: $($_.FullName)" }
+                Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host "Found in ${dir}: $($_.FullName)" }
             } else {
                 Write-Host "Directory not found: $dir"
             }
