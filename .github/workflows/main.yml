@@ -81,17 +81,15 @@ jobs:
         New-Item -ItemType Directory "${env:GITHUB_WORKSPACE}/binaries/"
         # First update the craft environment
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --update
-        # Add owncloud blueprint repository from the fork
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --add-blueprint-repository https://github.com/CSG-Development/owncloud-client-craft-blueprints.git
         # Then set the force asserts
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --set forceAsserts=true owncloud-client
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --set forceAsserts=true
 
     - name: Install dependencies
       run: |
         # First resolve dependencies
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --resolve-deps owncloud-client
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --resolve-deps
         # Then install them
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --install-deps owncloud-client
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --install-deps
         if ($IsWindows) {
             # Install NSIS using winget
             winget install -e --id NSIS.NullsoftScriptableInstallSystem
@@ -101,24 +99,24 @@ jobs:
     - name: Build
       run: |
         # Configure the build
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --configure owncloud-client
-        $env:BUILD_DIR = $(& "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --get buildDir -q owncloud-client)
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --configure
+        $env:BUILD_DIR = $(& "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --get buildDir -q)
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run pwsh "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build
         # Install the package
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --install --qmerge owncloud-client
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --install --qmerge
 
     - name: Run tests
       run: |
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --test owncloud-client
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --test
 
     - name: Sonarcloud
       run: |
-        $env:BUILD_DIR = $(& "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --get buildDir -q owncloud-client)
+        $env:BUILD_DIR = $(& "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --get buildDir -q)
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run pwsh "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --analyze
 
     - name: Package
       run: |
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --package owncloud-client
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --package
 
     - name: Create Installer (Dummy)
       run: |
