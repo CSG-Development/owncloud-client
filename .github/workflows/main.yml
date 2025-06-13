@@ -160,83 +160,78 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        # DEBUG: Log initial state
-        Write-Host "=== DEBUG: Initial state ==="
+        Write-Host "=== DEBUG: Pre-build state ==="
+        Write-Host "Current directory: $(Get-Location)"
+        Write-Host "Workspace: ${env:GITHUB_WORKSPACE}"
+        Write-Host "USERPROFILE: ${env:USERPROFILE}"
+        Write-Host "CRAFT_TARGET: ${env:CRAFT_TARGET}"
+        
+        Write-Host "=== Running build with Sonar wrapper ==="
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build
+        
+        Write-Host "=== DEBUG: Post-build state ==="
         Write-Host "Current directory: $(Get-Location)"
         Write-Host "Workspace: ${env:GITHUB_WORKSPACE}"
         
-        # DEBUG: List initial directory contents
-        Write-Host "=== DEBUG: Initial directory contents ==="
-        Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host "Found: $($_.FullName)" }
-        
-        # DEBUG: Check Craft environment
-        Write-Host "=== DEBUG: Craft Environment ==="
-        Write-Host "CRAFT_TARGET: ${env:CRAFT_TARGET}"
-        Write-Host "HOME: ${env:USERPROFILE}"
-        
-        # Create binaries directory
-        Write-Host "=== DEBUG: Creating binaries directory ==="
-        $binariesDir = Join-Path ${env:GITHUB_WORKSPACE} "binaries"
-        New-Item -ItemType Directory -Force -Path $binariesDir
-        Write-Host "Created binaries directory at: $binariesDir"
-        
-        # Run the build with debug output
-        Write-Host "=== DEBUG: Starting build ==="
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build
-        
-        # DEBUG: Log post-build state
-        Write-Host "=== DEBUG: Post-build state ==="
-        Write-Host "Build directory: ${env:BUILD_DIR}"
-        
-        # DEBUG: Check Craft directories
-        Write-Host "=== DEBUG: Craft directories ==="
-        $craftDirs = @(
-            "${env:USERPROFILE}/craft",
-            "${env:USERPROFILE}/craft/binaries",
-            "${env:USERPROFILE}/craft/build",
+        Write-Host "=== DEBUG: Checking build output ==="
+        $buildDirs = @(
             "${env:GITHUB_WORKSPACE}/build",
+            "${env:USERPROFILE}/craft/build",
+            "${env:USERPROFILE}/craft/binaries",
+            "${env:GITHUB_WORKSPACE}/bw-output",
             "${env:GITHUB_WORKSPACE}/binaries"
         )
         
-        foreach ($dir in $craftDirs) {
+        foreach ($dir in $buildDirs) {
             if (Test-Path $dir) {
-                Write-Host "Directory exists: ${dir}"
-                Write-Host "Contents of ${dir}:"
+                Write-Host "Build directory: $dir"
+                Write-Host "Contents:"
                 Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
             } else {
-                Write-Host "Directory not found: ${dir}"
+                Write-Host "Build directory not found: $dir"
             }
         }
         
-        # DEBUG: Check for specific executables
-        Write-Host "=== DEBUG: Checking for ownCloud executables ==="
-        $expectedExecutables = @(
+        Write-Host "=== DEBUG: Checking for executables ==="
+        $targetExecutables = @(
             "owncloud.exe",
             "owncloudcmd.exe",
             "owncloudsync.exe"
         )
         
-        foreach ($exe in $expectedExecutables) {
+        foreach ($exe in $targetExecutables) {
+            Write-Host "Looking for $exe:"
             $found = Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -Filter $exe -ErrorAction SilentlyContinue
             if ($found) {
-                Write-Host "Found $exe at: $($found.FullName)"
+                Write-Host "  Found:"
+                $found | ForEach-Object { Write-Host "    $($_.FullName)" }
             } else {
-                Write-Host "WARNING: $exe not found in workspace"
+                Write-Host "  Not found"
             }
         }
         
-        # DEBUG: List all executables and DLLs
-        Write-Host "=== DEBUG: All executables and DLLs ==="
-        Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host "Found: $($_.FullName)" }
+        Write-Host "=== DEBUG: Checking Craft directories ==="
+        $craftDirs = @(
+            "${env:USERPROFILE}/craft",
+            "${env:USERPROFILE}/craft/binaries",
+            "${env:USERPROFILE}/craft/build"
+        )
         
-        # DEBUG: Check if binaries directory is empty
-        Write-Host "=== DEBUG: Checking binaries directory ==="
-        $binariesContents = Get-ChildItem -Path $binariesDir -Recurse -ErrorAction SilentlyContinue
-        if ($binariesContents) {
-            Write-Host "Binaries directory contains:"
-            $binariesContents | ForEach-Object { Write-Host "  $($_.FullName)" }
-        } else {
-            Write-Host "WARNING: Binaries directory is empty"
+        foreach ($dir in $craftDirs) {
+            if (Test-Path $dir) {
+                Write-Host "Craft directory: $dir"
+                Write-Host "Contents:"
+                Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
+            } else {
+                Write-Host "Craft directory not found: $dir"
+            }
+        }
+        
+        # Fail if no executables found
+        $foundExecutables = Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -Filter "owncloud*.exe" -ErrorAction SilentlyContinue
+        if (-not $foundExecutables) {
+            Write-Host "ERROR: No ownCloud executables found after build"
+            exit 1
         }
 
     - name: Run tests
@@ -261,45 +256,52 @@ jobs:
     - name: Prepare artifacts
       shell: pwsh
       run: |
+        Write-Host "=== DEBUG: Preparing artifacts ==="
+        Write-Host "Current directory: $(Get-Location)"
+        Write-Host "Workspace: ${env:GITHUB_WORKSPACE}"
+        
         # Create binaries directory if it doesn't exist
         New-Item -ItemType Directory -Force -Path "${env:GITHUB_WORKSPACE}/binaries"
         
-        # DEBUG: Environment variables
-        Write-Host "=== DEBUG: Environment variables ==="
-        Write-Host "GITHUB_WORKSPACE: ${env:GITHUB_WORKSPACE}"
-        Write-Host "HOME: ${env:USERPROFILE}"
-        Write-Host "BUILD_DIR: ${env:BUILD_DIR}"
-        
-        # DEBUG: List contents of various directories
-        Write-Host "=== DEBUG: Directory contents ==="
-        Write-Host "Contents of GITHUB_WORKSPACE:"
-        Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host $_.FullName }
-        
-        Write-Host "Contents of HOME/craft:"
-        Get-ChildItem -Path "${env:USERPROFILE}/craft" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host $_.FullName }
-        
-        # Copy files from Craft binaries directory
-        Write-Host "=== DEBUG: Copying files ==="
-        $craftBinaries = "${env:USERPROFILE}/craft/binaries"
-        if (Test-Path $craftBinaries) {
-            Get-ChildItem -Path $craftBinaries -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object {
+        # Copy executables and DLLs from build directory
+        Write-Host "=== DEBUG: Copying files from build directory ==="
+        Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -Include "*.exe","*.dll" -ErrorAction SilentlyContinue | 
+            Where-Object { $_.DirectoryName -notlike "*\binaries\*" } | 
+            ForEach-Object {
                 Write-Host "Copying: $($_.FullName)"
-                Copy-Item $_.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/"
+                Copy-Item -Path $_.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force
             }
+        
+        # Copy craft binaries
+        Write-Host "=== DEBUG: Copying files from Craft binaries ==="
+        if (Test-Path "${env:USERPROFILE}/craft/binaries") {
+            Get-ChildItem -Path "${env:USERPROFILE}/craft/binaries" -Recurse -Include "*.exe","*.dll" -ErrorAction SilentlyContinue | 
+                ForEach-Object {
+                    Write-Host "Copying: $($_.FullName)"
+                    Copy-Item -Path $_.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force
+                }
         } else {
-            Write-Host "Warning: Craft binaries directory not found: $craftBinaries"
+            Write-Host "WARNING: Craft binaries directory not found"
         }
         
-        # DEBUG: List collected files
+        # List collected files
         Write-Host "=== DEBUG: Collected files ==="
-        Get-ChildItem -Path "${env:GITHUB_WORKSPACE}/binaries" | ForEach-Object { Write-Host $_.Name }
+        Get-ChildItem -Path "${env:GITHUB_WORKSPACE}/binaries" -Recurse -ErrorAction SilentlyContinue | 
+            ForEach-Object { Write-Host "  $($_.FullName)" }
+        
+        # Fail if no files collected
+        $collectedFiles = Get-ChildItem -Path "${env:GITHUB_WORKSPACE}/binaries" -Recurse -ErrorAction SilentlyContinue
+        if (-not $collectedFiles) {
+            Write-Host "ERROR: No files collected for artifacts"
+            exit 1
+        }
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.name }}
+        name: owncloud-client-windows
         path: ${{ github.workspace }}/binaries/
-        if-no-files-found: warn
+        if-no-files-found: error
 
     - name: Debug - Find Executables
       shell: pwsh
@@ -374,7 +376,8 @@ jobs:
         $buildDirs = @(
             "${env:GITHUB_WORKSPACE}/build",
             "${env:USERPROFILE}/craft/build",
-            "${env:USERPROFILE}/craft/binaries"
+            "${env:USERPROFILE}/craft/binaries",
+            "${env:GITHUB_WORKSPACE}/binaries"
         )
         
         foreach ($dir in $buildDirs) {
@@ -416,4 +419,11 @@ jobs:
             Get-ChildItem -Path $binariesDir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
         } else {
             Write-Host "WARNING: Binaries directory not found at: $binariesDir"
+        }
+        
+        # Fail if no executables found
+        $foundExecutables = Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -Filter "owncloud*.exe" -ErrorAction SilentlyContinue
+        if (-not $foundExecutables) {
+            Write-Host "ERROR: No ownCloud executables found after build"
+            exit 1
         }
