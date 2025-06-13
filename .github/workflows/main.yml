@@ -177,11 +177,41 @@ jobs:
             exit 1
         }
         
-        # Run build
+        # Check CMake files
+        Write-Host "Checking CMake files:"
+        $cmakeFiles = @(
+            "src/gui/CMakeLists.txt",
+            "src/cmd/CMakeLists.txt",
+            "src/libsync/CMakeLists.txt"
+        )
+        foreach ($file in $cmakeFiles) {
+            if (Test-Path $file) {
+                Write-Host "Found CMake file: $file"
+                Get-Content $file | Select-Object -First 10 | ForEach-Object { Write-Host "  $_" }
+            } else {
+                Write-Host "ERROR: CMake file not found: $file"
+                exit 1
+            }
+        }
+        
+        # Run build with proper PowerShell syntax
         Write-Host "Running build..."
-        $buildOutput = & $python $craftMasterPath --config .craft.ini --config-override .github/workflows/craft_override.ini --target $env:CRAFT_TARGET --variables "WORKSPACE=$env:USERPROFILE/craft" 2>&1
-        Write-Host "Build output:"
-        Write-Host $buildOutput
+        try {
+            $buildOutput = & "$env:pythonLocation/python.exe" "$craftMasterPath" --config ".craft.ini" --config-override ".github/workflows/craft_override.ini" --target "$env:CRAFT_TARGET" --variables "WORKSPACE=$env:USERPROFILE/craft" 2>&1
+            Write-Host "Build output:"
+            Write-Host $buildOutput
+            
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "ERROR: Build failed with exit code $LASTEXITCODE"
+                exit 1
+            }
+        } catch {
+            Write-Host "ERROR: Build failed with exception:"
+            Write-Host $_.Exception.Message
+            Write-Host "Stack trace:"
+            Write-Host $_.ScriptStackTrace
+            exit 1
+        }
         
         # Check build output
         Write-Host "Post-build state:"
@@ -190,7 +220,10 @@ jobs:
             "$env:USERPROFILE/craft/bin",
             "$env:USERPROFILE/craft/build",
             "$env:GITHUB_WORKSPACE/binaries",
-            "$env:GITHUB_WORKSPACE/bin"
+            "$env:GITHUB_WORKSPACE/bin",
+            "$env:USERPROFILE/craft/build/src/gui",
+            "$env:USERPROFILE/craft/build/src/cmd",
+            "$env:USERPROFILE/craft/build/src/libsync"
         )
         
         foreach ($path in $binaryPaths) {
@@ -198,6 +231,11 @@ jobs:
             if (Test-Path $path) {
                 Write-Host "Directory exists: $path"
                 Get-ChildItem $path -Recurse -Filter "*.exe" | ForEach-Object { Write-Host "Found executable: $_" }
+                # Also check for CMake build files
+                Get-ChildItem $path -Recurse -Filter "CMakeFiles" | ForEach-Object { 
+                    Write-Host "Found CMake build directory: $_"
+                    Get-ChildItem $_.FullName -Recurse -Filter "*.dir" | ForEach-Object { Write-Host "  Found build directory: $_" }
+                }
             }
         }
         
