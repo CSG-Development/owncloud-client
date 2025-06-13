@@ -166,6 +166,30 @@ jobs:
         Write-Host "USERPROFILE: ${env:USERPROFILE}"
         Write-Host "CRAFT_TARGET: ${env:CRAFT_TARGET}"
         
+        Write-Host "=== DEBUG: Python setup ==="
+        Write-Host "Python version:"
+        python --version
+        Write-Host "Python location:"
+        Get-Command python | Select-Object -ExpandProperty Source
+        Write-Host "Python environment:"
+        python -c "import sys; print(sys.executable)"
+        
+        Write-Host "=== DEBUG: Craft setup ==="
+        Write-Host "Checking Craft directories:"
+        $craftDirs = @(
+            "${env:USERPROFILE}/craft",
+            "${env:USERPROFILE}/craft/CraftMaster"
+        )
+        foreach ($dir in $craftDirs) {
+            if (Test-Path $dir) {
+                Write-Host "Craft directory exists: $dir"
+                Write-Host "Contents:"
+                Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
+            } else {
+                Write-Host "Craft directory not found: $dir"
+            }
+        }
+        
         Write-Host "=== Running build with Sonar wrapper ==="
         try {
             $output = & "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build 2>&1
@@ -209,7 +233,7 @@ jobs:
         )
         
         foreach ($exe in $targetExecutables) {
-            Write-Host "Looking for $exe:"
+            Write-Host "Looking for $($exe):"
             $found = Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -Filter $exe -ErrorAction SilentlyContinue
             if ($found) {
                 Write-Host "  Found:"
@@ -228,11 +252,11 @@ jobs:
         
         foreach ($dir in $craftDirs) {
             if (Test-Path $dir) {
-                Write-Host "Craft directory: $dir"
+                Write-Host "Craft directory: $($dir)"
                 Write-Host "Contents:"
                 Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
             } else {
-                Write-Host "Craft directory not found: $dir"
+                Write-Host "Craft directory not found: $($dir)"
             }
         }
         
