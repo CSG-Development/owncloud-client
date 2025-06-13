@@ -197,7 +197,22 @@ jobs:
         # Run build with proper PowerShell syntax
         Write-Host "Running build..."
         try {
-            $buildOutput = & "$env:pythonLocation/python.exe" "$craftMasterPath" --config ".craft.ini" --config-override ".github/workflows/craft_override.ini" --target "$env:CRAFT_TARGET" --variables "WORKSPACE=$env:USERPROFILE/craft" 2>&1
+            $pythonExe = "$env:pythonLocation/python.exe"
+            Write-Host "Using Python: $pythonExe"
+            
+            # Build the command as an array
+            $cmdArgs = @(
+                $craftMasterPath,
+                "--config", ".craft.ini",
+                "--config-override", ".github/workflows/craft_override.ini",
+                "--target", $env:CRAFT_TARGET,
+                "--variables", "WORKSPACE=$env:USERPROFILE/craft"
+            )
+            
+            Write-Host "Command arguments: $cmdArgs"
+            
+            # Execute the command
+            $buildOutput = & $pythonExe $cmdArgs 2>&1
             Write-Host "Build output:"
             Write-Host $buildOutput
             
