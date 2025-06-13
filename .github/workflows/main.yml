@@ -133,12 +133,38 @@ jobs:
         Write-Host "=== DEBUG: Initial directory contents ==="
         Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host "Found: $($_.FullName)" }
         
-        # Run the build
+        # DEBUG: Check Craft environment
+        Write-Host "=== DEBUG: Craft Environment ==="
+        Write-Host "CRAFT_TARGET: ${env:CRAFT_TARGET}"
+        Write-Host "HOME: ${env:HOME}"
+        
+        # Run the build with debug output
+        Write-Host "=== DEBUG: Starting build ==="
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build
         
         # DEBUG: Log post-build state
         Write-Host "=== DEBUG: Post-build state ==="
         Write-Host "Build directory: ${env:BUILD_DIR}"
+        
+        # DEBUG: Check Craft directories
+        Write-Host "=== DEBUG: Craft directories ==="
+        $craftDirs = @(
+            "${env:HOME}/craft",
+            "${env:HOME}/craft/binaries",
+            "${env:HOME}/craft/build",
+            "${env:GITHUB_WORKSPACE}/build",
+            "${env:GITHUB_WORKSPACE}/binaries"
+        )
+        
+        foreach ($dir in $craftDirs) {
+            if (Test-Path $dir) {
+                Write-Host "Directory exists: $dir"
+                Write-Host "Contents of $dir:"
+                Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
+            } else {
+                Write-Host "Directory not found: $dir"
+            }
+        }
         
         # DEBUG: Check for specific executables
         Write-Host "=== DEBUG: Checking for ownCloud executables ==="
@@ -160,23 +186,6 @@ jobs:
         # DEBUG: List all executables and DLLs
         Write-Host "=== DEBUG: All executables and DLLs ==="
         Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host "Found: $($_.FullName)" }
-        
-        # DEBUG: Check Craft directories
-        Write-Host "=== DEBUG: Craft directories ==="
-        $craftDirs = @(
-            "${env:HOME}/craft",
-            "${env:HOME}/craft/binaries",
-            "${env:HOME}/craft/build"
-        )
-        
-        foreach ($dir in $craftDirs) {
-            if (Test-Path $dir) {
-                Write-Host "Directory exists: $dir"
-                Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host "Found in ${dir}: $($_.FullName)" }
-            } else {
-                Write-Host "Directory not found: $dir"
-            }
-        }
 
     - name: Run tests
       run: |
