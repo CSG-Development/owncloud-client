@@ -159,7 +159,7 @@ jobs:
         foreach ($dir in $craftDirs) {
             if (Test-Path $dir) {
                 Write-Host "Directory exists: $dir"
-                Write-Host "Contents of $dir:"
+                Write-Host "Contents of ${dir}:"
                 Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
             } else {
                 Write-Host "Directory not found: $dir"
