@@ -182,18 +182,36 @@ jobs:
         )
         foreach ($dir in $craftDirs) {
             if (Test-Path $dir) {
-                Write-Host "Craft directory exists: $dir"
+                Write-Host "Craft directory exists: $($dir)"
                 Write-Host "Contents:"
                 Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
             } else {
-                Write-Host "Craft directory not found: $dir"
+                Write-Host "Craft directory not found: $($dir)"
             }
         }
         
         Write-Host "=== Running build with Sonar wrapper ==="
         try {
-            $output = & "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build 2>&1
-            Write-Host $output
+            # Create a temporary file to capture the build output
+            $tempFile = [System.IO.Path]::GetTempFileName()
+            
+            # Run the build and capture both stdout and stderr
+            $process = Start-Process -FilePath "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" -ArgumentList "--build" -NoNewWindow -Wait -PassThru -RedirectStandardOutput $tempFile -RedirectStandardError "$tempFile.err"
+            
+            # Read and display the output
+            Write-Host "=== Build output ==="
+            Get-Content $tempFile
+            Write-Host "=== Build errors ==="
+            Get-Content "$tempFile.err"
+            
+            # Clean up
+            Remove-Item $tempFile
+            Remove-Item "$tempFile.err"
+            
+            if ($process.ExitCode -ne 0) {
+                Write-Host "ERROR: Build failed with exit code $($process.ExitCode)"
+                exit 1
+            }
         } catch {
             Write-Host "ERROR: Build failed with exception:"
             Write-Host $_.Exception.Message
@@ -217,11 +235,11 @@ jobs:
         
         foreach ($dir in $buildDirs) {
             if (Test-Path $dir) {
-                Write-Host "Build directory: $dir"
+                Write-Host "Build directory: $($dir)"
                 Write-Host "Contents:"
                 Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.FullName)" }
             } else {
-                Write-Host "Build directory not found: $dir"
+                Write-Host "Build directory not found: $($dir)"
             }
         }
         
