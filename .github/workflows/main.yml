@@ -122,20 +122,61 @@ jobs:
         Write-Host "Created build directory at: $env:BUILD_DIR"
 
     - name: Build
+      shell: pwsh
       run: |
-        # Configure the build
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --configure
+        # DEBUG: Log initial state
+        Write-Host "=== DEBUG: Initial state ==="
+        Write-Host "Current directory: $(Get-Location)"
+        Write-Host "Workspace: ${env:GITHUB_WORKSPACE}"
         
-        # Set build directory and ensure it exists
-        $env:BUILD_DIR = Join-Path $env:GITHUB_WORKSPACE "build"
-        New-Item -ItemType Directory -Force -Path $env:BUILD_DIR
-        Write-Host "Build directory set to: $env:BUILD_DIR"
+        # DEBUG: List initial directory contents
+        Write-Host "=== DEBUG: Initial directory contents ==="
+        Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host "Found: $($_.FullName)" }
         
         # Run the build
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run pwsh "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build
         
-        # Install the package
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --install --qmerge
+        # DEBUG: Log post-build state
+        Write-Host "=== DEBUG: Post-build state ==="
+        Write-Host "Build directory: ${env:BUILD_DIR}"
+        
+        # DEBUG: Check for specific executables
+        Write-Host "=== DEBUG: Checking for ownCloud executables ==="
+        $expectedExecutables = @(
+            "owncloud.exe",
+            "owncloudcmd.exe",
+            "owncloudsync.exe"
+        )
+        
+        foreach ($exe in $expectedExecutables) {
+            $found = Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -Filter $exe -ErrorAction SilentlyContinue
+            if ($found) {
+                Write-Host "Found $exe at: $($found.FullName)"
+            } else {
+                Write-Host "WARNING: $exe not found in workspace"
+            }
+        }
+        
+        # DEBUG: List all executables and DLLs
+        Write-Host "=== DEBUG: All executables and DLLs ==="
+        Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host "Found: $($_.FullName)" }
+        
+        # DEBUG: Check Craft directories
+        Write-Host "=== DEBUG: Craft directories ==="
+        $craftDirs = @(
+            "${env:HOME}/craft",
+            "${env:HOME}/craft/binaries",
+            "${env:HOME}/craft/build"
+        )
+        
+        foreach ($dir in $craftDirs) {
+            if (Test-Path $dir) {
+                Write-Host "Directory exists: $dir"
+                Get-ChildItem -Path $dir -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host "Found in $dir: $($_.FullName)" }
+            } else {
+                Write-Host "Directory not found: $dir"
+            }
+        }
 
     - name: Run tests
       run: |
@@ -162,13 +203,14 @@ jobs:
         # Create binaries directory if it doesn't exist
         New-Item -ItemType Directory -Force -Path "${env:GITHUB_WORKSPACE}/binaries"
         
-        # Debug environment variables
-        Write-Host "Environment variables:"
+        # DEBUG: Environment variables
+        Write-Host "=== DEBUG: Environment variables ==="
         Write-Host "GITHUB_WORKSPACE: ${env:GITHUB_WORKSPACE}"
         Write-Host "HOME: ${env:HOME}"
         Write-Host "BUILD_DIR: ${env:BUILD_DIR}"
         
-        # List contents of various directories for debugging
+        # DEBUG: List contents of various directories
+        Write-Host "=== DEBUG: Directory contents ==="
         Write-Host "Contents of GITHUB_WORKSPACE:"
         Get-ChildItem -Path "${env:GITHUB_WORKSPACE}" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host $_.FullName }
         
@@ -176,7 +218,7 @@ jobs:
         Get-ChildItem -Path "${env:HOME}/craft" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host $_.FullName }
         
         # Copy files from Craft binaries directory
-        Write-Host "Copying files from Craft binaries directory..."
+        Write-Host "=== DEBUG: Copying files ==="
         $craftBinaries = "${env:HOME}/craft/binaries"
         if (Test-Path $craftBinaries) {
             Get-ChildItem -Path $craftBinaries -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object {
@@ -187,8 +229,8 @@ jobs:
             Write-Host "Warning: Craft binaries directory not found: $craftBinaries"
         }
         
-        # List collected files
-        Write-Host "Collected files in binaries directory:"
+        # DEBUG: List collected files
+        Write-Host "=== DEBUG: Collected files ==="
         Get-ChildItem -Path "${env:GITHUB_WORKSPACE}/binaries" | ForEach-Object { Write-Host $_.Name }
 
     - name: Upload artifacts
