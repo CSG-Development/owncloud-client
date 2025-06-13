@@ -167,7 +167,16 @@ jobs:
         Write-Host "CRAFT_TARGET: ${env:CRAFT_TARGET}"
         
         Write-Host "=== Running build with Sonar wrapper ==="
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build
+        try {
+            $output = & "${env:GITHUB_WORKSPACE}/.github/workflows/.sonar.ps1" --build 2>&1
+            Write-Host $output
+        } catch {
+            Write-Host "ERROR: Build failed with exception:"
+            Write-Host $_.Exception.Message
+            Write-Host "Stack trace:"
+            Write-Host $_.ScriptStackTrace
+            exit 1
+        }
         
         Write-Host "=== DEBUG: Post-build state ==="
         Write-Host "Current directory: $(Get-Location)"
