@@ -87,13 +87,17 @@ jobs:
     - name: Install dependencies
       run: |
         # First resolve dependencies
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --resolve-deps
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --resolve-deps "${env:GITHUB_WORKSPACE}"
         # Then install them
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --install-deps
         if ($IsWindows) {
-            # Install NSIS using winget
-            winget install -e --id NSIS.NullsoftScriptableInstallSystem
-            $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+            # Install NSIS using direct download
+            $nsisUrl = "https://sourceforge.net/projects/nsis/files/NSIS%203/3.09/nsis-3.09-setup.exe/download"
+            $nsisInstaller = "$env:TEMP\nsis-setup.exe"
+            Invoke-WebRequest -Uri $nsisUrl -OutFile $nsisInstaller
+            Start-Process -FilePath $nsisInstaller -ArgumentList "/S" -Wait
+            # Add NSIS to PATH
+            $env:Path = "C:\Program Files (x86)\NSIS;$env:Path"
         }
 
     - name: Build
