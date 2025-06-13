@@ -14,7 +14,7 @@ rm "$env:SONAR_DIRECTORY/build-wrapper-win-x86" -Force -Recurse -ErrorAction Sil
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$env:SONAR_DIRECTORY/build-wrapper-win-x86.zip", "$env:SONAR_DIRECTORY")
 
 if ($args[0] -eq "--build") {
-    & $env:SONAR_DIRECTORY/build-wrapper-win-x86/build-wrapper-win-x86-64.exe --out-dir bw-output & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --no-cache --src-dir "${env:GITHUB_WORKSPACE}" --install --qmerge
+    & $env:SONAR_DIRECTORY/build-wrapper-win-x86/build-wrapper-win-x86-64.exe --out-dir bw-output pwsh -Command "& '${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1' -c --no-cache --src-dir '${env:GITHUB_WORKSPACE}' --install --qmerge"
 } elseif($args[0] -eq "--analyze") {
     $defines = @(
         "sonar.organization=owncloud-1",
