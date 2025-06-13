@@ -81,6 +81,8 @@ jobs:
         New-Item -ItemType Directory "${env:GITHUB_WORKSPACE}/binaries/"
         # First update the craft environment
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --update
+        # Add owncloud blueprint repository from the fork
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --add-blueprint-repository https://github.com/CSG-Development/owncloud-client-craft-blueprints.git
         # Then set the force asserts
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --set forceAsserts=true owncloud-client
 
