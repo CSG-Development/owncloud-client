@@ -162,49 +162,38 @@ jobs:
         # Create binaries directory if it doesn't exist
         New-Item -ItemType Directory -Force -Path "${env:GITHUB_WORKSPACE}/binaries"
         
-        # List contents of build directory
+        # List contents of build directory for debugging
         Write-Host "Contents of build directory:"
-        Get-ChildItem -Path $env:BUILD_DIR -Recurse | Select-Object FullName
+        Get-ChildItem -Path "${env:BUILD_DIR}" -Recurse | Where-Object { $_.Name -match '\.(exe|dll)$' } | ForEach-Object { Write-Host $_.FullName }
         
-        # List contents of craft binaries directory
-        Write-Host "Contents of craft binaries directory:"
-        Get-ChildItem -Path "$env:HOME/craft/binaries" -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
-        
-        # Copy executables and DLLs from build directory
-        Write-Host "Copying files from build directory..."
-        
-        # Look for main executables
-        $mainExecutables = @(
-            "owncloud.exe",
-            "owncloudcmd.exe"
+        # Copy main executables and their dependencies
+        $executables = @(
+            "${env:BUILD_DIR}/bin/owncloud.exe",
+            "${env:BUILD_DIR}/bin/owncloudcmd.exe"
         )
         
-        foreach ($exe in $mainExecutables) {
-            $found = Get-ChildItem -Path $env:BUILD_DIR -Recurse -Filter $exe | Select-Object -First 1
-            if ($found) {
-                Write-Host "Found main executable: $($found.FullName)"
-                Copy-Item -Path $found.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force
+        foreach ($exe in $executables) {
+            if (Test-Path $exe) {
+                Write-Host "Found executable: $exe"
+                Copy-Item $exe -Destination "${env:GITHUB_WORKSPACE}/binaries/"
+                
+                # Get dependencies using dumpbin
+                $deps = & dumpbin /dependents $exe | Select-String -Pattern "\.dll" | ForEach-Object { $_.Matches.Value }
+                foreach ($dep in $deps) {
+                    $depPath = "${env:BUILD_DIR}/bin/$dep"
+                    if (Test-Path $depPath) {
+                        Write-Host "Copying dependency: $dep"
+                        Copy-Item $depPath -Destination "${env:GITHUB_WORKSPACE}/binaries/"
+                    }
+                }
             } else {
-                Write-Host "Warning: Could not find $exe"
+                Write-Host "Warning: Executable not found: $exe"
             }
         }
         
-        # Copy DLLs from the same directory as the executables
-        $exeDirs = Get-ChildItem -Path $env:BUILD_DIR -Recurse -Include "*.exe" | 
-            Where-Object { $_.DirectoryName -notlike "*\binaries*" } | 
-            Select-Object -ExpandProperty DirectoryName -Unique
-        
-        foreach ($dir in $exeDirs) {
-            Write-Host "Copying DLLs from: $dir"
-            Get-ChildItem -Path $dir -Filter "*.dll" | ForEach-Object {
-                Write-Host "Found DLL: $($_.FullName)"
-                Copy-Item -Path $_.FullName -Destination "${env:GITHUB_WORKSPACE}/binaries/" -Force
-            }
-        }
-        
-        # List contents of binaries directory
-        Write-Host "Contents of binaries directory after copy:"
-        Get-ChildItem -Path "${env:GITHUB_WORKSPACE}/binaries" -Recurse | Select-Object FullName
+        # List collected files
+        Write-Host "Collected files in binaries directory:"
+        Get-ChildItem -Path "${env:GITHUB_WORKSPACE}/binaries" | ForEach-Object { Write-Host $_.Name }
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
