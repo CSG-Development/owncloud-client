@@ -1,3 +1,8 @@
+message(STATUS "=== LIBSYNC CMakeLists.txt START ===")
+message(STATUS "Building LIBSYNC component: ${CMAKE_CURRENT_SOURCE_DIR}")
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "Output directory: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+
 find_package(LibreGraphAPI 1.0.4 REQUIRED)
 set_package_properties(LibreGraphAPI PROPERTIES
         URL https://github.com/owncloud/libre-graph-api-cpp-qt-client.git

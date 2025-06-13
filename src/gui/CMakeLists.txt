@@ -1,3 +1,8 @@
+message(STATUS "=== GUI CMakeLists.txt START ===")
+message(STATUS "Building GUI component: ${CMAKE_CURRENT_SOURCE_DIR}")
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "Output directory: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+
 include(ECMAddAppIcon)
 
 find_package(KDSingleApplication-qt6 1.0.0 REQUIRED)
