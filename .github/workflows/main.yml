@@ -81,7 +81,7 @@ jobs:
         New-Item -ItemType Directory "${env:GITHUB_WORKSPACE}/binaries/"
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --set forceAsserts=true owncloud/owncloud-client
         if ($IsWindows) {
-            & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c dev-utils/nsis
+            & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c dev-utils/_windows/nsis
         }
 
     - name: Install dependencies
