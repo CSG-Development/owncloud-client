@@ -106,6 +106,7 @@ function(generate_theme TARGET CURATOR_SIDEBAR_ICONS_OUT)
     else()
         file(GLOB_RECURSE CURATOR_SIDEBAR_ICONS "${OEM_THEME_DIR}/theme/colored/*-${APPLICATION_ICON_NAME}-icon-sidebar.png")
     endif()
+
     if (NOT CURATOR_SIDEBAR_ICONS)
         message(WARNING "The branding does not provide sidebar icons falling back to vanilla icons")
         file(GLOB_RECURSE CURATOR_SIDEBAR_ICONS "${PROJECT_SOURCE_DIR}/src/resources/theme/colored/*-curator-icon-sidebar.png")

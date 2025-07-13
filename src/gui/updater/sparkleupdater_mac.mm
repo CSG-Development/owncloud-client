@@ -87,7 +87,7 @@ class SparkleUpdater::Private
         DelegateObject *delegate;
 };
 
-// Delete ~/Library//Preferences/com.owncloud.desktopclient.plist to re-test
+// Delete ~/Library//Preferences/com.curator.desktopclient.plist to re-test
 SparkleUpdater::SparkleUpdater(const QUrl& appCastUrl)
     : Updater()
 {

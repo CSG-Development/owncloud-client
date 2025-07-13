@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>OCC::IgnoreListEditor</class>
- <widget class="QDialog" name="OCC::IgnoreListEditor">
+ <class>CUR::IgnoreListEditor</class>
+ <widget class="QDialog" name="CUR::IgnoreListEditor">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -131,7 +131,7 @@ Items where deletion is allowed will be deleted if they prevent a directory from
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>OCC::IgnoreListEditor</receiver>
+   <receiver>CUR::IgnoreListEditor</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -147,7 +147,7 @@ Items where deletion is allowed will be deleted if they prevent a directory from
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>OCC::IgnoreListEditor</receiver>
+   <receiver>CUR::IgnoreListEditor</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

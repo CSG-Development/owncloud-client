@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>OCC::IssuesWidget</class>
- <widget class="QWidget" name="OCC::IssuesWidget">
+ <class>CUR::IssuesWidget</class>
+ <widget class="QWidget" name="CUR::IssuesWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
