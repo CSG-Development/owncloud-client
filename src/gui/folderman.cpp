@@ -176,7 +176,7 @@ std::optional<qsizetype> FolderMan::setupFolders()
     qCInfo(lcFolderMan) << "Setup folders from settings file";
 
     for (const auto &account : AccountManager::instance()->accounts()) {
-        const auto id = account->account()->id();
+        const auto id = account->account()->uuid().toString();
         if (!accountsWithSettings.contains(id)) {
             continue;
         }
@@ -932,7 +932,7 @@ Folder *FolderMan::addFolderFromFolderWizardResult(const AccountStatePtr &accoun
     return f;
 }
 
-QString FolderMan::suggestSyncFolder(const QUrl &server, const QString &displayName)
+QString FolderMan::suggestSyncFolder(const QUrl &/*server*/, const QString &/*displayName*/)
 {
     return FolderMan::instance()->findGoodPathForNewSyncFolder(QDir::homePath(), Theme::instance()->appName());
 }

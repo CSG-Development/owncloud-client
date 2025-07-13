@@ -68,7 +68,7 @@ namespace {
         return {};
     }
 
-    int64_t getQuotaOc10(const AccountStatePtr &accountState, const QUrl &davUrl, FolderStatusModel::Columns type)
+    int64_t getQuotaOc10(const AccountStatePtr &accountState, const QUrl &/*davUrl*/, FolderStatusModel::Columns type)
     {
         switch (type) {
         case FolderStatusModel::Columns::QuotaTotal:

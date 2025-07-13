@@ -653,7 +653,7 @@ private slots:
                 return new FakePayloadReply(op, req, jsondata.toJson(), fakeAm);
             }
 
-            void openBrowserHook(const QUrl &url) override { Q_UNREACHABLE(); }
+            void openBrowserHook(const QUrl &/*url*/) override { Q_UNREACHABLE(); }
 
             QNetworkReply *tokenReply(QNetworkAccessManager::Operation op, const QNetworkRequest &request, QIODevice *device) override
             {
@@ -695,7 +695,7 @@ private slots:
                 return new FakePayloadReply(op, request, payload, fakeAm);
             }
 
-            virtual void test()
+            virtual void test() override
             {
                 oauth = prepareOauth();
                 oauth->saveDynamicRegistrationDataForAccount(account, {});
@@ -732,7 +732,7 @@ private slots:
                 return new FakePayloadReply(op, req, jsondata.toJson(), fakeAm);
             }
 
-            void openBrowserHook(const QUrl &url) override { Q_UNREACHABLE(); }
+            void openBrowserHook(const QUrl &/*url*/) override { Q_UNREACHABLE(); }
 
             QNetworkReply *tokenReply(QNetworkAccessManager::Operation op, const QNetworkRequest &request, QIODevice *device) override
             {
@@ -756,7 +756,7 @@ private slots:
                 return new FakePayloadReply(op, request, {}, fakeAm);
             }
 
-            virtual void test()
+            virtual void test() override
             {
                 oauth = prepareOauth();
                 oauth->saveDynamicRegistrationDataForAccount(account, {});

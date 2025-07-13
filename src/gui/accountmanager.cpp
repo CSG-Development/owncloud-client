@@ -207,7 +207,7 @@ void AccountManager::saveAccount(Account *account, bool saveCredentials)
     qCDebug(lcAccountManager) << "Saving account" << account->url().toString();
     auto settings = ConfigFile::settingsWithGroup(accountsC());
     settings->setValue(versionC(), ConfigFile::UnusedLegacySettingsVersionNumber);
-    settings->beginGroup(account->id());
+    settings->beginGroup(account->uuid().toString());
 
     settings->setValue(versionC(), ConfigFile::UnusedLegacySettingsVersionNumber);
     settings->setValue(urlC(), account->_url.toString());
@@ -325,7 +325,7 @@ AccountStatePtr AccountManager::account(const QUuid uuid) {
 
 AccountStatePtr AccountManager::addAccount(const AccountPtr &newAccount)
 {
-    auto id = newAccount->id();
+    auto id = newAccount->uuid().toString();
     if (id.isEmpty() || !isAccountIdAvailable(id)) {
         id = generateFreeAccountId();
     }
@@ -349,7 +349,7 @@ void AccountManager::deleteAccount(AccountStatePtr account)
     account->account()->credentialManager()->clear();
 
     auto settings = ConfigFile::settingsWithGroup(accountsC());
-    settings->remove(account->account()->id());
+    settings->remove(account->account()->uuid().toString());
 
     emit accountRemoved(account);
     account->deleteLater();
@@ -372,7 +372,7 @@ void AccountManager::shutdown()
 bool AccountManager::isAccountIdAvailable(const QString &id) const
 {
     for (const auto &acc : _accounts) {
-        if (acc->account()->id() == id) {
+        if (acc->account()->uuid().toString() == id) {
             return false;
         }
     }
