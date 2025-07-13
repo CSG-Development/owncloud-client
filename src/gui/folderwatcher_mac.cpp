@@ -21,7 +21,7 @@
 #include <QStringList>
 
 
-namespace OCC {
+namespace CUR {
 
 FolderWatcherPrivate::FolderWatcherPrivate(FolderWatcher *p, const QString &path)
     : _parent(p)

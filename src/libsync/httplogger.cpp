@@ -73,7 +73,7 @@ void logHttp(const QByteArray &verb, const QString &url, const QByteArray &id, c
     stream << " " << url << " Header: { ";
     for (const auto &it : header) {
         stream << it.first << ": ";
-        static const bool dontRedact = qEnvironmentVariableIsSet("OWNCLOUD_HTTPLOGGER_NO_REDACT");
+        static const bool dontRedact = qEnvironmentVariableIsSet("CURATOR_HTTPLOGGER_NO_REDACT");
         if (!dontRedact && it.first == "Authorization") {
             stream << (it.second.startsWith("Bearer ") ? "Bearer" : "Basic");
             stream << " [redacted]";
@@ -106,7 +106,7 @@ void logHttp(const QByteArray &verb, const QString &url, const QByteArray &id, c
 }
 
 
-namespace OCC {
+namespace CUR {
 
 void HttpLogger::logRequest(QNetworkReply *reply, QNetworkAccessManager::Operation operation, QIODevice *device)
 {

@@ -17,7 +17,7 @@
 #include "filesystem.h"
 #include "syncfileitem.h"
 
-using namespace OCC;
+using namespace CUR;
 
 VfsOff::VfsOff(QObject *parent)
     : Vfs(parent)

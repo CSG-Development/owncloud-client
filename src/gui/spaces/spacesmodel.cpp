@@ -32,7 +32,7 @@ constexpr QSize ImageSizeC(128, 128);
 constexpr QSize ImageMarginC(ImageSizeC * 0.1);
 }
 
-using namespace OCC::Spaces;
+using namespace CUR::Spaces;
 
 SpacesModel::SpacesModel(QObject *parent)
     : QAbstractTableModel(parent)

@@ -162,12 +162,12 @@ static CSYNC_EXCLUDE_TYPE _csync_excluded_common(QStringView path, bool excludeC
                 return CSYNC_FILE_SILENTLY_EXCLUDED;
             }
         }
-        if (bname.startsWith(QLatin1String(".owncloudsync.log"), Qt::CaseInsensitive)) { // ".owncloudsync.log*"
+        if (bname.startsWith(QLatin1String(".curatorsync.log"), Qt::CaseInsensitive)) { // ".curatorsync.log*"
             return CSYNC_FILE_SILENTLY_EXCLUDED;
         }
     }
 
-    if (bname.endsWith(QLatin1String(APPLICATION_DOTVIRTUALFILE_SUFFIX), Qt::CaseInsensitive)) { // ".owncloud" placeholder
+    if (bname.endsWith(QLatin1String(APPLICATION_DOTVIRTUALFILE_SUFFIX), Qt::CaseInsensitive)) { // ".curator" placeholder
         return CSYNC_FILE_EXCLUDE_RESERVED;
     }
 
@@ -201,10 +201,10 @@ static CSYNC_EXCLUDE_TYPE _csync_excluded_common(QStringView path, bool excludeC
             return CSYNC_FILE_EXCLUDE_INVALID_CHAR;
         }
         if (std::find_if(
-                OCC::FileSystem::IllegalFilenameCharsWindows.begin(), OCC::FileSystem::IllegalFilenameCharsWindows.end(), [c](const auto illegal) {
+                CUR::FileSystem::IllegalFilenameCharsWindows.begin(), CUR::FileSystem::IllegalFilenameCharsWindows.end(), [c](const auto illegal) {
                     return c == illegal;
                 })
-            != OCC::FileSystem::IllegalFilenameCharsWindows.end()) {
+            != CUR::FileSystem::IllegalFilenameCharsWindows.end()) {
             return CSYNC_FILE_EXCLUDE_INVALID_CHAR;
         }
     }
@@ -217,17 +217,17 @@ static CSYNC_EXCLUDE_TYPE _csync_excluded_common(QStringView path, bool excludeC
     }
 
 
-    if (excludeConflictFiles && OCC::Utility::isConflictFile(path)) {
+    if (excludeConflictFiles && CUR::Utility::isConflictFile(path)) {
         return CSYNC_FILE_EXCLUDE_CONFLICT;
     }
     return CSYNC_NOT_EXCLUDED;
 }
 
 
-using namespace OCC;
+using namespace CUR;
 
 ExcludedFiles::ExcludedFiles()
-    : _clientVersion(OCC::Version::version())
+    : _clientVersion(CUR::Version::version())
 {
     // Windows used to use PathMatchSpec which allows *foo to match abc/deffoo.
     _wildcardsMatchSlash = Utility::isWindows();
@@ -742,7 +742,7 @@ void ExcludedFiles::prepare()
             .arg(fullFileDirKeep, fullDirKeep, bnameFileDirKeep, bnameDirKeep, fullFileDirRemove, fullDirRemove, bnameFileDirRemove, bnameDirRemove));
 
     QRegularExpression::PatternOptions patternOptions = QRegularExpression::NoPatternOption;
-    if (OCC::Utility::fsCasePreserving())
+    if (CUR::Utility::fsCasePreserving())
         patternOptions |= QRegularExpression::CaseInsensitiveOption;
     _bnameTraversalRegexFile.setPatternOptions(patternOptions);
     _bnameTraversalRegexFile.optimize();

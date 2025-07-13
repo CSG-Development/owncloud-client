@@ -22,7 +22,7 @@
 #include <map>
 #include <QSet>
 
-namespace OCC {
+namespace CUR {
 
 class SyncEngine;
 
@@ -31,7 +31,7 @@ class SyncEngine;
  *        go through the SyncEngine, to be reported as overlay icons in the shell.
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT SyncFileStatusTracker : public QObject
+class CURATORSYNC_EXPORT SyncFileStatusTracker : public QObject
 {
     Q_OBJECT
 public:

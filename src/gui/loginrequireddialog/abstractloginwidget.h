@@ -5,7 +5,7 @@
 #include <QList>
 #include <QWidget>
 
-namespace OCC {
+namespace CUR {
 
 class AbstractLoginWidget : public QWidget
 {
@@ -22,4 +22,4 @@ protected:
     explicit AbstractLoginWidget(QWidget *parent = nullptr);
 };
 
-} // OCC
+} // CUR

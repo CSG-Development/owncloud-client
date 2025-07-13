@@ -17,12 +17,12 @@
 
 #include <QAbstractItemModel>
 
-namespace OCC::GraphApi {
+namespace CUR::GraphApi {
 class SpacesManager;
 class Space;
 };
 
-namespace OCC::Spaces {
+namespace CUR::Spaces {
 class SpacesModel : public QAbstractTableModel
 {
     Q_OBJECT

@@ -20,7 +20,7 @@
 #include <QStyledItemDelegate>
 
 #include "accountstate.h"
-#include "owncloudgui.h"
+#include "curatorgui.h"
 #include "progressdispatcher.h"
 
 class QAction;
@@ -28,7 +28,7 @@ class QActionGroup;
 class QToolBar;
 class QStandardItemModel;
 
-namespace OCC {
+namespace CUR {
 
 namespace Ui {
     class SettingsDialog;
@@ -36,7 +36,7 @@ namespace Ui {
 class AccountSettings;
 class Application;
 class FolderMan;
-class ownCloudGui;
+class CuratorGui;
 class ActivitySettings;
 
 /**
@@ -49,7 +49,7 @@ class SettingsDialog : public QMainWindow
     Q_PROPERTY(QWidget* currentPage READ currentPage)
 
 public:
-    explicit SettingsDialog(ownCloudGui *gui, QWidget *parent = nullptr);
+    explicit SettingsDialog(CuratorGui *gui, QWidget *parent = nullptr);
     ~SettingsDialog() override;
 
     void addModalWidget(QWidget *w);
@@ -95,7 +95,7 @@ private:
     QAction *_activityAction;
     QAction *_addAccountAction;
     QList<QAction *> _accountActions;
-    ownCloudGui *_gui;
+    CuratorGui *_gui;
     QList<Account *> _modalStack;
 };
 }

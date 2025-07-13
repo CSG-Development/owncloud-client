@@ -13,7 +13,7 @@
  */
 
 #include "propagateupload.h"
-#include "owncloudpropagator_p.h"
+#include "curatorpropagator_p.h"
 #include "networkjobs.h"
 #include "account.h"
 #include "common/syncjournaldb.h"
@@ -35,7 +35,7 @@
 #include <cstring>
 #include <memory>
 
-namespace OCC {
+namespace CUR {
 
 void PropagateUploadFileV1::doStartUpload()
 {
@@ -162,7 +162,7 @@ void PropagateUploadFileV1::startNextChunk()
         parallelChunkUpload = false;
     } else {
         static bool envEnabled = [] {
-            const auto env = qEnvironmentVariable("OWNCLOUD_PARALLEL_CHUNK");
+            const auto env = qEnvironmentVariable("CURATOR_PARALLEL_CHUNK");
             if (!env.isEmpty()) {
                 return env != QLatin1String("false") && env != QLatin1String("0");
             }

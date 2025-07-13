@@ -28,7 +28,7 @@ class QPixmap;
 class QColor;
 class QPaintDevice;
 
-namespace OCC {
+namespace CUR {
 
 class SyncResult;
 
@@ -36,7 +36,7 @@ class SyncResult;
  * @brief The Theme class
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT Theme : public QObject
+class CURATORSYNC_EXPORT Theme : public QObject
 {
     Q_OBJECT
 public:
@@ -147,7 +147,7 @@ public:
     * If the function is overridden to return an empty string the action is removed from
     * the menu.
     *
-    * Defaults to ownCloud's client documentation website.
+    * Defaults to Curator's client documentation website.
     */
     virtual QString helpUrl() const;
 
@@ -156,7 +156,7 @@ public:
      *
      * If the function is overridden to return an empty string no help link will be shown.
      *
-     * Defaults to helpUrl() + "conflicts.html", which is a page in ownCloud's client
+     * Defaults to helpUrl() + "conflicts.html", which is a page in Curator's client
      * documentation website. If helpUrl() is empty, this function will also return the
      * empty string.
      */
@@ -172,7 +172,7 @@ public:
     virtual QString overrideServerUrl() const;
 
     /** Same as overrideServerUrl allows override by
-     *  setting $OWNCLOUD_OVERRIDE_SERVER_URL
+     *  setting $CURATOR_OVERRIDE_SERVER_URL
      */
     QString overrideServerUrlV2() const;
 
@@ -331,7 +331,7 @@ public:
 
     /**
      * The OAuth client_id, secret pair.
-     * Note that client that change these value cannot connect to un-branded owncloud servers.
+     * Note that client that change these value cannot connect to un-branded curator servers.
      */
     virtual QString oauthClientId() const;
     virtual QString oauthClientSecret() const;
@@ -480,6 +480,6 @@ private:
 };
 
 template <>
-QString OCC::Utility::enumToDisplayName(Theme::UserIDType userIdType);
+QString CUR::Utility::enumToDisplayName(Theme::UserIDType userIdType);
 }
 #endif // _THEME_H

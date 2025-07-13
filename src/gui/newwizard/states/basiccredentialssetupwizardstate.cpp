@@ -16,7 +16,7 @@
 #include "jobs/checkbasicauthjobfactory.h"
 #include "networkjobs/fetchuserinfojobfactory.h"
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 BasicCredentialsSetupWizardState::BasicCredentialsSetupWizardState(SetupWizardContext *context)
     : AbstractSetupWizardState(context)
@@ -50,4 +50,4 @@ SetupWizardState BasicCredentialsSetupWizardState::state() const
     return SetupWizardState::CredentialsState;
 }
 
-} // OCC::Wizard
+} // CUR::Wizard

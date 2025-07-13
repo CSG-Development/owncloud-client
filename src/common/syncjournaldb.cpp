@@ -54,7 +54,7 @@ const auto getFileRecordQueryC = QByteArrayLiteral("SELECT path, inode, modtime,
                                                    " LEFT JOIN checksumtype as contentchecksumtype ON metadata.contentChecksumTypeId == contentchecksumtype.id ");
 
 
-void fillFileRecordFromGetQuery(OCC::SyncJournalFileRecord &rec, OCC::SqlQuery &query)
+void fillFileRecordFromGetQuery(CUR::SyncJournalFileRecord &rec, CUR::SqlQuery &query)
 {
     rec._path = query.baValue(0);
     rec._inode = query.int64Value(1);
@@ -62,7 +62,7 @@ void fillFileRecordFromGetQuery(OCC::SyncJournalFileRecord &rec, OCC::SqlQuery &
     rec._type = static_cast<ItemType>(query.intValue(3));
     rec._etag = query.baValue(4);
     rec._fileId = query.baValue(5);
-    rec._remotePerm = OCC::RemotePermissions::fromDbValue(query.baValue(6));
+    rec._remotePerm = CUR::RemotePermissions::fromDbValue(query.baValue(6));
     rec._fileSize = query.int64Value(7);
     rec._serverHasIgnoredFiles = (query.intValue(8) > 0);
     rec._checksumHeader = query.baValue(9);
@@ -73,7 +73,7 @@ QByteArray defaultJournalMode(const QString &dbPath)
 #if defined(Q_OS_WIN)
     // See #2693: Some exFAT file systems seem unable to cope with the
     // WAL journaling mode. They work fine with DELETE.
-    QString fileSystem = OCC::FileSystem::fileSystemForPath(dbPath);
+    QString fileSystem = CUR::FileSystem::fileSystemForPath(dbPath);
     qCInfo(lcDb) << "Detected filesystem" << fileSystem << "for" << dbPath;
     if (fileSystem.contains(QLatin1String("FAT"))) {
         qCInfo(lcDb) << "Filesystem contains FAT - using DELETE journal mode";
@@ -91,7 +91,7 @@ QByteArray defaultJournalMode(const QString &dbPath)
 }
 }
 
-namespace OCC {
+namespace CUR {
 
 SyncJournalDb::SyncJournalDb(const QString &dbFilePath, QObject *parent)
     : QObject(parent)
@@ -100,7 +100,7 @@ SyncJournalDb::SyncJournalDb(const QString &dbFilePath, QObject *parent)
     , _metadataTableIsEmpty(false)
 {
     // Allow forcing the journal mode for debugging
-    static QByteArray envJournalMode = qgetenv("OWNCLOUD_SQLITE_JOURNAL_MODE");
+    static QByteArray envJournalMode = qgetenv("CURATOR_SQLITE_JOURNAL_MODE");
     _journalMode = envJournalMode;
     if (_journalMode.isEmpty()) {
         _journalMode = defaultJournalMode(_dbFile);
@@ -210,7 +210,7 @@ bool SyncJournalDb::dbIsTooNewForClient(const QString &dbFilePath)
     //    int minor = versionQuery.intValue(1);
     //    int patch = versionQuery.intValue(2);
 
-    return dbMajor > OCC::Version::versionWithBuildNumber().majorVersion();
+    return dbMajor > CUR::Version::versionWithBuildNumber().majorVersion();
 }
 
 bool SyncJournalDb::exists()
@@ -317,7 +317,7 @@ bool SyncJournalDb::checkConnect()
     }
 
     // Set locking mode to avoid issues with WAL on Windows
-    static QByteArray locking_mode_env = qgetenv("OWNCLOUD_SQLITE_LOCKING_MODE");
+    static QByteArray locking_mode_env = qgetenv("CURATOR_SQLITE_LOCKING_MODE");
     if (locking_mode_env.isEmpty())
         locking_mode_env = "EXCLUSIVE";
     pragma1.prepare("PRAGMA locking_mode=" + locking_mode_env + ";");
@@ -337,7 +337,7 @@ bool SyncJournalDb::checkConnect()
     }
 
     // For debugging purposes, allow temp_store to be set
-    static QByteArray env_temp_store = qgetenv("OWNCLOUD_SQLITE_TEMP_STORE");
+    static QByteArray env_temp_store = qgetenv("CURATOR_SQLITE_TEMP_STORE");
     if (!env_temp_store.isEmpty()) {
         pragma1.prepare("PRAGMA temp_store = " + env_temp_store + ";");
         if (!pragma1.exec()) {
@@ -528,7 +528,7 @@ bool SyncJournalDb::checkConnect()
         forceRemoteDiscovery = true;
 
         createQuery.prepare("INSERT INTO version VALUES (?1, ?2, ?3, ?4);");
-        const auto segments = OCC::Version::versionWithBuildNumber().segments();
+        const auto segments = CUR::Version::versionWithBuildNumber().segments();
         for (int i = 0; i < segments.size(); ++i) {
             createQuery.bindValue(i + 1, segments[i]);
         }
@@ -556,10 +556,10 @@ bool SyncJournalDb::checkConnect()
         }
 
         // Not comparing the BUILD id here, correct?
-        if (QVersionNumber(major, minor, patch) != OCC::Version::version()) {
+        if (QVersionNumber(major, minor, patch) != CUR::Version::version()) {
             createQuery.prepare("UPDATE version SET major=?1, minor=?2, patch =?3, custom=?4 "
                                 "WHERE major=?5 AND minor=?6 AND patch=?7;");
-            const auto segments = OCC::Version::versionWithBuildNumber().segments();
+            const auto segments = CUR::Version::versionWithBuildNumber().segments();
             for (int i = 0; i < segments.size(); ++i) {
                 createQuery.bindValue(i + 1, segments[i]);
             }
@@ -2397,4 +2397,4 @@ bool operator==(const SyncJournalDb::UploadInfo &lhs,
         && lhs._transferid == rhs._transferid
         && lhs._contentChecksum == rhs._contentChecksum;
 }
-} // namespace OCC
+} // namespace CUR

@@ -21,7 +21,7 @@
 #include <CoreServices/CoreServices.h>
 
 
-namespace OCC {
+namespace CUR {
 
 class FolderWatcher;
 
@@ -49,6 +49,6 @@ private:
     FSEventStreamRef _stream;
 };
 
-} // namespace OCC
+} // namespace CUR
 
 #endif

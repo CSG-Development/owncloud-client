@@ -23,15 +23,15 @@
 #include <QSet>
 #include <QTextStream>
 
-#include "owncloudlib.h"
+#include "curatorlib.h"
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief The Logger class
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT Logger : public QObject
+class CURATORSYNC_EXPORT Logger : public QObject
 {
     Q_OBJECT
 public:
@@ -107,6 +107,6 @@ private:
     int _maxLogFiles;
 };
 
-} // namespace OCC
+} // namespace CUR
 
 #endif // LOGGER_H

@@ -14,7 +14,7 @@
 
 #include "abstractsetupwizardpage.h"
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 AbstractSetupWizardPage::~AbstractSetupWizardPage() = default;
 

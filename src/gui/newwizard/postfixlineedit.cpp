@@ -17,7 +17,7 @@
 
 #include "postfixlineedit.h"
 
-namespace OCC {
+namespace CUR {
 
 const int horizontalMargin(4);
 const int verticalMargin(4);
@@ -74,4 +74,4 @@ void PostfixLineEdit::paintEvent(QPaintEvent *pe)
     p.drawText(postfixRect, _postfix);
 }
 
-} // namespace OCC
+} // namespace CUR

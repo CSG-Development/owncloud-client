@@ -32,7 +32,7 @@ using namespace std::chrono_literals;
 
 using namespace std::chrono_literals;
 
-namespace OCC {
+namespace CUR {
 
 UpdaterScheduler::UpdaterScheduler(QObject *parent)
     : QObject(parent)
@@ -447,7 +447,7 @@ void NSISUpdater::showNoUrlDialog(const UpdateInfo &info)
     layout->addWidget(bb);
 
     msgBox->open();
-    ownCloudGui::raiseDialog(msgBox);
+    CuratorGui::raiseDialog(msgBox);
 }
 
 void NSISUpdater::showUpdateErrorDialog(const QString &targetVersion)

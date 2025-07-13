@@ -28,7 +28,7 @@
 #include <QApplication>
 #include <QSslSocket>
 
-#include "owncloudtheme.h"
+#include "curatortheme.h"
 
 #ifdef THEME_INCLUDE
 #include THEME_INCLUDE
@@ -37,7 +37,7 @@
 namespace {
 QString vanillaThemePath()
 {
-    return QStringLiteral(":/client/ownCloud/theme");
+    return QStringLiteral(":/client/Curator/theme");
 }
 
 QString brandThemePath()
@@ -67,10 +67,10 @@ QString blackTheme()
 
 constexpr bool isVanilla()
 {
-    return std::string_view(APPLICATION_SHORTNAME) == "ownCloud";
+    return std::string_view(APPLICATION_SHORTNAME) == "Curator";
 }
 }
-namespace OCC {
+namespace CUR {
 
 Theme *Theme::_instance = nullptr;
 
@@ -280,7 +280,7 @@ QString Theme::overrideServerUrl() const
 
 QString Theme::overrideServerUrlV2() const
 {
-    static const auto serverOverride = qEnvironmentVariable("OWNCLOUD_OVERRIDE_SERVER_URL");
+    static const auto serverOverride = qEnvironmentVariable("CURATOR_OVERRIDE_SERVER_URL");
     if (serverOverride.isEmpty()) {
         OC_DISABLE_DEPRECATED_WARNING
         return overrideServerUrl();
@@ -369,7 +369,7 @@ QString Theme::aboutVersions(Theme::VersionFormat format) const
     QString gitUrl;
     if (!Version::gitSha().isEmpty()) {
         if (format != Theme::VersionFormat::Url) {
-            _version = QCoreApplication::translate("ownCloudTheme::versionWithSha", "%1 %2").arg(_version, gitSHA1(format));
+            _version = QCoreApplication::translate("CuratorTheme::versionWithSha", "%1 %2").arg(_version, gitSHA1(format));
         } else {
             gitUrl = gitSHA1(format) + br;
         }
@@ -380,7 +380,7 @@ QString Theme::aboutVersions(Theme::VersionFormat format) const
         sysInfo << QStringLiteral("QPA: %1").arg(guiApp->platformName());
     }
 
-    return QCoreApplication::translate("ownCloudTheme::aboutVersions()",
+    return QCoreApplication::translate("CuratorTheme::aboutVersions()",
         "%1 %2%7"
         "%8"
         "Libraries Qt %3, %4%7"
@@ -641,7 +641,7 @@ bool Theme::withCrashReporter() const
 }
 
 template <>
-OWNCLOUDSYNC_EXPORT QString Utility::enumToDisplayName(Theme::UserIDType userIdType)
+CURATORSYNC_EXPORT QString Utility::enumToDisplayName(Theme::UserIDType userIdType)
 {
     switch (userIdType) {
     case Theme::UserIDUserName:

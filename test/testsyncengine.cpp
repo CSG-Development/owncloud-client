@@ -13,8 +13,8 @@
 #include <QtTest>
 
 using namespace std::chrono_literals;
-using namespace OCC::FileSystem::SizeLiterals;
-using namespace OCC;
+using namespace CUR::FileSystem::SizeLiterals;
+using namespace CUR;
 
 bool itemDidComplete(const ItemCompletedSpy &spy, const QString &path)
 {

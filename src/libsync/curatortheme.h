@@ -12,32 +12,32 @@
  * for more details.
  */
 
-#ifndef OWNCLOUD_THEME_H
-#define OWNCLOUD_THEME_H
+#ifndef CURATOR_THEME_H
+#define CURATOR_THEME_H
 
 #include "theme.h"
 
-namespace OCC {
+namespace CUR {
 
 /**
- * @brief The ownCloudTheme class
+ * @brief The CuratorTheme class
  * @ingroup libsync
  */
-class ownCloudTheme : public Theme
+class CuratorTheme : public Theme
 {
     Q_OBJECT
 public:
-    ownCloudTheme();
+    CuratorTheme();
     QColor wizardHeaderBackgroundColor() const override;
     QColor wizardHeaderTitleColor() const override;
     QIcon wizardHeaderLogo() const override;
     QIcon aboutIcon() const override;
 
-    // For owncloud-brandings *do* show the virtual files option.
+    // For curator-brandings *do* show the virtual files option.
     bool showVirtualFilesOption() const override { return true; }
     bool enableExperimentalFeatures() const override { return true; };
 
 private:
 };
 }
-#endif // OWNCLOUD_MIRALL_THEME_H
+#endif // CURATOR_MIRALL_THEME_H

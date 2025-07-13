@@ -15,20 +15,20 @@
 #ifndef MIRALL_ACCESS_MANAGER_H
 #define MIRALL_ACCESS_MANAGER_H
 
-#include "owncloudlib.h"
+#include "curatorlib.h"
 #include <QNetworkAccessManager>
 
 class QByteArray;
 class QUrl;
 
-namespace OCC {
+namespace CUR {
 class CookieJar;
 
 /**
  * @brief The AccessManager class
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT AccessManager : public QNetworkAccessManager
+class CURATORSYNC_EXPORT AccessManager : public QNetworkAccessManager
 {
     Q_OBJECT
 
@@ -62,6 +62,6 @@ private:
     QSet<QSslCertificate> _customTrustedCaCertificates;
 };
 
-} // namespace OCC
+} // namespace CUR
 
 #endif

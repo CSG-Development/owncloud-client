@@ -29,7 +29,7 @@
 #include "configfile.h"
 #include "theme.h"
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcUpdater, "gui.updater", QtInfoMsg)
 
@@ -45,7 +45,7 @@ Updater *Updater::instance()
 
 QUrl Updater::updateUrl()
 {
-    QUrl updateBaseUrl(QString::fromLocal8Bit(qgetenv("OCC_UPDATE_URL")));
+    QUrl updateBaseUrl(QString::fromLocal8Bit(qgetenv("CUR_UPDATE_URL")));
     if (updateBaseUrl.isEmpty()) {
         updateBaseUrl = Theme::instance()->updateCheckUrl();
     }
@@ -96,7 +96,7 @@ QUrlQuery Updater::getQueryParams()
 #endif
 
 
-    query.addQueryItem(QStringLiteral("versionsuffix"), OCC::Version::suffix());
+    query.addQueryItem(QStringLiteral("versionsuffix"), CUR::Version::suffix());
 
     auto channel = ConfigFile().updateChannel();
     if (channel != QLatin1String("stable")) {
@@ -133,4 +133,4 @@ Updater *Updater::create()
 #endif
 }
 
-} // namespace OCC
+} // namespace CUR

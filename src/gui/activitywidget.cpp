@@ -46,7 +46,7 @@ using namespace std::chrono_literals;
 // refreshes of the notifications
 #define NOTIFICATION_REQUEST_FREE_PERIOD 15000
 
-namespace OCC {
+namespace CUR {
 
 ActivityWidget::ActivityWidget(QWidget *parent)
     : QWidget(parent)

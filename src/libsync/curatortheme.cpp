@@ -12,7 +12,7 @@
  * for more details.
  */
 
-#include "owncloudtheme.h"
+#include "curatortheme.h"
 
 #include <QString>
 #include <QVariant>
@@ -22,29 +22,29 @@
 
 #include "common/utility.h"
 
-namespace OCC {
+namespace CUR {
 
-ownCloudTheme::ownCloudTheme()
+CuratorTheme::CuratorTheme()
     : Theme()
 {
 }
 
-QColor ownCloudTheme::wizardHeaderBackgroundColor() const
+QColor CuratorTheme::wizardHeaderBackgroundColor() const
 {
     return QColor(4, 30, 66);
 }
 
-QColor ownCloudTheme::wizardHeaderTitleColor() const
+QColor CuratorTheme::wizardHeaderTitleColor() const
 {
     return Qt::white;
 }
 
-QIcon ownCloudTheme::wizardHeaderLogo() const
+QIcon CuratorTheme::wizardHeaderLogo() const
 {
     return themeUniversalIcon(QStringLiteral("wizard_logo"));
 }
 
-QIcon ownCloudTheme::aboutIcon() const
+QIcon CuratorTheme::aboutIcon() const
 {
     return themeUniversalIcon(QStringLiteral("oc-image-about"));
 }

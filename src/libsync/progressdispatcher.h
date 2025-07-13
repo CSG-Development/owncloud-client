@@ -15,7 +15,7 @@
 #ifndef PROGRESSDISPATCHER_H
 #define PROGRESSDISPATCHER_H
 
-#include "owncloudlib.h"
+#include "curatorlib.h"
 #include <QObject>
 #include <QHash>
 #include <QTime>
@@ -25,13 +25,13 @@
 
 #include "syncfileitem.h"
 
-namespace OCC {
+namespace CUR {
 class Folder;
 /**
  * @brief The ProgressInfo class
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT ProgressInfo : public QObject
+class CURATORSYNC_EXPORT ProgressInfo : public QObject
 {
     Q_OBJECT
 public:
@@ -138,7 +138,7 @@ public:
      * Holds the current state of something making progress and maintains an
      * estimate of the current progress per second.
      */
-    struct OWNCLOUDSYNC_EXPORT Progress
+    struct CURATORSYNC_EXPORT Progress
     {
         Progress()
             : _progressPerSec(0)
@@ -184,7 +184,7 @@ public:
 
     Status _status;
 
-    struct OWNCLOUDSYNC_EXPORT ProgressItem
+    struct CURATORSYNC_EXPORT ProgressItem
     {
         SyncFileItem _item;
         Progress _progress;
@@ -255,16 +255,16 @@ private:
 
 namespace Progress {
 
-    OWNCLOUDSYNC_EXPORT QString asActionString(const SyncFileItem &item);
-    OWNCLOUDSYNC_EXPORT QString asResultString(const SyncFileItem &item);
+    CURATORSYNC_EXPORT QString asActionString(const SyncFileItem &item);
+    CURATORSYNC_EXPORT QString asResultString(const SyncFileItem &item);
 
-    OWNCLOUDSYNC_EXPORT bool isWarningKind(SyncFileItem::Status);
-    OWNCLOUDSYNC_EXPORT bool isIgnoredKind(SyncFileItem::Status);
+    CURATORSYNC_EXPORT bool isWarningKind(SyncFileItem::Status);
+    CURATORSYNC_EXPORT bool isIgnoredKind(SyncFileItem::Status);
 }
 
-// work around for only having one namespace OCC, and this enum not beeing in a QObject
+// work around for only having one namespace CUR, and this enum not beeing in a QObject
 namespace ErrorCategoryPrivate {
-    OWNCLOUDSYNC_EXPORT Q_NAMESPACE;
+    CURATORSYNC_EXPORT Q_NAMESPACE;
 
     /** Type of error
      *
@@ -289,7 +289,7 @@ using ErrorCategoryPrivate::ErrorCategory;
  * or the overall sync progress.
  *
  */
-class OWNCLOUDSYNC_EXPORT ProgressDispatcher : public QObject
+class CURATORSYNC_EXPORT ProgressDispatcher : public QObject
 {
     Q_OBJECT
 public:

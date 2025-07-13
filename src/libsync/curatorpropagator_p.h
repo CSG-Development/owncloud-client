@@ -15,13 +15,13 @@
 
 #pragma once
 
-#include "owncloudpropagator.h"
+#include "curatorpropagator.h"
 #include "syncfileitem.h"
 #include "networkjobs.h"
 #include <QLoggingCategory>
 #include <QNetworkReply>
 
-namespace OCC {
+namespace CUR {
 
 inline QString getEtagFromReply(QNetworkReply *reply)
 {

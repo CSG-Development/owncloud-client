@@ -16,7 +16,7 @@
 
 #include "abstractsetupwizardstate.h"
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 class AccountConfiguredSetupWizardState : public AbstractSetupWizardState
 {
@@ -30,4 +30,4 @@ public:
     void evaluatePage() override;
 };
 
-} // OCC::Wizard
+} // CUR::Wizard

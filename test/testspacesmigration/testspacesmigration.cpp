@@ -13,7 +13,7 @@
 
 #include <QJsonObject>
 
-using namespace OCC;
+using namespace CUR;
 
 class TestSpacesMigration : public QObject
 {
@@ -23,7 +23,7 @@ private:
 
     auto addFolder(AccountStatePtr accountState, const QString &localPath, const QString &remotePath)
     {
-        auto d = OCC::FolderDefinition::createNewFolderDefinition(accountState->account()->davUrl(), {});
+        auto d = CUR::FolderDefinition::createNewFolderDefinition(accountState->account()->davUrl(), {});
         Q_ASSERT(localPath.startsWith(QLatin1Char('/')));
         d.setLocalPath(_tmp.path() + localPath);
         d.setTargetPath(remotePath);

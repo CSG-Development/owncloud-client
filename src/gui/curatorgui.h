@@ -12,8 +12,8 @@
  * for more details.
  */
 
-#ifndef OWNCLOUDGUI_H
-#define OWNCLOUDGUI_H
+#ifndef CURATORGUI_H
+#define CURATORGUI_H
 
 #include "account.h"
 #include "progressdispatcher.h"
@@ -26,7 +26,7 @@
 #include <QSize>
 #include <QTimer>
 
-namespace OCC {
+namespace CUR {
 
 namespace Wizard {
     class SetupWizardController;
@@ -45,15 +45,15 @@ enum class ShareDialogStartPage {
 };
 
 /**
- * @brief The ownCloudGui class
+ * @brief The CuratorGui class
  * @ingroup gui
  */
-class ownCloudGui : public QObject
+class CuratorGui : public QObject
 {
     Q_OBJECT
 public:
-    explicit ownCloudGui(Application *parent = nullptr);
-    ~ownCloudGui() override;
+    explicit CuratorGui(Application *parent = nullptr);
+    ~CuratorGui() override;
 
     bool checkAccountExists(bool openSettings);
 
@@ -146,6 +146,6 @@ private:
     QPointer<AboutDialog> _aboutDialog;
 };
 
-} // namespace OCC
+} // namespace CUR
 
-#endif // OWNCLOUDGUI_H
+#endif // CURATORGUI_H

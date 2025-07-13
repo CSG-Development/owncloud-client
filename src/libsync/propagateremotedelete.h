@@ -13,10 +13,10 @@
  */
 #pragma once
 
-#include "owncloudpropagator.h"
+#include "curatorpropagator.h"
 #include "networkjobs.h"
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief The DeleteJob class
@@ -42,7 +42,7 @@ class PropagateRemoteDelete : public PropagateItemJob
     QPointer<DeleteJob> _job;
 
 public:
-    PropagateRemoteDelete(OwncloudPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateRemoteDelete(CuratorPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
     {
     }

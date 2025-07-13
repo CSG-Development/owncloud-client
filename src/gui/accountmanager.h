@@ -17,7 +17,7 @@
 #include "account.h"
 #include "accountstate.h"
 
-namespace OCC {
+namespace CUR {
 
 /**
    @brief The AccountManager class

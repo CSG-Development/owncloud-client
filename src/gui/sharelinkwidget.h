@@ -30,7 +30,7 @@
 class QMenu;
 class QTableWidgetItem;
 
-namespace OCC {
+namespace CUR {
 
 namespace Ui {
     class ShareLinkWidget;

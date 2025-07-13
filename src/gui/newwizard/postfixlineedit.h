@@ -12,14 +12,14 @@
  * for more details.
  */
 
-#ifndef OCC_POSTFIXLINEEDIT_H
-#define OCC_POSTFIXLINEEDIT_H
+#ifndef CUR_POSTFIXLINEEDIT_H
+#define CUR_POSTFIXLINEEDIT_H
 
 #include <QLineEdit>
 #include <QPaintEvent>
 #include <QPainter>
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief A lineedit class with a pre-set postfix.
@@ -51,6 +51,6 @@ private:
 };
 
 
-} // namespace OCC
+} // namespace CUR
 
-#endif // OCC_POSTFIXLINEEDIT_H
+#endif // CUR_POSTFIXLINEEDIT_H

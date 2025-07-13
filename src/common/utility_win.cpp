@@ -52,7 +52,7 @@ const QString systemThemesC()
 
 }
 
-namespace OCC {
+namespace CUR {
 
 void Utility::setupFavLink(const QString &)
 {
@@ -151,4 +151,4 @@ void Utility::Handle::close()
 }
 
 
-} // namespace OCC
+} // namespace CUR

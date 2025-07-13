@@ -25,6 +25,6 @@
 #define QUOTE							L"\""
 #define VALUE							L"value"
 
-#define REGISTRY_ROOT_KEY			 L"SOFTWARE\\ownCloud Inc\\ownCloud"
+#define REGISTRY_ROOT_KEY			 L"SOFTWARE\\ownCloud Inc\\Curator"
 #define REGISTRY_ENABLE_OVERLAY		 L"EnableOverlay"
 #define REGISTRY_FILTER_FOLDER		 L"FilterFolder"

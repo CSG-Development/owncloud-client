@@ -16,17 +16,17 @@
 
 #include <QPalette>
 
-using namespace OCC;
+using namespace CUR;
 using namespace Resources;
 
-bool OCC::Resources::isUsingDarkTheme()
+bool CUR::Resources::isUsingDarkTheme()
 {
     // TODO: replace by a command line switch
-    static bool forceDark = qEnvironmentVariableIntValue("OWNCLOUD_FORCE_DARK_MODE") != 0;
+    static bool forceDark = qEnvironmentVariableIntValue("CURATOR_FORCE_DARK_MODE") != 0;
     return forceDark || QPalette().base().color().lightnessF() <= 0.5;
 }
 
-QIcon OCC::Resources::getCoreIcon(const QString &icon_name)
+QIcon CUR::Resources::getCoreIcon(const QString &icon_name)
 {
     if (icon_name.isEmpty()) {
         return {};

@@ -22,7 +22,7 @@
 #include <QPointer>
 
 
-using namespace OCC;
+using namespace CUR;
 
 
 ProtocolItem::ProtocolItem(Folder *folder, const SyncFileItemPtr &item)

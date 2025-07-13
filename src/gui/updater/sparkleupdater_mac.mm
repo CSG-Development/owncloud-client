@@ -29,7 +29,7 @@
 - (BOOL)updaterMayCheckForUpdates:(SUUpdater *)bundle
 {
     Q_UNUSED(bundle)
-    qCDebug(OCC::lcUpdater) << "may check: YES";
+    qCDebug(CUR::lcUpdater) << "may check: YES";
     return YES;
 }
 
@@ -38,14 +38,14 @@
 {
     Q_UNUSED(updater)
     Q_UNUSED(update)
-    qCDebug(OCC::lcUpdater) << "";
+    qCDebug(CUR::lcUpdater) << "";
 }
 
 // Sent when a valid update is not found.
 - (void)updaterDidNotFindUpdate:(SUUpdater *)update
 {
     Q_UNUSED(update)
-    qCDebug(OCC::lcUpdater) << "";
+    qCDebug(CUR::lcUpdater) << "";
 }
 
 // Sent immediately before installing the specified update.
@@ -53,7 +53,7 @@
 {
     Q_UNUSED(updater)
     Q_UNUSED(update)
-    qCDebug(OCC::lcUpdater) << "";
+    qCDebug(CUR::lcUpdater) << "";
 }
 
 - (void) updater:(SUUpdater *)updater didAbortWithError:(NSError *)error
@@ -61,24 +61,24 @@
     Q_UNUSED(updater)
 
     // Warning for end-user:
-    qCWarning(OCC::lcUpdater) << error.localizedDescription;
+    qCWarning(CUR::lcUpdater) << error.localizedDescription;
 
     // Full error, log it for when we need to debug problems (this will hold the full error object,
     // including possible nested `NSError`s):
-    qCInfo(OCC::lcUpdater) << "Full error:" << error.description;
+    qCInfo(CUR::lcUpdater) << "Full error:" << error.description;
 }
 
 - (void)updater:(SUUpdater *)updater didFinishLoadingAppcast:(SUAppcast *)appcast
 {
     Q_UNUSED(updater)
     Q_UNUSED(appcast)
-    qCDebug(OCC::lcUpdater) << "";
+    qCDebug(CUR::lcUpdater) << "";
 }
 
 @end
 
 
-namespace OCC {
+namespace CUR {
 
 class SparkleUpdater::Private
 {
@@ -147,7 +147,7 @@ void SparkleUpdater::checkForUpdate()
 
 void SparkleUpdater::backgroundCheckForUpdate()
 {
-    qCDebug(OCC::lcUpdater) << "launching background check";
+    qCDebug(CUR::lcUpdater) << "launching background check";
     if (autoUpdaterAllowed()) {
         [d->updater checkForUpdatesInBackground];
     }
@@ -159,4 +159,4 @@ QString SparkleUpdater::statusString()
     return QString();
 }
 
-} // namespace OCC
+} // namespace CUR

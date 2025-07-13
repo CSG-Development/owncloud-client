@@ -20,16 +20,16 @@
 #include <QDateTime>
 
 #include "common/utility.h"
-#include "owncloudlib.h"
+#include "curatorlib.h"
 #include "syncfileitem.h"
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief The SyncResult class
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT SyncResult
+class CURATORSYNC_EXPORT SyncResult
 {
     Q_GADGET
 public:
@@ -120,7 +120,7 @@ private:
 };
 
 template <>
-OWNCLOUDSYNC_EXPORT QString Utility::enumToDisplayName(SyncResult::Status status);
+CURATORSYNC_EXPORT QString Utility::enumToDisplayName(SyncResult::Status status);
 }
 
 #endif

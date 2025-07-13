@@ -28,7 +28,7 @@
 class QNetworkAccessManager;
 class QNetworkReply;
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief Schedule update checks every couple of hours if the client runs.
@@ -93,7 +93,7 @@ private:
 };
 
 /**
- * @brief Class that uses an ownCloud proprietary XML format to fetch update information
+ * @brief Class that uses an Curator proprietary XML format to fetch update information
  * @ingroup gui
  */
 class OCUpdater : public Updater

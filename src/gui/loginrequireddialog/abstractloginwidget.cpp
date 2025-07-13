@@ -14,11 +14,11 @@
 
 #include "abstractloginwidget.h"
 
-namespace OCC {
+namespace CUR {
 
 AbstractLoginWidget::AbstractLoginWidget(QWidget *parent)
     : QWidget(parent)
 {
 }
 
-} // OCC
+} // CUR

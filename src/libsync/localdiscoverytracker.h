@@ -15,13 +15,13 @@
 #ifndef LOCALDISCOVERYTRACKER_H
 #define LOCALDISCOVERYTRACKER_H
 
-#include "owncloudlib.h"
+#include "curatorlib.h"
 #include <set>
 #include <QObject>
 #include <QByteArray>
 #include <QSharedPointer>
 
-namespace OCC {
+namespace CUR {
 
 class SyncFileItem;
 typedef QSharedPointer<SyncFileItem> SyncFileItemPtr;
@@ -46,7 +46,7 @@ typedef QSharedPointer<SyncFileItem> SyncFileItemPtr;
  *
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT LocalDiscoveryTracker : public QObject
+class CURATORSYNC_EXPORT LocalDiscoveryTracker : public QObject
 {
     Q_OBJECT
 public:
@@ -98,6 +98,6 @@ private:
     std::set<QString> _previousLocalDiscoveryPaths;
 };
 
-} // namespace OCC
+} // namespace CUR
 
 #endif

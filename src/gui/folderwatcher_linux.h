@@ -25,7 +25,7 @@
 
 class QTimer;
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief Linux (inotify) API implementation of FolderWatcher

@@ -45,7 +45,7 @@
 
 #include <stdlib.h>
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcFolderWizard, "gui.folderwizard", QtInfoMsg)
 

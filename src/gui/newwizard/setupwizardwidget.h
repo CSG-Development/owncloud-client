@@ -23,7 +23,7 @@ namespace Ui {
 class SetupWizardWidget;
 }
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 /**
  * This class contains the UI-specific code. It hides the complexity from the controller, and provides a high-level API.

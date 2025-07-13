@@ -27,9 +27,9 @@
 #include "common/utility.h"
 #include "csync.h"
 
-#include "owncloudlib.h"
+#include "curatorlib.h"
 
-namespace OCC {
+namespace CUR {
 
 class SyncFileItem;
 class SyncJournalFileRecord;
@@ -39,7 +39,7 @@ typedef QSharedPointer<SyncFileItem> SyncFileItemPtr;
  * @brief The SyncFileItem class
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT SyncFileItem
+class CURATORSYNC_EXPORT SyncFileItem
 {
     Q_GADGET
 public:
@@ -332,7 +332,7 @@ private:
 
 
 template <>
-OWNCLOUDSYNC_EXPORT QString Utility::enumToDisplayName(SyncFileItem::Status s);
+CURATORSYNC_EXPORT QString Utility::enumToDisplayName(SyncFileItem::Status s);
 
 
 inline bool operator<(const SyncFileItemPtr &item1, const SyncFileItemPtr &item2)
@@ -343,12 +343,12 @@ inline bool operator<(const SyncFileItemPtr &item1, const SyncFileItemPtr &item2
 using SyncFileItemSet = std::set<SyncFileItemPtr>;
 }
 
-Q_DECLARE_METATYPE(OCC::SyncFileItemSet)
-Q_DECLARE_METATYPE(OCC::SyncFileItem)
-Q_DECLARE_METATYPE(OCC::SyncFileItemPtr)
+Q_DECLARE_METATYPE(CUR::SyncFileItemSet)
+Q_DECLARE_METATYPE(CUR::SyncFileItem)
+Q_DECLARE_METATYPE(CUR::SyncFileItemPtr)
 
-OWNCLOUDSYNC_EXPORT QDebug operator<<(QDebug debug, const OCC::SyncFileItem *item);
-inline QDebug operator<<(QDebug debug, const OCC::SyncFileItemPtr &item)
+CURATORSYNC_EXPORT QDebug operator<<(QDebug debug, const CUR::SyncFileItem *item);
+inline QDebug operator<<(QDebug debug, const CUR::SyncFileItemPtr &item)
 {
     return debug << item.data();
 }

@@ -13,8 +13,8 @@
 #include <QtTest>
 
 using namespace std::chrono_literals;
-using namespace OCC::FileSystem::SizeLiterals;
-using namespace OCC;
+using namespace CUR::FileSystem::SizeLiterals;
+using namespace CUR;
 
 namespace {
 
@@ -477,7 +477,7 @@ private slots:
                 }
         });
 
-        // we will get  OCC::SyncFileItem::Message and error: "Local file changed during sync. It will be resumed."
+        // we will get  CUR::SyncFileItem::Message and error: "Local file changed during sync. It will be resumed."
         // so a message but we report a successful sync
         QVERIFY(fakeFolder.applyLocalModificationsAndSync());
         QThread::sleep(1);
@@ -658,7 +658,7 @@ private slots:
         fakeFolder.setServerOverride(counter.functor());
 
         // do a partial discovery, don't actually list the local files
-        fakeFolder.syncEngine().setLocalDiscoveryOptions(OCC::LocalDiscoveryStyle::DatabaseAndFilesystem, {});
+        fakeFolder.syncEngine().setLocalDiscoveryOptions(CUR::LocalDiscoveryStyle::DatabaseAndFilesystem, {});
         QVERIFY(fakeFolder.applyLocalModificationsAndSync());
         QCOMPARE(counter.nDELETE, 0);
         QCOMPARE(counter.nPUT, 0);

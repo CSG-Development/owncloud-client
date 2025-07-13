@@ -13,7 +13,7 @@
  */
 
 #include "propagateremotemkdir.h"
-#include "owncloudpropagator_p.h"
+#include "curatorpropagator_p.h"
 #include "account.h"
 #include "common/syncjournalfilerecord.h"
 #include "propagateremotedelete.h"
@@ -28,7 +28,7 @@ using namespace std::chrono_literals;
 namespace {
 constexpr auto UpdateMetaDataRetyTimeOut = 30s;
 }
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcPropagateRemoteMkdir, "sync.propagator.remotemkdir", QtInfoMsg)
 

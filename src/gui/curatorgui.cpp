@@ -12,7 +12,7 @@
  * for more details.
  */
 
-#include "owncloudgui.h"
+#include "curatorgui.h"
 #include "aboutdialog.h"
 #include "account.h"
 #include "accountmanager.h"
@@ -56,7 +56,7 @@ using namespace std::chrono_literals;
 
 namespace {
 
-using namespace OCC;
+using namespace CUR;
 
 void setUpInitialSyncFolder(AccountStatePtr accountStatePtr, bool useVfs)
 {
@@ -110,9 +110,9 @@ void setUpInitialSyncFolder(AccountStatePtr accountStatePtr, bool useVfs)
 }
 }
 
-namespace OCC {
+namespace CUR {
 
-ownCloudGui::ownCloudGui(Application *parent)
+CuratorGui::CuratorGui(Application *parent)
     : QObject(parent)
     , _tray(new Systray(this))
     , _settingsDialog(new SettingsDialog(this))
@@ -123,7 +123,7 @@ ownCloudGui::ownCloudGui(Application *parent)
     _tray->setIcon(Theme::instance()->syncStateIcon(SyncResult::Status::Offline, true, false));
 
     connect(_tray, &QSystemTrayIcon::activated,
-        this, &ownCloudGui::slotTrayClicked);
+        this, &CuratorGui::slotTrayClicked);
 
     setupActions();
     setupContextMenu();
@@ -132,25 +132,25 @@ ownCloudGui::ownCloudGui(Application *parent)
 
     ProgressDispatcher *pd = ProgressDispatcher::instance();
     connect(pd, &ProgressDispatcher::progressInfo, this,
-        &ownCloudGui::slotUpdateProgress);
+        &CuratorGui::slotUpdateProgress);
 
     FolderMan *folderMan = FolderMan::instance();
     connect(folderMan, &FolderMan::folderSyncStateChange,
-        this, &ownCloudGui::slotSyncStateChange);
+        this, &CuratorGui::slotSyncStateChange);
 
     connect(AccountManager::instance(), &AccountManager::accountAdded,
-        this, &ownCloudGui::updateContextMenuNeeded);
+        this, &CuratorGui::updateContextMenuNeeded);
     connect(AccountManager::instance(), &AccountManager::accountRemoved,
-        this, &ownCloudGui::updateContextMenuNeeded);
+        this, &CuratorGui::updateContextMenuNeeded);
 }
 
-ownCloudGui::~ownCloudGui()
+CuratorGui::~CuratorGui()
 {
     delete _settingsDialog;
 }
 
 // This should rather be in application.... or rather in ConfigFile?
-void ownCloudGui::slotOpenSettingsDialog()
+void CuratorGui::slotOpenSettingsDialog()
 {
     // if account is set up, start the configuration wizard.
     if (!AccountManager::instance()->accounts().isEmpty()) {
@@ -165,7 +165,7 @@ void ownCloudGui::slotOpenSettingsDialog()
     }
 }
 
-void ownCloudGui::slotTrayClicked(QSystemTrayIcon::ActivationReason reason)
+void CuratorGui::slotTrayClicked(QSystemTrayIcon::ActivationReason reason)
 {
     if (_workaroundFakeDoubleClick) {
         static QElapsedTimer last_click;
@@ -192,7 +192,7 @@ void ownCloudGui::slotTrayClicked(QSystemTrayIcon::ActivationReason reason)
     // or SSL error dialog also comes to front.
 }
 
-void ownCloudGui::slotSyncStateChange(Folder *folder)
+void CuratorGui::slotSyncStateChange(Folder *folder)
 {
     slotComputeOverallSyncStatus();
     updateContextMenuNeeded();
@@ -206,24 +206,24 @@ void ownCloudGui::slotSyncStateChange(Folder *folder)
     qCInfo(lcApplication) << "Sync state changed for folder " << folder->remoteUrl().toString() << ": " << Utility::enumToDisplayName(result.status());
 }
 
-void ownCloudGui::slotFoldersChanged()
+void CuratorGui::slotFoldersChanged()
 {
     slotComputeOverallSyncStatus();
     updateContextMenuNeeded();
 }
 
-void ownCloudGui::slotOpenPath(const QString &path)
+void CuratorGui::slotOpenPath(const QString &path)
 {
     showInFileManager(path);
 }
 
-void ownCloudGui::slotAccountStateChanged()
+void CuratorGui::slotAccountStateChanged()
 {
     updateContextMenuNeeded();
     slotComputeOverallSyncStatus();
 }
 
-void ownCloudGui::slotTrayMessageIfServerUnsupported(Account *account)
+void CuratorGui::slotTrayMessageIfServerUnsupported(Account *account)
 {
     if (account->serverSupportLevel() != Account::ServerSupportLevel::Supported) {
         slotShowTrayMessage(
@@ -235,7 +235,7 @@ void ownCloudGui::slotTrayMessageIfServerUnsupported(Account *account)
     }
 }
 
-void ownCloudGui::slotComputeOverallSyncStatus()
+void CuratorGui::slotComputeOverallSyncStatus()
 {
     bool allSignedOut = true;
     bool allPaused = true;
@@ -360,7 +360,7 @@ void ownCloudGui::slotComputeOverallSyncStatus()
     }
 }
 
-void ownCloudGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *menu)
+void CuratorGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *menu)
 {
     menu->addAction(CommonStrings::showInWebBrowser(), this, [accountState] { QDesktopServices::openUrl(accountState->account()->url()); });
 
@@ -392,12 +392,12 @@ void ownCloudGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *men
     }
 }
 
-SettingsDialog *ownCloudGui::settingsDialog() const
+SettingsDialog *CuratorGui::settingsDialog() const
 {
     return _settingsDialog;
 }
 
-void ownCloudGui::slotContextMenuAboutToShow()
+void CuratorGui::slotContextMenuAboutToShow()
 {
     _contextMenuVisibleManual = true;
 
@@ -409,7 +409,7 @@ void ownCloudGui::slotContextMenuAboutToShow()
     }
 }
 
-void ownCloudGui::slotContextMenuAboutToHide()
+void CuratorGui::slotContextMenuAboutToHide()
 {
     _contextMenuVisibleManual = false;
 
@@ -417,7 +417,7 @@ void ownCloudGui::slotContextMenuAboutToHide()
     slotComputeOverallSyncStatus();
 }
 
-bool ownCloudGui::contextMenuVisible() const
+bool CuratorGui::contextMenuVisible() const
 {
     // On some platforms isVisible doesn't work and always returns false,
     // elsewhere aboutToHide is unreliable.
@@ -426,7 +426,7 @@ bool ownCloudGui::contextMenuVisible() const
     return _contextMenu->isVisible();
 }
 
-void ownCloudGui::hideAndShowTray()
+void CuratorGui::hideAndShowTray()
 {
     _tray->hide();
     _tray->show();
@@ -434,7 +434,7 @@ void ownCloudGui::hideAndShowTray()
 
 static bool updateWhileVisible()
 {
-    static QByteArray var = qgetenv("OWNCLOUD_TRAY_UPDATE_WHILE_VISIBLE");
+    static QByteArray var = qgetenv("CURATOR_TRAY_UPDATE_WHILE_VISIBLE");
     if (var == "1") {
         return true;
     } else if (var == "0") {
@@ -448,35 +448,35 @@ static bool updateWhileVisible()
 
 static QByteArray envForceQDBusTrayWorkaround()
 {
-    static QByteArray var = qgetenv("OWNCLOUD_FORCE_QDBUS_TRAY_WORKAROUND");
+    static QByteArray var = qgetenv("CURATOR_FORCE_QDBUS_TRAY_WORKAROUND");
     return var;
 }
 
 static QByteArray envForceWorkaroundShowAndHideTray()
 {
-    static QByteArray var = qgetenv("OWNCLOUD_FORCE_TRAY_SHOW_HIDE");
+    static QByteArray var = qgetenv("CURATOR_FORCE_TRAY_SHOW_HIDE");
     return var;
 }
 
 static QByteArray envForceWorkaroundNoAboutToShowUpdate()
 {
-    static QByteArray var = qgetenv("OWNCLOUD_FORCE_TRAY_NO_ABOUT_TO_SHOW");
+    static QByteArray var = qgetenv("CURATOR_FORCE_TRAY_NO_ABOUT_TO_SHOW");
     return var;
 }
 
 static QByteArray envForceWorkaroundFakeDoubleClick()
 {
-    static QByteArray var = qgetenv("OWNCLOUD_FORCE_TRAY_FAKE_DOUBLE_CLICK");
+    static QByteArray var = qgetenv("CURATOR_FORCE_TRAY_FAKE_DOUBLE_CLICK");
     return var;
 }
 
 static QByteArray envForceWorkaroundManualVisibility()
 {
-    static QByteArray var = qgetenv("OWNCLOUD_FORCE_TRAY_MANUAL_VISIBILITY");
+    static QByteArray var = qgetenv("CURATOR_FORCE_TRAY_MANUAL_VISIBILITY");
     return var;
 }
 
-void ownCloudGui::setupContextMenu()
+void CuratorGui::setupContextMenu()
 {
     if (_contextMenu) {
         return;
@@ -543,19 +543,19 @@ void ownCloudGui::setupContextMenu()
                           << "manualvisibility:" << _workaroundManualVisibility;
 
 
-    connect(&_delayedTrayUpdateTimer, &QTimer::timeout, this, &ownCloudGui::updateContextMenu);
+    connect(&_delayedTrayUpdateTimer, &QTimer::timeout, this, &CuratorGui::updateContextMenu);
     _delayedTrayUpdateTimer.setInterval(2s);
     _delayedTrayUpdateTimer.setSingleShot(true);
 
-    connect(_contextMenu.data(), &QMenu::aboutToShow, this, &ownCloudGui::slotContextMenuAboutToShow);
+    connect(_contextMenu.data(), &QMenu::aboutToShow, this, &CuratorGui::slotContextMenuAboutToShow);
     // unfortunately aboutToHide is unreliable, it seems to work on OSX though
-    connect(_contextMenu.data(), &QMenu::aboutToHide, this, &ownCloudGui::slotContextMenuAboutToHide);
+    connect(_contextMenu.data(), &QMenu::aboutToHide, this, &CuratorGui::slotContextMenuAboutToHide);
 
     // Populate the context menu now.
     updateContextMenu();
 }
 
-void ownCloudGui::updateContextMenu()
+void CuratorGui::updateContextMenu()
 {
     // If it's visible, we can't update live, and it won't be updated lazily: reschedule
     if (contextMenuVisible() && !updateWhileVisible() && _workaroundNoAboutToShowUpdate) {
@@ -604,11 +604,11 @@ void ownCloudGui::updateContextMenu()
         }
     }
 
-    _contextMenu->addAction(Theme::instance()->applicationIcon(), tr("Show %1").arg(Theme::instance()->appNameGUI()), this, &ownCloudGui::slotShowSettings);
+    _contextMenu->addAction(Theme::instance()->applicationIcon(), tr("Show %1").arg(Theme::instance()->appNameGUI()), this, &CuratorGui::slotShowSettings);
     _contextMenu->addSeparator();
 
     if (accountList.isEmpty()) {
-        _contextMenu->addAction(tr("Create a new account"), this, &ownCloudGui::runNewAccountWizard);
+        _contextMenu->addAction(tr("Create a new account"), this, &CuratorGui::runNewAccountWizard);
     } else {
         if (atLeastOnePaused) {
             _contextMenu->addAction(
@@ -648,11 +648,11 @@ void ownCloudGui::updateContextMenu()
     _contextMenu->addSeparator();
 
     if (!Theme::instance()->helpUrl().isEmpty()) {
-        _contextMenu->addAction(tr("Help"), this, &ownCloudGui::slotHelp);
+        _contextMenu->addAction(tr("Help"), this, &CuratorGui::slotHelp);
     }
 
     if (! Theme::instance()->about().isEmpty()) {
-        _contextMenu->addAction(tr("About %1").arg(Theme::instance()->appNameGUI()), this, &ownCloudGui::slotAbout);
+        _contextMenu->addAction(tr("About %1").arg(Theme::instance()->appNameGUI()), this, &CuratorGui::slotAbout);
     }
 
     _contextMenu->addAction(tr("Quit %1").arg(Theme::instance()->appNameGUI()), _app, &QApplication::quit);
@@ -662,7 +662,7 @@ void ownCloudGui::updateContextMenu()
     }
 }
 
-void ownCloudGui::updateContextMenuNeeded()
+void CuratorGui::updateContextMenuNeeded()
 {
     // if it's visible and we can update live: update now
     if (contextMenuVisible() && updateWhileVisible()) {
@@ -683,13 +683,13 @@ void ownCloudGui::updateContextMenuNeeded()
     }
 }
 
-void ownCloudGui::slotShowTrayMessage(const QString &title, const QString &msg, const QIcon &icon)
+void CuratorGui::slotShowTrayMessage(const QString &title, const QString &msg, const QIcon &icon)
 {
     // SyncResult::Problem is returns the info icon
     _tray->showMessage(title, msg, icon.isNull() ? Theme::instance()->syncStateIcon(SyncResult::Problem) : icon);
 }
 
-void ownCloudGui::slotShowOptionalTrayMessage(const QString &title, const QString &msg, const QIcon &icon)
+void CuratorGui::slotShowOptionalTrayMessage(const QString &title, const QString &msg, const QIcon &icon)
 {
     ConfigFile cfg;
     if (cfg.optionalDesktopNotifications()) {
@@ -701,7 +701,7 @@ void ownCloudGui::slotShowOptionalTrayMessage(const QString &title, const QStrin
 /*
  * open the folder with the given Alias
  */
-void ownCloudGui::slotFolderOpenAction(Folder *f)
+void CuratorGui::slotFolderOpenAction(Folder *f)
 {
     if (f) {
         qCInfo(lcApplication) << "opening local url " << f->path();
@@ -720,13 +720,13 @@ void ownCloudGui::slotFolderOpenAction(Folder *f)
     }
 }
 
-void ownCloudGui::setupActions()
+void CuratorGui::setupActions()
 {
     _actionStatus = new QAction(tr("Unknown status"), this);
     _actionStatus->setEnabled(false);
 }
 
-void ownCloudGui::slotRebuildRecentMenus()
+void CuratorGui::slotRebuildRecentMenus()
 {
     _recentActionsMenu->clear();
     if (!_recentItemsActions.isEmpty()) {
@@ -738,7 +738,7 @@ void ownCloudGui::slotRebuildRecentMenus()
         _recentActionsMenu->addAction(tr("No items synced recently"))->setEnabled(false);
     }
     // add a more... entry.
-    _recentActionsMenu->addAction(tr("Details..."), this, &ownCloudGui::slotShowSyncProtocol);
+    _recentActionsMenu->addAction(tr("Details..."), this, &CuratorGui::slotShowSyncProtocol);
 }
 
 /// Returns true if the completion of a given item should show up in the
@@ -748,7 +748,7 @@ static bool shouldShowInRecentsMenu(const SyncFileItem &item)
     return !Progress::isIgnoredKind(item._status) && item.instruction() != CSYNC_INSTRUCTION_NONE;
 }
 
-void ownCloudGui::slotUpdateProgress(Folder *folder, const ProgressInfo &progress)
+void CuratorGui::slotUpdateProgress(Folder *folder, const ProgressInfo &progress)
 {
     if (progress.status() == ProgressInfo::Discovery) {
         if (!progress._currentDiscoveredRemoteFolder.isEmpty()) {
@@ -759,7 +759,7 @@ void ownCloudGui::slotUpdateProgress(Folder *folder, const ProgressInfo &progres
                                        .arg(progress._currentDiscoveredLocalFolder));
         }
     } else if (progress.status() == ProgressInfo::Done) {
-        QTimer::singleShot(2s, this, &ownCloudGui::slotComputeOverallSyncStatus);
+        QTimer::singleShot(2s, this, &CuratorGui::slotComputeOverallSyncStatus);
     }
     if (progress.status() != ProgressInfo::Propagation) {
         return;
@@ -817,7 +817,7 @@ void ownCloudGui::slotUpdateProgress(Folder *folder, const ProgressInfo &progres
     }
 }
 
-void ownCloudGui::runNewAccountWizard()
+void CuratorGui::runNewAccountWizard()
 {
     if (_wizardController.isNull()) {
         // passing the settings dialog as parent makes sure the wizard will be shown above it
@@ -910,7 +910,7 @@ void ownCloudGui::runNewAccountWizard()
 
                                     break;
                                 }
-                                case OCC::Wizard::SyncMode::Invalid:
+                                case CUR::Wizard::SyncMode::Invalid:
                                     Q_UNREACHABLE();
                                 }
                             }
@@ -931,7 +931,7 @@ void ownCloudGui::runNewAccountWizard()
     }
 }
 
-void ownCloudGui::setPauseOnAllFoldersHelper(const QList<AccountStatePtr> &accounts, bool pause)
+void CuratorGui::setPauseOnAllFoldersHelper(const QList<AccountStatePtr> &accounts, bool pause)
 {
     for (auto *f : FolderMan::instance()->folders()) {
         if (accounts.contains(f->accountState())) {
@@ -943,19 +943,19 @@ void ownCloudGui::setPauseOnAllFoldersHelper(const QList<AccountStatePtr> &accou
     }
 }
 
-void ownCloudGui::slotShowSettings()
+void CuratorGui::slotShowSettings()
 {
     raise();
 }
 
-void ownCloudGui::slotShowSyncProtocol()
+void CuratorGui::slotShowSyncProtocol()
 {
     slotShowSettings();
     _settingsDialog->showActivityPage();
 }
 
 
-void ownCloudGui::slotShutdown()
+void CuratorGui::slotShutdown()
 {
     // explicitly close windows. This is somewhat of a hack to ensure
     // that saving the geometries happens ASAP during a OS shutdown
@@ -964,20 +964,20 @@ void ownCloudGui::slotShutdown()
     _settingsDialog->close();
 }
 
-void ownCloudGui::slotToggleLogBrowser()
+void CuratorGui::slotToggleLogBrowser()
 {
     auto logBrowser = new LogBrowser(settingsDialog());
     logBrowser->setAttribute(Qt::WA_DeleteOnClose);
-    ownCloudGui::raise();
+    CuratorGui::raise();
     logBrowser->open();
 }
 
-void ownCloudGui::slotHelp()
+void CuratorGui::slotHelp()
 {
     QDesktopServices::openUrl(QUrl(Theme::instance()->helpUrl()));
 }
 
-void ownCloudGui::raise()
+void CuratorGui::raise()
 {
     auto window = ocApp()->gui()->settingsDialog();
     window->show();
@@ -1003,7 +1003,7 @@ void ownCloudGui::raise()
 }
 
 
-void ownCloudGui::slotShowShareDialog(const QString &sharePath, const QString &localPath, ShareDialogStartPage startPage)
+void CuratorGui::slotShowShareDialog(const QString &sharePath, const QString &localPath, ShareDialogStartPage startPage)
 {
     QString file;
     const auto folder = FolderMan::instance()->folderForPath(localPath, &file);
@@ -1053,13 +1053,13 @@ void ownCloudGui::slotShowShareDialog(const QString &sharePath, const QString &l
             w->setAttribute(Qt::WA_DeleteOnClose, true);
 
             _shareDialogs[localPath] = w;
-            connect(w, &QObject::destroyed, this, &ownCloudGui::slotRemoveDestroyedShareDialogs);
+            connect(w, &QObject::destroyed, this, &CuratorGui::slotRemoveDestroyedShareDialogs);
         }
         ocApp()->gui()->settingsDialog()->accountSettings(accountState->account().get())->addModalWidget(w, AccountSettings::ModalWidgetSizePolicy::Expanding);
     }
 }
 
-void ownCloudGui::slotRemoveDestroyedShareDialogs()
+void CuratorGui::slotRemoveDestroyedShareDialogs()
 {
     QMutableMapIterator<QString, QPointer<ShareDialog>> it(_shareDialogs);
     while (it.hasNext()) {
@@ -1070,7 +1070,7 @@ void ownCloudGui::slotRemoveDestroyedShareDialogs()
     }
 }
 
-void ownCloudGui::slotAbout()
+void CuratorGui::slotAbout()
 {
     if(!_aboutDialog) {
         _aboutDialog = new AboutDialog(_settingsDialog);

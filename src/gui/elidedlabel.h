@@ -17,7 +17,7 @@
 
 #include <QLabel>
 
-namespace OCC {
+namespace CUR {
 
 /// Label that can elide its text
 class ElidedLabel : public QLabel

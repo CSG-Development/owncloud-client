@@ -1,5 +1,5 @@
-#ifndef OWNCLOUD_ASSERTS_H
-#define OWNCLOUD_ASSERTS_H
+#ifndef CURATOR_ASSERTS_H
+#define CURATOR_ASSERTS_H
 
 #include <qglobal.h>
 

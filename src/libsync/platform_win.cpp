@@ -45,7 +45,7 @@ struct
 
 } // anonymous namespace
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcPlatform, "sync.platform.windows")
 
@@ -77,7 +77,7 @@ void WinPlatform::setApplication(QCoreApplication *application)
     }
 }
 
-void OCC::WinPlatform::startServices()
+void CUR::WinPlatform::startServices()
 {
     startShutdownWatcher();
 }
@@ -146,9 +146,9 @@ void WinPlatform::startShutdownWatcher()
     });
 
     qAddPostRoutine([] {
-        qCDebug(OCC::lcUtility) << "app closed";
+        qCDebug(CUR::lcUtility) << "app closed";
         SetEvent(watchWMCtx.windowMessageWatcherEvent);
     });
 }
 
-} // namespace OCC
+} // namespace CUR

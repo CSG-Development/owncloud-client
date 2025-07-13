@@ -15,18 +15,18 @@
 
 #include "common/checksumalgorithms.h"
 #include "networkjobs.h"
-#include "owncloudpropagator.h"
+#include "curatorpropagator.h"
 
 #include <QBuffer>
 #include <QFile>
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief Downloads the remote file via GET
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT GETFileJob : public AbstractNetworkJob
+class CURATORSYNC_EXPORT GETFileJob : public AbstractNetworkJob
 {
     Q_OBJECT
     QIODevice *_device;
@@ -143,7 +143,7 @@ class PropagateDownloadFile : public PropagateItemJob
     QString _expectedEtagForResume;
 
 public:
-    PropagateDownloadFile(OwncloudPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateDownloadFile(CuratorPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
         , _resumeStart(0)
         , _downloadProgress(0)

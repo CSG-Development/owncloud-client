@@ -40,7 +40,7 @@ namespace {
 constexpr auto notificationTimeoutC = 10s;
 }
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcFolderWatcher, "gui.folderwatcher", QtInfoMsg)
 
@@ -160,4 +160,4 @@ void FolderWatcher::changeDetected(const QSet<QString> &paths)
     }
 }
 
-} // namespace OCC
+} // namespace CUR

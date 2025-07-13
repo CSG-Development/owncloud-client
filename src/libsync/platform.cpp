@@ -30,7 +30,7 @@
 
 #endif
 
-namespace OCC {
+namespace CUR {
 
 void Platform::migrate()
 {
@@ -66,4 +66,4 @@ std::unique_ptr<Platform> Platform::create()
 #endif
 }
 
-} // OCC namespace
+} // CUR namespace

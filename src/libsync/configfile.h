@@ -16,7 +16,7 @@
 #define CONFIGFILE_H
 
 #include "common/result.h"
-#include "owncloudlib.h"
+#include "curatorlib.h"
 
 #include <QNetworkProxy>
 #include <QSettings>
@@ -32,7 +32,7 @@ class QWidget;
 class QHeaderView;
 class ExcludedFiles;
 
-namespace OCC {
+namespace CUR {
 
 class AbstractCredentials;
 
@@ -40,7 +40,7 @@ class AbstractCredentials;
  * @brief The ConfigFile class
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT ConfigFile
+class CURATORSYNC_EXPORT ConfigFile
 {
 public:
     static QString configPath();

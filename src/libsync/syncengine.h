@@ -36,17 +36,17 @@
 
 class QProcess;
 
-namespace OCC {
+namespace CUR {
 
 class SyncJournalFileRecord;
 class SyncJournalDb;
-class OwncloudPropagator;
+class CuratorPropagator;
 class ProcessDirectoryJob;
 
 
-// work around for only having one namespace OCC, and this enum not beeing in a QObject
+// work around for only having one namespace CUR, and this enum not beeing in a QObject
 namespace AnotherSyncNeededPrivate {
-    OWNCLOUDSYNC_EXPORT Q_NAMESPACE;
+    CURATORSYNC_EXPORT Q_NAMESPACE;
     enum class AnotherSyncNeeded {
         NoFollowUpSync,
         ImmediateFollowUp, // schedule this again immediately (limited amount of times)
@@ -60,7 +60,7 @@ using AnotherSyncNeededPrivate::AnotherSyncNeeded;
  * @brief The SyncEngine class
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT SyncEngine : public QObject
+class CURATORSYNC_EXPORT SyncEngine : public QObject
 {
     Q_OBJECT
 public:
@@ -180,7 +180,7 @@ signals:
 
     /** Emitted when propagation has problems with a locked file.
      *
-     * Forwarded from OwncloudPropagator::seenLockedFile.
+     * Forwarded from CuratorPropagator::seenLockedFile.
      */
     void seenLockedFile(const QString &fileName, FileSystem::LockMode mode);
 
@@ -242,7 +242,7 @@ private:
     QString _remoteRootEtag;
     SyncJournalDb *_journal;
     std::unique_ptr<DiscoveryPhase> _discoveryPhase;
-    QSharedPointer<OwncloudPropagator> _propagator;
+    QSharedPointer<CuratorPropagator> _propagator;
 
     // List of all files with conflicts
     QSet<QString> _seenConflictFiles;

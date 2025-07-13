@@ -47,7 +47,7 @@
 
 using namespace std::chrono_literals;
 
-using namespace OCC;
+using namespace CUR;
 
 Q_LOGGING_CATEGORY(lcMain, "gui.main", QtInfoMsg)
 
@@ -96,10 +96,10 @@ CommandLineOptions parseOptions(const QStringList &arguments)
     QTextStream descriptionTextStream(&descriptionText);
 
     descriptionTextStream
-        << QStringLiteral("%1 version %2\r\nFile synchronization desktop utility.").arg(Theme::instance()->appName(), OCC::Version::displayString())
+        << QStringLiteral("%1 version %2\r\nFile synchronization desktop utility.").arg(Theme::instance()->appName(), CUR::Version::displayString())
         << Qt::endl;
 
-    if (Theme::instance()->appName() == QLatin1String("ownCloud")) {
+    if (Theme::instance()->appName() == QLatin1String("Curator")) {
         descriptionTextStream
             << Qt::endl
             << Qt::endl
@@ -210,7 +210,7 @@ void showDowngradeDialog()
         QCoreApplication::translate("version check",
             "Some settings were configured in newer versions of this client "
             "and use features that are not available in this version"));
-    box.addButton(OCC::Application::tr("Quit"), QMessageBox::AcceptRole);
+    box.addButton(CUR::Application::tr("Quit"), QMessageBox::AcceptRole);
     box.exec();
     QTimer::singleShot(0, qApp, &QApplication::quit);
 }
@@ -228,7 +228,7 @@ bool checkClientVersion()
     // Did the client version change?
     // (The client version is adjusted further down)
     auto configVersion = QVersionNumber::fromString(configFile.clientVersionWithBuildNumberString());
-    auto clientVersion = OCC::Version::versionWithBuildNumber();
+    auto clientVersion = CUR::Version::versionWithBuildNumber();
 
     if (configVersion == clientVersion) {
         // no config backup needed
@@ -245,7 +245,7 @@ bool checkClientVersion()
     // We're okay to continue. The settings will be updated in other parts, but here we bump the
     // version we store in the config file.
     configFile.backup();
-    configFile.setClientVersionWithBuildNumberString(OCC::Version::versionWithBuildNumber().toString());
+    configFile.setClientVersionWithBuildNumberString(CUR::Version::versionWithBuildNumber().toString());
     return true;
 }
 
@@ -314,7 +314,7 @@ int main(int argc, char **argv)
     }
 
     // load the resources
-    const OCC::ResourcesLoader resource;
+    const CUR::ResourcesLoader resource;
 
     // Create a `Platform` instance so it can set-up/tear-down stuff for us, and do any
     // initialisation that needs to be done before creating a QApplication
@@ -394,7 +394,7 @@ int main(int argc, char **argv)
 
     auto ocApp = Application::createInstance(platform.get(), options.debugMode);
 
-    QObject::connect(platform.get(), &Platform::requestAttention, ocApp->gui(), &ownCloudGui::slotShowSettings);
+    QObject::connect(platform.get(), &Platform::requestAttention, ocApp->gui(), &CuratorGui::slotShowSettings);
 
     QObject::connect(&singleApplication, &KDSingleApplication::messageReceived, ocApp.get(), [&](const QByteArray &message) {
         const QString msg = QString::fromUtf8(message);
@@ -440,7 +440,7 @@ int main(int argc, char **argv)
 
     // Display the wizard if we don't have an account yet, and no other UI is showing.
     if (AccountManager::instance()->accounts().isEmpty()) {
-        QTimer::singleShot(0, ocApp->gui(), &ownCloudGui::runNewAccountWizard);
+        QTimer::singleShot(0, ocApp->gui(), &CuratorGui::runNewAccountWizard);
     }
 
     // Now that everything is up and running, start accepting connections/requests from the shell integration.

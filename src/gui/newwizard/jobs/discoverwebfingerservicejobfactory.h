@@ -16,7 +16,7 @@
 
 #include "abstractcorejob.h"
 
-namespace OCC::Wizard::Jobs {
+namespace CUR::Wizard::Jobs {
 
 /**
  * Check whether we need to run an authenticated WebFinger request to find a user's list of allowed instances.

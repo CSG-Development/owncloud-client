@@ -21,7 +21,7 @@
 #include "application.h"
 #include "configfile.h"
 #include "generalsettings.h"
-#include "owncloudgui.h"
+#include "curatorgui.h"
 #include "theme.h"
 
 #include "resources/resources.h"
@@ -88,7 +88,7 @@ const float BUTTONSIZERATIO = 1.618f; // golden ratio
 
 /** display name with two lines that is displayed in the settings
  */
-QString shortDisplayNameForSettings(OCC::Account *account)
+QString shortDisplayNameForSettings(CUR::Account *account)
 {
     QString user = account->davDisplayName();
     if (user.isEmpty()) {
@@ -105,7 +105,7 @@ QString shortDisplayNameForSettings(OCC::Account *account)
 }
 
 
-namespace OCC {
+namespace CUR {
 
 class ToolButtonAction : public QWidgetAction
 {
@@ -173,7 +173,7 @@ private:
     QString _iconName;
 };
 
-SettingsDialog::SettingsDialog(ownCloudGui *gui, QWidget *parent)
+SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
     : QMainWindow(parent)
     , _ui(new Ui::SettingsDialog)
     , _gui(gui)
@@ -220,7 +220,7 @@ SettingsDialog::SettingsDialog(ownCloudGui *gui, QWidget *parent)
     _ui->toolBar->addAction(generalAction);
     GeneralSettings *generalSettings = new GeneralSettings;
     _ui->stack->addWidget(generalSettings);
-    QObject::connect(generalSettings, &GeneralSettings::showAbout, gui, &ownCloudGui::slotAbout);
+    QObject::connect(generalSettings, &GeneralSettings::showAbout, gui, &CuratorGui::slotAbout);
 
     QWidget *spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
@@ -269,12 +269,12 @@ SettingsDialog::SettingsDialog(ownCloudGui *gui, QWidget *parent)
 
     QAction *showLogWindow = new QAction(this);
     showLogWindow->setShortcut(QKeySequence(QStringLiteral("F12")));
-    connect(showLogWindow, &QAction::triggered, gui, &ownCloudGui::slotToggleLogBrowser);
+    connect(showLogWindow, &QAction::triggered, gui, &CuratorGui::slotToggleLogBrowser);
     addAction(showLogWindow);
 
     QAction *showLogWindow2 = new QAction(this);
     showLogWindow2->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_L));
-    connect(showLogWindow2, &QAction::triggered, gui, &ownCloudGui::slotToggleLogBrowser);
+    connect(showLogWindow2, &QAction::triggered, gui, &CuratorGui::slotToggleLogBrowser);
     addAction(showLogWindow2);
 
     customizeStyle();
@@ -302,7 +302,7 @@ SettingsDialog::~SettingsDialog()
 
 void SettingsDialog::addModalWidget(QWidget *w)
 {
-    ownCloudGui::raise();
+    CuratorGui::raise();
     if (_ui->dialogStack->indexOf(w) == -1) {
         _ui->dialogStack->addWidget(w);
         _ui->dialogStack->setCurrentWidget(w);
@@ -318,7 +318,7 @@ void SettingsDialog::requestModality(Account *account)
         }
     }
     _modalStack.append(account);
-    ownCloudGui::raise();
+    CuratorGui::raise();
 }
 
 void SettingsDialog::ceaseModality(Account *account)
@@ -449,7 +449,7 @@ void SettingsDialog::accountAdded(AccountStatePtr accountStatePtr)
     _actionForAccount.insert(accountStatePtr->account().data(), accountAction);
     accountAction->trigger();
 
-    connect(accountSettings, &AccountSettings::folderChanged, _gui, &ownCloudGui::slotFoldersChanged);
+    connect(accountSettings, &AccountSettings::folderChanged, _gui, &CuratorGui::slotFoldersChanged);
     connect(accountSettings, &AccountSettings::showIssuesList, this, &SettingsDialog::showIssuesList);
     connect(accountStatePtr->account().data(), &Account::accountChangedAvatar, this, &SettingsDialog::slotAccountAvatarChanged);
     connect(accountStatePtr->account().data(), &Account::accountChangedDisplayName, this, &SettingsDialog::slotAccountDisplayNameChanged);
@@ -537,6 +537,6 @@ void SettingsDialog::customizeStyle()
 }
 
 
-} // namespace OCC
+} // namespace CUR
 
 #include "settingsdialog.moc"

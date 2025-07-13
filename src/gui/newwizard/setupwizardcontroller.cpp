@@ -21,8 +21,8 @@ using namespace std::chrono_literals;
 
 namespace {
 
-using namespace OCC;
-using namespace OCC::Wizard;
+using namespace CUR;
+using namespace CUR::Wizard;
 
 using namespace SetupWizardControllerPrivate;
 
@@ -51,7 +51,7 @@ QList<SetupWizardState> getNavigationEntries()
 
 }
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 Q_LOGGING_CATEGORY(lcSetupWizardController, "gui.setupwizard.controller")
 

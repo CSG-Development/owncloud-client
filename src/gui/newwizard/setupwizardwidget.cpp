@@ -3,7 +3,7 @@
 
 #include "gui/application.h"
 #include "gui/guiutility.h"
-#include "gui/owncloudgui.h"
+#include "gui/curatorgui.h"
 #include "gui/settingsdialog.h"
 #include "theme.h"
 
@@ -15,7 +15,7 @@ using namespace std::chrono_literals;
 
 namespace {
 
-using namespace OCC;
+using namespace CUR;
 
 QString replaceCssColors(const QString &stylesheet)
 {
@@ -28,7 +28,7 @@ QString replaceCssColors(const QString &stylesheet)
 
 }
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 Q_LOGGING_CATEGORY(lcSetupWizardWidget, "gui.setupwizard.window")
 
@@ -52,7 +52,7 @@ SetupWizardWidget::SetupWizardWidget(SettingsDialog *parent)
             // call the base implementation
             Q_EMIT rejected();
         });
-        ownCloudGui::raise();
+        CuratorGui::raise();
         messageBox->open();
     });
 
@@ -134,7 +134,7 @@ void SetupWizardWidget::displayPage(AbstractSetupWizardPage *page, SetupWizardSt
     _ui->nextButton->setFocus();
 
     // bring to front if necessary
-    ownCloudGui::raise();
+    CuratorGui::raise();
 
     connect(_currentPage, &AbstractSetupWizardPage::contentChanged, this, &SetupWizardWidget::slotUpdateNextButton);
 

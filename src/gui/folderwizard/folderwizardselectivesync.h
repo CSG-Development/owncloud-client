@@ -22,7 +22,7 @@
 #include "gui/folderwizard/folderwizard_p.h"
 #include "libsync/accountfwd.h"
 
-namespace OCC {
+namespace CUR {
 
 class SelectiveSyncWidget;
 

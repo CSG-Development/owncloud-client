@@ -58,7 +58,7 @@ namespace {
 constexpr auto modalWidgetStretchedMarginC = 50;
 }
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcAccountSettings, "gui.account.settings", QtInfoMsg)
 
@@ -552,7 +552,7 @@ void AccountSettings::slotEnableVfsCurrentFolder()
     if (VfsPluginManager::instance().bestAvailableVfsMode() == Vfs::WindowsCfApi) {
         Q_EMIT messageBox->accepted();
     } else {
-        ownCloudGui::raise();
+        CuratorGui::raise();
         messageBox->show();
     }
 }
@@ -786,13 +786,13 @@ void AccountSettings::slotAccountStateChanged()
             connect(cred, &HttpCredentialsGui::oAuthErrorOccurred, _askForOAuthLoginDialog, [loginDialog = _askForOAuthLoginDialog, contentWidget, cred]() {
                 Q_ASSERT(!cred->ready());
 
-                ownCloudGui::raise();
+                CuratorGui::raise();
                 contentWidget->showRetryFrame();
             });
 
             showConnectionLabel(tr("Reauthorization required."));
 
-            ownCloudGui::raise();
+            CuratorGui::raise();
             _askForOAuthLoginDialog->open();
 
             QTimer::singleShot(0, [contentWidget]() {
@@ -1057,6 +1057,6 @@ bool AccountSettings::event(QEvent *e)
     return QWidget::event(e);
 }
 
-} // namespace OCC
+} // namespace CUR
 
 #include "accountsettings.moc"

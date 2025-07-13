@@ -8,11 +8,11 @@
 #include <QRandomGenerator>
 
 namespace {
-class HttpCredentialsTest : public OCC::HttpCredentials
+class HttpCredentialsTest : public CUR::HttpCredentials
 {
 public:
     HttpCredentialsTest(const QString &user, const QString &password)
-        : HttpCredentials(OCC::DetermineAuthTypeJob::AuthType::Basic, user, password)
+        : HttpCredentials(CUR::DetermineAuthTypeJob::AuthType::Basic, user, password)
     {
     }
 
@@ -22,7 +22,7 @@ public:
 };
 }
 
-namespace OCC {
+namespace CUR {
 
 namespace TestUtils {
     TestUtilsPrivate::AccountStateRaii createDummyAccount()
@@ -35,14 +35,14 @@ namespace TestUtils {
         acc->setCredentials(cred);
         acc->setUrl(QUrl(QStringLiteral("http://localhost/owncloud")));
         acc->setDavDisplayName(QStringLiteral("fakename") + acc->uuid().toString(QUuid::WithoutBraces));
-        acc->setCapabilities({acc->url(), OCC::TestUtils::testCapabilities()});
-        return {OCC::AccountManager::instance()->addAccount(acc).get(), &TestUtilsPrivate::accountStateDeleter};
+        acc->setCapabilities({acc->url(), CUR::TestUtils::testCapabilities()});
+        return {CUR::AccountManager::instance()->addAccount(acc).get(), &TestUtilsPrivate::accountStateDeleter};
     }
 
     FolderDefinition createDummyFolderDefinition(const AccountPtr &account, const QString &path)
     {
         // TODO: legacy
-        auto d = OCC::FolderDefinition::createNewFolderDefinition(account->davUrl(), {});
+        auto d = CUR::FolderDefinition::createNewFolderDefinition(account->davUrl(), {});
         d.setLocalPath(path);
         d.setTargetPath(path);
         return d;
@@ -50,7 +50,7 @@ namespace TestUtils {
 
     QTemporaryDir createTempDir()
     {
-        return QTemporaryDir { QStringLiteral("%1/ownCloud-unit-test-%2-XXXXXX").arg(QDir::tempPath(), qApp->applicationName()) };
+        return QTemporaryDir { QStringLiteral("%1/Curator-unit-test-%2-XXXXXX").arg(QDir::tempPath(), qApp->applicationName()) };
     }
 
     FolderMan *folderMan()
@@ -108,10 +108,10 @@ namespace TestUtils {
             {"checksums", QVariantMap{{"preferredUploadType", Utility::enumToString(algo)}, {"supportedTypes", algorithmNames}}}};
     }
 
-    void TestUtilsPrivate::accountStateDeleter(OCC::AccountState *acc)
+    void TestUtilsPrivate::accountStateDeleter(CUR::AccountState *acc)
     {
         if (acc) {
-            OCC::AccountManager::instance()->deleteAccount(acc);
+            CUR::AccountManager::instance()->deleteAccount(acc);
         }
     }
 }

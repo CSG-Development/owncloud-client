@@ -18,7 +18,7 @@
 #include <QMetaType>
 #include <QCoreApplication>
 
-namespace OCC {
+namespace CUR {
 
 ProgressDispatcher *ProgressDispatcher::_instance = nullptr;
 

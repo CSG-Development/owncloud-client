@@ -16,7 +16,7 @@
 
 #include "abstractcorejob.h"
 
-namespace OCC::Wizard::Jobs {
+namespace CUR::Wizard::Jobs {
 
 class ResolveUrlJobFactory : public AbstractCoreJobFactory
 {

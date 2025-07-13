@@ -16,7 +16,7 @@
 
 #include "propagateupload.h"
 
-namespace OCC {
+namespace CUR {
 Q_DECLARE_LOGGING_CATEGORY(lcPropagateUploadTUS)
 
 class PropagateUploadFileTUS : public PropagateUploadFileCommon
@@ -36,7 +36,7 @@ private:
     QUrl _location;
 
 public:
-    PropagateUploadFileTUS(OwncloudPropagator *propagator, const SyncFileItemPtr &item);
+    PropagateUploadFileTUS(CuratorPropagator *propagator, const SyncFileItemPtr &item);
 
     void doStartUpload() override;
 public Q_SLOTS:

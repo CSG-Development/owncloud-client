@@ -6,7 +6,7 @@
 #include <QIcon>
 
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 ServerUrlSetupWizardPage::ServerUrlSetupWizardPage(const QUrl &serverUrl)
     : _ui(new ::Ui::ServerUrlSetupWizardPage)

@@ -23,7 +23,7 @@
 
 #include "folder.h"
 #include "loginrequireddialog.h"
-#include "owncloudgui.h"
+#include "curatorgui.h"
 #include "progressdispatcher.h"
 
 class QModelIndex;
@@ -31,7 +31,7 @@ class QNetworkReply;
 class QLabel;
 class QSortFilterProxyModel;
 
-namespace OCC {
+namespace CUR {
 
 namespace Ui {
     class AccountSettings;
@@ -114,6 +114,6 @@ private:
     QPointer<LoginRequiredDialog> _askForOAuthLoginDialog = nullptr;
 };
 
-} // namespace OCC
+} // namespace CUR
 
 #endif // ACCOUNTSETTINGS_H

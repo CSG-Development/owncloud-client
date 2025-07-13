@@ -21,7 +21,7 @@
 #include "ocsynclib.h"
 #include <QObject>
 
-namespace OCC {
+namespace CUR {
 
 class OCSYNC_EXPORT PluginFactory
 {
@@ -45,4 +45,4 @@ QString pluginFileName(const QString &type, const QString &name);
 
 }
 
-Q_DECLARE_INTERFACE(OCC::PluginFactory, "org.owncloud.PluginFactory")
+Q_DECLARE_INTERFACE(CUR::PluginFactory, "org.curator.PluginFactory")

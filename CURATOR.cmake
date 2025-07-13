@@ -1,15 +1,15 @@
-set( APPLICATION_NAME       "ownCloud" )
-set( APPLICATION_SHORTNAME  "ownCloud" )
-set( APPLICATION_EXECUTABLE "owncloud" )
+set( APPLICATION_NAME       "Curator" )
+set( APPLICATION_SHORTNAME  "Curator" )
+set( APPLICATION_EXECUTABLE "curator" )
 set( APPLICATION_DOMAIN     "owncloud.com" )
-set( APPLICATION_VENDOR     "ownCloud" )
+set( APPLICATION_VENDOR     "Curator" )
 set( APPLICATION_UPDATE_URL "https://updates.owncloud.com/client/" CACHE STRING "URL for updater" )
-set( APPLICATION_ICON_NAME  "owncloud" )
-set( APPLICATION_VIRTUALFILE_SUFFIX "owncloud" CACHE STRING "Virtual file suffix (not including the .)")
+set( APPLICATION_ICON_NAME  "curator" )
+set( APPLICATION_VIRTUALFILE_SUFFIX "curator" CACHE STRING "Virtual file suffix (not including the .)")
 
-set( LINUX_PACKAGE_SHORTNAME "owncloud" )
+set( LINUX_PACKAGE_SHORTNAME "curator" )
 
-set( THEME_CLASS            "ownCloudTheme" )
+set( THEME_CLASS            "CuratorTheme" )
 set( APPLICATION_REV_DOMAIN "com.seagate.curator.stxfiles.macos" )
 set( WIN_SETUP_BITMAP_PATH  "${CMAKE_SOURCE_DIR}/admin/win/nsi" )
 

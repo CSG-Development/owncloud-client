@@ -3,17 +3,17 @@
 #include <QSettings>
 #include <QVariant>
 
-#include "owncloudlib.h"
+#include "curatorlib.h"
 
 #include <qt6keychain/keychain.h>
 
 #include <memory>
 
-namespace OCC {
+namespace CUR {
 class Account;
 class CredentialJob;
 
-class OWNCLOUDSYNC_EXPORT CredentialManager : public QObject
+class CURATORSYNC_EXPORT CredentialManager : public QObject
 {
     Q_OBJECT
 public:
@@ -45,7 +45,7 @@ private:
     friend class TestCredentialManager;
 };
 
-class OWNCLOUDSYNC_EXPORT CredentialJob : public QObject
+class CURATORSYNC_EXPORT CredentialJob : public QObject
 {
     Q_OBJECT
 public:

@@ -13,19 +13,19 @@
  */
 #pragma once
 
-#include "owncloudlib.h"
+#include "curatorlib.h"
 
 #include <QNetworkReply>
 #include <QUrl>
 
-namespace OCC {
+namespace CUR {
 namespace HttpLogger {
-    void OWNCLOUDSYNC_EXPORT logRequest(QNetworkReply *reply, QNetworkAccessManager::Operation operation, QIODevice *device);
+    void CURATORSYNC_EXPORT logRequest(QNetworkReply *reply, QNetworkAccessManager::Operation operation, QIODevice *device);
 
     /**
     * Helper to construct the HTTP verb used in the request
     */
-    QByteArray OWNCLOUDSYNC_EXPORT requestVerb(QNetworkAccessManager::Operation operation, const QNetworkRequest &request);
+    QByteArray CURATORSYNC_EXPORT requestVerb(QNetworkAccessManager::Operation operation, const QNetworkRequest &request);
     inline QByteArray requestVerb(const QNetworkReply &reply)
     {
         return requestVerb(reply.operation(), reply.request());

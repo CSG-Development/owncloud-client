@@ -9,7 +9,7 @@
 #include "testutils/syncenginetestutils.h"
 #include <syncengine.h>
 
-using namespace OCC;
+using namespace CUR;
 
 
 class TestDatabaseError : public QObject

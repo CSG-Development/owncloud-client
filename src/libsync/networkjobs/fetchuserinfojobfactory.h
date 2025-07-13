@@ -15,9 +15,9 @@
 #pragma once
 
 #include "abstractcorejob.h"
-namespace OCC {
+namespace CUR {
 
-class OWNCLOUDSYNC_EXPORT FetchUserInfoResult
+class CURATORSYNC_EXPORT FetchUserInfoResult
 {
 public:
     FetchUserInfoResult() = default;
@@ -43,7 +43,7 @@ private:
     QString _displayName;
 };
 
-class OWNCLOUDSYNC_EXPORT FetchUserInfoJobFactory : public AbstractCoreJobFactory
+class CURATORSYNC_EXPORT FetchUserInfoJobFactory : public AbstractCoreJobFactory
 {
 public:
     static FetchUserInfoJobFactory fromBasicAuthCredentials(QNetworkAccessManager *nam, const QString &username, const QString &token);
@@ -57,6 +57,6 @@ private:
     QString _authorizationHeader;
 };
 
-} // OCC
+} // CUR
 
-Q_DECLARE_METATYPE(OCC::FetchUserInfoResult)
+Q_DECLARE_METATYPE(CUR::FetchUserInfoResult)

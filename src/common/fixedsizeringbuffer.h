@@ -19,7 +19,7 @@
 #include <functional>
 #include <vector>
 
-namespace OCC {
+namespace CUR {
 
 /**
  * A Fixed sized ring buffer optimized on continouous insertion

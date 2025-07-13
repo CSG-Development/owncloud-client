@@ -11,7 +11,7 @@
 
 #include <QTest>
 
-namespace OCC {
+namespace CUR {
 
 class TestCredentialManager : public QObject
 {
@@ -138,5 +138,5 @@ private Q_SLOTS:
 };
 }
 
-QTEST_GUILESS_MAIN(OCC::TestCredentialManager)
+QTEST_GUILESS_MAIN(CUR::TestCredentialManager)
 #include "testcredentialmanager.moc"

@@ -16,7 +16,7 @@
 
 #include <QModelIndex>
 
-using namespace OCC;
+using namespace CUR;
 
 SpacesPage::SpacesPage(AccountPtr acc, QWidget *parent)
     : QWizardPage(parent)
@@ -34,12 +34,12 @@ SpacesPage::~SpacesPage()
     delete ui;
 }
 
-bool OCC::SpacesPage::isComplete() const
+bool CUR::SpacesPage::isComplete() const
 {
     return ui->widget->currentSpace().isValid();
 }
 
-QVariant OCC::SpacesPage::selectedSpaceData(Spaces::SpacesModel::Columns column) const
+QVariant CUR::SpacesPage::selectedSpaceData(Spaces::SpacesModel::Columns column) const
 {
     return ui->widget->currentSpace().siblingAtColumn(static_cast<int>(column)).data();
 }

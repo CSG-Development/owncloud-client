@@ -23,7 +23,7 @@
 #include "ocsynclib.h"
 #include <QDebug>
 
-namespace OCC {
+namespace CUR {
 
 /**
  * Class that store in a memory efficient way the remote permission
@@ -105,6 +105,6 @@ public:
 };
 
 
-} // namespace OCC
+} // namespace CUR
 
-Q_DECLARE_METATYPE(OCC::RemotePermissions)
+Q_DECLARE_METATYPE(CUR::RemotePermissions)

@@ -19,7 +19,7 @@ function(add_vfs_plugin)
         ${__PLUGIN_LIBS}
     )
     if(APPLE)
-        set_target_properties(vfs_${__PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "$<TARGET_FILE_DIR:owncloud>/../PlugIns/")
+        set_target_properties(vfs_${__PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "$<TARGET_FILE_DIR:curator>/../PlugIns/")
         # make the plugins available to the tests
         add_custom_command(TARGET vfs_${__PLUGIN_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND}
             ARGS -E create_symlink "$<TARGET_FILE:vfs_${__PLUGIN_NAME}>" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<TARGET_FILE_NAME:vfs_${__PLUGIN_NAME}>" MAIN_DEPENDENCY "vfs_${__PLUGIN_NAME}")
@@ -28,8 +28,8 @@ function(add_vfs_plugin)
         install(TARGETS vfs_${__PLUGIN_NAME} DESTINATION "${KDE_INSTALL_PLUGINDIR}")
     endif()
 
-    if (TARGET owncloud)
-        add_dependencies(owncloud vfs_${__PLUGIN_NAME})
+    if (TARGET curator)
+        add_dependencies(curator vfs_${__PLUGIN_NAME})
     endif()
     if (TARGET cmd)
         add_dependencies(cmd vfs_${__PLUGIN_NAME})

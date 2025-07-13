@@ -18,7 +18,7 @@
 
 #include "plugin.h"
 
-namespace OCC {
+namespace CUR {
 
 PluginFactory::~PluginFactory() = default;
 

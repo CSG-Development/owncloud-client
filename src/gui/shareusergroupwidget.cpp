@@ -42,7 +42,7 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 
-namespace OCC {
+namespace CUR {
 
 ShareUserGroupWidget::ShareUserGroupWidget(AccountPtr account,
     const QString &sharePath,

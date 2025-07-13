@@ -14,16 +14,16 @@
 
 #pragma once
 
-#include "owncloudlib.h"
+#include "curatorlib.h"
 
 #include "account.h"
 
 #include <QJsonParseError>
 
 
-namespace OCC {
+namespace CUR {
 
-class OWNCLOUDSYNC_EXPORT WebFinger : public QObject
+class CURATORSYNC_EXPORT WebFinger : public QObject
 {
     Q_OBJECT
 public:

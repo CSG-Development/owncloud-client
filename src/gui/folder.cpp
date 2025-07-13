@@ -94,7 +94,7 @@ auto priorityC()
 }
 }
 
-namespace OCC {
+namespace CUR {
 
 using namespace FileSystem::SizeLiterals;
 
@@ -1214,7 +1214,7 @@ void Folder::slotWatcherUnreliable(const QString &message)
         {}, ocApp()->gui()->settingsDialog());
 
     msgBox->setAttribute(Qt::WA_DeleteOnClose);
-    ownCloudGui::raise();
+    CuratorGui::raise();
     msgBox->open();
 }
 
@@ -1232,7 +1232,7 @@ void Folder::registerFolderWatcher()
     connect(_folderWatcher.data(), &FolderWatcher::becameUnreliable,
         this, &Folder::slotWatcherUnreliable);
     _folderWatcher->init(path());
-    _folderWatcher->startNotificatonTest(path() + QLatin1String(".owncloudsync.log"));
+    _folderWatcher->startNotificatonTest(path() + QLatin1String(".curatorsync.log"));
 }
 
 bool Folder::virtualFilesEnabled() const
@@ -1243,7 +1243,7 @@ bool Folder::virtualFilesEnabled() const
 void Folder::slotAboutToRemoveAllFiles(SyncFileItem::Direction direction)
 {
     if (_removeAllFilesDialog) {
-        ownCloudGui::raise();
+        CuratorGui::raise();
         return;
     }
     const QString msg = [direction] {
@@ -1449,4 +1449,4 @@ QString FolderDefinition::spaceId() const
     Q_ASSERT(_webDavUrl.isValid() || !_spaceId.isEmpty());
     return _spaceId;
 }
-} // namespace OCC
+} // namespace CUR

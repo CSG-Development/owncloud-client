@@ -841,8 +841,8 @@ This is a new, experimental mode. If you decide to use it, please report any iss
     <name>OCC::ConnectionValidator</name>
     <message>
         <location filename="../src/gui/connectionvalidator.cpp" line="67"/>
-        <source>No ownCloud account configured</source>
-        <translation>لا يوجد حساب مضبوط على ownCloud</translation>
+        <source>No Curator account configured</source>
+        <translation>لا يوجد حساب مضبوط على Curator</translation>
     </message>
     <message>
         <location filename="../src/gui/connectionvalidator.cpp" line="239"/>
@@ -2217,9 +2217,9 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::OwncloudPropagator</name>
+    <name>CUR::CuratorPropagator</name>
     <message>
-        <location filename="../src/libsync/owncloudpropagator.cpp" line="766"/>
+        <location filename="../src/libsync/curatorpropagator.cpp" line="766"/>
         <source>File %1 is currently in use</source>
         <translation type="unfinished"/>
     </message>
@@ -2370,12 +2370,12 @@ for additional privileges during the process.</source>
 <context>
     <name>OCC::PropagateDirectory</name>
     <message>
-        <location filename="../src/libsync/owncloudpropagator.cpp" line="1126"/>
+        <location filename="../src/libsync/curatorpropagator.cpp" line="1126"/>
         <source>Error updating metadata: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/libsync/owncloudpropagator.cpp" line="1129"/>
+        <location filename="../src/libsync/curatorpropagator.cpp" line="1129"/>
         <source>%1 the folder is currently in use</source>
         <translation type="unfinished"/>
     </message>
@@ -2451,7 +2451,7 @@ for additional privileges during the process.</source>
 <context>
     <name>OCC::PropagateItemJob</name>
     <message>
-        <location filename="../src/libsync/owncloudpropagator.cpp" line="240"/>
+        <location filename="../src/libsync/curatorpropagator.cpp" line="240"/>
         <source>; Restoration Failed: %1</source>
         <translation>؛ فشلت الاستعادة: %1</translation>
     </message>
@@ -2598,12 +2598,12 @@ for additional privileges during the process.</source>
 <context>
     <name>OCC::PropagateUpdateMetaDataJob</name>
     <message>
-        <location filename="../src/libsync/owncloudpropagator.cpp" line="1310"/>
+        <location filename="../src/libsync/curatorpropagator.cpp" line="1310"/>
         <source>Could not update file : %1</source>
         <translation>تعذر تحديث الملف : ٪ 1</translation>
     </message>
     <message>
-        <location filename="../src/libsync/owncloudpropagator.cpp" line="1313"/>
+        <location filename="../src/libsync/curatorpropagator.cpp" line="1313"/>
         <source>The file %1 is currently in use</source>
         <translation type="unfinished"/>
     </message>
@@ -2889,8 +2889,8 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <location filename="../src/gui/sharedialog.ui" line="62"/>
-        <source>ownCloud Path:</source>
-        <translation>مسار ownCloud:</translation>
+        <source>Curator Path:</source>
+        <translation>مسار Curator:</translation>
     </message>
     <message>
         <location filename="../src/gui/sharedialog.cpp" line="108"/>
@@ -3200,7 +3200,7 @@ for additional privileges during the process.</source>
     <message>
         <location filename="../src/gui/socketapi/socketapi.cpp" line="509"/>
         <source>Share with %1</source>
-        <comment>parameter is ownCloud</comment>
+        <comment>parameter is Curator</comment>
         <translation>مشاركة مع %1</translation>
     </message>
     <message>
@@ -3775,196 +3775,196 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
-    <name>OCC::ownCloudGui</name>
+    <name>OCC::CuratorGui</name>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="300"/>
+        <location filename="../src/gui/curatorgui.cpp" line="300"/>
         <source>Please sign in</source>
         <translation>يُرجى تسجيل الدخول</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="328"/>
+        <location filename="../src/gui/curatorgui.cpp" line="328"/>
         <source>Folder %1: %2</source>
         <translation>مجلد %1: %2</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="337"/>
+        <location filename="../src/gui/curatorgui.cpp" line="337"/>
         <source>Unresolved %1 conflicts</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="340"/>
+        <location filename="../src/gui/curatorgui.cpp" line="340"/>
         <source>Ignored errors %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="355"/>
+        <location filename="../src/gui/curatorgui.cpp" line="355"/>
         <source>There are no sync folders configured.</source>
         <translation>لا توجد مجلدات مزامنة مكونة.</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="389"/>
+        <location filename="../src/gui/curatorgui.cpp" line="389"/>
         <source>Log in...</source>
         <translation>جارٍ تسجيل الدخول...</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="391"/>
+        <location filename="../src/gui/curatorgui.cpp" line="391"/>
         <source>Log out</source>
         <translation>تسجيل الخروج</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="488"/>
+        <location filename="../src/gui/curatorgui.cpp" line="488"/>
         <source>Recent Changes</source>
         <translation>التغييرات الأخيرة</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="378"/>
+        <location filename="../src/gui/curatorgui.cpp" line="378"/>
         <source>Open folder &apos;%1&apos;</source>
         <translation>فتح مجلد &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="231"/>
+        <location filename="../src/gui/curatorgui.cpp" line="231"/>
         <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
         <translation>يشغِّل الخادم الموجود على الحساب %1 إصدارًا غير مدعوم%2. لم يتم اختبار استخدام هذا العميل مع إصدارات الخادم غير المدعومة وقد يشكل خطورة. تابع على مسؤوليتك.</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="287"/>
+        <location filename="../src/gui/curatorgui.cpp" line="287"/>
         <source>Account %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="385"/>
-        <location filename="../src/gui/owncloudgui.cpp" line="618"/>
+        <location filename="../src/gui/curatorgui.cpp" line="385"/>
+        <location filename="../src/gui/curatorgui.cpp" line="618"/>
         <source>Stop synchronization</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="611"/>
+        <location filename="../src/gui/curatorgui.cpp" line="611"/>
         <source>Create a new account</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="725"/>
+        <location filename="../src/gui/curatorgui.cpp" line="725"/>
         <source>Unknown status</source>
         <translation>حالة غير معروفة</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="741"/>
+        <location filename="../src/gui/curatorgui.cpp" line="741"/>
         <source>Details...</source>
         <translation>التفاصيل...</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="651"/>
+        <location filename="../src/gui/curatorgui.cpp" line="651"/>
         <source>Help</source>
         <translation>تعليمات</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="383"/>
-        <location filename="../src/gui/owncloudgui.cpp" line="615"/>
+        <location filename="../src/gui/curatorgui.cpp" line="383"/>
+        <location filename="../src/gui/curatorgui.cpp" line="615"/>
         <source>Resume synchronization</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="658"/>
+        <location filename="../src/gui/curatorgui.cpp" line="658"/>
         <source>Quit %1</source>
         <translation>إنهاء %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="282"/>
+        <location filename="../src/gui/curatorgui.cpp" line="282"/>
         <source>Disconnected from %1</source>
         <translation>انقطع الاتصال عن %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="230"/>
+        <location filename="../src/gui/curatorgui.cpp" line="230"/>
         <source>Unsupported Server Version</source>
         <translation>إصدار خادم غير مدعوم</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="272"/>
+        <location filename="../src/gui/curatorgui.cpp" line="272"/>
         <source>Disconnected</source>
         <translation>غير متصل</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="274"/>
+        <location filename="../src/gui/curatorgui.cpp" line="274"/>
         <source>Disconnected from some accounts</source>
         <translation>غير متصل ببعض الحسابات</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="285"/>
+        <location filename="../src/gui/curatorgui.cpp" line="285"/>
         <source>Disconnected from accounts:</source>
         <translation>غير متصل بالحسابات:</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="301"/>
+        <location filename="../src/gui/curatorgui.cpp" line="301"/>
         <source>Signed out</source>
         <translation>تم تسجيل الخروج</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="305"/>
+        <location filename="../src/gui/curatorgui.cpp" line="305"/>
         <source>Account synchronization is disabled</source>
         <translation>تم تعطيل مزامنة الحساب</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="306"/>
+        <location filename="../src/gui/curatorgui.cpp" line="306"/>
         <source>Synchronization is paused</source>
         <translation>تم إيقاف المزامنة مؤقتًا</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="352"/>
+        <location filename="../src/gui/curatorgui.cpp" line="352"/>
         <source>Up to date (%1)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="356"/>
+        <location filename="../src/gui/curatorgui.cpp" line="356"/>
         <source>No sync folders configured</source>
         <translation>لم يتم تكوين أي مجلدات مزامنة</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="607"/>
+        <location filename="../src/gui/curatorgui.cpp" line="607"/>
         <source>Show %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="655"/>
+        <location filename="../src/gui/curatorgui.cpp" line="655"/>
         <source>About %1</source>
         <translation>عن %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="738"/>
+        <location filename="../src/gui/curatorgui.cpp" line="738"/>
         <source>No items synced recently</source>
         <translation>لم تتم مزامنة أي عناصر مؤخرًا</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="755"/>
+        <location filename="../src/gui/curatorgui.cpp" line="755"/>
         <source>Checking for changes in remote &apos;%1&apos;</source>
         <translation>البحث عن تغييرات في &apos;%1&apos; البعيد</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="758"/>
+        <location filename="../src/gui/curatorgui.cpp" line="758"/>
         <source>Checking for changes in local &apos;%1&apos;</source>
         <translation>البحث عن تغييرات في &apos;%1&apos; المحلي</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="773"/>
+        <location filename="../src/gui/curatorgui.cpp" line="773"/>
         <source>Syncing %1 of %2  (%3 left)</source>
         <translation>مزامنة %1 من %2 (%3 متبقٍّ)</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="778"/>
+        <location filename="../src/gui/curatorgui.cpp" line="778"/>
         <source>Syncing %1 of %2</source>
         <translation>مزامنة %1 من %2</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="787"/>
+        <location filename="../src/gui/curatorgui.cpp" line="787"/>
         <source>Syncing %1 (%2 left)</source>
         <translation>مزامنة %1 (%2 متبقٍّ)</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="790"/>
+        <location filename="../src/gui/curatorgui.cpp" line="790"/>
         <source>Syncing %1</source>
         <translation>مزامنة %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/owncloudgui.cpp" line="799"/>
+        <location filename="../src/gui/curatorgui.cpp" line="799"/>
         <source>%1 (%2, %3)</source>
         <translation>%1 (%2، %3)</translation>
     </message>
@@ -4273,7 +4273,7 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
-    <name>ownCloudTheme::aboutVersions()</name>
+    <name>CuratorTheme::aboutVersions()</name>
     <message>
         <location filename="../src/libsync/theme.cpp" line="383"/>
         <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
@@ -4281,7 +4281,7 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
-    <name>ownCloudTheme::qtVer</name>
+    <name>CuratorTheme::qtVer</name>
     <message>
         <location filename="../src/libsync/theme.cpp" line="367"/>
         <source>%1 (Built against Qt %2)</source>
@@ -4289,7 +4289,7 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
-    <name>ownCloudTheme::versionWithSha</name>
+    <name>CuratorTheme::versionWithSha</name>
     <message>
         <location filename="../src/libsync/theme.cpp" line="372"/>
         <source>%1 %2</source>

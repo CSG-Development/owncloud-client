@@ -23,7 +23,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-namespace OCC {
+namespace CUR {
 
 /**
  * When a share is modified, we need to tell the folders so they can adjust overlay icons

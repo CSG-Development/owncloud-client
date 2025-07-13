@@ -13,10 +13,10 @@
  */
 #pragma once
 
-#include "owncloudpropagator.h"
+#include "curatorpropagator.h"
 #include "networkjobs.h"
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief The PropagateRemoteMkdir class
@@ -29,7 +29,7 @@ class PropagateRemoteMkdir : public PropagateItemJob
     bool _deleteExisting;
     friend class PropagateDirectory; // So it can access the _item;
 public:
-    PropagateRemoteMkdir(OwncloudPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateRemoteMkdir(CuratorPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
         , _deleteExisting(false)
     {

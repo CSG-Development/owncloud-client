@@ -20,7 +20,7 @@
 
 #include <chrono>
 
-namespace OCC::Utility {
+namespace CUR::Utility {
 
 /**
  * Meassure time using std::chrono::steady_clock

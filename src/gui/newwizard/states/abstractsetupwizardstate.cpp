@@ -14,7 +14,7 @@
 
 #include "abstractsetupwizardstate.h"
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 AbstractSetupWizardState::AbstractSetupWizardState(SetupWizardContext *context)
     : _context(context)
@@ -26,4 +26,4 @@ AbstractSetupWizardPage *AbstractSetupWizardState::page() const
     return _page;
 }
 
-} // OCC::Wizard
+} // CUR::Wizard

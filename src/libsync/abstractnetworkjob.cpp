@@ -33,7 +33,7 @@
 #include "common/asserts.h"
 #include "networkjobs.h"
 #include "account.h"
-#include "owncloudpropagator.h"
+#include "curatorpropagator.h"
 #include "httplogger.h"
 
 #include "creds/abstractcredentials.h"
@@ -48,13 +48,13 @@ constexpr int MaxRetryCount = 5;
 }
 
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcNetworkJob, "sync.networkjob", QtInfoMsg)
 
 // If not set, it is overwritten by the Application constructor with the value from the config
 seconds AbstractNetworkJob::httpTimeout = [] {
-    const auto def = qEnvironmentVariableIntValue("OWNCLOUD_TIMEOUT");
+    const auto def = qEnvironmentVariableIntValue("CURATOR_TIMEOUT");
     if (def <= 0) {
         return AbstractNetworkJob::DefaultHttpTimeout;
     }
@@ -252,7 +252,7 @@ QByteArray AbstractNetworkJob::responseTimestamp() const
     return _responseTimestamp;
 }
 
-QDateTime OCC::AbstractNetworkJob::responseQTimeStamp() const
+QDateTime CUR::AbstractNetworkJob::responseQTimeStamp() const
 {
     return Utility::parseRFC1123Date(QString::fromUtf8(responseTimestamp()));
 }
@@ -424,9 +424,9 @@ void AbstractNetworkJob::setCacheLoadControl(QNetworkRequest::CacheLoadControl c
     _cacheLoadControl = cacheLoadControl;
 }
 
-} // namespace OCC
+} // namespace CUR
 
-QDebug operator<<(QDebug debug, const OCC::AbstractNetworkJob *job)
+QDebug operator<<(QDebug debug, const CUR::AbstractNetworkJob *job)
 {
     QDebugStateSaver saver(debug);
     debug.setAutoInsertSpaces(false);

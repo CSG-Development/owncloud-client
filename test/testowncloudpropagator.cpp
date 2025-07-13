@@ -7,23 +7,23 @@
 #include <QtTest>
 #include <QDebug>
 
-#include "owncloudpropagator_p.h"
+#include "curatorpropagator_p.h"
 #include "propagatedownload.h"
 #include "qchar.h"
 
-using namespace OCC;
-namespace OCC {
-QString OWNCLOUDSYNC_EXPORT createDownloadTmpFileName(const QString &previous);
+using namespace CUR;
+namespace CUR {
+QString CURATORSYNC_EXPORT createDownloadTmpFileName(const QString &previous);
 }
 
-class TestOwncloudPropagator : public QObject
+class TestCuratorPropagator : public QObject
 {
     Q_OBJECT
 
 private slots:
     void testUpdateErrorFromSession()
     {
-//        OwncloudPropagator propagator( NULL, QLatin1String("test1"), QLatin1String("test2"), new ProgressDatabase);
+//        CuratorPropagator propagator( NULL, QLatin1String("test1"), QLatin1String("test2"), new ProgressDatabase);
         QVERIFY( true );
     }
 
@@ -65,5 +65,5 @@ private slots:
     }
 };
 
-QTEST_APPLESS_MAIN(TestOwncloudPropagator)
-#include "testowncloudpropagator.moc"
+QTEST_APPLESS_MAIN(TestCuratorPropagator)
+#include "testcuratorpropagator.moc"

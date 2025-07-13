@@ -59,7 +59,7 @@
           </font>
          </property>
          <property name="text">
-          <string>ownCloud Path:</string>
+          <string>Curator Path:</string>
          </property>
          <property name="textFormat">
           <enum>Qt::PlainText</enum>

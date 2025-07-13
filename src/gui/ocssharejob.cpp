@@ -21,16 +21,16 @@
 #include <QJsonDocument>
 
 namespace {
-OCC::JsonApiJob *createJob(OCC::AccountPtr account, const QString &path, const QByteArray &verb, const OCC::JsonApiJob::UrlQuery &arguments, QObject *parent)
+CUR::JsonApiJob *createJob(CUR::AccountPtr account, const QString &path, const QByteArray &verb, const CUR::JsonApiJob::UrlQuery &arguments, QObject *parent)
 {
     QString p = QStringLiteral("ocs/v1.php/apps/files_sharing/api/v1/shares");
     if (!path.isEmpty()) {
         p += QLatin1Char('/') + path;
     }
-    return new OCC::JsonApiJob(account, p, verb, arguments, {}, parent);
+    return new CUR::JsonApiJob(account, p, verb, arguments, {}, parent);
 }
 }
-namespace OCC {
+namespace CUR {
 
 
 JsonApiJob *OcsShareJob::getShares(AccountPtr account, QObject *parent, const QString &path)

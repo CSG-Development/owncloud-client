@@ -14,8 +14,8 @@
  */
 
 #include "propagatorjobs.h"
-#include "owncloudpropagator.h"
-#include "owncloudpropagator_p.h"
+#include "curatorpropagator.h"
+#include "curatorpropagator_p.h"
 #include "propagateremotemove.h"
 #include "common/utility.h"
 #include "common/syncjournaldb.h"
@@ -33,7 +33,7 @@
 #include <time.h>
 
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcPropagateLocalRemove, "sync.propagator.localremove", QtInfoMsg)
 Q_LOGGING_CATEGORY(lcPropagateLocalMkdir, "sync.propagator.localmkdir", QtInfoMsg)

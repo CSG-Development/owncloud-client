@@ -17,7 +17,7 @@
 
 #include "theme.h"
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 LegacyWebFingerSetupWizardPage::LegacyWebFingerSetupWizardPage(const QUrl &serverUrl)
     : _ui(new ::Ui::LegacyWebFingerSetupWizardPage)
