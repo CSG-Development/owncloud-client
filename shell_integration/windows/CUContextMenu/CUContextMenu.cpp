@@ -12,8 +12,8 @@
 * details.
 */
 
-#include "OCContextMenu.h"
-#include "OCClientInterface.h"
+#include "CUContextMenu.h"
+#include "CUClientInterface.h"
 
 #include <shobjidl.h>
 #include <shlwapi.h>
@@ -23,13 +23,13 @@
 
 extern long g_cDllRef;
 
-OCContextMenu::OCContextMenu(void) 
+CUContextMenu::CUContextMenu(void) 
     : m_cRef(1)
 {
     InterlockedIncrement(&g_cDllRef);
 }
 
-OCContextMenu::~OCContextMenu(void)
+CUContextMenu::~CUContextMenu(void)
 {
     InterlockedDecrement(&g_cDllRef);
 }
@@ -37,25 +37,25 @@ OCContextMenu::~OCContextMenu(void)
 #pragma region IUnknown
 
 // Query to the interface the component supported.
-IFACEMETHODIMP OCContextMenu::QueryInterface(REFIID riid, void **ppv)
+IFACEMETHODIMP CUContextMenu::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] =
     {
-        QITABENT(OCContextMenu, IContextMenu),
-        QITABENT(OCContextMenu, IShellExtInit),
+        QITABENT(CUContextMenu, IContextMenu),
+        QITABENT(CUContextMenu, IShellExtInit),
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 // Increase the reference count for an interface on an object.
-IFACEMETHODIMP_(ULONG) OCContextMenu::AddRef()
+IFACEMETHODIMP_(ULONG) CUContextMenu::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
 // Decrease the reference count for an interface on an object.
-IFACEMETHODIMP_(ULONG) OCContextMenu::Release()
+IFACEMETHODIMP_(ULONG) CUContextMenu::Release()
 {
     ULONG cRef = InterlockedDecrement(&m_cRef);
     if (0 == cRef) {
@@ -71,7 +71,7 @@ IFACEMETHODIMP_(ULONG) OCContextMenu::Release()
 #pragma region IShellExtInit
 
 // Initialize the context menu handler.
-IFACEMETHODIMP OCContextMenu::Initialize(
+IFACEMETHODIMP CUContextMenu::Initialize(
     LPCITEMIDLIST, LPDATAOBJECT pDataObj, HKEY)
 {
     m_selectedFiles.clear();
@@ -127,7 +127,7 @@ void InsertSeperator(HMENU hMenu, UINT indexMenu)
     InsertMenuItem(hMenu, indexMenu, TRUE, &sep);
 }
 
-IFACEMETHODIMP OCContextMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
+IFACEMETHODIMP CUContextMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
     // If uFlags include CMF_DEFAULTONLY then we should not do anything.
     if (CMF_DEFAULTONLY & uFlags)
@@ -135,7 +135,7 @@ IFACEMETHODIMP OCContextMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT
         return MAKE_HRESULT(SEVERITY_SUCCESS, 0, USHORT(0));
     }
 
-    m_info = OCClientInterface::FetchInfo(m_selectedFiles);
+    m_info = CUClientInterface::FetchInfo(m_selectedFiles);
     if (m_info.menuItems.empty()) {
         return MAKE_HRESULT(SEVERITY_SUCCESS, 0, USHORT(0));
     }
@@ -181,7 +181,7 @@ IFACEMETHODIMP OCContextMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT
     return MAKE_HRESULT(SEVERITY_SUCCESS, 0, USHORT(indexSubMenu));
 }
 
-IFACEMETHODIMP OCContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
+IFACEMETHODIMP CUContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 {
     std::wstring command;
 
@@ -219,11 +219,11 @@ IFACEMETHODIMP OCContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
         return E_FAIL;
     }
 
-    std::ignore = OCClientInterface::SendRequest(command, m_selectedFiles);
+    std::ignore = CUClientInterface::SendRequest(command, m_selectedFiles);
     return S_OK;
 }
 
-IFACEMETHODIMP OCContextMenu::GetCommandString(UINT_PTR idCommand,
+IFACEMETHODIMP CUContextMenu::GetCommandString(UINT_PTR idCommand,
     UINT uFlags, UINT *pwReserved, LPSTR pszName, UINT cchMax)
 {
     if (idCommand < m_info.menuItems.size() && uFlags == GCS_VERBW) {

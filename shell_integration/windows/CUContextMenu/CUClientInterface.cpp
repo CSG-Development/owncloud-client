@@ -12,7 +12,7 @@
 * details.
 */
 
-#include "OCClientInterface.h"
+#include "CUClientInterface.h"
 
 #include "CommunicationSocket.h"
 #include "Log.h"
@@ -76,19 +76,19 @@ std::shared_ptr<HBITMAP> saveImage(const string &data)
     std::vector<BYTE> buf(size, 0);
     DWORD skipped;
     if (!CryptStringToBinaryA(data.data(), 0, CRYPT_STRING_BASE64, buf.data(), &size, &skipped, nullptr)) {
-        OCShell::logWinError(L"Failed to decode icon");
+        CUShell::logWinError(L"Failed to decode icon");
         return {};
     }
     ComPtr<IStream> stream = SHCreateMemStream(buf.data(), size);
     if (!stream) {
-        OCShell::log(L"Failed to create stream");
+        CUShell::log(L"Failed to create stream");
         return {};
     };
     HBITMAP result;
     Gdiplus::Bitmap bitmap(stream.Get(), true);
     const auto status = bitmap.GetHBITMAP(0, &result);
     if (status != Gdiplus::Ok) {
-        OCShell::log(L"Failed to get HBITMAP", to_wstring(status));
+        CUShell::log(L"Failed to get HBITMAP", to_wstring(status));
         return {};
     }
     return std::shared_ptr<HBITMAP> { new HBITMAP(result), [gdiplusToken](auto o) {
@@ -98,17 +98,17 @@ std::shared_ptr<HBITMAP> saveImage(const string &data)
 }
 }
 
-OCClientInterface::ContextMenuInfo OCClientInterface::FetchInfo(const std::wstring &files)
+CUClientInterface::ContextMenuInfo CUClientInterface::FetchInfo(const std::wstring &files)
 {
     auto pipename = CommunicationSocket::DefaultPipePath();
 
     CommunicationSocket socket;
     if (!WaitNamedPipe(pipename.data(), PIPE_TIMEOUT)) {
-        OCShell::logWinError(L"OCClientInterface::FetchInfo: Failed to connect to " + pipename);
+        CUShell::logWinError(L"CUClientInterface::FetchInfo: Failed to connect to " + pipename);
         return {};
     }
     if (!socket.Connect(pipename)) {
-        OCShell::log(L"OCClientInterface::FetchInfo: Failed to connect to " + pipename);
+        CUShell::log(L"CUClientInterface::FetchInfo: Failed to connect to " + pipename);
         return {};
     }
     bool ok = sendV2(socket, L"V2/GET_CLIENT_ICON", { { "size", 16 } })
@@ -117,7 +117,7 @@ OCClientInterface::ContextMenuInfo OCClientInterface::FetchInfo(const std::wstri
 
     if (!ok) {
         socket.Close();
-        OCShell::log(L"OCClientInterface::FetchInfo: Failed to request the context menu");
+        CUShell::log(L"CUClientInterface::FetchInfo: Failed to request the context menu");
         return {};
     }
 
@@ -137,7 +137,7 @@ OCClientInterface::ContextMenuInfo OCClientInterface::FetchInfo(const std::wstri
                 if (msg.first == L"V2/GET_CLIENT_ICON_RESULT") {
                     iconReceived = true;
                     if (arguments.contains("error")) {
-                        OCShell::log(L"V2/GET_CLIENT_ICON failed", arguments["error"].get<string>());
+                        CUShell::log(L"V2/GET_CLIENT_ICON failed", arguments["error"].get<string>());
                     } else {
                         info.icon = saveImage(arguments["png"].get<string>());
                     }
@@ -173,19 +173,19 @@ OCClientInterface::ContextMenuInfo OCClientInterface::FetchInfo(const std::wstri
         }
     }
     if (endReceived && !iconReceived) {
-        OCShell::log(L"OCClientInterface::FetchInfo: received a menu but no icon");
+        CUShell::log(L"CUClientInterface::FetchInfo: received a menu but no icon");
         return info;
     }
 
     if (!endReceived && iconReceived) {
-        OCShell::log(L"OCClientInterface::FetchInfo: received a icon but no menu");
+        CUShell::log(L"CUClientInterface::FetchInfo: received a icon but no menu");
         return {};
     }
-    OCShell::log(L"OCClientInterface::FetchInfo: timeout");
+    CUShell::log(L"CUClientInterface::FetchInfo: timeout");
     return {};
 }
 
-bool OCClientInterface::SendRequest(const wstring &verb, const std::wstring &path)
+bool CUClientInterface::SendRequest(const wstring &verb, const std::wstring &path)
 {
     auto pipename = CommunicationSocket::DefaultPipePath();
 

@@ -1,4 +1,4 @@
-include(OCRcVersion)
+include(CURcVersion)
 
 if (MSVC)
     # ecm sets /W3 we set /W4

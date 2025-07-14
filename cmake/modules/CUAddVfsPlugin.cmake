@@ -1,4 +1,4 @@
-include(OCApplyCommonSettings)
+include(CUApplyCommonSettings)
 
 function(add_vfs_plugin)
     set(options "")

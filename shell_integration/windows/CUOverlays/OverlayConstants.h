@@ -25,14 +25,14 @@
 #define OVERLAY_GENERIC_NAME        L"Curator overlay handler"
 
 // two spaces to put us ahead of the competition :/
-#define OVERLAY_NAME_ERROR          L"  OCError"
-#define OVERLAY_NAME_ERROR_SHARED   L"  OCErrorShared"
-#define OVERLAY_NAME_OK             L"  OCOK"
-#define OVERLAY_NAME_OK_SHARED      L"  OCOKShared"
-#define OVERLAY_NAME_SYNC           L"  OCSync"
-#define OVERLAY_NAME_SYNC_SHARED    L"  OCSyncShared"
-#define OVERLAY_NAME_WARNING        L"  OCWarning"
-#define OVERLAY_NAME_WARNING_SHARED L"  OCWarningShared"
+#define OVERLAY_NAME_ERROR          L"  CUError"
+#define OVERLAY_NAME_ERROR_SHARED   L"  CUErrorShared"
+#define OVERLAY_NAME_OK             L"  CUOK"
+#define OVERLAY_NAME_OK_SHARED      L"  CUOKShared"
+#define OVERLAY_NAME_SYNC           L"  CUSync"
+#define OVERLAY_NAME_SYNC_SHARED    L"  CUSyncShared"
+#define OVERLAY_NAME_WARNING        L"  CUWarning"
+#define OVERLAY_NAME_WARNING_SHARED L"  CUWarningShared"
 
 #define REGISTRY_OVERLAY_KEY        L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers"
 #define REGISTRY_CLSID              L"CLSID"

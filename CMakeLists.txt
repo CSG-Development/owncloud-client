@@ -44,8 +44,8 @@ if(UNIT_TESTING)
 endif()
 include(CTest)
 
-include(OCBundleResources)
-include(OCApplyCommonSettings)
+include(CUBundleResources)
+include(CUApplyCommonSettings)
 
 include("${CMAKE_CURRENT_LIST_DIR}/THEME.cmake")
 

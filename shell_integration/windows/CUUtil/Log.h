@@ -16,7 +16,7 @@
 #include <comdef.h>
 #include <sstream>
 
-namespace OCShell {
+namespace CUShell {
 
 template <typename T = std::wstring>
 void log(const std::wstring &msg, const T &error = {})

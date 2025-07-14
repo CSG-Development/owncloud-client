@@ -27,7 +27,7 @@
   </xsl:template>
 
   <!-- Exclude Shell Extensions -->
-  <xsl:key name="shellext-search" match="wix:Component[contains(wix:File/@Source, 'OCContextMenu.dll') or contains(wix:File/@Source, 'OCOverlays.dll')]" use="@Id" />
+  <xsl:key name="shellext-search" match="wix:Component[contains(wix:File/@Source, 'CUContextMenu.dll') or contains(wix:File/@Source, 'CUOverlays.dll')]" use="@Id" />
   <xsl:template match="wix:Component[key('shellext-search', @Id)]" />
   <xsl:template match="wix:ComponentRef[key('shellext-search', @Id)]" />
 

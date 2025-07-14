@@ -12,7 +12,7 @@
  * details.
  */
 
-#include "OCOverlayRegistrationHandler.h"
+#include "CUOverlayRegistrationHandler.h"
 #include "OverlayConstants.h"
 
 #include <windows.h>
@@ -22,7 +22,7 @@
 
 using namespace std;
 
-HRESULT OCOverlayRegistrationHandler::MakeRegistryEntries(const CLSID& clsid, PCWSTR friendlyName)
+HRESULT CUOverlayRegistrationHandler::MakeRegistryEntries(const CLSID& clsid, PCWSTR friendlyName)
 {
     HRESULT hResult;
     HKEY shellOverlayKey = NULL;
@@ -53,7 +53,7 @@ HRESULT OCOverlayRegistrationHandler::MakeRegistryEntries(const CLSID& clsid, PC
     return hResult;
 }
 
-HRESULT OCOverlayRegistrationHandler::RemoveRegistryEntries(PCWSTR friendlyName)
+HRESULT CUOverlayRegistrationHandler::RemoveRegistryEntries(PCWSTR friendlyName)
 {
     HRESULT hResult;
     HKEY shellOverlayKey = NULL;
@@ -72,7 +72,7 @@ HRESULT OCOverlayRegistrationHandler::RemoveRegistryEntries(PCWSTR friendlyName)
     return hResult;
 }
 
-HRESULT OCOverlayRegistrationHandler::RegisterCOMObject(PCWSTR modulePath, PCWSTR friendlyName, const CLSID& clsid)
+HRESULT CUOverlayRegistrationHandler::RegisterCOMObject(PCWSTR modulePath, PCWSTR friendlyName, const CLSID& clsid)
 {
     if (modulePath == NULL) {
         return E_FAIL;
@@ -121,7 +121,7 @@ HRESULT OCOverlayRegistrationHandler::RegisterCOMObject(PCWSTR modulePath, PCWST
     return S_OK;
 }
 
-HRESULT OCOverlayRegistrationHandler::UnregisterCOMObject(const CLSID& clsid)
+HRESULT CUOverlayRegistrationHandler::UnregisterCOMObject(const CLSID& clsid)
 {
     wchar_t stringCLSID[MAX_PATH];
 

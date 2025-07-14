@@ -15,7 +15,7 @@
 #pragma once
 #include <windows.h>
 
-class __declspec(dllexport) OCContextMenuRegHandler
+class __declspec(dllexport) CUContextMenuRegHandler
 {
 public:
     static HRESULT MakeRegistryEntries(const CLSID& clsid, PCWSTR fileType);

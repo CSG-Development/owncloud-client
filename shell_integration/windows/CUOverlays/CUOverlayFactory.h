@@ -14,23 +14,28 @@
 
 #pragma once
 
-#include <shlobj.h>
+#include <unknwn.h>
 
-class OCOverlay : public IShellIconOverlayIdentifier
+enum State {
+    State_Error = 0,
+    State_OK, State_OKShared,
+    State_Sync, 
+    State_Warning
+};
 
+class CUOverlayFactory : public IClassFactory
 {
 public:
-    OCOverlay(int state);
+    CUOverlayFactory(int state);
 
     IFACEMETHODIMP_(ULONG) AddRef();
-    IFACEMETHODIMP GetOverlayInfo(PWSTR pwszIconFile, int cchMax, int *pIndex, DWORD *pdwFlags);
-    IFACEMETHODIMP GetPriority(int *pPriority);
-    IFACEMETHODIMP IsMemberOf(PCWSTR pwszPath, DWORD dwAttrib);
+    IFACEMETHODIMP CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppv);
+    IFACEMETHODIMP LockServer(BOOL fLock);
     IFACEMETHODIMP QueryInterface(REFIID riid, void **ppv);
     IFACEMETHODIMP_(ULONG) Release();
 
 protected:
-    ~OCOverlay();
+    ~CUOverlayFactory();
 
 private:
     long _referenceCount;

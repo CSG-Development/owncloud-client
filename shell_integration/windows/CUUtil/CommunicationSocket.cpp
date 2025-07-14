@@ -93,11 +93,11 @@ bool CommunicationSocket::SendMsg(const wstring &message) const
     if (!WriteFile(_pipe, utf8_msg.c_str(), static_cast<DWORD>(utf8_msg.size()), &numBytesWritten, &_overlapped)) {
         if (GetLastError() == ERROR_IO_PENDING) {
             if (WaitForSingleObject(_overlapped.hEvent, timeoutC) != WAIT_OBJECT_0) {
-                OCShell::logWinError(L"SendMsg timed out");
+                CUShell::logWinError(L"SendMsg timed out");
                 return false;
             }
             if (!GetOverlappedResult(_pipe, &_overlapped, &numBytesWritten, FALSE)) {
-                OCShell::logWinError(L"GetOverlappedResult failed");
+                CUShell::logWinError(L"GetOverlappedResult failed");
                 return false;
             }
         }
@@ -137,10 +137,10 @@ bool CommunicationSocket::ReadLine(wstring *response) const
         if (!ReadFile(_pipe, resp_utf8.data(), DWORD(resp_utf8.size()), &numBytesRead, &_overlapped)) {
             if (GetLastError() == ERROR_IO_PENDING) {
                 if (WaitForSingleObject(_overlapped.hEvent, timeoutC) != WAIT_OBJECT_0) {
-                    OCShell::logWinError(L"ReadLine timed out");
+                    CUShell::logWinError(L"ReadLine timed out");
                 }
                 if (!GetOverlappedResult(_pipe, &_overlapped, &numBytesRead, FALSE)) {
-                    OCShell::logWinError(L"GetOverlappedResult failed");
+                    CUShell::logWinError(L"GetOverlappedResult failed");
                     return false;
                 }
             } else {

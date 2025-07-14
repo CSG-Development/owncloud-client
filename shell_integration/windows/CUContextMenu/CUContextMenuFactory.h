@@ -13,14 +13,14 @@
 */
 
 
-#ifndef OCCONTEXTMENUFACTORY_H
-#define OCCONTEXTMENUFACTORY_H
+#ifndef CUCONTEXTMENUFACTORY_H
+#define CUCONTEXTMENUFACTORY_H
 
 #pragma once
 
 #include <unknwn.h>     // For IClassFactory
 
-class OCContextMenuFactory : public IClassFactory
+class CUContextMenuFactory : public IClassFactory
 {
 public:
     // IUnknown
@@ -32,11 +32,11 @@ public:
     IFACEMETHODIMP CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppv);
     IFACEMETHODIMP LockServer(BOOL fLock);
 
-    OCContextMenuFactory();
+    CUContextMenuFactory();
 
 private:
-    ~OCContextMenuFactory();
+    ~CUContextMenuFactory();
     long m_cRef;
 };
 
-#endif //OCCONTEXTMENUFACTORY_H
+#endif //CUCONTEXTMENUFACTORY_H

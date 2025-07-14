@@ -14,31 +14,13 @@
 
 #pragma once
 
-#include <unknwn.h>
+#include <windows.h>
 
-enum State {
-    State_Error = 0,
-    State_OK, State_OKShared,
-    State_Sync, 
-    State_Warning
-};
-
-class OCOverlayFactory : public IClassFactory
+class __declspec(dllexport) CUOverlayRegistrationHandler 
 {
-public:
-    OCOverlayFactory(int state);
-
-    IFACEMETHODIMP_(ULONG) AddRef();
-    IFACEMETHODIMP CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppv);
-    IFACEMETHODIMP LockServer(BOOL fLock);
-    IFACEMETHODIMP QueryInterface(REFIID riid, void **ppv);
-    IFACEMETHODIMP_(ULONG) Release();
-
-protected:
-    ~OCOverlayFactory();
-
-private:
-    long _referenceCount;
-    int _state;
+    public:
+        static HRESULT MakeRegistryEntries(const CLSID& clsid, PCWSTR fileType);
+        static HRESULT RegisterCOMObject(PCWSTR modulePath, PCWSTR friendlyName, const CLSID& clsid);
+        static HRESULT RemoveRegistryEntries(PCWSTR friendlyName);
+        static HRESULT UnregisterCOMObject(const CLSID& clsid);
 };
-

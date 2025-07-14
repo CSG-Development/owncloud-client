@@ -8,7 +8,7 @@ if (WITH_WINDOWS_SHELL_EXTENSIONS)
     # Use static runtime for all subdirectories
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-    add_subdirectory(OCContextMenu)
-    add_subdirectory(OCOverlays)
-    add_subdirectory(OCUtil)
+    add_subdirectory(CUContextMenu)
+    add_subdirectory(CUOverlays)
+    add_subdirectory(CUUtil)
 endif()

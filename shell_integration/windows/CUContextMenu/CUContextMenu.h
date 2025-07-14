@@ -12,15 +12,15 @@
 * details.
 */
 
-#ifndef OCCONTEXTMENU_H
-#define OCCONTEXTMENU_H
+#ifndef CUCONTEXTMENU_H
+#define CUCONTEXTMENU_H
 
 #pragma once
 #include <shlobj.h>     // For IShellExtInit and IContextMenu
 #include <string>
-#include "OCClientInterface.h"
+#include "CUClientInterface.h"
 
-class OCContextMenu : public IShellExtInit, public IContextMenu
+class CUContextMenu : public IShellExtInit, public IContextMenu
 {
 public:
 	// IUnknown
@@ -36,10 +36,10 @@ public:
 	IFACEMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO pici);
 	IFACEMETHODIMP GetCommandString(UINT_PTR idCommand, UINT uFlags, UINT *pwReserved, LPSTR pszName, UINT cchMax);
 
-	OCContextMenu();
+	CUContextMenu();
 
 protected:
-	~OCContextMenu();
+	~CUContextMenu();
 
 private:
 	// Reference count of component.
@@ -47,7 +47,7 @@ private:
 
 	// The name of the selected files (separated by '\x1e')
 	std::wstring m_selectedFiles;
-	OCClientInterface::ContextMenuInfo m_info;
+	CUClientInterface::ContextMenuInfo m_info;
 };
 	
-#endif //OCCONTEXTMENU_H
+#endif //CUCONTEXTMENU_H
