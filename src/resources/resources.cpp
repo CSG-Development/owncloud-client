@@ -15,6 +15,8 @@
 #include "resources.h"
 
 #include <QPalette>
+#include <QDebug>
+#include <QFile>
 
 using namespace CUR;
 using namespace Resources;
@@ -32,9 +34,17 @@ QIcon CUR::Resources::getCoreIcon(const QString &icon_name)
         return {};
     }
     const QString theme = Resources::isUsingDarkTheme() ? QStringLiteral("dark") : QStringLiteral("light");
-    const QString path = QStringLiteral(":/client/resources/%1/%2").arg(theme, icon_name);
-    const QIcon icon(path);
-    // were we able to load the file?
-    Q_ASSERT(icon.actualSize({100, 100}).isValid());
-    return icon;
+    const QString path_svg = QStringLiteral(":/client/resources/%1/%2.svg").arg(theme, icon_name);
+    if (QFile::exists(path_svg)) {
+        const QIcon icon(path_svg);
+        return icon;
+    }
+    const QString path_png = QStringLiteral(":/client/resources/%1/%2.png").arg(theme, icon_name);
+    if (QFile::exists(path_png)) {
+        const QIcon icon(path_png);
+        return icon;
+    }
+
+    qWarning() << "Unable to load icon" << path_png << "or" << path_svg;
+    return {};
 }
