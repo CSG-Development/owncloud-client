@@ -30,7 +30,7 @@
 
 class QFile;
 
-namespace OCC {
+namespace CUR {
 
 /**
  * Tags for checksum headers values.
@@ -77,7 +77,7 @@ private:
     QString _error;
 };
 
-/// Checks OWNCLOUD_DISABLE_CHECKSUM_UPLOAD
+/// Checks CURATOR_DISABLE_CHECKSUM_UPLOAD
 OCSYNC_EXPORT bool uploadChecksumEnabled();
 
 /**

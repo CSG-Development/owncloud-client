@@ -26,7 +26,7 @@ auto dateTimeStr(const QDateTime &dt = QDateTime::currentDateTimeUtc())
 }
 
 }
-namespace OCC {
+namespace CUR {
 
 SyncRunFileLog::SyncRunFileLog()
 {
@@ -38,7 +38,7 @@ void SyncRunFileLog::start(const QString &folderPath)
     const qint64 logfileMaxSize = 10 * 1024 * 1024; // 10MiB
 
     // Note; this name is ignored in csync_exclude.c
-    const QString filename = folderPath + QStringLiteral(".owncloudsync.log");
+    const QString filename = folderPath + QStringLiteral(".curatorsync.log");
 
     // When the file is too big, just rename it to an old name.
     QFileInfo info(filename);

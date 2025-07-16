@@ -14,7 +14,7 @@
 
 #include "discovery.h"
 #include "csync.h"
-#include "owncloudpropagator.h"
+#include "curatorpropagator.h"
 #include "syncfileitem.h"
 
 #include "csync/csync_exclude.h"
@@ -31,7 +31,7 @@
 #include <QFileInfo>
 #include <QThreadPool>
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcDisco, "sync.discovery", QtInfoMsg)
 
@@ -71,8 +71,8 @@ void ProcessDirectoryJob::process()
     // Build lookup tables for local, remote and db entries.
     // For suffix-virtual files, the key will normally be the base file name
     // without the suffix.
-    // However, if foo and foo.owncloud exists locally, there'll be "foo"
-    // with local, db, server entries and "foo.owncloud" with only a local
+    // However, if foo and foo.curator exists locally, there'll be "foo"
+    // with local, db, server entries and "foo.curator" with only a local
     // entry.
     struct Entries {
         QString nameOverride;
@@ -511,7 +511,7 @@ void ProcessDirectoryJob::processFileAnalyzeRemoteInfo(
     bool done = false;
     bool async = false;
     // This function will be executed for every candidate
-    auto renameCandidateProcessing = [&](const OCC::SyncJournalFileRecord &base) {
+    auto renameCandidateProcessing = [&](const CUR::SyncJournalFileRecord &base) {
         if (done)
             return;
         if (!base.isValid())
@@ -681,7 +681,7 @@ void ProcessDirectoryJob::processFileAnalyzeLocalInfo(
     auto finalize = [item, localEntry, serverEntry, this](const PathTuple &path, QueryMode recurseQueryServer) {
         bool recurse = item->isDirectory() || localEntry.isDirectory || serverEntry.isDirectory;
         // Even if we have a local directory: If the remote is a file that's propagated as a
-        // conflict we don't need to recurse into it. (local c1.owncloud, c1/ ; remote: c1)
+        // conflict we don't need to recurse into it. (local c1.curator, c1/ ; remote: c1)
         if (item->instruction() == CSYNC_INSTRUCTION_CONFLICT && !item->isDirectory())
             recurse = false;
         if (_queryLocal != NormalQuery && _queryServer != NormalQuery)
@@ -741,7 +741,7 @@ void ProcessDirectoryJob::processFileAnalyzeLocalInfo(
                 item->setInstruction(CSYNC_INSTRUCTION_REMOVE);
                 item->_direction = SyncFileItem::Down;
             } else if (!dbEntry.isVirtualFile() && isVfsWithSuffix()) {
-                // If we find what looks to be a spurious "abc.owncloud" the base file "abc"
+                // If we find what looks to be a spurious "abc.curator" the base file "abc"
                 // might have been renamed to that. Make sure that the base file is not
                 // deleted from the server.
                 if (dbEntry._modtime == localEntry.modtime && dbEntry._fileSize == localEntry.size) {
@@ -872,7 +872,7 @@ void ProcessDirectoryJob::processFileAnalyzeLocalInfo(
     };
 
     // Check if it is a move
-    OCC::SyncJournalFileRecord base;
+    CUR::SyncJournalFileRecord base;
     if (!_discoveryData->_statedb->getFileRecordByInode(localEntry.inode, &base)) {
         dbError();
         return;
@@ -1163,7 +1163,7 @@ void ProcessDirectoryJob::processFileFinalize(
     }
 }
 
-void ProcessDirectoryJob::processBlacklisted(const PathTuple &path, const OCC::LocalInfo &localEntry,
+void ProcessDirectoryJob::processBlacklisted(const PathTuple &path, const CUR::LocalInfo &localEntry,
     const SyncJournalFileRecord &dbEntry)
 {
     if (!localEntry.isValid())
@@ -1195,7 +1195,7 @@ void ProcessDirectoryJob::processBlacklisted(const PathTuple &path, const OCC::L
     }
 }
 
-bool ProcessDirectoryJob::checkPermissions(const OCC::SyncFileItemPtr &item)
+bool ProcessDirectoryJob::checkPermissions(const CUR::SyncFileItemPtr &item)
 {
     if (item->_direction != SyncFileItem::Up) {
         // Currently we only check server-side permissions

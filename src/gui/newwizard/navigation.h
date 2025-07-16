@@ -22,7 +22,7 @@
 #include <QString>
 #include <QWidget>
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 /**
  * Provides a radio button based quick navigation on the wizard's bottom side.

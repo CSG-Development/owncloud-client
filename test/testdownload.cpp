@@ -6,7 +6,7 @@
  */
 
 
-#include "owncloudpropagator.h"
+#include "curatorpropagator.h"
 #include "syncengine.h"
 #include "testutils/syncenginetestutils.h"
 
@@ -17,7 +17,7 @@
 #endif
 
 using namespace std::chrono_literals;
-using namespace OCC;
+using namespace CUR;
 
 static constexpr auto stopAfter = 3_mb;
 
@@ -177,7 +177,7 @@ private slots:
             });
             fakeFolder.syncJournal().wipeErrorBlacklist();
             // perform a partial sync
-            fakeFolder.syncEngine().setLocalDiscoveryOptions(OCC::LocalDiscoveryStyle::DatabaseAndFilesystem, {});
+            fakeFolder.syncEngine().setLocalDiscoveryOptions(CUR::LocalDiscoveryStyle::DatabaseAndFilesystem, {});
             QVERIFY(fakeFolder.applyLocalModificationsAndSync()); // now this should succeed
             QCOMPARE(ranges, QByteArray("bytes=" + QByteArray::number(stopAfter) + "-"));
             QCOMPARE(fakeFolder.currentLocalState(), fakeFolder.currentRemoteState());

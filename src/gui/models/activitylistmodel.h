@@ -22,7 +22,7 @@
 
 class QJsonDocument;
 
-namespace OCC {
+namespace CUR {
 
 Q_DECLARE_LOGGING_CATEGORY(lcActivity)
 

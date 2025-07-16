@@ -21,7 +21,7 @@
 
 using namespace std::chrono_literals;
 
-using namespace OCC;
+using namespace CUR;
 
 
 Q_LOGGING_CATEGORY(lcfetchserversettings, "sync.fetchserversettings", QtInfoMsg)
@@ -31,7 +31,7 @@ constexpr auto timeoutC = 20s;
 }
 
 // TODO: move to libsync?
-FetchServerSettingsJob::FetchServerSettingsJob(const OCC::AccountPtr &account, QObject *parent)
+FetchServerSettingsJob::FetchServerSettingsJob(const CUR::AccountPtr &account, QObject *parent)
     : QObject(parent)
     , _account(account)
 {

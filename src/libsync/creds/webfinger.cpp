@@ -35,7 +35,7 @@ auto relId()
 }
 }
 
-using namespace OCC;
+using namespace CUR;
 
 WebFinger::WebFinger(QNetworkAccessManager *nam, QObject *parent)
     : QObject(parent)

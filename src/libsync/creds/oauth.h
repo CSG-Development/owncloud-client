@@ -14,7 +14,7 @@
 
 #pragma once
 #include "accountfwd.h"
-#include "owncloudlib.h"
+#include "curatorlib.h"
 
 #include <QNetworkReply>
 #include <QPointer>
@@ -22,7 +22,7 @@
 #include <QUrl>
 
 
-namespace OCC {
+namespace CUR {
 class JsonJob;
 
 /**
@@ -49,7 +49,7 @@ class JsonJob;
  *              finalize(...): emit result(...)
  *
  */
-class OWNCLOUDSYNC_EXPORT OAuth : public QObject
+class CURATORSYNC_EXPORT OAuth : public QObject
 {
     Q_OBJECT
 public:
@@ -122,7 +122,7 @@ private:
  * Instead of relying on the user to provide a working server URL, a CheckServerJob is run upon start(), which also stores the fetched cookies in the account's state.
  * Furthermore, it takes care of storing and loading the dynamic registration data in the account's credentials manager.
  */
-class OWNCLOUDSYNC_EXPORT AccountBasedOAuth : public OAuth
+class CURATORSYNC_EXPORT AccountBasedOAuth : public OAuth
 {
     Q_OBJECT
 
@@ -144,4 +144,4 @@ private:
     AccountPtr _account;
 };
 
-} // namespce OCC
+} // namespce CUR

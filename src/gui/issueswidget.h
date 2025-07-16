@@ -23,12 +23,12 @@
 #include "models/expandingheaderview.h"
 #include "models/models.h"
 #include "models/protocolitemmodel.h"
-#include "owncloudgui.h"
+#include "curatorgui.h"
 #include "progressdispatcher.h"
 
 class QSortFilterProxyModel;
 
-namespace OCC {
+namespace CUR {
 class SyncResult;
 class SyncFileItemStatusSetSortFilterProxyModel;
 

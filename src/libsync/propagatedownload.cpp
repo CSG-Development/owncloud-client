@@ -16,7 +16,7 @@
 #include "account.h"
 #include "filesystem.h"
 #include "networkjobs.h"
-#include "owncloudpropagator_p.h"
+#include "curatorpropagator_p.h"
 #include "propagatorjobs.h"
 
 #include "common/asserts.h"
@@ -42,7 +42,7 @@
 
 using namespace std::chrono_literals;
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcGetJob, "sync.networkjob.get", QtInfoMsg)
 Q_LOGGING_CATEGORY(lcPropagateDownload, "sync.propagator.download", QtInfoMsg)
@@ -129,7 +129,7 @@ namespace {
 // Always coming in with forward slashes.
 // In csync_excluded_no_ctx we ignore all files with longer than 254 chars
 // This function also adds a dot at the beginning of the filename to hide the file on OS X and Linux
-QString OWNCLOUDSYNC_EXPORT createDownloadTmpFileName(const QString &previous)
+QString CURATORSYNC_EXPORT createDownloadTmpFileName(const QString &previous)
 {
     QString tmpFileName;
     QString tmpPath;
@@ -589,15 +589,15 @@ void PropagateDownloadFile::startDownload()
 
     // If there's not enough space to fully download this file, stop.
     const auto diskSpaceResult = propagator()->diskSpaceCheck();
-    if (diskSpaceResult != OwncloudPropagator::DiskSpaceOk) {
-        if (diskSpaceResult == OwncloudPropagator::DiskSpaceFailure) {
+    if (diskSpaceResult != CuratorPropagator::DiskSpaceOk) {
+        if (diskSpaceResult == CuratorPropagator::DiskSpaceFailure) {
             // Using DetailError here will make the error not pop up in the account
             // tab: instead we'll generate a general "disk space low" message and show
             // these detail errors only in the error view.
             done(SyncFileItem::DetailError,
                 tr("The download would reduce free local disk space below the limit"));
             emit propagator()->insufficientLocalStorage();
-        } else if (diskSpaceResult == OwncloudPropagator::DiskSpaceCritical) {
+        } else if (diskSpaceResult == CuratorPropagator::DiskSpaceCritical) {
             done(SyncFileItem::FatalError,
                 tr("Free space on disk is less than %1").arg(Utility::octetsToString(criticalFreeSpaceLimit())));
         }
@@ -668,7 +668,7 @@ void PropagateDownloadFile::setDeleteExistingFolder(bool enabled)
     _deleteExisting = enabled;
 }
 
-const char owncloudCustomSoftErrorStringC[] = "owncloud-custom-soft-error-string";
+const char curatorCustomSoftErrorStringC[] = "curator-custom-soft-error-string";
 void PropagateDownloadFile::slotGetFinished()
 {
     propagator()->_activeJobList.removeOne(this);
@@ -713,12 +713,12 @@ void PropagateDownloadFile::slotGetFinished()
             return;
         }
 
-        // This gives a custom QNAM (by the user of libowncloudsync) to abort() a QNetworkReply in its metaDataChanged() slot and
+        // This gives a custom QNAM (by the user of libcuratorsync) to abort() a QNetworkReply in its metaDataChanged() slot and
         // set a custom error string to make this a soft error. In contrast to the default hard error this won't bring down
         // the whole sync and allows for a custom error message.
         QNetworkReply *reply = job->reply();
-        if (err == QNetworkReply::OperationCanceledError && reply->property(owncloudCustomSoftErrorStringC).isValid()) {
-            job->setErrorString(reply->property(owncloudCustomSoftErrorStringC).toString());
+        if (err == QNetworkReply::OperationCanceledError && reply->property(curatorCustomSoftErrorStringC).isValid()) {
+            job->setErrorString(reply->property(curatorCustomSoftErrorStringC).toString());
             job->setErrorStatus(SyncFileItem::SoftError);
         } else if (badRangeHeader) {
             // Can't do this in classifyError() because 416 without a

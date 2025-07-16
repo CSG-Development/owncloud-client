@@ -28,7 +28,7 @@
 #include "appimageupdateavailabledialog.h"
 #include "application.h"
 
-using namespace OCC;
+using namespace CUR;
 using namespace std::chrono_literals;
 
 namespace {
@@ -185,7 +185,7 @@ void AppImageUpdater::versionInfoArrived(const UpdateInfo &info)
     });
 
     dialog->open();
-    ownCloudGui::raiseDialog(dialog);
+    CuratorGui::raiseDialog(dialog);
 }
 
 void AppImageUpdater::backgroundCheckForUpdate()

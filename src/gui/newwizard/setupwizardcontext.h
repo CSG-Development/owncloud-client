@@ -19,11 +19,11 @@
 
 #include <QtGlobal>
 
-namespace OCC {
+namespace CUR {
 class SettingsDialog;
 }
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 /**
  * This class makes sharing wizard related objects between the controller and the states easier.
@@ -61,4 +61,4 @@ private:
     SetupWizardAccountBuilder _accountBuilder;
 };
 
-} // OCC::Wizard
+} // CUR::Wizard

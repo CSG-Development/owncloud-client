@@ -19,7 +19,7 @@
 
 #include "account.h"
 
-namespace OCC {
+namespace CUR {
 /**
  * @brief The ActivityLink class describes actions of an activity
  *

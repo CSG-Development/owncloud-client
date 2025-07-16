@@ -61,7 +61,7 @@ def hook(context):
 # Order: 2
 @OnScenarioStart
 def hook(context):
-    # set owncloud config file path
+    # set curator config file path
     config_dir = get_config('clientConfigDir')
     if os.path.exists(config_dir):
         if len(os.listdir(config_dir)) != 0 and isWindows():
@@ -73,7 +73,7 @@ def hook(context):
         # clean previous configs
         shutil.rmtree(config_dir)
     os.makedirs(config_dir, 0o0755)
-    set_config('clientConfigFile', os.path.join(config_dir, 'owncloud.cfg'))
+    set_config('clientConfigFile', os.path.join(config_dir, 'curator.cfg'))
 
     # create reports dir if not exists
     test_report_dir = get_config('guiTestReportDir')
@@ -116,7 +116,7 @@ def hook(context):
         )
 
     # sync connection folder display name
-    set_config('syncConnectionName', "Personal" if get_config("ocis") else "ownCloud")
+    set_config('syncConnectionName', "Personal" if get_config("ocis") else "Curator")
 
 
 # determines if the test scenario failed or not

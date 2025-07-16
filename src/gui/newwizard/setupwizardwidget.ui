@@ -131,7 +131,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="OCC::Wizard::Navigation" name="navigation" native="true"/>
+        <widget class="CUR::Wizard::Navigation" name="navigation" native="true"/>
        </item>
        <item>
         <spacer name="horizontalSpacer_2">
@@ -168,7 +168,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>OCC::Wizard::Navigation</class>
+   <class>CUR::Wizard::Navigation</class>
    <extends>QWidget</extends>
    <header>navigation.h</header>
    <container>1</container>

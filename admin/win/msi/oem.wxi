@@ -3,26 +3,26 @@
 <Include>
 
     <?define AppVendor = "ownCloud GmbH" ?>
-    <?define AppName = "ownCloud client" ?>
-    <?define AppShortName = "owncloud" ?>
+    <?define AppName = "Curator client" ?>
+    <?define AppShortName = "curator" ?>
 
-    <?define AppIcon = "owncloud.ico" ?>
-    <?define AppExe = "owncloud.exe" ?>
+    <?define AppIcon = "curator.ico" ?>
+    <?define AppExe = "curator.exe" ?>
 
 	<?define AppCommandOpenUrlScheme = "oc" ?>
 
     <!-- App Version -->
-    <?define VerMajor = "5" ?>
-    <?define VerMinor = "2" ?>
-    <?define VerRevision = "3" ?>
-    <?define VerBuild = "1234" ?>
+    <?define VerMajor = "1" ?>
+    <?define VerMinor = "0" ?>
+    <?define VerRevision = "4" ?>
+    <?define VerBuild = "1" ?>
     <?define VerStd = "$(var.VerMajor).$(var.VerMinor).$(var.VerRevision)" ?>
     <?define VerFull = "$(var.VerStd).$(var.VerBuild)" ?>
-    <?define VerDesc = "ownCloud Sync Client" ?>
+    <?define VerDesc = "Curator Sync Client" ?>
     <?define PackageDescr = "$(var.VerDesc) - Version $(var.VerFull)" ?>
 
     <?define ProductId = "{B550F35E-3467-4F71-9108-D755C34054BC}" ?>
-	<?define ProgramFilesProductSubDir = "ownCloud" ?>
+	<?define ProgramFilesProductSubDir = "Curator" ?>
 
 	
 </Include>

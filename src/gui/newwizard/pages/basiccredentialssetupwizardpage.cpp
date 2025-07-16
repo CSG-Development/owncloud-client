@@ -17,7 +17,7 @@
 
 #include "theme.h"
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 BasicCredentialsSetupWizardPage::BasicCredentialsSetupWizardPage(const QUrl &serverUrl)
     : _ui(new ::Ui::CredentialsSetupWizardPage)

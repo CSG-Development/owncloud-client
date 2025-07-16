@@ -17,7 +17,7 @@
 
 #include <QStandardPaths>
 
-namespace OCC {
+namespace CUR {
 
 void Utility::startShellIntegration()
 {
@@ -28,4 +28,4 @@ QString Utility::socketApiSocketPath()
     return QStringLiteral("%1/%2/socket").arg(QStandardPaths::writableLocation(QStandardPaths::RuntimeLocation), Theme::instance()->appName());
 }
 
-} // namespace OCC
+} // namespace CUR

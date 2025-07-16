@@ -1,1 +1,0 @@
-#define OWNCLOUDSYNC_EXPORT

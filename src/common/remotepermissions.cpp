@@ -19,7 +19,7 @@
 #include "remotepermissions.h"
 #include <cstring>
 
-namespace OCC {
+namespace CUR {
 
 static const char letters[] = " WDNVCKRSMmz";
 
@@ -75,4 +75,4 @@ RemotePermissions RemotePermissions::fromServerString(const QString &value)
     return perm;
 }
 
-} // namespace OCC
+} // namespace CUR

@@ -13,10 +13,10 @@
  */
 #pragma once
 
-#include "owncloudpropagator.h"
+#include "curatorpropagator.h"
 #include "networkjobs.h"
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief The MoveJob class
@@ -46,7 +46,7 @@ class PropagateRemoteMove : public PropagateItemJob
     QPointer<MoveJob> _job;
 
 public:
-    PropagateRemoteMove(OwncloudPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateRemoteMove(CuratorPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
     {
     }

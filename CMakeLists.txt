@@ -3,7 +3,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(VERSION.cmake)
-project(owncloud-client LANGUAGES CXX C VERSION ${MIRALL_VERSION_MAJOR}.${MIRALL_VERSION_MINOR}.${MIRALL_VERSION_PATCH})
+project(curator-client LANGUAGES CXX C VERSION ${MIRALL_VERSION_MAJOR}.${MIRALL_VERSION_MINOR}.${MIRALL_VERSION_PATCH})
 include(FeatureSummary)
 
 find_package(ECM 5.50.0 REQUIRED NO_MODULE)
@@ -44,8 +44,8 @@ if(UNIT_TESTING)
 endif()
 include(CTest)
 
-include(OCBundleResources)
-include(OCApplyCommonSettings)
+include(CUBundleResources)
+include(CUApplyCommonSettings)
 
 include("${CMAKE_CURRENT_LIST_DIR}/THEME.cmake")
 
@@ -88,7 +88,7 @@ option(BUILD_SHELL_INTEGRATION "BUILD_SHELL_INTEGRATION" ON)
 # this option builds/installs the generic shell integration icons
 option(BUILD_SHELL_INTEGRATION_ICONS "BUILD_SHELL_INTEGRATION_ICONS" ON)
 
-# build the GUI component, when disabled only owncloudcmd is built
+# build the GUI component, when disabled only curatorcmd is built
 option(BUILD_GUI "BUILD_GUI" ON)
 
 # build the auto updater component
@@ -129,16 +129,16 @@ if (NOT DEFINED APPLICATION_ICON_NAME)
     set(APPLICATION_ICON_NAME "${APPLICATION_SHORTNAME}")
 endif()
 
-file(GLOB_RECURSE OWNCLOUD_ICONS "${OEM_THEME_DIR}/theme/colored/*-${APPLICATION_ICON_NAME}-icon.png")
-if (NOT OWNCLOUD_ICONS)
-    generate_legacy_icons(${OEM_THEME_DIR}/theme OWNCLOUD_ICONS)
+file(GLOB_RECURSE CURATOR_ICONS "${OEM_THEME_DIR}/theme/colored/*-${APPLICATION_ICON_NAME}-icon.png")
+if (NOT CURATOR_ICONS)
+    generate_legacy_icons(${OEM_THEME_DIR}/theme CURATOR_ICONS)
 endif()
-MESSAGE(STATUS "OWNCLOUD_ICONS: ${APPLICATION_ICON_NAME}: ${OWNCLOUD_ICONS}")
+MESSAGE(STATUS "CURATOR_ICONS: ${APPLICATION_ICON_NAME}: ${CURATOR_ICONS}")
 
 set(EXCLUDE_FILE_NAME "sync-exclude.lst")
 
 if(APPLE)
-    list(APPEND OWNCLOUD_BUNDLED_RESOURCES "${CMAKE_CURRENT_SOURCE_DIR}/${EXCLUDE_FILE_NAME}")
+    list(APPEND CURATOR_BUNDLED_RESOURCES "${CMAKE_CURRENT_SOURCE_DIR}/${EXCLUDE_FILE_NAME}")
 else()
     configure_file("${EXCLUDE_FILE_NAME}" "bin/${EXCLUDE_FILE_NAME}" COPYONLY)
     if(WIN32)

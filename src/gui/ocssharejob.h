@@ -23,7 +23,7 @@
 
 class QJsonDocument;
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief The OcsShareJob class

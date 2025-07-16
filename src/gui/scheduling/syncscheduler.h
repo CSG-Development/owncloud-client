@@ -25,7 +25,7 @@
 
 class FolderPriorityQueue;
 
-namespace OCC {
+namespace CUR {
 
 class FolderMan;
 

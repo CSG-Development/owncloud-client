@@ -15,26 +15,36 @@
 #include "resources.h"
 
 #include <QPalette>
+#include <QDebug>
+#include <QFile>
 
-using namespace OCC;
+using namespace CUR;
 using namespace Resources;
 
-bool OCC::Resources::isUsingDarkTheme()
+bool CUR::Resources::isUsingDarkTheme()
 {
     // TODO: replace by a command line switch
-    static bool forceDark = qEnvironmentVariableIntValue("OWNCLOUD_FORCE_DARK_MODE") != 0;
+    static bool forceDark = qEnvironmentVariableIntValue("CURATOR_FORCE_DARK_MODE") != 0;
     return forceDark || QPalette().base().color().lightnessF() <= 0.5;
 }
 
-QIcon OCC::Resources::getCoreIcon(const QString &icon_name)
+QIcon CUR::Resources::getCoreIcon(const QString &icon_name)
 {
     if (icon_name.isEmpty()) {
         return {};
     }
     const QString theme = Resources::isUsingDarkTheme() ? QStringLiteral("dark") : QStringLiteral("light");
-    const QString path = QStringLiteral(":/client/resources/%1/%2").arg(theme, icon_name);
-    const QIcon icon(path);
-    // were we able to load the file?
-    Q_ASSERT(icon.actualSize({100, 100}).isValid());
-    return icon;
+    const QString path_svg = QStringLiteral(":/client/resources/%1/%2.svg").arg(theme, icon_name);
+    if (QFile::exists(path_svg)) {
+        const QIcon icon(path_svg);
+        return icon;
+    }
+    const QString path_png = QStringLiteral(":/client/resources/%1/%2.png").arg(theme, icon_name);
+    if (QFile::exists(path_png)) {
+        const QIcon icon(path_png);
+        return icon;
+    }
+
+    qWarning() << "Unable to load icon" << path_png << "or" << path_svg;
+    return {};
 }

@@ -42,7 +42,7 @@
 #include <QOperatingSystemVersion>
 #include <QScopedValueRollback>
 
-namespace OCC {
+namespace CUR {
 
 GeneralSettings::GeneralSettings(QWidget *parent)
     : QWidget(parent)
@@ -280,7 +280,7 @@ void GeneralSettings::slotIgnoreFilesEditor()
     if (_ignoreEditor.isNull()) {
         _ignoreEditor = new IgnoreListEditor(ocApp()->gui()->settingsDialog());
         _ignoreEditor->setAttribute(Qt::WA_DeleteOnClose, true);
-        ownCloudGui::raise();
+        CuratorGui::raise();
         _ignoreEditor->open();
     }
 }
@@ -331,4 +331,4 @@ void GeneralSettings::loadLanguageNamesIntoDropdown()
     }
 }
 
-} // namespace OCC
+} // namespace CUR

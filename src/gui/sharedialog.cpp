@@ -37,7 +37,7 @@
 
 using namespace std::chrono_literals;
 
-namespace OCC {
+namespace CUR {
 
 static const int thumbnailSize = 40;
 

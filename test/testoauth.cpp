@@ -14,7 +14,7 @@
 #include "common/asserts.h"
 
 using namespace std::chrono_literals;
-using namespace OCC;
+using namespace CUR;
 
 class DesktopServiceHook : public QObject
 {
@@ -117,7 +117,7 @@ public:
     QNetworkAccessManager realQNAM;
     QPointer<QNetworkReply> browserReply = nullptr;
     QString code = QString::fromUtf8(generateEtag());
-    OCC::AccountPtr account;
+    CUR::AccountPtr account;
 
     std::unique_ptr<AccountBasedOAuth> oauth;
 
@@ -156,7 +156,7 @@ public:
         oauth = prepareOauth();
         oauth->startAuthentication();
 
-        QSignalSpy spy(oauth.get(), &OCC::OAuth::authorisationLinkChanged);
+        QSignalSpy spy(oauth.get(), &CUR::OAuth::authorisationLinkChanged);
         if (spy.wait()) {
             oauth->openBrowser();
         }
@@ -653,7 +653,7 @@ private slots:
                 return new FakePayloadReply(op, req, jsondata.toJson(), fakeAm);
             }
 
-            void openBrowserHook(const QUrl &url) override { Q_UNREACHABLE(); }
+            void openBrowserHook(const QUrl &/*url*/) override { Q_UNREACHABLE(); }
 
             QNetworkReply *tokenReply(QNetworkAccessManager::Operation op, const QNetworkRequest &request, QIODevice *device) override
             {
@@ -695,11 +695,11 @@ private slots:
                 return new FakePayloadReply(op, request, payload, fakeAm);
             }
 
-            virtual void test()
+            virtual void test() override
             {
                 oauth = prepareOauth();
                 oauth->saveDynamicRegistrationDataForAccount(account, {});
-                QSignalSpy spy(oauth.get(), &OCC::AccountBasedOAuth::refreshFinished);
+                QSignalSpy spy(oauth.get(), &CUR::AccountBasedOAuth::refreshFinished);
                 oauth->refreshAuthentication(QStringLiteral("foo"));
 
                 QVERIFY(spy.wait());
@@ -732,7 +732,7 @@ private slots:
                 return new FakePayloadReply(op, req, jsondata.toJson(), fakeAm);
             }
 
-            void openBrowserHook(const QUrl &url) override { Q_UNREACHABLE(); }
+            void openBrowserHook(const QUrl &/*url*/) override { Q_UNREACHABLE(); }
 
             QNetworkReply *tokenReply(QNetworkAccessManager::Operation op, const QNetworkRequest &request, QIODevice *device) override
             {
@@ -756,11 +756,11 @@ private slots:
                 return new FakePayloadReply(op, request, {}, fakeAm);
             }
 
-            virtual void test()
+            virtual void test() override
             {
                 oauth = prepareOauth();
                 oauth->saveDynamicRegistrationDataForAccount(account, {});
-                QSignalSpy spy(oauth.get(), &OCC::AccountBasedOAuth::refreshFinished);
+                QSignalSpy spy(oauth.get(), &CUR::AccountBasedOAuth::refreshFinished);
                 oauth->refreshAuthentication(QStringLiteral("foo"));
 
                 QVERIFY(spy.wait());

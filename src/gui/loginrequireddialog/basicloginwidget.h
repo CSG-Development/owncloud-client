@@ -26,7 +26,7 @@ namespace Ui {
 class BasicLoginWidget;
 }
 
-namespace OCC {
+namespace CUR {
 
 /**
  * Form-style widget used to log in to accounts using HTTP Basic auth.
@@ -54,4 +54,4 @@ private:
     ::Ui::BasicLoginWidget *_ui;
 };
 
-} // OCC
+} // CUR

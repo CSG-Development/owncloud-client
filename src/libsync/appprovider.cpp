@@ -27,7 +27,7 @@
 #include <QJsonArray>
 #include <QMimeDatabase>
 
-using namespace OCC;
+using namespace CUR;
 
 Q_LOGGING_CATEGORY(lcAppProvider, "sync.appprovider", QtInfoMsg)
 

@@ -21,7 +21,7 @@
 
 #include <QStyle>
 
-namespace OCC {
+namespace CUR {
 
 AppImageUpdateAvailableDialog::AppImageUpdateAvailableDialog(const QVersionNumber &currentVersion, const QVersionNumber &newVersion, QWidget *parent)
     : QDialog(parent)

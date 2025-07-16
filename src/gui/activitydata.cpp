@@ -17,7 +17,7 @@
 #include "activitydata.h"
 
 
-namespace OCC {
+namespace CUR {
 
 Activity::Activity(Activity::Type type, const QString &id, AccountPtr acc, const QString &subject, const QString &message, const QString &file,
     const QUrl &link, const QDateTime &dateTime, const QVector<ActivityLink> &&links)

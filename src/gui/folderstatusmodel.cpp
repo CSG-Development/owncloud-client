@@ -36,7 +36,7 @@ using namespace std::chrono_literals;
 
 Q_DECLARE_METATYPE(QPersistentModelIndex)
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcFolderStatus, "gui.folder.model", QtInfoMsg)
 
@@ -68,7 +68,7 @@ namespace {
         return {};
     }
 
-    int64_t getQuotaOc10(const AccountStatePtr &accountState, const QUrl &davUrl, FolderStatusModel::Columns type)
+    int64_t getQuotaOc10(const AccountStatePtr &accountState, const QUrl &/*davUrl*/, FolderStatusModel::Columns type)
     {
         switch (type) {
         case FolderStatusModel::Columns::QuotaTotal:
@@ -1308,4 +1308,4 @@ void FolderStatusModel::SubFolderInfo::resetSubs(FolderStatusModel *model, const
 }
 
 
-} // namespace OCC
+} // namespace CUR

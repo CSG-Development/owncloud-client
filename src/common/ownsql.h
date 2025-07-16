@@ -29,7 +29,7 @@
 struct sqlite3;
 struct sqlite3_stmt;
 
-namespace OCC {
+namespace CUR {
 OCSYNC_EXPORT Q_DECLARE_LOGGING_CATEGORY(lcSql)
 
 class SqlQuery;
@@ -186,6 +186,6 @@ private:
     friend class PreparedSqlQueryManager;
 };
 
-} // namespace OCC
+} // namespace CUR
 
 #endif // OWNSQL_H

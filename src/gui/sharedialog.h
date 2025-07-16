@@ -17,7 +17,7 @@
 
 #include "accountstate.h"
 #include "sharepermissions.h"
-#include "owncloudgui.h"
+#include "curatorgui.h"
 
 #include <QPointer>
 #include <QString>
@@ -26,7 +26,7 @@
 
 class QProgressIndicator;
 
-namespace OCC {
+namespace CUR {
 
 namespace Ui {
     class ShareDialog;

@@ -24,7 +24,7 @@ class QPushButton;
 
 class Ui_NotificationWidget;
 
-namespace OCC {
+namespace CUR {
 
 class NotificationWidget : public QWidget
 {

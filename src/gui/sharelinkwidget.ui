@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>OCC::ShareLinkWidget</class>
- <widget class="QWidget" name="OCC::ShareLinkWidget">
+ <class>CUR::ShareLinkWidget</class>
+ <widget class="QWidget" name="CUR::ShareLinkWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

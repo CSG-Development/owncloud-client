@@ -41,7 +41,7 @@
 #include <chrono>
 using namespace std::chrono_literals;
 
-namespace OCC {
+namespace CUR {
 
 namespace chrono = std::chrono;
 
@@ -470,7 +470,7 @@ chrono::milliseconds ConfigFile::forceSyncInterval(std::chrono::seconds remoteFr
     return interval;
 }
 
-chrono::milliseconds OCC::ConfigFile::fullLocalDiscoveryInterval() const
+chrono::milliseconds CUR::ConfigFile::fullLocalDiscoveryInterval() const
 {
     auto settings = makeQSettings();
     settings.beginGroup(defaultConnection());
@@ -542,7 +542,7 @@ void ConfigFile::setSkipUpdateCheck(bool skip, const QString &connection)
 QString ConfigFile::updateChannel() const
 {
     QString defaultUpdateChannel = QStringLiteral("stable");
-    const QString suffix = OCC::Version::suffix();
+    const QString suffix = CUR::Version::suffix();
     if (suffix.startsWith(QLatin1String("daily"))
         || suffix.startsWith(QLatin1String("nightly"))
         || suffix.startsWith(QLatin1String("alpha"))
@@ -747,7 +747,7 @@ bool ConfigFile::monoIcons() const
     bool monoDefault = false; // On Mac we want bw by default
 #ifdef Q_OS_MAC
     // OEM themes are not obliged to ship mono icons
-    monoDefault = Theme::instance()->appNameGUI() == QStringLiteral("ownCloud");
+    monoDefault = Theme::instance()->appNameGUI() == QStringLiteral("Curator");
 #endif
     return settings.value(monoIconsC(), monoDefault).toBool();
 }

@@ -18,12 +18,12 @@
 #include "abstractcorejob.h"
 
 #include "networkjobs.h"
-#include "owncloudlib.h"
+#include "curatorlib.h"
 
-namespace OCC {
+namespace CUR {
 
 
-class OWNCLOUDSYNC_EXPORT DetermineAuthTypeJobFactory : public AbstractCoreJobFactory
+class CURATORSYNC_EXPORT DetermineAuthTypeJobFactory : public AbstractCoreJobFactory
 {
 public:
     using AuthType = DetermineAuthTypeJob::AuthType;

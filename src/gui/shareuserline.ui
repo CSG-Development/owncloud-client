@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>OCC::ShareUserLine</class>
- <widget class="QWidget" name="OCC::ShareUserLine">
+ <class>CUR::ShareUserLine</class>
+ <widget class="QWidget" name="CUR::ShareUserLine">
   <property name="enabled">
    <bool>true</bool>
   </property>

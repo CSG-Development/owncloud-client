@@ -29,7 +29,7 @@ class QTreeWidgetItem;
 
 class Ui_FolderWizardTargetPage;
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief page to ask for the target folder

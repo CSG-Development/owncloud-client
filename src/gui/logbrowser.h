@@ -27,7 +27,7 @@
 #include <QPushButton>
 #include <QLabel>
 
-namespace OCC {
+namespace CUR {
 
 namespace Ui {
     class LogBrowser;

@@ -26,7 +26,7 @@
 
 class TestFolderMigration;
 
-namespace OCC {
+namespace CUR {
 
 class FolderMan;
 namespace TestUtils {
@@ -321,9 +321,9 @@ private:
     mutable QMap<QString, Result<void, QString>> _unsupportedConfigurationError;
 
     static FolderMan *_instance;
-    friend class OCC::Application;
+    friend class CUR::Application;
     friend class ::TestFolderMigration;
 };
 
-} // namespace OCC
+} // namespace CUR
 #endif // FOLDERMAN_H

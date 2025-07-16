@@ -21,7 +21,7 @@
 
 #include "clientproxy.h"
 #include "folderman.h"
-#include "owncloudgui.h"
+#include "curatorgui.h"
 #include "platform.h"
 
 class QMessageBox;
@@ -32,7 +32,7 @@ namespace CrashReporter {
 class Handler;
 }
 
-namespace OCC {
+namespace CUR {
 
 Q_DECLARE_LOGGING_CATEGORY(lcApplication)
 
@@ -52,7 +52,7 @@ public:
 
     bool debugMode();
 
-    ownCloudGui *gui() const;
+    CuratorGui *gui() const;
 
     QString displayLanguage() const;
 
@@ -85,7 +85,7 @@ protected slots:
 private:
     explicit Application(Platform *platform, bool debugMode);
 
-    QPointer<ownCloudGui> _gui = {};
+    QPointer<CuratorGui> _gui = {};
 
     const bool _debugMode = false;
     QString _userEnforcedLanguage;
@@ -101,6 +101,6 @@ inline Application *ocApp()
     return Application::_instance;
 }
 
-} // namespace OCC
+} // namespace CUR
 
 #endif // APPLICATION_H

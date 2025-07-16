@@ -20,15 +20,15 @@
 
 #include <memory>
 
-#include "owncloudlib.h"
+#include "curatorlib.h"
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief The Platform is the baseclass for all platform classes, which in turn implement platform
  *        specific functionality for the GUI.
  */
-class OWNCLOUDSYNC_EXPORT Platform : public QObject
+class CURATORSYNC_EXPORT Platform : public QObject
 {
     Q_OBJECT
 public:
@@ -46,6 +46,6 @@ Q_SIGNALS:
     void requestAttention();
 };
 
-} // OCC namespace
+} // CUR namespace
 
 #endif // PLATFORM_H

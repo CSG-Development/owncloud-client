@@ -30,7 +30,7 @@
 
 #endif
 
-namespace OCC {
+namespace CUR {
 
 void Platform::migrate()
 {
@@ -38,6 +38,7 @@ void Platform::migrate()
 
 void Platform::setApplication(QCoreApplication *application)
 {
+    Q_UNUSED(application)
 #ifdef CRASHREPORTER_EXECUTABLE
     if (ConfigFile().crashReporter()) {
         auto *crashHandler =
@@ -66,4 +67,4 @@ std::unique_ptr<Platform> Platform::create()
 #endif
 }
 
-} // OCC namespace
+} // CUR namespace

@@ -19,7 +19,7 @@
 #include <QPointer>
 #include <QTcpServer>
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief The HttpCredentialsGui class
@@ -74,4 +74,4 @@ private:
     QPointer<QWidget> _loginRequiredDialog;
 };
 
-} // namespace OCC
+} // namespace CUR

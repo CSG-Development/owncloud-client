@@ -13,16 +13,16 @@
  */
 
 #pragma once
-#include "resources/owncloudresources.h"
+#include "resources/curatorresources.h"
 
 #include <QIcon>
 
-namespace OCC::Resources {
+namespace CUR::Resources {
 /**
  * Whether use the dark icon theme
  * The function also ensures the theme supports the dark theme
  */
-bool OWNCLOUDRESOURCES_EXPORT isUsingDarkTheme();
+bool CURATORRESOURCES_EXPORT isUsingDarkTheme();
 
-QIcon OWNCLOUDRESOURCES_EXPORT getCoreIcon(const QString &icon_name);
+QIcon CURATORRESOURCES_EXPORT getCoreIcon(const QString &icon_name);
 }

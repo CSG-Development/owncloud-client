@@ -37,12 +37,12 @@ class SyncConnectionWizard:
     SELECTIVE_SYNC_ROOT_FOLDER = {
         "column": 0,
         "container": names.add_Folder_Sync_Connection_Deselect_remote_folders_you_do_not_wish_to_synchronize_QTreeWidget,
-        "text": "ownCloud",
+        "text": "Curator",
         "type": "QModelIndex",
     }
     SYNC_DIALOG_FOLDER_TREE = {
         "column": 0,
-        "container": names.deselect_remote_folders_you_do_not_wish_to_synchronize_ownCloud_QModelIndex,
+        "container": names.deselect_remote_folders_you_do_not_wish_to_synchronize_Curator_QModelIndex,
         "type": "QModelIndex",
     }
     ADD_SYNC_CONNECTION_BUTTON = {
@@ -318,7 +318,7 @@ class SyncConnectionWizard:
         if not parent_container:
             parent_container = {
                 "container": names.groupBox_folderTreeWidget_QTreeWidget,
-                "text": "ownCloud",
+                "text": "Curator",
                 "type": "QModelIndex",
             }
         return {

@@ -14,7 +14,7 @@
 
 #include "propagateremotemove.h"
 #include "propagatorjobs.h"
-#include "owncloudpropagator_p.h"
+#include "curatorpropagator_p.h"
 #include "account.h"
 #include "common/syncjournalfilerecord.h"
 #include "filesystem.h"
@@ -23,7 +23,7 @@
 #include <QStringList>
 #include <QDir>
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcMoveJob, "sync.networkjob.move", QtInfoMsg)
 Q_LOGGING_CATEGORY(lcPropagateRemoteMove, "sync.propagator.remotemove", QtInfoMsg)
@@ -98,13 +98,13 @@ void PropagateRemoteMove::start()
         if (itype == ItemTypeFile) {
             OC_ASSERT(!sourceHadSuffix && !destinationHadSuffix);
 
-            // If foo -> bar.owncloud, the rename target will be "bar"
+            // If foo -> bar.curator, the rename target will be "bar"
             folderTargetAlt = folderTarget + suffix;
 
         } else if (itype == ItemTypeVirtualFile) {
             OC_ASSERT(sourceHadSuffix && destinationHadSuffix);
 
-            // If foo.owncloud -> bar, the rename target will be "bar.owncloud"
+            // If foo.curator -> bar, the rename target will be "bar.curator"
             folderTargetAlt.chop(suffix.size());
         }
 

@@ -29,7 +29,7 @@
 #include <cstring>
 
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcDiscovery, "sync.discovery", QtInfoMsg)
 
@@ -135,7 +135,7 @@ void DiscoveryPhase::checkSelectiveSyncNewFolder(const QString &path, RemotePerm
 /* Given a path on the remote, give the path as it is when the rename is done */
 QString DiscoveryPhase::adjustRenamedPath(const QString &original, SyncFileItem::Direction d) const
 {
-    return OCC::adjustRenamedPath(d == SyncFileItem::Down ? _renamedItemsRemote : _renamedItemsLocal, original);
+    return CUR::adjustRenamedPath(d == SyncFileItem::Down ? _renamedItemsRemote : _renamedItemsLocal, original);
 }
 
 QString adjustRenamedPath(const QHash<QString, QString> &renamedItems, const QString &original)
@@ -247,7 +247,7 @@ bool DiscoveryPhase::isSpace() const
     return !(Utility::urlEqual(_account->davUrl(), _baseUrl) || _account->davUrl().isParentOf(_baseUrl));
 }
 
-DiscoverySingleLocalDirectoryJob::DiscoverySingleLocalDirectoryJob(const AccountPtr &account, const QString &localPath, OCC::Vfs *vfs, QObject *parent)
+DiscoverySingleLocalDirectoryJob::DiscoverySingleLocalDirectoryJob(const AccountPtr &account, const QString &localPath, CUR::Vfs *vfs, QObject *parent)
     : QObject(parent)
     , QRunnable()
     , _localPath(localPath)

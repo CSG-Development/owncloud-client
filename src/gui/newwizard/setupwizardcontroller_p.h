@@ -2,7 +2,7 @@
 
 #include <QtGlobal>
 
-namespace OCC::Wizard::SetupWizardControllerPrivate {
+namespace CUR::Wizard::SetupWizardControllerPrivate {
 
 Q_NAMESPACE
 

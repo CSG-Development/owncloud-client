@@ -18,7 +18,7 @@
 #include <QPushButton>
 #include <QTimer>
 
-namespace OCC {
+namespace CUR {
 
 UpdateUrlDialog::UpdateUrlDialog(const QString &title, const QString &content, const QUrl &oldUrl, const QUrl &newUrl, QWidget *parent)
     : QMessageBox(QMessageBox::Warning, title, content, QMessageBox::NoButton, parent)

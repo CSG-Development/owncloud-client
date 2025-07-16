@@ -23,7 +23,7 @@
 
 #include "libsync/accountfwd.h"
 
-namespace OCC {
+namespace CUR {
 class PropfindJob;
 
 /**
@@ -89,6 +89,6 @@ private:
 };
 
 
-} // namespace OCC
+} // namespace CUR
 
 #endif //QUOTAINFO_H

@@ -54,7 +54,7 @@
 #include <QNetworkInformation>
 #endif
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcApplication, "gui.application", QtInfoMsg)
 
@@ -63,7 +63,7 @@ QString Application::displayLanguage() const
     return _displayLanguage;
 }
 
-ownCloudGui *Application::gui() const
+CuratorGui *Application::gui() const
 {
     return _gui;
 }
@@ -114,7 +114,7 @@ Application::Application(Platform *platform, bool debugMode)
 
     // Setting up the gui class will allow tray notifications for the
     // setup that follows, like folder setup
-    _gui = new ownCloudGui(this);
+    _gui = new CuratorGui(this);
 
     connect(AccountManager::instance(), &AccountManager::accountAdded, this, &Application::slotAccountStateAdded);
     connect(AccountManager::instance(), &AccountManager::accountRemoved, this, &Application::slotAccountStateRemoved);
@@ -122,7 +122,7 @@ Application::Application(Platform *platform, bool debugMode)
         slotAccountStateAdded(ai);
     }
 
-    connect(FolderMan::instance()->socketApi(), &SocketApi::shareCommandReceived, _gui.data(), &ownCloudGui::slotShowShareDialog);
+    connect(FolderMan::instance()->socketApi(), &SocketApi::shareCommandReceived, _gui.data(), &CuratorGui::slotShowShareDialog);
 
 #ifdef WITH_AUTO_UPDATER
     // Update checks
@@ -167,7 +167,7 @@ void Application::slotAccountStateAdded(AccountStatePtr accountState) const
 {
     // Hook up the GUI slots to the account state's signals:
     connect(accountState.data(), &AccountState::stateChanged,
-        _gui.data(), &ownCloudGui::slotAccountStateChanged);
+        _gui.data(), &CuratorGui::slotAccountStateChanged);
     connect(accountState->account().data(), &Account::serverVersionChanged,
         _gui.data(), [account = accountState->account().data(), this] {
             _gui->slotTrayMessageIfServerUnsupported(account);
@@ -359,7 +359,7 @@ void Application::openVirtualFile(const QString &filename)
 {
     QString virtualFileExt = Theme::instance()->appDotVirtualFileSuffix();
     if (!filename.endsWith(virtualFileExt)) {
-        qWarning(lcApplication) << "Can only handle file ending in .owncloud. Unable to open" << filename;
+        qWarning(lcApplication) << "Can only handle file ending in .curator. Unable to open" << filename;
         return;
     }
     QString relativePath;
@@ -408,4 +408,4 @@ std::unique_ptr<Application> Application::createInstance(Platform *platform, boo
     return std::unique_ptr<Application>(_instance);
 }
 
-} // namespace OCC
+} // namespace CUR

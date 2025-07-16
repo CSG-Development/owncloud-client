@@ -22,7 +22,7 @@
 #include <chrono>
 
 #include "progressdispatcher.h"
-#include "owncloudgui.h"
+#include "curatorgui.h"
 #include "account.h"
 #include "activitydata.h"
 
@@ -33,7 +33,7 @@ class QProgressIndicator;
 class QTabWidget;
 class QVBoxLayout;
 
-namespace OCC {
+namespace CUR {
 
 class Account;
 class AccountStatusPtr;

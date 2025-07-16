@@ -31,7 +31,7 @@
 #include <QDir>
 #include <QInputDialog>
 
-using namespace OCC;
+using namespace CUR;
 
 FolderWizardRemotePath::FolderWizardRemotePath(FolderWizardPrivate *parent)
     : FolderWizardPage(parent)
@@ -93,7 +93,7 @@ void FolderWizardRemotePath::slotCreateRemoteFolder(const QString &folder)
 
 
     MkColJob *job = new MkColJob(folderWizardPrivate()->accountState()->account(), folderWizardPrivate()->davUrl(), fullPath, {}, this);
-    /* check the owncloud configuration file and query the ownCloud */
+    /* check the curator configuration file and query the Curator */
     connect(job, &MkColJob::finishedWithoutError,
         this, &FolderWizardRemotePath::slotCreateRemoteFolderFinished);
     connect(job, &AbstractNetworkJob::networkError, this, &FolderWizardRemotePath::slotHandleMkdirNetworkError);

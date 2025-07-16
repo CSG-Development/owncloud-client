@@ -14,7 +14,7 @@
 #include <QtTest>
 
 using namespace std::chrono_literals;
-using namespace OCC;
+using namespace CUR;
 
 #ifdef Q_OS_WIN
 #include "common/utility_win.h"

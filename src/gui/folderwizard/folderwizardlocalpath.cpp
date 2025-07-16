@@ -28,7 +28,7 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 
-using namespace OCC;
+using namespace CUR;
 
 FolderWizardLocalPath::FolderWizardLocalPath(FolderWizardPrivate *parent)
     : FolderWizardPage(parent)

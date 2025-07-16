@@ -18,7 +18,7 @@
 
 #include <QLoggingCategory>
 
-using namespace OCC;
+using namespace CUR;
 
 Q_LOGGING_CATEGORY(lcLocalDiscoveryTracker, "sync.localdiscoverytracker", QtInfoMsg)
 
@@ -80,7 +80,7 @@ void LocalDiscoveryTracker::slotItemCompleted(const SyncFileItemPtr &item)
         Q_FALLTHROUGH();
     case SyncFileItem::Conflict:
         Q_FALLTHROUGH();
-    case OCC::SyncFileItem::Message:
+    case CUR::SyncFileItem::Message:
         if (_previousLocalDiscoveryPaths.erase(item->_file)) {
             qCDebug(lcLocalDiscoveryTracker) << "wiped successful item" << item->_file;
         }
@@ -88,19 +88,19 @@ void LocalDiscoveryTracker::slotItemCompleted(const SyncFileItemPtr &item)
             qCDebug(lcLocalDiscoveryTracker) << "wiped successful item" << item->_renameTarget;
         }
         return;
-    case OCC::SyncFileItem::FatalError:
+    case CUR::SyncFileItem::FatalError:
         Q_FALLTHROUGH();
-    case OCC::SyncFileItem::NormalError:
+    case CUR::SyncFileItem::NormalError:
         Q_FALLTHROUGH();
-    case OCC::SyncFileItem::SoftError:
+    case CUR::SyncFileItem::SoftError:
         Q_FALLTHROUGH();
-    case OCC::SyncFileItem::DetailError:
+    case CUR::SyncFileItem::DetailError:
         Q_FALLTHROUGH();
-    case OCC::SyncFileItem::BlacklistedError:
+    case CUR::SyncFileItem::BlacklistedError:
         Q_FALLTHROUGH();
-    case OCC::SyncFileItem::Excluded:
+    case CUR::SyncFileItem::Excluded:
         [[fallthrough]];
-    case OCC::SyncFileItem::FilenameReserved:
+    case CUR::SyncFileItem::FilenameReserved:
         break;
     case SyncFileItem::StatusCount:
         Q_UNREACHABLE();

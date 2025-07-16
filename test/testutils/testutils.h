@@ -11,11 +11,11 @@
 
 #include <memory>
 
-namespace OCC {
+namespace CUR {
 
 namespace TestUtils {
     namespace TestUtilsPrivate {
-        void accountStateDeleter(OCC::AccountState *acc);
+        void accountStateDeleter(CUR::AccountState *acc);
 
         using AccountStateRaii = std::unique_ptr<AccountState, decltype(&TestUtilsPrivate::accountStateDeleter)>;
     }
@@ -27,7 +27,7 @@ namespace TestUtils {
 
     /***
      * Create a QTemporaryDir with a test specific name pattern
-     * ownCloud-unit-test-{TestName}-XXXXXX
+     * Curator-unit-test-{TestName}-XXXXXX
      * This allow to clean up after failed tests
      */
     QTemporaryDir createTempDir();

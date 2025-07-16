@@ -13,13 +13,13 @@
  */
 
 #include "propagateremotedelete.h"
-#include "owncloudpropagator_p.h"
+#include "curatorpropagator_p.h"
 #include "account.h"
 #include "common/asserts.h"
 
 #include <QLoggingCategory>
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcDeleteJob, "sync.networkjob.delete", QtInfoMsg)
 Q_LOGGING_CATEGORY(lcPropagateRemoteDelete, "sync.propagator.remotedelete", QtInfoMsg)

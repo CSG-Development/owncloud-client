@@ -14,7 +14,7 @@
 #include <QTest>
 #include <QAbstractItemModelTester>
 
-namespace OCC {
+namespace CUR {
 
 class TestActivityModel : public QObject
 {
@@ -51,5 +51,5 @@ private Q_SLOTS:
 };
 }
 
-QTEST_GUILESS_MAIN(OCC::TestActivityModel)
+QTEST_GUILESS_MAIN(CUR::TestActivityModel)
 #include "testactivitymodel.moc"

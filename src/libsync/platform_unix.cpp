@@ -21,7 +21,7 @@
 #include <signal.h>
 #include <sys/resource.h>
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcPlatform, "gui.platform")
 
@@ -38,7 +38,7 @@ UnixPlatform::~UnixPlatform()
 void UnixPlatform::setLimitsForCoreDumps()
 {
     // check a environment variable for core dumps
-    if (!qEnvironmentVariableIsEmpty("OWNCLOUD_CORE_DUMP")) {
+    if (!qEnvironmentVariableIsEmpty("CURATOR_CORE_DUMP")) {
         struct rlimit core_limit;
         core_limit.rlim_cur = RLIM_INFINITY;
         core_limit.rlim_max = RLIM_INFINITY;
@@ -52,4 +52,4 @@ void UnixPlatform::setLimitsForCoreDumps()
 }
 
 
-} // namespace OCC
+} // namespace CUR

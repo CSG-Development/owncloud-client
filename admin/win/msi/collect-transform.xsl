@@ -15,7 +15,7 @@
   </xsl:template>
 
   <!-- Identify MainExecutable -->
-  <xsl:key name="exe-search" match="wix:File[contains(@Source, 'owncloud.exe')]" use="@Id" />
+  <xsl:key name="exe-search" match="wix:File[contains(@Source, 'curator.exe')]" use="@Id" />
   <xsl:template match="wix:File[key('exe-search', @Id)]">
     <xsl:copy>
       <xsl:apply-templates select="@*" />
@@ -27,7 +27,7 @@
   </xsl:template>
 
   <!-- Exclude Shell Extensions -->
-  <xsl:key name="shellext-search" match="wix:Component[contains(wix:File/@Source, 'OCContextMenu.dll') or contains(wix:File/@Source, 'OCOverlays.dll')]" use="@Id" />
+  <xsl:key name="shellext-search" match="wix:Component[contains(wix:File/@Source, 'CUContextMenu.dll') or contains(wix:File/@Source, 'CUOverlays.dll')]" use="@Id" />
   <xsl:template match="wix:Component[key('shellext-search', @Id)]" />
   <xsl:template match="wix:ComponentRef[key('shellext-search', @Id)]" />
 

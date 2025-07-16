@@ -22,7 +22,7 @@
 
 #include "syncfileitem.h"
 
-namespace OCC {
+namespace CUR {
 class SyncFileItem;
 
 /**

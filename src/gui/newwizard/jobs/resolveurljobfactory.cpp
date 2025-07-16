@@ -16,7 +16,7 @@
 
 #include "common/utility.h"
 #include "gui/application.h"
-#include "gui/owncloudgui.h"
+#include "gui/curatorgui.h"
 #include "gui/settingsdialog.h"
 #include "gui/tlserrordialog.h"
 #include "gui/updateurldialog.h"
@@ -31,7 +31,7 @@ Q_LOGGING_CATEGORY(lcResolveUrl, "gui.wizard.resolveurl")
 const char abortedBySslErrorHandlerC[] = "aborted-by-ssl-error-handler";
 }
 
-namespace OCC::Wizard::Jobs {
+namespace CUR::Wizard::Jobs {
 
 ResolveUrlJobFactory::ResolveUrlJobFactory(QNetworkAccessManager *nam)
     : AbstractCoreJobFactory(nam)
@@ -114,7 +114,7 @@ CoreJob *ResolveUrlJobFactory::startJob(const QUrl &url, QObject *parent)
             setJobError(job, QApplication::translate("ResolveUrlJobFactory", "User rejected invalid SSL certificate"));
         });
 
-        ownCloudGui::raise();
+        CuratorGui::raise();
         tlsErrorDialog->open();
     });
 

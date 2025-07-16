@@ -22,7 +22,7 @@
 #include <QJsonParseError>
 #include <QNetworkReply>
 
-namespace OCC::Wizard::Jobs {
+namespace CUR::Wizard::Jobs {
 
 Q_LOGGING_CATEGORY(lcDiscoverWebFingerService, "gui.jobs.discoverwebfinger");
 

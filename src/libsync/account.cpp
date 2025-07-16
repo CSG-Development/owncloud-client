@@ -38,7 +38,7 @@
 #include <QSslSocket>
 #include <QStandardPaths>
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcAccount, "sync.account", QtInfoMsg)
 
@@ -377,13 +377,13 @@ ResourcesCache *Account::resourcesCache() const
     return _resourcesCache;
 }
 
-} // namespace OCC
+} // namespace CUR
 
 
-QDebug operator<<(QDebug debug, const OCC::Account *acc)
+QDebug operator<<(QDebug debug, const CUR::Account *acc)
 {
     QDebugStateSaver saver(debug);
     debug.setAutoInsertSpaces(false);
-    debug << "OCC::Account(" << acc->displayName() << ")";
+    debug << "CUR::Account(" << acc->displayName() << ")";
     return debug.maybeSpace();
 }

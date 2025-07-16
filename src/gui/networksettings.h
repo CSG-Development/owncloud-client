@@ -20,7 +20,7 @@
 #include <QWidget>
 
 
-namespace OCC {
+namespace CUR {
 
 namespace Ui {
     class NetworkSettings;
@@ -60,5 +60,5 @@ private:
 };
 
 
-} // namespace OCC
+} // namespace CUR
 #endif // MIRALL_NETWORKSETTINGS_H

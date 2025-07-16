@@ -16,7 +16,7 @@
 #include "progressdispatcher.h"
 #include "theme.h"
 
-namespace OCC {
+namespace CUR {
 
 SyncResult::SyncResult(Status status)
     : _status(status)

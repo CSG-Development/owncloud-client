@@ -1,7 +1,7 @@
 Feature: adding accounts
 
     As a user
-    I want to be able join multiple owncloud servers to the client
+    I want to be able join multiple curator servers to the client
     So that I can sync data with various organisations
 
 

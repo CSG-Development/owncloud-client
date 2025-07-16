@@ -21,11 +21,11 @@
 
 #include <list>
 
-namespace OCC {
+namespace CUR {
 
 class UploadDevice;
 class GETFileJob;
-class OwncloudPropagator;
+class CuratorPropagator;
 
 /**
  * @brief The BandwidthManager class
@@ -35,7 +35,7 @@ class BandwidthManager : public QObject
 {
     Q_OBJECT
 public:
-    BandwidthManager(OwncloudPropagator *p);
+    BandwidthManager(CuratorPropagator *p);
     ~BandwidthManager() override;
 
     bool usingAbsoluteUploadLimit() { return _currentUploadLimit > 0; }
@@ -68,7 +68,7 @@ public slots:
 private:
     // FIXME this timer and this variable should be replaced
     // by the propagator emitting the changed limit values to us as signal
-    OwncloudPropagator *_propagator;
+    CuratorPropagator *_propagator;
 
     // for absolute up/down bw limiting
     QTimer _absoluteLimitTimer;

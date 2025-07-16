@@ -19,7 +19,7 @@
 #include "pages/accountconfiguredwizardpage.h"
 #include "theme.h"
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 AccountConfiguredSetupWizardState::AccountConfiguredSetupWizardState(SetupWizardContext *context)
     : AbstractSetupWizardState(context)
@@ -98,4 +98,4 @@ void AccountConfiguredSetupWizardState::evaluatePage()
     Q_EMIT evaluationSuccessful();
 }
 
-} // OCC::Wizard
+} // CUR::Wizard

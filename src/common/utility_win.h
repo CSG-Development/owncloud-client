@@ -21,7 +21,7 @@
 #include <functional>
 #include <qt_windows.h>
 
-namespace OCC {
+namespace CUR {
 namespace Utility {
     class OCSYNC_EXPORT Handle
     {

@@ -33,7 +33,7 @@
 
 using namespace std::chrono_literals;
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcConnectionValidator, "sync.connectionvalidator", QtInfoMsg)
 
@@ -64,7 +64,7 @@ void ConnectionValidator::checkServer(ConnectionValidator::ValidationMode mode)
 {
     _mode = mode;
     if (!_account) {
-        _errors << tr("No ownCloud account configured");
+        _errors << tr("No Curator account configured");
         reportResult(NotConfigured);
         return;
     }
@@ -153,7 +153,7 @@ void ConnectionValidator::slotCheckServerAndAuth()
 void ConnectionValidator::slotStatusFound(const QUrl &url, const QJsonObject &info)
 {
     // status.php was found.
-    qCInfo(lcConnectionValidator) << "** Application: ownCloud found: "
+    qCInfo(lcConnectionValidator) << "** Application: Curator found: "
                                   << url << " with version "
                                   << info.value(QLatin1String("versionstring")).toString();
 
@@ -279,4 +279,4 @@ void ConnectionValidator::reportResult(Status status)
     }
 }
 
-} // namespace OCC
+} // namespace CUR

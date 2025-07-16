@@ -44,7 +44,7 @@
 #include <QByteArray>
 #include "common/remotepermissions.h"
 
-namespace OCC {
+namespace CUR {
 class SyncJournalFileRecord;
 }
 

@@ -88,7 +88,7 @@
            <property name="currentIndex">
             <number>1</number>
            </property>
-           <widget class="OCC::BasicLoginWidget" name="basicLoginWidget">
+           <widget class="CUR::BasicLoginWidget" name="basicLoginWidget">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -96,7 +96,7 @@
              </sizepolicy>
             </property>
            </widget>
-           <widget class="OCC::OAuthLoginWidget" name="oauthLoginWidget">
+           <widget class="CUR::OAuthLoginWidget" name="oauthLoginWidget">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
               <horstretch>0</horstretch>
@@ -152,13 +152,13 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>OCC::BasicLoginWidget</class>
+   <class>CUR::BasicLoginWidget</class>
    <extends>QWidget</extends>
    <header>gui/loginrequireddialog/basicloginwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>OCC::OAuthLoginWidget</class>
+   <class>CUR::OAuthLoginWidget</class>
    <extends>QWidget</extends>
    <header>gui/loginrequireddialog/oauthloginwidget.h</header>
    <container>1</container>

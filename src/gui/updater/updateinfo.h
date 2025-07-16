@@ -6,7 +6,7 @@
 #include <QDomElement>
 #include <QXmlStreamWriter>
 
-namespace OCC {
+namespace CUR {
 
 class UpdateInfo
 {
@@ -32,6 +32,6 @@ private:
     QString mDownloadUrl;
 };
 
-} // namespace OCC
+} // namespace CUR
 
 #endif // UPDATEINFO_H

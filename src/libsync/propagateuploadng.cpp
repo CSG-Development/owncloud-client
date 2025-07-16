@@ -18,7 +18,7 @@
 #include "common/utility.h"
 #include "filesystem.h"
 #include "networkjobs.h"
-#include "owncloudpropagator_p.h"
+#include "curatorpropagator_p.h"
 #include "propagateremotedelete.h"
 #include "propagateremotemove.h"
 #include "propagateupload.h"
@@ -33,7 +33,7 @@
 
 #include <memory>
 
-namespace OCC {
+namespace CUR {
 
 QString PropagateUploadFileNG::chunkPath(qint64 chunkOffset)
 {
@@ -80,7 +80,7 @@ State machine:
         +-> MOVE +-----> moveJobFinished() +--> finalize()
  */
 
-PropagateUploadFileNG::PropagateUploadFileNG(OwncloudPropagator *propagator, const SyncFileItemPtr &item)
+PropagateUploadFileNG::PropagateUploadFileNG(CuratorPropagator *propagator, const SyncFileItemPtr &item)
     : PropagateUploadFileCommon(propagator, item)
     , _bytesToUpload(item->_size)
 {

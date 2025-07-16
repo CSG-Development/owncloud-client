@@ -1,0 +1,1 @@
+#define CURATORSYNC_EXPORT

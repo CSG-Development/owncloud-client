@@ -49,7 +49,7 @@ bool isDebuggerPresent()
 }
 #endif
 }
-namespace OCC {
+namespace CUR {
 
 Logger *Logger::instance()
 {
@@ -334,7 +334,7 @@ void Logger::rotateLog()
     }
 }
 
-void OCC::Logger::attacheToConsole()
+void CUR::Logger::attacheToConsole()
 {
     if (_consoleIsAttached) {
         return;
@@ -352,4 +352,4 @@ void OCC::Logger::attacheToConsole()
 #endif
 }
 
-} // namespace OCC
+} // namespace CUR

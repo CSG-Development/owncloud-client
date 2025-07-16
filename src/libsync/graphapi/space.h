@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "owncloudlib.h"
+#include "curatorlib.h"
 
 #include "libsync/accountfwd.h"
 
@@ -22,11 +22,11 @@
 
 #include <QIcon>
 
-namespace OCC {
+namespace CUR {
 namespace GraphApi {
     class SpacesManager;
 
-    class OWNCLOUDSYNC_EXPORT Space : public QObject
+    class CURATORSYNC_EXPORT Space : public QObject
     {
         Q_OBJECT
     public:
@@ -69,5 +69,5 @@ namespace GraphApi {
         friend class SpacesManager;
     };
 
-} // OCC
+} // CUR
 } // GraphApi

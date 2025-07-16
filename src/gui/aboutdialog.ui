@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>OCC::AboutDialog</class>
- <widget class="QDialog" name="OCC::AboutDialog">
+ <class>CUR::AboutDialog</class>
+ <widget class="QDialog" name="CUR::AboutDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -57,7 +57,7 @@
             <string notr="true"/>
            </property>
            <property name="pixmap">
-            <pixmap resource="../../core_theme.qrc">:/client/ownCloud/theme/colored/owncloud-icon.svg</pixmap>
+            <pixmap resource="../../core_theme.qrc">:/client/Curator/theme/colored/curator-icon.svg</pixmap>
            </property>
           </widget>
          </item>
@@ -126,7 +126,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>OCC::AboutDialog</receiver>
+   <receiver>CUR::AboutDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -142,7 +142,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>OCC::AboutDialog</receiver>
+   <receiver>CUR::AboutDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

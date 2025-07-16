@@ -38,7 +38,7 @@
 
 using namespace std::chrono_literals;
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcEtagJob, "sync.networkjob.etag", QtInfoMsg)
 Q_LOGGING_CATEGORY(lcPropfindJob, "sync.networkjob.propfind", QtInfoMsg)
@@ -542,4 +542,4 @@ void fetchPrivateLinkUrl(AccountPtr account, const QUrl &baseUrl, const QString 
     }
 }
 
-} // namespace OCC
+} // namespace CUR

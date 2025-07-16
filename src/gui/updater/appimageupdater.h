@@ -19,7 +19,7 @@
 
 #include <updater/ocupdater.h>
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief AppImage Updater using AppImageUpdate
@@ -38,4 +38,4 @@ private:
     void versionInfoArrived(const UpdateInfo &succeeded) override;
 };
 
-} // namespace OCC
+} // namespace CUR

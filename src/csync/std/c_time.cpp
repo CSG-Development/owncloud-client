@@ -60,7 +60,7 @@ int c_utimes(const QString &uri, const struct timeval *times) {
     FILETIME LastModificationTime;
     HANDLE hFile;
 
-    const QString wuri = OCC::FileSystem::longWinPath(uri);
+    const QString wuri = CUR::FileSystem::longWinPath(uri);
 
     if(times) {
         UnixTimevalToFileTime(times[0], &LastAccessTime);
@@ -75,7 +75,7 @@ int c_utimes(const QString &uri, const struct timeval *times) {
         NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_BACKUP_SEMANTICS, NULL);
     if(hFile==INVALID_HANDLE_VALUE) {
         const auto error = GetLastError();
-        qCWarning(lcCSyncCtime) << Q_FUNC_INFO << "for" << wuri << "failed with error:" << OCC::Utility::formatWinError(error);
+        qCWarning(lcCSyncCtime) << Q_FUNC_INFO << "for" << wuri << "failed with error:" << CUR::Utility::formatWinError(error);
         switch (error) {
         case ERROR_FILE_NOT_FOUND:
             errno = ENOENT;
@@ -100,7 +100,7 @@ int c_utimes(const QString &uri, const struct timeval *times) {
     if(!SetFileTime(hFile, NULL, &LastAccessTime, &LastModificationTime)) {
         // can this happen?
         const auto error = GetLastError();
-        qCWarning(lcCSyncCtime) << Q_FUNC_INFO << "for" << wuri << "failed with error:" << OCC::Utility::formatWinError(error);
+        qCWarning(lcCSyncCtime) << Q_FUNC_INFO << "for" << wuri << "failed with error:" << CUR::Utility::formatWinError(error);
         errno=ENOENT;
         CloseHandle(hFile);
         return -1;

@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "owncloudlib.h"
+#include "curatorlib.h"
 #include "common/filesystembase.h"
 #include "common/vfs.h"
 
@@ -25,12 +25,12 @@
 #include <chrono>
 
 
-namespace OCC {
+namespace CUR {
 
 /**
  * Value class containing the options given to the sync engine
  */
-class OWNCLOUDSYNC_EXPORT SyncOptions
+class CURATORSYNC_EXPORT SyncOptions
 {
 public:
     explicit SyncOptions(QSharedPointer<Vfs> vfs);

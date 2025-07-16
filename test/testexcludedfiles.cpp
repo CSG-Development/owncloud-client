@@ -11,7 +11,7 @@
 #include "csync_exclude.h"
 #include "testutils.h"
 
-using namespace OCC;
+using namespace CUR;
 
 namespace {
 const QString excludeListFileC = QStringLiteral(SOURCEDIR "/sync-exclude.lst");
@@ -60,7 +60,7 @@ private slots:
         bool keepHidden = false;
 
         auto check_isExcluded = [&](const QString &a, bool keepHidden, bool create = true) {
-            auto tmp = OCC::TestUtils::createTempDir();
+            auto tmp = CUR::TestUtils::createTempDir();
             Q_ASSERT(tmp.isValid());
 
             auto createTree = [&](const QString &path) {
@@ -76,7 +76,7 @@ private slots:
                 workPath += fileName;
                 QFile file(workPath);
                 QVERIFY(file.open(QFile::WriteOnly));
-                file.write("ownCloud");
+                file.write("Curator");
                 file.close();
             };
             if (create) {

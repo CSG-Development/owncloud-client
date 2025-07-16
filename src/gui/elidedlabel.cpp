@@ -16,7 +16,7 @@
 
 #include <QResizeEvent>
 
-namespace OCC {
+namespace CUR {
 
 ElidedLabel::ElidedLabel(const QString &text, QWidget *parent)
     : QLabel(text, parent)

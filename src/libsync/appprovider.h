@@ -19,7 +19,7 @@
 
 #include "accountfwd.h"
 #include "capabilities.h"
-#include "owncloudlib.h"
+#include "curatorlib.h"
 
 #include <QJsonObject>
 #include <QMimeType>
@@ -27,11 +27,11 @@
 #include <QUrl>
 #include <QVariantMap>
 
-namespace OCC {
-class OWNCLOUDSYNC_EXPORT AppProvider
+namespace CUR {
+class CURATORSYNC_EXPORT AppProvider
 {
 public:
-    struct OWNCLOUDSYNC_EXPORT Provider
+    struct CURATORSYNC_EXPORT Provider
     {
         // the server might provide multiple apps but no default
         // for now we only support default apps

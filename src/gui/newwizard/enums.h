@@ -18,7 +18,7 @@
 
 #include <QObject>
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 Q_NAMESPACE
 
 enum class SetupWizardState {
@@ -44,7 +44,7 @@ Q_ENUM_NS(SyncMode)
 
 }
 
-namespace OCC {
+namespace CUR {
 template <>
 QString Utility::enumToDisplayName(Wizard::SetupWizardState state);
 }

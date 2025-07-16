@@ -11,7 +11,7 @@
 #include <localdiscoverytracker.h>
 
 using namespace std::chrono_literals;
-using namespace OCC;
+using namespace CUR;
 
 struct FakeBrokenXmlPropfindReply : FakePropfindReply {
     FakeBrokenXmlPropfindReply(FileInfo &remoteRootFileInfo, QNetworkAccessManager::Operation op,

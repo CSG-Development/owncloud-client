@@ -19,7 +19,7 @@
 
 using namespace std::chrono;
 
-namespace OCC {
+namespace CUR {
 
 
 Capabilities::Capabilities(const QUrl &url, const QVariantMap &capabilities)
@@ -145,7 +145,7 @@ QList<CheckSums::Algorithm> Capabilities::supportedChecksumTypes() const
 
 CheckSums::Algorithm Capabilities::preferredUploadChecksumType() const
 {
-    static auto envType = CheckSums::fromByteArray(qgetenv("OWNCLOUD_CONTENT_CHECKSUM_TYPE"));
+    static auto envType = CheckSums::fromByteArray(qgetenv("CURATOR_CONTENT_CHECKSUM_TYPE"));
     if (envType != CheckSums::Algorithm::NONE && envType != CheckSums::Algorithm::PARSE_ERROR) {
         return envType;
     }
@@ -170,7 +170,7 @@ bool Capabilities::chunkingNg() const
     {
         return false;
     }
-    static const auto chunkng = qgetenv("OWNCLOUD_CHUNKING_NG");
+    static const auto chunkng = qgetenv("CURATOR_CHUNKING_NG");
     if (chunkng == "0")
         return false;
     if (chunkng == "1")
@@ -181,7 +181,7 @@ bool Capabilities::chunkingNg() const
 bool Capabilities::bigfilechunkingEnabled() const
 {
     bool ok;
-    const int chunkSize = qEnvironmentVariableIntValue("OWNCLOUD_CHUNK_SIZE", &ok);
+    const int chunkSize = qEnvironmentVariableIntValue("CURATOR_CHUNK_SIZE", &ok);
     if (ok && chunkSize == 0)
     {
         return false;
@@ -236,8 +236,8 @@ QString Capabilities::invalidFilenameRegex() const
 
 bool Capabilities::uploadConflictFiles() const
 {
-    static auto envIsSet = !qEnvironmentVariableIsEmpty("OWNCLOUD_UPLOAD_CONFLICT_FILES");
-    static int envValue = qEnvironmentVariableIntValue("OWNCLOUD_UPLOAD_CONFLICT_FILES");
+    static auto envIsSet = !qEnvironmentVariableIsEmpty("CURATOR_UPLOAD_CONFLICT_FILES");
+    static int envValue = qEnvironmentVariableIntValue("CURATOR_UPLOAD_CONFLICT_FILES");
     if (envIsSet)
         return envValue != 0;
 
@@ -283,7 +283,7 @@ QString Status::versionString() const
 
 TusSupport::TusSupport(const QVariantMap &tus_support)
 {
-    if (tus_support.isEmpty() || qEnvironmentVariableIsSet("OWNCLOUD_NO_TUS")) {
+    if (tus_support.isEmpty() || qEnvironmentVariableIsSet("CURATOR_NO_TUS")) {
         return;
     }
     version = QVersionNumber::fromString(tus_support.value(QStringLiteral("version")).toString());
@@ -347,7 +347,7 @@ FilesSharing::FilesSharing(const QVariantMap &filesSharing)
 {
 }
 
-OCC::Migration::Migration(const QVariantMap &data)
+CUR::Migration::Migration(const QVariantMap &data)
 {
     const auto spaces = data.value(QStringLiteral("space_migration")).toMap();
     space_migration.enabled = spaces.value(QStringLiteral("enabled")).toBool();
@@ -359,4 +359,4 @@ const Migration &Capabilities::migration() const
     return _migration;
 }
 
-} // namespace OCC
+} // namespace CUR

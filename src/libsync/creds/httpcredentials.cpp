@@ -40,7 +40,7 @@ namespace {
 constexpr int TokenRefreshMaxRetries = 3;
 constexpr std::chrono::seconds TokenRefreshDefaultTimeout = 30s;
 constexpr int CredentialVersion = 1;
-const char authenticationFailedC[] = "owncloud-authentication-failed";
+const char authenticationFailedC[] = "curator-authentication-failed";
 
 auto isOAuthC()
 {
@@ -68,7 +68,7 @@ const QString userC()
 }
 }
 
-namespace OCC {
+namespace CUR {
 
 class HttpCredentialsAccessManager : public AccessManager
 {
@@ -413,6 +413,6 @@ void HttpCredentials::persist()
     }
 }
 
-} // namespace OCC
+} // namespace CUR
 
 #include "httpcredentials.moc"

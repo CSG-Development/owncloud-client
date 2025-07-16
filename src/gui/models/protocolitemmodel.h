@@ -20,7 +20,7 @@
 #include "common/fixedsizeringbuffer.h"
 
 
-namespace OCC {
+namespace CUR {
 
 class ProtocolItemModel : public QAbstractTableModel
 {

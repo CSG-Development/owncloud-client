@@ -25,7 +25,7 @@
 
 @end
 
-namespace OCC {
+namespace CUR {
 
 void *createOsXNotificationCenterDelegate()
 {
@@ -50,4 +50,4 @@ void sendOsXUserNotification(const QString &title, const QString &message)
     }
 }
 
-} // namespace OCC
+} // namespace CUR
