@@ -1,4 +1,4 @@
-set( APPLICATION_NAME       "Curator" )
+set( APPLICATION_NAME       "Curator Files" )
 set( APPLICATION_SHORTNAME  "Curator" )
 set( APPLICATION_EXECUTABLE "curator" )
 set( APPLICATION_DOMAIN     "owncloud.com" )

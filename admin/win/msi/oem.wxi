@@ -2,8 +2,8 @@
 
 <Include>
 
-    <?define AppVendor = "ownCloud GmbH" ?>
-    <?define AppName = "Curator client" ?>
+    <?define AppVendor = "Seagate Technologies LLC" ?>
+    <?define AppName = "Curator Files" ?>
     <?define AppShortName = "curator" ?>
 
     <?define AppIcon = "curator.ico" ?>
@@ -18,7 +18,7 @@
     <?define VerBuild = "1" ?>
     <?define VerStd = "$(var.VerMajor).$(var.VerMinor).$(var.VerRevision)" ?>
     <?define VerFull = "$(var.VerStd).$(var.VerBuild)" ?>
-    <?define VerDesc = "Curator Sync Client" ?>
+    <?define VerDesc = "Curator Files Sync Client" ?>
     <?define PackageDescr = "$(var.VerDesc) - Version $(var.VerFull)" ?>
 
     <?define ProductId = "{B550F35E-3467-4F71-9108-D755C34054BC}" ?>
