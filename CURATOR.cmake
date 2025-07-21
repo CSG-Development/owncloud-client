@@ -6,6 +6,7 @@ set( APPLICATION_VENDOR     "Seagate Technologies LLC" )
 set( APPLICATION_UPDATE_URL "https://updates.owncloud.com/client/" CACHE STRING "URL for updater" )
 set( APPLICATION_ICON_NAME  "curator" )
 set( APPLICATION_VIRTUALFILE_SUFFIX "curator" CACHE STRING "Virtual file suffix (not including the .)")
+set( APPLICATION_BUNDLE_NAME "Curator Files" )
 
 set( LINUX_PACKAGE_SHORTNAME "curator" )
 
