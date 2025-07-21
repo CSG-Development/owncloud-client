@@ -22,7 +22,6 @@
     <?define PackageDescr = "$(var.VerDesc) - Version $(var.VerFull)" ?>
 
     <?define ProductId = "{B550F35E-3467-4F71-9108-D755C34054BC}" ?>
-	<?define ProgramFilesProductSubDir = "Curator" ?>
-
+	<?define ProgramFilesProductSubDir = $(var.AppVendor) ?>
 	
 </Include>
