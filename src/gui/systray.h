@@ -19,7 +19,7 @@
 
 class QIcon;
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief The Systray class
@@ -40,6 +40,6 @@ private:
     void *delegate = nullptr;
 };
 
-} // namespace OCC
+} // namespace CUR
 
 #endif //SYSTRAY_H

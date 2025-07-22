@@ -20,7 +20,7 @@ namespace Ui {
 class CredentialsSetupWizardPage;
 }
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 class BasicCredentialsSetupWizardPage : public AbstractSetupWizardPage
 {

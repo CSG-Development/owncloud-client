@@ -23,7 +23,7 @@ namespace Ui {
 class AccountConfiguredWizardPage;
 }
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 class AccountConfiguredWizardPage : public AbstractSetupWizardPage
 {

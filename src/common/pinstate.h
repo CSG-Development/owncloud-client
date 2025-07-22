@@ -20,7 +20,7 @@
 
 #include <QObject>
 
-namespace OCC {
+namespace CUR {
 
 namespace PinStateEnums {
 OCSYNC_EXPORT Q_NAMESPACE

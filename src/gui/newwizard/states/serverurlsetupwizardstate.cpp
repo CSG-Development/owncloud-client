@@ -28,7 +28,7 @@ const QStringList supportedUrlSchemesC({ defaultUrlSchemeC, QStringLiteral("http
 
 }
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 Q_LOGGING_CATEGORY(lcSetupWizardServerUrlState, "gui.setupwizard.states.serverurl");
 
@@ -176,4 +176,4 @@ void ServerUrlSetupWizardState::evaluatePage()
     }
 }
 
-} // OCC::Wizard
+} // CUR::Wizard

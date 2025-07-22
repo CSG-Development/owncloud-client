@@ -20,7 +20,7 @@ namespace Ui {
 class ServerUrlSetupWizardPage;
 }
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 class ServerUrlSetupWizardPage : public AbstractSetupWizardPage
 {
     Q_OBJECT

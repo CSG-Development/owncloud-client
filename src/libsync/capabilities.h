@@ -16,7 +16,7 @@
 #ifndef CAPABILITIES_H
 #define CAPABILITIES_H
 
-#include "owncloudlib.h"
+#include "curatorlib.h"
 
 #include "common/checksumalgorithms.h"
 
@@ -24,9 +24,9 @@
 #include <QStringList>
 #include <QVersionNumber>
 
-namespace OCC {
+namespace CUR {
 
-struct OWNCLOUDSYNC_EXPORT Status
+struct CURATORSYNC_EXPORT Status
 {
     /**
      <installed>1</installed>
@@ -55,7 +55,7 @@ struct OWNCLOUDSYNC_EXPORT Status
     QString versionString() const;
 };
 
-struct OWNCLOUDSYNC_EXPORT TusSupport
+struct CURATORSYNC_EXPORT TusSupport
 {
     /**
     <tus_support>
@@ -76,7 +76,7 @@ struct OWNCLOUDSYNC_EXPORT TusSupport
     bool isValid() const;
 };
 
-struct OWNCLOUDSYNC_EXPORT SpaceSupport
+struct CURATORSYNC_EXPORT SpaceSupport
 {
     /**
         "spaces": {
@@ -91,7 +91,7 @@ struct OWNCLOUDSYNC_EXPORT SpaceSupport
     bool isValid() const;
 };
 
-struct OWNCLOUDSYNC_EXPORT FilesSharing
+struct CURATORSYNC_EXPORT FilesSharing
 {
     /**
      api_enabled": true,
@@ -110,7 +110,7 @@ struct OWNCLOUDSYNC_EXPORT FilesSharing
     bool sharing_roles = false;
 };
 
-struct OWNCLOUDSYNC_EXPORT Migration
+struct CURATORSYNC_EXPORT Migration
 {
     struct SpacesMigration
     {
@@ -124,14 +124,14 @@ struct OWNCLOUDSYNC_EXPORT Migration
 };
 
 /**
- * @brief The Capabilities class represents the capabilities of an ownCloud
+ * @brief The Capabilities class represents the capabilities of an Curator
  * server
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT Capabilities
+class CURATORSYNC_EXPORT Capabilities
 {
 public:
-    struct OWNCLOUDSYNC_EXPORT AppProviders
+    struct CURATORSYNC_EXPORT AppProviders
     {
         /**
          "app_providers": [
@@ -222,7 +222,7 @@ public:
      * Default: []
      * Possible entries: "Adler32", "MD5", "SHA1"
      */
-    QList<OCC::CheckSums::Algorithm> supportedChecksumTypes() const;
+    QList<CUR::CheckSums::Algorithm> supportedChecksumTypes() const;
 
     /**
      * The checksum algorithm that the server recommends for file uploads.
@@ -230,7 +230,7 @@ public:
      *
      * Path: checksums/preferredUploadType
      */
-    OCC::CheckSums::Algorithm preferredUploadChecksumType() const;
+    CUR::CheckSums::Algorithm preferredUploadChecksumType() const;
 
     /**
      * Helper that returns the preferredUploadChecksumType() if set, or one

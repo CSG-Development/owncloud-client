@@ -16,7 +16,7 @@
 
 #include "platform.h"
 
-namespace OCC {
+namespace CUR {
 
 class WinPlatform : public Platform
 {
@@ -34,4 +34,4 @@ private:
     void startShutdownWatcher();
 };
 
-} // namespace OCC
+} // namespace CUR

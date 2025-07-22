@@ -20,7 +20,7 @@
 
 #include <unordered_map>
 
-namespace OCC {
+namespace CUR {
 
 class FolderMan;
 class Folder;

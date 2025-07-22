@@ -32,7 +32,7 @@ auto proxyPasswordC()
     return QStringLiteral("Proxy/Password");
 }
 }
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcNetworkSettings, "gui.networksettings.gui", QtInfoMsg)
 
@@ -108,7 +108,7 @@ void NetworkSettings::loadProxySettings()
         return;
     }
     // load current proxy settings
-    OCC::ConfigFile cfgFile;
+    CUR::ConfigFile cfgFile;
     int type = cfgFile.proxyType();
     switch (type) {
     case QNetworkProxy::NoProxy:
@@ -272,4 +272,4 @@ void NetworkSettings::checkAccountLocalhost()
 }
 
 
-} // namespace OCC
+} // namespace CUR

@@ -20,7 +20,7 @@
 #include <QDir>
 #include <QFileInfo>
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 AbstractAuthenticationStrategy::~AbstractAuthenticationStrategy() { }
 

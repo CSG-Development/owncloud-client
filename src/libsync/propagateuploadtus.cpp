@@ -23,7 +23,7 @@
 #include "filesystem.h"
 #include "httplogger.h"
 #include "networkjobs.h"
-#include "owncloudpropagator_p.h"
+#include "curatorpropagator_p.h"
 #include "propagateremotedelete.h"
 #include "propagateupload.h"
 #include "propagatorjobs.h"
@@ -48,7 +48,7 @@ void setTusVersionHeader(QNetworkRequest &req){
 }
 }
 
-namespace OCC {
+namespace CUR {
 // be very verbose for now
 Q_LOGGING_CATEGORY(lcPropagateUploadTUS, "sync.propagator.upload.tus", QtDebugMsg)
 
@@ -108,7 +108,7 @@ QNetworkRequest PropagateUploadFileTUS::prepareRequest(const quint64 &chunkSize)
     return request;
 }
 
-PropagateUploadFileTUS::PropagateUploadFileTUS(OwncloudPropagator *propagator, const SyncFileItemPtr &item)
+PropagateUploadFileTUS::PropagateUploadFileTUS(CuratorPropagator *propagator, const SyncFileItemPtr &item)
     : PropagateUploadFileCommon(propagator, item)
 {
 }

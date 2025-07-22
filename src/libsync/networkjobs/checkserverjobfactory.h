@@ -18,9 +18,9 @@
 
 #include <QJsonObject>
 
-namespace OCC {
+namespace CUR {
 
-class OWNCLOUDSYNC_EXPORT CheckServerJobResult
+class CURATORSYNC_EXPORT CheckServerJobResult
 {
 
 public:
@@ -36,7 +36,7 @@ private:
 };
 
 
-class OWNCLOUDSYNC_EXPORT CheckServerJobFactory : public AbstractCoreJobFactory
+class CURATORSYNC_EXPORT CheckServerJobFactory : public AbstractCoreJobFactory
 {
 public:
     using AbstractCoreJobFactory::AbstractCoreJobFactory;
@@ -53,6 +53,6 @@ private:
     int _maxRedirectsAllowed = 5;
 };
 
-} // OCC
+} // CUR
 
-Q_DECLARE_METATYPE(OCC::CheckServerJobResult)
+Q_DECLARE_METATYPE(CUR::CheckServerJobResult)

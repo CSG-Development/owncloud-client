@@ -1,6 +1,6 @@
 #include "askexperimentalvirtualfilesfeaturemessagebox.h"
 
-namespace OCC {
+namespace CUR {
 
 AskExperimentalVirtualFilesFeatureMessageBox::AskExperimentalVirtualFilesFeatureMessageBox(QWidget *parent)
     : QMessageBox(QMessageBox::Warning,

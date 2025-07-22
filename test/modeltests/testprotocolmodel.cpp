@@ -17,7 +17,7 @@
 #include <QAbstractItemModelTester>
 #include <folder.h>
 
-namespace OCC {
+namespace CUR {
 
 class TestProtocolModel : public QObject
 {
@@ -103,5 +103,5 @@ private Q_SLOTS:
 };
 }
 
-QTEST_GUILESS_MAIN(OCC::TestProtocolModel)
+QTEST_GUILESS_MAIN(CUR::TestProtocolModel)
 #include "testprotocolmodel.moc"

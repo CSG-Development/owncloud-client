@@ -17,7 +17,7 @@
 
 #include <qglobal.h>
 
-namespace OCC {
+namespace CUR {
 
 /**
  * Possible permissions, must match the server permission constants
@@ -33,6 +33,6 @@ enum SharePermission {
 Q_DECLARE_FLAGS(SharePermissions, SharePermission)
 Q_DECLARE_OPERATORS_FOR_FLAGS(SharePermissions)
 
-} // namespace OCC
+} // namespace CUR
 
 #endif

@@ -22,7 +22,7 @@
 #include <QFileInfo>
 #include <QLoggingCategory>
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcStatusTracker, "sync.statustracker", QtInfoMsg)
 

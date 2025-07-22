@@ -17,7 +17,7 @@
 
 #include <QCoreApplication>
 
-namespace OCC {
+namespace CUR {
 
 void Utility::startShellIntegration()
 {
@@ -25,11 +25,11 @@ void Utility::startShellIntegration()
 
 QString Utility::socketApiSocketPath()
 {
-    return QLatin1String("\\\\.\\pipe\\") + QLatin1String("ownCloud-") + qEnvironmentVariable("USERNAME");
+    return QLatin1String("\\\\.\\pipe\\") + QLatin1String("Curator-") + qEnvironmentVariable("USERNAME");
     // TODO: once the windows extension supports multiple
     // client connections, switch back to the theme name
     // See issue #2388
     // + Theme::instance()->appName();
 }
 
-} // namespace OCC
+} // namespace CUR

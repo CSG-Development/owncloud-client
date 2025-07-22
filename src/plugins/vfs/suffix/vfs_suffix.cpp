@@ -21,7 +21,7 @@
 #include "syncfileitem.h"
 #include "theme.h"
 
-namespace OCC {
+namespace CUR {
 
 VfsSuffix::VfsSuffix(QObject *parent)
     : Vfs(parent)
@@ -44,8 +44,8 @@ QString VfsSuffix::fileSuffix() const
 
 void VfsSuffix::startImpl(const VfsSetupParams &params)
 {
-    // It is unsafe for the database to contain any ".owncloud" file entries
-    // that are not marked as a virtual file. These could be real .owncloud
+    // It is unsafe for the database to contain any ".curator" file entries
+    // that are not marked as a virtual file. These could be real .curator
     // files that were synced before vfs was enabled.
     QByteArrayList toWipe;
     params.journal->getFilesBelowPath("", [&toWipe](const SyncJournalFileRecord &rec) {
@@ -80,7 +80,7 @@ Result<Vfs::ConvertToPlaceholderResult, QString> VfsSuffix::updateMetadata(const
         if (pin && *pin != PinState::Inherited) {
             std::ignore = setPinState(item._renameTarget, *pin);
         }
-        if (item._file != item._renameTarget) { // can be the same when renaming foo -> foo.owncloud to dehydrate
+        if (item._file != item._renameTarget) { // can be the same when renaming foo -> foo.curator to dehydrate
             QString error;
             if (!FileSystem::remove(params().filesystemPath + item._file, &error)) {
                 return error;
@@ -151,4 +151,4 @@ QString VfsSuffix::underlyingFileName(const QString &fileName) const
     }
 }
 
-} // namespace OCC
+} // namespace CUR

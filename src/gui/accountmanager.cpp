@@ -87,7 +87,7 @@ auto capabilitesC()
 }
 
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcAccountManager, "gui.account.manager", QtInfoMsg)
 
@@ -142,12 +142,12 @@ bool AccountManager::restoreFromLegacySettings()
     // if the settings file could not be opened, the childKeys list is empty
     // then try to load settings from a very old place
     if (settings->childKeys().isEmpty()) {
-        // Now try to open the original ownCloud settings to see if they exist.
+        // Now try to open the original Curator settings to see if they exist.
         QString oCCfgFile = QDir::fromNativeSeparators(settings->fileName());
-        // replace the last two segments with ownCloud/owncloud.cfg
+        // replace the last two segments with Curator/curator.cfg
         oCCfgFile = oCCfgFile.left(oCCfgFile.lastIndexOf(QLatin1Char('/')));
         oCCfgFile = oCCfgFile.left(oCCfgFile.lastIndexOf(QLatin1Char('/')));
-        oCCfgFile += QLatin1String("/ownCloud/owncloud.cfg");
+        oCCfgFile += QLatin1String("/Curator/curator.cfg");
 
         qCInfo(lcAccountManager) << logPrefix
                                  << "checking old config " << oCCfgFile;
@@ -158,7 +158,7 @@ bool AccountManager::restoreFromLegacySettings()
         QFileInfo fi(oCCfgFile);
         if (fi.isReadable()) {
             auto oCSettings = std::make_unique<QSettings>(oCCfgFile, QSettings::IniFormat);
-            oCSettings->beginGroup(QStringLiteral("ownCloud"));
+            oCSettings->beginGroup(QStringLiteral("Curator"));
 
             // Check the theme url to see if it is the same url that the oC config was for
             QString overrideUrl = Theme::instance()->overrideServerUrlV2();
@@ -172,7 +172,7 @@ bool AccountManager::restoreFromLegacySettings()
                 }
 
                 // in case the urls are equal reset the settings object to read from
-                // the ownCloud settings object
+                // the Curator settings object
                 qCInfo(lcAccountManager) << logPrefix
                                          << "Migrate oC config if " << oCUrl << " == " << overrideUrl << ":"
                                          << (oCUrl == overrideUrl ? "Yes" : "No");
@@ -207,7 +207,7 @@ void AccountManager::saveAccount(Account *account, bool saveCredentials)
     qCDebug(lcAccountManager) << "Saving account" << account->url().toString();
     auto settings = ConfigFile::settingsWithGroup(accountsC());
     settings->setValue(versionC(), ConfigFile::UnusedLegacySettingsVersionNumber);
-    settings->beginGroup(account->id());
+    settings->beginGroup(account->uuid().toString());
 
     settings->setValue(versionC(), ConfigFile::UnusedLegacySettingsVersionNumber);
     settings->setValue(urlC(), account->_url.toString());
@@ -325,7 +325,7 @@ AccountStatePtr AccountManager::account(const QUuid uuid) {
 
 AccountStatePtr AccountManager::addAccount(const AccountPtr &newAccount)
 {
-    auto id = newAccount->id();
+    auto id = newAccount->uuid().toString();
     if (id.isEmpty() || !isAccountIdAvailable(id)) {
         id = generateFreeAccountId();
     }
@@ -349,7 +349,7 @@ void AccountManager::deleteAccount(AccountStatePtr account)
     account->account()->credentialManager()->clear();
 
     auto settings = ConfigFile::settingsWithGroup(accountsC());
-    settings->remove(account->account()->id());
+    settings->remove(account->account()->uuid().toString());
 
     emit accountRemoved(account);
     account->deleteLater();
@@ -372,7 +372,7 @@ void AccountManager::shutdown()
 bool AccountManager::isAccountIdAvailable(const QString &id) const
 {
     for (const auto &acc : _accounts) {
-        if (acc->account()->id() == id) {
+        if (acc->account()->uuid().toString() == id) {
             return false;
         }
     }

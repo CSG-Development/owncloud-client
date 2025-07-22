@@ -46,7 +46,7 @@ int numberOfSyncJournals(const QString &path)
     return QDir(path).entryList({ QStringLiteral(".sync_*.db"), QStringLiteral("._sync_*.db") }, QDir::Hidden | QDir::Files).size();
 }
 
-QString makeLegacyDbName(const OCC::FolderDefinition &def, const OCC::AccountPtr &account)
+QString makeLegacyDbName(const CUR::FolderDefinition &def, const CUR::AccountPtr &account)
 {
     // ensure https://demo.owncloud.org/ matches https://demo.owncloud.org
     // the empty path was the legacy formating before 2.9
@@ -55,11 +55,11 @@ QString makeLegacyDbName(const OCC::FolderDefinition &def, const OCC::AccountPtr
         legacyUrl.setPath(QString());
     }
     const QString key = QStringLiteral("%1@%2:%3").arg(account->credentials()->user(), legacyUrl.toString(), def.targetPath());
-    return OCC::SyncJournalDb::makeDbName(def.localPath(), QString::fromUtf8(QCryptographicHash::hash(key.toUtf8(), QCryptographicHash::Md5).left(6).toHex()));
+    return CUR::SyncJournalDb::makeDbName(def.localPath(), QString::fromUtf8(QCryptographicHash::hash(key.toUtf8(), QCryptographicHash::Md5).left(6).toHex()));
 }
 }
 
-namespace OCC {
+namespace CUR {
 Q_LOGGING_CATEGORY(lcFolderMan, "gui.folder.manager", QtInfoMsg)
 
 void TrayOverallStatusResult::addResult(Folder *f)
@@ -176,7 +176,7 @@ std::optional<qsizetype> FolderMan::setupFolders()
     qCInfo(lcFolderMan) << "Setup folders from settings file";
 
     for (const auto &account : AccountManager::instance()->accounts()) {
-        const auto id = account->account()->id();
+        const auto id = account->account()->uuid().toString();
         if (!accountsWithSettings.contains(id)) {
             continue;
         }
@@ -765,7 +765,7 @@ QString FolderMan::checkPathValidityRecursive(const QString &path)
 
 QString FolderMan::checkPathValidityForNewFolder(const QString &path) const
 {
-    // check if the local directory isn't used yet in another ownCloud sync
+    // check if the local directory isn't used yet in another Curator sync
     const auto cs = Utility::fsCaseSensitivity();
 
     const QString userDir = QDir::cleanPath(canonicalPath(path)) + QLatin1Char('/');
@@ -932,7 +932,7 @@ Folder *FolderMan::addFolderFromFolderWizardResult(const AccountStatePtr &accoun
     return f;
 }
 
-QString FolderMan::suggestSyncFolder(const QUrl &server, const QString &displayName)
+QString FolderMan::suggestSyncFolder(const QUrl &/*server*/, const QString &/*displayName*/)
 {
     return FolderMan::instance()->findGoodPathForNewSyncFolder(QDir::homePath(), Theme::instance()->appName());
 }
@@ -956,4 +956,4 @@ std::unique_ptr<FolderMan> FolderMan::createInstance()
     return std::unique_ptr<FolderMan>(_instance);
 }
 
-} // namespace OCC
+} // namespace CUR

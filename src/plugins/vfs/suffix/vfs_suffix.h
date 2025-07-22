@@ -19,7 +19,7 @@
 #include "common/plugin.h"
 #include "common/vfs.h"
 
-namespace OCC {
+namespace CUR {
 
 class VfsSuffix : public Vfs
 {
@@ -67,8 +67,8 @@ protected:
 class SuffixVfsPluginFactory : public QObject, public DefaultPluginFactory<VfsSuffix>
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.owncloud.PluginFactory" FILE "vfspluginmetadata.json")
-    Q_INTERFACES(OCC::PluginFactory)
+    Q_PLUGIN_METADATA(IID "org.curator.PluginFactory" FILE "vfspluginmetadata.json")
+    Q_INTERFACES(CUR::PluginFactory)
 };
 
-} // namespace OCC
+} // namespace CUR

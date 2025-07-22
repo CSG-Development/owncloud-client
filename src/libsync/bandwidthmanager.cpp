@@ -12,7 +12,7 @@
  * for more details.
  */
 
-#include "owncloudpropagator.h"
+#include "curatorpropagator.h"
 #include "propagatedownload.h"
 #include "propagateupload.h"
 #include "propagatorjobs.h"
@@ -22,7 +22,7 @@
 #include <QTimer>
 #include <QObject>
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcBandwidthManager, "sync.bandwidthmanager", QtInfoMsg)
 
@@ -39,7 +39,7 @@ static qint64 relativeLimitMeasuringTimerIntervalMsec = 1000 * 2;
 //  * For relative limiting, do less measuring and more delaying+giving quota
 //  * For relative limiting, smoothen measurements
 
-BandwidthManager::BandwidthManager(OwncloudPropagator *p)
+BandwidthManager::BandwidthManager(CuratorPropagator *p)
     : QObject(p)
     , _propagator(p)
     , _relativeLimitCurrentMeasuredDevice(nullptr)

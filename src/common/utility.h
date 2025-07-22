@@ -38,7 +38,7 @@
 
 class QSettings;
 
-namespace OCC {
+namespace CUR {
 
 class SyncJournal;
 
@@ -372,7 +372,7 @@ constexpr bool Utility::isBSD()
     return false;
 #endif
 }
-} // OCC namespace
+} // CUR namespace
 
 #endif // UTILITY_H
 

@@ -15,10 +15,10 @@
 
 #pragma once
 
-#include "owncloudpropagator.h"
+#include "curatorpropagator.h"
 #include <QFile>
 
-namespace OCC {
+namespace CUR {
 
 /**
  * Tags for checksum header.
@@ -35,7 +35,7 @@ class PropagateLocalRemove : public PropagateItemJob
 {
     Q_OBJECT
 public:
-    PropagateLocalRemove(OwncloudPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateLocalRemove(CuratorPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
     {
     }
@@ -54,7 +54,7 @@ class PropagateLocalMkdir : public PropagateItemJob
 {
     Q_OBJECT
 public:
-    PropagateLocalMkdir(OwncloudPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateLocalMkdir(CuratorPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
         , _deleteExistingFile(false)
     {
@@ -81,7 +81,7 @@ class PropagateLocalRename : public PropagateItemJob
 {
     Q_OBJECT
 public:
-    PropagateLocalRename(OwncloudPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateLocalRename(CuratorPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
     {
     }

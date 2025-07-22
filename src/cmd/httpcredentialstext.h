@@ -19,7 +19,7 @@
 
 #include "creds/httpcredentials.h"
 
-class HttpCredentialsText : public OCC::HttpCredentials
+class HttpCredentialsText : public CUR::HttpCredentials
 {
     Q_OBJECT
 public:

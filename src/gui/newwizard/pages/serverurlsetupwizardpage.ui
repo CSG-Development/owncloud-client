@@ -127,7 +127,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="OCC::PostfixLineEdit" name="urlLineEdit">
+      <widget class="CUR::PostfixLineEdit" name="urlLineEdit">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -183,7 +183,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>OCC::PostfixLineEdit</class>
+   <class>CUR::PostfixLineEdit</class>
    <extends>QLineEdit</extends>
    <header>postfixlineedit.h</header>
   </customwidget>

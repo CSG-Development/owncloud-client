@@ -15,7 +15,7 @@
 
 #include <QString>
 
-namespace OCC {
+namespace CUR {
 /**
  * @brief Open the file manager with the specified file pre-selected
  * @ingroup gui

@@ -21,7 +21,7 @@
 
 class QJsonDocument;
 
-namespace OCC {
+namespace CUR {
 
 class ServerNotificationHandler : public QObject
 {

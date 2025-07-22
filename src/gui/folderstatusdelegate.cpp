@@ -32,7 +32,7 @@ namespace {
 const int barHeightC = 7;
 }
 
-namespace OCC {
+namespace CUR {
 
 FolderStatusDelegate::FolderStatusDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -330,4 +330,4 @@ void FolderStatusDelegate::updateFont(const QFont &font)
 }
 
 
-} // namespace OCC
+} // namespace CUR

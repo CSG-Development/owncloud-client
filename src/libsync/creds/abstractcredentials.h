@@ -19,16 +19,16 @@
 
 #include "accessmanager.h"
 #include "accountfwd.h"
-#include "owncloudlib.h"
+#include "curatorlib.h"
 #include <csync.h>
 
 class QNetworkAccessManager;
 class QNetworkReply;
-namespace OCC {
+namespace CUR {
 
 class AbstractNetworkJob;
 
-class OWNCLOUDSYNC_EXPORT AbstractCredentials : public QObject
+class CURATORSYNC_EXPORT AbstractCredentials : public QObject
 {
     Q_OBJECT
 
@@ -112,6 +112,6 @@ protected:
     bool _wasFetched;
 };
 
-} // namespace OCC
+} // namespace CUR
 
 #endif

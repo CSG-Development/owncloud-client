@@ -16,7 +16,7 @@
 #pragma once
 #include <QStyledItemDelegate>
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief The FolderStatusDelegate class
@@ -54,4 +54,4 @@ private:
     bool _ready = false;
 };
 
-} // namespace OCC
+} // namespace CUR

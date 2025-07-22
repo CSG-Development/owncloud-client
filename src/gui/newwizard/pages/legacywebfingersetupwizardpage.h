@@ -20,7 +20,7 @@ namespace Ui {
 class LegacyWebFingerSetupWizardPage;
 }
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 class LegacyWebFingerSetupWizardPage : public AbstractSetupWizardPage
 {

@@ -21,7 +21,7 @@
 
 #include "ocsynclib.h"
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief The SyncFileStatus class
@@ -67,8 +67,8 @@ inline bool operator!=(const SyncFileStatus &a, const SyncFileStatus &b)
     return !(a == b);
 }
 }
-OCSYNC_EXPORT QDebug &operator<<(QDebug &debug, const OCC::SyncFileStatus &item);
+OCSYNC_EXPORT QDebug &operator<<(QDebug &debug, const CUR::SyncFileStatus &item);
 
-Q_DECLARE_METATYPE(OCC::SyncFileStatus)
+Q_DECLARE_METATYPE(CUR::SyncFileStatus)
 
 #endif // SYNCFILESTATUS_H

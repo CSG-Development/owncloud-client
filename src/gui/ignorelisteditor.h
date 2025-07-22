@@ -19,7 +19,7 @@
 
 class QListWidgetItem;
 
-namespace OCC {
+namespace CUR {
 
 namespace Ui {
     class IgnoreListEditor;
@@ -51,6 +51,6 @@ private:
     Ui::IgnoreListEditor *ui;
 };
 
-} // namespace OCC
+} // namespace CUR
 
 #endif // IGNORELISTEDITOR_H

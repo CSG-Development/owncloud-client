@@ -60,7 +60,7 @@ auto RFC1123PatternC()
     return QStringLiteral("ddd, dd MMM yyyy HH:mm:ss 'GMT'");
 }
 }
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcUtility, "sync.utility")
 
@@ -152,7 +152,10 @@ QByteArray Utility::userAgentString()
 {
     return QStringLiteral("Mozilla/5.0 (%1) mirall/%2 (%3, %4-%5 ClientArchitecture: %6 OsArchitecture: %7)")
         .arg(platform(),
-            OCC::Version::displayString(),
+            // TODO: Temporarily change the version number to ensure connection to the server.
+            // Should be fixed as soon as the server version changes.
+            //CUR::Version::displayString(),
+            QStringLiteral("5.3.4"),
             // accessing the theme to fetch the string is rather difficult
             // since this is only needed server-side to identify clients, the app name (as of 2.9, the short name) is good enough
             qApp->applicationName(),
@@ -220,7 +223,7 @@ void Utility::usleep(int usec)
 // This can be overriden from the tests
 OCSYNC_EXPORT bool fsCasePreserving_override = []() -> bool {
     static bool ok = false;
-    static int env = qEnvironmentVariableIntValue("OWNCLOUD_TEST_CASE_PRESERVING", &ok);
+    static int env = qEnvironmentVariableIntValue("CURATOR_TEST_CASE_PRESERVING", &ok);
     if (ok) {
         return env;
     }
@@ -656,7 +659,7 @@ QString Utility::formatRFC1123Date(const QDateTime &date)
     return date.toUTC().toString(RFC1123PatternC());
 }
 
-} // namespace OCC
+} // namespace CUR
 
 QDebug operator<<(QDebug debug, nanoseconds in)
 {

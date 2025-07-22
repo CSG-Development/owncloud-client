@@ -18,7 +18,7 @@
 #include <QSet>
 #include <QString>
 
-namespace OCC {
+namespace CUR {
 
 namespace Translations {
 
@@ -44,6 +44,6 @@ namespace Translations {
 
 } // namespace Translations
 
-} // namespace OCC
+} // namespace CUR
 
 #endif // TRANSLATIONSMANAGER_H

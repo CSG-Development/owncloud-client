@@ -17,7 +17,7 @@
 #include "theme.h"
 #include "guiutility.h"
 
-namespace OCC {
+namespace CUR {
 
 AboutDialog::AboutDialog(QWidget *parent)
     : QDialog(parent)

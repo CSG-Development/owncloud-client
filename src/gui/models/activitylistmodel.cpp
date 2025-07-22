@@ -33,7 +33,7 @@
 #include "activitydata.h"
 #include "activitylistmodel.h"
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcActivity, "gui.activity", QtInfoMsg)
 

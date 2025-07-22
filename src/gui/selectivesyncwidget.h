@@ -24,7 +24,7 @@ class QTreeWidgetItem;
 class QTreeWidget;
 class QNetworkReply;
 class QLabel;
-namespace OCC {
+namespace CUR {
 
 class Folder;
 

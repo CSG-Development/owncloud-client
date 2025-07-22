@@ -12,7 +12,7 @@ endif()
 # Pass the info through the xcodebuild command line and make sure that the project uses
 # those user-defined settings to build the plist.
 add_custom_target( mac_overlayplugin ALL
-    xcodebuild -project ${CMAKE_SOURCE_DIR}/shell_integration/MacOSX/OwnCloudFinderSync/OwnCloudFinderSync.xcodeproj
+    xcodebuild -project ${CMAKE_SOURCE_DIR}/shell_integration/MacOSX/CuratorFinderSync/CuratorFinderSync.xcodeproj
         -target FinderSyncExt -configuration "${XCODE_CONFIG}" "SYMROOT=${CMAKE_CURRENT_BINARY_DIR}"
         "OC_OEM_SHARE_ICNS=${OC_OEM_SHARE_ICNS}"
         "OC_APPLICATION_NAME=${APPLICATION_NAME}"
@@ -20,9 +20,9 @@ add_custom_target( mac_overlayplugin ALL
         "OC_SOCKETAPI_TEAM_IDENTIFIER_PREFIX=${SOCKETAPI_TEAM_IDENTIFIER_PREFIX}"
     COMMENT building Mac Overlay icons
     VERBATIM)
-add_dependencies(mac_overlayplugin owncloud) # for the ownCloud.icns to be generated
+add_dependencies(mac_overlayplugin curator) # for the Curator.icns to be generated
 add_custom_command(TARGET mac_overlayplugin POST_BUILD COMMAND ${CMAKE_COMMAND}
-    ARGS -E copy_directory "${CMAKE_CURRENT_BINARY_DIR}/${XCODE_CONFIG}/FinderSyncExt.appex" "$<TARGET_FILE_DIR:owncloud>/../PlugIns/FinderSyncExt.appex" MAIN_DEPENDENCY "${mac_overlayplugin}")
+    ARGS -E copy_directory "${CMAKE_CURRENT_BINARY_DIR}/${XCODE_CONFIG}/FinderSyncExt.appex" "$<TARGET_FILE_DIR:curator>/../PlugIns/FinderSyncExt.appex" MAIN_DEPENDENCY "${mac_overlayplugin}")
 
 endif()
 

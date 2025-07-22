@@ -23,7 +23,7 @@
 
 Q_LOGGING_CATEGORY(lcFetchUserInfoJob, "sync.networkjob.fetchuserinfojob", QtInfoMsg);
 
-namespace OCC {
+namespace CUR {
 
 FetchUserInfoJobFactory FetchUserInfoJobFactory::fromBasicAuthCredentials(QNetworkAccessManager *nam, const QString &username, const QString &password)
 {
@@ -86,4 +86,4 @@ CoreJob *FetchUserInfoJobFactory::startJob(const QUrl &url, QObject *parent)
     return job;
 }
 
-} // OCC
+} // CUR

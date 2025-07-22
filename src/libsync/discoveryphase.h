@@ -30,7 +30,7 @@
 
 class ExcludedFiles;
 
-namespace OCC {
+namespace CUR {
 
 enum class LocalDiscoveryStyle {
     FilesystemOnly, //< read all local data from the filesystem
@@ -52,7 +52,7 @@ struct RemoteInfo
     QString etag;
     QByteArray fileId;
     QByteArray checksumHeader;
-    OCC::RemotePermissions remotePerm;
+    CUR::RemotePermissions remotePerm;
     time_t modtime = 0;
     int64_t size = 0;
     bool isDirectory = false;
@@ -86,7 +86,7 @@ class DiscoverySingleLocalDirectoryJob : public QObject, public QRunnable
 {
     Q_OBJECT
 public:
-    explicit DiscoverySingleLocalDirectoryJob(const AccountPtr &account, const QString &localPath, OCC::Vfs *vfs, QObject *parent = nullptr);
+    explicit DiscoverySingleLocalDirectoryJob(const AccountPtr &account, const QString &localPath, CUR::Vfs *vfs, QObject *parent = nullptr);
 
     void run() override;
 signals:
@@ -100,7 +100,7 @@ private slots:
 private:
     QString _localPath;
     AccountPtr _account;
-    OCC::Vfs* _vfs;
+    CUR::Vfs* _vfs;
 public:
 };
 

@@ -29,7 +29,7 @@
 class QJsonDocument;
 class QJsonObject;
 
-namespace OCC {
+namespace CUR {
 
 Q_DECLARE_LOGGING_CATEGORY(lcSharing)
 
@@ -91,6 +91,6 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(QSharedPointer<OCC::Sharee>)
+Q_DECLARE_METATYPE(QSharedPointer<CUR::Sharee>)
 
 #endif //SHAREE_H

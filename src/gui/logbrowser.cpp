@@ -37,7 +37,7 @@
 
 #include "resources/resources.h"
 
-namespace OCC {
+namespace CUR {
 
 // ==============================================================================
 

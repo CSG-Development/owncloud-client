@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>OCC::GeneralSettings</class>
- <widget class="QWidget" name="OCC::GeneralSettings">
+ <class>CUR::GeneralSettings</class>
+ <widget class="QWidget" name="CUR::GeneralSettings">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -340,7 +340,7 @@
          <cursorShape>ArrowCursor</cursorShape>
         </property>
         <property name="text">
-         <string notr="true">Copyright ownCloud GmbH</string>
+         <string notr="true">Copyright Seagate Technologies LLC</string>
         </property>
         <property name="textInteractionFlags">
          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>

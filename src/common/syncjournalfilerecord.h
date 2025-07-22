@@ -27,7 +27,7 @@
 #include "remotepermissions.h"
 #include "common/utility.h"
 
-namespace OCC {
+namespace CUR {
 
 class SyncFileItem;
 

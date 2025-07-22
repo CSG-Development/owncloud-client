@@ -2,7 +2,7 @@
 # that create directories for the build.
 
 
-include(OCAddVfsPlugin)
+include(CUAddVfsPlugin)
 
 foreach(vfsPlugin ${VIRTUAL_FILE_SYSTEM_PLUGINS})
     set(vfsPluginPath ${vfsPlugin})

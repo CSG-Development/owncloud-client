@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QRadioButton>
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 Navigation::Navigation(QWidget *parent)
     : QWidget(parent)

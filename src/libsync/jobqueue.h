@@ -13,17 +13,17 @@
  */
 #pragma once
 
-#include "owncloudlib.h"
+#include "curatorlib.h"
 
 #include <QPointer>
 #include <vector>
 
-namespace OCC {
+namespace CUR {
 
 class AbstractNetworkJob;
 class Account;
 
-class OWNCLOUDSYNC_EXPORT JobQueue
+class CURATORSYNC_EXPORT JobQueue
 {
 public:
     JobQueue(Account *account);
@@ -62,7 +62,7 @@ private:
     friend class JobQueueGuard;
 };
 
-class OWNCLOUDSYNC_EXPORT JobQueueGuard
+class CURATORSYNC_EXPORT JobQueueGuard
 {
 public:
     JobQueueGuard(JobQueue *queue);

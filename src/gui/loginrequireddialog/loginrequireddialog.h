@@ -22,7 +22,7 @@ namespace Ui {
 class LoginRequiredDialog;
 }
 
-namespace OCC {
+namespace CUR {
 
 /**
  * This dialog is used to ask users to re-authenticate in case an existing account's credentials no longer work or the user logged out.
@@ -63,4 +63,4 @@ private:
     ::Ui::LoginRequiredDialog *_ui;
 };
 
-} // OCC
+} // CUR

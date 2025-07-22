@@ -33,7 +33,7 @@
 
 using namespace std::chrono_literals;
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcConnectionValidator, "sync.connectionvalidator", QtInfoMsg)
 
@@ -64,7 +64,7 @@ void ConnectionValidator::checkServer(ConnectionValidator::ValidationMode mode)
 {
     _mode = mode;
     if (!_account) {
-        _errors << tr("No ownCloud account configured");
+        _errors << tr("No Curator account configured");
         reportResult(NotConfigured);
         return;
     }
@@ -134,6 +134,9 @@ void ConnectionValidator::slotCheckServerAndAuth()
             case QNetworkReply::TooManyRedirectsError:
                 reportResult(MaintenanceMode);
                 return;
+            case QNetworkReply::ContentAccessDenied:
+                reportResult(ClientUnsupported);
+                return;
             default:
                 break;
             }
@@ -153,7 +156,7 @@ void ConnectionValidator::slotCheckServerAndAuth()
 void ConnectionValidator::slotStatusFound(const QUrl &url, const QJsonObject &info)
 {
     // status.php was found.
-    qCInfo(lcConnectionValidator) << "** Application: ownCloud found: "
+    qCInfo(lcConnectionValidator) << "** Application: Curator found: "
                                   << url << " with version "
                                   << info.value(QLatin1String("versionstring")).toString();
 
@@ -215,7 +218,9 @@ void ConnectionValidator::slotAuthFailed(QNetworkReply *reply)
         qCWarning(lcConnectionValidator) << "******** Password is wrong!" << reply->error() << job;
         _errors << tr("The provided credentials are not correct");
         stat = CredentialsWrong;
-
+    } else if (reply->error() == QNetworkReply::ContentAccessDenied) {
+        stat = ClientUnsupported;
+        _errors << extractErrorMessage(job->reply()->readAll());
     } else if (reply->error() != QNetworkReply::NoError) {
         _errors << job->errorStringParsingBody();
 
@@ -279,4 +284,4 @@ void ConnectionValidator::reportResult(Status status)
     }
 }
 
-} // namespace OCC
+} // namespace CUR

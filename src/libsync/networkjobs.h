@@ -24,7 +24,7 @@
 
 class QUrl;
 
-namespace OCC {
+namespace CUR {
 
 struct HttpError
 {
@@ -39,7 +39,7 @@ using HttpResult = Result<T, HttpError>;
  * @brief The EntityExistsJob class
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT EntityExistsJob : public AbstractNetworkJob
+class CURATORSYNC_EXPORT EntityExistsJob : public AbstractNetworkJob
 {
     Q_OBJECT
 public:
@@ -57,7 +57,7 @@ private slots:
  * @brief The PropfindJob class parser
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT LsColXMLParser : public QObject
+class CURATORSYNC_EXPORT LsColXMLParser : public QObject
 {
     Q_OBJECT
 public:
@@ -72,7 +72,7 @@ signals:
     void finishedWithoutError();
 };
 
-class OWNCLOUDSYNC_EXPORT PropfindJob : public AbstractNetworkJob
+class CURATORSYNC_EXPORT PropfindJob : public AbstractNetworkJob
 {
     Q_OBJECT
 public:
@@ -120,7 +120,7 @@ private:
  *
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT AvatarJob : public AbstractNetworkJob
+class CURATORSYNC_EXPORT AvatarJob : public AbstractNetworkJob
 {
     Q_OBJECT
 public:
@@ -150,7 +150,7 @@ private slots:
  * @brief The MkColJob class
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT MkColJob : public AbstractNetworkJob
+class CURATORSYNC_EXPORT MkColJob : public AbstractNetworkJob
 {
     Q_OBJECT
     HeaderMap _extraHeaders;
@@ -171,7 +171,7 @@ private:
 /**
  * @brief The RequestEtagJob class
  */
-class OWNCLOUDSYNC_EXPORT RequestEtagJob : public PropfindJob
+class CURATORSYNC_EXPORT RequestEtagJob : public PropfindJob
 {
     Q_OBJECT
 public:
@@ -187,7 +187,7 @@ private:
  * @brief Checks with auth type to use for a server
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT DetermineAuthTypeJob : public AbstractNetworkJob
+class CURATORSYNC_EXPORT DetermineAuthTypeJob : public AbstractNetworkJob
 {
     Q_OBJECT
 public:
@@ -213,7 +213,7 @@ protected Q_SLOTS:
  *
  * Primarily adds timeout and redirection handling.
  */
-class OWNCLOUDSYNC_EXPORT SimpleNetworkJob : public AbstractNetworkJob
+class CURATORSYNC_EXPORT SimpleNetworkJob : public AbstractNetworkJob
 {
     Q_OBJECT
 public:
@@ -258,10 +258,10 @@ private:
  * Note: targetFun is guaranteed to be called only through the event
  * loop and never directly.
  */
-void OWNCLOUDSYNC_EXPORT fetchPrivateLinkUrl(AccountPtr account, const QUrl &baseUrl, const QString &remotePath, QObject *target,
+void CURATORSYNC_EXPORT fetchPrivateLinkUrl(AccountPtr account, const QUrl &baseUrl, const QString &remotePath, QObject *target,
     const std::function<void(const QUrl &url)> &targetFun);
 
-} // namespace OCC
+} // namespace CUR
 
 
 #endif // NETWORKJOBS_H

@@ -1,2 +1,2 @@
-owncloud_add_test(ActivityModel)
-owncloud_add_test(ProtocolModel)
+curator_add_test(ActivityModel)
+curator_add_test(ProtocolModel)

@@ -44,7 +44,7 @@ class QNetworkReply;
 class QUrl;
 class AccessManager;
 
-namespace OCC {
+namespace CUR {
 
 class CredentialManager;
 class AbstractCredentials;
@@ -66,7 +66,7 @@ class ResourcesCache;
  * The Account has a name and url. It also has information about credentials,
  * SSL errors and certificates.
  */
-class OWNCLOUDSYNC_EXPORT Account : public QObject
+class CURATORSYNC_EXPORT Account : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString id MEMBER _id)
@@ -274,9 +274,9 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(OCC::AccountPtr)
+Q_DECLARE_METATYPE(CUR::AccountPtr)
 
 
-QDebug OWNCLOUDSYNC_EXPORT operator<<(QDebug debug, const OCC::Account *job);
+QDebug CURATORSYNC_EXPORT operator<<(QDebug debug, const CUR::Account *job);
 
 #endif //SERVERCONNECTION_H

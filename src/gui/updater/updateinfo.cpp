@@ -9,7 +9,7 @@
 #include <QtCore/QtDebug>
 #include <QtCore/QFile>
 
-namespace OCC {
+namespace CUR {
 
 void UpdateInfo::setVersion(const QString &v)
 {
@@ -53,8 +53,8 @@ QString UpdateInfo::downloadUrl() const
 
 UpdateInfo UpdateInfo::parseElement(const QDomElement &element, bool *ok)
 {
-    if (element.tagName() != QLatin1String("owncloudclient")) {
-        qCCritical(lcUpdater) << "Expected 'owncloudclient', got '" << element.tagName() << "'.";
+    if (element.tagName() != QLatin1String("curatorclient")) {
+        qCCritical(lcUpdater) << "Expected 'curatorclient', got '" << element.tagName() << "'.";
         if (ok)
             *ok = false;
         return UpdateInfo();
@@ -105,4 +105,4 @@ UpdateInfo UpdateInfo::parseString(const QString &xml, bool *ok)
     return c;
 }
 
-} // namespace OCC
+} // namespace CUR

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>OCC::LogBrowser</class>
- <widget class="QDialog" name="OCC::LogBrowser">
+ <class>CUR::LogBrowser</class>
+ <widget class="QDialog" name="CUR::LogBrowser">
   <property name="geometry">
    <rect>
     <x>0</x>

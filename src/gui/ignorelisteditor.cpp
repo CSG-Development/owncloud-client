@@ -26,7 +26,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 
-namespace OCC {
+namespace CUR {
 
 static const int patternCol = 0;
 static const int deletableCol = 1;
@@ -203,4 +203,4 @@ int IgnoreListEditor::addPattern(const QString &pattern, bool deletable, bool re
     return newRow;
 }
 
-} // namespace OCC
+} // namespace CUR

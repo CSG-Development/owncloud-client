@@ -18,7 +18,7 @@
 
 #include "checksumalgorithms.h"
 
-using namespace OCC;
+using namespace CUR;
 CheckSums::Algorithm CheckSums::fromByteArray(const QByteArray &s)
 {
     // assert to ensure that all keys are uppercase

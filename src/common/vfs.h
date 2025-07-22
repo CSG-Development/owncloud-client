@@ -30,7 +30,7 @@
 
 #include <memory>
 
-namespace OCC {
+namespace CUR {
 
 class Account;
 class SyncJournalDb;
@@ -125,7 +125,7 @@ public:
 
     static Optional<Mode> modeFromString(const QString &str);
 
-    static Result<void, QString> checkAvailability(const QString &path, OCC::Vfs::Mode mode);
+    static Result<void, QString> checkAvailability(const QString &path, CUR::Vfs::Mode mode);
 
     enum class AvailabilityError
     {
@@ -279,7 +279,7 @@ private:
     // the parameters passed to start()
     std::unique_ptr<VfsSetupParams> _setupParams;
 
-    friend class OwncloudPropagator;
+    friend class CuratorPropagator;
 };
 
 class OCSYNC_EXPORT VfsPluginManager
@@ -308,4 +308,4 @@ private:
 template <>
 OCSYNC_EXPORT QString Utility::enumToString(Vfs::Mode mode);
 
-} // namespace OCC
+} // namespace CUR

@@ -108,7 +108,7 @@ QByteArray calcAdler32(QIODevice *device)
 }
 }
 
-namespace OCC {
+namespace CUR {
 
 Q_LOGGING_CATEGORY(lcChecksums, "sync.checksums", QtInfoMsg)
 Q_LOGGING_CATEGORY(lcChecksumsHeader, "sync.checksums.header", QtInfoMsg)
@@ -212,7 +212,7 @@ QByteArray findBestChecksum(const QByteArray &_checksums)
 
 bool uploadChecksumEnabled()
 {
-    static bool enabled = qEnvironmentVariableIsEmpty("OWNCLOUD_DISABLE_CHECKSUM_UPLOAD");
+    static bool enabled = qEnvironmentVariableIsEmpty("CURATOR_DISABLE_CHECKSUM_UPLOAD");
     return enabled;
 }
 

@@ -17,7 +17,7 @@
 
 #include <QCoreApplication>
 
-using namespace OCC;
+using namespace CUR;
 
 template <>
 QString Utility::enumToDisplayName(VfsItemAvailability availability)

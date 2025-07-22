@@ -29,7 +29,7 @@
 // drop this whole file, because we cannot migrate.
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-namespace OCC {
+namespace CUR {
 
 namespace Deprecated {
 
@@ -154,4 +154,4 @@ void migrateLaunchOnStartup()
     // And we're done.
 }
 
-} // OCC namespace
+} // CUR namespace

@@ -18,10 +18,10 @@
 
 #include <QApplication>
 
-using namespace OCC::Wizard;
+using namespace CUR::Wizard;
 
 template <>
-QString OCC::Utility::enumToDisplayName(SetupWizardState state)
+QString CUR::Utility::enumToDisplayName(SetupWizardState state)
 {
     switch (state) {
     case SetupWizardState::ServerUrlState:

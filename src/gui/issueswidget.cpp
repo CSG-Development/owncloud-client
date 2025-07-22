@@ -31,15 +31,15 @@
 #include "ui_issueswidget.h"
 
 namespace {
-bool persistsUntilLocalDiscovery(const OCC::ProtocolItem &data)
+bool persistsUntilLocalDiscovery(const CUR::ProtocolItem &data)
 {
-    return data.status() == OCC::SyncFileItem::Conflict
-        || (data.status() == OCC::SyncFileItem::FileIgnored && data.direction() == OCC::SyncFileItem::Up)
-        || data.status() == OCC::SyncFileItem::Excluded;
+    return data.status() == CUR::SyncFileItem::Conflict
+        || (data.status() == CUR::SyncFileItem::FileIgnored && data.direction() == CUR::SyncFileItem::Up)
+        || data.status() == CUR::SyncFileItem::Excluded;
 }
 
 }
-namespace OCC {
+namespace CUR {
 
 class SyncFileItemStatusSetSortFilterProxyModel : public Models::SignalledQSortFilterProxyModel
 {
@@ -286,7 +286,7 @@ QMenu *IssuesWidget::showFilterMenu(QWidget *parent)
 
 void IssuesWidget::addResetFiltersAction(QMenu *menu, const QList<std::function<void()>> &resetFunctions)
 {
-    menu->addAction(QCoreApplication::translate("OCC::Models", "Reset Filters"), [resetFunctions]() {
+    menu->addAction(QCoreApplication::translate("CUR::Models", "Reset Filters"), [resetFunctions]() {
         for (const auto &reset : resetFunctions) {
             reset();
         }
@@ -373,7 +373,7 @@ void IssuesWidget::slotItemContextMenu()
 
 std::function<void(void)> IssuesWidget::addStatusFilter(QMenu *menu)
 {
-    menu->addAction(QCoreApplication::translate("OCC::Models", "Status Filter:"))->setEnabled(false);
+    menu->addAction(QCoreApplication::translate("CUR::Models", "Status Filter:"))->setEnabled(false);
 
     // Use a QActionGroup to contain all status filter items, so we can find them back easily to reset.
     auto statusFilterGroup = new QActionGroup(menu);

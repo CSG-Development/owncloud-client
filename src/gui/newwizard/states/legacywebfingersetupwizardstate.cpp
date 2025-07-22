@@ -17,7 +17,7 @@
 #include "determineauthtypejobfactory.h"
 #include "pages/legacywebfingersetupwizardpage.h"
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 LegacyWebFingerSetupWizardState::LegacyWebFingerSetupWizardState(SetupWizardContext *context)
     : AbstractSetupWizardState(context)
@@ -72,4 +72,4 @@ SetupWizardState LegacyWebFingerSetupWizardState::state() const
     return SetupWizardState::LegacyWebFingerState;
 }
 
-} // OCC::Wizard
+} // CUR::Wizard

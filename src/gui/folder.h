@@ -36,7 +36,7 @@
 class QThread;
 class QSettings;
 
-namespace OCC {
+namespace CUR {
 
 class Vfs;
 class SyncEngine;

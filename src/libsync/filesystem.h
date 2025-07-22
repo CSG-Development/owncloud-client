@@ -18,13 +18,13 @@
 #include <ctime>
 #include <functional>
 
-#include <owncloudlib.h>
+#include <curatorlib.h>
 // Chain in the base include and extend the namespace
 #include "common/filesystembase.h"
 
 class QFile;
 
-namespace OCC {
+namespace CUR {
 
 class SyncJournal;
 
@@ -49,9 +49,9 @@ namespace FileSystem {
      * Use this over QFileInfo::lastModified() to avoid timezone related bugs. See
      * owncloud/core#9781 for details.
      */
-    time_t OWNCLOUDSYNC_EXPORT getModTime(const QString &filename);
+    time_t CURATORSYNC_EXPORT getModTime(const QString &filename);
 
-    bool OWNCLOUDSYNC_EXPORT setModTime(const QString &filename, time_t modTime);
+    bool CURATORSYNC_EXPORT setModTime(const QString &filename, time_t modTime);
 
     /**
      * @brief Get the size for a file
@@ -59,12 +59,12 @@ namespace FileSystem {
      * Use this over QFileInfo::size() to avoid bugs with lnk files on Windows.
      * See https://bugreports.qt.io/browse/QTBUG-24831.
      */
-    qint64 OWNCLOUDSYNC_EXPORT getSize(const QFileInfo &info);
+    qint64 CURATORSYNC_EXPORT getSize(const QFileInfo &info);
 
     /**
      * @brief Retrieve a file inode with csync
      */
-    bool OWNCLOUDSYNC_EXPORT getInode(const QString &filename, quint64 *inode);
+    bool CURATORSYNC_EXPORT getInode(const QString &filename, quint64 *inode);
 
     /**
      * @brief Check if \a fileName has changed given previous size and mtime
@@ -73,7 +73,7 @@ namespace FileSystem {
      *
      * @return true if the file's mtime or size are not what is expected.
      */
-    bool OWNCLOUDSYNC_EXPORT fileChanged(const QFileInfo &info, qint64 previousSize, time_t previousMtime, std::optional<quint64> previousInode = {});
+    bool CURATORSYNC_EXPORT fileChanged(const QFileInfo &info, qint64 previousSize, time_t previousMtime, std::optional<quint64> previousInode = {});
 
 
     struct RemoveEntry
@@ -95,7 +95,7 @@ namespace FileSystem {
      *
      * Returns true if all removes succeeded.
      */
-    bool OWNCLOUDSYNC_EXPORT removeRecursively(const QString &path,
+    bool CURATORSYNC_EXPORT removeRecursively(const QString &path,
         RemoveEntryList *success,
         RemoveEntryList *locked,
         RemoveErrorList *errors);

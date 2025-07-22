@@ -24,7 +24,7 @@ namespace Ui {
 class SpacesPage;
 }
 
-namespace OCC {
+namespace CUR {
 class SpacesPage : public QWizardPage
 {
     Q_OBJECT

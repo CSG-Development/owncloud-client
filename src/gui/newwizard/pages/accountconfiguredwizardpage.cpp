@@ -13,7 +13,7 @@
 #include <QMessageBox>
 
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 AccountConfiguredWizardPage::AccountConfiguredWizardPage(
     const QString &defaultSyncTargetDir, const QString &userChosenSyncTargetDir, bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental)

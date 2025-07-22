@@ -16,8 +16,8 @@
 #include "propagatorjobs.h"
 #include "testutils/testutils.h"
 
-using namespace OCC;
-using namespace OCC::Utility;
+using namespace CUR;
+using namespace CUR::Utility;
 
     class TestChecksumValidator : public QObject
     {
@@ -136,7 +136,7 @@ using namespace OCC::Utility;
     void testUploadChecksummingMd5() {
 
         ComputeChecksum *vali = new ComputeChecksum(this);
-        _expectedType = OCC::CheckSums::Algorithm::MD5;
+        _expectedType = CUR::CheckSums::Algorithm::MD5;
         vali->setChecksumType(_expectedType);
         connect(vali, &ComputeChecksum::done, this, &TestChecksumValidator::slotUpValidated);
 
@@ -154,7 +154,7 @@ using namespace OCC::Utility;
 
     void testUploadChecksummingSha1() {
         ComputeChecksum *vali = new ComputeChecksum(this);
-        _expectedType = OCC::CheckSums::Algorithm::SHA1;
+        _expectedType = CUR::CheckSums::Algorithm::SHA1;
         vali->setChecksumType(_expectedType);
         connect(vali, &ComputeChecksum::done, this, &TestChecksumValidator::slotUpValidated);
 
@@ -180,7 +180,7 @@ using namespace OCC::Utility;
         file.open(QIODevice::ReadOnly);
         _expected = ComputeChecksum::computeNow(&file, CheckSums::Algorithm::ADLER32);
 
-        QByteArray adler = OCC::CheckSums::toString(OCC::CheckSums::Algorithm::ADLER32).data();
+        QByteArray adler = CUR::CheckSums::toString(CUR::CheckSums::Algorithm::ADLER32).data();
         adler.append(":");
         adler.append(_expected);
 

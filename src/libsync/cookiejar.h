@@ -17,15 +17,15 @@
 
 #include <QNetworkCookieJar>
 
-#include "owncloudlib.h"
+#include "curatorlib.h"
 
-namespace OCC {
+namespace CUR {
 
 /**
  * @brief The CookieJar class
  * @ingroup libsync
  */
-class OWNCLOUDSYNC_EXPORT CookieJar : public QNetworkCookieJar
+class CURATORSYNC_EXPORT CookieJar : public QNetworkCookieJar
 {
     Q_OBJECT
 public:
@@ -36,6 +36,6 @@ public:
     using QNetworkCookieJar::allCookies;
 };
 
-} // namespace OCC
+} // namespace CUR
 
 #endif // MIRALL_COOKIEJAR_H

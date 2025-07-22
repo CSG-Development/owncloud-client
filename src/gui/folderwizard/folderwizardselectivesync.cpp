@@ -34,7 +34,7 @@
 #include <QVBoxLayout>
 
 
-using namespace OCC;
+using namespace CUR;
 
 FolderWizardSelectiveSync::FolderWizardSelectiveSync(FolderWizardPrivate *parent)
     : FolderWizardPage(parent)
@@ -49,7 +49,7 @@ FolderWizardSelectiveSync::FolderWizardSelectiveSync(FolderWizardPrivate *parent
     } else if (Theme::instance()->showVirtualFilesOption() && vfsMode != Vfs::Off && (vfsMode == Vfs::WindowsCfApi || Theme::instance()->enableExperimentalFeatures())) {
         _virtualFilesCheckBox = new QCheckBox(tr("Use virtual files instead of downloading content immediately%1").arg(vfsMode == Vfs::WindowsCfApi ? QString() : tr(" (experimental)")));
         connect(_virtualFilesCheckBox, &QCheckBox::clicked, this, &FolderWizardSelectiveSync::virtualFilesCheckboxClicked);
-        connect(_virtualFilesCheckBox, &QCheckBox::stateChanged, this, [this](int state) {
+        connect(_virtualFilesCheckBox, &QCheckBox::checkStateChanged, this, [this](int state) {
             _selectiveSync->setEnabled(state == Qt::Unchecked);
         });
         _virtualFilesCheckBox->setChecked(vfsMode == Vfs::WindowsCfApi);
@@ -104,7 +104,7 @@ void FolderWizardSelectiveSync::virtualFilesCheckboxClicked()
         if (VfsPluginManager::instance().bestAvailableVfsMode() == Vfs::WindowsCfApi) {
             Q_EMIT messageBox->accepted();
         } else {
-            ownCloudGui::raise();
+            CuratorGui::raise();
             messageBox->show();
         }
     }

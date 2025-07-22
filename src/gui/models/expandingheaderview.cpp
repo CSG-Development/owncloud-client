@@ -21,7 +21,7 @@
 #include <QMenu>
 #include <QScopedValueRollback>
 
-using namespace OCC;
+using namespace CUR;
 
 ExpandingHeaderView::ExpandingHeaderView(const QString &objectName, QWidget *parent)
     : QHeaderView(Qt::Horizontal, parent)

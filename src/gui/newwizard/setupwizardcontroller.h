@@ -27,7 +27,7 @@
 #include <QDialog>
 #include <optional>
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 /**
  * This class is the backbone of the new setup wizard. It instantiates the required UI elements and fills them with the correct data. It also provides the public API for the settings UI.
  *

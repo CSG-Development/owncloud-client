@@ -20,8 +20,8 @@ set(libsync_SRCS
     configfile.cpp
     abstractnetworkjob.cpp
     networkjobs.cpp
-    owncloudpropagator.cpp
-    owncloudtheme.cpp
+    curatorpropagator.cpp
+    curatortheme.cpp
     platform.cpp
     progressdispatcher.cpp
     propagatorjobs.cpp
@@ -68,10 +68,10 @@ endif()
 
 set(libsync_SRCS ${libsync_SRCS} creds/httpcredentials.cpp)
 
-# These headers are installed for libowncloudsync to be used by 3rd party apps
+# These headers are installed for libcuratorsync to be used by 3rd party apps
 INSTALL(
     FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/owncloudlib.h
+        ${CMAKE_CURRENT_BINARY_DIR}/curatorlib.h
         logger.h
         accessmanager.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/${APPLICATION_SHORTNAME}/libsync
@@ -87,7 +87,7 @@ target_link_libraries(libsync
         Qt::Network
         Qt::Widgets
     PRIVATE
-        owncloudResources
+        curatorResources
         Qt::Concurrent
         ZLIB::ZLIB
         Qt6Keychain::Qt6Keychain
@@ -122,9 +122,9 @@ if(NO_MSG_HANDLER)
 endif()
 
 GENERATE_EXPORT_HEADER(libsync
-        EXPORT_MACRO_NAME OWNCLOUDSYNC_EXPORT
-        EXPORT_FILE_NAME owncloudlib.h
-        STATIC_DEFINE OWNCLOUD_BUILT_AS_STATIC
+        EXPORT_MACRO_NAME CURATORSYNC_EXPORT
+        EXPORT_FILE_NAME curatorlib.h
+        STATIC_DEFINE CURATOR_BUILT_AS_STATIC
 )
 
 set_target_properties(libsync PROPERTIES

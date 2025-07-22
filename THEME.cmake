@@ -7,7 +7,7 @@ endif()
 if (EXISTS "${OEM_THEME_DIR}/OEM.cmake")
     include("${OEM_THEME_DIR}/OEM.cmake")
 else()
-    include ("${CMAKE_CURRENT_LIST_DIR}/OWNCLOUD.cmake")
+    include ("${CMAKE_CURRENT_LIST_DIR}/CURATOR.cmake")
 endif()
 
 message(STATUS "Branding: ${APPLICATION_NAME}")

@@ -19,7 +19,7 @@
 			Manufacturer="$(var.AppVendor)"
 			Platform="x64" />
 
-        <CustomAction Id="SetINSTALLDIR" Property="INSTALLDIR" Value="[ProgramFiles64Folder]\ownCloud" />
+        <CustomAction Id="SetINSTALLDIR" Property="INSTALLDIR" Value="[ProgramFiles64Folder]\$(var.AppVendor)" />
 
 		<Media Id="1" Cabinet="$(var.AppShortName).cab" EmbedCab="yes" />
 		<!-- App icon -->

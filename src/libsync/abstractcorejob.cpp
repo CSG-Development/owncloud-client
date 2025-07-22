@@ -15,7 +15,7 @@
 
 #include "abstractcorejob.h"
 
-using namespace OCC;
+using namespace CUR;
 
 AbstractCoreJobFactory::AbstractCoreJobFactory(QNetworkAccessManager *nam)
     : _nam(nam)

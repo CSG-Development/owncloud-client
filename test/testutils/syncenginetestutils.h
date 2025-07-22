@@ -29,7 +29,7 @@
 
 #include <chrono>
 
-using namespace OCC::FileSystem::SizeLiterals;
+using namespace CUR::FileSystem::SizeLiterals;
 /*
  * TODO: In theory we should use QVERIFY instead of Q_ASSERT for testing, but this
  * only works when directly called from a QTest :-(
@@ -141,7 +141,7 @@ public:
 static inline qint64 defaultLastModified()
 {
     auto precise = QDateTime::currentDateTimeUtc().addDays(-7);
-    time_t timeInSeconds = OCC::Utility::qDateTimeToTime_t(precise);
+    time_t timeInSeconds = CUR::Utility::qDateTimeToTime_t(precise);
     return timeInSeconds;
 }
 
@@ -226,12 +226,12 @@ public:
 
     QDateTime lastModified() const
     {
-        return QDateTime::fromSecsSinceEpoch(_lastModifiedInSecondsUTC, Qt::LocalTime);
+        return QDateTime::fromSecsSinceEpoch(_lastModifiedInSecondsUTC, QTimeZone::LocalTime);
     }
 
     QDateTime lastModifiedInUtc() const
     {
-        return QDateTime::fromSecsSinceEpoch(_lastModifiedInSecondsUTC, Qt::UTC);
+        return QDateTime::fromSecsSinceEpoch(_lastModifiedInSecondsUTC, QTimeZone::UTC);
     }
 
     void setLastModified(const QDateTime &t)
@@ -257,7 +257,7 @@ public:
     QString name;
     bool isDir = true;
     bool isShared = false;
-    OCC::RemotePermissions permissions; // When uset, defaults to everything
+    CUR::RemotePermissions permissions; // When uset, defaults to everything
     qint64 _lastModifiedInSecondsUTC = defaultLastModified();
     QByteArray etag = generateEtag();
     QByteArray fileId = generateFileId();
@@ -511,7 +511,7 @@ public:
     }
 };
 
-class FakeAM : public OCC::AccessManager
+class FakeAM : public CUR::AccessManager
 {
 public:
     using Override = std::function<QNetworkReply *(Operation, const QNetworkRequest &, QIODevice *)>;
@@ -538,17 +538,17 @@ protected:
         QIODevice *outgoingData = nullptr) override;
 };
 
-class FakeCredentials : public OCC::AbstractCredentials
+class FakeCredentials : public CUR::AbstractCredentials
 {
 public:
-    FakeCredentials(OCC::AccessManager *am)
+    FakeCredentials(CUR::AccessManager *am)
         : _am { am }
     {
     }
 
     QString authType() const override { return QStringLiteral("test"); }
     QString user() const override { return QStringLiteral("admin"); }
-    OCC::AccessManager *createAM() const override { return _am; }
+    CUR::AccessManager *createAM() const override { return _am; }
     bool ready() const override { return true; }
     void fetchFromKeychain() override { }
     void askFromUser() override { }
@@ -558,29 +558,29 @@ public:
     void forgetSensitiveData() override { }
 
 private:
-    OCC::AccessManager *_am;
+    CUR::AccessManager *_am;
 };
 
 class FakeFolder : public QObject
 {
     Q_OBJECT
-    const QTemporaryDir _tempDir = OCC::TestUtils::createTempDir();
+    const QTemporaryDir _tempDir = CUR::TestUtils::createTempDir();
     DiskFileModifier _localModifier;
     FakeAM *_fakeAm;
-    OCC::TestUtils::TestUtilsPrivate::AccountStateRaii _accountState =
-        OCC::TestUtils::TestUtilsPrivate::AccountStateRaii{nullptr, &OCC::TestUtils::TestUtilsPrivate::accountStateDeleter};
-    std::unique_ptr<OCC::SyncJournalDb> _journalDb;
-    std::unique_ptr<OCC::SyncEngine> _syncEngine;
+    CUR::TestUtils::TestUtilsPrivate::AccountStateRaii _accountState =
+        CUR::TestUtils::TestUtilsPrivate::AccountStateRaii{nullptr, &CUR::TestUtils::TestUtilsPrivate::accountStateDeleter};
+    std::unique_ptr<CUR::SyncJournalDb> _journalDb;
+    std::unique_ptr<CUR::SyncEngine> _syncEngine;
 
 public:
-    FakeFolder(const FileInfo &fileTemplate, OCC::Vfs::Mode vfsMode = OCC::Vfs::Off, bool filesAreDehydrated = false);
+    FakeFolder(const FileInfo &fileTemplate, CUR::Vfs::Mode vfsMode = CUR::Vfs::Off, bool filesAreDehydrated = false);
     ~FakeFolder();
 
-    void switchToVfs(QSharedPointer<OCC::Vfs> vfs);
+    void switchToVfs(QSharedPointer<CUR::Vfs> vfs);
 
-    OCC::AccountPtr account() const { return _accountState->account(); }
-    OCC::SyncEngine &syncEngine() const { return *_syncEngine; }
-    OCC::SyncJournalDb &syncJournal() const { return *_journalDb; }
+    CUR::AccountPtr account() const { return _accountState->account(); }
+    CUR::SyncEngine &syncEngine() const { return *_syncEngine; }
+    CUR::SyncJournalDb &syncJournal() const { return *_journalDb; }
 
     FileModifier &localModifier() { return _localModifier; }
     FileInfo &remoteModifier() { return _fakeAm->currentRemoteState(); }
@@ -628,7 +628,7 @@ public:
     }
 
     bool isDehydratedPlaceholder(const QString &filePath);
-    QSharedPointer<OCC::Vfs> vfs() const;
+    QSharedPointer<CUR::Vfs> vfs() const;
 
 private:
     static void toDisk(QDir &dir, const FileInfo &templateFi);
@@ -656,15 +656,15 @@ inline const FileInfo *findConflict(FileInfo &dir, const QString &filename)
 struct ItemCompletedSpy : QSignalSpy
 {
     explicit ItemCompletedSpy(FakeFolder &folder)
-        : QSignalSpy(&folder.syncEngine(), &OCC::SyncEngine::itemCompleted)
+        : QSignalSpy(&folder.syncEngine(), &CUR::SyncEngine::itemCompleted)
     {
     }
 
-    OCC::SyncFileItemPtr findItem(const QString &path) const;
+    CUR::SyncFileItemPtr findItem(const QString &path) const;
 };
 
 // QTest::toString overloads
-namespace OCC {
+namespace CUR {
 inline char *toString(const SyncFileStatus &s)
 {
     return QTest::toString(QStringLiteral("SyncFileStatus(%1)").arg(s.toSocketAPIString()));

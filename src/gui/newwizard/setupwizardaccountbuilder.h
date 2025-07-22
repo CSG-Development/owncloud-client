@@ -19,7 +19,7 @@
 #include "networkjobs.h"
 #include "networkjobs/fetchuserinfojobfactory.h"
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 /**
  * The server can use varying authentication methods, for instance HTTP Basic or OAuth2.

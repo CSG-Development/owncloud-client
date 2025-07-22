@@ -8,7 +8,7 @@
 
 #include "networkjobs.h"
 
-using namespace OCC;
+using namespace CUR;
 
 class TestXmlParse : public QObject
 {

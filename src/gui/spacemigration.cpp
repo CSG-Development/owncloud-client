@@ -27,7 +27,7 @@
 
 Q_LOGGING_CATEGORY(lcMigration, "gui.migration.spaces", QtInfoMsg)
 
-using namespace OCC;
+using namespace CUR;
 
 SpaceMigration::SpaceMigration(const AccountStatePtr &account, const QString &path, QObject *parent)
     : QObject(parent)

@@ -30,7 +30,7 @@
 #ifdef Q_OS_WIN
 #include <qt_windows.h>
 #endif
-using namespace OCC;
+using namespace CUR;
 
 Q_LOGGING_CATEGORY(lcVfs, "sync.vfs", QtInfoMsg)
 
@@ -180,9 +180,9 @@ void Vfs::wipeDehydratedVirtualFiles()
 
 Q_LOGGING_CATEGORY(lcPlugin, "sync.plugins", QtInfoMsg)
 
-OCC::VfsPluginManager *OCC::VfsPluginManager::_instance = nullptr;
+CUR::VfsPluginManager *CUR::VfsPluginManager::_instance = nullptr;
 
-bool OCC::VfsPluginManager::isVfsPluginAvailable(Vfs::Mode mode) const
+bool CUR::VfsPluginManager::isVfsPluginAvailable(Vfs::Mode mode) const
 {
     {
         auto result = _pluginCache.constFind(mode);
@@ -203,7 +203,7 @@ bool OCC::VfsPluginManager::isVfsPluginAvailable(Vfs::Mode mode) const
             qCDebug(lcPlugin) << "Plugin doesn't exist:" << loader.fileName() << "LibraryPath:" << QCoreApplication::libraryPaths();
             return false;
         }
-        if (basemeta[QStringLiteral("IID")].toString() != QLatin1String("org.owncloud.PluginFactory")) {
+        if (basemeta[QStringLiteral("IID")].toString() != QLatin1String("org.curator.PluginFactory")) {
             qCWarning(lcPlugin) << "Plugin has wrong IID" << loader.fileName() << basemeta[QStringLiteral("IID")];
             return false;
         }
@@ -213,7 +213,7 @@ bool OCC::VfsPluginManager::isVfsPluginAvailable(Vfs::Mode mode) const
             qCWarning(lcPlugin) << "Plugin has wrong type" << loader.fileName() << metadata[QStringLiteral("type")];
             return false;
         }
-        if (metadata[QStringLiteral("version")].toString() != OCC::Version::version().toString()) {
+        if (metadata[QStringLiteral("version")].toString() != CUR::Version::version().toString()) {
             qCWarning(lcPlugin) << "Plugin has wrong version" << loader.fileName() << metadata[QStringLiteral("version")];
             return false;
         }
@@ -231,7 +231,7 @@ bool OCC::VfsPluginManager::isVfsPluginAvailable(Vfs::Mode mode) const
     return out;
 }
 
-Vfs::Mode OCC::VfsPluginManager::bestAvailableVfsMode() const
+Vfs::Mode CUR::VfsPluginManager::bestAvailableVfsMode() const
 {
     if (isVfsPluginAvailable(Vfs::WindowsCfApi)) {
         return Vfs::WindowsCfApi;
@@ -243,7 +243,7 @@ Vfs::Mode OCC::VfsPluginManager::bestAvailableVfsMode() const
     Q_UNREACHABLE();
 }
 
-std::unique_ptr<Vfs> OCC::VfsPluginManager::createVfsFromPlugin(Vfs::Mode mode) const
+std::unique_ptr<Vfs> CUR::VfsPluginManager::createVfsFromPlugin(Vfs::Mode mode) const
 {
     auto name = modeToPluginName(mode);
     if (name.isEmpty())

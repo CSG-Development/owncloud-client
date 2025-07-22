@@ -16,7 +16,7 @@
 
 #include <QWidget>
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 class AbstractSetupWizardPage : public QWidget
 {

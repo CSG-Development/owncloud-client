@@ -30,7 +30,7 @@ class QDialog;
 class QMessageBox;
 class QSettings;
 
-namespace OCC {
+namespace CUR {
 
 class AccountState;
 class Account;
@@ -213,7 +213,7 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(OCC::AccountState *)
-Q_DECLARE_METATYPE(OCC::AccountStatePtr)
+Q_DECLARE_METATYPE(CUR::AccountState *)
+Q_DECLARE_METATYPE(CUR::AccountStatePtr)
 
 #endif //ACCOUNTINFO_H

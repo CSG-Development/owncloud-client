@@ -20,7 +20,7 @@
 
 #include <QClipboard>
 
-namespace OCC::Wizard {
+namespace CUR::Wizard {
 
 OAuthCredentialsSetupWizardPage::OAuthCredentialsSetupWizardPage(const QUrl &serverUrl)
     : _ui(new ::Ui::CredentialsSetupWizardPage)
@@ -66,4 +66,4 @@ void OAuthCredentialsSetupWizardPage::setAuthUrl(const QUrl &url)
     _ui->oauthLoginWidget->setUrl(url);
 }
 
-} // namespace OCC::Wizard
+} // namespace CUR::Wizard
