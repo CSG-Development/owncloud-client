@@ -846,18 +846,22 @@ void CuratorGui::runNewAccountWizard()
 
                     QObject::connect(validator, &ConnectionValidator::connectionResult, accountStatePtr.data(),
                         [accountStatePtr, syncMode, dynamicRegistrationData](ConnectionValidator::Status status, const QStringList &) {
-                            if (OC_ENSURE(status == ConnectionValidator::Connected || status == ConnectionValidator::ServerVersionMismatch)) {
+                            switch (status) {
+                            // a server we no longer support but that might work
+                            case ConnectionValidator::ServerVersionMismatch:
+                                [[fallthrough]];
+                            case ConnectionValidator::Connected: {
                                 // saving once after adding makes sure the account is stored in the config in a working state
                                 // this is needed to ensure a consistent state in the config file upon unexpected terminations of the client
                                 // (for instance, when running from a debugger and stopping the process from there)
                                 AccountManager::instance()->save(true);
 
-                                // only now, we can store the dynamic registration data in the keychain
+                                       // only now, we can store the dynamic registration data in the keychain
                                 if (!dynamicRegistrationData.isEmpty()) {
                                     OAuth::saveDynamicRegistrationDataForAccount(accountStatePtr->account(), dynamicRegistrationData);
                                 }
 
-                                // the account is now ready, emulate a normal account loading and emit that the credentials are ready
+                                       // the account is now ready, emulate a normal account loading and emit that the credentials are ready
                                 Q_EMIT accountStatePtr->account()->credentialsFetched();
 
                                 switch (syncMode) {
@@ -874,8 +878,8 @@ void CuratorGui::runNewAccountWizard()
                                     auto *folderWizard = new FolderWizard(accountStatePtr, ocApp()->gui()->settingsDialog());
                                     folderWizard->setAttribute(Qt::WA_DeleteOnClose);
 
-                                    // TODO: duplication of AccountSettings
-                                    // adapted from AccountSettings::slotFolderWizardAccepted()
+                                           // TODO: duplication of AccountSettings
+                                           // adapted from AccountSettings::slotFolderWizardAccepted()
                                     connect(folderWizard, &QDialog::accepted, [accountStatePtr, folderWizard]() {
                                         FolderMan *folderMan = FolderMan::instance();
 
@@ -887,7 +891,7 @@ void CuratorGui::runNewAccountWizard()
                                         if (!config.selectiveSyncBlackList.isEmpty() && OC_ENSURE(folder && !config.useVirtualFiles)) {
                                             folder->journalDb()->setSelectiveSyncList(SyncJournalDb::SelectiveSyncBlackList, config.selectiveSyncBlackList);
 
-                                            // The user already accepted the selective sync dialog. everything is in the white list
+                                                   // The user already accepted the selective sync dialog. everything is in the white list
                                             folder->journalDb()->setSelectiveSyncList(SyncJournalDb::SelectiveSyncWhiteList, {QLatin1String("/")});
                                         }
 
@@ -907,12 +911,16 @@ void CuratorGui::runNewAccountWizard()
                                         ->settingsDialog()
                                         ->accountSettings(accountStatePtr->account().get())
                                         ->addModalWidget(folderWizard, AccountSettings::ModalWidgetSizePolicy::Expanding);
-
                                     break;
                                 }
                                 case CUR::Wizard::SyncMode::Invalid:
                                     Q_UNREACHABLE();
                                 }
+                            }
+                            case ConnectionValidator::ClientUnsupported:
+                                break;
+                            default:
+                                Q_UNREACHABLE();
                             }
                         });
 
