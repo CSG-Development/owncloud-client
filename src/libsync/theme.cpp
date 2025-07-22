@@ -393,15 +393,15 @@ QString Theme::aboutVersions(Theme::VersionFormat format) const
 
 QString Theme::about() const
 {
-    // Ideally, the vendor should be "ownCloud GmbH", but it cannot be changed without
+    // Ideally, the vendor should be "Seagate Technologies LLC", but it cannot be changed without
     // changing the location of the settings and other registery keys.
-    const QString vendor = isVanilla() ? QStringLiteral("ownCloud GmbH") : QStringLiteral(APPLICATION_VENDOR);
+    const QString vendor = isVanilla() ? QStringLiteral("Seagate Technologies LLC") : QStringLiteral(APPLICATION_VENDOR);
     return tr("<p>Version %1. For more information visit <a href=\"%2\">https://%3</a></p>"
               "<p>For known issues and help, please visit: <a href=\"https://central.owncloud.com/c/desktop-client\">https://central.owncloud.com</a></p>"
               "<p><small>By Klaas Freitag, Daniel Molkentin, Olivier Goffart, Markus Götz, "
               " Jan-Christoph Borchardt, Thomas Müller,<br>"
               "Dominik Schmidt, Michael Stingl, Hannah von Reth, Fabian Müller and others.</small></p>"
-              "<p>Copyright ownCloud GmbH</p>"
+              "<p>Copyright Seagate Technologies LLC</p>"
               "<p>Distributed by %4 and licensed under the GNU General Public License (GPL) Version 2.0.<br/>"
               "%5 and the %5 logo are registered trademarks of %4 in the "
               "United States, other countries, or both.</p>"
