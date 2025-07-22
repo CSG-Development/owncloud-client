@@ -845,7 +845,7 @@ void CuratorGui::runNewAccountWizard()
                     auto validator = new ConnectionValidator(accountStatePtr->account(), accountStatePtr->account().data());
 
                     QObject::connect(validator, &ConnectionValidator::connectionResult, accountStatePtr.data(),
-                        [accountStatePtr, syncMode, dynamicRegistrationData](ConnectionValidator::Status status, const QStringList &) {
+                        [accountStatePtr, syncMode, dynamicRegistrationData, validator, this](ConnectionValidator::Status status, const QStringList &) {
                             switch (status) {
                             // a server we no longer support but that might work
                             case ConnectionValidator::ServerVersionMismatch:
@@ -922,6 +922,7 @@ void CuratorGui::runNewAccountWizard()
                             default:
                                 Q_UNREACHABLE();
                             }
+                            validator->deleteLater();
                         });
 
 
