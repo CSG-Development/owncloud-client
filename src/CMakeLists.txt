@@ -47,6 +47,7 @@ if (WITH_CRASHREPORTER)
 endif()
 
 add_subdirectory(plugins)
+add_subdirectory(telemetry)
 
 install(EXPORT ${APPLICATION_SHORTNAME}Config DESTINATION "${KDE_INSTALL_CMAKEPACKAGEDIR}/${APPLICATION_SHORTNAME}" NAMESPACE Curator::)
 
