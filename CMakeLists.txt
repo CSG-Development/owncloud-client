@@ -100,7 +100,7 @@ option(FORCE_ASSERTS "FORCE_ASSERTS" OFF)
 option(WITH_APPIMAGEUPDATER OFF "Enable built-in libappimageupdate based updater on Linux")
 add_feature_info(AppImageUpdate WITH_APPIMAGEUPDATER "Built-in libappimageupdate based updater")
 
-option(WITH_CAP_CORE "WITH_CAP_CORE" ON)
+option(WITH_CAP_CORE "WITH_CAP_CORE" OFF)
 if (WITH_CAP_CORE)
     include(CapCore)
 endif (WITH_CAP_CORE)

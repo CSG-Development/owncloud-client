@@ -19,21 +19,17 @@ include_directories(
 add_definitions(-DUSE_CAPCORE)
 add_definitions(-DCURL_STATICLIB)
 
+link_directories(
+    ${CAPCORE_DIR}/platforms/x64/prebuilt/lib
+)
+
 if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     message(STATUS "CapCore Debug build")
     set(CURL_LIB libcurl-d)
-    #set(ZLIB_LIB zlibstaticd)
-    link_directories(
-        ${CAPCORE_DIR}/platforms/x64/prebuilt/lib
-        ${CAPCORE_DIR}/platforms/x64/prebuilt/lib/Debug
-    )
+    set(CAPCORE_LIB telemetry_cored)
 else()
     message(STATUS "CapCore Release build")
     set(CURL_LIB libcurl)
-    #set(ZLIB_LIB zlibstatic)
-    link_directories(
-        ${CAPCORE_DIR}/platforms/x64/prebuilt/lib
-        ${CAPCORE_DIR}/platforms/x64/prebuilt/lib/Release
-    )
+    set(CAPCORE_LIB telemetry_core)
 endif()
 
