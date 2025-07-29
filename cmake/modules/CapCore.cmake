@@ -17,19 +17,43 @@ include_directories(
 )
 
 add_definitions(-DUSE_CAPCORE)
-add_definitions(-DCURL_STATICLIB)
 
-link_directories(
-    ${CAPCORE_DIR}/platforms/x64/prebuilt/lib
-)
+if (APPLE)
 
-if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    message(STATUS "CapCore Debug build")
-    set(CURL_LIB libcurl-d)
-    set(CAPCORE_LIB telemetry_cored)
-else()
-    message(STATUS "CapCore Release build")
-    set(CURL_LIB libcurl)
-    set(CAPCORE_LIB telemetry_core)
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
+    link_directories(
+        "${CAPCORE_DIR}/lib"
+    )
+    set(CURL_LIB curl)
+    set(CAPCORE_LIB telemetry_core_staticlib)
+    # Ensure static libraries linked
+    set(CURL_LIB
+        libcurl.a
+        libbrotlicommon.a
+        libbrotlidec.a
+        libbrotlienc.a
+        libnghttp2.a
+        libnghttp3.a
+        libssh2.a
+        libzstd.a
+        libcrypto.a
+        libssl.a
+        libidn2.a
+        "-framework SystemConfiguration"
+    )
+
+elseif (WIN32)
+
+    add_definitions(-DCURL_STATICLIB)
+    link_directories(
+        ${CAPCORE_DIR}/platforms/x64/prebuilt/lib
+    )
+    if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+        set(CURL_LIB libcurl-d)
+        set(CAPCORE_LIB telemetry_cored)
+    else()
+        set(CURL_LIB libcurl)
+        set(CAPCORE_LIB telemetry_core)
+    endif()
+
 endif()
-
