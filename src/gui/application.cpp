@@ -32,6 +32,11 @@
 #include "socketapi/socketapi.h"
 #include "theme.h"
 #include "translations.h"
+#include "telemetry/ProviderNull.h"
+
+#ifdef USE_CAPCORE
+#include "telemetry/ProviderCapcore.h"
+#endif
 
 #ifdef WITH_AUTO_UPDATER
 #include "updater/ocupdater.h"
@@ -234,6 +239,15 @@ AccountStatePtr Application::addNewAccount(AccountPtr newAccount)
     _gui->slotShowSettings();
 
     return accountStatePtr;
+}
+
+void Application::createTelemetry()
+{
+#ifdef USE_CAPCORE
+    _telemetry.reset(new Telemetry({std::make_unique<ProviderCapcore>()}));
+#else
+    _telemetry.reset(new Telemetry({std::make_unique<ProviderNull>()}));
+#endif // USE_CAPCORE
 }
 
 void Application::slotUseMonoIconsChanged(bool)

@@ -105,6 +105,7 @@ target_link_libraries(curatorCore
         Qt::Widgets Qt::Network Qt::Xml
         newwizard folderwizard spaces loginrequireddialog
         libsync
+#        telemetry
         Qt6Keychain::Qt6Keychain
 )
 
@@ -157,7 +158,12 @@ set_target_properties(curator PROPERTIES
     AUTORCC ON
 )
 apply_common_target_settings(curator)
-target_link_libraries(curator curatorCore curatorResources KDAB::kdsingleapplication )
+target_link_libraries(curator
+    curatorCore
+    curatorResources
+    KDAB::kdsingleapplication
+    telemetry
+)
 
 MESSAGE(STATUS "CURATOR_SIDEBAR_ICONS: ${APPLICATION_ICON_NAME}: ${CURATOR_SIDEBAR_ICONS}")
 
