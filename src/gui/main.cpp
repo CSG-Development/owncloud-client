@@ -393,6 +393,7 @@ int main(int argc, char **argv)
     folderManager->setSyncEnabled(true);
 
     auto ocApp = Application::createInstance(platform.get(), options.debugMode);
+    ocApp->createTelemetry();
 
     QObject::connect(platform.get(), &Platform::requestAttention, ocApp->gui(), &CuratorGui::slotShowSettings);
 

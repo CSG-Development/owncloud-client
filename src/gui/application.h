@@ -23,6 +23,7 @@
 #include "folderman.h"
 #include "curatorgui.h"
 #include "platform.h"
+#include "telemetry/Telemetry.h"
 
 class QMessageBox;
 class QSystemTrayIcon;
@@ -57,6 +58,7 @@ public:
     QString displayLanguage() const;
 
     AccountStatePtr addNewAccount(AccountPtr newAccount);
+    void createTelemetry();
 
 public slots:
     void slotCrash();
@@ -93,6 +95,8 @@ private:
 
     static Application *_instance;
     friend Application *ocApp();
+
+    QScopedPointer<Telemetry> _telemetry;
 };
 
 inline Application *ocApp()
