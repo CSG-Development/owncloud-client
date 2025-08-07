@@ -23,5 +23,8 @@
 
     <?define ProductId = "{B550F35E-3467-4F71-9108-D755C34054BC}" ?>
 	<?define ProgramFilesProductSubDir = $(var.AppVendor) ?>
+
+    <?define UIBannerBmp = "gui\banner.bmp" ?>
+    <?define UIDialogBmp = "gui\dialog.bmp" ?>
 	
 </Include>

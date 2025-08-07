@@ -24,6 +24,10 @@
 		<Media Id="1" Cabinet="$(var.AppShortName).cab" EmbedCab="yes" />
 		<!-- App icon -->
 		<Icon Id="$(var.AppIcon)" SourceFile="gui\$(var.AppIcon)" />
+
+		<!-- Custom bitmaps -->
+		<WixVariable Id="WixUIBannerBmp" Value="$(var.UIBannerBmp)" />
+		<WixVariable Id="WixUIDialogBmp" Value="$(var.UIDialogBmp)" />
 		
 		<WixVariable Id="WixUILicenseRtf" Value="text/license.rtf" />
 
