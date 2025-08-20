@@ -2,7 +2,7 @@
 Categories=Utility;X-SuSE-SyncUtility;
 Type=Application
 Terminal=true
-Exec=@APPLICATION_EXECUTABLE@cmd
+Exec="@APPLICATION_EXECUTABLE@ Cmd"
 Name=@APPLICATION_NAME@ commandline sync client
 Comment=@APPLICATION_NAME@ commandline synchronization client
 GenericName=Folder Sync Commandline
