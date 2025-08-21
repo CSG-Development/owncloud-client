@@ -15,7 +15,7 @@ apply_common_target_settings(curatorResources)
 target_include_directories(curatorResources PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/..>)
 
 set_target_properties(curatorResources PROPERTIES
-    OUTPUT_NAME "${APPLICATION_EXECUTABLE}Resources"
+    OUTPUT_NAME "${APPLICATION_LIB_PREFIX}Resources"
     AUTOUIC ON
     AUTORCC ON
     VERSION ${MIRALL_VERSION}

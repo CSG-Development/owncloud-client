@@ -49,7 +49,7 @@ include(CUApplyCommonSettings)
 
 include("${CMAKE_CURRENT_LIST_DIR}/THEME.cmake")
 
-set(synclib_NAME "${APPLICATION_EXECUTABLE}sync")
+set(synclib_NAME "${APPLICATION_LIB_PREFIX}sync")
 
 if(NOT WITH_CRASHREPORTER)
     message(STATUS "Build of crashreporter disabled.")
