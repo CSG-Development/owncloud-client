@@ -1,6 +1,6 @@
 set( APPLICATION_NAME       "Curator Files" )
 set( APPLICATION_SHORTNAME  "Curator" )
-set( APPLICATION_EXECUTABLE "curator" )
+set( APPLICATION_EXECUTABLE "Curator Files" )
 set( APPLICATION_DOMAIN     "owncloud.com" )
 set( APPLICATION_VENDOR     "Seagate Technologies LLC" )
 set( APPLICATION_UPDATE_URL "https://updates.owncloud.com/client/" CACHE STRING "URL for updater" )

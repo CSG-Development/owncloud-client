@@ -7,7 +7,7 @@
     <?define AppShortName = "curator" ?>
 
     <?define AppIcon = "curator.ico" ?>
-    <?define AppExe = "curator.exe" ?>
+    <?define AppExe = "Curator Files.exe" ?>
 
 	<?define AppCommandOpenUrlScheme = "oc" ?>
 
