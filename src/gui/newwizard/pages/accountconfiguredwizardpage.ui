@@ -14,10 +14,10 @@
    <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::MinimumExpanding</enum>
+      <enum>QSizePolicy::Policy::MinimumExpanding</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -33,17 +33,17 @@
       <string>✓ You're all set!</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
    </item>
    <item>
     <spacer name="verticalSpacer_2">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::MinimumExpanding</enum>
+      <enum>QSizePolicy::Policy::MinimumExpanding</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -143,6 +143,9 @@
             </item>
             <item>
              <widget class="QRadioButton" name="syncEverythingRadioButton">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
               <property name="text">
                <string>Download everything</string>
               </property>
@@ -153,6 +156,9 @@
             </item>
             <item>
              <widget class="QRadioButton" name="configureSyncManuallyRadioButton">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
               <property name="toolTip">
                <string>After completing this wizard, you can set up folder synchronization manually.</string>
               </property>
@@ -163,6 +169,9 @@
             </item>
             <item>
              <widget class="QRadioButton" name="useVfsRadioButton">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
               <property name="text">
                <string notr="true">Enable virtual filesystem (placeholder)</string>
               </property>
@@ -215,6 +224,9 @@
               </item>
               <item>
                <widget class="QToolButton" name="chooseLocalDirectoryButton">
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
                 <property name="text">
                  <string notr="true"/>
                 </property>
@@ -226,6 +238,9 @@
               </item>
               <item>
                <widget class="QToolButton" name="resetLocalDirectoryButton">
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
                 <property name="toolTip">
                  <string>Restore default value</string>
                 </property>

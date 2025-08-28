@@ -4,6 +4,7 @@
 #include "gui/application.h"
 #include "gui/guiutility.h"
 #include "gui/settingsdialog.h"
+#include "gui/customui/stylehelper.h"
 #include "libsync/theme.h"
 
 #include "resources/resources.h"
@@ -138,6 +139,7 @@ AccountConfiguredWizardPage::AccountConfiguredWizardPage(
             messageBox->addButton(tr("Stay safe"), QMessageBox::RejectRole);
 
             messageBox->setAttribute(Qt::WA_DeleteOnClose);
+            StyleHelper::applyPushButtonStyle(messageBox);
 
             connect(messageBox, &QMessageBox::rejected, this, [this]() {
                 // bring back to "safety"

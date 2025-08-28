@@ -40,7 +40,11 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="_filterButton"/>
+      <widget class="QPushButton" name="_filterButton">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

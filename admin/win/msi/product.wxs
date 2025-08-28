@@ -29,7 +29,7 @@
 		<WixVariable Id="WixUIBannerBmp" Value="$(var.UIBannerBmp)" />
 		<WixVariable Id="WixUIDialogBmp" Value="$(var.UIDialogBmp)" />
 		
-        <WixVariable Id="WixUILicenseRtf" Value="text/license.rtf" /> 
+		<WixVariable Id="WixUILicenseRtf" Value="text/license.rtf" />
 
 		<!-- "Add or Remove" Programs Entries -->
 		<Property Id="APPNAME">$(var.AppName)</Property>

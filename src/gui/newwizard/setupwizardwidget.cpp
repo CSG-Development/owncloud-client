@@ -5,6 +5,7 @@
 #include "gui/guiutility.h"
 #include "gui/curatorgui.h"
 #include "gui/settingsdialog.h"
+#include "gui/customui/stylehelper.h"
 #include "theme.h"
 
 #include <QLabel>
@@ -42,12 +43,15 @@ SetupWizardWidget::SetupWizardWidget(SettingsDialog *parent)
     _ui->backButton->setText(Utility::isMac() ? tr("Back") : tr("< &Back"));
     _ui->backButton->setAccessibleName(tr("Back"));
 
+    StyleHelper::applyPushButtonStyle(this);
+
     slotHideErrorMessageWidget();
 
     connect(_ui->cancelButton, &QPushButton::clicked, this, [this] {
         auto messageBox = new QMessageBox(QMessageBox::Warning, tr("Cancel Setup"), tr("Do you really want to cancel the account setup?"),
             QMessageBox::Yes | QMessageBox::No, ocApp()->gui()->settingsDialog());
         messageBox->setAttribute(Qt::WA_DeleteOnClose);
+        StyleHelper::applyPushButtonStyle(messageBox);
         connect(messageBox, &QMessageBox::accepted, this, [this] {
             // call the base implementation
             Q_EMIT rejected();

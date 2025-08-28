@@ -17,6 +17,7 @@
  */
 
 #include "plugin.h"
+#include "config.h"
 
 namespace CUR {
 
@@ -25,7 +26,7 @@ PluginFactory::~PluginFactory() = default;
 QString pluginFileName(const QString &type, const QString &name)
 {
     return QStringLiteral("%1sync_%2_%3")
-        .arg(QStringLiteral(APPLICATION_EXECUTABLE), type, name);
+        .arg(QStringLiteral(APPLICATION_LIB_PREFIX), type, name);
 }
 
 }

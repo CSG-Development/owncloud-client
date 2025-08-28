@@ -22,6 +22,8 @@
 #include "libsync/platform.h"
 #include "libsync/theme.h"
 #include "resources/loadresources.h"
+#include "resources/resources.h"
+#include "customui/stylehelper.h"
 
 #include "common/version.h"
 #include "gui/translations.h"
@@ -211,6 +213,7 @@ void showDowngradeDialog()
             "Some settings were configured in newer versions of this client "
             "and use features that are not available in this version"));
     box.addButton(CUR::Application::tr("Quit"), QMessageBox::AcceptRole);
+    StyleHelper::applyPushButtonStyle(&box);
     box.exec();
     QTimer::singleShot(0, qApp, &QApplication::quit);
 }
@@ -315,6 +318,7 @@ int main(int argc, char **argv)
 
     // load the resources
     const CUR::ResourcesLoader resource;
+    const CUR::StyleHelper shelper;
 
     // Create a `Platform` instance so it can set-up/tear-down stuff for us, and do any
     // initialisation that needs to be done before creating a QApplication

@@ -17,6 +17,7 @@
 #include "jobs/discoverwebfingerservicejobfactory.h"
 #include "jobs/resolveurljobfactory.h"
 #include "theme.h"
+#include "gui/customui/stylehelper.h"
 
 #include <QDebug>
 #include <QMessageBox>
@@ -96,6 +97,7 @@ void ServerUrlSetupWizardState::evaluatePage()
 
     messageBox->addButton(QMessageBox::Cancel);
     messageBox->addButton(tr("Confirm"), QMessageBox::YesRole);
+    StyleHelper::applyPushButtonStyle(messageBox);
 
     connect(messageBox, &QMessageBox::rejected, this, [this]() {
         Q_EMIT evaluationFailed(tr("Insecure server rejected by user"));

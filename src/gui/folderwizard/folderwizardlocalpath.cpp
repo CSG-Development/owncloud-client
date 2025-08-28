@@ -23,6 +23,7 @@
 #include "folderwizard_p.h"
 
 #include "gui/folderman.h"
+#include "gui/customui/stylehelper.h"
 
 #include <QDir>
 #include <QFileDialog>
@@ -35,6 +36,9 @@ FolderWizardLocalPath::FolderWizardLocalPath(FolderWizardPrivate *parent)
     , _ui(new Ui_FolderWizardSourcePage)
 {
     _ui->setupUi(this);
+
+    StyleHelper::applyPushButtonStyle(this);
+
     registerField(QStringLiteral("sourceFolder*"), _ui->localFolderLineEdit);
     connect(_ui->localFolderChooseBtn, &QAbstractButton::clicked, this, &FolderWizardLocalPath::slotChooseLocalFolder);
     _ui->localFolderChooseBtn->setToolTip(tr("Click to select a local folder to sync."));

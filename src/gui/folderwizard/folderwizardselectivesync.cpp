@@ -48,6 +48,7 @@ FolderWizardSelectiveSync::FolderWizardSelectiveSync(FolderWizardPrivate *parent
         // using an else if to make the condition not even more complex...
     } else if (Theme::instance()->showVirtualFilesOption() && vfsMode != Vfs::Off && (vfsMode == Vfs::WindowsCfApi || Theme::instance()->enableExperimentalFeatures())) {
         _virtualFilesCheckBox = new QCheckBox(tr("Use virtual files instead of downloading content immediately%1").arg(vfsMode == Vfs::WindowsCfApi ? QString() : tr(" (experimental)")));
+        _virtualFilesCheckBox->setCursor(Qt::PointingHandCursor);
         connect(_virtualFilesCheckBox, &QCheckBox::clicked, this, &FolderWizardSelectiveSync::virtualFilesCheckboxClicked);
         connect(_virtualFilesCheckBox, &QCheckBox::checkStateChanged, this, [this](int state) {
             _selectiveSync->setEnabled(state == Qt::Unchecked);

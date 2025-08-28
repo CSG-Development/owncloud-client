@@ -17,16 +17,13 @@
 #include "folderstatusdelegate.h"
 #include "folderstatusmodel.h"
 
-#include "folderman.h"
-#include "accountstate.h"
 #include "theme.h"
-#include "account.h"
-#include "guiutility.h"
-
 #include "resources/resources.h"
+#include "customui/tool_button_dots.h"
 
 #include <QPainter>
 #include <QApplication>
+#include <QMouseEvent>
 
 namespace {
 const int barHeightC = 7;
@@ -64,6 +61,38 @@ QSize FolderStatusDelegate::sizeHint(const QStyleOptionViewItem &option,
     }
 
     return QSize(0, h);
+}
+
+bool FolderStatusDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
+{
+    const auto optionsButtonRect = this->computeOptionsButtonRect(option.rect);
+
+    if (QMouseEvent* mev = dynamic_cast<QMouseEvent*>(event)) {
+        if (event->type() == QEvent::MouseMove) {
+            if (optionsButtonRect.contains(mev->position())) {
+                hovered_ = true;
+            }
+            else {
+                hovered_ = false;
+            }
+            return true;
+        }
+
+        if (optionsButtonRect.contains(mev->position())) {
+            if (event->type() == QEvent::MouseButtonPress) {
+                if (mev->button() == Qt::LeftButton)
+                    pressed_ = true;
+                return true;
+            }
+        }
+        if (event->type() == QEvent::MouseButtonRelease) {
+            if (mev->button() == Qt::LeftButton)
+                pressed_ = false;
+            return true;
+        }
+    }
+
+    return QStyledItemDelegate::editorEvent(event, model, option, index);
 }
 
 qreal FolderStatusDelegate::rootFolderHeightWithoutErrors() const
@@ -264,17 +293,29 @@ void FolderStatusDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     {
         // was saved before we fetched the data from the model
         painter->restore();
+
         QStyleOptionToolButton btnOpt;
         btnOpt.state = option.state;
         btnOpt.state &= ~(QStyle::State_Selected | QStyle::State_HasFocus);
         btnOpt.state |= QStyle::State_Raised;
+        if (hovered_)
+            btnOpt.state |= QStyle::State_MouseOver;
+        else
+            btnOpt.state &= ~QStyle::State_MouseOver;
+        if (pressed_)
+            btnOpt.state |= QStyle::State_Sunken;
+        else
+            btnOpt.state &= ~QStyle::State_Sunken;
+
         btnOpt.arrowType = Qt::NoArrow;
         btnOpt.subControls = QStyle::SC_ToolButton;
         btnOpt.rect = QStyle::visualRect(option.direction, option.rect, optionsButtonRect.toRect());
         btnOpt.icon = Resources::getCoreIcon(QStringLiteral("more"));
         int e = QApplication::style()->pixelMetric(QStyle::PM_ButtonIconSize);
         btnOpt.iconSize = QSize(e,e);
-        QApplication::style()->drawComplexControl(QStyle::CC_ToolButton, &btnOpt, painter);
+
+        ToolButtonDots::drawButton(&btnOpt, painter, Theme::instance()->isDarkTheme());
+        //QApplication::style()->drawComplexControl(QStyle::CC_ToolButton, &btnOpt, painter);
     }
 }
 
@@ -287,6 +328,7 @@ QRectF FolderStatusDelegate::computeOptionsButtonRect(QRectF within) const
 
     QStyleOptionToolButton opt;
     int e = QApplication::style()->pixelMetric(QStyle::PM_ButtonIconSize);
+
     opt.rect.setSize(QSize(e,e));
     QSizeF size = QApplication::style()->sizeFromContents(QStyle::CT_ToolButton, &opt, opt.rect.size());
 
