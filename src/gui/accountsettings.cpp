@@ -301,8 +301,10 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
         folderUrl = QUrl::fromLocalFile(fileName);
     } else {
         // the root folder
-        if (auto *folder = selectedFolder()) {
-            folderUrl = QUrl::fromLocalFile(folder->path());
+        if (_model->hasFolder(ui->_folderList->selectionModel()->currentIndex())) {
+            if (auto *folder = selectedFolder()) {
+                folderUrl = QUrl::fromLocalFile(folder->path());
+            }
         }
     }
 

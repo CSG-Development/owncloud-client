@@ -15,6 +15,7 @@
 #include "guiutility.h"
 #include "application.h"
 #include "settingsdialog.h"
+#include "customui/stylehelper.h"
 
 #include <QClipboard>
 #include <QApplication>
@@ -38,13 +39,14 @@ bool Utility::openBrowser(const QUrl &url, QWidget *errorWidgetParent)
 {
     if (!QDesktopServices::openUrl(url)) {
         if (errorWidgetParent) {
-            QMessageBox::warning(
-                errorWidgetParent,
+            QMessageBox msg(QMessageBox::Warning,
                 QCoreApplication::translate("utility", "Could not open browser"),
                 QCoreApplication::translate("utility",
                     "There was an error when launching the browser to go to "
                     "URL %1. Maybe no default browser is configured?")
-                    .arg(url.toString()));
+                    .arg(url.toString()), QMessageBox::Ok, errorWidgetParent);
+            StyleHelper::applyPushButtonStyle(&msg);
+            msg.exec();
         }
         qCWarning(lcGuiUtility) << "QDesktopServices::openUrl failed for" << url;
         return false;
@@ -62,13 +64,14 @@ bool Utility::openEmailComposer(const QString &subject, const QString &body, QWi
 
     if (!QDesktopServices::openUrl(url)) {
         if (errorWidgetParent) {
-            QMessageBox::warning(
-                errorWidgetParent,
+            QMessageBox msg(QMessageBox::Warning,
                 QCoreApplication::translate("utility", "Could not open email client"),
                 QCoreApplication::translate("utility",
                     "There was an error when launching the email client to "
                     "create a new message. Maybe no default email client is "
-                    "configured?"));
+                    "configured?"), QMessageBox::Ok, errorWidgetParent);
+            StyleHelper::applyPushButtonStyle(&msg);
+            msg.exec();
         }
         qCWarning(lcGuiUtility) << "QDesktopServices::openUrl failed for" << url;
         return false;

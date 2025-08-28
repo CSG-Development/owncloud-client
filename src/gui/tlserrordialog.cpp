@@ -40,6 +40,9 @@ TlsErrorDialog::TlsErrorDialog(const QList<QSslError> &sslErrors, const QString 
 
     connect(_ui->buttonBox, &QDialogButtonBox::accepted, this, &TlsErrorDialog::accept);
     connect(_ui->buttonBox, &QDialogButtonBox::rejected, this, &TlsErrorDialog::reject);
+
+    _ui->buttonBox->button(QDialogButtonBox::Yes)->setCursor(Qt::PointingHandCursor);
+    _ui->buttonBox->button(QDialogButtonBox::No)->setCursor(Qt::PointingHandCursor);
 }
 
 TlsErrorDialog::~TlsErrorDialog()

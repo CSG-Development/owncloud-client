@@ -22,6 +22,7 @@ void Navigation::setEntries(const QList<SetupWizardState> &newEntries)
         const QString text = Utility::enumToDisplayName(state);
 
         auto newButton = new QRadioButton(text, this);
+        newButton->setCursor(Qt::PointingHandCursor);
 
         _entries.insert(state, newButton);
         layout()->addWidget(newButton);

@@ -13,6 +13,7 @@
 */
 
 #include "updateurldialog.h"
+#include "customui/stylehelper.h"
 
 #include <QMessageBox>
 #include <QPushButton>
@@ -39,6 +40,7 @@ UpdateUrlDialog::UpdateUrlDialog(const QString &title, const QString &content, c
 
     addButton(tr("Change url permanently to %1").arg(_newUrl.toString()), QMessageBox::AcceptRole);
     addButton(tr("Reject"), QMessageBox::RejectRole);
+    StyleHelper::applyPushButtonStyle(this);
 }
 
 UpdateUrlDialog *UpdateUrlDialog::fromAccount(AccountPtr account, const QUrl &newUrl, QWidget *parent)

@@ -24,7 +24,9 @@
 #include "curatorgui.h"
 #include "theme.h"
 
+#include "customui/stylehelper.h"
 #include "resources/resources.h"
+#include "customui/menu_toolbutton.h"
 
 #include <QActionGroup>
 #include <QDesktopServices>
@@ -46,13 +48,17 @@
 #include <QWidgetAction>
 #include <QWindow>
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 #include "settingsdialog_mac.h"
 
 void setActivationPolicy(ActivationPolicy policy);
 #endif
 
 Q_LOGGING_CATEGORY(lcSettingsDialog, "gui.settingsdialog", QtInfoMsg);
+
+// Define to use custom style
+// If not defined - used QToolButton overload with custom paintEvent
+#define USE_TOOLBUTTON_STYLE
 
 namespace {
 auto minimumSizeHint(const QWidget *w)
@@ -75,16 +81,7 @@ auto minimumSizeHint(const QWidget *w)
     return min;
 }
 
-const QString TOOLBAR_CSS()
-{
-    return QStringLiteral("QToolBar { background: %1; margin: 0; padding: 0; border: none; border-bottom: 1px solid %2; spacing: 0; } "
-                          "QToolBar QToolButton { background: %1; border: none; border-bottom: 1px solid %2; margin: 0; padding: 5px; } "
-                          "QToolBar QToolBarExtension { padding:0; } "
-                          "QToolBar QToolButton:checked { background: %3; color: %4; }");
-}
-
 const float BUTTONSIZERATIO = 1.618f; // golden ratio
-
 
 /** display name with two lines that is displayed in the settings
  */
@@ -136,16 +133,22 @@ public:
             return nullptr;
         }
 
-        QToolButton *btn = new QToolButton(toolbar);
+#ifdef USE_TOOLBUTTON_STYLE
+        QToolButton* btn = new QToolButton(toolbar);
+#else
+        MenuToolButton* btn = new MenuToolButton(toolbar);
+#endif
         QString objectName = QStringLiteral("settingsdialog_toolbutton_");
         objectName += text();
         btn->setObjectName(objectName);
-
         btn->setDefaultAction(this);
         btn->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
         btn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
         // icon size is fixed, we can't use the toolbars actual size hint as it might not be defined yet
         btn->setMinimumWidth(toolbar->iconSize().height() * BUTTONSIZERATIO);
+        btn->setCursor(Qt::PointingHandCursor);
+        btn->setAttribute(Qt::WA_Hover, true);
+        _widget = btn;
         return btn;
     }
 
@@ -164,13 +167,19 @@ public:
 
     void updateIcon()
     {
-        if (!_iconName.isEmpty()) {
-            setIcon(Resources::getCoreIcon(_iconName));
-        }
+        // if (!_iconName.isEmpty()) {
+        //     setIcon(Resources::getCoreIcon(_iconName));
+        // }
+        setIcon(StyleHelper::getIcon(_iconName));
+    }
+
+    QWidget* buttonWidget() const {
+        return _widget;
     }
 
 private:
     QString _iconName;
+    QWidget* _widget = nullptr;
 };
 
 SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
@@ -180,6 +189,31 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
 {
     ConfigFile cfg;
     _ui->setupUi(this);
+
+    connect(Theme::instance(), &Theme::themeChanged, this, [&] {
+        StyleHelper::setDarkMode(Theme::instance()->isDarkTheme());
+        updateToolbarTheme();
+        update();
+        _ui->stack->currentWidget()->update();
+    });
+
+    static bool prevDarkTheme = Theme::instance()->isDarkTheme();
+    StyleHelper::setDarkMode(prevDarkTheme);
+    auto themeTimer = new QTimer(this);
+    themeTimer->setInterval(700);
+    themeTimer->start();
+    connect(themeTimer, &QTimer::timeout, this, [&] {
+        bool nowTheme = Theme::instance()->isDarkTheme();
+        if (nowTheme != prevDarkTheme) {
+            prevDarkTheme = nowTheme;
+            Theme::instance()->emit_theme_change();
+        }
+    }, Qt::QueuedConnection);
+
+
+    StyleHelper::applyPushButtonStyle(this);
+    _ui->toolBar->layout()->setContentsMargins(0, 0, 0, 0);
+    updateToolbarTheme();
 
     // People perceive this as a Window, so also make Ctrl+W work
     QAction *closeWindowAction = new QAction(this);
@@ -193,8 +227,8 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
     _actionGroup = new QActionGroup(this);
     _actionGroup->setExclusive(true);
 
-
-    _addAccountAction = new ToolButtonAction(QStringLiteral("plus-solid"), tr("Add account"), this);
+    auto tbAction = new ToolButtonAction(QStringLiteral("plus-solid"), tr("Add account"), this);
+    _addAccountAction = tbAction;
     _addAccountAction->setCheckable(false);
     connect(_addAccountAction, &QAction::triggered, this, [] {
         // don't directly connect here, ocApp might not be defined yet
@@ -204,9 +238,12 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
 
     // Note: all the actions have a '\n' because the account name is in two lines and
     // all buttons must have the same size in order to keep a good layout
-    _activityAction = new ToolButtonAction(QStringLiteral("activity"), tr("Activity"), this);
+    tbAction = new ToolButtonAction(QStringLiteral("activity"), tr("Activity"), this);
+
+    _activityAction = tbAction;
     _actionGroup->addAction(_activityAction);
     _ui->toolBar->addAction(_activityAction);
+
     _activitySettings = new ActivitySettings;
     _ui->stack->addWidget(_activitySettings);
     connect(_activitySettings, &ActivitySettings::guiLog, _gui,
@@ -215,7 +252,7 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
         });
     _activitySettings->setNotificationRefreshInterval(cfg.notificationRefreshInterval());
 
-    QAction *generalAction = new ToolButtonAction(QStringLiteral("settings"), tr("Settings"), this);
+    auto generalAction = new ToolButtonAction(QStringLiteral("settings"), tr("Settings"), this);
     _actionGroup->addAction(generalAction);
     _ui->toolBar->addAction(generalAction);
     GeneralSettings *generalSettings = new GeneralSettings;
@@ -228,7 +265,8 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
 
     const auto appNameGui = Theme::instance()->appNameGUI();
 
-    for (const auto &[iconName, name, url] : Theme::instance()->urlButtons()) {
+    const auto& urlButtonsList = Theme::instance()->urlButtons();
+    for (const auto &[iconName, name, url] : urlButtonsList) {
         auto urlAction = new ToolButtonAction(Theme::instance()->themeUniversalIcon(QStringLiteral("urlIcons/%1").arg(iconName)), name, this);
         urlAction->setCheckable(false);
         connect(urlAction, &QAction::triggered, this, [url = url] {
@@ -239,12 +277,13 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
         _ui->toolBar->addAction(urlAction);
     }
 
-    QAction *quitAction = new ToolButtonAction(QStringLiteral("quit"), tr("Quit %1").arg(appNameGui), this);
+    auto *quitAction = new ToolButtonAction(QStringLiteral("quit"), tr("Quit %1").arg(appNameGui), this);
     quitAction->setCheckable(false);
     connect(quitAction, &QAction::triggered, this, [this, appNameGui] {
         auto box = new QMessageBox(QMessageBox::Question, tr("Quit %1").arg(appNameGui),
             tr("Are you sure you want to quit %1?").arg(appNameGui), QMessageBox::Yes | QMessageBox::No, this);
         box->setAttribute(Qt::WA_DeleteOnClose);
+        StyleHelper::applyPushButtonStyle(box);
         connect(box, &QMessageBox::accepted, this, [] {
             qApp->quit();
         });
@@ -298,6 +337,14 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
 SettingsDialog::~SettingsDialog()
 {
     delete _ui;
+}
+
+void SettingsDialog::updateToolbarTheme()
+{
+    _ui->toolBar->setStyleSheet(QStringLiteral(
+        "background-color: %1;"
+        "border: none;").arg(Theme::instance()->isDarkTheme() ? QStringLiteral("#000000") : QStringLiteral("#FFFFFF"))
+        );
 }
 
 void SettingsDialog::addModalWidget(QWidget *w)
@@ -369,7 +416,7 @@ void SettingsDialog::setVisible(bool visible)
         cfg.saveGeometry(this);
     }
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
     if (visible) {
         setActivationPolicy(ActivationPolicy::Regular);
     } else {
@@ -418,7 +465,7 @@ void SettingsDialog::accountAdded(AccountStatePtr accountStatePtr)
         _ui->toolBar->removeAction(_addAccountAction);
     }
 
-    QAction *accountAction;
+    ToolButtonAction* accountAction;
     const QPixmap avatar = accountStatePtr->account()->avatar();
     const QString actionText = brandingSingleAccount ? tr("Account") : accountStatePtr->account()->displayName();
     if (avatar.isNull()) {
@@ -427,6 +474,8 @@ void SettingsDialog::accountAdded(AccountStatePtr accountStatePtr)
         const QIcon icon(AvatarJob::makeCircularAvatar(avatar));
         accountAction = new ToolButtonAction(icon, actionText, this);
     }
+
+
     _accountActions.append(accountAction);
 
     if (!brandingSingleAccount) {
@@ -437,6 +486,15 @@ void SettingsDialog::accountAdded(AccountStatePtr accountStatePtr)
     // For single account: the add button is removed, place the account tab as the first item.
     // For multi account: we keep the add button on the left, but place the account(s) right after the add button.
     _ui->toolBar->insertAction(brandingSingleAccount ? _ui->toolBar->actions().at(0) : _ui->toolBar->actions().at(1), accountAction);
+
+    // Fix taborder of inserted account button
+    if (const auto tbAction = dynamic_cast<ToolButtonAction*>(_addAccountAction)) {
+        auto add = tbAction->buttonWidget();
+        auto acc = accountAction->buttonWidget();
+        if (add && acc) {
+            _ui->toolBar->setTabOrder(add, acc);
+        }
+    }
 
     auto accountSettings = new AccountSettings(accountStatePtr, this);
     QString objectName = QStringLiteral("accountSettings_");
@@ -489,6 +547,11 @@ void SettingsDialog::slotAccountDisplayNameChanged()
 
 void SettingsDialog::accountRemoved(AccountStatePtr s)
 {
+    if (!s) {
+        qWarning(lcSettingsDialog) << "Invalid account state ptr";
+        return;
+    }
+
     while (_modalStack.contains(s->account().data())) {
         ceaseModality(s->account().get());
     }
@@ -524,11 +587,14 @@ void SettingsDialog::accountRemoved(AccountStatePtr s)
 
 void SettingsDialog::customizeStyle()
 {
-    QString highlightColor(palette().highlight().color().name());
-    QString highlightTextColor(palette().highlightedText().color().name());
-    QString dark(palette().dark().color().name());
-    QString background(palette().base().color().name());
-    _ui->toolBar->setStyleSheet(TOOLBAR_CSS().arg(background, dark, highlightColor, highlightTextColor));
+#ifdef USE_TOOLBUTTON_STYLE
+    const auto& tbrs = _ui->toolBar->findChildren<QToolButton*>();
+    for (auto* t: tbrs) {
+        t->setStyle(StyleHelper::toolbarMenuStyle());
+        t->setMinimumHeight(92);
+        t->setAttribute(Qt::WA_Hover, true);
+    }
+#endif
 
     const auto &toolButtonActions = findChildren<ToolButtonAction *>();
     for (auto *a : toolButtonActions) {

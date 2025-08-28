@@ -640,6 +640,23 @@ bool Theme::withCrashReporter() const
 #endif
 }
 
+void Theme::systemThemeChanged()
+{
+    Q_EMIT themeChanged();
+}
+
+bool Theme::isDarkTheme() const
+{
+#ifdef Q_OS_WIN
+    QSettings registry(QStringLiteral("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"), QSettings::Registry64Format);
+    auto lightTheme = registry.value("AppsUseLightTheme").toInt();
+    return !lightTheme;
+#elif defined Q_OS_MACOS
+    auto sh = QGuiApplication::styleHints();
+    return sh->colorScheme() == Qt::ColorScheme::Dark;
+#endif
+}
+
 template <>
 CURATORSYNC_EXPORT QString Utility::enumToDisplayName(Theme::UserIDType userIdType)
 {

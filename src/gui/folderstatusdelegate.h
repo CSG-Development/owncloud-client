@@ -18,6 +18,8 @@
 
 namespace CUR {
 
+class FolderStatusModel;
+
 /**
  * @brief The FolderStatusDelegate class
  * @ingroup gui
@@ -31,6 +33,7 @@ public:
     void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
     QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const override;
 
+    bool editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index) override;
 
     /**
      * return the position of the option button within the item
@@ -38,6 +41,8 @@ public:
     QRectF computeOptionsButtonRect(QRectF within) const;
     QRectF errorsListRect(QRectF within, const QModelIndex &) const;
     qreal rootFolderHeightWithoutErrors() const;
+
+    void setModel(FolderStatusModel* model) {model_ = model;}
 
 private:
     static QString addFolderText(bool useSapces);
@@ -52,6 +57,9 @@ private:
     qreal _margin = 0;
     qreal _aliasMargin = 0;
     bool _ready = false;
+    bool hovered_ = false;
+    bool pressed_ = false;
+    FolderStatusModel* model_ = nullptr;
 };
 
 } // namespace CUR

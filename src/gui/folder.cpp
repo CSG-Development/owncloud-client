@@ -31,6 +31,7 @@
 #include "folderman.h"
 #include "folderwatcher.h"
 #include "gui/accountsettings.h"
+#include "gui/customui/stylehelper.h"
 #include "libsync/graphapi/spacesmanager.h"
 #include "localdiscoverytracker.h"
 #include "scheduling/syncscheduler.h"
@@ -1214,6 +1215,7 @@ void Folder::slotWatcherUnreliable(const QString &message)
         {}, ocApp()->gui()->settingsDialog());
 
     msgBox->setAttribute(Qt::WA_DeleteOnClose);
+    StyleHelper::applyPushButtonStyle(msgBox);
     CuratorGui::raise();
     msgBox->open();
 }
@@ -1264,9 +1266,11 @@ void Folder::slotAboutToRemoveAllFiles(SyncFileItem::Direction direction)
         new QMessageBox(QMessageBox::Warning, tr("Remove All Files?"), msg.arg(shortGuiLocalPath()), QMessageBox::NoButton, ocApp()->gui()->settingsDialog());
     _removeAllFilesDialog->setAttribute(Qt::WA_DeleteOnClose);
     _removeAllFilesDialog->setWindowFlags(_removeAllFilesDialog->windowFlags() | Qt::WindowStaysOnTopHint);
-    _removeAllFilesDialog->addButton(tr("Remove all files"), QMessageBox::DestructiveRole);
+    auto removeBtn = _removeAllFilesDialog->addButton(tr("Remove all files"), QMessageBox::DestructiveRole);
+    removeBtn->setCursor(Qt::PointingHandCursor);
     QPushButton *keepBtn = _removeAllFilesDialog->addButton(tr("Keep files"), QMessageBox::AcceptRole);
     _removeAllFilesDialog->setDefaultButton(keepBtn);
+    StyleHelper::applyPushButtonStyle(_removeAllFilesDialog);
     setSyncPaused(true);
     connect(_removeAllFilesDialog, &QMessageBox::finished, this, [keepBtn, this] {
         if (_removeAllFilesDialog->clickedButton() == keepBtn) {

@@ -22,6 +22,7 @@
 #include "guiutility.h"
 
 #include "resources/resources.h"
+#include "customui/stylehelper.h"
 
 #include "QProgressIndicator.h"
 #include <QBuffer>
@@ -595,9 +596,13 @@ void ShareLinkWidget::confirmAndDeleteShare(const QSharedPointer<LinkShare> &sha
             .arg(shareName(*share)),
         QMessageBox::NoButton,
         this);
-    QPushButton *yesButton =
-        messageBox->addButton(tr("Delete"), QMessageBox::YesRole);
-    messageBox->addButton(tr("Cancel"), QMessageBox::NoRole);
+
+    QPushButton *yesButton = messageBox->addButton(tr("Delete"), QMessageBox::YesRole);
+    yesButton->setCursor(Qt::PointingHandCursor);
+    auto addBtn = messageBox->addButton(tr("Cancel"), QMessageBox::NoRole);
+    addBtn->setCursor(Qt::PointingHandCursor);
+
+    StyleHelper::applyPushButtonStyle(messageBox);
 
     connect(messageBox, &QMessageBox::finished, this,
         [messageBox, yesButton, share]() {
