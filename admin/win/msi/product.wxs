@@ -42,7 +42,7 @@
 			<UIRef Id="WixUI_FeatureTree" />
 			<UIRef Id="WixUI_ErrorProgressText" />
 
-			<!-- https://wixtoolset.org/documentation/manual/v3/howtos/ui_and_localization/run_program_after_install.html -->        
+			<!-- https://wixtoolset.org/documentation/manual/v3/howtos/ui_and_localization/run_program_after_install.html -->
 			<Publish Dialog="ExitDialog" 
 				Control="Finish" 
 				Event="DoAction" 
