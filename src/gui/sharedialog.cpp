@@ -65,6 +65,8 @@ ShareDialog::ShareDialog(AccountStatePtr accountState,
 
     _ui->setupUi(this);
 
+    _ui->shareWidgets->tabBar()->setCursor(Qt::PointingHandCursor);
+
     QPushButton *closeButton = _ui->buttonBox->button(QDialogButtonBox::Close);
     closeButton->setCursor(Qt::PointingHandCursor);
     connect(closeButton, &QAbstractButton::clicked, this, &QWidget::close);

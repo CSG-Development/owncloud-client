@@ -69,7 +69,8 @@
     </layout>
    </item>
    <item>
-    <widget class="QTabWidget" name="shareWidgets"/>
+    <widget class="QTabWidget" name="shareWidgets">
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="buttonBoxLayout">

@@ -107,6 +107,7 @@ private:
     AccountStatePtr _accountState;
     QAction *_toggleSignInOutAction;
     QAction *_toggleReconnect;
+    QMenu* _accountToolboxMenu;
     // are we already in the destructor
     bool _goingDown = false;
 

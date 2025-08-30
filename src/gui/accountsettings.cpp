@@ -33,6 +33,7 @@
 #include "settingsdialog.h"
 #include "theme.h"
 #include "tooltipupdater.h"
+#include "customui/stylehelper.h"
 
 #include "folderwizard/folderwizard.h"
 
@@ -77,9 +78,9 @@ public:
     {
     }
 
-    QTreeView *folderList;
-    FolderStatusDelegate *delegate;
-    QAbstractItemModel *model;
+    QTreeView *folderList = nullptr;
+    FolderStatusDelegate *delegate = nullptr;
+    QAbstractItemModel *model = nullptr;
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override
@@ -110,6 +111,12 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
 {
     ui->setupUi(this);
 
+    ui->_accountToolbox->setMinimumHeight(34);
+    ui->_accountToolbox->setMinimumWidth(100);
+    ui->_accountToolbox->setAttribute(Qt::WA_Hover, true);
+
+    StyleHelper::applyPushButtonStyle(this);
+
     _model = new FolderStatusModel(this);
     _model->setAccountState(_accountState);
 
@@ -132,7 +139,7 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     ui->_folderList->sortByColumn(static_cast<int>(FolderStatusModel::Columns::HeaderRole), Qt::AscendingOrder);
 
     ui->_folderList->header()->hide();
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_MACOS)
     ui->_folderList->setMinimumWidth(400);
 #else
     ui->_folderList->setMinimumWidth(300);
@@ -216,24 +223,31 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
 
 void AccountSettings::createAccountToolbox()
 {
-    QMenu *menu = new QMenu(ui->_accountToolbox);
+    _accountToolboxMenu = new QMenu(ui->_accountToolbox);
 
     _toggleSignInOutAction = new QAction(tr("Log out"), this);
     connect(_toggleSignInOutAction, &QAction::triggered, this, &AccountSettings::slotToggleSignInState);
-    menu->addAction(_toggleSignInOutAction);
+    _accountToolboxMenu->addAction(_toggleSignInOutAction);
 
-    _toggleReconnect = menu->addAction(tr("Reconnect"));
+    _toggleReconnect = _accountToolboxMenu->addAction(tr("Reconnect"));
     connect(_toggleReconnect, &QAction::triggered, this, [this] {
         _accountState->checkConnectivity(true);
     });
 
     QAction *action = new QAction(tr("Remove"), this);
-    menu->addAction(action);
+    _accountToolboxMenu->addAction(action);
     connect(action, &QAction::triggered, this, &AccountSettings::slotDeleteAccount);
 
     ui->_accountToolbox->setText(tr("Account") + QLatin1Char(' '));
-    ui->_accountToolbox->setMenu(menu);
-    ui->_accountToolbox->setPopupMode(QToolButton::InstantPopup);
+
+    connect(_accountToolboxMenu, &QMenu::aboutToShow, this, [&] {ui->_accountToolbox->setArrowType(Qt::UpArrow);});
+    connect(_accountToolboxMenu, &QMenu::aboutToHide, this, [&] {ui->_accountToolbox->setArrowType(Qt::DownArrow);});
+
+    connect(ui->_accountToolbox, &QToolButton::clicked, this, [&] {
+        auto pos = mapToGlobal(ui->_accountToolbox->frameGeometry().bottomLeft());
+        pos.setY(pos.y() + 4);
+        _accountToolboxMenu->exec(pos);
+    });
 }
 
 Folder *AccountSettings::selectedFolder() const
@@ -301,6 +315,10 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
         folderUrl = QUrl::fromLocalFile(fileName);
     } else {
         // the root folder
+        // crash workaround if table has no selected item and not focused
+        if (!_model->hasFolder(ui->_folderList->selectionModel()->currentIndex())) {
+            ui->_folderList->setFocus();
+        }
         if (_model->hasFolder(ui->_folderList->selectionModel()->currentIndex())) {
             if (auto *folder = selectedFolder()) {
                 folderUrl = QUrl::fromLocalFile(folder->path());
@@ -481,7 +499,9 @@ void AccountSettings::slotRemoveCurrentFolder()
         messageBox->setAttribute(Qt::WA_DeleteOnClose);
         QPushButton *yesButton =
             messageBox->addButton(tr("Remove Folder Sync Connection"), QMessageBox::YesRole);
+        yesButton->setCursor(Qt::PointingHandCursor);
         messageBox->addButton(tr("Cancel"), QMessageBox::NoRole);
+        StyleHelper::applyPushButtonStyle(messageBox);
         connect(messageBox, &QMessageBox::finished, this, [messageBox, yesButton, folder, row, this]{
             if (messageBox->clickedButton() == yesButton) {
                 FolderMan::instance()->removeFolder(folder);
@@ -578,6 +598,7 @@ void AccountSettings::slotDisableVfsCurrentFolder()
            "This action will abort any currently running synchronization."));
     auto acceptButton = msgBox->addButton(tr("Disable support"), QMessageBox::AcceptRole);
     msgBox->addButton(tr("Cancel"), QMessageBox::RejectRole);
+    StyleHelper::applyPushButtonStyle(msgBox);
     connect(msgBox, &QMessageBox::finished, msgBox, [this, msgBox, folder, acceptButton] {
         msgBox->deleteLater();
         if (msgBox->clickedButton() != acceptButton|| !folder)
@@ -1032,6 +1053,7 @@ void AccountSettings::slotDeleteAccount()
     auto yesButton = messageBox->addButton(tr("Remove connection"), QMessageBox::YesRole);
     messageBox->addButton(tr("Cancel"), QMessageBox::NoRole);
     messageBox->setAttribute(Qt::WA_DeleteOnClose);
+    StyleHelper::applyPushButtonStyle(messageBox);
     connect(messageBox, &QMessageBox::finished, this, [this, messageBox, yesButton]{
         if (messageBox->clickedButton() == yesButton) {
             auto manager = AccountManager::instance();

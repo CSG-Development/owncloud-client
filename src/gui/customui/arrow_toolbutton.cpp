@@ -29,6 +29,7 @@ ArrowToolButton::ArrowToolButton(QWidget *parent)
     : QToolButton(parent)
 {
     setAttribute(Qt::WA_Hover, true);
+    setCursor(Qt::PointingHandCursor);
 }
 
 void ArrowToolButton::paintEvent(QPaintEvent* /*event*/)
