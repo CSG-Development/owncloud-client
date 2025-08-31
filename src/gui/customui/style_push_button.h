@@ -13,6 +13,8 @@ public:
     void drawControl(QStyle::ControlElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget = nullptr) const override;
     void drawItemText(QPainter *painter, const QRect &rect, int flags, const QPalette &pal, bool enabled, const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const override;
 
+    QSize sizeFromContents(ContentsType ct, const QStyleOption *opt, const QSize &contentsSize, const QWidget *w) const override;
+
 protected:
     QColor buttonFrameFocused() const override;
 
@@ -25,6 +27,7 @@ protected:
     QColor buttonBackgroundPressed() const override;
     QColor buttonBackgroundHovered() const override;
     QColor buttonBackgroundDisabled() const override;
+
 
 };
 
