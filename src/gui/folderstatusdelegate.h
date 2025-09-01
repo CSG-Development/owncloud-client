@@ -39,6 +39,7 @@ public:
      * return the position of the option button within the item
      */
     QRectF computeOptionsButtonRect(QRectF within) const;
+    QRect getCheckboxRect() const;
     QRectF errorsListRect(QRectF within, const QModelIndex &) const;
     qreal rootFolderHeightWithoutErrors() const;
 
@@ -60,6 +61,7 @@ private:
     bool hovered_ = false;
     bool pressed_ = false;
     FolderStatusModel* model_ = nullptr;
+    QRect checkboxRect;
 };
 
 } // namespace CUR

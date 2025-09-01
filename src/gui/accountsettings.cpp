@@ -96,6 +96,11 @@ protected:
                     || QStyle::visualRect(folderList->layoutDirection(), rect, delegate->computeOptionsButtonRect(rect).toRect()).contains(pos))) {
                 shape = Qt::PointingHandCursor;
             }
+
+            if (delegate->getCheckboxRect().contains(pos)) {
+                shape = Qt::PointingHandCursor;
+            }
+
             folderList->setCursor(shape);
         }
         return QObject::eventFilter(watched, event);

@@ -65,10 +65,29 @@ QSize FolderStatusDelegate::sizeHint(const QStyleOptionViewItem &option,
 
 bool FolderStatusDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
-    const auto optionsButtonRect = this->computeOptionsButtonRect(option.rect);
-
     if (QMouseEvent* mev = dynamic_cast<QMouseEvent*>(event)) {
+
+        const auto optionsButtonRect = this->computeOptionsButtonRect(option.rect);
+
         if (event->type() == QEvent::MouseMove) {
+
+            QWidget* w = const_cast<QWidget*>(option.widget);
+            if (w) {
+
+                // Checkbox hover mouse cursor
+                if (index.model()->flags(index) & Qt::ItemIsUserCheckable) {
+                    QStyleOptionButton opt;
+                    opt.QStyleOption::operator=(option);
+                    opt.rect = option.rect;
+                    QStyle* style = option.widget->style();
+                    checkboxRect = style->subElementRect(QStyle::SE_ItemViewItemCheckIndicator, &opt, option.widget);
+                }
+                else {
+                    checkboxRect = {};
+                }
+
+            }
+
             if (optionsButtonRect.contains(mev->position())) {
                 hovered_ = true;
             }
@@ -90,6 +109,7 @@ bool FolderStatusDelegate::editorEvent(QEvent *event, QAbstractItemModel *model,
                 pressed_ = false;
             return true;
         }
+
     }
 
     return QStyledItemDelegate::editorEvent(event, model, option, index);
@@ -335,6 +355,11 @@ QRectF FolderStatusDelegate::computeOptionsButtonRect(QRectF within) const
     return {{within.right() - size.width() - QApplication::style()->pixelMetric(QStyle::PM_LayoutRightMargin),
                 within.top() + within.height() / 2 - size.height() / 2},
         size};
+}
+
+QRect FolderStatusDelegate::getCheckboxRect() const
+{
+    return checkboxRect;
 }
 
 QRectF FolderStatusDelegate::errorsListRect(QRectF within, const QModelIndex &index) const
