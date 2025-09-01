@@ -22,6 +22,7 @@ constexpr qreal frameRadius = 4;
 constexpr qreal frameWidth = 1;
 constexpr qreal focusFrameMargin = 5;
 #endif
+constexpr int textPadding = 14;
 }
 
 namespace CUR {
@@ -133,6 +134,13 @@ void ProxyStylePushButton::drawItemText(QPainter *painter, const QRect &rect, in
         painter->setPen(QPen(pal.brush(textRole), savedPen.widthF()));
     painter->drawText(rect, flags, text);
     painter->setPen(savedPen);
+}
+
+QSize ProxyStylePushButton::sizeFromContents(ContentsType ct, const QStyleOption *opt, const QSize &contentsSize, const QWidget *w) const
+{
+    QSize sz = QProxyStyle::sizeFromContents(ct, opt, contentsSize, w);
+    sz.rwidth() += ::textPadding;
+    return sz;
 }
 
 } // namespace CUR

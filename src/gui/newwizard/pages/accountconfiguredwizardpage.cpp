@@ -12,6 +12,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QCheckBox>
 
 
 namespace CUR::Wizard {
@@ -170,6 +171,11 @@ AccountConfiguredWizardPage::AccountConfiguredWizardPage(
         [this, enableResetLocalDirectoryButton]() { _ui->resetLocalDirectoryButton->setEnabled(enableResetLocalDirectoryButton()); });
     connect(_ui->resetLocalDirectoryButton, &QToolButton::clicked, this,
         [this, defaultSyncTargetDir]() { _ui->localDirectoryLineEdit->setText(QDir::toNativeSeparators(defaultSyncTargetDir)); });
+
+    const auto& chkBoxes = findChildren<QCheckBox*>();
+    for (auto chk: chkBoxes) {
+        chk->setCursor(Qt::PointingHandCursor);
+    }
 }
 
 AccountConfiguredWizardPage::~AccountConfiguredWizardPage() noexcept

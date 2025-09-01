@@ -148,6 +148,7 @@ public:
         btn->setMinimumWidth(toolbar->iconSize().height() * BUTTONSIZERATIO);
         btn->setCursor(Qt::PointingHandCursor);
         btn->setAttribute(Qt::WA_Hover, true);
+        btn->setStyle(StyleHelper::toolbarMenuStyle());
         _widget = btn;
         return btn;
     }

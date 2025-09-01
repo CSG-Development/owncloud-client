@@ -1,4 +1,5 @@
 #include "askexperimentalvirtualfilesfeaturemessagebox.h"
+#include "customui/stylehelper.h"
 
 namespace CUR {
 
@@ -24,6 +25,7 @@ AskExperimentalVirtualFilesFeatureMessageBox::AskExperimentalVirtualFilesFeature
     this->addButton(tr("Stay safe"), QMessageBox::RejectRole);
 
     this->setAttribute(Qt::WA_DeleteOnClose);
+    StyleHelper::applyPushButtonStyle(this);
 }
 
 }
