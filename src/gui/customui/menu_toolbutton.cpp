@@ -60,15 +60,16 @@ void MenuToolButton::paintEvent(QPaintEvent* /*event*/)
     pix_r.setHeight(::iconSize.height() + 4);
     text_r.adjust(0, pix_r.height() - 14, 0, -1);
 
-    auto pm = icon().pixmap(rect().size().boundedTo(::iconSize), painter.device()->devicePixelRatio(), mode, state);
-
     int alignment = Qt::TextShowMnemonic;
     alignment |= Qt::AlignCenter;
 
     QFontMetrics fontMetrics = painter.fontMetrics();
     const QString elidedLine = fontMetrics.elidedText(text(), Qt::ElideMiddle, text_r.width());
 
-    style()->drawItemPixmap(&painter, pix_r, Qt::AlignCenter, pm);
+    auto pm = icon().pixmap(rect().size().boundedTo(::iconSize), painter.device()->devicePixelRatio(), mode, state);
+    if (!pm.isNull()) {
+        style()->drawItemPixmap(&painter, pix_r, Qt::AlignCenter, pm);
+    }
     style()->drawItemText(&painter, QStyle::visualRect(layoutDirection(), rect(), text_r), alignment, palette(), isEnabled(), elidedLine);
 }
 

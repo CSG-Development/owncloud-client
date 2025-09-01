@@ -101,9 +101,10 @@ void ArrowToolButton::paintEvent(QPaintEvent* /*event*/)
     QRect text_r = rect();
 
     auto pm = StyleHelper::getArrowPixmap(arrowType(), isPressed, !isEnabled(), isDark);
-    pix_r.adjust(0, 0, -pm.width(), 0);
-    style()->drawItemPixmap(&
-        painter, pix_r, Qt::AlignRight|Qt::AlignVCenter, pm);
+    if (!pm.isNull()) {
+        pix_r.adjust(0, 0, -pm.width(), 0);
+        style()->drawItemPixmap(&painter, pix_r, Qt::AlignRight|Qt::AlignVCenter, pm);
+    }
 
     int alignment = Qt::TextShowMnemonic;
     alignment |= Qt::AlignCenter;
