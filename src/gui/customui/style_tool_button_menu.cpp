@@ -103,7 +103,6 @@ void ProxyStyleToolButtonMenu::drawControl(ControlElement element, const QStyleO
             pix_r.setHeight(iconSize.height() + 4);
             text_r.adjust(0, pix_r.height() - 14, 0, -1);
 
-            auto pm = tb->icon.pixmap(tb->rect.size().boundedTo(tb->iconSize), painter->device()->devicePixelRatio(), mode, state);
 
             int alignment = Qt::TextShowMnemonic;
             alignment |= Qt::AlignCenter;
@@ -111,7 +110,10 @@ void ProxyStyleToolButtonMenu::drawControl(ControlElement element, const QStyleO
             QFontMetrics fontMetrics = painter->fontMetrics();
             const QString elidedLine = fontMetrics.elidedText(tb->text, Qt::ElideMiddle, text_r.width());
 
-            proxy()->drawItemPixmap(painter, pix_r, Qt::AlignCenter, pm);
+            auto pm = tb->icon.pixmap(tb->rect.size().boundedTo(tb->iconSize), painter->device()->devicePixelRatio(), mode, state);
+            if (!pm.isNull()) {
+                proxy()->drawItemPixmap(painter, pix_r, Qt::AlignCenter, pm);
+            }
             proxy()->drawItemText(painter, QStyle::visualRect(tb->direction, tb->rect, text_r), alignment, tb->palette, tb->state & State_Enabled, elidedLine);
 
             return;

@@ -66,7 +66,9 @@ void ToolButtonDots::drawButton(QStyleOptionToolButton *opt, QPainter *painter, 
     QPointF p1 {p.x() + rect.x(), p.y() + rect.y()};
 
     const auto px = StyleHelper::getDotsPixmap(opt);
-    painter->drawPixmap(p1, px);
+    if (!px.isNull()) {
+        painter->drawPixmap(p1, px);
+    }
 
     painter->restore();
 }
