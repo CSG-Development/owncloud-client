@@ -320,16 +320,10 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
         folderUrl = QUrl::fromLocalFile(fileName);
     } else {
         // the root folder
-        // crash workaround if table has no selected item and not focused
-        if (!_model->hasFolder(ui->_folderList->selectionModel()->currentIndex())) {
-            ui->_folderList->setFocus();
-        }
-        if (_model->hasFolder(ui->_folderList->selectionModel()->currentIndex())) {
             if (auto *folder = selectedFolder()) {
                 folderUrl = QUrl::fromLocalFile(folder->path());
             }
         }
-    }
 
     if (!folderUrl.isEmpty()) {
         QAction *ac = menu->addAction(CommonStrings::showInFileBrowser(), [folderUrl]() {
