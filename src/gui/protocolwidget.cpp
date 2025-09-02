@@ -27,6 +27,7 @@
 #include "syncfileitem.h"
 
 #include "models/expandingheaderview.h"
+#include "gui/customui/stylehelper.h"
 
 #include "ui_protocolwidget.h"
 
@@ -37,6 +38,8 @@ ProtocolWidget::ProtocolWidget(QWidget *parent)
     , _ui(new Ui::ProtocolWidget)
 {
     _ui->setupUi(this);
+
+    StyleHelper::applyPushButtonStyle(this);
 
     connect(ProgressDispatcher::instance(), &ProgressDispatcher::itemCompleted,
         this, &ProtocolWidget::slotItemCompleted);

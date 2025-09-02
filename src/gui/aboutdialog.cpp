@@ -13,9 +13,12 @@
  */
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
+#include "customui/stylehelper.h"
 
 #include "theme.h"
 #include "guiutility.h"
+
+#include <QTabBar>
 
 namespace CUR {
 
@@ -24,10 +27,12 @@ AboutDialog::AboutDialog(QWidget *parent)
     , ui(new Ui::AboutDialog)
 {
     ui->setupUi(this);
+    StyleHelper::applyPushButtonStyle(this);
     setWindowTitle(tr("About %1").arg(Theme::instance()->appNameGUI()));
     ui->aboutText->setText(Theme::instance()->about());
     ui->icon->setPixmap(Theme::instance()->aboutIcon().pixmap(256));
     ui->versionInfo->setText(Theme::instance()->aboutVersions(Theme::VersionFormat::RichText));
+    ui->tabWidget->tabBar()->setCursor(Qt::PointingHandCursor);
 
     connect(ui->versionInfo, &QTextBrowser::anchorClicked, this, &AboutDialog::openBrowserFromUrl);
     connect(ui->aboutText, &QLabel::linkActivated, this, &AboutDialog::openBrowser);

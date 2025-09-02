@@ -17,7 +17,6 @@
 #include "accountstate.h"
 #include "common/asserts.h"
 #include "folderman.h"
-#include "folderstatusdelegate.h"
 #include "gui/quotainfo.h"
 #include "theme.h"
 
@@ -361,6 +360,11 @@ Folder *FolderStatusModel::folder(const QModelIndex &index) const
 {
     Q_ASSERT(checkIndex(index, QAbstractItemModel::CheckIndexOption::IndexIsValid));
     return _folders.at(index.row())._folder;
+}
+
+bool FolderStatusModel::hasFolder(const QModelIndex &index) const
+{
+    return checkIndex(index, QAbstractItemModel::CheckIndexOption::IndexIsValid);
 }
 
 bool FolderStatusModel::setData(const QModelIndex &index, const QVariant &value, int role)

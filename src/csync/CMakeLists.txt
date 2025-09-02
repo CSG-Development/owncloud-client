@@ -72,7 +72,7 @@ set_target_properties(
   csync
     PROPERTIES
       OUTPUT_NAME
-        "${APPLICATION_EXECUTABLE}_csync"
+        "${APPLICATION_LIB_PREFIX}_csync"
       VERSION
         ${MIRALL_VERSION}
       SOVERSION

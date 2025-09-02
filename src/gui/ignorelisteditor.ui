@@ -55,6 +55,9 @@
             <property name="enabled">
              <bool>true</bool>
             </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="text">
              <string>Add</string>
             </property>
@@ -64,6 +67,9 @@
            <widget class="QPushButton" name="removePushButton">
             <property name="enabled">
              <bool>true</bool>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
             </property>
             <property name="text">
              <string>Remove</string>

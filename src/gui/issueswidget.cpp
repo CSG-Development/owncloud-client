@@ -27,6 +27,7 @@
 #include "syncengine.h"
 #include "syncfileitem.h"
 #include "theme.h"
+#include "gui/customui/stylehelper.h"
 
 #include "ui_issueswidget.h"
 
@@ -188,6 +189,8 @@ IssuesWidget::IssuesWidget(QWidget *parent)
     , _ui(new Ui::IssuesWidget)
 {
     _ui->setupUi(this);
+
+    StyleHelper::applyPushButtonStyle(this);
 
     connect(ProgressDispatcher::instance(), &ProgressDispatcher::progressInfo,
         this, &IssuesWidget::slotProgressInfo);

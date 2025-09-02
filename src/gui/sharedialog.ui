@@ -23,8 +23,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLabel" name="label_icon">
-      </widget>
+      <widget class="QLabel" name="label_icon"/>
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -40,7 +39,7 @@
           <string>share label</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
         </widget>
        </item>
@@ -54,7 +53,6 @@
          </property>
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -62,7 +60,7 @@
           <string>Curator Path:</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::PlainText</enum>
+          <enum>Qt::TextFormat::PlainText</enum>
          </property>
         </widget>
        </item>
@@ -71,7 +69,8 @@
     </layout>
    </item>
    <item>
-    <widget class="QTabWidget" name="shareWidgets"/>
+    <widget class="QTabWidget" name="shareWidgets">
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="buttonBoxLayout">
@@ -83,8 +82,11 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="standardButtons">
-        <set>QDialogButtonBox::Close</set>
+        <set>QDialogButtonBox::StandardButton::Close</set>
        </property>
       </widget>
      </item>

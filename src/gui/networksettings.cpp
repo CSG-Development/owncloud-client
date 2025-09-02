@@ -20,11 +20,13 @@
 #include "configfile.h"
 #include "folderman.h"
 #include "theme.h"
+#include "customui/stylehelper.h"
 
 #include <QList>
 #include <QNetworkProxy>
 #include <QString>
 #include <QtGui/QtEvents>
+#include <QPushButton>
 
 namespace {
 auto proxyPasswordC()
@@ -42,6 +44,8 @@ NetworkSettings::NetworkSettings(QWidget *parent)
     , _ui(new Ui::NetworkSettings)
 {
     _ui->setupUi(this);
+
+    StyleHelper::applyPushButtonStyle(this);
 
     _ui->hostLineEdit->setPlaceholderText(tr("Hostname of proxy server"));
     _ui->userLineEdit->setPlaceholderText(tr("Username for proxy server"));

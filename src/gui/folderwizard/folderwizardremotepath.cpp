@@ -23,6 +23,7 @@
 #include "folderwizard_p.h"
 
 #include "gui/folderman.h"
+#include "gui/customui/stylehelper.h"
 
 #include "libsync/theme.h"
 
@@ -41,6 +42,8 @@ FolderWizardRemotePath::FolderWizardRemotePath(FolderWizardPrivate *parent)
 {
     _ui->setupUi(this);
     _ui->warnFrame->hide();
+
+    StyleHelper::applyPushButtonStyle(this);
 
     _ui->folderTreeWidget->setSortingEnabled(true);
     _ui->folderTreeWidget->sortByColumn(0, Qt::AscendingOrder);

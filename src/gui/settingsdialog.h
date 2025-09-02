@@ -38,6 +38,7 @@ class Application;
 class FolderMan;
 class CuratorGui;
 class ActivitySettings;
+class ProxyStyleToolWin;
 
 /**
  * @brief The SettingsDialog class
@@ -79,6 +80,7 @@ private slots:
 
 private:
     void customizeStyle();
+    void updateToolbarTheme();
 
     Ui::SettingsDialog *const _ui;
 
@@ -98,6 +100,7 @@ private:
     CuratorGui *_gui;
     QList<Account *> _modalStack;
 };
+
 }
 
 #endif // SETTINGSDIALOG_H

@@ -75,6 +75,7 @@ void NotificationWidget::setActivity(const Activity &activity)
     if (activity.links().isEmpty()) {
         // in case there is no action defined, do a close button.
         QPushButton *b = _ui->_buttonBox->addButton(QDialogButtonBox::Close);
+        b->setCursor(Qt::PointingHandCursor);
         b->setDefault(true);
         connect(b, &QAbstractButton::clicked, this, [this]{
             QString doneText = tr("Closing in a few seconds...");
@@ -85,6 +86,7 @@ void NotificationWidget::setActivity(const Activity &activity)
     } else {
         for (const auto &link : activity.links()) {
             QPushButton *b = _ui->_buttonBox->addButton(link._label, QDialogButtonBox::AcceptRole);
+            b->setCursor(Qt::PointingHandCursor);
             b->setDefault(link._isPrimary);
             connect(b, &QAbstractButton::clicked, this, [this, b, link] {
                 slotButtonClicked(b, link);

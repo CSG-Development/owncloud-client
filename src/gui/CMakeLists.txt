@@ -97,6 +97,7 @@ set( final_src
 add_subdirectory(newwizard)
 add_subdirectory(folderwizard)
 add_subdirectory(loginrequireddialog)
+add_subdirectory(customui)
 
 add_library(curatorCore STATIC ${final_src})
 set_target_properties(curatorCore PROPERTIES AUTOUIC ON AUTORCC ON)
@@ -104,6 +105,7 @@ target_link_libraries(curatorCore
     PUBLIC
         Qt::Widgets Qt::Network Qt::Xml
         newwizard folderwizard spaces loginrequireddialog
+        customui
         libsync
 #        telemetry
         Qt6Keychain::Qt6Keychain

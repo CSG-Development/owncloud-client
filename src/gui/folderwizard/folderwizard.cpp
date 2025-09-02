@@ -36,12 +36,14 @@
 #include "gui/folderman.h"
 #include "gui/selectivesyncwidget.h"
 #include "gui/spaces/spacesmodel.h"
+#include "gui/customui/stylehelper.h"
 
 #include <QDesktopServices>
 #include <QDir>
 #include <QEvent>
 #include <QFileInfo>
 #include <QUrl>
+#include <QPushButton>
 
 #include <stdlib.h>
 
@@ -165,6 +167,7 @@ bool FolderWizardPrivate::useVirtualFiles() const
         if (!availability) {
             auto msg = new QMessageBox(QMessageBox::Warning, FolderWizard::tr("Virtual files are not available for the selected folder"), availability.error(), QMessageBox::Ok, ocApp()->gui()->settingsDialog());
             msg->setAttribute(Qt::WA_DeleteOnClose);
+            StyleHelper::applyPushButtonStyle(msg);
             msg->open();
             return false;
         }
@@ -180,6 +183,8 @@ FolderWizard::FolderWizard(const AccountStatePtr &account, QWidget *parent)
     setOptions(QWizard::CancelButtonOnLeft);
     setButtonText(QWizard::FinishButton, tr("Add Sync Connection"));
     setWizardStyle(QWizard::ModernStyle);
+
+    StyleHelper::applyPushButtonStyle(this);
 }
 
 FolderWizard::~FolderWizard()

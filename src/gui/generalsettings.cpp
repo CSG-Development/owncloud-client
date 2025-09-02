@@ -35,6 +35,7 @@
 #include "ignorelisteditor.h"
 
 #include "translations.h"
+#include "customui/stylehelper.h"
 
 #include <QDir>
 #include <QMessageBox>
@@ -50,6 +51,15 @@ GeneralSettings::GeneralSettings(QWidget *parent)
     , _currentlyLoading(false)
 {
     _ui->setupUi(this);
+
+    StyleHelper::applyPushButtonStyle(this);
+    connect(Theme::instance(), &Theme::themeChanged, this, [&] {
+        const auto& btns = findChildren<QPushButton*>();
+        for (auto* t: btns) {
+            t->update();
+        }
+        update();
+    });
 
     connect(_ui->desktopNotificationsCheckBox, &QAbstractButton::toggled, this, &GeneralSettings::slotToggleOptionalDesktopNotifications);
 

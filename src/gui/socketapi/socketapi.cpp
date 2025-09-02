@@ -19,6 +19,7 @@
 #include "socketapi_p.h"
 
 #include "gui/commonstrings.h"
+#include "gui/customui/stylehelper.h"
 
 #include "accountmanager.h"
 #include "common/asserts.h"
@@ -717,12 +718,14 @@ void SocketApi::command_DELETE_ITEM(const QString &localFile, SocketListener *)
 {
     QFileInfo info(localFile);
 
-    auto result = QMessageBox::question(
-        nullptr, tr("Confirm deletion"),
+    QMessageBox msg(QMessageBox::Question,
+        tr("Confirm deletion"),
         info.isDir()
             ? tr("Do you want to delete the directory <i>%1</i> and all its contents permanently?").arg(info.dir().dirName())
             : tr("Do you want to delete the file <i>%1</i> permanently?").arg(info.fileName()),
-        QMessageBox::Yes, QMessageBox::No);
+        QMessageBox::Yes|QMessageBox::No, nullptr);
+    StyleHelper::applyPushButtonStyle(&msg);
+    auto result = msg.exec();
     if (result != QMessageBox::Yes)
         return;
 

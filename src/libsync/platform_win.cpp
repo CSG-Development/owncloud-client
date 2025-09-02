@@ -125,7 +125,10 @@ void WinPlatform::startShutdownWatcher()
                 qCInfo(lcPlatform) << "WM_ENDSESSION successfully shut down" << (steady_clock::now() - start);
                 watchWMCtx.windowMessageWatcherRun = false;
                 return 0;
+            } else if (msg == WM_SETTINGCHANGE) {
+                QMetaObject::invokeMethod(Theme::instance(), "systemThemeChanged");
             }
+
             return DefWindowProc(hwnd, msg, wParam, lParam);
         };
         OC_ASSERT(RegisterClass(&wc));

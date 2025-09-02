@@ -4,6 +4,7 @@
 #include "gui/application.h"
 #include "gui/guiutility.h"
 #include "gui/settingsdialog.h"
+#include "gui/customui/stylehelper.h"
 #include "libsync/theme.h"
 
 #include "resources/resources.h"
@@ -11,6 +12,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QCheckBox>
 
 
 namespace CUR::Wizard {
@@ -138,6 +140,7 @@ AccountConfiguredWizardPage::AccountConfiguredWizardPage(
             messageBox->addButton(tr("Stay safe"), QMessageBox::RejectRole);
 
             messageBox->setAttribute(Qt::WA_DeleteOnClose);
+            StyleHelper::applyPushButtonStyle(messageBox);
 
             connect(messageBox, &QMessageBox::rejected, this, [this]() {
                 // bring back to "safety"
@@ -168,6 +171,11 @@ AccountConfiguredWizardPage::AccountConfiguredWizardPage(
         [this, enableResetLocalDirectoryButton]() { _ui->resetLocalDirectoryButton->setEnabled(enableResetLocalDirectoryButton()); });
     connect(_ui->resetLocalDirectoryButton, &QToolButton::clicked, this,
         [this, defaultSyncTargetDir]() { _ui->localDirectoryLineEdit->setText(QDir::toNativeSeparators(defaultSyncTargetDir)); });
+
+    const auto& chkBoxes = findChildren<QCheckBox*>();
+    for (auto chk: chkBoxes) {
+        chk->setCursor(Qt::PointingHandCursor);
+    }
 }
 
 AccountConfiguredWizardPage::~AccountConfiguredWizardPage() noexcept

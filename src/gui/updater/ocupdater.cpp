@@ -436,6 +436,9 @@ void NSISUpdater::showNoUrlDialog(const UpdateInfo &info)
     QPushButton *skip = bb->addButton(tr("Skip this version"), QDialogButtonBox::ResetRole);
     QPushButton *reject = bb->addButton(tr("Skip this time"), QDialogButtonBox::AcceptRole);
     QPushButton *getupdate = bb->addButton(tr("Get update"), QDialogButtonBox::AcceptRole);
+    skip->setCursor(Qt::PointingHandCursor);
+    reject->setCursor(Qt::PointingHandCursor);
+    getupdate->setCursor(Qt::PointingHandCursor);
 
     connect(skip, &QAbstractButton::clicked, msgBox, &QDialog::reject);
     connect(reject, &QAbstractButton::clicked, msgBox, &QDialog::reject);
@@ -487,6 +490,10 @@ void NSISUpdater::showUpdateErrorDialog(const QString &targetVersion)
     QPushButton *askagain = bb->addButton(tr("Ask again later"), QDialogButtonBox::ResetRole);
     QPushButton *retry = bb->addButton(tr("Restart and update"), QDialogButtonBox::AcceptRole);
     QPushButton *getupdate = bb->addButton(tr("Update manually"), QDialogButtonBox::AcceptRole);
+    skip->setCursor(Qt::PointingHandCursor);
+    askagain->setCursor(Qt::PointingHandCursor);
+    retry->setCursor(Qt::PointingHandCursor);
+    getupdate->setCursor(Qt::PointingHandCursor);
 
     connect(skip, &QAbstractButton::clicked, msgBox, &QDialog::reject);
     connect(askagain, &QAbstractButton::clicked, msgBox, &QDialog::reject);

@@ -34,6 +34,7 @@
 #include "models/activitylistmodel.h"
 #include "models/expandingheaderview.h"
 #include "models/models.h"
+#include "gui/customui/stylehelper.h"
 
 #include "ui_activitywidget.h"
 
@@ -54,6 +55,8 @@ ActivityWidget::ActivityWidget(QWidget *parent)
     , _notificationRequestsRunning(0)
 {
     _ui->setupUi(this);
+
+    StyleHelper::applyPushButtonStyle(this);
 
     _model = new ActivityListModel(this);
     _sortModel = new Models::SignalledQSortFilterProxyModel(this);
@@ -461,6 +464,7 @@ ActivitySettings::ActivitySettings(QWidget *parent)
 
     // create a tab widget for the three activity views
     _tab = new QTabWidget(this);
+    _tab->tabBar()->setCursor(Qt::PointingHandCursor);
     hbox->addWidget(_tab);
     _activityWidget = new ActivityWidget(this);
     _activityTabId = _tab->addTab(_activityWidget, Theme::instance()->applicationIcon(), tr("Server Activity"));

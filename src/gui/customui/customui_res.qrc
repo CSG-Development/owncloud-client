@@ -1,0 +1,37 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/Activity.png</file>
+        <file>res/Add.png</file>
+        <file>res/Power.png</file>
+        <file>res/Settings.png</file>
+        <file>res/User.png</file>
+        <file>res/checkbox/chk_checked.png</file>
+        <file>res/checkbox/chk_checked_disabled.png</file>
+        <file>res/checkbox/chk_checked_hovered.png</file>
+        <file>res/checkbox/chk_checked_pressed.png</file>
+        <file>res/checkbox/chk_part.png</file>
+        <file>res/checkbox/chk_part_disabled.png</file>
+        <file>res/checkbox/chk_part_hovered.png</file>
+        <file>res/checkbox/chk_part_pressed.png</file>
+        <file>res/checkbox/chk_unchecked.png</file>
+        <file>res/checkbox/chk_unchecked_disabled.png</file>
+        <file>res/checkbox/chk_unchecked_hovered.png</file>
+        <file>res/checkbox/chk_unchecked_pressed.png</file>
+        <file>res/checkbox/chk_dots.png</file>
+        <file>res/checkbox/chk_dots_disabled.png</file>
+        <file>res/checkbox/chk_dots_hovered.png</file>
+        <file>res/checkbox/chk_dots_pressed.png</file>
+        <file>res/arrow/arrow_down.png</file>
+        <file>res/arrow/arrow_down_disabled.png</file>
+        <file>res/arrow/arrow_down_pressed.png</file>
+        <file>res/arrow/arrow_up.png</file>
+        <file>res/arrow/arrow_up_disabled.png</file>
+        <file>res/arrow/arrow_up_pressed.png</file>
+        <file>res/arrow/arrow_down_dark.png</file>
+        <file>res/arrow/arrow_down_disabled_dark.png</file>
+        <file>res/arrow/arrow_down_pressed_dark.png</file>
+        <file>res/arrow/arrow_up_dark.png</file>
+        <file>res/arrow/arrow_up_disabled_dark.png</file>
+        <file>res/arrow/arrow_up_pressed_dark.png</file>
+    </qresource>
+</RCC>

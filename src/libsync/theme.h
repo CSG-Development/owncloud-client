@@ -20,6 +20,7 @@
 
 #include <QFileInfo>
 #include <QObject>
+#include <QTimer>
 
 class QIcon;
 class QString;
@@ -453,6 +454,10 @@ public:
 
     bool withCrashReporter() const;
 
+    Q_INVOKABLE void systemThemeChanged();
+    bool isDarkTheme() const;
+    Q_INVOKABLE void emit_theme_change() {emit themeChanged();}
+
 protected:
     QIcon themeTrayIcon(const QString &name, bool sysTrayMenuVisible = false, IconType iconType = IconType::BrandedIconWithFallbackToVanillaIcon) const;
 
@@ -460,6 +465,7 @@ protected:
 
 signals:
     void systrayUseMonoIconsChanged(bool);
+    void themeChanged();
 
 private:
     Theme(Theme const &);

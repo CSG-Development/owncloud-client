@@ -25,6 +25,7 @@
 #include "lockwatcher.h"
 #include "scheduling/syncscheduler.h"
 #include "socketapi/socketapi.h"
+#include "customui/stylehelper.h"
 #include "syncresult.h"
 #include "theme.h"
 
@@ -290,12 +291,13 @@ bool FolderMan::ensureJournalGone(const QString &journalDbFile)
     // remove the old journal file
     while (QFile::exists(journalDbFile) && !QFile::remove(journalDbFile)) {
         qCWarning(lcFolderMan) << "Could not remove old db file at" << journalDbFile;
-        int ret = QMessageBox::warning(nullptr, tr("Could not reset folder state"),
-            tr("An old sync journal '%1' was found, "
-               "but could not be removed. Please make sure "
-               "that no application is currently using it.")
-                .arg(QDir::fromNativeSeparators(QDir::cleanPath(journalDbFile))),
-            QMessageBox::Retry | QMessageBox::Abort);
+        const auto text = tr("An old sync journal '%1' was found, "
+                             "but could not be removed. Please make sure "
+                             "that no application is currently using it.")
+                              .arg(QDir::fromNativeSeparators(QDir::cleanPath(journalDbFile)));
+        QMessageBox msg(QMessageBox::Warning, tr("Could not reset folder state"), text, QMessageBox::Retry|QMessageBox::Abort);
+        StyleHelper::applyPushButtonStyle(&msg);
+        int ret = msg.exec();
         if (ret == QMessageBox::Abort) {
             return false;
         }

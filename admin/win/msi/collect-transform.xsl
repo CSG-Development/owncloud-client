@@ -15,7 +15,7 @@
   </xsl:template>
 
   <!-- Identify MainExecutable -->
-  <xsl:key name="exe-search" match="wix:File[contains(@Source, 'curator.exe')]" use="@Id" />
+  <xsl:key name="exe-search" match="wix:File[contains(@Source, 'Curator Files.exe')]" use="@Id" />
   <xsl:template match="wix:File[key('exe-search', @Id)]">
     <xsl:copy>
       <xsl:apply-templates select="@*" />
