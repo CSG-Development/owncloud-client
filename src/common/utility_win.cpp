@@ -19,14 +19,13 @@
 #include "utility_win.h"
 #include "utility.h"
 
-#include "asserts.h"
-#include "filesystembase.h"
-
 #include <comdef.h>
 #include <qt_windows.h>
 #include <shlguid.h>
 #include <shlobj.h>
-#include <string>
+#include <knownfolders.h>
+#include <Shlwapi.h>
+#include <atlbase.h>
 
 #include <QCoreApplication>
 #include <QDir>
@@ -34,7 +33,11 @@
 #include <QLibrary>
 #include <QSettings>
 
+#pragma comment(lib, "ole32.lib")
+
 extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+
+Q_LOGGING_CATEGORY(lcUtilityWin, "gui.utility.win", QtDebugMsg)
 
 namespace {
 const QString systemRunPathC() {
@@ -50,11 +53,113 @@ const QString systemThemesC()
     return QStringLiteral("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize");
 }
 
+HRESULT GetShellLibraryItem(LPWSTR pwszLibraryName, IShellItem2** ppShellItem)
+{
+    *ppShellItem = nullptr;
+
+    // Create the real library file name
+    WCHAR wszRealLibraryName[MAX_PATH] = {0};
+    swprintf_s(wszRealLibraryName, L"%s%s", pwszLibraryName, L".library-ms");
+
+    return SHCreateItemInKnownFolder(FOLDERID_UsersLibraries, KF_FLAG_DEFAULT_PATH | KF_FLAG_NO_ALIAS, wszRealLibraryName, IID_PPV_ARGS(ppShellItem));
+}
+
+HRESULT OpenShellLibrary(LPWSTR pwszLibraryName, IShellLibrary** ppShellLib)
+{
+    *ppShellLib = nullptr;
+
+    CComPtr<IShellItem2> pShellItem;
+    HRESULT hr = GetShellLibraryItem(pwszLibraryName, &pShellItem);
+    if (FAILED(hr)) {
+        qCWarning(lcUtilityWin) << "GetShellLibraryItem" << std::system_category().message(hr);
+        return hr;
+    }
+
+    // Get the shell library object from the shell item with a read and write permissions
+    hr = SHLoadLibraryFromItem(pShellItem, STGM_READWRITE, IID_PPV_ARGS(ppShellLib));
+    if (FAILED(hr)) {
+        qCWarning(lcUtilityWin) << "SHLoadLibraryFromItem" << std::system_category().message(hr);
+    }
+
+    return hr;
+}
+
+void AddRemoveLib(bool add, const QString& folderPath, bool createLib)
+{
+    const auto normalizedPath = QDir::toNativeSeparators(folderPath);
+    QDir d(normalizedPath);
+    if (add && !d.exists()) {
+        qCWarning(lcUtilityWin) << "Can't add non-existing directory" << normalizedPath;
+    }
+
+    HRESULT hr = ::CoInitialize(nullptr);
+    if (FAILED(hr)) {
+        qCWarning(lcUtilityWin) << "CoInitialize error: " << std::system_category().message(hr);
+        return;
+    }
+
+    CComPtr<IShellLibrary> pLibrary;
+    hr = OpenShellLibrary(const_cast<LPWSTR>(L"Curator Files"), &pLibrary);
+    if (FAILED(hr))
+    {
+        qCWarning(lcUtilityWin) << "OpenShellLibrary error:" << std::system_category().message(hr);
+
+        if (!createLib) {
+            qCWarning(lcUtilityWin) << "Create lib is not set, function canceled";
+            return;
+        }
+
+        hr = SHCreateLibrary(IID_PPV_ARGS(&pLibrary));
+        if (FAILED(hr)) {
+            qCWarning(lcUtilityWin) << "SHCreateLibrary error: " << std::system_category().message(hr);
+            return;
+        }
+
+        // Save the new library under the user's Libraries folder.
+        CComPtr<IShellItem> pSavedTo;
+        hr = pLibrary->SaveInKnownFolder(FOLDERID_UsersLibraries, L"Curator Files", LSF_OVERRIDEEXISTING, &pSavedTo);
+        if (FAILED(hr)) {
+            qCWarning(lcUtilityWin) << "SaveInKnownFolder error:" << std::system_category().message(hr);
+            return;
+        }
+    }
+
+    if (add) {
+        hr = SHAddFolderPathToLibrary(pLibrary, normalizedPath.toStdWString().c_str());
+        if (FAILED(hr)) {
+            qCWarning(lcUtilityWin) << "SHAddFolderPathToLibrary error:" << std::system_category().message(hr);
+        }
+    }
+    else {
+        SHRemoveFolderPathFromLibrary(pLibrary, normalizedPath.toStdWString().c_str());
+        if (FAILED(hr)) {
+            qCWarning(lcUtilityWin) << "SHRemoveFolderPathFromLibrary error:" << std::system_category().message(hr);
+        }
+    }
+
+    if (SUCCEEDED(pLibrary->SetFolderType(FOLDERTYPEID_Documents)))
+    {
+        hr = pLibrary->Commit();
+        if (FAILED(hr)) {
+            qCWarning(lcUtilityWin) << "Library commit error:" << std::system_category().message(hr);
+        }
+    }
+
+    ::CoUninitialize();
+}
+
+
 }
 
 namespace CUR {
 
-void Utility::setupFavLink(const QString &)
+void Utility::setupFavLink(const QString& localDir)
+{
+    qCInfo(lcUtilityWin) << "Creating Library item" << localDir;
+    AddRemoveLib(true, localDir, true);
+}
+
+void Utility::removeFavLink(const QString& /*localDir*/)
 {
 }
 
