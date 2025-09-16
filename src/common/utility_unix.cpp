@@ -44,6 +44,11 @@ void Utility::setupFavLink(const QString &folder)
     }
 }
 
+void Utility::removeFavLink(const QString &/*folder*/)
+{
+    qt_noop();
+}
+
 // returns the autostart directory the linux way
 // and respects the XDG_CONFIG_HOME env variable
 static QString getUserAutostartDir()

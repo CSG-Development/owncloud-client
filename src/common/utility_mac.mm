@@ -55,6 +55,11 @@ void Utility::setupFavLink(const QString &folder)
     }
 }
 
+void Utility::removeFavLink(const QString &/*folder*/)
+{
+    qt_noop();
+}
+
 bool Utility::hasSystemLaunchOnStartup(const QString &appName)
 {
     Q_UNUSED(appName)

@@ -65,27 +65,23 @@ QSize FolderStatusDelegate::sizeHint(const QStyleOptionViewItem &option,
 
 bool FolderStatusDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
-    if (QMouseEvent* mev = dynamic_cast<QMouseEvent*>(event)) {
+    if (auto* mev = dynamic_cast<QMouseEvent*>(event)) {
 
         const auto optionsButtonRect = this->computeOptionsButtonRect(option.rect);
 
         if (event->type() == QEvent::MouseMove) {
-
-            QWidget* w = const_cast<QWidget*>(option.widget);
-            if (w) {
-
+            if (auto* w = const_cast<QWidget*>(option.widget)) {
                 // Checkbox hover mouse cursor
                 if (index.model()->flags(index) & Qt::ItemIsUserCheckable) {
                     QStyleOptionButton opt;
                     opt.QStyleOption::operator=(option);
                     opt.rect = option.rect;
-                    QStyle* style = option.widget->style();
-                    checkboxRect = style->subElementRect(QStyle::SE_ItemViewItemCheckIndicator, &opt, option.widget);
+                    if (auto* style = w->style())
+                        checkboxRect = style->subElementRect(QStyle::SE_ItemViewItemCheckIndicator, &opt, option.widget);
                 }
                 else {
                     checkboxRect = {};
                 }
-
             }
 
             if (optionsButtonRect.contains(mev->position())) {
@@ -94,22 +90,18 @@ bool FolderStatusDelegate::editorEvent(QEvent *event, QAbstractItemModel *model,
             else {
                 hovered_ = false;
             }
-            return true;
         }
 
         if (optionsButtonRect.contains(mev->position())) {
             if (event->type() == QEvent::MouseButtonPress) {
                 if (mev->button() == Qt::LeftButton)
                     pressed_ = true;
-                return true;
             }
         }
         if (event->type() == QEvent::MouseButtonRelease) {
             if (mev->button() == Qt::LeftButton)
                 pressed_ = false;
-            return true;
         }
-
     }
 
     return QStyledItemDelegate::editorEvent(event, model, option, index);
