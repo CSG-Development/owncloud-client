@@ -2,14 +2,22 @@
 #include "ui_credentialspage.h"
 
 #include "gui/customui/stylehelper.h"
+#include "gui/customui/focusproxy.h"
 #include "theme.h"
+
 
 #include <QLineEdit>
 
 namespace {
 constexpr int fontSize = 16;
-QPair<QString,QString> widgetStyle = {QStringLiteral(":/res/login/cred_page_light.qss"),QStringLiteral(":/res/login/cred_page_dark.qss")};
-QPair<QString,QString> eyeIcon = {QStringLiteral(":/res/login/eye_light.svg"), QStringLiteral(":/res/login/eye_dark.svg")};
+QPair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/login/cred_page_light.qss"),
+    QStringLiteral(":/res/login/cred_page_dark.qss")
+};
+QPair<QString,QString> eyeIcon = {
+    QStringLiteral(":/res/login/eye_light.svg"),
+    QStringLiteral(":/res/login/eye_dark.svg")
+};
 }
 
 CredentialsPage::CredentialsPage(QWidget *parent)
@@ -18,6 +26,11 @@ CredentialsPage::CredentialsPage(QWidget *parent)
 {
     ui->setupUi(this);
     setObjectName("credentialsPage");
+
+    auto noFocus = new FocusProxyStyle;
+    ui->btnLogin->setStyle(noFocus);
+    ui->btnCancel->setStyle(noFocus);
+    ui->btnResetPass->setStyle(noFocus);
 
     setAttribute(Qt::WA_TranslucentBackground, true);
 

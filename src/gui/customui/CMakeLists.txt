@@ -29,6 +29,8 @@ add_library(${LIBRARY_NAME} STATIC
     progressindicator.h
     loginpushbutton.cpp
     loginpushbutton.h
+    focusproxy.cpp
+    focusproxy.h
     customui_res.qrc
 )
 
