@@ -21,20 +21,16 @@
 using namespace CUR::Wizard;
 
 template <>
-QString CUR::Utility::enumToDisplayName(SetupWizardState state)
+QString CUR::Utility::enumToDisplayName(SetupState state)
 {
     switch (state) {
-    case SetupWizardState::ServerUrlState:
-        if (Theme::instance()->overrideServerUrlV2().isEmpty()) {
-            return QApplication::translate("SetupWizardState", "Server URL");
-        } else {
-            return QApplication::translate("SetupWizardState", "Welcome");
-        }
-    case SetupWizardState::LegacyWebFingerState:
-        return QApplication::translate("SetupWizardState", "Username");
-    case SetupWizardState::CredentialsState:
+    case SetupState::CredentialsState:
         return QApplication::translate("SetupWizardState", "Login");
-    case SetupWizardState::AccountConfiguredState:
+
+    case SetupState::WaitState:
+        return QApplication::translate("SetupWizardState", "Welcome");
+
+    case SetupState::AccountConfiguredState:
         return QApplication::translate("SetupWizardState", "Sync Options");
     default:
         Q_UNREACHABLE();

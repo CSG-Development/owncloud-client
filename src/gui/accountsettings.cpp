@@ -122,6 +122,9 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
 
     StyleHelper::applyPushButtonStyle(this);
 
+    setStyleSheet(StyleHelper::loadFileToString(QStringLiteral(":/res/accountsettings_light.qss")));
+
+
     _model = new FolderStatusModel(this);
     _model->setAccountState(_accountState);
 
@@ -639,14 +642,14 @@ void AccountSettings::showConnectionLabel(const QString &message, QStringList er
     if (errors.isEmpty()) {
         ui->connectLabel->setText(message);
         ui->connectLabel->setToolTip(QString());
-        ui->connectLabel->setStyleSheet(QString());
+        //ui->connectLabel->setStyleSheet(QString());
     } else {
         errors.prepend(message);
         const QString msg = errors.join(QLatin1String("\n"));
         qCDebug(lcAccountSettings) << msg;
         ui->connectLabel->setText(msg);
         ui->connectLabel->setToolTip(QString());
-        ui->connectLabel->setStyleSheet(errStyle);
+        //ui->connectLabel->setStyleSheet(errStyle);
     }
     ui->accountStatus->setVisible(!message.isEmpty());
 }

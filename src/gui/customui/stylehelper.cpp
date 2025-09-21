@@ -10,6 +10,7 @@
 #include <QStyleHints>
 #include <QSettings>
 #include <QPushButton>
+#include <QFile>
 
 #ifdef Q_OS_DARWIN
 static const qreal qstyleBaseDpi = 72;
@@ -77,84 +78,50 @@ void StyleHelper::applyPushButtonStyle(QWidget *root)
     }
 }
 
-qreal StyleHelper::dpi(const QStyleOption *option)
-{
-#ifndef Q_OS_DARWIN
-    // Prioritize the application override, except for on macOS where
-    // we have historically not supported the AA_Use96Dpi flag.
-    if (QCoreApplication::testAttribute(Qt::AA_Use96Dpi))
-        return 96;
-#endif
-
-    // Expect that QStyleOption::QFontMetrics::QFont has the correct DPI set
-    if (option)
-        return option->fontMetrics.fontDpi();
-
-    // Fall back to historical Qt behavior: hardocded 72 DPI on mac,
-    // primary screen DPI on other platforms.
-#ifdef Q_OS_DARWIN
-    return qstyleBaseDpi;
-#else
-    return qt_defaultDpiX();
-#endif
-}
-
-qreal StyleHelper::dpiScaled(qreal value, qreal dpi)
-{
-    return value * dpi / qstyleBaseDpi;
-}
-
 QIcon StyleHelper::getIcon(const QString &name)
 {
     if (name == QStringLiteral("plus-solid"))
-        return QIcon(QStringLiteral(":/res/Add.png"));
+        return QIcon(QStringLiteral(":/res/toolbar/Add.svg"));
     else if (name == QStringLiteral("activity"))
-        return QIcon(QStringLiteral(":/res/Activity.png"));
+        return QIcon(QStringLiteral(":/res/toolbar/Activity.svg"));
     else if (name == QStringLiteral("settings"))
-        return QIcon(QStringLiteral(":/res/Settings.png"));
+        return QIcon(QStringLiteral(":/res/toolbar/Settings.svg"));
     else if (name == QStringLiteral("account"))
-        return QIcon(QStringLiteral(":/res/User.png"));
+        return QIcon(QStringLiteral(":/res/toolbar/User.svg"));
     else if (name == QStringLiteral("quit"))
-        return QIcon(QStringLiteral(":/res/Power.png"));
+        return QIcon(QStringLiteral(":/res/toolbar/Power.svg"));
     return {};
 }
 
-QPixmap StyleHelper::getDotsPixmap(const QStyleOptionToolButton *opt)
+QIcon StyleHelper::getDotsIcon(const QStyleOptionToolButton *opt)
 {
     if ((opt->state & QStyle::State_Enabled) == 0)
-        return QPixmap(QStringLiteral(":/res/checkbox/chk_dots_disabled.png"));
+        return QIcon(QStringLiteral(":/res/dots/dots_disabled.svg"));
     else if (opt->state & QStyle::State_Sunken)
-        return QPixmap(QStringLiteral(":/res/checkbox/chk_dots_pressed.png"));
+        return QIcon(QStringLiteral(":/res/dots/dots_pressed.svg"));
     else if (opt->state & QStyle::State_MouseOver)
-        return QPixmap(QStringLiteral(":/res/checkbox/chk_dots_hovered.png"));
+        return QIcon(QStringLiteral(":/res/dots/dots_hover.svg"));
 
-    return QPixmap(QStringLiteral(":/res/checkbox/chk_dots.png"));
+    return QIcon(QStringLiteral(":/res/dots/dots_normal.svg"));
 }
 
-QPixmap StyleHelper::getArrowPixmap(const QStyleOptionToolButton* opt, bool isDark)
-{
-    bool isDisabled = (opt->state & QStyle::State_Enabled) == 0;
-    bool isPressed = (opt->state & QStyle::State_Raised) == 0;
-    return getArrowPixmap(opt->arrowType, isPressed, isDisabled, isDark);
-}
-
-QPixmap StyleHelper::getArrowPixmap(Qt::ArrowType arrow, bool isPressed, bool isDisabled, bool isDark)
+QIcon StyleHelper::getArrowIcon(Qt::ArrowType arrow, bool isPressed, bool isDisabled, bool isDark)
 {
     if (arrow == Qt::UpArrow) {
         if (isDisabled)
-            return QPixmap(isDark ? QStringLiteral(":/res/arrow/arrow_up_disabled_dark.png") : QStringLiteral(":/res/arrow/arrow_up_disabled.png"));
+            return QIcon(isDark ? QStringLiteral(":/res/arrow/arrow_up_disabled_dark.png") : QStringLiteral(":/res/arrow/arrow_up_disabled.svg"));
         if (isPressed)
-            return QPixmap(isDark ? QStringLiteral(":/res/arrow/arrow_up_pressed_dark.png") : QStringLiteral(":/res/arrow/arrow_up_pressed.png"));
+            return QIcon(isDark ? QStringLiteral(":/res/arrow/arrow_up_pressed_dark.png") : QStringLiteral(":/res/arrow/arrow_up_pressed.svg"));
 
-        return QPixmap(isDark ? QStringLiteral(":/res/arrow/arrow_up_dark.png") : QStringLiteral(":/res/arrow/arrow_up.png"));
+        return QIcon(isDark ? QStringLiteral(":/res/arrow/arrow_up_dark.png") : QStringLiteral(":/res/arrow/arrow_up.svg"));
     }
     else if (arrow == Qt::DownArrow) {
         if (isDisabled)
-            return QPixmap(isDark ? QStringLiteral(":/res/arrow/arrow_down_disabled_dark.png") : QStringLiteral(":/res/arrow/arrow_down_disabled.png"));
+            return QIcon(isDark ? QStringLiteral(":/res/arrow/arrow_down_disabled_dark.png") : QStringLiteral(":/res/arrow/arrow_down_disabled.svg"));
         if (isPressed)
-            return QPixmap(isDark ? QStringLiteral(":/res/arrow/arrow_down_pressed_dark.png") : QStringLiteral(":/res/arrow/arrow_down_pressed.png"));
+            return QIcon(isDark ? QStringLiteral(":/res/arrow/arrow_down_pressed_dark.png") : QStringLiteral(":/res/arrow/arrow_down_pressed.svg"));
 
-        return QPixmap(isDark ? QStringLiteral(":/res/arrow/arrow_down_dark.png") : QStringLiteral(":/res/arrow/arrow_down.png"));
+        return QIcon(isDark ? QStringLiteral(":/res/arrow/arrow_down_dark.png") : QStringLiteral(":/res/arrow/arrow_down.svg"));
     }
 
     return {};
@@ -171,6 +138,18 @@ void StyleHelper::setDarkMode(bool dark)
 StyleHelper *StyleHelper::getInstance()
 {
     return instance_;
+}
+
+QString StyleHelper::loadFileToString(const QString &fileName)
+{
+    QFile file(fileName);
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QByteArray data = file.readAll();
+        return QString::fromUtf8(data);
+    }
+
+    return {};
 }
 
 } // namespace CUR

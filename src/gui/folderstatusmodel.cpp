@@ -137,7 +137,7 @@ void FolderStatusModel::setAccountState(const AccountStatePtr &accountState)
         _folders[i]._pathIdx << i;
     }
 
-    Q_EMIT endResetModel();
+    endResetModel();
     emit dirtyChanged();
 }
 
@@ -188,6 +188,9 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
         const auto &x = static_cast<SubFolderInfo *>(index.internalPointer())->_subs.at(index.row());
 
         switch (role) {
+        case Qt::SizeHintRole:
+            return QSize(26,26);
+
         case Qt::DisplayRole:
             switch (column) {
             case Columns::FolderPathRole: {
@@ -196,22 +199,29 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
                     return QVariant();
                 return QVariant(f->path() + x._path);
             }
+
             case Columns::IsReady:
                 return x._folder->isReady();
+
             case Columns::HeaderRole:
                 return x._size < 0 ? x._name : tr("%1 (%2)", "filename (size)").arg(x._name, Utility::octetsToString(x._size));
+
             default:
                 return {};
             }
+
         case Qt::ToolTipRole:
             return QString(QLatin1String("<qt>") + Utility::escape(x._size < 0 ? x._name : tr("%1 (%2)", "filename (size)").arg(x._name, Utility::octetsToString(x._size))) + QLatin1String("</qt>"));
+
         case Qt::CheckStateRole:
             return x._checked;
+
         case Qt::DecorationRole:
             if (x._isExternal) {
                 return QFileIconProvider().icon(QFileIconProvider::Network);
             }
             return Resources::getCoreIcon(QStringLiteral("folder-sync"));
+
         case Qt::ForegroundRole:
             if (x._isUndecided) {
                 return QColor(Qt::red);
@@ -219,7 +229,8 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
             break;
         }
     }
-        return QVariant();
+    return QVariant();
+
     case FetchLabel: {
         const auto x = static_cast<SubFolderInfo *>(index.internalPointer());
         switch (role) {
@@ -231,10 +242,12 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
                 return tr("Fetching folder list from server...");
             }
             break;
+
         default:
             return QVariant();
         }
     }
+
     case RootFolder:
         break;
     }
@@ -259,12 +272,15 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
         switch (column) {
         case Columns::FolderPathRole:
             return f->shortGuiLocalPath();
+
         case Columns::FolderSecondPathRole:
             return f->remotePath();
+
         case Columns::FolderConflictMsg:
             return (f->syncResult().hasUnresolvedConflicts())
                 ? QStringList(tr("There are unresolved conflicts. Click for details."))
                 : QStringList();
+
         case Columns::FolderErrorMsg: {
             auto errors = f->syncResult().errorStrings();
             const auto legacyError = FolderMan::instance()->unsupportedConfiguration(f->path());
@@ -274,26 +290,33 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
             }
             return errors;
         }
+
         case Columns::FolderInfoMsg:
             return f->isReady() && f->virtualFilesEnabled() && f->vfs().mode() != Vfs::Mode::WindowsCfApi ? QStringList(tr("Virtual file support is enabled."))
                                                                                                           : QStringList();
+
         case Columns::SyncRunning:
             return f->syncResult().status() == SyncResult::SyncRunning;
+
         case Columns::HeaderRole: {
             if (auto *space = getSpace()) {
                 return space->displayName();
             }
             return f->displayName();
         }
+
         case Columns::FolderImage:
             if (auto *space = getSpace()) {
                 return space->image();
             }
             return Resources::getCoreIcon(QStringLiteral("folder-sync"));
+
         case Columns::FolderSyncPaused:
             return f->syncPaused();
+
         case Columns::FolderAccountConnected:
             return accountConnected;
+
         case Columns::FolderStatusIconRole: {
             auto status = f->syncResult();
             if (!accountConnected) {
@@ -303,14 +326,19 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
             }
             return Theme::instance()->syncStateIconName(status);
         }
+
         case Columns::SyncProgressItemString:
             return progress._progressString;
+
         case Columns::WarningCount:
             return progress._warningCount;
+
         case Columns::SyncProgressOverallPercent:
             return progress._overallPercent;
+
         case Columns::SyncProgressOverallString:
             return progress._overallSyncString;
+
         case Columns::FolderSyncText: {
             if (auto *space = getSpace()) {
                 if (!space->drive().getDescription().isEmpty()) {
@@ -319,29 +347,38 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
             }
             return tr("Local folder: %1").arg(f->shortGuiLocalPath());
         }
+
         case Columns::IsReady:
             return f->isReady();
+
         case Columns::IsDeployed:
             return f->isDeployed();
+
         case Columns::Priority:
             return f->priority();
+
         case Columns::QuotaTotal:
             [[fallthrough]];
+
         case Columns::QuotaUsed:
             if (_accountState->supportsSpaces()) {
                 return QVariant::fromValue(getQuota(_accountState, f->spaceId(), column));
             } else {
                 return QVariant::fromValue(getQuotaOc10(_accountState, f->webDavUrl(), column));
             }
+
         case Columns::IsUsingSpaces: // handled before
             [[fallthrough]];
+
         case Columns::ItemType: // handled before
             [[fallthrough]];
+
         case Columns::ColumnCount:
             Q_UNREACHABLE();
             break;
         }
         break;
+
     case Qt::ToolTipRole: {
         if (!progress.isNull()) {
             return progress._progressString;

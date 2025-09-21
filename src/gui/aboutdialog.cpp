@@ -30,7 +30,7 @@ AboutDialog::AboutDialog(QWidget *parent)
     StyleHelper::applyPushButtonStyle(this);
     setWindowTitle(tr("About %1").arg(Theme::instance()->appNameGUI()));
     ui->aboutText->setText(Theme::instance()->about());
-    ui->icon->setPixmap(Theme::instance()->aboutIcon().pixmap(256));
+    //ui->icon->setPixmap(Theme::instance()->aboutIcon().pixmap(256));
     ui->versionInfo->setText(Theme::instance()->aboutVersions(Theme::VersionFormat::RichText));
     ui->tabWidget->tabBar()->setCursor(Qt::PointingHandCursor);
 

@@ -467,7 +467,7 @@ ActivitySettings::ActivitySettings(QWidget *parent)
     _tab->tabBar()->setCursor(Qt::PointingHandCursor);
     hbox->addWidget(_tab);
     _activityWidget = new ActivityWidget(this);
-    _activityTabId = _tab->addTab(_activityWidget, Theme::instance()->applicationIcon(), tr("Server Activity"));
+    _activityTabId = _tab->addTab(_activityWidget, QIcon(QStringLiteral(":/res/activity_tab.svg"))/*Theme::instance()->applicationIcon()*/, tr("Server Activity"));
     connect(_activityWidget, &ActivityWidget::hideActivityTab, this, &ActivitySettings::setActivityTabHidden);
     connect(_activityWidget, &ActivityWidget::guiLog, this, &ActivitySettings::guiLog);
     connect(_activityWidget, &ActivityWidget::newNotification, this, &ActivitySettings::slotShowActivityTab);

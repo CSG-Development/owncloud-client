@@ -1,0 +1,63 @@
+#frameContent {
+    background-color: #262729;
+    border-radius: 24px;
+}
+
+#frame,
+#frameHalign,
+#frameHead,
+#frameAdvanced,
+#frameDownload,
+#frameDownloadGroup,
+#frameDownloadDir,
+#frameErrorMessage,
+#frameButtons {
+    border: none;
+}
+
+#btnBrowse {
+    border: none;
+    image: url(":/res/login/browse_dark.svg");
+}
+
+#btnReset {
+    border: none;
+    image: url(":/res/login/reset_dark.svg");
+}
+
+#lblHeader {
+    font-size: 34px;
+    color: rgba(0,0,0,0xDE);
+}
+
+#frameLocalDir {
+    border: 1px solid #CBCDD3;
+    border-radius: 20px;
+}
+
+#chkAdvanced,
+#lblConfigDownload,
+#lblLocalDir {
+    font-size: 16px;
+    font-style: bold;
+}
+
+#rbDownloadEverything,
+#rbConfigManually,
+#rbUseVfs {
+    font-size: 14px;
+}
+
+#frameErrorMessage {
+    background: rgba(242,143,140,61);
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 12px;
+}
+
+#lblErrorIcon {
+    image: url(":/res/login/error_dark.svg");
+}
+
+#lblErrorText {
+    color: rgba(255,255,255,222);
+}

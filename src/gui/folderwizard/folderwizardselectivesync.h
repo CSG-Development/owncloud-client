@@ -22,6 +22,8 @@
 #include "gui/folderwizard/folderwizard_p.h"
 #include "libsync/accountfwd.h"
 
+class CCheckBox;
+
 namespace CUR {
 
 class SelectiveSyncWidget;
@@ -49,7 +51,7 @@ private slots:
 
 private:
     SelectiveSyncWidget *_selectiveSync;
-    QCheckBox *_virtualFilesCheckBox = nullptr;
+    CCheckBox *_virtualFilesCheckBox = nullptr;
     QSet<QString> _selectiveSyncBlackList;
 };
 

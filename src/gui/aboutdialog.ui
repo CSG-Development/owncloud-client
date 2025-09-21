@@ -47,17 +47,11 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="maximumSize">
-            <size>
-             <width>256</width>
-             <height>256</height>
-            </size>
-           </property>
            <property name="text">
             <string notr="true"/>
            </property>
            <property name="pixmap">
-            <pixmap resource="../../core_theme.qrc">:/client/Curator/theme/colored/curator-icon.svg</pixmap>
+            <pixmap resource="customui/customui_res.qrc">:/res/Files-logo.png</pixmap>
            </property>
           </widget>
          </item>
@@ -83,6 +77,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -123,7 +120,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../core_theme.qrc"/>
+  <include location="customui/customui_res.qrc"/>
  </resources>
  <connections>
   <connection>

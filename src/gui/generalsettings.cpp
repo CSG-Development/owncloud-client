@@ -86,7 +86,7 @@ GeneralSettings::GeneralSettings(QWidget *parent)
     /* the ignoreHiddenFiles flag is a folder specific setting, but for now, it is
      * handled globally. Save it to every folder that is defined.
      */
-    connect(_ui->syncHiddenFilesCheckBox, &QCheckBox::toggled, this, [](bool checked) { FolderMan::instance()->setIgnoreHiddenFiles(!checked); });
+    connect(_ui->syncHiddenFilesCheckBox, &CCheckBox::toggled, this, [](bool checked) { FolderMan::instance()->setIgnoreHiddenFiles(!checked); });
 
     _ui->crashreporterCheckBox->setVisible(Theme::instance()->withCrashReporter());
 

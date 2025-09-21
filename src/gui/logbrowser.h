@@ -15,7 +15,6 @@
 #ifndef LOGBROWSER_H
 #define LOGBROWSER_H
 
-#include <QCheckBox>
 #include <QPlainTextEdit>
 #include <QTextStream>
 #include <QFile>

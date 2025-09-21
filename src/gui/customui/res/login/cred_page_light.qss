@@ -1,0 +1,104 @@
+#frameContent {
+    background-color: #FFFFFF;
+    border-radius: 24px;
+}
+
+#frame,
+#frameHalign,
+#frameContent,
+#frameToolbar,
+#frameLogo,
+#frameInput,
+#frameProps,
+#frameImage,
+#frameText,
+#frameErrorMessage,
+#frameButton {
+    border: none;
+}
+
+#lblImage {
+    background-image: url(":/res/Files-logo.png");
+}
+
+#lblCurator,
+#lblFiles {
+    font-size: 34px;
+    font: "Segoe UI";
+}
+
+#lblCurator {
+    color: #6EBD49;
+}
+
+#btnLogin,
+#btnCancel {
+    background: #1976D2;
+    border-color: rgba(0,0,0,0);
+    border-width: 1px;
+    border-radius: 20px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font: "Segoe UI";
+}
+
+#btnLogin:disabled,
+#btnCancel:disabled {
+    background: #EEEEEE;
+    color: #9E9E9E;
+}
+
+#btnResetPass {
+    background: rgba(0,0,0,0);
+    color: "#1976D2";
+    border: none;
+    font: "Segoe UI";
+    font-size: 14px;
+}
+
+#btnShowPass {
+    border: none;
+    image: url(":/res/login/eye_light.svg");
+}
+
+#btnSettings {
+    border: none;
+    image: url(":/res/login/gear_light.svg");
+}
+
+#edEmail,
+#edUrl,
+#edPassword {
+    background: rgba(0,0,0,0);
+    border: none;
+    font: "Segoe UI";
+    font-size: 16px;
+}
+
+
+#frameEmail,
+#frameUrl,
+#framePassword {
+    border: none;
+}
+
+QToolTip {
+    background: #4E4E4E;
+    color: rgba(255, 255, 255, 222);
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 4px;
+}
+
+#frameErrorMessage {
+    background: rgba(244,67,54,31);
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 12px;
+}
+
+#lblErrorIcon {
+    image: url(":/res/login/error_light.svg");
+}
+
+#lblErrorText {
+    color: rgba(0,0,0,222);
+}

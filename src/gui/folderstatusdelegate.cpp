@@ -339,7 +339,7 @@ QRectF FolderStatusDelegate::computeOptionsButtonRect(QRectF within) const
     within.setHeight(FolderStatusDelegate::rootFolderHeightWithoutErrors());
 
     QStyleOptionToolButton opt;
-    int e = QApplication::style()->pixelMetric(QStyle::PM_ButtonIconSize);
+    int e = 24;//QApplication::style()->pixelMetric(QStyle::PM_ButtonIconSize);
 
     opt.rect.setSize(QSize(e,e));
     QSizeF size = QApplication::style()->sizeFromContents(QStyle::CT_ToolButton, &opt, opt.rect.size());

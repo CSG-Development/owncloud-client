@@ -51,10 +51,10 @@ LogBrowser::LogBrowser(QWidget *parent)
     ui->locationLabel->setText(Logger::instance()->temporaryFolderLogDirPath());
 
     ui->enableLoggingButton->setChecked(ConfigFile().automaticLogDir());
-    connect(ui->enableLoggingButton, &QCheckBox::toggled, this, &LogBrowser::togglePermanentLogging);
+    connect(ui->enableLoggingButton, &CCheckBox::toggled, this, &LogBrowser::togglePermanentLogging);
 
     ui->httpLogButton->setChecked(ConfigFile().logHttp());
-    connect(ui->httpLogButton, &QCheckBox::toggled, this, [](bool enable) {
+    connect(ui->httpLogButton, &CCheckBox::toggled, this, [](bool enable) {
         ConfigFile().configureHttpLogging(std::make_optional(enable));
     });
 

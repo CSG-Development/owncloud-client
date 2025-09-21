@@ -28,11 +28,9 @@
 
 namespace CUR {
 
-namespace Wizard {
-    class SetupWizardController;
-}
-class Folder;
+namespace Wizard {class SetupController;}
 
+class Folder;
 class AboutDialog;
 class SettingsDialog;
 class ShareDialog;
@@ -142,7 +140,7 @@ private:
     Application *_app;
 
     // keeping a pointer on those dialogs allows us to make sure they will be shown only once
-    QPointer<Wizard::SetupWizardController> _wizardController;
+    QPointer<Wizard::SetupController> _wizardController;
     QPointer<AboutDialog> _aboutDialog;
 };
 

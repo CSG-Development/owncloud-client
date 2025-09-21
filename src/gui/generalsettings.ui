@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>791</width>
-    <height>686</height>
+    <width>560</width>
+    <height>594</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>765</width>
-        <height>618</height>
+        <width>544</width>
+        <height>539</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -34,38 +34,121 @@
          <property name="title">
           <string>General Settings</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="monoIconsCheckBox">
-            <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
-            </property>
-            <property name="text">
-             <string>Use &amp;Monochrome Icons in the system tray</string>
-            </property>
-           </widget>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QFrame" name="frame">
+              <layout class="QGridLayout" name="gridLayout">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <property name="verticalSpacing">
+                <number>3</number>
+               </property>
+               <item row="1" column="0">
+                <widget class="CCheckBox" name="monoIconsCheckBox">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>34</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>34</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Use &amp;Monochrome Icons in the system tray</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="CCheckBox" name="autostartCheckBox">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>34</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>34</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Start on &amp;Login</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="CCheckBox" name="desktopNotificationsCheckBox">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>34</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>34</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Show &amp;Desktop Notifications</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="desktopNotificationsCheckBox">
-            <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
-            </property>
-            <property name="text">
-             <string>Show &amp;Desktop Notifications</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="autostartCheckBox">
-            <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
-            </property>
-            <property name="text">
-             <string>Start on &amp;Login</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
+          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
              <widget class="QLabel" name="languageLabel">
@@ -91,6 +174,12 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="minimumSize">
+               <size>
+                <width>200</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="cursor">
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
@@ -98,6 +187,19 @@
                <string/>
               </property>
              </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </item>
@@ -112,10 +214,22 @@
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_6">
+            <property name="spacing">
+             <number>3</number>
+            </property>
             <item>
-             <widget class="QCheckBox" name="syncHiddenFilesCheckBox">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
+             <widget class="CCheckBox" name="syncHiddenFilesCheckBox">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>300</width>
+                <height>34</height>
+               </size>
               </property>
               <property name="text">
                <string>Sync hidden files</string>
@@ -123,15 +237,24 @@
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="crashreporterCheckBox">
+             <widget class="CCheckBox" name="crashreporterCheckBox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>300</width>
+                <height>34</height>
+               </size>
               </property>
               <property name="text">
                <string>S&amp;how crash reporter</string>
@@ -145,7 +268,13 @@
                 <property name="minimumSize">
                  <size>
                   <width>130</width>
-                  <height>0</height>
+                  <height>34</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>34</height>
                  </size>
                 </property>
                 <property name="cursor">
@@ -161,7 +290,13 @@
                 <property name="minimumSize">
                  <size>
                   <width>120</width>
-                  <height>0</height>
+                  <height>34</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>34</height>
                  </size>
                 </property>
                 <property name="cursor">
@@ -198,12 +333,24 @@
           <string>Advanced - Approval of folder sync (Non virtual file mode only)</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="spacing">
+           <number>3</number>
+          </property>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="QCheckBox" name="newFolderLimitCheckBox">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
+             <widget class="CCheckBox" name="newFolderLimitCheckBox">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>34</height>
+               </size>
               </property>
               <property name="text">
                <string>Ask for confirmation before synchronizing folders larger than</string>
@@ -246,9 +393,18 @@
            </layout>
           </item>
           <item>
-           <widget class="QCheckBox" name="newExternalStorage">
-            <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
+           <widget class="CCheckBox" name="newExternalStorage">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>34</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>34</height>
+             </size>
             </property>
             <property name="text">
              <string>Ask for confirmation before synchronizing external storages</string>
@@ -329,7 +485,13 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>0</height>
+              <height>34</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>34</height>
              </size>
             </property>
             <property name="cursor">
@@ -403,6 +565,18 @@
       </item>
       <item>
        <widget class="QPushButton" name="about_pushButton">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>34</height>
+         </size>
+        </property>
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
@@ -423,10 +597,14 @@
    <header>networksettings.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>CCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header>gui/customui/ccheckbox.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>autostartCheckBox</tabstop>
-  <tabstop>desktopNotificationsCheckBox</tabstop>
   <tabstop>monoIconsCheckBox</tabstop>
   <tabstop>syncHiddenFilesCheckBox</tabstop>
   <tabstop>crashreporterCheckBox</tabstop>
