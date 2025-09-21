@@ -97,8 +97,15 @@
         <file>res/radiobutton/pressed/checked.svg</file>
         <file>res/radiobutton/pressed/unchecked.svg</file>
         <file>res/Files-logo.png</file>
-        <file>res/accountsettings_light.qss</file>
         <file>res/branch_closed.svg</file>
         <file>res/branch_open.svg</file>
+        <file>res/accountsettings_light.qss</file>
+        <file>res/accountsettings_dark.qss</file>
+        <file>res/generalsettings_light.qss</file>
+        <file>res/generalsettings_dark.qss</file>
+        <file>res/networksettings_light.qss</file>
+        <file>res/networksettings_dark.qss</file>
+        <file>res/settingsdialog_light.qss</file>
+        <file>res/settingsdialog_dark.qss</file>
     </qresource>
 </RCC>

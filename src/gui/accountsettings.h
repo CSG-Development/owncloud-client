@@ -90,6 +90,7 @@ protected slots:
     void slotLinkActivated(const QString &link);
 
 private:
+    void onThemeChanged();
     void showConnectionLabel(const QString &message,
         QStringList errors = QStringList());
     bool event(QEvent *) override;

@@ -54,6 +54,7 @@ protected:
     void showEvent(QShowEvent *event) override;
 
 private:
+    void onThemeChanged();
     void reloadConfig();
     void loadLanguageNamesIntoDropdown();
 

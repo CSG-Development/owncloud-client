@@ -57,6 +57,10 @@
 
 namespace {
 constexpr auto modalWidgetStretchedMarginC = 50;
+QPair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/accountsettings_light.qss"),
+    QStringLiteral(":/res/accountsettings_dark.qss")
+};
 }
 
 namespace CUR {
@@ -121,9 +125,6 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     ui->_accountToolbox->setAttribute(Qt::WA_Hover, true);
 
     StyleHelper::applyPushButtonStyle(this);
-
-    setStyleSheet(StyleHelper::loadFileToString(QStringLiteral(":/res/accountsettings_light.qss")));
-
 
     _model = new FolderStatusModel(this);
     _model->setAccountState(_accountState);
@@ -226,6 +227,9 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
         }
     });
     ui->stackedWidget->setCurrentWidget(ui->folderListPage);
+
+    connect(Theme::instance(), &Theme::themeChanged, this, &AccountSettings::onThemeChanged);
+    onThemeChanged();
 }
 
 
@@ -919,6 +923,12 @@ void AccountSettings::slotLinkActivated(const QString &link)
             }
         }
     }
+}
+
+void AccountSettings::onThemeChanged()
+{
+    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 }
 
 AccountSettings::~AccountSettings()

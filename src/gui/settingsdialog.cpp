@@ -99,6 +99,11 @@ QString shortDisplayNameForSettings(CUR::Account *account)
     }
     return QStringLiteral("%1\n%2").arg(user, host);
 }
+
+QPair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/settingsdialog_light.qss"),
+    QStringLiteral(":/res/settingsdialog_dark.qss")
+};
 }
 
 
@@ -318,6 +323,9 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
     addAction(showLogWindow2);
 
     customizeStyle();
+
+    connect(Theme::instance(), &Theme::themeChanged, this, &SettingsDialog::onThemeChanged);
+    onThemeChanged();
 
     cfg.restoreGeometry(this);
     setMinimumSize(::minimumSizeHint(this));
@@ -584,6 +592,12 @@ void SettingsDialog::accountRemoved(AccountStatePtr s)
         _actionForAccount.remove(s->account().data());
     }
     _activitySettings->slotRemoveAccount(s);
+}
+
+void SettingsDialog::onThemeChanged()
+{
+    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 }
 
 void SettingsDialog::customizeStyle()

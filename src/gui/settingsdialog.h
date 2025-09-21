@@ -79,6 +79,7 @@ private slots:
     void accountRemoved(AccountStatePtr);
 
 private:
+    void onThemeChanged();
     void customizeStyle();
     void updateToolbarTheme();
 

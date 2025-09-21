@@ -51,6 +51,7 @@ protected:
     void showEvent(QShowEvent *event) override;
 
 private:
+    void onThemeChanged();
     void loadProxySettings();
     void loadBWLimitSettings();
     CredentialManager *_credentialManager;
