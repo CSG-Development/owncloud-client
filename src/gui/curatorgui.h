@@ -114,8 +114,8 @@ private:
     void setupActions();
     void addAccountContextMenu(AccountStatePtr accountState, QMenu *menu);
 
-    Systray *_tray;
-    SettingsDialog *_settingsDialog;
+    Systray *_tray = nullptr;
+    SettingsDialog *_settingsDialog = nullptr;
     // tray's menu
     QScopedPointer<QMenu> _contextMenu;
 
@@ -125,7 +125,7 @@ private:
     // isVisible() is unreliable)
     bool _contextMenuVisibleManual = false;
 
-    QMenu *_recentActionsMenu;
+    QMenu *_recentActionsMenu = nullptr;
     QVector<QMenu *> _accountMenus;
     bool _workaroundShowAndHideTray = false;
     bool _workaroundNoAboutToShowUpdate = false;
@@ -134,10 +134,10 @@ private:
     QTimer _delayedTrayUpdateTimer;
     QMap<QString, QPointer<ShareDialog>> _shareDialogs;
 
-    QAction *_actionStatus;
+    QAction *_actionStatus = nullptr;
 
     QList<QAction *> _recentItemsActions;
-    Application *_app;
+    Application *_app = nullptr;
 
     // keeping a pointer on those dialogs allows us to make sure they will be shown only once
     QPointer<Wizard::SetupController> _wizardController;

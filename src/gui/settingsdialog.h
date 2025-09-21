@@ -82,9 +82,9 @@ private:
     void customizeStyle();
     void updateToolbarTheme();
 
-    Ui::SettingsDialog *const _ui;
+    Ui::SettingsDialog *const _ui = nullptr;
 
-    QActionGroup *_actionGroup;
+    QActionGroup *_actionGroup = nullptr;
     // Maps the actions from the action group to the corresponding widgets
     QHash<QAction *, QWidget *> _actionGroupWidgets;
 
@@ -92,12 +92,12 @@ private:
     // case the account avatar changes
     QHash<Account *, QAction *> _actionForAccount;
 
-    ActivitySettings *_activitySettings;
+    ActivitySettings *_activitySettings = nullptr;
 
-    QAction *_activityAction;
-    QAction *_addAccountAction;
+    QAction *_activityAction = nullptr;
+    QAction *_addAccountAction = nullptr;
     QList<QAction *> _accountActions;
-    CuratorGui *_gui;
+    CuratorGui *_gui = nullptr;
     QList<Account *> _modalStack;
 };
 

@@ -67,7 +67,7 @@ StyleHelper::~StyleHelper()
 void StyleHelper::applyPushButtonStyle(QWidget *root)
 {
     Q_ASSERT(root);
-    const auto& btns = root->findChildren<QPushButton*>();
+    const QList<QPushButton*> btns = root->findChildren<QPushButton*>();
     for (auto* t: btns) {
         t->setStyle(StyleHelper::pushButtonStyle());
         t->setMinimumHeight(34);

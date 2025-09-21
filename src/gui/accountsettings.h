@@ -98,16 +98,16 @@ private:
     /// Returns the alias of the selected folder, empty string if none
     Folder *selectedFolder() const;
 
-    Ui::AccountSettings *ui;
+    Ui::AccountSettings *ui = nullptr;
 
-    FolderStatusModel *_model;
-    FolderStatusDelegate *_delegate;
-    QSortFilterProxyModel *_sortModel;
+    FolderStatusModel *_model = nullptr;
+    FolderStatusDelegate *_delegate = nullptr;
+    QSortFilterProxyModel *_sortModel = nullptr;
     bool _wasDisabledBefore;
     AccountStatePtr _accountState;
-    QAction *_toggleSignInOutAction;
-    QAction *_toggleReconnect;
-    QMenu* _accountToolboxMenu;
+    QAction *_toggleSignInOutAction = nullptr;
+    QAction *_toggleReconnect = nullptr;
+    QMenu* _accountToolboxMenu = nullptr;
     // are we already in the destructor
     bool _goingDown = false;
 
