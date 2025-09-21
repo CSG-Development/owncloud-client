@@ -27,6 +27,7 @@ void ProgressIndicator::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
+    flipHorizontal(painter, rect());    // CW rotarion
 
     int size = qMin(width(), height());
     double thickness = size * 0.1;
@@ -50,6 +51,31 @@ void ProgressIndicator::paintEvent(QPaintEvent *event)
     painter.setPen(pen);
 
     painter.drawArc(QRectF(thickness/2, thickness/2, width() - thickness, height() - thickness), startAngle * 16, spanAngle * 16);
+}
+
+void ProgressIndicator::flipHorizontal(QPainter &painter, const QRect &r)
+{
+    QTransform transform(painter.transform());
+    qreal m11 = transform.m11();
+    qreal m12 = transform.m12();
+    qreal m13 = transform.m13();
+    qreal m21 = transform.m21();
+    qreal m22 = transform.m22();
+    qreal m23 = transform.m23();
+    qreal m31 = transform.m31();
+    qreal m32 = transform.m32();
+    qreal m33 = transform.m33();
+    qreal scale = m11;
+
+    // Horizontal flip
+    m11 = -m11;
+    if (m31 > 0)
+        m31 = 0;
+    else
+        m31 = (r.width() * scale);
+
+    transform.setMatrix(m11, m12, m13, m21, m22, m23, m31, m32, m33);
+    painter.setTransform(transform);
 }
 
 void ProgressIndicator::updateAnimation()

@@ -15,6 +15,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    void flipHorizontal(QPainter& painter, const QRect& r);
 
 private slots:
     void updateAnimation();
