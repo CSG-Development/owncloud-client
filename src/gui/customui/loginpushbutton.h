@@ -18,7 +18,7 @@ public:
     void setIconSidePosition(IconSidePosition side) {side_ = side; update();}
     void setSideIcon(const QIcon& icon) {icon_ = icon; update();}
 
-    Q_INVOKABLE void setDarkTheme(bool dark);
+    Q_INVOKABLE void setDarkTheme();
 
 protected:
     void paintEvent(QPaintEvent *event) override;

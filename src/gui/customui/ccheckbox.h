@@ -14,7 +14,7 @@ public:
     QSize minimumSizeHint() const override;
     QSize sizeHint() const override;
 
-    Q_INVOKABLE void setDarkTheme(bool dark);
+    Q_INVOKABLE void setDarkTheme();
 
 protected:
     void paintEvent(QPaintEvent *event) override;

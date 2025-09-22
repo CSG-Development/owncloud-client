@@ -27,7 +27,8 @@ public:
     QString text() const;
     void setText(const QString& val);
 
-    Q_INVOKABLE void setDarkTheme(bool dark);
+public slots:
+    void setDarkTheme();
 
 Q_SIGNALS:
     void frameColorChanged();

@@ -16,6 +16,7 @@
 #include "ui_ignorelisteditor.h"
 
 #include "configfile.h"
+#include "theme.h"
 #include "gui/folderman.h"
 #include "gui/guiutility.h"
 
@@ -24,7 +25,16 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QMessageBox>
-#include <QInputDialog>
+#include <QFormLayout>
+
+namespace {
+
+QPair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/ignorelisteditor_light.qss"),
+    QStringLiteral(":/res/ignorelisteditor_dark.qss")
+};
+
+}
 
 namespace CUR {
 
@@ -38,6 +48,8 @@ IgnoreListEditor::IgnoreListEditor(QWidget *parent)
     , ui(new Ui::IgnoreListEditor)
 {
     ui->setupUi(this);
+
+    StyleHelper::applyPushButtonStyle(this);
 
     ConfigFile cfgFile;
     readOnlyTooltip = tr("This entry is provided by the system at '%1' "
@@ -59,11 +71,21 @@ IgnoreListEditor::IgnoreListEditor(QWidget *parent)
     ui->tableWidget->resizeColumnsToContents();
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(patternCol, QHeaderView::Stretch);
     ui->tableWidget->verticalHeader()->setVisible(false);
+
+    connect(Theme::instance(), &Theme::themeChanged, this, &IgnoreListEditor::updateTheme);
+    updateTheme();
 }
 
 IgnoreListEditor::~IgnoreListEditor()
 {
     delete ui;
+}
+
+void IgnoreListEditor::updateTheme()
+{
+    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    StyleHelper::applyPushButtonStyle(ui->buttonBox);
 }
 
 void IgnoreListEditor::slotItemSelectionChanged()
@@ -131,12 +153,12 @@ void IgnoreListEditor::slotUpdateLocalIgnoreList()
 
 void IgnoreListEditor::slotAddPattern()
 {
-    bool okClicked;
-    QString pattern = QInputDialog::getText(this, tr("Add Ignore Pattern"),
-        tr("Add a new ignore pattern:"),
-        QLineEdit::Normal, QString(), &okClicked);
+    InpDlg dlg(this);
 
-    if (!okClicked || pattern.isEmpty())
+    int result = dlg.exec();
+    const auto pattern = dlg.textValue();
+
+    if ((result != QDialog::Accepted) || pattern.isEmpty())
         return;
 
     addPattern(pattern, /*deletable=*/false, /*readonly=*/false, /*global=*/false);

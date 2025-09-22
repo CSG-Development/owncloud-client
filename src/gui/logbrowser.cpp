@@ -13,6 +13,7 @@
  */
 
 #include "logbrowser.h"
+#include "theme.h"
 
 #include "stdio.h"
 #include <iostream>
@@ -30,6 +31,7 @@
 #include <QTextStream>
 #include <optional>
 
+#include "gui/customui/stylehelper.h"
 #include "configfile.h"
 #include "guiutility.h"
 #include "logger.h"
@@ -46,6 +48,9 @@ LogBrowser::LogBrowser(QWidget *parent)
     , ui(new Ui::LogBrowser)
 {
     ui->setupUi(this);
+
+    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonStyle(ui->buttonBox);
 
     ui->warningLabel->setPixmap(Resources::getCoreIcon(QStringLiteral("warning")).pixmap(ui->warningLabel->size()));
     ui->locationLabel->setText(Logger::instance()->temporaryFolderLogDirPath());
@@ -74,6 +79,14 @@ LogBrowser::LogBrowser(QWidget *parent)
 
     ConfigFile cfg;
     cfg.restoreGeometry(this);
+
+    connect(Theme::instance(), &Theme::themeChanged, this, [&] {
+        onThemeChanged();
+        update();
+    });
+
+
+    onThemeChanged();
 }
 
 LogBrowser::~LogBrowser()
@@ -94,6 +107,15 @@ void LogBrowser::setupLoggingFromConfig()
         Logger::instance()->setMaxLogFiles(config.automaticDeleteOldLogs());
     } else {
         logger->disableTemporaryFolderLogDir();
+    }
+}
+
+void LogBrowser::onThemeChanged()
+{
+    for (auto widget: findChildren<QWidget*>()) {
+        if (widget->metaObject()->indexOfSlot("setDarkTheme()") != -1) {
+            QMetaObject::invokeMethod(widget, "setDarkTheme");
+        }
     }
 }
 

@@ -107,5 +107,7 @@
         <file>res/networksettings_dark.qss</file>
         <file>res/settingsdialog_light.qss</file>
         <file>res/settingsdialog_dark.qss</file>
+        <file>res/ignorelisteditor_light.qss</file>
+        <file>res/ignorelisteditor_dark.qss</file>
     </qresource>
 </RCC>

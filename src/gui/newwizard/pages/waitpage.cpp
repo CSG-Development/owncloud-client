@@ -27,9 +27,9 @@ void WaitPage::updateTheme()
 
     setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 
-    for (auto widget: children()) {
-        if (widget->metaObject()->indexOfMethod("setDarkTheme") != -1)
-            QMetaObject::invokeMethod(widget, "setDarkTheme", isDark);
+    for (auto widget: findChildren<QWidget*>()) {
+        if (widget->metaObject()->indexOfMethod("setDarkTheme()") != -1)
+            QMetaObject::invokeMethod(widget, "setDarkTheme");
     }
     update();
 }

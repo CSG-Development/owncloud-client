@@ -1,4 +1,5 @@
 #include "progressindicator.h"
+#include "theme.h"
 
 #include <QPainter>
 #include <QTimer>
@@ -19,6 +20,12 @@ ProgressIndicator::ProgressIndicator(QWidget *parent)
 
     startTime_ = QTime::currentTime();
     easingCurve_.setType(QEasingCurve::InOutQuad);
+}
+
+void ProgressIndicator::setDarkTheme()
+{
+    isDark = CUR::Theme::instance()->isDarkTheme();
+    update();
 }
 
 void ProgressIndicator::paintEvent(QPaintEvent *event)

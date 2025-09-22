@@ -1,4 +1,5 @@
 #include "loginpushbutton.h"
+#include "theme.h"
 
 #include <QPainter>
 #include <QPainterPath>
@@ -22,9 +23,9 @@ LoginPushButton::LoginPushButton(QWidget *parent)
 {
 }
 
-void LoginPushButton::setDarkTheme(bool dark)
+void LoginPushButton::setDarkTheme()
 {
-    isDark = dark;
+    isDark = CUR::Theme::instance()->isDarkTheme();
     update();
 }
 

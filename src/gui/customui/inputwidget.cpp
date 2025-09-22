@@ -1,5 +1,6 @@
 #include "inputwidget.h"
 #include "stylehelper.h"
+#include "theme.h"
 
 #include <QHBoxLayout>
 #include <QLineEdit>
@@ -17,8 +18,15 @@ constexpr int editFrameHeight = 56;
 constexpr qreal frameWidth = 1;
 constexpr qreal frameRadius = 20;
 constexpr int fontPixelSize = 16;
-QPair<QColor,QColor> frameColor = {QColor("#CBCDD3"), QColor("#616161")};
-QPair<QString,QString> inputStyle = {QStringLiteral(":/res/inputwidget/inputwidget_light.qss"), QStringLiteral(":/res/inputwidget/inputwidget_dark.qss")};
+
+QPair<QColor,QColor> frameColor = {
+    QColor("#CBCDD3"),
+    QColor("#616161")
+};
+QPair<QString,QString> inputStyle = {
+    QStringLiteral(":/res/inputwidget/inputwidget_light.qss"),
+    QStringLiteral(":/res/inputwidget/inputwidget_dark.qss")
+};
 }
 
 InputWidget::InputWidget(QWidget *parent)
@@ -42,7 +50,7 @@ InputWidget::InputWidget(QWidget *parent)
     l->addWidget(lineEdit_);
 
     prompt_ = new QLabel(this);
-    prompt_->setObjectName(QStringLiteral("prompt"));
+    prompt_->setObjectName(QStringLiteral("promptText"));
     QFont f = prompt_->font();
     f.setPixelSize(promptFontSize);
     prompt_->setFont(f);
@@ -63,7 +71,7 @@ InputWidget::InputWidget(QWidget *parent)
     });
     connect(lineEdit_, &QLineEdit::textChanged, this, &InputWidget::onTextChanged);
 
-    updateStyles();
+    setDarkTheme();
 }
 
 QSize InputWidget::minimumSizeHint() const
@@ -103,9 +111,9 @@ void InputWidget::setText(const QString &val)
     lineEdit_->setText(val);
 }
 
-void InputWidget::setDarkTheme(bool dark)
+void InputWidget::setDarkTheme()
 {
-    isDark = dark;
+    isDark = CUR::Theme::instance()->isDarkTheme();
     updateStyles();
 }
 

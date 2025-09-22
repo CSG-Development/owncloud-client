@@ -166,8 +166,8 @@ void FinishedPage::updateTheme()
 
     auto widgets = findChildren<QWidget*>();
     for (QWidget* widget: std::as_const(widgets)) {
-        if (widget->metaObject()->indexOfMethod("setDarkTheme") != -1)
-            QMetaObject::invokeMethod(widget, "setDarkTheme", isDark);
+        if (widget->metaObject()->indexOfMethod("setDarkTheme()") != -1)
+            QMetaObject::invokeMethod(widget, "setDarkTheme");
     }
 
     setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));

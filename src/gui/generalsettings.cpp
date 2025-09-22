@@ -62,10 +62,7 @@ GeneralSettings::GeneralSettings(QWidget *parent)
     setObjectName(QStringLiteral("CUR_GeneralSettings"));
     StyleHelper::applyPushButtonStyle(this);
     connect(Theme::instance(), &Theme::themeChanged, this, [&] {
-        const auto& btns = findChildren<QPushButton*>();
-        for (auto* t: btns) {
-            t->update();
-        }
+        onThemeChanged();
         update();
     });
 
@@ -174,7 +171,6 @@ GeneralSettings::GeneralSettings(QWidget *parent)
         _ui->groupBox_non_vfs->hide();
     }
 
-    connect(Theme::instance(), &Theme::themeChanged, this, &GeneralSettings::onThemeChanged);
     onThemeChanged();
 }
 
@@ -213,6 +209,15 @@ void GeneralSettings::onThemeChanged()
 {
     bool isDark = CUR::Theme::instance()->isDarkTheme();
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    const auto& btns = findChildren<QPushButton*>();
+    for (auto* t: btns) {
+        t->update();
+    }
+    for (auto widget: findChildren<QWidget*>()) {
+        if (widget->metaObject()->indexOfSlot("setDarkTheme()") != -1) {
+            QMetaObject::invokeMethod(widget, "setDarkTheme");
+        }
+    }
 }
 
 void GeneralSettings::slotUpdateChannelChanged([[maybe_unused]] int index)

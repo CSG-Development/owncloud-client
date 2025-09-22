@@ -52,7 +52,6 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     ui->edPassword->setPlaceholderText(tr("Password"));
     ui->edPassword->setFontPixelSize(fontSize);
     ui->edPassword->setPasswordMode(true);
-    ui->edPassword->setPasswordButtonImage(eyeIcon.first);
 
     connect(ui->edUrl, &InputWidget::textChanged, this, [&] {
         updateLoginEnable();
@@ -97,13 +96,15 @@ void CredentialsPage::updateTheme()
 {
     bool isDark = CUR::Theme::instance()->isDarkTheme();
 
-    for (auto widget: children()) {
-        if (widget->metaObject()->indexOfMethod("setDarkTheme") != -1)
-            QMetaObject::invokeMethod(widget, "setDarkTheme", isDark);
+    const QList<QWidget*> childrenList = findChildren<QWidget*>();
+    for (auto* widget: childrenList) {
+        if (widget->metaObject()->indexOfSlot("setDarkTheme()") != -1) {
+            QMetaObject::invokeMethod(widget, "setDarkTheme");
+        }
     }
     setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
-    showErrorMessage({});
 
+    ui->edPassword->setPasswordButtonImage(isDark ? eyeIcon.second : eyeIcon.first);
     update();
 }
 

@@ -50,6 +50,9 @@ public:
      */
     static void setupLoggingFromConfig();
 
+    void onThemeChanged();
+
+
 protected slots:
     void togglePermanentLogging(bool enabled);
 

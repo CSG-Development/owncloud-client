@@ -11,7 +11,7 @@ class ProgressIndicator: public QWidget
 public:
     explicit ProgressIndicator(QWidget *parent = nullptr);
 
-    Q_INVOKABLE void setDarkTheme(bool dark) {isDark = dark;}
+    Q_INVOKABLE void setDarkTheme();
 
 protected:
     void paintEvent(QPaintEvent *event) override;

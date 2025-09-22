@@ -56,11 +56,6 @@
     font-size: 14px;
 }
 
-#btnShowPass {
-    border: none;
-    image: url(":/res/login/eye_light.svg");
-}
-
 #btnSettings {
     border: none;
     image: url(":/res/login/gear_light.svg");
@@ -89,7 +84,7 @@ QToolTip {
     border-radius: 4px;
 }
 
-#frameErrorMessage {
+#frameErrorMessageInternal {
     background: rgba(244,67,54,31);
     border: 1px solid rgba(0, 0, 0, 0);
     border-radius: 12px;

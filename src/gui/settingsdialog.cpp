@@ -198,6 +198,14 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
 
     connect(Theme::instance(), &Theme::themeChanged, this, [&] {
         StyleHelper::setDarkMode(Theme::instance()->isDarkTheme());
+
+        const QList<QWidget*> childrenList = findChildren<QWidget*>();
+        for (auto* widget: childrenList) {
+            if (widget->metaObject()->indexOfSlot("setDarkTheme()") != -1) {
+                QMetaObject::invokeMethod(widget, "setDarkTheme");
+            }
+        }
+
         updateToolbarTheme();
         update();
         _ui->stack->currentWidget()->update();

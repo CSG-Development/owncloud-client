@@ -1,5 +1,6 @@
 #include "ccheckbox.h"
 #include "checkboxres.h"
+#include "theme.h"
 
 #include <QPainter>
 #include <QStyleOptionButton>
@@ -40,9 +41,9 @@ QSize CCheckBox::sizeHint() const
     return szHint;
 }
 
-void CCheckBox::setDarkTheme(bool dark)
+void CCheckBox::setDarkTheme()
 {
-    isDark = dark;
+    isDark = CUR::Theme::instance()->isDarkTheme();
     update();
 }
 
