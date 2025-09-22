@@ -23,6 +23,7 @@
 #include "gui/sharelinkwidget.h"
 #include "gui/shareusergroupwidget.h"
 #include "gui/thumbnailjob.h"
+#include "gui/customui/stylehelper.h"
 
 #include "account.h"
 #include "configfile.h"
@@ -69,6 +70,7 @@ ShareDialog::ShareDialog(AccountStatePtr accountState,
 
     QPushButton *closeButton = _ui->buttonBox->button(QDialogButtonBox::Close);
     closeButton->setCursor(Qt::PointingHandCursor);
+    closeButton->setMinimumHeight(34);
     connect(closeButton, &QAbstractButton::clicked, this, &QWidget::close);
 
     // We want to act on account state changes
@@ -142,6 +144,9 @@ ShareDialog::ShareDialog(AccountStatePtr accountState,
     connect(job, &PropfindJob::directoryListingIterated, this, &ShareDialog::slotPropfindReceived);
     connect(job, &PropfindJob::finishedWithError, this, &ShareDialog::slotPropfindError);
     job->start();
+
+    StyleHelper::applyPushButtonStyle(this);
+    closeButton->setStyle(StyleHelper::pushButtonStyle());
 }
 
 ShareDialog::~ShareDialog()
@@ -239,3 +244,4 @@ void ShareDialog::slotAccountStateChanged(int state)
     }
 }
 }
+
