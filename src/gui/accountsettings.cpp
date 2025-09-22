@@ -56,7 +56,8 @@
 #include "oauthloginwidget.h"
 
 namespace {
-constexpr auto modalWidgetStretchedMarginC = 50;
+//constexpr auto modalWidgetStretchedMarginC = 50;
+constexpr auto modalWidgetStretchedMarginC = 4;
 }
 
 namespace CUR {
@@ -935,6 +936,7 @@ void AccountSettings::addModalWidget(QWidget *widget, ModalWidgetSizePolicy size
         outerLayout->setContentsMargins(modalWidgetStretchedMarginC, modalWidgetStretchedMarginC, modalWidgetStretchedMarginC, modalWidgetStretchedMarginC);
         outerLayout->addWidget(groupBox);
         auto *layout = new QHBoxLayout(groupBox);
+        layout->setContentsMargins(modalWidgetStretchedMarginC, modalWidgetStretchedMarginC, modalWidgetStretchedMarginC, modalWidgetStretchedMarginC);
         layout->addWidget(widget);
     } break;
     case ModalWidgetSizePolicy::Minimum: {

@@ -53,6 +53,8 @@ ShareLinkWidget::ShareLinkWidget(AccountPtr account,
 {
     _ui->setupUi(this);
 
+    StyleHelper::applyPushButtonStyle(this);
+
     _ui->linkShares->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     _ui->linkShares->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     _ui->linkShares->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);

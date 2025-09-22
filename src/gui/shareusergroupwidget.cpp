@@ -25,6 +25,7 @@
 #include "ui_shareuserline.h"
 
 #include "resources/resources.h"
+#include "gui/customui/stylehelper.h"
 
 #include "QProgressIndicator.h"
 
@@ -63,6 +64,8 @@ ShareUserGroupWidget::ShareUserGroupWidget(AccountPtr account,
     setObjectName(QStringLiteral("SharingDialogUG")); // required as group for saveGeometry call
 
     _ui->setupUi(this);
+
+    StyleHelper::applyPushButtonStyle(this);
 
     //Is this a file or folder?
     _isFile = QFileInfo(localPath).isFile();
