@@ -150,6 +150,7 @@ signals:
     void guiLog(const QString &, const QString &);
 
 private:
+    void onThemeChanged();
     bool event(QEvent *e) override;
 
     QTabWidget *_tab;

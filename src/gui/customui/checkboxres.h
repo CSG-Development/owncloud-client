@@ -7,6 +7,6 @@ namespace CheckboxRes {
 
 void init();
 
-const QIcon& getChkIcon(QStyle::State state);
+const QIcon& getChkIcon(QStyle::State state, bool isDark);
 
 } // namespace CheckboxRes

@@ -4,35 +4,35 @@ QTreeView::indicator {
 }
 
 QTreeView::indicator:checked {
-     image: url(:/res/checkbox/normal/checked.svg);
+     image: url(:/res/checkbox/dark/normal/checked.svg);
 }
 
 QTreeView::indicator:unchecked {
-     image: url(:/res/checkbox/normal/unchecked.svg);
+     image: url(:/res/checkbox/dark/normal/unchecked.svg);
 }
 
 QTreeView::indicator:checked:hover {
-     image: url(:/res/checkbox/hover/checked.svg);
+     image: url(:/res/checkbox/dark/hover/checked.svg);
 }
 
 QTreeView::indicator:unchecked:hover {
-     image: url(:/res/checkbox/hover/unchecked.svg);
+     image: url(:/res/checkbox/dark/hover/unchecked.svg);
 }
 
 QTreeView::indicator:checked:pressed {
-     image: url(:/res/checkbox/pressed/checked.svg);
+     image: url(:/res/checkbox/dark/pressed/checked.svg);
 }
 
 QTreeView::indicator:unchecked:pressed {
-     image: url(:/res/checkbox/pressed/unchecked.svg);
+     image: url(:/res/checkbox/dark/pressed/unchecked.svg);
 }
 
 QTreeView::indicator:checked:disabled {
-     image: url(:/res/checkbox/disabled/checked.svg);
+     image: url(:/res/checkbox/dark/disabled/checked.svg);
 }
 
 QTreeView::indicator:unchecked:disabled {
-     image: url(:/res/checkbox/disabled/unchecked.svg);
+     image: url(:/res/checkbox/dark/disabled/unchecked.svg);
 }
 
 QAbstractItemView {

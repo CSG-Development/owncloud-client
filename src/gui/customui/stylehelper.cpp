@@ -18,6 +18,8 @@ static const qreal qstyleBaseDpi = 72;
 static const qreal qstyleBaseDpi = 96;
 #endif
 
+Q_LOGGING_CATEGORY(lcStyleHelper, "gui.stylehelper", QtInfoMsg);
+
 int qt_defaultDpiX()
 {
     if (QCoreApplication::instance()->testAttribute(Qt::AA_Use96Dpi))
@@ -78,18 +80,18 @@ void StyleHelper::applyPushButtonStyle(QWidget *root)
     }
 }
 
-QIcon StyleHelper::getIcon(const QString &name)
+QIcon StyleHelper::getIcon(const QString &name, bool isDark)
 {
     if (name == QStringLiteral("plus-solid"))
-        return QIcon(QStringLiteral(":/res/toolbar/Add.svg"));
+        return QIcon(isDark ? QStringLiteral(":/res/toolbar/dark/Add.svg") : QStringLiteral(":/res/toolbar/light/Add.svg"));
     else if (name == QStringLiteral("activity"))
-        return QIcon(QStringLiteral(":/res/toolbar/Activity.svg"));
+        return QIcon(isDark ? QStringLiteral(":/res/toolbar/dark/Activity.svg") : QStringLiteral(":/res/toolbar/light/Activity.svg"));
     else if (name == QStringLiteral("settings"))
-        return QIcon(QStringLiteral(":/res/toolbar/Settings.svg"));
+        return QIcon(isDark ? QStringLiteral(":/res/toolbar/dark/Settings.svg") : QStringLiteral(":/res/toolbar/light/Settings.svg"));
     else if (name == QStringLiteral("account"))
-        return QIcon(QStringLiteral(":/res/toolbar/User.svg"));
+        return QIcon(isDark ? QStringLiteral(":/res/toolbar/dark/User.svg") : QStringLiteral(":/res/toolbar/light/User.svg"));
     else if (name == QStringLiteral("quit"))
-        return QIcon(QStringLiteral(":/res/toolbar/Power.svg"));
+        return QIcon(isDark ? QStringLiteral(":/res/toolbar/dark/Power.svg") : QStringLiteral(":/res/toolbar/light/Power.svg"));
     return {};
 }
 
@@ -148,6 +150,7 @@ QString StyleHelper::loadFileToString(const QString &fileName)
         QByteArray data = file.readAll();
         return QString::fromUtf8(data);
     }
+    qCWarning(lcStyleHelper) << "Unable to load file" << fileName;
 
     return {};
 }

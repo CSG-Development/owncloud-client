@@ -1,113 +1,125 @@
 <RCC>
     <qresource prefix="/">
-        <file>res/toolbar/Activity.svg</file>
-        <file>res/toolbar/Add.svg</file>
-        <file>res/toolbar/Power.svg</file>
-        <file>res/toolbar/Settings.svg</file>
-        <file>res/toolbar/User.svg</file>
+        <file>res/Files-logo.png</file>
+        <file>res/Files-logo.png</file>
+        <file>res/accountsettings_dark.qss</file>
+        <file>res/accountsettings_light.qss</file>
+        <file>res/activitysettings_dark.qss</file>
+        <file>res/activitysettings_light.qss</file>
+        <file>res/activity_tab_light.svg</file>
+        <file>res/activity_tab_dark.svg</file>
+        <file>res/protocol_tab_dark.svg</file>
+        <file>res/protocol_tab_light.svg</file>
+        <file>res/issues_tab_dark.svg</file>
+        <file>res/issues_tab_light.svg</file>
         <file>res/arrow/arrow_down.png</file>
-        <file>res/arrow/arrow_down_disabled.png</file>
-        <file>res/arrow/arrow_down_pressed.png</file>
-        <file>res/arrow/arrow_up.png</file>
-        <file>res/arrow/arrow_up_disabled.png</file>
-        <file>res/arrow/arrow_up_pressed.png</file>
-        <file>res/arrow/arrow_down_dark.png</file>
-        <file>res/arrow/arrow_down_disabled_dark.png</file>
-        <file>res/arrow/arrow_down_pressed_dark.png</file>
-        <file>res/arrow/arrow_up_dark.png</file>
-        <file>res/arrow/arrow_up_disabled_dark.png</file>
-        <file>res/arrow/arrow_up_pressed_dark.png</file>
         <file>res/arrow/arrow_down.svg</file>
+        <file>res/arrow/arrow_down_dark.png</file>
+        <file>res/arrow/arrow_down_disabled.png</file>
         <file>res/arrow/arrow_down_disabled.svg</file>
+        <file>res/arrow/arrow_down_disabled_dark.png</file>
         <file>res/arrow/arrow_down_hover.svg</file>
+        <file>res/arrow/arrow_down_pressed.png</file>
         <file>res/arrow/arrow_down_pressed.svg</file>
+        <file>res/arrow/arrow_down_pressed_dark.png</file>
+        <file>res/arrow/arrow_up.png</file>
         <file>res/arrow/arrow_up.svg</file>
+        <file>res/arrow/arrow_up_dark.png</file>
+        <file>res/arrow/arrow_up_disabled.png</file>
         <file>res/arrow/arrow_up_disabled.svg</file>
+        <file>res/arrow/arrow_up_disabled_dark.png</file>
         <file>res/arrow/arrow_up_hover.svg</file>
+        <file>res/arrow/arrow_up_pressed.png</file>
         <file>res/arrow/arrow_up_pressed.svg</file>
+        <file>res/arrow/arrow_up_pressed_dark.png</file>
+        <file>res/branch_closed.svg</file>
+        <file>res/branch_open.svg</file>
+        <file>res/checkbox/light/disabled/checked.svg</file>
+        <file>res/checkbox/light/disabled/partial.svg</file>
+        <file>res/checkbox/light/disabled/unchecked.svg</file>
+        <file>res/checkbox/light/hover/checked.svg</file>
+        <file>res/checkbox/light/hover/partial.svg</file>
+        <file>res/checkbox/light/hover/unchecked.svg</file>
+        <file>res/checkbox/light/normal/checked.svg</file>
+        <file>res/checkbox/light/normal/partial.svg</file>
+        <file>res/checkbox/light/normal/unchecked.svg</file>
+        <file>res/checkbox/light/pressed/checked.svg</file>
+        <file>res/checkbox/light/pressed/partial.svg</file>
+        <file>res/checkbox/light/pressed/unchecked.svg</file>
+        <file>res/checkbox/dark/disabled/checked.svg</file>
+        <file>res/checkbox/dark/disabled/partial.svg</file>
+        <file>res/checkbox/dark/disabled/unchecked.svg</file>
+        <file>res/checkbox/dark/hover/checked.svg</file>
+        <file>res/checkbox/dark/hover/partial.svg</file>
+        <file>res/checkbox/dark/hover/unchecked.svg</file>
+        <file>res/checkbox/dark/normal/checked.svg</file>
+        <file>res/checkbox/dark/normal/partial.svg</file>
+        <file>res/checkbox/dark/normal/unchecked.svg</file>
+        <file>res/checkbox/dark/pressed/checked.svg</file>
+        <file>res/checkbox/dark/pressed/partial.svg</file>
+        <file>res/checkbox/dark/pressed/unchecked.svg</file>
         <file>res/dots/dots_disabled.svg</file>
         <file>res/dots/dots_hover.svg</file>
         <file>res/dots/dots_normal.svg</file>
         <file>res/dots/dots_pressed.svg</file>
-        <file>res/checkbox/normal/checked.svg</file>
-        <file>res/checkbox/normal/unchecked.svg</file>
-        <file>res/checkbox/normal/partial.svg</file>
-        <file>res/checkbox/hover/checked.svg</file>
-        <file>res/checkbox/hover/unchecked.svg</file>
-        <file>res/checkbox/hover/partial.svg</file>
-        <file>res/checkbox/pressed/checked.svg</file>
-        <file>res/checkbox/pressed/unchecked.svg</file>
-        <file>res/checkbox/pressed/partial.svg</file>
-        <file>res/checkbox/disabled/checked.svg</file>
-        <file>res/checkbox/disabled/unchecked.svg</file>
-        <file>res/checkbox/disabled/partial.svg</file>
-        <file>res/radiobutton/disabled/checked.svg</file>
-        <file>res/radiobutton/disabled/unchecked.svg</file>
-        <file>res/radiobutton/hover/checked.svg</file>
-        <file>res/radiobutton/hover/unchecked.svg</file>
-        <file>res/radiobutton/normal/checked.svg</file>
-        <file>res/radiobutton/normal/unchecked.svg</file>
-        <file>res/radiobutton/pressed/checked.svg</file>
-        <file>res/radiobutton/pressed/unchecked.svg</file>
-        <file>res/Files-logo.png</file>
-        <file>res/activity_tab.svg</file>
+        <file>res/generalsettings_dark.qss</file>
+        <file>res/generalsettings_light.qss</file>
+        <file>res/ignorelisteditor_dark.qss</file>
+        <file>res/ignorelisteditor_light.qss</file>
+        <file>res/inputwidget/inputwidget_dark.qss</file>
+        <file>res/inputwidget/inputwidget_light.qss</file>
+        <file>res/login/back_arrow_dark.svg</file>
+        <file>res/login/back_arrow_light.svg</file>
+        <file>res/login/browse_dark.svg</file>
+        <file>res/login/browse_light.svg</file>
         <file>res/login/cred_page_dark.qss</file>
         <file>res/login/cred_page_light.qss</file>
-        <file>res/login/setupwidget_light.qss</file>
-        <file>res/login/setupwidget_dark.qss</file>
-        <file>res/login/wait_page_light.qss</file>
-        <file>res/login/wait_page_dark.qss</file>
-        <file>res/login/finished_page_light.qss</file>
-        <file>res/login/finished_page_dark.qss</file>
+        <file>res/login/done_dark.svg</file>
+        <file>res/login/done_light.svg</file>
+        <file>res/login/error_dark.svg</file>
+        <file>res/login/error_light.svg</file>
         <file>res/login/eye_dark.svg</file>
         <file>res/login/eye_light.svg</file>
+        <file>res/login/finished_page_dark.qss</file>
+        <file>res/login/finished_page_light.qss</file>
         <file>res/login/gear_dark.svg</file>
         <file>res/login/gear_light.svg</file>
-        <file>res/login/browse_light.svg</file>
-        <file>res/login/browse_dark.svg</file>
-        <file>res/login/reset_light.svg</file>
         <file>res/login/reset_dark.svg</file>
-        <file>res/login/back_arrow_light.svg</file>
-        <file>res/login/done_light.svg</file>
-        <file>res/login/back_arrow_dark.svg</file>
-        <file>res/login/done_dark.svg</file>
-        <file>res/login/error_light.svg</file>
-        <file>res/login/error_dark.svg</file>
+        <file>res/login/reset_light.svg</file>
+        <file>res/login/setupwidget_dark.qss</file>
+        <file>res/login/setupwidget_light.qss</file>
+        <file>res/login/wait_page_dark.qss</file>
+        <file>res/login/wait_page_light.qss</file>
         <file>res/login/warning_light.svg</file>
-        <file>res/inputwidget/inputwidget_light.qss</file>
-        <file>res/inputwidget/inputwidget_dark.qss</file>
-        <file>res/checkbox/normal/checked.svg</file>
-        <file>res/checkbox/normal/unchecked.svg</file>
-        <file>res/checkbox/normal/partial.svg</file>
-        <file>res/checkbox/hover/checked.svg</file>
-        <file>res/checkbox/hover/unchecked.svg</file>
-        <file>res/checkbox/hover/partial.svg</file>
-        <file>res/checkbox/pressed/checked.svg</file>
-        <file>res/checkbox/pressed/unchecked.svg</file>
-        <file>res/checkbox/pressed/partial.svg</file>
-        <file>res/checkbox/disabled/checked.svg</file>
-        <file>res/checkbox/disabled/unchecked.svg</file>
-        <file>res/checkbox/disabled/partial.svg</file>
-        <file>res/radiobutton/disabled/checked.svg</file>
-        <file>res/radiobutton/disabled/unchecked.svg</file>
-        <file>res/radiobutton/hover/checked.svg</file>
-        <file>res/radiobutton/hover/unchecked.svg</file>
-        <file>res/radiobutton/normal/checked.svg</file>
-        <file>res/radiobutton/normal/unchecked.svg</file>
-        <file>res/radiobutton/pressed/checked.svg</file>
-        <file>res/radiobutton/pressed/unchecked.svg</file>
-        <file>res/Files-logo.png</file>
-        <file>res/branch_closed.svg</file>
-        <file>res/branch_open.svg</file>
-        <file>res/accountsettings_light.qss</file>
-        <file>res/accountsettings_dark.qss</file>
-        <file>res/generalsettings_light.qss</file>
-        <file>res/generalsettings_dark.qss</file>
-        <file>res/networksettings_light.qss</file>
         <file>res/networksettings_dark.qss</file>
-        <file>res/settingsdialog_light.qss</file>
+        <file>res/networksettings_light.qss</file>
+        <file>res/radiobutton/light/disabled/checked.svg</file>
+        <file>res/radiobutton/light/disabled/unchecked.svg</file>
+        <file>res/radiobutton/light/hover/checked.svg</file>
+        <file>res/radiobutton/light/hover/unchecked.svg</file>
+        <file>res/radiobutton/light/normal/checked.svg</file>
+        <file>res/radiobutton/light/normal/unchecked.svg</file>
+        <file>res/radiobutton/light/pressed/checked.svg</file>
+        <file>res/radiobutton/light/pressed/unchecked.svg</file>
+        <file>res/radiobutton/dark/disabled/checked.svg</file>
+        <file>res/radiobutton/dark/disabled/unchecked.svg</file>
+        <file>res/radiobutton/dark/hover/checked.svg</file>
+        <file>res/radiobutton/dark/hover/unchecked.svg</file>
+        <file>res/radiobutton/dark/normal/checked.svg</file>
+        <file>res/radiobutton/dark/normal/unchecked.svg</file>
+        <file>res/radiobutton/dark/pressed/checked.svg</file>
+        <file>res/radiobutton/dark/pressed/unchecked.svg</file>
         <file>res/settingsdialog_dark.qss</file>
-        <file>res/ignorelisteditor_light.qss</file>
-        <file>res/ignorelisteditor_dark.qss</file>
+        <file>res/settingsdialog_light.qss</file>
+        <file>res/toolbar/light/Activity.svg</file>
+        <file>res/toolbar/light/Add.svg</file>
+        <file>res/toolbar/light/Power.svg</file>
+        <file>res/toolbar/light/Settings.svg</file>
+        <file>res/toolbar/light/User.svg</file>
+        <file>res/toolbar/dark/Activity.svg</file>
+        <file>res/toolbar/dark/Add.svg</file>
+        <file>res/toolbar/dark/Power.svg</file>
+        <file>res/toolbar/dark/Settings.svg</file>
+        <file>res/toolbar/dark/User.svg</file>
     </qresource>
 </RCC>

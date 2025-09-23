@@ -61,7 +61,7 @@ void CCheckBox::paintEvent(QPaintEvent* /*event*/)
 
     int icon_offs = (contentRect.height() - iconSize().height()) / 2;
 
-    const auto& icon = CheckboxRes::getChkIcon(so.state);
+    const auto& icon = CheckboxRes::getChkIcon(so.state, isDark);
     icon.paint(&painter, QRect(QPoint(contentRect.x() + icon_offs, contentRect.y() + icon_offs), iconSize()));
 
     if (so.state.testFlag(QStyle::State_Enabled)) {
@@ -84,11 +84,6 @@ void CCheckBox::paintEvent(QPaintEvent* /*event*/)
 
     painter.setPen(isDark ? textColor.second : textColor.first);
     painter.drawText(textRect, alignment, text());
-}
-
-void CCheckBox::mouseMoveEvent(QMouseEvent *event)
-{
-    QCheckBox::mouseMoveEvent(event);
 }
 
 bool CCheckBox::hitButton(const QPoint &pos) const

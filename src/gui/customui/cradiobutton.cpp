@@ -1,9 +1,21 @@
 #include "cradiobutton.h"
 #include "radiobuttonres.h"
+#include "theme.h"
 
 #include <QPainter>
 #include <QStyleOptionButton>
 #include <QFlags>
+
+namespace {
+QPair<QColor,QColor> textColor = {
+    QColor(0,0,0,0xDE),
+    QColor(0xFF,0xFF,0xFF,0xDE)
+};
+QPair<QColor,QColor> focusFrameColor = {
+    QColor(0,0,0,0xDE),
+    QColor(0xFF,0xFF,0xFF,0xDE)
+};
+}
 
 CRadioButton::CRadioButton(QWidget* parent)
     : QRadioButton(parent)
@@ -33,6 +45,12 @@ QSize CRadioButton::sizeHint() const
     return szHint;
 }
 
+void CRadioButton::setDarkTheme()
+{
+    isDark = CUR::Theme::instance()->isDarkTheme();
+    update();
+}
+
 void CRadioButton::paintEvent(QPaintEvent */*event*/)
 {
     QStyleOptionButton so;
@@ -40,25 +58,25 @@ void CRadioButton::paintEvent(QPaintEvent */*event*/)
 
     QPainter painter(this);
 
-    QRectF controlRect = rect().adjusted(frameWidth(), frameWidth(), -frameWidth(), -frameWidth());
+    QRectF controlRect = rect().adjusted(frameWidth_, frameWidth_, -frameWidth_, -frameWidth_);
     QRectF contentRect = controlRect.adjusted(2, 2, -2, -2);
 
     painter.setRenderHint(QPainter::Antialiasing);
 
-    int icon_offs = (contentRect.height() - iconSize().height()) / 2;
+    int icon_offs = (contentRect.height() - iconSize_.height()) / 2;
 
-    const auto& icon = RadiobuttonRes::getRbIcon(so.state);
-    icon.paint(&painter, QRect(QPoint(contentRect.x() + icon_offs, contentRect.y() + icon_offs), iconSize()));
+    const auto& icon = RadiobuttonRes::getRbIcon(so.state, isDark);
+    icon.paint(&painter, QRect(QPoint(contentRect.x() + icon_offs, contentRect.y() + icon_offs), iconSize_));
 
     if (so.state.testFlag(QStyle::State_Enabled)) {
         if (so.state.testFlag(QStyle::State_HasFocus)) {
-            painter.setPen(QPen(frameColor(), frameWidth(), Qt::SolidLine));
+            painter.setPen(QPen(isDark ? focusFrameColor.second : focusFrameColor.first, frameWidth_, Qt::SolidLine));
             painter.drawPath(focusFrame(controlRect));
         }
     }
 
     QRectF textRect = contentRect;
-    textRect.adjust(contentRect.x() + icon_offs * 2 + iconSize().width(), 1,  contentRect.x() + icon_offs, 0);
+    textRect.adjust(contentRect.x() + icon_offs * 2 + iconSize_.width(), 1,  contentRect.x() + icon_offs, 0);
 
     int alignment = style()->visualAlignment(layoutDirection(), Qt::AlignLeft | Qt::AlignVCenter);
 
@@ -68,7 +86,7 @@ void CRadioButton::paintEvent(QPaintEvent */*event*/)
         alignment |= Qt::TextShowMnemonic;
     }
 
-    painter.setPen(textColor());
+    painter.setPen(isDark ? textColor.second : textColor.first);
     painter.drawText(textRect, alignment, text());
 }
 
@@ -87,6 +105,6 @@ bool CRadioButton::hitButton(const QPoint &pos) const
 QPainterPath CRadioButton::focusFrame(const QRectF &r)
 {
     QPainterPath p;
-    p.addRoundedRect(r, frameRadius(), frameRadius());
+    p.addRoundedRect(r, frameRadius_, frameRadius_);
     return p;
 }

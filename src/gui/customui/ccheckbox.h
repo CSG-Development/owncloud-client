@@ -18,7 +18,6 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
     bool hitButton(const QPoint &pos) const override;
 
     QPainterPath focusFrame(const QRectF& r);

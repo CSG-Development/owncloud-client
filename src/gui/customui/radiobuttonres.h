@@ -7,6 +7,6 @@ namespace RadiobuttonRes {
 
 void init();
 
-const QIcon& getRbIcon(QStyle::State state);
+const QIcon& getRbIcon(QStyle::State state, bool isDark);
 
 } // namespace CheckboxRes

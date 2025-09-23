@@ -18,8 +18,8 @@ public:
     ~StyleHelper();
 
     static void applyPushButtonStyle(QWidget* root);
-
-    static QIcon getIcon(const QString& name);
+    
+    static QIcon getIcon(const QString& name, bool isDark);
 
     static QIcon getDotsIcon(const QStyleOptionToolButton* opt);
     static QIcon getArrowIcon(Qt::ArrowType arrow, bool isPressed, bool isDisabled, bool isDark);

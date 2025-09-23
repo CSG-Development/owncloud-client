@@ -47,6 +47,30 @@ using namespace std::chrono_literals;
 // refreshes of the notifications
 #define NOTIFICATION_REQUEST_FREE_PERIOD 15000
 
+namespace {
+QPair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/activitysettings_light.qss"),
+    QStringLiteral(":/res/activitysettings_dark.qss")
+};
+
+QPair<QString,QString> activityIcon = {
+    QStringLiteral(":/res/activity_tab_light.svg"),
+    QStringLiteral(":/res/activity_tab_dark.svg")
+};
+
+QPair<QString,QString> protocolIcon = {
+    QStringLiteral(":/res/protocol_tab_light.svg"),
+    QStringLiteral(":/res/protocol_tab_night.svg")
+};
+
+QPair<QString,QString> issuesIcon = {
+    QStringLiteral(":/res/issues_tab_light.svg"),
+    QStringLiteral(":/res/issues_tab_dark.svg")
+};
+
+} // namespace
+
+
 namespace CUR {
 
 ActivityWidget::ActivityWidget(QWidget *parent)
@@ -464,19 +488,20 @@ ActivitySettings::ActivitySettings(QWidget *parent)
 
     // create a tab widget for the three activity views
     _tab = new QTabWidget(this);
+    _tab->setObjectName(QStringLiteral("tabWidget"));
     _tab->tabBar()->setCursor(Qt::PointingHandCursor);
     hbox->addWidget(_tab);
     _activityWidget = new ActivityWidget(this);
-    _activityTabId = _tab->addTab(_activityWidget, QIcon(QStringLiteral(":/res/activity_tab.svg"))/*Theme::instance()->applicationIcon()*/, tr("Server Activity"));
+    _activityTabId = _tab->addTab(_activityWidget, QIcon(activityIcon.first), tr("Server Activity"));
     connect(_activityWidget, &ActivityWidget::hideActivityTab, this, &ActivitySettings::setActivityTabHidden);
     connect(_activityWidget, &ActivityWidget::guiLog, this, &ActivitySettings::guiLog);
     connect(_activityWidget, &ActivityWidget::newNotification, this, &ActivitySettings::slotShowActivityTab);
 
     _protocolWidget = new ProtocolWidget(this);
-    _protocolTabId = _tab->addTab(_protocolWidget, Theme::instance()->syncStateIcon(SyncResult::Success), tr("Sync Protocol"));
+    _protocolTabId = _tab->addTab(_protocolWidget, QIcon(protocolIcon.first), tr("Sync Protocol"));
 
     _issuesWidget = new IssuesWidget(this);
-    _syncIssueTabId = _tab->addTab(_issuesWidget, Theme::instance()->syncStateIcon(SyncResult::Problem), QString());
+    _syncIssueTabId = _tab->addTab(_issuesWidget, QIcon(issuesIcon.first), QString());
     slotShowIssueItemCount(0); // to display the label.
     connect(_issuesWidget, &IssuesWidget::issueCountUpdated,
         this, &ActivitySettings::slotShowIssueItemCount);
@@ -496,6 +521,9 @@ ActivitySettings::ActivitySettings(QWidget *parent)
 
     connect(AccountManager::instance(), &AccountManager::accountRemoved, this,
         [this](const AccountStatePtr &accountStatePtr) { _timeSinceLastCheck.take(accountStatePtr); });
+
+    connect(Theme::instance(), &Theme::themeChanged, this, &ActivitySettings::onThemeChanged);
+    onThemeChanged();
 }
 
 void ActivitySettings::setNotificationRefreshInterval(std::chrono::milliseconds interval)
@@ -535,6 +563,15 @@ void ActivitySettings::slotShowActivityTab()
     if (_activityTabId != -1) {
         _tab->setCurrentIndex(_activityTabId);
     }
+}
+
+void ActivitySettings::onThemeChanged()
+{
+    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    _tab->setTabIcon(_activityTabId, QIcon(isDark ? activityIcon.second : activityIcon.first));
+    _tab->setTabIcon(_protocolTabId, QIcon(isDark ? protocolIcon.second : protocolIcon.first));
+    _tab->setTabIcon(_syncIssueTabId, QIcon(isDark ? issuesIcon.second : issuesIcon.first));
 }
 
 void ActivitySettings::slotShowIssuesTab()

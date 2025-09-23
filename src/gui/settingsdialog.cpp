@@ -176,7 +176,7 @@ public:
         // if (!_iconName.isEmpty()) {
         //     setIcon(Resources::getCoreIcon(_iconName));
         // }
-        setIcon(StyleHelper::getIcon(_iconName));
+        setIcon(StyleHelper::getIcon(_iconName, CUR::Theme::instance()->isDarkTheme()));
     }
 
     QWidget* buttonWidget() const {
