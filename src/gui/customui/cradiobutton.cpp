@@ -22,6 +22,9 @@ CRadioButton::CRadioButton(QWidget* parent)
 {
     RadiobuttonRes::init();
     setCursor(Qt::PointingHandCursor);
+#ifdef Q_OS_MACOS
+    setAttribute(Qt::WA_MacShowFocusRect, false);
+#endif
 }
 
 CRadioButton::CRadioButton(const QString &text, QWidget *parent)

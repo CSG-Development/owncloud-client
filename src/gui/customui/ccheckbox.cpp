@@ -1,6 +1,7 @@
 #include "ccheckbox.h"
 #include "checkboxres.h"
 #include "theme.h"
+#include "focusproxy.h"
 
 #include <QPainter>
 #include <QStyleOptionButton>
@@ -17,6 +18,9 @@ CCheckBox::CCheckBox(QWidget* parent)
 {
     CheckboxRes::init();
     setCursor(Qt::PointingHandCursor);
+#ifdef Q_OS_MACOS
+    setAttribute(Qt::WA_MacShowFocusRect, false);
+#endif
 }
 
 CCheckBox::CCheckBox(const QString &text, QWidget *parent)

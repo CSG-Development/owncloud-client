@@ -76,6 +76,7 @@ void StyleHelper::applyPushButtonStyle(QWidget *root)
         t->setCursor(Qt::PointingHandCursor);
 #ifdef Q_OS_MACOS
         t->setAttribute(Qt::WA_Hover, true);
+        t->setAttribute(Qt::WA_MacShowFocusRect, false);
 #endif
     }
 }

@@ -1,0 +1,55 @@
+QTabWidget {
+    border: none;
+}
+
+QTabWidget::pane {
+    top: -1em;
+    border: 1px solid #CBCDD3;
+    position: absolute;
+    background: #FFFFFF;
+}
+
+QTabBar::tab {
+    border: 1px solid #C4C4C3;
+    min-height: 24px;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-left: -1px;
+    margin-right: -1px;
+}
+
+QTabBar::tab:selected  {
+    background-color: #1976D2;
+    border-color: #CBCDD3;
+    margin-left: -1px;
+    margin-right: -1px;
+    color: rgba(255,255,255,222);
+}
+
+QTabBar::tab:!selected  {
+    background-color: #FFFFFF;
+    border-color: #CBCDD3;
+}
+
+QTabBar::tab:first {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    margin-left: 0px;
+}
+
+QTabBar::tab:last {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    margin-right: 0;
+}
+
+QTabBar::tab:first:selected {
+    margin-left: 0;
+}
+
+QTabBar::tab:last:selected {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    margin-right: 0;
+}
+

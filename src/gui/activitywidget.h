@@ -145,6 +145,7 @@ private slots:
     void slotRegularNotificationCheck();
     void slotShowIssueItemCount(int cnt);
     void slotShowActivityTab();
+    void onCurrentTabChanged(int idx);
 
 signals:
     void guiLog(const QString &, const QString &);

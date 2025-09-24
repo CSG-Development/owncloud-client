@@ -78,6 +78,10 @@ void NotificationWidget::setActivity(const Activity &activity)
         QPushButton *b = _ui->_buttonBox->addButton(QDialogButtonBox::Close);
         b->setCursor(Qt::PointingHandCursor);
         b->setStyle(StyleHelper::pushButtonStyle());
+#ifdef Q_OS_MACOS
+        b->setAttribute(Qt::WA_Hover, true);
+        b->setAttribute(Qt::WA_MacShowFocusRect, false);
+#endif
         b->setMinimumHeight(34);
         b->setDefault(true);
         connect(b, &QAbstractButton::clicked, this, [this]{
@@ -91,6 +95,10 @@ void NotificationWidget::setActivity(const Activity &activity)
             QPushButton *b = _ui->_buttonBox->addButton(link._label, QDialogButtonBox::AcceptRole);
             b->setCursor(Qt::PointingHandCursor);
             b->setStyle(StyleHelper::pushButtonStyle());
+#ifdef Q_OS_MACOS
+            b->setAttribute(Qt::WA_Hover, true);
+            b->setAttribute(Qt::WA_MacShowFocusRect, false);
+#endif
             b->setMinimumHeight(34);
             b->setDefault(link._isPrimary);
             connect(b, &QAbstractButton::clicked, this, [this, b, link] {

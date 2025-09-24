@@ -4,14 +4,22 @@
         <file>res/Files-logo.png</file>
         <file>res/accountsettings_dark.qss</file>
         <file>res/accountsettings_light.qss</file>
-        <file>res/activitysettings_dark.qss</file>
-        <file>res/activitysettings_light.qss</file>
-        <file>res/activity_tab_light.svg</file>
-        <file>res/activity_tab_dark.svg</file>
-        <file>res/protocol_tab_dark.svg</file>
-        <file>res/protocol_tab_light.svg</file>
-        <file>res/issues_tab_dark.svg</file>
-        <file>res/issues_tab_light.svg</file>
+        <file>res/activitypage/activitysettings_dark.qss</file>
+        <file>res/activitypage/activitysettings_light.qss</file>
+        <file>res/activitypage/activitysettings_dark_mac.qss</file>
+        <file>res/activitypage/activitysettings_light_mac.qss</file>
+        <file>res/activitypage/activity_tab_light.svg</file>
+        <file>res/activitypage/activity_tab_dark.svg</file>
+        <file>res/activitypage/activity_tab_selected_light.svg</file>
+        <file>res/activitypage/activity_tab_selected_dark.svg</file>
+        <file>res/activitypage/protocol_tab_dark.svg</file>
+        <file>res/activitypage/protocol_tab_light.svg</file>
+        <file>res/activitypage/protocol_tab_selected_dark.svg</file>
+        <file>res/activitypage/protocol_tab_selected_light.svg</file>
+        <file>res/activitypage/issues_tab_dark.svg</file>
+        <file>res/activitypage/issues_tab_light.svg</file>
+        <file>res/activitypage/issues_tab_selected_dark.svg</file>
+        <file>res/activitypage/issues_tab_selected_light.svg</file>
         <file>res/arrow/arrow_down.png</file>
         <file>res/arrow/arrow_down.svg</file>
         <file>res/arrow/arrow_down_dark.png</file>

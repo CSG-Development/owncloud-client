@@ -48,25 +48,50 @@ using namespace std::chrono_literals;
 #define NOTIFICATION_REQUEST_FREE_PERIOD 15000
 
 namespace {
+#ifdef Q_OS_MACOS
 QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/activitysettings_light.qss"),
-    QStringLiteral(":/res/activitysettings_dark.qss")
+    QStringLiteral(":/res/activitypage/activitysettings_light_mac.qss"),
+    QStringLiteral(":/res/activitypage/activitysettings_dark_mac.qss")
 };
+#else
+QPair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/activitypage/activitysettings_light.qss"),
+    QStringLiteral(":/res/activitypage/activitysettings_dark.qss")
+};
+#endif
 
 QPair<QString,QString> activityIcon = {
-    QStringLiteral(":/res/activity_tab_light.svg"),
-    QStringLiteral(":/res/activity_tab_dark.svg")
+    QStringLiteral(":/res/activitypage/activity_tab_light.svg"),
+    QStringLiteral(":/res/activitypage/activity_tab_dark.svg")
 };
+#ifdef Q_OS_MACOS
+QPair<QString,QString> activityIconSelected = {
+    QStringLiteral(":/res/activitypage/activity_tab_selected_light.svg"),
+    QStringLiteral(":/res/activitypage/activity_tab_selected_dark.svg")
+};
+#endif
 
 QPair<QString,QString> protocolIcon = {
-    QStringLiteral(":/res/protocol_tab_light.svg"),
-    QStringLiteral(":/res/protocol_tab_night.svg")
+    QStringLiteral(":/res/activitypage/protocol_tab_light.svg"),
+    QStringLiteral(":/res/activitypage/protocol_tab_dark.svg")
 };
+#ifdef Q_OS_MACOS
+QPair<QString,QString> protocolIconSelected = {
+    QStringLiteral(":/res/activitypage/protocol_tab_selected_light.svg"),
+    QStringLiteral(":/res/activitypage/protocol_tab_selected_dark.svg")
+};
+#endif
 
 QPair<QString,QString> issuesIcon = {
-    QStringLiteral(":/res/issues_tab_light.svg"),
-    QStringLiteral(":/res/issues_tab_dark.svg")
+    QStringLiteral(":/res/activitypage/issues_tab_light.svg"),
+    QStringLiteral(":/res/activitypage/issues_tab_dark.svg")
 };
+#ifdef Q_OS_MACOS
+QPair<QString,QString> issuesIconSelected = {
+    QStringLiteral(":/res/activitypage/issues_tab_selected_light.svg"),
+    QStringLiteral(":/res/activitypage/issues_tab_selected_dark.svg")
+};
+#endif
 
 } // namespace
 
@@ -516,6 +541,8 @@ ActivitySettings::ActivitySettings(QWidget *parent)
     // connect a model signal to stop the animation.
     connect(_activityWidget, &ActivityWidget::dataChanged, _progressIndicator, &QProgressIndicator::stopAnimation);
 
+    connect(_tab, &QTabWidget::currentChanged, this, &ActivitySettings::onCurrentTabChanged);
+
     // We want the protocol be the default
     _tab->setCurrentIndex(1);
 
@@ -569,9 +596,37 @@ void ActivitySettings::onThemeChanged()
 {
     bool isDark = CUR::Theme::instance()->isDarkTheme();
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+#ifdef Q_OS_MACOS
+    onCurrentTabChanged(_tab->currentIndex());
+#else
     _tab->setTabIcon(_activityTabId, QIcon(isDark ? activityIcon.second : activityIcon.first));
     _tab->setTabIcon(_protocolTabId, QIcon(isDark ? protocolIcon.second : protocolIcon.first));
     _tab->setTabIcon(_syncIssueTabId, QIcon(isDark ? issuesIcon.second : issuesIcon.first));
+#endif
+}
+
+void ActivitySettings::onCurrentTabChanged(int idx)
+{
+    Q_UNUSED(idx)
+
+#ifdef Q_OS_MACOS
+    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    if (idx == _activityTabId) {
+        _tab->setTabIcon(_activityTabId, QIcon(isDark ? activityIconSelected.second : activityIconSelected.first));
+        _tab->setTabIcon(_protocolTabId, QIcon(isDark ? protocolIcon.second : protocolIcon.first));
+        _tab->setTabIcon(_syncIssueTabId, QIcon(isDark ? issuesIcon.second : issuesIcon.first));
+    }
+    else if (idx == _protocolTabId) {
+        _tab->setTabIcon(_activityTabId, QIcon(isDark ? activityIcon.second : activityIcon.first));
+        _tab->setTabIcon(_protocolTabId, QIcon(isDark ? protocolIconSelected.second : protocolIconSelected.first));
+        _tab->setTabIcon(_syncIssueTabId, QIcon(isDark ? issuesIcon.second : issuesIcon.first));
+    }
+    else if (idx == _syncIssueTabId) {
+        _tab->setTabIcon(_activityTabId, QIcon(isDark ? activityIcon.second : activityIcon.first));
+        _tab->setTabIcon(_protocolTabId, QIcon(isDark ? protocolIcon.second : protocolIcon.first));
+        _tab->setTabIcon(_syncIssueTabId, QIcon(isDark ? issuesIconSelected.second : issuesIconSelected.first));
+    }
+#endif
 }
 
 void ActivitySettings::slotShowIssuesTab()

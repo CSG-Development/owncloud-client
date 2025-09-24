@@ -4,6 +4,7 @@
 
 class QLineEdit;
 class QLabel;
+class QToolButton;
 
 class InputWidget: public QFrame
 {
