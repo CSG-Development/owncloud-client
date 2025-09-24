@@ -33,6 +33,11 @@ auto proxyPasswordC()
 {
     return QStringLiteral("Proxy/Password");
 }
+
+QPair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/networksettings_light.qss"),
+    QStringLiteral(":/res/networksettings_dark.qss")
+};
 }
 namespace CUR {
 
@@ -44,6 +49,7 @@ NetworkSettings::NetworkSettings(QWidget *parent)
     , _ui(new Ui::NetworkSettings)
 {
     _ui->setupUi(this);
+    setObjectName(QStringLiteral("CUR_NetworkSettings"));
 
     StyleHelper::applyPushButtonStyle(this);
 
@@ -96,6 +102,9 @@ NetworkSettings::NetworkSettings(QWidget *parent)
     connect(_ui->hostLineEdit, &QLineEdit::textChanged, this, &NetworkSettings::checkEmptyProxyHost);
     checkEmptyProxyHost();
     checkAccountLocalhost();
+
+    connect(Theme::instance(), &Theme::themeChanged, this, &NetworkSettings::onThemeChanged);
+    onThemeChanged();
 }
 
 NetworkSettings::~NetworkSettings()
@@ -256,6 +265,12 @@ void NetworkSettings::showEvent(QShowEvent *event)
     checkAccountLocalhost();
 
     QWidget::showEvent(event);
+}
+
+void NetworkSettings::onThemeChanged()
+{
+    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 }
 
 

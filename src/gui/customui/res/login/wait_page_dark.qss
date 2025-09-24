@@ -1,0 +1,30 @@
+#frameContent {
+    background-color: #262729;
+    border-radius: 24px;
+}
+
+#frame,
+#frameHalign,
+#frameContent,
+#frameBusy,
+#frameLogo,
+#frameImage,
+#frameText,
+#frameProcessText {
+    border: none;
+}
+
+
+#lblImage {
+    background-image: url(":/res/Files-logo.png");
+}
+
+#lblCurator,
+#lblFiles {
+    font-size: 34px;
+    font: "Segoe UI";
+}
+
+#lblCurator {
+    color: #6EBD49;
+}

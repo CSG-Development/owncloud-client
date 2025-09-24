@@ -99,6 +99,11 @@ QString shortDisplayNameForSettings(CUR::Account *account)
     }
     return QStringLiteral("%1\n%2").arg(user, host);
 }
+
+QPair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/settingsdialog_light.qss"),
+    QStringLiteral(":/res/settingsdialog_dark.qss")
+};
 }
 
 
@@ -171,7 +176,7 @@ public:
         // if (!_iconName.isEmpty()) {
         //     setIcon(Resources::getCoreIcon(_iconName));
         // }
-        setIcon(StyleHelper::getIcon(_iconName));
+        setIcon(StyleHelper::getIcon(_iconName, CUR::Theme::instance()->isDarkTheme()));
     }
 
     QWidget* buttonWidget() const {
@@ -193,6 +198,14 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
 
     connect(Theme::instance(), &Theme::themeChanged, this, [&] {
         StyleHelper::setDarkMode(Theme::instance()->isDarkTheme());
+
+        const QList<QWidget*> childrenList = findChildren<QWidget*>();
+        for (auto* widget: childrenList) {
+            if (widget->metaObject()->indexOfSlot("setDarkTheme()") != -1) {
+                QMetaObject::invokeMethod(widget, "setDarkTheme");
+            }
+        }
+
         updateToolbarTheme();
         update();
         _ui->stack->currentWidget()->update();
@@ -318,6 +331,9 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
     addAction(showLogWindow2);
 
     customizeStyle();
+
+    connect(Theme::instance(), &Theme::themeChanged, this, &SettingsDialog::onThemeChanged);
+    onThemeChanged();
 
     cfg.restoreGeometry(this);
     setMinimumSize(::minimumSizeHint(this));
@@ -584,6 +600,12 @@ void SettingsDialog::accountRemoved(AccountStatePtr s)
         _actionForAccount.remove(s->account().data());
     }
     _activitySettings->slotRemoveAccount(s);
+}
+
+void SettingsDialog::onThemeChanged()
+{
+    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 }
 
 void SettingsDialog::customizeStyle()

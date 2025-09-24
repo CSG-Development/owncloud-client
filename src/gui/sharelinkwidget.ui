@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>441</width>
-    <height>568</height>
+    <height>526</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -94,9 +94,18 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QRadioButton" name="radio_readOnly">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
+            <widget class="CRadioButton" name="radio_readOnly">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>34</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>34</height>
+              </size>
              </property>
              <property name="text">
               <string>Download / View</string>
@@ -122,9 +131,18 @@
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radio_readWrite">
-           <property name="cursor">
-            <cursorShape>PointingHandCursor</cursorShape>
+          <widget class="CRadioButton" name="radio_readWrite">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>34</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>34</height>
+            </size>
            </property>
            <property name="text">
             <string>Download / View / Edit</string>
@@ -148,9 +166,18 @@
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radio_uploadOnly">
-           <property name="cursor">
-            <cursorShape>PointingHandCursor</cursorShape>
+          <widget class="CRadioButton" name="radio_uploadOnly">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>34</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>34</height>
+            </size>
            </property>
            <property name="text">
             <string>Upload only (File Drop)</string>
@@ -179,12 +206,24 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_password">
         <item>
-         <widget class="QCheckBox" name="checkBox_password">
+         <widget class="CCheckBox" name="checkBox_password">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>34</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>34</height>
+           </size>
           </property>
           <property name="cursor">
            <cursorShape>PointingHandCursor</cursorShape>
@@ -229,6 +268,18 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>34</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>34</height>
+           </size>
+          </property>
           <property name="cursor">
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
@@ -245,7 +296,19 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QCheckBox" name="checkBox_expire">
+         <widget class="CCheckBox" name="checkBox_expire">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>34</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>34</height>
+           </size>
+          </property>
           <property name="cursor">
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
@@ -297,6 +360,18 @@
       </item>
       <item>
        <widget class="QPushButton" name="createShareButton">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>34</height>
+         </size>
+        </property>
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
@@ -361,6 +436,18 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>CCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header>gui/customui/ccheckbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CRadioButton</class>
+   <extends>QRadioButton</extends>
+   <header>gui/customui/cradiobutton.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>nameLineEdit</tabstop>
   <tabstop>createShareButton</tabstop>

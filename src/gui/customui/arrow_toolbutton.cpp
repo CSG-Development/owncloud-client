@@ -100,10 +100,11 @@ void ArrowToolButton::paintEvent(QPaintEvent* /*event*/)
     QRect pix_r = rect();
     QRect text_r = rect();
 
-    auto pm = StyleHelper::getArrowPixmap(arrowType(), isPressed, !isEnabled(), isDark);
-    if (!pm.isNull()) {
-        pix_r.adjust(0, 0, -pm.width(), 0);
-        style()->drawItemPixmap(&painter, pix_r, Qt::AlignRight|Qt::AlignVCenter, pm);
+    constexpr QSize iconSize = {16, 17};
+    pix_r = QRect(pix_r.right() - iconSize.width() - 11, (pix_r.height() - iconSize.height()) / 2, iconSize.width(), iconSize.height());
+    const auto icon = StyleHelper::getArrowIcon(arrowType(), isPressed, !isEnabled(), isDark);
+    if (!icon.isNull()) {
+        icon.paint(&painter, pix_r, Qt::AlignCenter);
     }
 
     int alignment = Qt::TextShowMnemonic;
@@ -112,7 +113,7 @@ void ArrowToolButton::paintEvent(QPaintEvent* /*event*/)
     QFontMetrics fontMetrics = painter.fontMetrics();
     const QString elidedLine = fontMetrics.elidedText(text(), Qt::ElideMiddle, text_r.width());
 
-    text_r.adjust(0, 0, -pm.width(), 0);
+    text_r.adjust(0, 0, -iconSize.width(), 0);
     style()->drawItemText(&painter, QStyle::visualRect(layoutDirection(), rect(), text_r), alignment, palette(), isEnabled(), elidedLine);
 }
 

@@ -1,0 +1,27 @@
+#frame {
+    border: 1px solid #CBCDD3;
+    border-radius: 20px;
+}
+
+#lineEdit {
+    border: none;
+    border-radius: 0px;
+    background: rgba(0,0,0,0);
+    font-size: 16px;
+}
+
+#promptText {
+    color: rgba(255,255,255,204);
+    background-color: #262729;
+    padding-left: 4px;
+    padding-right: 4px;
+    border: 1px solid rgba(0,0,0,0);
+}
+
+#btnPassword {
+    border: none;
+}
+
+#btnPassword {
+    border: none;
+}

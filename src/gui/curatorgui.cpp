@@ -32,7 +32,7 @@
 #include "openfilemanager.h"
 #include "progressdispatcher.h"
 #include "settingsdialog.h"
-#include "setupwizardcontroller.h"
+#include "setupcontroller.h"
 #include "sharedialog.h"
 
 #include "libsync/graphapi/space.h"
@@ -823,12 +823,12 @@ void CuratorGui::runNewAccountWizard()
         // passing the settings dialog as parent makes sure the wizard will be shown above it
         // as the settingsDialog's lifetime spans across the entire application but the dialog will live much shorter,
         // we have to clean it up manually when finished() is emitted
-        _wizardController = new Wizard::SetupWizardController(settingsDialog());
+        _wizardController = new Wizard::SetupController(settingsDialog());
 
         // while the wizard is shown, new syncs are disabled
         FolderMan::instance()->setSyncEnabled(false);
 
-        connect(_wizardController, &Wizard::SetupWizardController::finished, ocApp(),
+        connect(_wizardController, &Wizard::SetupController::finished, ocApp(),
             [this](AccountPtr newAccount, Wizard::SyncMode syncMode, const QVariantMap &dynamicRegistrationData) {
                 // note: while the wizard is shown, we disable the folder synchronization
                 // previously we could perform this just here, but now we have to postpone this depending on whether selective sync was chosen

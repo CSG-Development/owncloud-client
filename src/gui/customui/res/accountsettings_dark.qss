@@ -1,0 +1,57 @@
+QTreeView::indicator {
+     width: 16px;
+     height: 20px;
+}
+
+QTreeView::indicator:checked {
+     image: url(:/res/checkbox/dark/normal/checked.svg);
+}
+
+QTreeView::indicator:unchecked {
+     image: url(:/res/checkbox/dark/normal/unchecked.svg);
+}
+
+QTreeView::indicator:checked:hover {
+     image: url(:/res/checkbox/dark/hover/checked.svg);
+}
+
+QTreeView::indicator:unchecked:hover {
+     image: url(:/res/checkbox/dark/hover/unchecked.svg);
+}
+
+QTreeView::indicator:checked:pressed {
+     image: url(:/res/checkbox/dark/pressed/checked.svg);
+}
+
+QTreeView::indicator:unchecked:pressed {
+     image: url(:/res/checkbox/dark/pressed/unchecked.svg);
+}
+
+QTreeView::indicator:checked:disabled {
+     image: url(:/res/checkbox/dark/disabled/checked.svg);
+}
+
+QTreeView::indicator:unchecked:disabled {
+     image: url(:/res/checkbox/dark/disabled/unchecked.svg);
+}
+
+QAbstractItemView {
+    icon-size: 20px;
+}
+
+/*
+QTreeView::branch:open {
+     image: url(:/res/branch_open.svg);
+     height: 16px;
+     icon-size: 16px;
+}
+
+QTreeView::branch:closed {
+     image: url(:/res/branch_closed.svg);
+}
+
+QTreeView::branch:!has-children {
+     image: none;
+}
+
+*/

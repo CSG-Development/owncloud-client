@@ -1,0 +1,22 @@
+#CUR_NetworkSettings {
+    background-color: #FFFFFF;
+}
+
+#proxyGroupBox,
+#downloadBox,
+#uploadBox {
+    background-color: rgba(66,66,66,120);
+    border-width: 1px;
+    border-style: solid;
+    border-color: #616161;
+    margin-top: 24px;
+    font-size: 14px;
+}
+
+#proxyGroupBox::title,
+#downloadBox::title,
+#uploadBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 0px;
+}

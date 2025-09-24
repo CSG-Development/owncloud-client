@@ -15,7 +15,6 @@
 #ifndef LOGBROWSER_H
 #define LOGBROWSER_H
 
-#include <QCheckBox>
 #include <QPlainTextEdit>
 #include <QTextStream>
 #include <QFile>
@@ -50,6 +49,9 @@ public:
      * Will only enable logging if it isn't enabled already.
      */
     static void setupLoggingFromConfig();
+
+    void onThemeChanged();
+
 
 protected slots:
     void togglePermanentLogging(bool enabled);

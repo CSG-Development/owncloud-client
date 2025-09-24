@@ -56,8 +56,15 @@
 #include "oauthloginwidget.h"
 
 namespace {
+
+QPair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/accountsettings_light.qss"),
+    QStringLiteral(":/res/accountsettings_dark.qss")
+};
+
 //constexpr auto modalWidgetStretchedMarginC = 50;
 constexpr auto modalWidgetStretchedMarginC = 4;
+
 }
 
 namespace CUR {
@@ -224,6 +231,9 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
         }
     });
     ui->stackedWidget->setCurrentWidget(ui->folderListPage);
+
+    connect(Theme::instance(), &Theme::themeChanged, this, &AccountSettings::onThemeChanged);
+    onThemeChanged();
 }
 
 
@@ -640,14 +650,14 @@ void AccountSettings::showConnectionLabel(const QString &message, QStringList er
     if (errors.isEmpty()) {
         ui->connectLabel->setText(message);
         ui->connectLabel->setToolTip(QString());
-        ui->connectLabel->setStyleSheet(QString());
+        //ui->connectLabel->setStyleSheet(QString());
     } else {
         errors.prepend(message);
         const QString msg = errors.join(QLatin1String("\n"));
         qCDebug(lcAccountSettings) << msg;
         ui->connectLabel->setText(msg);
         ui->connectLabel->setToolTip(QString());
-        ui->connectLabel->setStyleSheet(errStyle);
+        //ui->connectLabel->setStyleSheet(errStyle);
     }
     ui->accountStatus->setVisible(!message.isEmpty());
 }
@@ -917,6 +927,12 @@ void AccountSettings::slotLinkActivated(const QString &link)
             }
         }
     }
+}
+
+void AccountSettings::onThemeChanged()
+{
+    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 }
 
 AccountSettings::~AccountSettings()

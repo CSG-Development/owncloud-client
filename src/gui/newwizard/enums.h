@@ -21,18 +21,14 @@
 namespace CUR::Wizard {
 Q_NAMESPACE
 
-enum class SetupWizardState {
-    ServerUrlState,
-    FirstState = ServerUrlState,
-
-    LegacyWebFingerState,
-
+enum class SetupState {
     CredentialsState,
-
+    FirstState = CredentialsState,
+    WaitState,
     AccountConfiguredState,
     FinalState = AccountConfiguredState,
 };
-Q_ENUM_NS(SetupWizardState)
+Q_ENUM_NS(SetupState)
 
 enum class SyncMode {
     Invalid = 0,
@@ -46,5 +42,5 @@ Q_ENUM_NS(SyncMode)
 
 namespace CUR {
 template <>
-QString Utility::enumToDisplayName(Wizard::SetupWizardState state);
+QString Utility::enumToDisplayName(Wizard::SetupState state);
 }
