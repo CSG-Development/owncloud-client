@@ -68,17 +68,14 @@ ShareDialog::ShareDialog(AccountStatePtr accountState,
 
     _ui->shareWidgets->tabBar()->setCursor(Qt::PointingHandCursor);
 
-    QPushButton *closeButton = _ui->buttonBox->button(QDialogButtonBox::Close);
-    closeButton->setCursor(Qt::PointingHandCursor);
-    closeButton->setMinimumHeight(34);
-    connect(closeButton, &QAbstractButton::clicked, this, &QWidget::close);
+    connect(_ui->btnClose, &QAbstractButton::clicked, this, &QWidget::close);
 
     // We want to act on account state changes
     connect(_accountState.data(), &AccountState::stateChanged, this, &ShareDialog::slotAccountStateChanged);
 
     // Because people press enter in the dialog and we don't want to close for that
-    closeButton->setDefault(false);
-    closeButton->setAutoDefault(false);
+    _ui->btnClose->setDefault(false);
+    _ui->btnClose->setAutoDefault(false);
 
     // Set icon
     const QIcon icon = QFileIconProvider().icon(QFileInfo(_localPath));
@@ -146,7 +143,6 @@ ShareDialog::ShareDialog(AccountStatePtr accountState,
     job->start();
 
     StyleHelper::applyPushButtonStyle(this);
-    closeButton->setStyle(StyleHelper::pushButtonStyle());
 }
 
 ShareDialog::~ShareDialog()
