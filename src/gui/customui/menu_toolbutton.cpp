@@ -10,7 +10,7 @@ constexpr qreal focusRound = 4;
 constexpr qreal focusWidth = 1;
 constexpr qreal frameRound = 3;
 constexpr qreal frameWidth = 1;
-QSize iconSize = {40,40};
+QSize toolbarIconSize = {40,40};
 }
 
 namespace CUR {
@@ -45,20 +45,16 @@ void MenuToolButton::paintEvent(QPaintEvent* /*event*/)
 
     painter.fillRect(rect(), bgColor);
 
-    QIcon::State state = isEnabled() ? QIcon::On : QIcon::Off;
-    QIcon::Mode mode;
-    if (!isEnabled())
-        mode = QIcon::Disabled;
-    else if (isHovered)
-        mode = QIcon::Active;
-    else
-        mode = QIcon::Normal;
-
     QRect pix_r = rect();
     QRect text_r = rect();
 
-    pix_r.setHeight(::iconSize.height() + 4);
+    pix_r.setHeight(::toolbarIconSize.height() + 4);
     text_r.adjust(0, pix_r.height() - 14, 0, -1);
+
+    const auto ic = icon();
+    if (!ic.isNull()) {
+        ic.paint(&painter, pix_r, Qt::AlignCenter);
+    }
 
     int alignment = Qt::TextShowMnemonic;
     alignment |= Qt::AlignCenter;
@@ -66,10 +62,6 @@ void MenuToolButton::paintEvent(QPaintEvent* /*event*/)
     QFontMetrics fontMetrics = painter.fontMetrics();
     const QString elidedLine = fontMetrics.elidedText(text(), Qt::ElideMiddle, text_r.width());
 
-    auto pm = icon().pixmap(rect().size().boundedTo(::iconSize), painter.device()->devicePixelRatio(), mode, state);
-    if (!pm.isNull()) {
-        style()->drawItemPixmap(&painter, pix_r, Qt::AlignCenter, pm);
-    }
     style()->drawItemText(&painter, QStyle::visualRect(layoutDirection(), rect(), text_r), alignment, palette(), isEnabled(), elidedLine);
 }
 

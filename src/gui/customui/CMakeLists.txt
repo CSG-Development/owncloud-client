@@ -15,6 +15,22 @@ add_library(${LIBRARY_NAME} STATIC
     stylebase.h
     stylehelper.cpp
     stylehelper.h
+    ccheckbox.cpp
+    ccheckbox.h
+    checkboxres.cpp
+    checkboxres.h
+    cradiobutton.cpp
+    cradiobutton.h
+    radiobuttonres.cpp
+    radiobuttonres.h
+    inputwidget.cpp
+    inputwidget.h
+    progressindicator.cpp
+    progressindicator.h
+    loginpushbutton.cpp
+    loginpushbutton.h
+    focusproxy.cpp
+    focusproxy.h
     customui_res.qrc
 )
 

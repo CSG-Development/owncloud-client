@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>468</width>
-    <height>46</height>
+    <width>494</width>
+    <height>50</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,9 +46,18 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="permissionShare">
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
+      <widget class="CCheckBox" name="permissionShare">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>34</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>34</height>
+        </size>
        </property>
        <property name="text">
         <string>can share</string>
@@ -56,9 +65,18 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="permissionsEdit">
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
+      <widget class="CCheckBox" name="permissionsEdit">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>34</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>34</height>
+        </size>
        </property>
        <property name="text">
         <string>can edit</string>
@@ -92,6 +110,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header>gui/customui/ccheckbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

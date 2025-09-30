@@ -30,12 +30,8 @@ AboutDialog::AboutDialog(QWidget *parent)
     StyleHelper::applyPushButtonStyle(this);
     setWindowTitle(tr("About %1").arg(Theme::instance()->appNameGUI()));
     ui->aboutText->setText(Theme::instance()->about());
-    ui->icon->setPixmap(Theme::instance()->aboutIcon().pixmap(256));
-    ui->versionInfo->setText(Theme::instance()->aboutVersions(Theme::VersionFormat::RichText));
-    ui->tabWidget->tabBar()->setCursor(Qt::PointingHandCursor);
-
-    connect(ui->versionInfo, &QTextBrowser::anchorClicked, this, &AboutDialog::openBrowserFromUrl);
     connect(ui->aboutText, &QLabel::linkActivated, this, &AboutDialog::openBrowser);
+    connect(ui->btnOk, &QPushButton::clicked, this, &AboutDialog::accept);
 }
 
 AboutDialog::~AboutDialog()

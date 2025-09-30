@@ -53,6 +53,8 @@ ShareLinkWidget::ShareLinkWidget(AccountPtr account,
 {
     _ui->setupUi(this);
 
+    StyleHelper::applyPushButtonStyle(this);
+
     _ui->linkShares->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     _ui->linkShares->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     _ui->linkShares->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
@@ -330,7 +332,7 @@ void ShareLinkWidget::slotShareSelectionChanged()
     _ui->shareProperties->setEnabled(true);
 
     // Public upload state (files can only be read-only, box is hidden for them)
-    _ui->widget_editing->setEnabled(!_isFile);
+    _ui->frame_editing->setEnabled(!_isFile);
     if (!selectionUnchanged) {
         if (share && share->getPublicUpload()) {
             if (share->getShowFileListing()) {
@@ -672,7 +674,7 @@ SharePermissions ShareLinkWidget::uiPermissionState() const
 void ShareLinkWidget::slotPermissionsClicked()
 {
     if (auto current = selectedShare()) {
-        _ui->widget_editing->setEnabled(false);
+        _ui->frame_editing->setEnabled(false);
         _pi_editing->startAnimation();
         _ui->errorLabel->hide();
 

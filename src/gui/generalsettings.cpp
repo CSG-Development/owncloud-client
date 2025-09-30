@@ -43,6 +43,13 @@
 #include <QOperatingSystemVersion>
 #include <QScopedValueRollback>
 
+namespace {
+QPair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/generalsettings_light.qss"),
+    QStringLiteral(":/res/generalsettings_dark.qss")
+};
+}
+
 namespace CUR {
 
 GeneralSettings::GeneralSettings(QWidget *parent)
@@ -52,12 +59,10 @@ GeneralSettings::GeneralSettings(QWidget *parent)
 {
     _ui->setupUi(this);
 
+    setObjectName(QStringLiteral("CUR_GeneralSettings"));
     StyleHelper::applyPushButtonStyle(this);
     connect(Theme::instance(), &Theme::themeChanged, this, [&] {
-        const auto& btns = findChildren<QPushButton*>();
-        for (auto* t: btns) {
-            t->update();
-        }
+        onThemeChanged();
         update();
     });
 
@@ -86,7 +91,7 @@ GeneralSettings::GeneralSettings(QWidget *parent)
     /* the ignoreHiddenFiles flag is a folder specific setting, but for now, it is
      * handled globally. Save it to every folder that is defined.
      */
-    connect(_ui->syncHiddenFilesCheckBox, &QCheckBox::toggled, this, [](bool checked) { FolderMan::instance()->setIgnoreHiddenFiles(!checked); });
+    connect(_ui->syncHiddenFilesCheckBox, &CCheckBox::toggled, this, [](bool checked) { FolderMan::instance()->setIgnoreHiddenFiles(!checked); });
 
     _ui->crashreporterCheckBox->setVisible(Theme::instance()->withCrashReporter());
 
@@ -165,6 +170,8 @@ GeneralSettings::GeneralSettings(QWidget *parent)
     if (Theme::instance()->forceVirtualFilesOption() && VfsPluginManager::instance().bestAvailableVfsMode() == Vfs::WindowsCfApi) {
         _ui->groupBox_non_vfs->hide();
     }
+
+    onThemeChanged();
 }
 
 GeneralSettings::~GeneralSettings()
@@ -196,6 +203,21 @@ void GeneralSettings::loadMiscSettings()
 void GeneralSettings::showEvent(QShowEvent *)
 {
     reloadConfig();
+}
+
+void GeneralSettings::onThemeChanged()
+{
+    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    const auto& btns = findChildren<QPushButton*>();
+    for (auto* t: btns) {
+        t->update();
+    }
+    for (auto widget: findChildren<QWidget*>()) {
+        if (widget->metaObject()->indexOfSlot("setDarkTheme()") != -1) {
+            QMetaObject::invokeMethod(widget, "setDarkTheme");
+        }
+    }
 }
 
 void GeneralSettings::slotUpdateChannelChanged([[maybe_unused]] int index)

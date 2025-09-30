@@ -29,8 +29,8 @@
 
 #include "common/vfs.h"
 #include "gui/settingsdialog.h"
+#include "gui/customui/ccheckbox.h"
 
-#include <QCheckBox>
 #include <QVBoxLayout>
 
 
@@ -47,10 +47,10 @@ FolderWizardSelectiveSync::FolderWizardSelectiveSync(FolderWizardPrivate *parent
     if (Theme::instance()->forceVirtualFilesOption() && vfsMode == Vfs::WindowsCfApi) {
         // using an else if to make the condition not even more complex...
     } else if (Theme::instance()->showVirtualFilesOption() && vfsMode != Vfs::Off && (vfsMode == Vfs::WindowsCfApi || Theme::instance()->enableExperimentalFeatures())) {
-        _virtualFilesCheckBox = new QCheckBox(tr("Use virtual files instead of downloading content immediately%1").arg(vfsMode == Vfs::WindowsCfApi ? QString() : tr(" (experimental)")));
+        _virtualFilesCheckBox = new CCheckBox(tr("Use virtual files instead of downloading content immediately%1").arg(vfsMode == Vfs::WindowsCfApi ? QString() : tr(" (experimental)")));
         _virtualFilesCheckBox->setCursor(Qt::PointingHandCursor);
-        connect(_virtualFilesCheckBox, &QCheckBox::clicked, this, &FolderWizardSelectiveSync::virtualFilesCheckboxClicked);
-        connect(_virtualFilesCheckBox, &QCheckBox::checkStateChanged, this, [this](int state) {
+        connect(_virtualFilesCheckBox, &CCheckBox::clicked, this, &FolderWizardSelectiveSync::virtualFilesCheckboxClicked);
+        connect(_virtualFilesCheckBox, &CCheckBox::checkStateChanged, this, [this](int state) {
             _selectiveSync->setEnabled(state == Qt::Unchecked);
         });
         _virtualFilesCheckBox->setChecked(vfsMode == Vfs::WindowsCfApi);

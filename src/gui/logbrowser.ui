@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>399</height>
+    <width>578</width>
+    <height>436</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -111,9 +111,18 @@ Since log files can get large, the client will start a new one for each sync run
     </layout>
    </item>
    <item>
-    <widget class="QCheckBox" name="enableLoggingButton">
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
+    <widget class="CCheckBox" name="enableLoggingButton">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>34</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>34</height>
+      </size>
      </property>
      <property name="text">
       <string>Enable logging to temporary folder</string>
@@ -121,9 +130,18 @@ Since log files can get large, the client will start a new one for each sync run
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="httpLogButton">
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
+    <widget class="CCheckBox" name="httpLogButton">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>34</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>34</height>
+      </size>
      </property>
      <property name="text">
       <string>Log Http traffic </string>
@@ -180,6 +198,18 @@ Note that using any logging command line options will override the settings.</st
    </item>
    <item>
     <widget class="QPushButton" name="openFolderButton">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>34</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>34</height>
+      </size>
+     </property>
      <property name="cursor">
       <cursorShape>PointingHandCursor</cursorShape>
      </property>
@@ -190,6 +220,18 @@ Note that using any logging command line options will override the settings.</st
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>34</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>34</height>
+      </size>
+     </property>
      <property name="cursor">
       <cursorShape>PointingHandCursor</cursorShape>
      </property>
@@ -203,6 +245,13 @@ Note that using any logging command line options will override the settings.</st
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header>gui/customui/ccheckbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../resources/client.qrc"/>
  </resources>

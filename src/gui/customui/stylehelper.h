@@ -18,15 +18,11 @@ public:
     ~StyleHelper();
 
     static void applyPushButtonStyle(QWidget* root);
+    
+    static QIcon getIcon(const QString& name, bool isDark);
 
-    static qreal dpi(const QStyleOption* option);
-    static qreal dpiScaled(qreal value, qreal dpi);
-
-    static QIcon getIcon(const QString& name);
-
-    static QPixmap getDotsPixmap(const QStyleOptionToolButton* opt);
-    static QPixmap getArrowPixmap(const QStyleOptionToolButton* opt, bool isDark);
-    static QPixmap getArrowPixmap(Qt::ArrowType arrow, bool isPressed, bool isDisabled, bool isDark);
+    static QIcon getDotsIcon(const QStyleOptionToolButton* opt);
+    static QIcon getArrowIcon(Qt::ArrowType arrow, bool isPressed, bool isDisabled, bool isDark);
 
     static void setDarkMode(bool dark);
 
@@ -34,6 +30,8 @@ public:
     static QProxyStyle* pushButtonStyle() {return pushButtonStyle_;}
 
     static StyleHelper* getInstance();
+
+    static QString loadFileToString(const QString& fileName);
 
 private:
     static StyleHelper* instance_;

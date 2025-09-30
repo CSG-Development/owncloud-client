@@ -59,16 +59,8 @@ void ToolButtonDots::drawButton(QStyleOptionToolButton *opt, QPainter *painter, 
     painter->setPen(QPen(frameColor, 1, Qt::SolidLine));
     painter->drawPath(path);
 
-    QSize pmSize = {10, 2};
-    QPointF p;
-    p.setX((rect.width() - pmSize.width()) / 2);
-    p.setY((rect.height() - pmSize.height()) / 2);
-    QPointF p1 {p.x() + rect.x(), p.y() + rect.y()};
-
-    const auto px = StyleHelper::getDotsPixmap(opt);
-    if (!px.isNull()) {
-        painter->drawPixmap(p1, px);
-    }
+    const auto icon = StyleHelper::getDotsIcon(opt);
+    icon.paint(painter, rect.adjusted(6, 6, -6, -6), Qt::AlignCenter);
 
     painter->restore();
 }

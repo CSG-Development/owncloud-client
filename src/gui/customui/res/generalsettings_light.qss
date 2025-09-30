@@ -1,0 +1,28 @@
+#CUR_GeneralSettings,
+#scrollArea,
+#scrollAreaWidgetContents_2,
+#frame,
+#updaterWidget {
+    background-color: #FFFFFF;
+}
+
+#advancedGroupBox,
+#groupBox_non_vfs,
+#groupBox,
+#generalGroupBox {
+    background-color: #FFFFFF;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #CBCDD3;
+    margin-top: 24px;
+    font-size: 14px;
+}
+
+#advancedGroupBox::title,
+#groupBox_non_vfs::title,
+#groupBox::title,
+#generalGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 0px;
+}

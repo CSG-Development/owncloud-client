@@ -22,7 +22,6 @@
 
 #include "gui/folder.h"
 
-class QCheckBox;
 class QTreeWidgetItem;
 
 class Ui_FolderWizardTargetPage;
