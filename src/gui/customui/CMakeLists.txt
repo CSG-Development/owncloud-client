@@ -25,6 +25,7 @@ add_library(${LIBRARY_NAME} STATIC
     radiobuttonres.h
     inputwidget.cpp
     inputwidget.h
+    inputwidget.ui
     progressindicator.cpp
     progressindicator.h
     loginpushbutton.cpp

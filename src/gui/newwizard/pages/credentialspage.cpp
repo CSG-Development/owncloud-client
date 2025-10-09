@@ -7,6 +7,7 @@
 
 
 #include <QLineEdit>
+#include <QRegularExpression>
 
 namespace {
 constexpr int fontSize = 16;
@@ -53,17 +54,19 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     ui->edPassword->setFontPixelSize(fontSize);
     ui->edPassword->setPasswordMode(true);
 
-    connect(ui->edUrl, &InputWidget::textChanged, this, [&] {
-        updateLoginEnable();
-        showErrorMessage({});
-    });
-    connect(ui->edEmail, &InputWidget::textChanged, this, [&] {
-        updateLoginEnable();
-    });
-    connect(ui->edPassword, &InputWidget::textChanged, this, [&] {
-        updateLoginEnable();
-    });
-    updateLoginEnable();
+    connect(ui->edUrl, &InputWidget::textChanged, this, &CredentialsPage::onTextChanged);
+    connect(ui->edEmail, &InputWidget::textChanged, this, &CredentialsPage::onTextChanged);
+    connect(ui->edPassword, &InputWidget::textChanged, this, &CredentialsPage::onTextChanged);
+
+    connect(ui->edUrl, &InputWidget::textEdited, this, &CredentialsPage::onTextEdited);
+    connect(ui->edEmail, &InputWidget::textEdited, this, &CredentialsPage::onTextEdited);
+    connect(ui->edPassword, &InputWidget::textEdited, this, &CredentialsPage::onTextEdited);
+
+    connect(ui->edUrl, &InputWidget::editingFinished, this, &CredentialsPage::onEditingFinished);
+    connect(ui->edEmail, &InputWidget::editingFinished, this, &CredentialsPage::onEditingFinished);
+    connect(ui->edPassword, &InputWidget::editingFinished, this, &CredentialsPage::onEditingFinished);
+
+    validateFormData();
 
     ui->btnLogin->installEventFilter(this);
     ui->btnLogin->setToolTip(tr("Enter a valid email address and password"));
@@ -123,16 +126,62 @@ QString CredentialsPage::password() const
     return ui->edPassword->text();
 }
 
-void CredentialsPage::showErrorMessage(const QString &msg)
+void CredentialsPage::showErrorMessage(const QString& msg)
 {
     ui->frameErrorMessage->setVisible(!msg.isEmpty());
     ui->lblErrorText->setText(msg);
 }
 
-void CredentialsPage::updateLoginEnable()
+void CredentialsPage::onTextChanged(const QString& /*txt*/)
 {
-    bool enable = !ui->edUrl->text().trimmed().isEmpty() &&
-                  !ui->edEmail->text().trimmed().isEmpty() &&
-                  !ui->edPassword->text().trimmed().isEmpty();
-    ui->btnLogin->setEnabled(enable);
+    validateFormData();
+    showErrorMessage({});
+}
+
+void CredentialsPage::onTextEdited(const QString&/*txt*/)
+{
+    if (sender() == ui->edEmail)
+        ui->edEmail->setErrorState(false);
+    else if (sender() == ui->edUrl)
+        ui->edUrl->setErrorState(false);
+}
+
+void CredentialsPage::onEditingFinished()
+{
+    qDebug() << "EditingFinished" << sender();
+    if (!simpleEmailValidate(email())) {
+        ui->edEmail->setErrorState(true, tr("Invalid email"));
+    }
+}
+
+void CredentialsPage::validateFormData()
+{
+    ui->btnLogin->setEnabled(isAllFieldValid());
+}
+
+bool CredentialsPage::simpleEmailValidate(const QString& email)
+{
+    if (email.trimmed().isEmpty())
+        return true;
+
+    static QRegularExpression rx(QStringLiteral("^[0-9a-zA-Z]+([0-9a-zA-Z]*[-._+])*[0-9a-zA-Z]+@[0-9a-zA-Z]+([-.][0-9a-zA-Z]+)*([0-9a-zA-Z]*[.])[a-zA-Z]{2,6}$"),
+                                 QRegularExpression::CaseInsensitiveOption);
+    return rx.match(email).hasMatch();
+}
+
+bool CredentialsPage::simpleUrlValidate(const QString& url)
+{
+    if (url.trimmed().isEmpty())
+        return true;
+
+    QUrl urlValidator(url);
+    qDebug() << urlValidator << urlValidator.isValid();
+    return urlValidator.isValid();
+}
+
+bool CredentialsPage::isAllFieldValid()
+{
+    return !ui->edUrl->text().trimmed().isEmpty() &&
+           !ui->edEmail->text().trimmed().isEmpty() &&
+           !ui->edPassword->text().trimmed().isEmpty();
 }

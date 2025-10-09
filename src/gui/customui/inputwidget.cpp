@@ -1,4 +1,5 @@
 #include "inputwidget.h"
+#include "ui_inputwidget.h"
 #include "stylehelper.h"
 #include "theme.h"
 
@@ -8,107 +9,101 @@
 #include <QLabel>
 
 namespace {
-constexpr int promptFontSize = 12;
 constexpr int btnIconSize = 21;
-constexpr int horizMargin = 16;
-constexpr int vertMargin = 4;
-constexpr int btnSpacing = 7;
-constexpr int editFrameHeight = 56;
 
-constexpr qreal frameWidth = 1;
-constexpr qreal frameRadius = 20;
-constexpr int fontPixelSize = 16;
-
-QPair<QColor,QColor> frameColor = {
-    QColor("#CBCDD3"),
-    QColor("#616161")
-};
 QPair<QString,QString> inputStyle = {
     QStringLiteral(":/res/inputwidget/inputwidget_light.qss"),
     QStringLiteral(":/res/inputwidget/inputwidget_dark.qss")
+};
+QPair<QString,QString> inputStyleError = {
+    QStringLiteral(":/res/inputwidget/inputwidget_error_light.qss"),
+    QStringLiteral(":/res/inputwidget/inputwidget_error_dark.qss")
 };
 }
 
 InputWidget::InputWidget(QWidget *parent)
     : QFrame(parent)
+    , ui(new Ui::InputWidget)
 {
-    frame_ = new QFrame(this);
-    frame_->setObjectName(QStringLiteral("frame"));
-    frame_->setMinimumHeight(editFrameHeight);
-    frame_->setMaximumHeight(editFrameHeight);
+    ui->setupUi(this);
 
-    frame_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    promptLabel = new QLabel(this);
+    promptLabel->setObjectName(QStringLiteral("promptLabel"));
+    promptLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+    promptLabel->setMaximumHeight(16);
+    promptLabel->setVisible(false);
 
-    QHBoxLayout* l = new QHBoxLayout;
-    l->setContentsMargins(horizMargin, vertMargin, horizMargin, vertMargin);
-    l->setSpacing(btnSpacing);
-    frame_->setLayout(l);
+    ui->showPasswordButton->setVisible(false);
+    ui->showPasswordButton->setCheckable(true);
+    ui->showPasswordButton->setCursor(Qt::PointingHandCursor);
+    ui->showPasswordButton->setIconSize(QSize(btnIconSize, btnIconSize));
 
-    lineEdit_ = new QLineEdit(this);
-    lineEdit_->setObjectName(QStringLiteral("lineEdit"));
-    lineEdit_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    l->addWidget(lineEdit_);
-
-    prompt_ = new QLabel(this);
-    prompt_->setObjectName(QStringLiteral("promptText"));
-    QFont f = prompt_->font();
-    f.setPixelSize(promptFontSize);
-    prompt_->setFont(f);
-    prompt_->setAutoFillBackground(true);
-    prompt_->setVisible(false);
-    updateSize();
-
-    showPassButton_ = new QToolButton(this);
-    showPassButton_->setObjectName(QStringLiteral("btnPassword"));
-    showPassButton_->setVisible(false);
-    showPassButton_->setCheckable(true);
-    showPassButton_->setCursor(Qt::PointingHandCursor);
-    showPassButton_->setIconSize(QSize(btnIconSize, btnIconSize));
-    l->addWidget(showPassButton_);
-
-    connect(showPassButton_, &QToolButton::clicked, this, [this] {
-        lineEdit_->setEchoMode(showPassButton_->isChecked() ? QLineEdit::Normal : QLineEdit::Password);
+    connect(ui->showPasswordButton, &QToolButton::clicked, this, [this] {
+        ui->inputLineEdit->setEchoMode(ui->showPasswordButton->isChecked() ? QLineEdit::Normal : QLineEdit::Password);
     });
-    connect(lineEdit_, &QLineEdit::textChanged, this, &InputWidget::onTextChanged);
 
+    connect(ui->inputLineEdit, &QLineEdit::textChanged, this, &InputWidget::onTextChanged);
+    connect(ui->inputLineEdit, &QLineEdit::textEdited, this, &InputWidget::textEdited);
+    connect(ui->inputLineEdit, &QLineEdit::editingFinished, this, &InputWidget::editingFinished);
+
+    setErrorState(false);
+    updatePromptPosition();
     setDarkTheme();
 }
 
-QSize InputWidget::minimumSizeHint() const
+InputWidget::~InputWidget()
 {
-    int sz = editFrameHeight + promptFontSize / 2;
-    return {sz, sz};
+    delete ui;
+}
+
+QLineEdit *InputWidget::lineEdit() const
+{
+    return ui->inputLineEdit;
 }
 
 int InputWidget::fontPixelSize() const
 {
-    return lineEdit_->font().pixelSize();
+    return ui->inputLineEdit->font().pixelSize();
 }
 
 void InputWidget::setPasswordMode(bool val)
 {
-    lineEdit_->setEchoMode(val ? QLineEdit::Password : QLineEdit::Normal);
-    const QSignalBlocker b_(showPassButton_);
-    showPassButton_->setChecked(!val);
-    showPassButton_->setVisible(val);
+    ui->inputLineEdit->setEchoMode(val ? QLineEdit::Password : QLineEdit::Normal);
+    const QSignalBlocker b_(ui->showPasswordButton);
+    ui->showPasswordButton->setChecked(!val);
+    ui->showPasswordButton->setVisible(val);
 }
 
 void InputWidget::setPasswordButtonImage(const QString &val)
 {
-    showPassButton_->setIcon(QIcon(val));
+    ui->showPasswordButton->setIcon(QIcon(val));
 }
 
 void InputWidget::setPlaceholderText(const QString &str)
 {
-    lineEdit_->setPlaceholderText(str);
-    prompt_->setText(str);
+    ui->inputLineEdit->setPlaceholderText(str.trimmed());
+    promptLabel->setText(str.trimmed());
+    promptLabel->adjustSize();
 }
 
-QString InputWidget::text() const {return lineEdit_->text();}
+QString InputWidget::text() const
+{
+    return ui->inputLineEdit->text();
+}
 
 void InputWidget::setText(const QString &val)
 {
-    lineEdit_->setText(val);
+    ui->inputLineEdit->setText(val);
+}
+
+void InputWidget::setErrorState(bool enable, const QString& txt)
+{
+    errorState = enable;
+    if (!errorState)
+        ui->errorLabel->clear();
+    else
+        ui->errorLabel->setText(txt);
+    updateStyles();
 }
 
 void InputWidget::setDarkTheme()
@@ -119,9 +114,9 @@ void InputWidget::setDarkTheme()
 
 void InputWidget::setFontPixelSize(int val)
 {
-    auto font = lineEdit_->font();
+    auto font = ui->inputLineEdit->font();
     font.setPixelSize(val);
-    lineEdit_->setFont(font);
+    ui->inputLineEdit->setFont(font);
 }
 
 void InputWidget::paintEvent(QPaintEvent *event)
@@ -131,25 +126,28 @@ void InputWidget::paintEvent(QPaintEvent *event)
 
 void InputWidget::resizeEvent(QResizeEvent */*event*/)
 {
-    updateSize();
+    updatePromptPosition();
 }
 
 void InputWidget::onTextChanged(const QString& str)
 {
-    if (!prompt_->text().isEmpty())
-        prompt_->setVisible(!str.isEmpty());
+    if (!promptLabel->text().isEmpty())
+        promptLabel->setVisible(!str.isEmpty());
+
     Q_EMIT textChanged(str);
 }
 
-void InputWidget::updateSize()
+void InputWidget::updatePromptPosition()
 {
-    frame_->resize(rect().width() - 1, rect().height() - (promptFontSize / 2));
-    frame_->move(rect().x() + 1, rect().y() + (promptFontSize / 2));
-    prompt_->move(rect().left() + 16, frame_->rect().top() - 2);
+    promptLabel->move(ui->inputLineEdit->pos().x() + 12, rect().top());
 }
 
 void InputWidget::updateStyles()
 {
-    setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? inputStyle.second : inputStyle.first));
+    if (errorState)
+        setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? inputStyleError.second : inputStyleError.first));
+    else
+        setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? inputStyle.second : inputStyle.first));
+
     update();
 }

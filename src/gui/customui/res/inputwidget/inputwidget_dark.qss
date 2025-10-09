@@ -1,27 +1,38 @@
-#frame {
+#mainFrame {
+    border: none;
+}
+
+#inputFrame {
     border: 1px solid #CBCDD3;
     border-radius: 20px;
 }
 
-#lineEdit {
+#errorFrame {
+    border: none;
+}
+
+#inputLineEdit {
     border: none;
     border-radius: 0px;
     background: rgba(0,0,0,0);
     font-size: 16px;
 }
 
-#promptText {
+#promptLabel {
     color: rgba(255,255,255,204);
     background-color: #262729;
+    padding-top: 1px;
+    padding-bottom: 1px;
     padding-left: 4px;
     padding-right: 4px;
     border: 1px solid rgba(0,0,0,0);
 }
 
-#btnPassword {
-    border: none;
+#errorLabel {
+    color: #F28F8C;
+    background: #FFFFFF;
 }
 
-#btnPassword {
+#showPasswordButton {
     border: none;
 }

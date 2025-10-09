@@ -76,6 +76,8 @@
         <file>res/ignorelisteditor_light.qss</file>
         <file>res/inputwidget/inputwidget_dark.qss</file>
         <file>res/inputwidget/inputwidget_light.qss</file>
+        <file>res/inputwidget/inputwidget_error_dark.qss</file>
+        <file>res/inputwidget/inputwidget_error_light.qss</file>
         <file>res/login/back_arrow_dark.svg</file>
         <file>res/login/back_arrow_light.svg</file>
         <file>res/login/browse_dark.svg</file>

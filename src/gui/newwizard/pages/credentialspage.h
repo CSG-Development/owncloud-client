@@ -29,7 +29,17 @@ Q_SIGNALS:
     void resetPasswordClicked();
 
 private:
-    void updateLoginEnable();
+    void onTextChanged(const QString& txt);
+    void onTextEdited(const QString& txt);
+    void onEditingFinished();
 
-    Ui::CredentialsPage *ui;
+    void validateFormData();
+
+    // EmailValidate and UrlValidate return true if input string is empty to avoid startup errors
+    bool simpleEmailValidate(const QString& email);
+    bool simpleUrlValidate(const QString& url);
+
+    bool isAllFieldValid();
+
+    Ui::CredentialsPage* ui = nullptr;
 };

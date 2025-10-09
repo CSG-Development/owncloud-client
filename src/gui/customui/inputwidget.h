@@ -6,16 +6,18 @@ class QLineEdit;
 class QLabel;
 class QToolButton;
 
+namespace Ui {class InputWidget;}
+
+
 class InputWidget: public QFrame
 {
     Q_OBJECT
 
 public:
     explicit InputWidget(QWidget* parent = nullptr);
+    ~InputWidget();
 
-    QSize minimumSizeHint() const override;
-
-    QLineEdit* lineEdit() const {return lineEdit_;}
+    QLineEdit* lineEdit() const;
 
     void setFontPixelSize(int val);
     int fontPixelSize() const;
@@ -28,6 +30,8 @@ public:
     QString text() const;
     void setText(const QString& val);
 
+    void setErrorState(bool enable, const QString& txt = QString());
+
 public slots:
     void setDarkTheme();
 
@@ -38,6 +42,8 @@ Q_SIGNALS:
     void fontPixelSizeChanged();
 
     void textChanged(const QString &);
+    void textEdited(const QString &);
+    void editingFinished();
 
     void buttonClicked();
 
@@ -46,14 +52,14 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
     void onTextChanged(const QString&);
-    void updateSize();
+    void updatePromptPosition();
     void updateStyles();
 
 private:
-    QLineEdit* lineEdit_ = nullptr;
-    QToolButton* showPassButton_ = nullptr;
-    QLabel* prompt_ = nullptr;
-    QFrame* frame_ = nullptr;
+    Ui::InputWidget* ui = nullptr;
+
+    QLabel* promptLabel = nullptr;
 
     bool isDark = false;
+    bool errorState = false;
 };

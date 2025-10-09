@@ -3,7 +3,7 @@
 }
 
 #inputFrame {
-    border: 1px solid #CBCDD3;
+    border: 1px solid #F44336;
     border-radius: 20px;
 }
 
@@ -19,17 +19,20 @@
 }
 
 #promptLabel {
-    color: rgba(0,0,0,204);
+    color: #F44336;
     background: #FFFFFF;
     padding-top: 1px;
     padding-bottom: 1px;
     padding-left: 4px;
     padding-right: 4px;
+    font-size: 12px;
 }
 
 #errorLabel {
     color: #F44336;
     background: #FFFFFF;
+    font-size: 12px;
+    padding-left: 4px;
 }
 
 #showPasswordButton {
