@@ -30,7 +30,7 @@
 
 #errorLabel {
     color: #F28F8C;
-    background: #FFFFFF;
+    background: rgba(0,0,0,0);
 }
 
 #showPasswordButton {

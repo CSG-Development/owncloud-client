@@ -19,7 +19,7 @@
 }
 
 #promptLabel {
-    color: rgba(255,255,255,204);
+    color: #F28F8C;
     background-color: #262729;
     padding-top: 1px;
     padding-bottom: 1px;
@@ -31,7 +31,7 @@
 
 #errorLabel {
     color: #F28F8C;
-    background: #FFFFFF;
+    background: rgba(0,0,0,0);
     font-size: 12px;
     padding-left: 4px;
 }
