@@ -57,7 +57,14 @@ SetupController::SetupController(SettingsDialog *parent)
     connect(this, &SetupController::credentialsEvaluationFailed, this, [&](const QString& msg) {
         qCWarning(lcSetupWizardController) << "Credentials evaluation failed:" << msg;
         window()->displayPage(SetupWidget::SetupPage::PageCredentials);
+        window()->setInvalidCredentialsError();
         window()->showErrorMessage(msg);
+    });
+
+    connect(this, &SetupController::invalidServerUrl, this, [&] {
+        qCWarning(lcSetupWizardController) << "Invalid server URL";
+        window()->displayPage(SetupWidget::SetupPage::PageCredentials);
+        window()->setInvalidUrlError();
     });
 
     connect(this, &SetupController::credentialsEvaluationSuccessful, this, [&] {
@@ -68,6 +75,7 @@ SetupController::SetupController(SettingsDialog *parent)
     connect(this, &SetupController::loginFailed, this, [&](const QString& msg) {
         qCWarning(lcSetupWizardController) << "Login failed:" << msg;
         window()->displayPage(SetupWidget::SetupPage::PageCredentials);
+        window()->setInvalidCredentialsError();
         window()->showErrorMessage(msg);
     });
 
@@ -169,7 +177,7 @@ void SetupController::evaluateCredentials(const QString& url, const QString &log
 
     // TODO: perform some better validation
     if (!serverUrl.isValid()) {
-        Q_EMIT credentialsEvaluationFailed(tr("Invalid server URL"));
+        Q_EMIT invalidServerUrl();
         return;
     }
 

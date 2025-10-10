@@ -15,10 +15,6 @@ QPair<QString,QString> widgetStyle = {
     QStringLiteral(":/res/login/cred_page_light.qss"),
     QStringLiteral(":/res/login/cred_page_dark.qss")
 };
-QPair<QString,QString> eyeIcon = {
-    QStringLiteral(":/res/login/eye_light.svg"),
-    QStringLiteral(":/res/login/eye_dark.svg")
-};
 }
 
 CredentialsPage::CredentialsPage(QWidget *parent)
@@ -54,17 +50,26 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     ui->edPassword->setFontPixelSize(fontSize);
     ui->edPassword->setPasswordMode(true);
 
-    connect(ui->edUrl, &InputWidget::textChanged, this, &CredentialsPage::onTextChanged);
-    connect(ui->edEmail, &InputWidget::textChanged, this, &CredentialsPage::onTextChanged);
-    connect(ui->edPassword, &InputWidget::textChanged, this, &CredentialsPage::onTextChanged);
-
     connect(ui->edUrl, &InputWidget::textEdited, this, &CredentialsPage::onTextEdited);
     connect(ui->edEmail, &InputWidget::textEdited, this, &CredentialsPage::onTextEdited);
     connect(ui->edPassword, &InputWidget::textEdited, this, &CredentialsPage::onTextEdited);
 
-    connect(ui->edUrl, &InputWidget::editingFinished, this, &CredentialsPage::onEditingFinished);
-    connect(ui->edEmail, &InputWidget::editingFinished, this, &CredentialsPage::onEditingFinished);
-    connect(ui->edPassword, &InputWidget::editingFinished, this, &CredentialsPage::onEditingFinished);
+    connect(ui->edUrl, &InputWidget::focusLost, this, [&] {
+        if (!simpleUrlValidate(url())) {
+            ui->edUrl->setErrorState(true, tr("Invalid URL"));
+            ui->btnLogin->setEnabled(false);
+        }
+    });
+
+    connect(ui->edEmail, &InputWidget::focusReceived, this, [&] {
+        ui->edEmail->setErrorState(false);
+    });
+    connect(ui->edEmail, &InputWidget::focusLost, this, [&] {
+        if (!simpleEmailValidate(email())) {
+            ui->edEmail->setErrorState(true, tr("Invalid email"));
+            ui->btnLogin->setEnabled(false);
+        }
+    });
 
     validateFormData();
 
@@ -107,7 +112,6 @@ void CredentialsPage::updateTheme()
     }
     setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 
-    ui->edPassword->setPasswordButtonImage(isDark ? eyeIcon.second : eyeIcon.first);
     update();
 }
 
@@ -132,31 +136,42 @@ void CredentialsPage::showErrorMessage(const QString& msg)
     ui->lblErrorText->setText(msg);
 }
 
-void CredentialsPage::onTextChanged(const QString& /*txt*/)
+void CredentialsPage::showInvalidUrlError()
 {
-    validateFormData();
-    showErrorMessage({});
+    ui->edUrl->setErrorState(true, tr("Invalid URL"));
+    ui->btnLogin->setEnabled(false);
+}
+
+void CredentialsPage::showInvalidCredentialsError()
+{
+    ui->edEmail->setErrorState(true, {});
+    ui->edPassword->setErrorState(true, {});
+    ui->btnLogin->setEnabled(false);
 }
 
 void CredentialsPage::onTextEdited(const QString&/*txt*/)
 {
-    if (sender() == ui->edEmail)
+    if (sender() == ui->edEmail) {
         ui->edEmail->setErrorState(false);
-    else if (sender() == ui->edUrl)
-        ui->edUrl->setErrorState(false);
-}
-
-void CredentialsPage::onEditingFinished()
-{
-    qDebug() << "EditingFinished" << sender();
-    if (!simpleEmailValidate(email())) {
-        ui->edEmail->setErrorState(true, tr("Invalid email"));
     }
+    else if (sender() == ui->edUrl) {
+        ui->edUrl->setErrorState(false);
+    }
+    else if (sender() == ui->edPassword) {
+        ui->edPassword->setErrorState(false);
+    }
+
+    validateFormData();
+    showErrorMessage({});
 }
 
 void CredentialsPage::validateFormData()
 {
-    ui->btnLogin->setEnabled(isAllFieldValid());
+    bool valid = isAllFieldNotEmpty() &&
+                 simpleUrlValidate(url()) &&
+                 simpleEmailValidate(email());
+
+    ui->btnLogin->setEnabled(valid);
 }
 
 bool CredentialsPage::simpleEmailValidate(const QString& email)
@@ -174,12 +189,44 @@ bool CredentialsPage::simpleUrlValidate(const QString& url)
     if (url.trimmed().isEmpty())
         return true;
 
-    QUrl urlValidator(url);
-    qDebug() << urlValidator << urlValidator.isValid();
-    return urlValidator.isValid();
+    QString urlRegExp = QStringLiteral(
+                        "^"
+                        // protocol identifier
+                        "(?:(?:https?|ftp)://)"
+                        // user:pass authentication
+                        "(?:\\S+(?::\\S*)?&#64;)?"
+                        "(?:"
+                        // IP address exclusion
+                        // private & local networks
+                        "(?!(?:10|127)(?:\\.\\d{1,3}){3})"
+                        "(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})"
+                        "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})"
+                        // IP address dotted notation octets
+                        // excludes loopback network 0.0.0.0
+                        // excludes reserved space >= 224.0.0.0
+                        // excludes network & broacast addresses
+                        // (first & last IP address of each class)
+                        "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])"
+                        "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}"
+                        "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))"
+                        "|"
+                        // host name
+                        "(?:(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)"
+                        // domain name
+                        "(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)*"
+                        // TLD identifier
+                        "(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,}))"
+                        ")"
+                        // port number
+                        "(?::\\d{2,5})?"
+                        // resource path
+                        "(?:/[^\\s]*)?"
+                        "$");
+    static QRegularExpression rx(urlRegExp, QRegularExpression::CaseInsensitiveOption);
+    return rx.match(url).hasMatch();
 }
 
-bool CredentialsPage::isAllFieldValid()
+bool CredentialsPage::isAllFieldNotEmpty()
 {
     return !ui->edUrl->text().trimmed().isEmpty() &&
            !ui->edEmail->text().trimmed().isEmpty() &&

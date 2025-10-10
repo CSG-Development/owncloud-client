@@ -36,6 +36,9 @@ public:
     void onSetupFinishPageDefaults(const QString &defaultSyncTargetDir, const QString &userChosenSyncTargetDir,
         bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental);
 
+    void setInvalidUrlError();
+    void setInvalidCredentialsError();
+
 Q_SIGNALS:
     void rejected();
 
