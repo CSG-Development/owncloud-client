@@ -9,8 +9,6 @@
 #include <QLabel>
 
 namespace {
-constexpr int btnIconSize = 21;
-
 QPair<QString,QString> inputStyle = {
     QStringLiteral(":/res/inputwidget/inputwidget_light.qss"),
     QStringLiteral(":/res/inputwidget/inputwidget_dark.qss")
@@ -36,7 +34,6 @@ InputWidget::InputWidget(QWidget *parent)
     ui->showPasswordButton->setVisible(false);
     ui->showPasswordButton->setCheckable(true);
     ui->showPasswordButton->setCursor(Qt::PointingHandCursor);
-    ui->showPasswordButton->setIconSize(QSize(btnIconSize, btnIconSize));
 
     connect(ui->showPasswordButton, &QToolButton::clicked, this, [this] {
         ui->inputLineEdit->setEchoMode(ui->showPasswordButton->isChecked() ? QLineEdit::Normal : QLineEdit::Password);

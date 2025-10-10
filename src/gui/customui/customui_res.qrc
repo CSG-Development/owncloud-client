@@ -88,8 +88,10 @@
         <file>res/login/done_light.svg</file>
         <file>res/login/error_dark.svg</file>
         <file>res/login/error_light.svg</file>
-        <file>res/login/eye_dark.svg</file>
-        <file>res/login/eye_light.svg</file>
+        <file>res/login/eye_open_dark.svg</file>
+        <file>res/login/eye_open_light.svg</file>
+        <file>res/login/eye_closed_dark.svg</file>
+        <file>res/login/eye_closed_light.svg</file>
         <file>res/login/finished_page_dark.qss</file>
         <file>res/login/finished_page_light.qss</file>
         <file>res/login/gear_dark.svg</file>

@@ -97,3 +97,12 @@ QToolTip {
 #lblErrorText {
     color: rgba(255,255,255,222);
 }
+
+#showPasswordButton {
+    border: none;
+    image: url(":/res/login/eye_closed_dark.svg");
+}
+
+#showPasswordButton:checked {
+    image: url(":/res/login/eye_open_dark.svg");
+}
