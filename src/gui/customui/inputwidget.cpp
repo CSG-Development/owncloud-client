@@ -43,6 +43,8 @@ InputWidget::InputWidget(QWidget *parent)
     connect(ui->inputLineEdit, &QLineEdit::textEdited, this, &InputWidget::textEdited);
     connect(ui->inputLineEdit, &QLineEdit::editingFinished, this, &InputWidget::editingFinished);
 
+    ui->inputLineEdit->installEventFilter(this);
+
     setErrorState(false);
     updatePromptPosition();
     setDarkTheme();
@@ -101,6 +103,19 @@ void InputWidget::setErrorState(bool enable, const QString& txt)
     else
         ui->errorLabel->setText(txt);
     updateStyles();
+}
+
+bool InputWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == ui->inputLineEdit) {
+        if (event->type() == QEvent::FocusIn) {
+            Q_EMIT focusReceived();
+        }
+        else if (event->type() == QEvent::FocusOut) {
+            Q_EMIT focusLost();
+        }
+    }
+    return QFrame::eventFilter(watched, event);
 }
 
 void InputWidget::setDarkTheme()

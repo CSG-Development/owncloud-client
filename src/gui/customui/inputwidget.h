@@ -32,6 +32,8 @@ public:
 
     void setErrorState(bool enable, const QString& txt = QString());
 
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 public slots:
     void setDarkTheme();
 
@@ -44,6 +46,8 @@ Q_SIGNALS:
     void textChanged(const QString &);
     void textEdited(const QString &);
     void editingFinished();
+    void focusReceived();
+    void focusLost();
 
     void buttonClicked();
 
