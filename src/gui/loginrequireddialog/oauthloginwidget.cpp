@@ -18,6 +18,7 @@
 #include "gui/application.h"
 #include "gui/creds/httpcredentialsgui.h"
 #include "gui/guiutility.h"
+#include "gui/customui/stylehelper.h"
 
 #include "resources/resources.h"
 
@@ -30,7 +31,6 @@ OAuthLoginWidget::OAuthLoginWidget(QWidget *parent)
     , _ui(new ::Ui::OAuthLoginWidget)
 {
     _ui->setupUi(this);
-
 
     _ui->openBrowserButton->setDisabled(true);
     _ui->copyUrlToClipboardButton->setDisabled(true);
@@ -47,6 +47,7 @@ OAuthLoginWidget::OAuthLoginWidget(QWidget *parent)
     _ui->copyUrlToClipboardButton->setIcon(Resources::getCoreIcon(QStringLiteral("copy")));
 
     setFocusProxy(_ui->openBrowserButton);
+    StyleHelper::applyPushButtonStyle(this);
 
     connect(_ui->retryButton, &QPushButton::clicked, this, [this]() {
         Q_EMIT retryButtonClicked();

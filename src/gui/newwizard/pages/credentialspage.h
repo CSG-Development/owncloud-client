@@ -21,6 +21,8 @@ public:
     QString password() const;
 
     void showErrorMessage(const QString& msg);
+    void showInvalidUrlError();
+    void showInvalidCredentialsError();
 
 Q_SIGNALS:
     void loginClicked(const QString& url, const QString& user, const QString& password);
@@ -29,7 +31,15 @@ Q_SIGNALS:
     void resetPasswordClicked();
 
 private:
-    void updateLoginEnable();
+    void onTextEdited(const QString& txt);
 
-    Ui::CredentialsPage *ui;
+    void validateFormData();
+
+    // EmailValidate and UrlValidate return true if input string is empty to avoid startup errors
+    bool simpleEmailValidate(const QString& email);
+    bool simpleUrlValidate(const QString& url);
+
+    bool isAllFieldNotEmpty();
+
+    Ui::CredentialsPage* ui = nullptr;
 };

@@ -121,6 +121,16 @@ void SetupWidget::onSetupFinishPageDefaults(const QString &defaultSyncTargetDir,
     finishPage_->setupPageDefaults(defaultSyncTargetDir, userChosenSyncTargetDir, vfsIsAvailable, enableVfsByDefault, vfsModeIsExperimental);
 }
 
+void SetupWidget::setInvalidUrlError()
+{
+    credPage_->showInvalidUrlError();
+}
+
+void SetupWidget::setInvalidCredentialsError()
+{
+    credPage_->showInvalidCredentialsError();
+}
+
 SetupWidget::~SetupWidget() noexcept
 {
     delete _ui;
