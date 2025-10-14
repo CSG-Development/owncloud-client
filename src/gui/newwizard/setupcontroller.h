@@ -52,6 +52,7 @@ Q_SIGNALS:
     void setupFinishPageDefaults(const QString &defaultSyncTargetDir, const QString &userChosenSyncTargetDir, bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental);
     void finished(AccountPtr newAccount, SyncMode syncMode, const QVariantMap &dynamicRegistrationData);
     void credentialsEvaluationFailed(const QString& msg);
+    void invalidServerUrl();
     void credentialsEvaluationSuccessful();
     void loginFailed(const QString& msg);
     void loginSuccessful();

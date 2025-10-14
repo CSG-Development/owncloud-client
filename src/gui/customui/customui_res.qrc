@@ -76,6 +76,8 @@
         <file>res/ignorelisteditor_light.qss</file>
         <file>res/inputwidget/inputwidget_dark.qss</file>
         <file>res/inputwidget/inputwidget_light.qss</file>
+        <file>res/inputwidget/inputwidget_error_dark.qss</file>
+        <file>res/inputwidget/inputwidget_error_light.qss</file>
         <file>res/login/back_arrow_dark.svg</file>
         <file>res/login/back_arrow_light.svg</file>
         <file>res/login/browse_dark.svg</file>
@@ -86,8 +88,10 @@
         <file>res/login/done_light.svg</file>
         <file>res/login/error_dark.svg</file>
         <file>res/login/error_light.svg</file>
-        <file>res/login/eye_dark.svg</file>
-        <file>res/login/eye_light.svg</file>
+        <file>res/login/eye_open_dark.svg</file>
+        <file>res/login/eye_open_light.svg</file>
+        <file>res/login/eye_closed_dark.svg</file>
+        <file>res/login/eye_closed_light.svg</file>
         <file>res/login/finished_page_dark.qss</file>
         <file>res/login/finished_page_light.qss</file>
         <file>res/login/gear_dark.svg</file>
