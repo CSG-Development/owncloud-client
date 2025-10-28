@@ -5,15 +5,20 @@
 #include "gui/customui/focusproxy.h"
 #include "theme.h"
 
-
 #include <QLineEdit>
+#include <QComboBox>
 #include <QRegularExpression>
+#include <QHostAddress>
 
 namespace {
 constexpr int fontSize = 16;
 QPair<QString,QString> widgetStyle = {
     QStringLiteral(":/res/login/cred_page_light.qss"),
     QStringLiteral(":/res/login/cred_page_dark.qss")
+};
+QPair<QString,QString> refreshIcon = {
+    QStringLiteral(":/res/login/refresh_light.svg"),
+    QStringLiteral(":/res/login/refresh_light.svg")
 };
 }
 
@@ -35,8 +40,9 @@ CredentialsPage::CredentialsPage(QWidget *parent)
         Q_EMIT loginClicked(url(), email(), password());
     });
     connect(ui->btnCancel, &QPushButton::clicked, this, &CredentialsPage::cancelClicked);
-    connect(ui->btnSettings, &QPushButton::clicked, this, &CredentialsPage::settingsClicked);
+    connect(ui->btnSettings, &QToolButton::clicked, this, &CredentialsPage::settingsClicked);
     connect(ui->btnResetPass, &QPushButton::clicked, this, &CredentialsPage::resetPasswordClicked);
+    connect(ui->btnRefresh, &QToolButton::clicked, this, &CredentialsPage::refreshDevicesClicked);
 
     ui->btnLogin->setMouseTracking(true);
 
@@ -50,11 +56,11 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     ui->edPassword->setFontPixelSize(fontSize);
     ui->edPassword->setPasswordMode(true);
 
-    connect(ui->edUrl, &InputWidget::textEdited, this, &CredentialsPage::onTextEdited);
+    connect(ui->edUrl, &ComboWidget::textEdited, this, &CredentialsPage::onTextEdited);
     connect(ui->edEmail, &InputWidget::textEdited, this, &CredentialsPage::onTextEdited);
     connect(ui->edPassword, &InputWidget::textEdited, this, &CredentialsPage::onTextEdited);
 
-    connect(ui->edUrl, &InputWidget::focusLost, this, [&] {
+    connect(ui->edUrl, &ComboWidget::focusLost, this, [&] {
         if (!simpleUrlValidate(url())) {
             ui->edUrl->setErrorState(true, tr("Invalid URL"));
             ui->btnLogin->setEnabled(false);
@@ -64,17 +70,14 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     connect(ui->edEmail, &InputWidget::focusReceived, this, [&] {
         ui->edEmail->setErrorState(false);
     });
-    connect(ui->edEmail, &InputWidget::focusLost, this, [&] {
-        if (!simpleEmailValidate(email())) {
-            ui->edEmail->setErrorState(true, tr("Invalid email"));
-            ui->btnLogin->setEnabled(false);
-        }
-    });
+    ui->edEmail->setReadOnly(true);
 
     validateFormData();
 
     ui->btnLogin->installEventFilter(this);
     ui->btnLogin->setToolTip(tr("Enter a valid email address and password"));
+
+    showErrorMessage({});
 
     updateTheme();
 }
@@ -110,9 +113,28 @@ void CredentialsPage::updateTheme()
             QMetaObject::invokeMethod(widget, "setDarkTheme");
         }
     }
+
+    ui->btnRefresh->setIcon(isDark ? QIcon(refreshIcon.second) : QIcon(refreshIcon.first));
     setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 
     update();
+}
+
+void CredentialsPage::setDevicesList(const QList<DeviceInfo> &list)
+{
+    auto cb = ui->edUrl->comboBox();
+    cb->clear();
+
+    for (const auto& item: list) {
+        if (item.port > 0) {
+            QUrl addr(item.host);
+            addr.setPort(item.port);
+            cb->addItem(addr.toString());
+        }
+        else {
+            cb->addItem(item.host);
+        }
+    }
 }
 
 QString CredentialsPage::url() const
@@ -123,6 +145,12 @@ QString CredentialsPage::url() const
 QString CredentialsPage::email() const
 {
     return ui->edEmail->text();
+}
+
+void CredentialsPage::setEmail(const QString &user)
+{
+    const QSignalBlocker b_(ui->edEmail);
+    ui->edEmail->setText(user);
 }
 
 QString CredentialsPage::password() const
@@ -167,21 +195,9 @@ void CredentialsPage::onTextEdited(const QString&/*txt*/)
 
 void CredentialsPage::validateFormData()
 {
-    bool valid = isAllFieldNotEmpty() &&
-                 simpleUrlValidate(url()) &&
-                 simpleEmailValidate(email());
+    bool valid = isAllFieldNotEmpty() && simpleUrlValidate(url());
 
     ui->btnLogin->setEnabled(valid);
-}
-
-bool CredentialsPage::simpleEmailValidate(const QString& email)
-{
-    if (email.trimmed().isEmpty())
-        return true;
-
-    static QRegularExpression rx(QStringLiteral("^[0-9a-zA-Z]+([0-9a-zA-Z]*[-._+])*[0-9a-zA-Z]+@[0-9a-zA-Z]+([-.][0-9a-zA-Z]+)*([0-9a-zA-Z]*[.])[a-zA-Z]{2,6}$"),
-                                 QRegularExpression::CaseInsensitiveOption);
-    return rx.match(email).hasMatch();
 }
 
 bool CredentialsPage::simpleUrlValidate(const QString& url)
@@ -223,7 +239,9 @@ bool CredentialsPage::simpleUrlValidate(const QString& url)
                         "(?:/[^\\s]*)?"
                         "$");
     static QRegularExpression rx(urlRegExp, QRegularExpression::CaseInsensitiveOption);
-    return rx.match(url).hasMatch();
+    //return rx.match(url).hasMatch();
+
+    return true;
 }
 
 bool CredentialsPage::isAllFieldNotEmpty()

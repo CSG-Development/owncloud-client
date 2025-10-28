@@ -6,6 +6,7 @@
 #include "gui/curatorgui.h"
 #include "gui/settingsdialog.h"
 #include "gui/customui/stylehelper.h"
+#include "pages/emailpage.h"
 #include "pages/credentialspage.h"
 #include "pages/waitpage.h"
 #include "pages/finishedpage.h"
@@ -38,13 +39,20 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
 
     _ui->setupUi(this);
 
+    emailPage_ = new EmailPage(this);
+    _ui->contentWidget->addWidget(emailPage_);
+    connect(emailPage_, &EmailPage::loginClicked, this, &SetupWidget::loginEmailClicked);
+    connect(emailPage_, &EmailPage::cancelClicked, this, &SetupWidget::onCancelClicked);
+    connect(emailPage_, &EmailPage::codeEntered, this, &SetupWidget::codeEntered);
+
     credPage_ = new CredentialsPage(this);
     _ui->contentWidget->addWidget(credPage_);
 
     connect(credPage_, &CredentialsPage::cancelClicked, this, &SetupWidget::onCancelClicked);
-    connect(credPage_, &CredentialsPage::loginClicked, this, &SetupWidget::loginClicked);
+    connect(credPage_, &CredentialsPage::loginClicked, this, &SetupWidget::loginCredentialClicked);
     connect(credPage_, &CredentialsPage::settingsClicked, this, &SetupWidget::loginSettingsClicked);
     connect(credPage_, &CredentialsPage::resetPasswordClicked, this, &SetupWidget::loginResetPasswordClicked);
+    connect(credPage_, &CredentialsPage::refreshDevicesClicked, this, &SetupWidget::refreshDevicesClicked);
 
     waitPage_ = new WaitPage(this);
     _ui->contentWidget->addWidget(waitPage_);
@@ -60,12 +68,17 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     hideErrorMessage();
 
     onThemeChanged();
-    displayPage(SetupPage::PageCredentials);
+    displayPage(SetupPage::PageEmail);
 }
 
 void SetupWidget::displayPage(SetupPage page)
 {
     switch (page) {
+    case SetupPage::PageEmail:
+        if (emailPage_)
+            _ui->contentWidget->setCurrentWidget(emailPage_);
+        break;
+
     case SetupPage::PageCredentials:
         if (credPage_)
             _ui->contentWidget->setCurrentWidget(credPage_);
@@ -87,6 +100,8 @@ void SetupWidget::displayPage(SetupPage page)
 
 void SetupWidget::showErrorMessage(const QString &errorMessage)
 {
+    if (_ui->contentWidget->currentWidget() == emailPage_)
+        emailPage_->showErrorMessage(errorMessage);
     if (_ui->contentWidget->currentWidget() == credPage_)
         credPage_->showErrorMessage(errorMessage);
     else if (_ui->contentWidget->currentWidget() == finishPage_)
@@ -95,10 +110,30 @@ void SetupWidget::showErrorMessage(const QString &errorMessage)
 
 void SetupWidget::hideErrorMessage()
 {
+    if (_ui->contentWidget->currentWidget() == emailPage_)
+        emailPage_->showErrorMessage({});
     if (_ui->contentWidget->currentWidget() == credPage_)
         credPage_->showErrorMessage({});
     else if (_ui->contentWidget->currentWidget() == finishPage_)
         finishPage_->showErrorMessage({});
+}
+
+void SetupWidget::showCodeDialog()
+{
+    if (_ui->contentWidget->currentWidget() == emailPage_)
+        emailPage_->showCodeDialog();
+}
+
+void SetupWidget::setDevicesList(const QList<DeviceInfo> &list)
+{
+    if (_ui->contentWidget->currentWidget() == credPage_)
+        credPage_->setDevicesList(list);
+}
+
+void SetupWidget::setEmail(const QString &email)
+{
+    if (_ui->contentWidget->currentWidget() == credPage_)
+        credPage_->setEmail(email);
 }
 
 void SetupWidget::onCancelClicked()
@@ -140,6 +175,9 @@ void SetupWidget::onThemeChanged()
 {
     bool isDark = CUR::Theme::instance()->isDarkTheme();
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+
+    if (emailPage_)
+        emailPage_->updateTheme();
 
     if (credPage_)
         credPage_->updateTheme();

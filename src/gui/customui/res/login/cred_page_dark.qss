@@ -31,21 +31,50 @@
     color: #6EBD49;
 }
 
-#btnLogin,
-#btnCancel {
+/**** Login button */
+#btnLogin {
     background: #64B5F6;
     border-color: rgba(0,0,0,0);
     border-width: 1px;
     border-radius: 20px;
     color: #212121;
     font-size: 14px;
-    font: "Segoe UI";
 }
+
+#btnLogin:hover {
+    background: rgba(144, 202, 249, 1);
+}
+
+#btnLogin:pressed {
+    background: rgba(53, 158, 243, 1);
+}
+
+/**** Cancel button */
+#btnCancel {
+    background: rgba(0,0,0,0);
+    border: 1px solid rgba(100, 181, 246, 1);
+    border-radius: 20px;
+    color: rgba(100, 181, 246, 1);
+    font-size: 14px;
+}
+
+#btnCancel:hover {
+    background: rgba(144, 202, 249, 0.12);
+}
+
+#btnCancel:pressed {
+    background: rgba(144, 202, 249, 0.3);
+}
+
 
 #btnLogin:disabled,
 #btnCancel:disabled {
     background: #616161;
     color: #9E9E9E;
+}
+
+#btnRefresh {
+    border: none;
 }
 
 #btnResetPass {
@@ -57,8 +86,13 @@
 }
 
 #btnSettings {
-    border: none;
-    image: url(":/res/login/gear_dark.svg");
+    background: rgba(0,0,0,0);
+    border: 1px solid rgba(0,0,0,0);
+    border-radius: 20px;
+}
+
+#btnSettings:hover {
+    background: rgba(144, 202, 249, 0.12);
 }
 
 #edEmail,

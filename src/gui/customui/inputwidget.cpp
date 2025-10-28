@@ -78,6 +78,11 @@ void InputWidget::setPasswordButtonImage(const QString &val)
     ui->showPasswordButton->setIcon(QIcon(val));
 }
 
+void InputWidget::setReadOnly(bool ro)
+{
+    ui->inputLineEdit->setReadOnly(ro);
+}
+
 void InputWidget::setPlaceholderText(const QString &str)
 {
     ui->inputLineEdit->setPlaceholderText(str.trimmed());
