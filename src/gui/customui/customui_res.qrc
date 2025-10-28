@@ -103,6 +103,9 @@
         <file>res/login/wait_page_dark.qss</file>
         <file>res/login/wait_page_light.qss</file>
         <file>res/login/warning_light.svg</file>
+        <file>res/login/code_dialog_dark.qss</file>
+        <file>res/login/code_dialog_light.qss</file>
+        <file>res/login/refresh_light.svg</file>
         <file>res/networksettings_dark.qss</file>
         <file>res/networksettings_light.qss</file>
         <file>res/radiobutton/light/disabled/checked.svg</file>
@@ -133,5 +136,11 @@
         <file>res/toolbar/dark/Power.svg</file>
         <file>res/toolbar/dark/Settings.svg</file>
         <file>res/toolbar/dark/User.svg</file>
+        <file>res/combowidget/combowidget_dark.qss</file>
+        <file>res/combowidget/combowidget_error_dark.qss</file>
+        <file>res/combowidget/combowidget_error_light.qss</file>
+        <file>res/combowidget/combowidget_light.qss</file>
+        <file>res/combowidget/triangle_down.svg</file>
+        <file>res/combowidget/triangle_up.svg</file>
     </qresource>
 </RCC>

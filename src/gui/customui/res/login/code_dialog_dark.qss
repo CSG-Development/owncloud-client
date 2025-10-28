@@ -1,0 +1,44 @@
+#frame {
+    background-color: #262729;
+    border-radius: 28px;
+}
+
+#frameButtons {
+    border: none;
+}
+
+#lblHeader {
+    font-size: 24px;
+}
+
+#lblText {
+    font-size: 16px;
+}
+
+#btnSkip,
+#btnAllowAccess {
+    border: none;
+    color: rgba(100, 181, 246, 1);
+    font-size: 14px;
+}
+
+#btnSkip:disabled,
+#btnAllowAccess:disabled {
+    border: none;
+    color: rgba(158, 158, 158, 1);
+    font-size: 14px;
+}
+
+#btnSkip:hover,
+#btnAllowAccess:hover {
+    background: rgba(144, 202, 249, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 20px;
+}
+
+#btnSkip:pressed,
+#btnAllowAccess:pressed {
+    background: rgba(144, 202, 249, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 20px;
+}

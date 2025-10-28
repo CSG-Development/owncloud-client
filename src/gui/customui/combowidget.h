@@ -5,27 +5,24 @@
 class QLineEdit;
 class QLabel;
 class QToolButton;
+class QComboBox;
 
-namespace Ui {class InputWidget;}
+namespace Ui {class ComboWidget;}
 
+//class PopupComboWidget;
 
-class InputWidget: public QFrame
+class ComboWidget: public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit InputWidget(QWidget* parent = nullptr);
-    ~InputWidget();
+    explicit ComboWidget(QWidget* parent = nullptr);
+    ~ComboWidget();
 
-    QLineEdit* lineEdit() const;
+    QComboBox* comboBox() const;
 
     void setFontPixelSize(int val);
     int fontPixelSize() const;
-
-    void setPasswordMode(bool val);
-    void setPasswordButtonImage(const QString& val);
-
-    void setReadOnly(bool ro);
 
     void setPlaceholderText(const QString& str);
 
@@ -40,11 +37,6 @@ public slots:
     void setDarkTheme();
 
 Q_SIGNALS:
-    void frameColorChanged();
-    void frameWidthChanged();
-    void frameRadiusChanged();
-    void fontPixelSizeChanged();
-
     void textChanged(const QString &);
     void textEdited(const QString &);
     void editingFinished();
@@ -62,9 +54,10 @@ protected:
     void updateStyles();
 
 private:
-    Ui::InputWidget* ui = nullptr;
+    Ui::ComboWidget* ui = nullptr;
 
     QLabel* promptLabel = nullptr;
+    //PopupComboWidget* popup = nullptr;
 
     bool isDark = false;
     bool errorState = false;

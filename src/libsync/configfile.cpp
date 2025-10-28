@@ -97,6 +97,8 @@ const QString useNewBigFolderSizeLimitC() { return QStringLiteral("useNewBigFold
 const QString confirmExternalStorageC() { return QStringLiteral("confirmExternalStorage"); }
 const QString moveToTrashC() { return QStringLiteral("moveToTrash"); }
 
+const QString refreshTokenC() { return QStringLiteral("refreshToken"); }
+
 const QString issuesWidgetFilterC()
 {
     return QStringLiteral("issuesWidgetFilter");
@@ -834,6 +836,18 @@ void ConfigFile::setClientVersionWithBuildNumberString(const QString &version)
 {
     auto settings = makeQSettings();
     settings.setValue(clientVersionC(), version);
+}
+
+QString ConfigFile::refreshToken() const
+{
+    auto settings = makeQSettings();
+    return settings.value(refreshTokenC(), QString()).toString();
+}
+
+void ConfigFile::setRefreshToken(const QString &token)
+{
+    auto settings = makeQSettings();
+    settings.setValue(refreshTokenC(), token);
 }
 
 std::unique_ptr<QSettings> ConfigFile::settingsWithGroup(const QString &group)

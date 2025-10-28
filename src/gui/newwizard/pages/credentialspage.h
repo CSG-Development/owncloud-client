@@ -1,5 +1,7 @@
 #pragma once
 
+#include "loginservices/devicetypes.h"
+
 #include <QWidget>
 
 namespace Ui {class CredentialsPage;}
@@ -16,8 +18,13 @@ public:
 
     void updateTheme();
 
+    void setDevicesList(const QList<DeviceInfo>& list);
+
     QString url() const;
+
     QString email() const;
+    void setEmail(const QString& user);
+
     QString password() const;
 
     void showErrorMessage(const QString& msg);
@@ -29,14 +36,14 @@ Q_SIGNALS:
     void cancelClicked();
     void settingsClicked();
     void resetPasswordClicked();
+    void refreshDevicesClicked();
 
 private:
     void onTextEdited(const QString& txt);
 
     void validateFormData();
 
-    // EmailValidate and UrlValidate return true if input string is empty to avoid startup errors
-    bool simpleEmailValidate(const QString& email);
+    // UrlValidate return true if input string is empty to avoid startup errors
     bool simpleUrlValidate(const QString& url);
 
     bool isAllFieldNotEmpty();

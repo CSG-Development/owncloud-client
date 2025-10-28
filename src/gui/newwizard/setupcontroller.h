@@ -29,7 +29,13 @@ enum class ChangeReason {
 };
 Q_ENUM_NS(ChangeReason)
 
+namespace CUR {
+class ServiceConnector;
+class MdnsClient;
+}
+
 namespace CUR::Wizard {
+
 
 /**
  * This class is the backbone of the new setup wizard. It instantiates the required UI elements and fills them with the correct data. It also provides the public API for the settings UI.
@@ -72,5 +78,7 @@ private:
     QString url_;
     QString user_;
     QString password_;
+    ServiceConnector* raConnector = nullptr;
+    MdnsClient* mdns = nullptr;
 };
 }
