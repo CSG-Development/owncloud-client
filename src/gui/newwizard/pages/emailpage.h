@@ -33,6 +33,7 @@ Q_SIGNALS:
     void settingsClicked();
     void codeExpired();
     void codeEntered(const QString& code);
+    void codeSkipped();
 
 private:
     void onTextEdited(const QString& txt);

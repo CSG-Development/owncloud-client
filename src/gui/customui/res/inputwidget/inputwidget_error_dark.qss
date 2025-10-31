@@ -14,7 +14,7 @@
 #inputLineEdit {
     border: none;
     border-radius: 0px;
-    background: rgba(0,0,0,0);
+    background: transparent;
     font-size: 16px;
 }
 
@@ -25,13 +25,13 @@
     padding-bottom: 1px;
     padding-left: 4px;
     padding-right: 4px;
-    border: 1px solid rgba(0,0,0,0);
+    border: 1px solid transparent;
     font-size: 12px;
 }
 
 #errorLabel {
     color: #F28F8C;
-    background: rgba(0,0,0,0);
+    background: transparent;
     font-size: 12px;
     padding-left: 4px;
 }

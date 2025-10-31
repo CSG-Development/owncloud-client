@@ -106,6 +106,9 @@
         <file>res/login/code_dialog_dark.qss</file>
         <file>res/login/code_dialog_light.qss</file>
         <file>res/login/refresh_light.svg</file>
+        <file>res/login/refresh_dark.svg</file>
+        <file>res/login/arrow_back_btn_dark.svg</file>
+        <file>res/login/arrow_back_btn_light.svg</file>
         <file>res/networksettings_dark.qss</file>
         <file>res/networksettings_light.qss</file>
         <file>res/radiobutton/light/disabled/checked.svg</file>
@@ -142,5 +145,7 @@
         <file>res/combowidget/combowidget_light.qss</file>
         <file>res/combowidget/triangle_down.svg</file>
         <file>res/combowidget/triangle_up.svg</file>
+        <file>res/combowidget/popup_combo_dark.qss</file>
+        <file>res/combowidget/popup_combo_light.qss</file>
     </qresource>
 </RCC>

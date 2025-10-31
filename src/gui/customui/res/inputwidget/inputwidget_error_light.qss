@@ -14,7 +14,7 @@
 #inputLineEdit {
     border: none;
     border-radius: 0px;
-    background: rgba(0,0,0,0);
+    background: transparent;
     font-size: 16px;
 }
 

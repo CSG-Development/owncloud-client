@@ -47,8 +47,8 @@ signals:
     void request_finished(std::optional<QJsonDocument>, int code, const QString& url);
 
 private:
-    void saveRefreshToken();
-    void loadRefreshToken();
+    void saveRefreshToken(const QString& email);
+    void loadRefreshToken(const QString& email);
     Device* findDevice(const QString& devId);
 
     void parseTokenReply(const QJsonDocument& doc);
@@ -69,6 +69,7 @@ private:
     QString accessToken;
     QString referenceCode;
     QString tokenType;
+    QString currentEmail;
 
     QList<Device> devices;
     QList<QString> devIdsQueue;

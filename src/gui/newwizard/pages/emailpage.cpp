@@ -146,6 +146,9 @@ void EmailPage::showCodeDialog()
     if (res == QDialog::Accepted) {
         emit codeEntered(dlg.getCode());
     }
+    else {
+        emit codeSkipped();
+    }
 }
 
 void EmailPage::onTextEdited(const QString&/*txt*/)

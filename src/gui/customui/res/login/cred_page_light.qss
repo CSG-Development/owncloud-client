@@ -13,7 +13,8 @@
 #frameImage,
 #frameText,
 #frameErrorMessage,
-#frameButton {
+#frameButton,
+#frameRefreshBtn {
     border: none;
 }
 
@@ -34,7 +35,7 @@
 /**** Login button */
 #btnLogin {
     background: #1976D2;
-    border-color: rgba(0,0,0,0);
+    border-color: transparent;
     border-width: 1px;
     border-radius: 20px;
     color: #FFFFFF;
@@ -52,7 +53,7 @@
 
 /**** Cancel button */
 #btnCancel {
-    background: rgba(0,0,0,0);
+    background: transparent;
     border: 1px solid #1976D2;
     border-radius: 20px;
     color: #1976D2;
@@ -75,37 +76,48 @@
 }
 
 #btnRefresh {
-    background: rgba(0,0,0,0);
-    border: 1px solid rgba(0,0,0,0);
+    background: transparent;
+    border: 1px solid transparent;
     border-radius: 20px;
 }
 
 #btnRefresh:hover {
     background: rgba(30, 136, 229, 0.12);
+    border: 1px solid transparent;
+    border-radius: 20px;
 }
 
 #btnResetPass {
-    background: rgba(0,0,0,0);
+    background: transparent;
     color: "#1976D2";
     border: none;
     font: "Segoe UI";
     font-size: 14px;
 }
 
-#btnSettings {
-    background: rgba(0,0,0,0);
-    border: 1px solid rgba(0,0,0,0);
+#btnSettings,
+#btnBack {
+    background: transparent;
+    border: 1px solid transparent;
     border-radius: 20px;
 }
 
-#btnSettings:hover {
+#btnSettings:hover,
+#btnBack:hover {
     background: rgba(30, 136, 229, 0.12);
+    border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+#edUrl {
+    background: transparent;
+    border: none;
+    font-size: 16px;
 }
 
 #edEmail,
-#edUrl,
 #edPassword {
-    background: rgba(0,0,0,0);
+    background: transparent;
     border: none;
     font: "Segoe UI";
     font-size: 16px;
@@ -121,13 +133,13 @@
 QToolTip {
     background: #4E4E4E;
     color: rgba(255, 255, 255, 222);
-    border: 1px solid rgba(0, 0, 0, 0);
+    border: 1px solid transparent;
     border-radius: 4px;
 }
 
 #frameErrorMessageInternal {
     background: rgba(244,67,54,31);
-    border: 1px solid rgba(0, 0, 0, 0);
+    border: 1px solid transparent;
     border-radius: 12px;
 }
 

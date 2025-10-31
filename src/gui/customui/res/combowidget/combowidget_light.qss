@@ -11,23 +11,11 @@
     border: none;
 }
 
-#comboBox {
+#lineEdit {
     border: none;
     border-radius: 0px;
-    background: rgba(0,0,0,0);
+    background: transparent;
     font-size: 16px;
-}
-
-#comboBox::drop-down:button {
-    width: 32px;
-}
-
-#comboBox::down-arrow {
-    image: url(://res/combowidget/triangle_down.svg);
-}
-
-#comboBox::down-arrow:on {
-    image: url(://res/combowidget/triangle_up.svg);
 }
 
 #promptLabel {
@@ -41,9 +29,17 @@
 
 #errorLabel {
     color: #F44336;
-    background: rgba(0,0,0,0);
+    background: transparent;
 }
 
 #arrowButton {
-    border: none;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+#arrowButton:hover {
+    background: rgba(30, 136, 229, 0.12);
+    border: 1px solid transparent;
+    border-radius: 20px;
 }

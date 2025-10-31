@@ -31,6 +31,11 @@ add_library(${LIBRARY_NAME} STATIC
     inputwidget.cpp
     inputwidget.h
     inputwidget.ui
+    popupcombomodel.cpp
+    popupcombomodel.h
+    popupcombowidget.cpp
+    popupcombowidget.h
+    popupcombowidget.ui
     progressindicator.cpp
     progressindicator.h
     overlaywidget.cpp

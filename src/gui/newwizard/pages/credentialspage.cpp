@@ -18,7 +18,11 @@ QPair<QString,QString> widgetStyle = {
 };
 QPair<QString,QString> refreshIcon = {
     QStringLiteral(":/res/login/refresh_light.svg"),
-    QStringLiteral(":/res/login/refresh_light.svg")
+    QStringLiteral(":/res/login/refresh_dark.svg")
+};
+QPair<QString,QString> backIcon = {
+    QStringLiteral(":/res/login/arrow_back_btn_light.svg"),
+    QStringLiteral(":/res/login/arrow_back_btn_dark.svg")
 };
 }
 
@@ -43,6 +47,7 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     connect(ui->btnSettings, &QToolButton::clicked, this, &CredentialsPage::settingsClicked);
     connect(ui->btnResetPass, &QPushButton::clicked, this, &CredentialsPage::resetPasswordClicked);
     connect(ui->btnRefresh, &QToolButton::clicked, this, &CredentialsPage::refreshDevicesClicked);
+    connect(ui->btnBack, &QToolButton::clicked, this, &CredentialsPage::backButtonClicked);
 
     ui->btnLogin->setMouseTracking(true);
 
@@ -57,19 +62,8 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     ui->edPassword->setPasswordMode(true);
 
     connect(ui->edUrl, &ComboWidget::textEdited, this, &CredentialsPage::onTextEdited);
-    connect(ui->edEmail, &InputWidget::textEdited, this, &CredentialsPage::onTextEdited);
     connect(ui->edPassword, &InputWidget::textEdited, this, &CredentialsPage::onTextEdited);
 
-    connect(ui->edUrl, &ComboWidget::focusLost, this, [&] {
-        if (!simpleUrlValidate(url())) {
-            ui->edUrl->setErrorState(true, tr("Invalid URL"));
-            ui->btnLogin->setEnabled(false);
-        }
-    });
-
-    connect(ui->edEmail, &InputWidget::focusReceived, this, [&] {
-        ui->edEmail->setErrorState(false);
-    });
     ui->edEmail->setReadOnly(true);
 
     validateFormData();
@@ -78,7 +72,6 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     ui->btnLogin->setToolTip(tr("Enter a valid email address and password"));
 
     showErrorMessage({});
-
     updateTheme();
 }
 
@@ -115,6 +108,7 @@ void CredentialsPage::updateTheme()
     }
 
     ui->btnRefresh->setIcon(isDark ? QIcon(refreshIcon.second) : QIcon(refreshIcon.first));
+    ui->btnBack->setIcon(isDark ? QIcon(backIcon.second) : QIcon(backIcon.first));
     setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 
     update();
@@ -122,24 +116,20 @@ void CredentialsPage::updateTheme()
 
 void CredentialsPage::setDevicesList(const QList<DeviceInfo> &list)
 {
-    auto cb = ui->edUrl->comboBox();
-    cb->clear();
+    ui->edUrl->setItems(list);
+}
 
-    for (const auto& item: list) {
-        if (item.port > 0) {
-            QUrl addr(item.host);
-            addr.setPort(item.port);
-            cb->addItem(addr.toString());
-        }
-        else {
-            cb->addItem(item.host);
-        }
-    }
+std::optional<DeviceInfo> CredentialsPage::currentDevice() const
+{
+    return ui->edUrl->currentDevice();
 }
 
 QString CredentialsPage::url() const
 {
-    return ui->edUrl->text();
+    if (auto currDevice = currentDevice()) {
+        return currDevice->host;
+    }
+    return {};
 }
 
 QString CredentialsPage::email() const
@@ -195,58 +185,12 @@ void CredentialsPage::onTextEdited(const QString&/*txt*/)
 
 void CredentialsPage::validateFormData()
 {
-    bool valid = isAllFieldNotEmpty() && simpleUrlValidate(url());
-
+    bool valid = isAllFieldNotEmpty();
     ui->btnLogin->setEnabled(valid);
-}
-
-bool CredentialsPage::simpleUrlValidate(const QString& url)
-{
-    if (url.trimmed().isEmpty())
-        return true;
-
-    QString urlRegExp = QStringLiteral(
-                        "^"
-                        // protocol identifier
-                        "(?:(?:https?|ftp)://)"
-                        // user:pass authentication
-                        "(?:\\S+(?::\\S*)?&#64;)?"
-                        "(?:"
-                        // IP address exclusion
-                        // private & local networks
-                        "(?!(?:10|127)(?:\\.\\d{1,3}){3})"
-                        "(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})"
-                        "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})"
-                        // IP address dotted notation octets
-                        // excludes loopback network 0.0.0.0
-                        // excludes reserved space >= 224.0.0.0
-                        // excludes network & broacast addresses
-                        // (first & last IP address of each class)
-                        "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])"
-                        "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}"
-                        "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))"
-                        "|"
-                        // host name
-                        "(?:(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)"
-                        // domain name
-                        "(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)*"
-                        // TLD identifier
-                        "(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,}))"
-                        ")"
-                        // port number
-                        "(?::\\d{2,5})?"
-                        // resource path
-                        "(?:/[^\\s]*)?"
-                        "$");
-    static QRegularExpression rx(urlRegExp, QRegularExpression::CaseInsensitiveOption);
-    //return rx.match(url).hasMatch();
-
-    return true;
 }
 
 bool CredentialsPage::isAllFieldNotEmpty()
 {
     return !ui->edUrl->text().trimmed().isEmpty() &&
-           !ui->edEmail->text().trimmed().isEmpty() &&
            !ui->edPassword->text().trimmed().isEmpty();
 }

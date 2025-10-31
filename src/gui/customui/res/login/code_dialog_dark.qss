@@ -32,13 +32,13 @@
 #btnSkip:hover,
 #btnAllowAccess:hover {
     background: rgba(144, 202, 249, 0.12);
-    border: 1px solid rgba(0, 0, 0, 0);
+    border: 1px solid transparent;
     border-radius: 20px;
 }
 
 #btnSkip:pressed,
 #btnAllowAccess:pressed {
     background: rgba(144, 202, 249, 0.3);
-    border: 1px solid rgba(0, 0, 0, 0);
+    border: 1px solid transparent;
     border-radius: 20px;
 }

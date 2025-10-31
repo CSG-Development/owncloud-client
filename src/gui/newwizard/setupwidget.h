@@ -57,6 +57,8 @@ Q_SIGNALS:
     void finishPageBackClicked();
     void finishPageDoneClicked(CUR::Wizard::SyncMode mode, const QString& targetDir);
     void codeEntered(const QString& code);
+    void codeSkipped();
+    void credPageBackClicked();
 
 
 private:

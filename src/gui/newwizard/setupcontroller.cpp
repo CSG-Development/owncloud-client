@@ -54,6 +54,11 @@ SetupController::SetupController(SettingsDialog *parent)
         raConnector->query_token(code);
     });
 
+    connect(_context->window(), &SetupWidget::codeSkipped, this, [&] {
+        qCDebug(lcSetupWizardController) << "Code skipped";
+        mdns->query();
+    });
+
     connect(raConnector, &ServiceConnector::fetch_devices_finished, this, [&] {
         qCDebug(lcSetupWizardController) << "Device list query finished";
         mdns->query();
@@ -70,6 +75,7 @@ SetupController::SetupController(SettingsDialog *parent)
         QList<DeviceInfo> devList = mdns->records();
         devList.append(raConnector->deviceList());
 
+        DeviceInfo::assignIds(devList);
         window()->setDevicesList(devList);
     });
 
@@ -84,6 +90,11 @@ SetupController::SetupController(SettingsDialog *parent)
         user_ = user;
         password_ = password;
         startLogin(url, user, password);
+    });
+
+    connect(_context->window(), &SetupWidget::credPageBackClicked, this, [&] {
+        qCDebug(lcSetupWizardController) << "Login credential back clicked";
+        window()->displayPage(SetupWidget::SetupPage::PageEmail);
     });
 
     connect(this, &SetupController::setupFinishPageDefaults, _context->window(), &SetupWidget::onSetupFinishPageDefaults);

@@ -19,6 +19,7 @@ public:
     void updateTheme();
 
     void setDevicesList(const QList<DeviceInfo>& list);
+    std::optional<DeviceInfo> currentDevice() const;
 
     QString url() const;
 
@@ -37,15 +38,12 @@ Q_SIGNALS:
     void settingsClicked();
     void resetPasswordClicked();
     void refreshDevicesClicked();
+    void backButtonClicked();
 
 private:
     void onTextEdited(const QString& txt);
 
     void validateFormData();
-
-    // UrlValidate return true if input string is empty to avoid startup errors
-    bool simpleUrlValidate(const QString& url);
-
     bool isAllFieldNotEmpty();
 
     Ui::CredentialsPage* ui = nullptr;

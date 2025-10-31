@@ -44,6 +44,7 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     connect(emailPage_, &EmailPage::loginClicked, this, &SetupWidget::loginEmailClicked);
     connect(emailPage_, &EmailPage::cancelClicked, this, &SetupWidget::onCancelClicked);
     connect(emailPage_, &EmailPage::codeEntered, this, &SetupWidget::codeEntered);
+    connect(emailPage_, &EmailPage::codeSkipped, this, &SetupWidget::codeSkipped);
 
     credPage_ = new CredentialsPage(this);
     _ui->contentWidget->addWidget(credPage_);
@@ -53,6 +54,7 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     connect(credPage_, &CredentialsPage::settingsClicked, this, &SetupWidget::loginSettingsClicked);
     connect(credPage_, &CredentialsPage::resetPasswordClicked, this, &SetupWidget::loginResetPasswordClicked);
     connect(credPage_, &CredentialsPage::refreshDevicesClicked, this, &SetupWidget::refreshDevicesClicked);
+    connect(credPage_, &CredentialsPage::backButtonClicked, this, &SetupWidget::credPageBackClicked);
 
     waitPage_ = new WaitPage(this);
     _ui->contentWidget->addWidget(waitPage_);

@@ -37,6 +37,8 @@ ServiceConnector::ServiceConnector(QObject *parent)
     : QObject(parent)
     , rest_mgr(std::make_unique<QRestAccessManager>(&net_mgr))
 {
+    qRegisterMetaType<DeviceInfo>();
+
     ::load_loginservices_res();
     rest_factory = std::make_unique<QNetworkRequestFactory>();
 
@@ -150,8 +152,6 @@ ServiceConnector::ServiceConnector(QObject *parent)
             emit fetch_devices_finished();
         }
     });
-
-    loadRefreshToken();
 }
 
 ServiceConnector::~ServiceConnector()
@@ -187,7 +187,8 @@ void ServiceConnector::setRaCert()
 
 void ServiceConnector::start_query(const QString &email)
 {
-    loadRefreshToken();
+    currentEmail  = email;
+    loadRefreshToken(currentEmail);
     if (refreshToken.isEmpty()) {
         query_initiate(email);
         emit code_requested();
@@ -280,16 +281,24 @@ void ServiceConnector::query_device_info(const QString &access_token, const QStr
     });
 }
 
-void ServiceConnector::saveRefreshToken()
+void ServiceConnector::saveRefreshToken(const QString& email)
 {
+    if (email.isEmpty()) {
+        qCWarning(lcLoginService) << "Can't save refresh token with empty email";
+        return;
+    }
     ConfigFile cf;
-    cf.setRefreshToken(refreshToken);
+    cf.setRefreshTokenForEmail(refreshToken, email);
 }
 
-void ServiceConnector::loadRefreshToken()
+void ServiceConnector::loadRefreshToken(const QString& email)
 {
+    if (email.isEmpty()) {
+        qCWarning(lcLoginService) << "Can't load refresh token with empty email";
+        return;
+    }
     ConfigFile cf;
-    refreshToken = cf.refreshToken();
+    refreshToken = cf.refreshTokenForEmail(email);
 }
 
 void ServiceConnector::parseTokenReply(const QJsonDocument& doc)
@@ -302,7 +311,7 @@ void ServiceConnector::parseTokenReply(const QJsonDocument& doc)
     if (expiresIn > 0)
         accessTokenExpireTime = QDateTime::currentDateTime().addSecs(expiresIn);
 
-    saveRefreshToken();
+    saveRefreshToken(currentEmail);
 }
 
 void ServiceConnector::parseDeviceInfoReply(const QJsonDocument &doc)

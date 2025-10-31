@@ -187,8 +187,8 @@ public:
     QString clientVersionWithBuildNumberString() const;
     void setClientVersionWithBuildNumberString(const QString &version);
 
-    QString refreshToken() const;
-    void setRefreshToken(const QString& token);
+    QString refreshTokenForEmail(const QString& email) const;
+    void setRefreshTokenForEmail(const QString& token, const QString& email);
 
     /**  Returns a new settings pre-set in a specific group. */
     static std::unique_ptr<QSettings> settingsWithGroup(const QString &group);
