@@ -41,7 +41,7 @@ auto NOTIFICATIONS_IFACE_C()
 
 namespace CUR {
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
 void *createOsXNotificationCenterDelegate();
 void releaseOsXNotificationCenterDelegate(void *delegate);
 void sendOsXUserNotification(const QString &title, const QString &message);
@@ -49,7 +49,7 @@ void sendOsXUserNotification(const QString &title, const QString &message);
 
 Systray::Systray(QObject *parent)
     : QSystemTrayIcon(parent)
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     , delegate(createOsXNotificationCenterDelegate())
 #endif
 {
@@ -57,16 +57,16 @@ Systray::Systray(QObject *parent)
 
 Systray::~Systray()
 {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     if (delegate) {
         releaseOsXNotificationCenterDelegate(delegate);
     }
-#endif // Q_OS_OSX
+#endif // Q_OS_MACOS
 }
 
 void Systray::showMessage(const QString &title, const QString &message, const QIcon &icon, int millisecondsTimeoutHint)
 {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     Q_UNUSED(icon)
     Q_UNUSED(millisecondsTimeoutHint)
 
@@ -85,7 +85,7 @@ void Systray::showMessage(const QString &title, const QString &message, const QI
     {
         QSystemTrayIcon::showMessage(title, message, icon, millisecondsTimeoutHint);
     }
-#endif // Q_OS_OSX
+#endif // Q_OS_MACOS
 }
 
 void Systray::setToolTip(const QString &tip)
