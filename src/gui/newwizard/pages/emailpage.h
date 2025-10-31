@@ -35,6 +35,9 @@ Q_SIGNALS:
     void codeEntered(const QString& code);
     void codeSkipped();
 
+protected:
+    void moveEvent(QMoveEvent *event) override;
+
 private:
     void onTextEdited(const QString& txt);
     void onCodeExpireCheckTimer();
@@ -50,4 +53,5 @@ private:
     DimWidget* dim = nullptr;
     QTimer codeExpireCheckTimer;
     QDateTime codeExpireTime;
+
 };

@@ -31,6 +31,7 @@ public:
     void showErrorMessage(const QString& msg);
     void showInvalidUrlError();
     void showInvalidCredentialsError();
+    void showProgressIndicator(bool show);
 
 Q_SIGNALS:
     void loginClicked(const QString& url, const QString& user, const QString& password);

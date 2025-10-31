@@ -65,6 +65,11 @@ EmailPage::EmailPage(QWidget *parent)
         }
     });
 
+    // MacOS hover enable
+    ui->btnLogin->setAttribute(Qt::WA_Hover, true);
+    ui->btnCancel->setAttribute(Qt::WA_Hover, true);
+    ui->btnSettings->setAttribute(Qt::WA_Hover, true);
+
     validateFormData();
 
     ui->btnLogin->installEventFilter(this);
@@ -149,6 +154,11 @@ void EmailPage::showCodeDialog()
     else {
         emit codeSkipped();
     }
+}
+
+void EmailPage::moveEvent(QMoveEvent *event)
+{
+    QWidget::moveEvent(event);
 }
 
 void EmailPage::onTextEdited(const QString&/*txt*/)

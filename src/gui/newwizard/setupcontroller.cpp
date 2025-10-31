@@ -77,6 +77,7 @@ SetupController::SetupController(SettingsDialog *parent)
 
         DeviceInfo::assignIds(devList);
         window()->setDevicesList(devList);
+        window()->showCredPageProgress(false);
     });
 
     connect(_context->window(), &SetupWidget::refreshDevicesClicked, this, [&] {

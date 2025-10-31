@@ -46,8 +46,18 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     connect(ui->btnCancel, &QPushButton::clicked, this, &CredentialsPage::cancelClicked);
     connect(ui->btnSettings, &QToolButton::clicked, this, &CredentialsPage::settingsClicked);
     connect(ui->btnResetPass, &QPushButton::clicked, this, &CredentialsPage::resetPasswordClicked);
-    connect(ui->btnRefresh, &QToolButton::clicked, this, &CredentialsPage::refreshDevicesClicked);
+    connect(ui->btnRefresh, &QToolButton::clicked, this, [&] {
+        showProgressIndicator(true);
+        emit refreshDevicesClicked();
+    });
     connect(ui->btnBack, &QToolButton::clicked, this, &CredentialsPage::backButtonClicked);
+
+    // MacOS hover enable
+    ui->btnLogin->setAttribute(Qt::WA_Hover, true);
+    ui->btnCancel->setAttribute(Qt::WA_Hover, true);
+    ui->btnSettings->setAttribute(Qt::WA_Hover, true);
+    ui->btnRefresh->setAttribute(Qt::WA_Hover, true);
+    ui->btnBack->setAttribute(Qt::WA_Hover, true);
 
     ui->btnLogin->setMouseTracking(true);
 
@@ -72,6 +82,7 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     ui->btnLogin->setToolTip(tr("Enter a valid email address and password"));
 
     showErrorMessage({});
+    showProgressIndicator(false);
     updateTheme();
 }
 
@@ -165,6 +176,12 @@ void CredentialsPage::showInvalidCredentialsError()
     ui->edEmail->setErrorState(true, {});
     ui->edPassword->setErrorState(true, {});
     ui->btnLogin->setEnabled(false);
+}
+
+void CredentialsPage::showProgressIndicator(bool show)
+{
+    ui->btnRefresh->setVisible(!show);
+    ui->progressIndicator->setVisible(show);
 }
 
 void CredentialsPage::onTextEdited(const QString&/*txt*/)

@@ -46,6 +46,8 @@ public:
     void setInvalidUrlError();
     void setInvalidCredentialsError();
 
+    void showCredPageProgress(bool show);
+
 Q_SIGNALS:
     void rejected();
 

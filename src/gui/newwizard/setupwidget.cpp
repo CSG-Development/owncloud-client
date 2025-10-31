@@ -168,6 +168,11 @@ void SetupWidget::setInvalidCredentialsError()
     credPage_->showInvalidCredentialsError();
 }
 
+void SetupWidget::showCredPageProgress(bool show)
+{
+    credPage_->showProgressIndicator(show);
+}
+
 SetupWidget::~SetupWidget() noexcept
 {
     delete _ui;

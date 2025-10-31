@@ -69,6 +69,9 @@ ComboWidget::ComboWidget(QWidget *parent)
         updateButtonIcon();
     });
 
+    // MacOS hover enable
+    ui->arrowButton->setAttribute(Qt::WA_Hover, true);
+
     connect(ui->lineEdit, &QLineEdit::textChanged, this, &ComboWidget::onTextChanged);
     ui->lineEdit->installEventFilter(this);
     ui->lineEdit->setReadOnly(true);
