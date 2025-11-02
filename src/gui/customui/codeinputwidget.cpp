@@ -68,6 +68,13 @@ QString CodeInputWidget::codeStr() const
     return s;
 }
 
+void CodeInputWidget::clearCode()
+{
+    for (int i = 0; i < ed_count; i++) {
+        edPtrs[i]->clear();
+    }
+}
+
 void CodeInputWidget::setErrorState(bool enable)
 {
     errorState = enable;

@@ -3,6 +3,8 @@
 
 #include "gui/customui/stylehelper.h"
 #include "gui/customui/focusproxy.h"
+#include "gui/customui/dimwidget.h"
+#include "codedialog.h"
 #include "theme.h"
 
 #include <QLineEdit>
@@ -24,6 +26,7 @@ QPair<QString,QString> backIcon = {
     QStringLiteral(":/res/login/arrow_back_btn_light.svg"),
     QStringLiteral(":/res/login/arrow_back_btn_dark.svg")
 };
+constexpr int code_expire_seconds = 10 * 60;     // 10 min
 }
 
 CredentialsPage::CredentialsPage(QWidget *parent)
@@ -42,6 +45,30 @@ CredentialsPage::CredentialsPage(QWidget *parent)
 
     setAttribute(Qt::WA_TranslucentBackground, true);
 
+    dim = new DimWidget(this);
+    dim->setVisible(false);
+
+    codeDialog = new CodeDialog(this);
+    codeDialog->setVisible(false);
+
+    connect(codeDialog, &CodeDialog::skipClicked, this, [&] {
+        codeDialog->setVisible(false);
+        codeDialog->clearCode();
+        dim->setVisible(false);
+        emit codeEntered(codeDialog->getCode());
+    });
+    connect(codeDialog, &CodeDialog::allowAccessClicked, this, [&] {
+        codeDialog->setVisible(false);
+        codeDialog->clearCode();
+        dim->setVisible(false);
+        emit codeSkipped();
+    });
+    connect(codeDialog, &CodeDialog::resendCodeClicked, this, [&] {
+        codeExpireTime = QDateTime::currentDateTime().addSecs(code_expire_seconds);
+        codeExpireCheckTimer.start();
+        emit codeResend();
+    });
+
     connect(ui->btnLogin, &QPushButton::clicked, this, [&] {
         Q_EMIT loginClicked(url(), email(), password());
     });
@@ -49,6 +76,7 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     connect(ui->btnSettings, &QToolButton::clicked, this, &CredentialsPage::settingsClicked);
     connect(ui->btnResetPass, &QPushButton::clicked, this, &CredentialsPage::resetPasswordClicked);
     connect(ui->btnRefresh, &QToolButton::clicked, this, [&] {
+        showErrorMessage({});
         showProgressIndicator(true);
         emit refreshDevicesClicked();
     });
@@ -80,6 +108,10 @@ CredentialsPage::CredentialsPage(QWidget *parent)
 
     showErrorMessage({});
     showProgressIndicator(false);
+
+    codeExpireCheckTimer.setInterval(1000);
+    connect(&codeExpireCheckTimer, &QTimer::timeout, this, &CredentialsPage::onCodeExpireCheckTimer);
+
     updateTheme();
 }
 
@@ -135,9 +167,37 @@ std::optional<DeviceInfo> CredentialsPage::currentDevice() const
 QString CredentialsPage::url() const
 {
     if (auto currDevice = currentDevice()) {
-        return currDevice->host;
+        return normalizeUrl(currDevice->host, currDevice->port);
     }
     return {};
+}
+
+QString CredentialsPage::normalizeUrl(const QString &url, int port)
+{
+    QString result;
+
+    if (!url.startsWith(QStringLiteral("http://")) && !url.startsWith(QStringLiteral("https://"))) {
+        result = QStringLiteral("https://");
+    }
+
+    if (url.endsWith(QStringLiteral("files")) || url.endsWith(QStringLiteral("files/"))) {
+        result += url;
+        if (!result.endsWith(QStringLiteral("/")))
+            result += QStringLiteral("/");
+    }
+    else {
+        result += url;
+        if (result.endsWith(QStringLiteral("/")))
+            result += QStringLiteral("files/");
+        else
+            result += QStringLiteral("/files/");
+    }
+
+    QUrl tmpurl(result);
+    if (port > 0)
+        tmpurl.setPort(port);
+
+    return tmpurl.toString();
 }
 
 QString CredentialsPage::email() const
@@ -179,6 +239,17 @@ void CredentialsPage::showProgressIndicator(bool show)
     ui->progressIndicator->setVisible(show);
 }
 
+void CredentialsPage::showCodeDialog()
+{
+    showProgressIndicator(false);
+    codeExpireTime = QDateTime::currentDateTime().addSecs(code_expire_seconds);
+    codeExpireCheckTimer.start();
+
+    dim->setVisible(true);
+
+    codeDialog->show();
+}
+
 void CredentialsPage::onTextEdited(const QString&/*txt*/)
 {
     if (sender() == ui->edUrl) {
@@ -190,6 +261,14 @@ void CredentialsPage::onTextEdited(const QString&/*txt*/)
 
     validateFormData();
     showErrorMessage({});
+}
+
+void CredentialsPage::onCodeExpireCheckTimer()
+{
+    if (QDateTime::currentDateTime() > codeExpireTime) {
+        codeExpireCheckTimer.stop();
+        codeDialog->showError(tr("Your code has expired"));
+    }
 }
 
 void CredentialsPage::validateFormData()

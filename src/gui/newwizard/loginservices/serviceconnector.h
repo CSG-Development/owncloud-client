@@ -42,7 +42,7 @@ signals:
     void fetch_devices_finished();
     void code_requested();
 
-    void error_code(int code);
+    void error_code(int code, const QString& str = QStringLiteral(""));
 
     void request_finished(std::optional<QJsonDocument>, int code, const QString& url);
 

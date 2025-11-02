@@ -40,12 +40,14 @@ SetupController::SetupController(SettingsDialog *parent)
     connect(_context->window(), &SetupWidget::loginEmailClicked, this, [&](const QString& user) {
         qCDebug(lcSetupWizardController) << "Login email clicked";
         user_ = user;
+        window()->displayPage(SetupWidget::SetupPage::PageCredentials);
+        window()->showCredPageProgress(true);
         raConnector->start_query(user_);
     });
 
     connect(raConnector, &ServiceConnector::code_requested, this, [&] {
         qCDebug(lcSetupWizardController) << "Code requested";
-        window()->displayPage(SetupWidget::SetupPage::PageEmail);
+        window()->displayPage(SetupWidget::SetupPage::PageCredentials);
         window()->showCodeDialog();
     });
 
@@ -64,8 +66,9 @@ SetupController::SetupController(SettingsDialog *parent)
         mdns->query();
     });
 
-    connect(raConnector, &ServiceConnector::error_code, this, [&](int error_code) {
-        window()->showErrorMessage(tr("Error code: %1").arg(error_code));
+    connect(raConnector, &ServiceConnector::error_code, this, [&](int error_code, const QString& str) {
+        window()->showErrorMessage(tr("Error code: %1 (%2)").arg(error_code).arg(str));
+        window()->showCredPageProgress(false);
     });
 
     connect(mdns, &MdnsClient::requestCompleted, this, [&] {

@@ -2,7 +2,7 @@
     border-radius: 20px;
     border: 1px solid rgba(97, 97, 97, 1);
     font-size: 16px;
-    color: rgba(97, 97, 97, 1);
+    color: rgba(255, 255, 255, 0.87);
 }
 
 #ed1:focus,

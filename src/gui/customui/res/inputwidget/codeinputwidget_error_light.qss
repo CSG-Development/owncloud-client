@@ -2,5 +2,14 @@
     border-radius: 20px;
     border: 1px solid rgba(244, 67, 54, 1);
     font-size: 16px;
-    color: rgba(203, 205, 211, 1);
+    color: rgba(0, 0, 0, 0.87);;
+}
+
+#ed1:focus,
+#ed2:focus,
+#ed3:focus,
+#ed4:focus,
+#ed5:focus,
+#ed6:focus {
+    border: 3px solid rgba(244, 67, 54, 1);
 }

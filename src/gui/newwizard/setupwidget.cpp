@@ -43,8 +43,6 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     _ui->contentWidget->addWidget(emailPage_);
     connect(emailPage_, &EmailPage::loginClicked, this, &SetupWidget::loginEmailClicked);
     connect(emailPage_, &EmailPage::cancelClicked, this, &SetupWidget::onCancelClicked);
-    connect(emailPage_, &EmailPage::codeEntered, this, &SetupWidget::codeEntered);
-    connect(emailPage_, &EmailPage::codeSkipped, this, &SetupWidget::codeSkipped);
 
     credPage_ = new CredentialsPage(this);
     _ui->contentWidget->addWidget(credPage_);
@@ -55,6 +53,8 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     connect(credPage_, &CredentialsPage::resetPasswordClicked, this, &SetupWidget::loginResetPasswordClicked);
     connect(credPage_, &CredentialsPage::refreshDevicesClicked, this, &SetupWidget::refreshDevicesClicked);
     connect(credPage_, &CredentialsPage::backButtonClicked, this, &SetupWidget::credPageBackClicked);
+    connect(credPage_, &CredentialsPage::codeEntered, this, &SetupWidget::codeEntered);
+    connect(credPage_, &CredentialsPage::codeSkipped, this, &SetupWidget::codeSkipped);
 
     waitPage_ = new WaitPage(this);
     _ui->contentWidget->addWidget(waitPage_);
@@ -122,8 +122,8 @@ void SetupWidget::hideErrorMessage()
 
 void SetupWidget::showCodeDialog()
 {
-    if (_ui->contentWidget->currentWidget() == emailPage_)
-        emailPage_->showCodeDialog();
+    if (_ui->contentWidget->currentWidget() == credPage_)
+        credPage_->showCodeDialog();
 }
 
 void SetupWidget::setDevicesList(const QList<DeviceInfo> &list)

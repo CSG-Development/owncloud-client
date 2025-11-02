@@ -71,9 +71,10 @@ ServiceConnector::ServiceConnector(QObject *parent)
 
         if (code == 200) {
             referenceCode = (*doc)[QStringLiteral("reference")].toString();
+            emit code_requested();
         }
         else {
-            emit error_code(code);
+            emit error_code(code, QStringLiteral("initiate"));
         }
     });
     connect(this, &ServiceConnector::refresh_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
@@ -87,7 +88,7 @@ ServiceConnector::ServiceConnector(QObject *parent)
             emit query_devices(accessToken);
         }
         else {
-            emit error_code(code);
+            emit error_code(code, QStringLiteral("refresh"));
         }
     });
     connect(this, &ServiceConnector::token_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
@@ -101,7 +102,7 @@ ServiceConnector::ServiceConnector(QObject *parent)
             emit query_devices(accessToken);
         }
         else {
-            emit error_code(code);
+            emit error_code(code, QStringLiteral("token"));
         }
     });
     connect(this, &ServiceConnector::devices_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
@@ -124,7 +125,7 @@ ServiceConnector::ServiceConnector(QObject *parent)
             }
         }
         else {
-            emit error_code(code);
+            emit error_code(code, QStringLiteral("devices"));
         }
     });
 
@@ -138,7 +139,7 @@ ServiceConnector::ServiceConnector(QObject *parent)
             emit fetch_devices();
         }
         else {
-            emit error_code(code);
+            emit error_code(code, QStringLiteral("device_info"));
         }
     });
 
@@ -191,7 +192,6 @@ void ServiceConnector::start_query(const QString &email)
     loadRefreshToken(currentEmail);
     if (refreshToken.isEmpty()) {
         query_initiate(email);
-        emit code_requested();
     }
     else {
         if (QDateTime::currentDateTime() > accessTokenExpireTime) {

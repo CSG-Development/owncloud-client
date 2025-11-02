@@ -15,6 +15,7 @@ public:
     ~CodeInputWidget();
 
     QString codeStr() const;
+    void clearCode();
 
     void setErrorState(bool enable);
 
