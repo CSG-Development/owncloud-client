@@ -124,7 +124,7 @@ bool ComboWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == ui->lineEdit) {
         if (event->type() == QEvent::ToolTip) {
-            ui->lineEdit->setToolTip(ui->lineEdit->text().isEmpty() ? QStringLiteral() : currentDevice()->host);
+            ui->lineEdit->setToolTip(ui->lineEdit->text().isEmpty() ? QStringLiteral("") : currentDevice()->host);
         }
     }
 

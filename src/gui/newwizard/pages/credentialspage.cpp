@@ -32,6 +32,8 @@ CredentialsPage::CredentialsPage(QWidget *parent)
 {
     ui->setupUi(this);
     setObjectName("credentialsPage");
+    setMouseTracking(true);
+    setAttribute(Qt::WA_Hover, true);
 
     auto noFocus = new FocusProxyStyle;
     ui->btnLogin->setStyle(noFocus);
@@ -61,9 +63,6 @@ CredentialsPage::CredentialsPage(QWidget *parent)
 
     ui->btnLogin->setMouseTracking(true);
 
-    ui->edEmail->setPlaceholderText(tr("Email"));
-    ui->edEmail->setFontPixelSize(fontSize);
-
     ui->edUrl->setPlaceholderText(tr("Connecting to"));
     ui->edUrl->setFontPixelSize(fontSize);
 
@@ -73,8 +72,6 @@ CredentialsPage::CredentialsPage(QWidget *parent)
 
     connect(ui->edUrl, &ComboWidget::textEdited, this, &CredentialsPage::onTextEdited);
     connect(ui->edPassword, &InputWidget::textEdited, this, &CredentialsPage::onTextEdited);
-
-    ui->edEmail->setReadOnly(true);
 
     validateFormData();
 
@@ -145,13 +142,12 @@ QString CredentialsPage::url() const
 
 QString CredentialsPage::email() const
 {
-    return ui->edEmail->text();
+    return ui->lblEmail->text();
 }
 
 void CredentialsPage::setEmail(const QString &user)
 {
-    const QSignalBlocker b_(ui->edEmail);
-    ui->edEmail->setText(user);
+    ui->lblEmail->setText(user);
 }
 
 QString CredentialsPage::password() const
@@ -173,7 +169,6 @@ void CredentialsPage::showInvalidUrlError()
 
 void CredentialsPage::showInvalidCredentialsError()
 {
-    ui->edEmail->setErrorState(true, {});
     ui->edPassword->setErrorState(true, {});
     ui->btnLogin->setEnabled(false);
 }
@@ -186,10 +181,7 @@ void CredentialsPage::showProgressIndicator(bool show)
 
 void CredentialsPage::onTextEdited(const QString&/*txt*/)
 {
-    if (sender() == ui->edEmail) {
-        ui->edEmail->setErrorState(false);
-    }
-    else if (sender() == ui->edUrl) {
+    if (sender() == ui->edUrl) {
         ui->edUrl->setErrorState(false);
     }
     else if (sender() == ui->edPassword) {

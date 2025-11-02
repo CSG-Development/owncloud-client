@@ -1,5 +1,7 @@
 #include "codeinputwidget.h"
 #include "ui_codeinputwidget.h"
+#include "stylehelper.h"
+#include "theme.h"
 
 #include <QKeyEvent>
 #include <QClipboard>
@@ -8,11 +10,14 @@
 #include <QRegularExpressionValidator>
 
 namespace {
-const auto widgetStyle = QStringLiteral("#ed1, #ed2, #ed3, #ed4, #ed5, #ed6 {"
-                             "border-radius: 20px;"
-                             "border: 1px solid #CBCDD3;"
-                             "font-size: 16px;"
-                             "}");
+const QPair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/inputwidget/codeinputwidget_light.qss"),
+    QStringLiteral(":/res/inputwidget/codeinputwidget_dark.qss")
+};
+const QPair<QString,QString> widgetStyleError = {
+    QStringLiteral(":/res/inputwidget/codeinputwidget_error_light.qss"),
+    QStringLiteral(":/res/inputwidget/codeinputwidget_error_dark.qss")
+};
 constexpr auto ed_count = 6;
 }
 
@@ -21,8 +26,6 @@ CodeInputWidget::CodeInputWidget(QWidget *parent)
     , ui(new Ui::CodeInputWidget)
 {
     ui->setupUi(this);
-
-    ui->frame->setStyleSheet(widgetStyle);
 
     edPtrs.append(ui->ed1);
     edPtrs.append(ui->ed2);
@@ -46,6 +49,7 @@ CodeInputWidget::CodeInputWidget(QWidget *parent)
     }
 
     edPtrs[0]->setFocus();
+    setDarkTheme();
 }
 
 CodeInputWidget::~CodeInputWidget()
@@ -64,6 +68,18 @@ QString CodeInputWidget::codeStr() const
     return s;
 }
 
+void CodeInputWidget::setErrorState(bool enable)
+{
+    errorState = enable;
+    updateStyles();
+}
+
+void CodeInputWidget::setDarkTheme()
+{
+    isDark = CUR::Theme::instance()->isDarkTheme();
+    updateStyles();
+}
+
 bool CodeInputWidget::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::KeyPress) {
@@ -76,10 +92,28 @@ bool CodeInputWidget::eventFilter(QObject *obj, QEvent *event)
                     }
                 }
             }
+            else if (
+                (key_ev->key() == Qt::Key_V && key_ev->modifiers() & Qt::ControlModifier) ||
+                (key_ev->key() == Qt::Key_Insert && key_ev->modifiers() & Qt::ShiftModifier)) {
+                pasteCode();
+                return true;
+            }
         }
     }
 
     return QWidget::eventFilter(obj, event);
+}
+
+void CodeInputWidget::updateStyles()
+{
+    if (errorState)
+        setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyleError.second : widgetStyleError.first));
+    else
+        setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+
+    style()->unpolish(this);
+    style()->polish(this);
+    update();
 }
 
 void CodeInputWidget::onTextEdited(const QString &/*txt*/)

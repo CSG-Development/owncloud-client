@@ -6,6 +6,8 @@
 
 #include "theme.h"
 
+#include <QKeyEvent>
+
 namespace {
 QPair<QString,QString> widgetStyle = {
     QStringLiteral(":/res/login/code_dialog_light.qss"),
@@ -66,4 +68,11 @@ void CodeDialog::updateTheme()
 QString CodeDialog::getCode() const
 {
     return ui->widget->codeStr();
+}
+
+void CodeDialog::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() != Qt::Key_Escape) {
+        QDialog::keyPressEvent(event);
+    }
 }

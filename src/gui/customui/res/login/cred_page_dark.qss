@@ -81,16 +81,26 @@
 }
 
 #btnRefresh:hover {
-    border: 1px solid transparent;
-    border-radius: 20px;
+    background: rgba(144, 202, 249, 0.12);
+}
+
+#btnRefresh:pressed {
+    background: rgba(144, 202, 249, 0.3)
 }
 
 #btnResetPass {
     background: transparent;
     color: #64B5F6;
-    border: none;
+    border: 1px solid transparent;
+    border-radius: 20px;
     font: "Segoe UI";
     font-size: 14px;
+}
+#btnResetPass:hover {
+    background: rgba(144, 202, 249, 0.12);
+}
+#btnResetPass:pressed {
+    background: rgba(144, 202, 249, 0.3);
 }
 
 #btnSettings,
@@ -103,8 +113,16 @@
 #btnSettings:hover,
 #btnBack:hover {
     background: rgba(144, 202, 249, 0.12);
-    border: 1px solid transparent;
-    border-radius: 20px;
+}
+
+#btnSettings:pressed,
+#btnBack:pressed {
+    background: rgba(144, 202, 249, 0.3);
+}
+
+#lblEmail {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.87);
 }
 
 #edUrl {
@@ -113,14 +131,12 @@
     font-size: 16px;
 }
 
-#edEmail,
 #edPassword {
     background: transparent;
     border: none;
     font: "Segoe UI";
     font-size: 16px;
 }
-
 
 #frameEmail,
 #frameUrl,

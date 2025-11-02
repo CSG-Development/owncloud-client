@@ -3,8 +3,16 @@
 }
 
 #inputFrame {
-    border: 1px solid #F28F8C;
+    border: 1px solid rgba(242, 143, 140, 1);
     border-radius: 20px;
+}
+
+#inputFrame[focusedFrame=true] {
+    border: 3px solid rgba(242, 143, 140, 1);
+}
+
+#inputFrame[focusedFrame=false] {
+    border: 1px solid rgba(242, 143, 140, 1);
 }
 
 #errorFrame {

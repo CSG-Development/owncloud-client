@@ -16,6 +16,10 @@ public:
 
     QString getCode() const;
 
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+
 private:
     Ui::CodeDialog *ui = nullptr;
+
 };

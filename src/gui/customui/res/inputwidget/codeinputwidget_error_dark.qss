@@ -1,0 +1,6 @@
+#ed1, #ed2, #ed3, #ed4, #ed5, #ed6 {
+    border-radius: 20px;
+    border: 1px solid rgba(242, 143, 140, 1);
+    font-size: 16px;
+    color: rgba(203, 205, 211, 1);
+}
