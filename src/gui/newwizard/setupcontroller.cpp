@@ -100,9 +100,9 @@ SetupController::SetupController(SettingsDialog *parent)
     connect(_context->window(), &SetupWidget::loginCredentialClicked, this, [&](const QString& url, const QString& user, const QString& password) {
         qCDebug(lcSetupWizardController) << "Login credential clicked" << url;
         url_ = url;
-        user_ = user;
+        //user_ = user;
         password_ = password;
-        startLogin(url, user, password);
+        startLogin(url_, user_, password_);
     });
 
     connect(_context->window(), &SetupWidget::credPageBackClicked, this, [&] {

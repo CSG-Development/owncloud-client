@@ -201,7 +201,7 @@ QList<Device> DeviceListManager::combine_lists(const QList<MdnsRecord>& mdns_rec
         DevicePath dev_path;
         dev_path.address = rec.host;
         dev_path.port = rec.port;
-        dev_path.deviceType = DeviceType::Remote;
+        dev_path.deviceType = rec.deviceType;
         dev->paths.append(dev_path);
     };
 

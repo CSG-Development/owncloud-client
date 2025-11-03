@@ -364,7 +364,7 @@ void RemoteConnector::addDevice(const QJsonValue &val)
     d.hostname = val[QStringLiteral("hostname")].toString();
     devices.append(d);
     devIdsQueue.append(d.seagateDeviceID);
-    qCDebug(lcLoginService) << "Device" << d.seagateDeviceID << "added";
+    qCDebug(lcLoginService) << "Device" << d.seagateDeviceID << d.certificateCommonName << "added";
 }
 
 void RemoteConnector::prepareDevList()
