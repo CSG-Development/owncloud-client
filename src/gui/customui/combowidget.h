@@ -27,8 +27,8 @@ public:
     QString text() const;
     void setText(const QString& val);
 
-    void setItems(const QList<DeviceInfo> &list);
-    std::optional<DeviceInfo> currentDevice() const {return selectedDevice;}
+    void setItems(const QList<Device> &list);
+    std::optional<Device> currentDevice() const {return selectedDevice;}
 
     void setErrorState(bool enable, const QString& txt = QString());
 
@@ -63,7 +63,7 @@ private:
 
     bool isDark = false;
     bool errorState = false;
-    QList<DeviceInfo> deviceList;
+    QList<Device> deviceList;
     QTimer blockMouseTimer;
-    std::optional<DeviceInfo> selectedDevice;
+    std::optional<Device> selectedDevice;
 };

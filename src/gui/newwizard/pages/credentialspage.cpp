@@ -55,13 +55,13 @@ CredentialsPage::CredentialsPage(QWidget *parent)
         codeDialog->setVisible(false);
         codeDialog->clearCode();
         dim->setVisible(false);
-        emit codeEntered(codeDialog->getCode());
+        emit codeSkipped();
     });
     connect(codeDialog, &CodeDialog::allowAccessClicked, this, [&] {
         codeDialog->setVisible(false);
         codeDialog->clearCode();
         dim->setVisible(false);
-        emit codeSkipped();
+        emit codeEntered(codeDialog->getCode());
     });
     connect(codeDialog, &CodeDialog::resendCodeClicked, this, [&] {
         codeExpireTime = QDateTime::currentDateTime().addSecs(code_expire_seconds);
@@ -154,12 +154,12 @@ void CredentialsPage::updateTheme()
     update();
 }
 
-void CredentialsPage::setDevicesList(const QList<DeviceInfo> &list)
+void CredentialsPage::setDevicesList(const QList<Device> &list)
 {
     ui->edUrl->setItems(list);
 }
 
-std::optional<DeviceInfo> CredentialsPage::currentDevice() const
+std::optional<Device> CredentialsPage::currentDevice() const
 {
     return ui->edUrl->currentDevice();
 }
@@ -167,37 +167,20 @@ std::optional<DeviceInfo> CredentialsPage::currentDevice() const
 QString CredentialsPage::url() const
 {
     if (auto currDevice = currentDevice()) {
-        return normalizeUrl(currDevice->host, currDevice->port);
+        if (!currDevice->paths.isEmpty()) {
+            auto path = Device::firstRemotePath(currDevice.value());
+            DevicePath devPath;
+            if (path) {
+                devPath = path.value();
+            }
+            else {
+                devPath = currDevice->paths.first();
+            }
+
+            return normalizeUrl(devPath.address, devPath.port, true);
+        }
     }
     return {};
-}
-
-QString CredentialsPage::normalizeUrl(const QString &url, int port)
-{
-    QString result;
-
-    if (!url.startsWith(QStringLiteral("http://")) && !url.startsWith(QStringLiteral("https://"))) {
-        result = QStringLiteral("https://");
-    }
-
-    if (url.endsWith(QStringLiteral("files")) || url.endsWith(QStringLiteral("files/"))) {
-        result += url;
-        if (!result.endsWith(QStringLiteral("/")))
-            result += QStringLiteral("/");
-    }
-    else {
-        result += url;
-        if (result.endsWith(QStringLiteral("/")))
-            result += QStringLiteral("files/");
-        else
-            result += QStringLiteral("/files/");
-    }
-
-    QUrl tmpurl(result);
-    if (port > 0)
-        tmpurl.setPort(port);
-
-    return tmpurl.toString();
 }
 
 QString CredentialsPage::email() const

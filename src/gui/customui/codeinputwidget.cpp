@@ -40,7 +40,7 @@ CodeInputWidget::CodeInputWidget(QWidget *parent)
     auto validator = new QRegularExpressionValidator(QRegularExpression(QStringLiteral("[\\d]")), this);
 
     for (int i = 0; i < ed_count; i++) {
-        connect(edPtrs[i], &QLineEdit::textChanged, this, &CodeInputWidget::onTextEdited);
+        connect(edPtrs[i], &QLineEdit::textEdited, this, &CodeInputWidget::onTextEdited);
         edPtrs[i]->installEventFilter(this);
         edPtrs[i]->setValidator(validator);
 
@@ -48,7 +48,7 @@ CodeInputWidget::CodeInputWidget(QWidget *parent)
         connect(edPtrs[i], &QLineEdit::customContextMenuRequested, this, &CodeInputWidget::onContextMenuRequested);
     }
 
-    edPtrs[0]->setFocus();
+    ui->ed1->setFocus();
     setDarkTheme();
 }
 
@@ -59,12 +59,16 @@ CodeInputWidget::~CodeInputWidget()
 
 QString CodeInputWidget::codeStr() const
 {
-    QString s;
-    for (int i = 0; i < ed_count; i++) {
-        s += edPtrs[i]->text().trimmed();
-    }
+    // QString s;
+    // for (int i = 0; i < ed_count; i++) {
+    //     s += edPtrs[i]->text().trimmed();
+    //     qDebug() << i << edPtrs[i]->text().trimmed();
+    // }
+    QString s = code_;
+
     if (s.length() != ed_count)
         return {};
+
     return s;
 }
 
@@ -132,6 +136,7 @@ void CodeInputWidget::onTextEdited(const QString &/*txt*/)
     if (!ed->text().isEmpty())
         moveFocus(true);
 
+    code_ = buildCode();
     emit codeChanged();
 }
 
@@ -165,11 +170,17 @@ void CodeInputWidget::pasteCode()
     const QClipboard* clipboard = QApplication::clipboard();
     const QMimeData* mimeData = clipboard->mimeData();
     const auto txt = mimeData->text();
+
     for (int i = 0; i < ed_count; i++) {
         const auto b_ = QSignalBlocker(edPtrs[i]);
-        edPtrs[i]->setText(txt[i]);
+        QString tmp;
+        tmp.append(txt[i]);
+        edPtrs[i]->setText(tmp);
     }
+
     edPtrs[ed_count - 1]->setFocus();
+
+    code_ = buildCode();
     emit codeChanged();
 }
 
@@ -179,4 +190,17 @@ void CodeInputWidget::onContextMenuRequested(const QPoint &/*pos*/)
     m.addAction(pasteCodeAction);
     pasteCodeAction->setEnabled(validateClipboardBuffer());
     m.exec(QCursor::pos());
+}
+
+QString CodeInputWidget::buildCode() const
+{
+    QString code;
+    code += ui->ed1->text();
+    code += ui->ed2->text();
+    code += ui->ed3->text();
+    code += ui->ed4->text();
+    code += ui->ed5->text();
+    code += ui->ed6->text();
+    qDebug() << code;
+    return code;
 }

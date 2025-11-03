@@ -22,8 +22,8 @@ public:
     int columnCount(const QModelIndex&) const override {return clCount;}
     QVariant data(const QModelIndex &idx, int role) const override;
 
-    void setDeviceInfoList(const QList<DeviceInfo>& list);
+    void setDeviceInfoList(const QList<Device>& list);
 
 private:
-    QList<DeviceInfo> data_;
+    QList<Device> data_;
 };

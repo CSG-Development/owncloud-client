@@ -37,10 +37,13 @@ private:
     void pasteCode();
     void onContextMenuRequested(const QPoint &pos);
 
+    QString buildCode() const;
+
 private:
     Ui::CodeInputWidget* ui = nullptr;
     QList<QLineEdit*> edPtrs;
     QAction* pasteCodeAction = nullptr;
     bool isDark = false;
     bool errorState = false;
+    QString code_;
 };

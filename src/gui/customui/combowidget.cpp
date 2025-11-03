@@ -60,7 +60,7 @@ ComboWidget::ComboWidget(QWidget *parent)
         auto selected = popup->selectedDevice();
         if (selected) {
             selectedDevice = selected;
-            ui->lineEdit->setText(selectedDevice->name);
+            ui->lineEdit->setText(selectedDevice->certificateCommonName);
         }
     });
 
@@ -103,9 +103,9 @@ void ComboWidget::setText(const QString &val)
     ui->lineEdit->setText(val);
 }
 
-void ComboWidget::setItems(const QList<DeviceInfo> &list)
+void ComboWidget::setItems(const QList<Device> &list)
 {
-    QList<DeviceInfo> tmpitems(list);
+    QList<Device> tmpitems(list);
     qSwap(tmpitems, deviceList);
     popup->setItems(deviceList);
 }
@@ -124,7 +124,7 @@ bool ComboWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == ui->lineEdit) {
         if (event->type() == QEvent::ToolTip) {
-            ui->lineEdit->setToolTip(ui->lineEdit->text().isEmpty() ? QStringLiteral("") : currentDevice()->host);
+            //ui->lineEdit->setToolTip(ui->lineEdit->text().isEmpty() ? QStringLiteral("") : currentDevice()->host);
         }
     }
 

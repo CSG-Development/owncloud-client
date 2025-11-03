@@ -126,7 +126,7 @@ void SetupWidget::showCodeDialog()
         credPage_->showCodeDialog();
 }
 
-void SetupWidget::setDevicesList(const QList<DeviceInfo> &list)
+void SetupWidget::setDevicesList(const QList<Device> &list)
 {
     if (_ui->contentWidget->currentWidget() == credPage_)
         credPage_->setDevicesList(list);

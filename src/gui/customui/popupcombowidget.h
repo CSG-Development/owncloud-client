@@ -21,8 +21,8 @@ public:
     void setAnchorWidget(QWidget* w);
     void updateAndShow();
     
-    void setItems(const QList<DeviceInfo> &list);
-    std::optional<DeviceInfo> selectedDevice() const {return currentItem;}
+    void setItems(const QList<Device> &list);
+    std::optional<Device> selectedDevice() const {return currentItem;}
 
     bool eventFilter(QObject *watched, QEvent *event) override;
 
@@ -39,6 +39,6 @@ private:
     Ui::PopupComboWidget* ui = nullptr;
 
     QWidget* anchor_ = nullptr;
-    std::optional<DeviceInfo> currentItem;
+    std::optional<Device> currentItem;
     PopupComboModel model_;
 };

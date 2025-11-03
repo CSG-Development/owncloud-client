@@ -28,38 +28,10 @@ public:
     QString certificateCommonName;
     QString friendlyName;
     QString hostname;
-
     QList<DevicePath> paths;
 
-    void addPath(const QString& deviceID,  const DevicePath& path);
+    static std::optional<DevicePath> firstRemotePath(const Device& dev);
 };
-
-class DeviceInfo
-{
-public:
-    QString name;
-    QString host;
-    int port = 0;
-    int tempId = -1;
-
-    bool isEqual(const DeviceInfo& di) const {
-        return tempId == di.tempId && name == di.name && host == di.host && port == di.port;
-    }
-    static void assignIds(QList<DeviceInfo>& list) {
-        int id = 0;
-        for (auto& item: list) {
-            item.tempId = id;
-            id++;
-        }
-    }
-};
-
-Q_DECLARE_METATYPE(DeviceInfo);
-
-inline bool operator==(const DeviceInfo& lhs, const DeviceInfo& rhs)
-{
-    return lhs.isEqual(rhs);
-}
 
 class DeviceHardwareInfo
 {
@@ -86,7 +58,7 @@ public:
     QString type;
 };
 
-class LocalDeviceInfo
+class DeviceInfoAbout
 {
 public:
     QString certificate_common_name;
@@ -102,4 +74,68 @@ public:
     QString version;
     DeviceHardwareInfo hardware_info;
     QList<LocalDeviceInterface> network_interfaces;
+
+    static DeviceInfoAbout fromJson(const QJsonDocument& doc);
 };
+
+inline QDebug operator<< (QDebug d, const DeviceInfoAbout& info) {
+    d << QStringLiteral("cert: %1, hostname: %2, serial: %3")
+             .arg(info.certificate_common_name)
+             .arg(info.hostname)
+             .arg(info.serial_number);
+    return d;
+}
+
+class DeviceInfoStatus
+{
+public:
+    bool oobe_done = false;
+    QString app_files;
+    QString app_photos;
+    QString state;
+
+    static DeviceInfoStatus fromJson(const QJsonDocument& doc);
+};
+
+inline QDebug operator<< (QDebug d, const DeviceInfoStatus& info) {
+    d << QStringLiteral("oobe: %1, state: %2")
+            .arg(info.oobe_done)
+            .arg(info.state);
+    return d;
+}
+
+class MdnsRecord
+{
+public:
+    QString name;
+    QString host;
+    int port = 0;
+    DeviceInfoAbout about;
+    DeviceInfoStatus status;
+};
+
+class DeviceInfo
+{
+public:
+    DeviceInfoAbout about;
+    DeviceInfoStatus status;
+    QString name;
+    QString host;
+    int port = 0;
+    DeviceType deviceType = DeviceType::Unknown;
+    int tempId = -1;
+
+    static void assignIds(QList<DeviceInfo>& list) {
+        int id = 0;
+        for (auto& item: list) {
+            item.tempId = id;
+            id++;
+        }
+    }
+};
+
+QString normalizeUrl(const QString &url, int port, bool add_folder);
+
+Q_DECLARE_METATYPE(DeviceInfo);
+Q_DECLARE_METATYPE(Device);
+

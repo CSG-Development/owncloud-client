@@ -30,8 +30,8 @@ enum class ChangeReason {
 Q_ENUM_NS(ChangeReason)
 
 namespace CUR {
-class ServiceConnector;
-class MdnsClient;
+class RemoteConnector;
+class DeviceListManager;
 }
 
 namespace CUR::Wizard {
@@ -78,7 +78,13 @@ private:
     QString url_;
     QString user_;
     QString password_;
-    ServiceConnector* raConnector = nullptr;
-    MdnsClient* mdns = nullptr;
+    RemoteConnector* raConnector = nullptr;
+    DeviceListManager* deviceMgr = nullptr;
+    bool remoteSkipped = false;
+
+    QList<DeviceInfo> remoteDevices;
+
+    QList<MdnsRecord> localDevices;
+    QList<Device> fullList;
 };
 }

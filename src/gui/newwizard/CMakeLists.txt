@@ -35,10 +35,14 @@ add_library(newwizard STATIC
     codedialog.ui
     loginservices/mdnsclient.cpp
     loginservices/mdnsclient.h
-    loginservices/serviceconnector.cpp
-    loginservices/serviceconnector.h
+    loginservices/remoteconnector.cpp
+    loginservices/remoteconnector.h
     loginservices/devicetypes.cpp
     loginservices/devicetypes.h
+    loginservices/deviceapi.cpp
+    loginservices/deviceapi.h
+    loginservices/devicelistmanager.cpp
+    loginservices/devicelistmanager.h
     loginservices/loginservices_res.qrc
 )
 

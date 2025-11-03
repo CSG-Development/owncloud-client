@@ -11,13 +11,13 @@
 
 namespace CUR {
 
-class ServiceConnector: public QObject
+class RemoteConnector: public QObject
 {
     Q_OBJECT
 
 public:
-    explicit ServiceConnector(QObject* parent = nullptr);
-    ~ServiceConnector();
+    explicit RemoteConnector(QObject* parent = nullptr);
+    ~RemoteConnector();
 
     void setRaCert();
 

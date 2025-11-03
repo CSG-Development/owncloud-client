@@ -22,15 +22,15 @@ QVariant PopupComboModel::data(const QModelIndex &idx, int role) const
     {
     case Qt::DisplayRole:
         if (col == clName) {
-            return data_[row].name;
+            return data_[row].certificateCommonName;
         }
         break;
 
-    case Qt::ToolTipRole:
-        if (col == clName) {
-            return data_[row].host;
-        }
-        break;
+    // case Qt::ToolTipRole:
+    //     if (col == clName) {
+    //         return data_[row].;
+    //     }
+    //     break;
 
     case DeviceInfoRole:
         return QVariant::fromValue(data_[row]);
@@ -39,9 +39,9 @@ QVariant PopupComboModel::data(const QModelIndex &idx, int role) const
     return {};
 }
 
-void PopupComboModel::setDeviceInfoList(const QList<DeviceInfo> &list)
+void PopupComboModel::setDeviceInfoList(const QList<Device> &list)
 {
-    QList<DeviceInfo> tmp(list);
+    QList<Device> tmp(list);
     beginResetModel();
     qSwap(data_, tmp);
     endResetModel();

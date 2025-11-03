@@ -53,7 +53,7 @@ PopupComboWidget::PopupComboWidget(QWidget* parent)
             currentItem = std::nullopt;
         }
         auto v = current.data(PopupComboModel::DeviceInfoRole);
-        currentItem = v.value<DeviceInfo>();
+        currentItem = v.value<Device>();
     });
 }
 
@@ -77,7 +77,7 @@ void PopupComboWidget::updateAndShow()
     show();
 }
 
-void PopupComboWidget::setItems(const QList<DeviceInfo> &list)
+void PopupComboWidget::setItems(const QList<Device> &list)
 {
     model_.setDeviceInfoList(list);
 }

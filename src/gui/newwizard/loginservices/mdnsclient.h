@@ -3,11 +3,7 @@
 #include "devicetypes.h"
 
 #include <QObject>
-#include <QNetworkAccessManager>
-#include <QRestAccessManager>
-#include <QNetworkRequestFactory>
 #include <QDnsLookup>
-#include <QJsonDocument>
 
 namespace CUR {
 
@@ -21,25 +17,19 @@ public:
 
     void query();
 
-    [[nodiscard]] const QList<DeviceInfo>& records() {return records_;}
+    [[nodiscard]] const QList<MdnsRecord>& records() {return records_;}
+    // Remove end '.'
+    static QString fixHost(const QString& host);
 
 signals:
     void requestCompleted();
-    void device_info_finished(std::optional<QJsonDocument>, int code);
 
 private:
-    void query_device_info();
-    void parse_device_about(const QJsonDocument& doc, LocalDeviceInfo &info);
+    static QUrl constructUrlFromLocalDomain(const QString& url, int port);
 
 private:
     QDnsLookup* dns = nullptr;
-    QList<DeviceInfo> records_;
-
-    QNetworkAccessManager net_mgr;
-    std::unique_ptr<QRestAccessManager> rest_mgr;
-    std::unique_ptr<QNetworkRequestFactory> rest_factory;
-    QList<DeviceInfo> deviceRequestQueue;
-    DeviceInfo processingDevice;
+    QList<MdnsRecord> records_;
 };
 
 } // namespace CUR

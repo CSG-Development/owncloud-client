@@ -23,13 +23,10 @@ public:
 
     void updateTheme();
 
-    void setDevicesList(const QList<DeviceInfo>& list);
-    std::optional<DeviceInfo> currentDevice() const;
+    void setDevicesList(const QList<Device>& list);
+    std::optional<Device> currentDevice() const;
 
     QString url() const;
-    // Adds 'https://' prefix and '/files' suffix if missed
-    // Adds port if specified
-    static QString normalizeUrl(const QString& url, int port = 0);
 
     QString email() const;
     void setEmail(const QString& user);

@@ -36,7 +36,7 @@ public:
     void hideErrorMessage();
 
     void showCodeDialog();
-    void setDevicesList(const QList<DeviceInfo> &list);
+    void setDevicesList(const QList<Device> &list);
     void setEmail(const QString& email);
 
     void onCancelClicked();

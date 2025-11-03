@@ -4,8 +4,9 @@
 #include "determineauthtypejobfactory.h"
 #include "jobs/discoverwebfingerservicejobfactory.h"
 #include "jobs/resolveurljobfactory.h"
-#include "loginservices/serviceconnector.h"
-#include "loginservices/mdnsclient.h"
+
+#include "loginservices/remoteconnector.h"
+#include "loginservices/devicelistmanager.h"
 
 #include "theme.h"
 
@@ -29,8 +30,8 @@ Q_LOGGING_CATEGORY(lcSetupWizardController, "gui.setupwizard.controller")
 SetupController::SetupController(SettingsDialog *parent)
     : QObject(parent)
     , _context(new SetupContext(parent, this))
-    , raConnector(new CUR::ServiceConnector(parent))
-    , mdns(new CUR::MdnsClient(parent))
+    , raConnector(new CUR::RemoteConnector(parent))
+    , deviceMgr(new CUR::DeviceListManager(parent))
 {
     connect(_context->window(), &SetupWidget::rejected, this, [&] {
         qCDebug(lcSetupWizardController) << "wizard window closed";
@@ -42,12 +43,14 @@ SetupController::SetupController(SettingsDialog *parent)
         user_ = user;
         window()->displayPage(SetupWidget::SetupPage::PageCredentials);
         window()->showCredPageProgress(true);
+
         raConnector->start_query(user_);
     });
 
-    connect(raConnector, &ServiceConnector::code_requested, this, [&] {
+    connect(raConnector, &RemoteConnector::code_requested, this, [&] {
         qCDebug(lcSetupWizardController) << "Code requested";
         window()->displayPage(SetupWidget::SetupPage::PageCredentials);
+        remoteSkipped = false;
         window()->showCodeDialog();
     });
 
@@ -58,29 +61,35 @@ SetupController::SetupController(SettingsDialog *parent)
 
     connect(_context->window(), &SetupWidget::codeSkipped, this, [&] {
         qCDebug(lcSetupWizardController) << "Code skipped";
-        mdns->query();
+        remoteSkipped = true;
+        deviceMgr->query_local();
     });
 
-    connect(raConnector, &ServiceConnector::fetch_devices_finished, this, [&] {
+    connect(raConnector, &RemoteConnector::fetch_devices_finished, this, [&] {
         qCDebug(lcSetupWizardController) << "Device list query finished";
-        mdns->query();
+        remoteDevices = raConnector->deviceList();
+        deviceMgr->query_remote(remoteDevices);
     });
 
-    connect(raConnector, &ServiceConnector::error_code, this, [&](int error_code, const QString& str) {
+    connect(raConnector, &RemoteConnector::error_code, this, [&](int error_code, const QString& str) {
         window()->showErrorMessage(tr("Error code: %1 (%2)").arg(error_code).arg(str));
         window()->showCredPageProgress(false);
     });
 
-    connect(mdns, &MdnsClient::requestCompleted, this, [&] {
-        window()->displayPage(SetupWidget::SetupPage::PageCredentials);
-        window()->setEmail(user_);
+    connect(deviceMgr, &DeviceListManager::local_finished, this, [&] {
+        qCDebug(lcSetupWizardController) << "Local devices discovery finished";
+        localDevices = deviceMgr->mdns_recs();
 
-        QList<DeviceInfo> devList = mdns->records();
-        devList.append(raConnector->deviceList());
+        fullList = DeviceListManager::combine_lists(localDevices, remoteDevices);
 
-        DeviceInfo::assignIds(devList);
-        window()->setDevicesList(devList);
+        window()->setDevicesList(fullList);
         window()->showCredPageProgress(false);
+    });
+
+    connect(deviceMgr, &DeviceListManager::ra_finished, this, [&] {
+        qCDebug(lcSetupWizardController) << "Remote devices discovery finished";
+        remoteDevices = deviceMgr->ra_recs();
+        deviceMgr->query_local();
     });
 
     connect(_context->window(), &SetupWidget::refreshDevicesClicked, this, [&] {
@@ -89,7 +98,7 @@ SetupController::SetupController(SettingsDialog *parent)
     });
 
     connect(_context->window(), &SetupWidget::loginCredentialClicked, this, [&](const QString& url, const QString& user, const QString& password) {
-        qCDebug(lcSetupWizardController) << "Login credential clicked";
+        qCDebug(lcSetupWizardController) << "Login credential clicked" << url;
         url_ = url;
         user_ = user;
         password_ = password;
