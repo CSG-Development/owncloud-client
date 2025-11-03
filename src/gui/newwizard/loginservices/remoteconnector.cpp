@@ -1,4 +1,4 @@
-#include "serviceconnector.h"
+#include "remoteconnector.h"
 #include "configfile.h"
 
 #include <QRestReply>
@@ -33,10 +33,13 @@ void static unload_loginservices_res()
 
 namespace CUR {
 
-ServiceConnector::ServiceConnector(QObject *parent)
+RemoteConnector::RemoteConnector(QObject *parent)
     : QObject(parent)
     , rest_mgr(std::make_unique<QRestAccessManager>(&net_mgr))
 {
+    qRegisterMetaType<DeviceInfo>();
+    qRegisterMetaType<Device>();
+
     ::load_loginservices_res();
     rest_factory = std::make_unique<QNetworkRequestFactory>();
 
@@ -61,105 +64,127 @@ ServiceConnector::ServiceConnector(QObject *parent)
         // qInfo() << "encrypted" << reply->url();
     });
 
-    connect(this, &ServiceConnector::initiate_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
-        if (!doc) {
-            qCWarning(lcLoginService) << "initiate returns empty data, code" << code;
-            return;
-        }
-
-        if (code == 200) {
-            referenceCode = (*doc)[QStringLiteral("reference")].toString();
-        }
-        else {
-            emit error_code(code);
-        }
-    });
-    connect(this, &ServiceConnector::refresh_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
-        if (!doc) {
-            qCWarning(lcLoginService) << "refresh returns empty data, code" << code;
-            return;
-        }
-
-        if (code == 200) {
-            parseTokenReply(doc.value());
-            emit query_devices(accessToken);
-        }
-        else {
-            emit error_code(code);
-        }
-    });
-    connect(this, &ServiceConnector::token_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
-        if (!doc) {
-            qCWarning(lcLoginService) << "token returns empty data, code" << code;
-            return;
-        }
-
-        if (code == 200) {
-            parseTokenReply(doc.value());
-            emit query_devices(accessToken);
-        }
-        else {
-            emit error_code(code);
-        }
-    });
-    connect(this, &ServiceConnector::devices_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
-        if (!doc) {
-            qCWarning(lcLoginService) << "devices returns empty data, code" << code;
-            return;
-        }
-        if (code == 200) {
-            devices.clear();
-            devInfoList.clear();
-            devIdsQueue.clear();
-
-            if (doc->isArray()) {
-                auto arr = doc->array();
-                for (const auto& item : doc->array()) {
-                    addDevice(item);
-                }
-
-                emit fetch_devices();
+    connect(this, &RemoteConnector::initiate_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
+        qCDebug(lcLoginService) << "Initiate request finished, code" << code;
+        if (doc) {
+            if (code == 200) {
+                referenceCode = (*doc)[QStringLiteral("reference")].toString();
+                emit code_requested();
+            }
+            else {
+                emit error_code(code, QStringLiteral("initiate"));
             }
         }
         else {
-            emit error_code(code);
+            qCWarning(lcLoginService) << "initiate request returns empty data, code" << code;
+            emit error_code(code, QStringLiteral("no data in reply"));
         }
     });
 
-    connect(this, &ServiceConnector::device_info_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
-        if (!doc) {
-            qCWarning(lcLoginService) << "device info returns empty data, code" << code;
-            return;
+    connect(this, &RemoteConnector::refresh_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
+        qCDebug(lcLoginService) << "Refresh request finished, code" << code;
+
+        if (doc) {
+            if (code == 200) {
+                parseTokenReply(doc.value());
+                query_devices(accessToken);
+            }
+            else {
+                emit error_code(code, QStringLiteral("refresh"));
+            }
         }
-        if (code == 200) {
-            parseDeviceInfoReply(doc.value());
-            emit fetch_devices();
+        else  {
+            qCWarning(lcLoginService) << "refresh request returns empty data, code" << code;
+            emit error_code(code, QStringLiteral("no data in reply"));
+        }
+    });
+
+    connect(this, &RemoteConnector::token_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
+        qCDebug(lcLoginService) << "Token request finished, code" << code;
+
+        if (doc) {
+            if (code == 200) {
+                parseTokenReply(doc.value());
+                emit query_devices(accessToken);
+            }
+            else {
+                auto error_str = doc.value()[QStringLiteral("name")].toString();
+                emit error_code(code, QStringLiteral("token, %1").arg(error_str));
+            }
         }
         else {
-            emit error_code(code);
+            qCWarning(lcLoginService) << "token request returns empty data, code" << code;
+            emit error_code(code, QStringLiteral("no data in reply"));
         }
     });
 
-    connect(this, &ServiceConnector::fetch_devices, this, [&] {
+    connect(this, &RemoteConnector::devices_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
+        qCDebug(lcLoginService) << "Devices list request finished, code" << code;
+
+        if (doc) {
+            if (code == 200) {
+                devices.clear();
+                devInfoList.clear();
+                devIdsQueue.clear();
+
+                if (doc->isArray()) {
+                    auto arr = doc->array();
+                    for (const auto& item : doc->array()) {
+                        addDevice(item);
+                    }
+                }
+                emit fetch_devices();
+            }
+            else {
+                auto error_str = doc.value()[QStringLiteral("name")].toString();
+                emit error_code(code, QStringLiteral("devices, %1").arg(error_str));
+            }
+        }
+        else {
+            qCWarning(lcLoginService) << "devices request returns empty data";
+            emit error_code(code, QStringLiteral("no data in reply"));
+        }
+    });
+
+    connect(this, &RemoteConnector::device_info_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
+        qCDebug(lcLoginService) << "Device info request finished, code" << code;
+
+        if (doc) {
+            if (code == 200) {
+                parseDeviceInfoReply(doc.value());
+                emit fetch_devices();
+            }
+            else {
+                auto error_str = doc.value()[QStringLiteral("name")].toString();
+                emit error_code(code, QStringLiteral("device_info, %1").arg(error_str));
+            }
+        }
+        else {
+            qCWarning(lcLoginService) << "device info request returns empty data, code" << code;
+            emit error_code(code, QStringLiteral("no data in reply"));
+        }
+    });
+
+    connect(this, &RemoteConnector::fetch_devices, this, [&] {
+        qCDebug(lcLoginService) << "fetch_devices";
         if (!devIdsQueue.isEmpty()) {
             auto devId = devIdsQueue.takeFirst();
             query_device_info(accessToken, devId);
         }
         else {
             prepareDevList();
+            qCDebug(lcLoginService) << "fetch_devices finished";
             emit fetch_devices_finished();
         }
     });
-
-    loadRefreshToken();
 }
 
-ServiceConnector::~ServiceConnector()
+RemoteConnector::~RemoteConnector()
 {
     ::unload_loginservices_res();
 }
 
-void ServiceConnector::setRaCert()
+void RemoteConnector::setRaCert()
 {
     QFile f(QStringLiteral(":/res/fake-device-noveo.cer"));
     QByteArray data;
@@ -185,12 +210,12 @@ void ServiceConnector::setRaCert()
     rest_factory->setSslConfiguration(ssl_config);
 }
 
-void ServiceConnector::start_query(const QString &email)
+void RemoteConnector::start_query(const QString &email)
 {
-    loadRefreshToken();
+    currentEmail  = email;
+    loadRefreshToken(currentEmail);
     if (refreshToken.isEmpty()) {
         query_initiate(email);
-        emit code_requested();
     }
     else {
         if (QDateTime::currentDateTime() > accessTokenExpireTime) {
@@ -202,7 +227,7 @@ void ServiceConnector::start_query(const QString &email)
     }
 }
 
-void ServiceConnector::query_initiate(const QString &email)
+void RemoteConnector::query_initiate(const QString &email)
 {
     qCDebug(lcLoginService) << "query_initiate";
 
@@ -221,7 +246,7 @@ void ServiceConnector::query_initiate(const QString &email)
     });
 }
 
-void ServiceConnector::query_refresh(const QString& refresh_token)
+void RemoteConnector::query_refresh(const QString& refresh_token)
 {
     qCDebug(lcLoginService) << "query_refresh";
 
@@ -233,7 +258,7 @@ void ServiceConnector::query_refresh(const QString& refresh_token)
     });
 }
 
-void ServiceConnector::query_token(const QString& code)
+void RemoteConnector::query_token(const QString& code)
 {
     qCDebug(lcLoginService) << "query_token";
 
@@ -251,7 +276,7 @@ void ServiceConnector::query_token(const QString& code)
     });
 }
 
-void ServiceConnector::query_devices(const QString& access_token)
+void RemoteConnector::query_devices(const QString& access_token)
 {
     qCDebug(lcLoginService) << "query_devices" << access_token;
 
@@ -265,7 +290,7 @@ void ServiceConnector::query_devices(const QString& access_token)
     });
 }
 
-void ServiceConnector::query_device_info(const QString &access_token, const QString &deviceId)
+void RemoteConnector::query_device_info(const QString &access_token, const QString &deviceId)
 {
     qCDebug(lcLoginService) << "query_device_info" << deviceId;
     rest_factory->clearQueryParameters();
@@ -280,19 +305,27 @@ void ServiceConnector::query_device_info(const QString &access_token, const QStr
     });
 }
 
-void ServiceConnector::saveRefreshToken()
+void RemoteConnector::saveRefreshToken(const QString& email)
 {
+    if (email.isEmpty()) {
+        qCWarning(lcLoginService) << "Can't save refresh token with empty email";
+        return;
+    }
     ConfigFile cf;
-    cf.setRefreshToken(refreshToken);
+    cf.setRefreshTokenForEmail(refreshToken, email);
 }
 
-void ServiceConnector::loadRefreshToken()
+void RemoteConnector::loadRefreshToken(const QString& email)
 {
+    if (email.isEmpty()) {
+        qCWarning(lcLoginService) << "Can't load refresh token with empty email";
+        return;
+    }
     ConfigFile cf;
-    refreshToken = cf.refreshToken();
+    refreshToken = cf.refreshTokenForEmail(email);
 }
 
-void ServiceConnector::parseTokenReply(const QJsonDocument& doc)
+void RemoteConnector::parseTokenReply(const QJsonDocument& doc)
 {
     refreshToken = doc[QStringLiteral("refreshToken")].toString();
     accessToken = doc[QStringLiteral("accessToken")].toString();
@@ -302,10 +335,10 @@ void ServiceConnector::parseTokenReply(const QJsonDocument& doc)
     if (expiresIn > 0)
         accessTokenExpireTime = QDateTime::currentDateTime().addSecs(expiresIn);
 
-    saveRefreshToken();
+    saveRefreshToken(currentEmail);
 }
 
-void ServiceConnector::parseDeviceInfoReply(const QJsonDocument &doc)
+void RemoteConnector::parseDeviceInfoReply(const QJsonDocument &doc)
 {
     QString devId = doc[QStringLiteral("seagateDeviceID")].toString();
     const auto& paths = doc[QStringLiteral("paths")].toArray();
@@ -322,7 +355,7 @@ void ServiceConnector::parseDeviceInfoReply(const QJsonDocument &doc)
     }
 }
 
-void ServiceConnector::addDevice(const QJsonValue &val)
+void RemoteConnector::addDevice(const QJsonValue &val)
 {
     Device d;
     d.seagateDeviceID = val[QStringLiteral("seagateDeviceID")].toString();
@@ -331,24 +364,25 @@ void ServiceConnector::addDevice(const QJsonValue &val)
     d.hostname = val[QStringLiteral("hostname")].toString();
     devices.append(d);
     devIdsQueue.append(d.seagateDeviceID);
-    qCDebug(lcLoginService) << "Device" << d.seagateDeviceID << "added";
+    qCDebug(lcLoginService) << "Device" << d.seagateDeviceID << d.certificateCommonName << "added";
 }
 
-void ServiceConnector::prepareDevList()
+void RemoteConnector::prepareDevList()
 {
     devInfoList.clear();
-    for (const auto& dev: devices) {
+    for (const auto& dev: std::as_const(devices)) {
         for (const auto& path: dev.paths) {
             DeviceInfo di;
             di.name = dev.friendlyName;
             di.host = path.address;
             di.port = path.port;
+            di.deviceType = path.deviceType;
             devInfoList.append(di);
         }
     }
 }
 
-Device* ServiceConnector::findDevice(const QString &devId)
+Device* RemoteConnector::findDevice(const QString &devId)
 {
     for (Device& d: devices) {
         if (d.seagateDeviceID == devId)

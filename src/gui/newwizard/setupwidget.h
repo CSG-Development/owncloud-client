@@ -36,7 +36,7 @@ public:
     void hideErrorMessage();
 
     void showCodeDialog();
-    void setDevicesList(const QList<DeviceInfo> &list);
+    void setDevicesList(const QList<Device> &list);
     void setEmail(const QString& email);
 
     void onCancelClicked();
@@ -45,6 +45,8 @@ public:
 
     void setInvalidUrlError();
     void setInvalidCredentialsError();
+
+    void showCredPageProgress(bool show);
 
 Q_SIGNALS:
     void rejected();
@@ -57,6 +59,8 @@ Q_SIGNALS:
     void finishPageBackClicked();
     void finishPageDoneClicked(CUR::Wizard::SyncMode mode, const QString& targetDir);
     void codeEntered(const QString& code);
+    void codeSkipped();
+    void credPageBackClicked();
 
 
 private:

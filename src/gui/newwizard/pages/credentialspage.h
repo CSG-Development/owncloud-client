@@ -3,8 +3,13 @@
 #include "loginservices/devicetypes.h"
 
 #include <QWidget>
+#include <QTimer>
+#include <QDateTime>
 
 namespace Ui {class CredentialsPage;}
+
+class DimWidget;
+class CodeDialog;
 
 class CredentialsPage : public QWidget
 {
@@ -18,7 +23,8 @@ public:
 
     void updateTheme();
 
-    void setDevicesList(const QList<DeviceInfo>& list);
+    void setDevicesList(const QList<Device>& list);
+    std::optional<Device> currentDevice() const;
 
     QString url() const;
 
@@ -30,6 +36,8 @@ public:
     void showErrorMessage(const QString& msg);
     void showInvalidUrlError();
     void showInvalidCredentialsError();
+    void showProgressIndicator(bool show);
+    void showCodeDialog();
 
 Q_SIGNALS:
     void loginClicked(const QString& url, const QString& user, const QString& password);
@@ -37,16 +45,24 @@ Q_SIGNALS:
     void settingsClicked();
     void resetPasswordClicked();
     void refreshDevicesClicked();
+    void backButtonClicked();
+
+    void codeEntered(const QString& code);
+    void codeSkipped();
+    void codeResend();
 
 private:
     void onTextEdited(const QString& txt);
+    void onCodeExpireCheckTimer();
 
     void validateFormData();
-
-    // UrlValidate return true if input string is empty to avoid startup errors
-    bool simpleUrlValidate(const QString& url);
-
     bool isAllFieldNotEmpty();
 
+private:
     Ui::CredentialsPage* ui = nullptr;
+
+    DimWidget* dim = nullptr;
+    QTimer codeExpireCheckTimer;
+    QDateTime codeExpireTime;
+    CodeDialog* codeDialog = nullptr;
 };

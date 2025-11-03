@@ -21,7 +21,6 @@ QPair<QString,QString> settingsIcon = {
     QStringLiteral(":/res/login/gear_dark.svg")
 };
 const QString loginBtnTooltip = QObject::tr("Enter a valid email address");
-constexpr int code_expire_seconds = 10 * 60;     // 10 min
 }
 
 EmailPage::EmailPage(QWidget *parent)
@@ -38,9 +37,6 @@ EmailPage::EmailPage(QWidget *parent)
     ui->btnSettings->setIconSize({20, 20});
 
     setAttribute(Qt::WA_TranslucentBackground, true);
-
-    dim = new DimWidget(this);
-    dim->setVisible(false);
 
     connect(ui->btnLogin, &QPushButton::clicked, this, [&] {
         Q_EMIT loginClicked(email());
@@ -65,14 +61,16 @@ EmailPage::EmailPage(QWidget *parent)
         }
     });
 
+    // MacOS hover enable
+    ui->btnLogin->setAttribute(Qt::WA_Hover, true);
+    ui->btnCancel->setAttribute(Qt::WA_Hover, true);
+    ui->btnSettings->setAttribute(Qt::WA_Hover, true);
+
     validateFormData();
 
     ui->btnLogin->installEventFilter(this);
     ui->btnLogin->setToolTip(loginBtnTooltip);
     showErrorMessage({});
-
-    codeExpireCheckTimer.setInterval(1000);
-    connect(&codeExpireCheckTimer, &QTimer::timeout, this, &EmailPage::onCodeExpireCheckTimer);
 
     updateTheme();
 }
@@ -133,19 +131,9 @@ void EmailPage::showInvalidCredentialsError()
     ui->btnLogin->setEnabled(false);
 }
 
-void EmailPage::showCodeDialog()
+void EmailPage::moveEvent(QMoveEvent *event)
 {
-    codeExpireTime = QDateTime::currentDateTime().addSecs(code_expire_seconds);
-    codeExpireCheckTimer.start();
-
-    dim->setVisible(true);
-    CodeDialog dlg(this);
-    int res = dlg.exec();
-    dim->setVisible(false);
-
-    if (res == QDialog::Accepted) {
-        emit codeEntered(dlg.getCode());
-    }
+    QWidget::moveEvent(event);
 }
 
 void EmailPage::onTextEdited(const QString&/*txt*/)
@@ -156,14 +144,6 @@ void EmailPage::onTextEdited(const QString&/*txt*/)
 
     validateFormData();
     showErrorMessage({});
-}
-
-void EmailPage::onCodeExpireCheckTimer()
-{
-    if (QDateTime::currentDateTime() > codeExpireTime) {
-        codeExpireCheckTimer.stop();
-        emit codeExpired();
-    }
 }
 
 void EmailPage::validateFormData()

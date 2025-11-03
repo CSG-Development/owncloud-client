@@ -1,12 +1,8 @@
 #pragma once
 
 #include <QWidget>
-#include <QTimer>
-#include <QDateTime>
 
 namespace Ui {class EmailPage;}
-
-class DimWidget;
 
 class EmailPage : public QWidget
 {
@@ -25,18 +21,16 @@ public:
     void showErrorMessage(const QString& msg);
     void showInvalidCredentialsError();
 
-    void showCodeDialog();
-
 Q_SIGNALS:
     void loginClicked(const QString& user);
     void cancelClicked();
     void settingsClicked();
-    void codeExpired();
-    void codeEntered(const QString& code);
+
+protected:
+    void moveEvent(QMoveEvent *event) override;
 
 private:
     void onTextEdited(const QString& txt);
-    void onCodeExpireCheckTimer();
 
     void validateFormData();
 
@@ -46,7 +40,4 @@ private:
     bool isAllFieldNotEmpty();
 
     Ui::EmailPage* ui = nullptr;
-    DimWidget* dim = nullptr;
-    QTimer codeExpireCheckTimer;
-    QDateTime codeExpireTime;
 };

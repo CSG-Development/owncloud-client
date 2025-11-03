@@ -1,5 +1,7 @@
 #include "codeinputwidget.h"
 #include "ui_codeinputwidget.h"
+#include "stylehelper.h"
+#include "theme.h"
 
 #include <QKeyEvent>
 #include <QClipboard>
@@ -8,11 +10,14 @@
 #include <QRegularExpressionValidator>
 
 namespace {
-const auto widgetStyle = QStringLiteral("#ed1, #ed2, #ed3, #ed4, #ed5, #ed6 {"
-                             "border-radius: 20px;"
-                             "border: 1px solid #CBCDD3;"
-                             "font-size: 16px;"
-                             "}");
+const QPair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/inputwidget/codeinputwidget_light.qss"),
+    QStringLiteral(":/res/inputwidget/codeinputwidget_dark.qss")
+};
+const QPair<QString,QString> widgetStyleError = {
+    QStringLiteral(":/res/inputwidget/codeinputwidget_error_light.qss"),
+    QStringLiteral(":/res/inputwidget/codeinputwidget_error_dark.qss")
+};
 constexpr auto ed_count = 6;
 }
 
@@ -21,8 +26,6 @@ CodeInputWidget::CodeInputWidget(QWidget *parent)
     , ui(new Ui::CodeInputWidget)
 {
     ui->setupUi(this);
-
-    ui->frame->setStyleSheet(widgetStyle);
 
     edPtrs.append(ui->ed1);
     edPtrs.append(ui->ed2);
@@ -37,7 +40,7 @@ CodeInputWidget::CodeInputWidget(QWidget *parent)
     auto validator = new QRegularExpressionValidator(QRegularExpression(QStringLiteral("[\\d]")), this);
 
     for (int i = 0; i < ed_count; i++) {
-        connect(edPtrs[i], &QLineEdit::textChanged, this, &CodeInputWidget::onTextEdited);
+        connect(edPtrs[i], &QLineEdit::textEdited, this, &CodeInputWidget::onTextEdited);
         edPtrs[i]->installEventFilter(this);
         edPtrs[i]->setValidator(validator);
 
@@ -45,7 +48,8 @@ CodeInputWidget::CodeInputWidget(QWidget *parent)
         connect(edPtrs[i], &QLineEdit::customContextMenuRequested, this, &CodeInputWidget::onContextMenuRequested);
     }
 
-    edPtrs[0]->setFocus();
+    ui->ed1->setFocus();
+    setDarkTheme();
 }
 
 CodeInputWidget::~CodeInputWidget()
@@ -55,13 +59,36 @@ CodeInputWidget::~CodeInputWidget()
 
 QString CodeInputWidget::codeStr() const
 {
-    QString s;
-    for (int i = 0; i < ed_count; i++) {
-        s += edPtrs[i]->text().trimmed();
-    }
+    // QString s;
+    // for (int i = 0; i < ed_count; i++) {
+    //     s += edPtrs[i]->text().trimmed();
+    //     qDebug() << i << edPtrs[i]->text().trimmed();
+    // }
+    QString s = code_;
+
     if (s.length() != ed_count)
         return {};
+
     return s;
+}
+
+void CodeInputWidget::clearCode()
+{
+    for (int i = 0; i < ed_count; i++) {
+        edPtrs[i]->clear();
+    }
+}
+
+void CodeInputWidget::setErrorState(bool enable)
+{
+    errorState = enable;
+    updateStyles();
+}
+
+void CodeInputWidget::setDarkTheme()
+{
+    isDark = CUR::Theme::instance()->isDarkTheme();
+    updateStyles();
 }
 
 bool CodeInputWidget::eventFilter(QObject *obj, QEvent *event)
@@ -76,10 +103,28 @@ bool CodeInputWidget::eventFilter(QObject *obj, QEvent *event)
                     }
                 }
             }
+            else if (
+                (key_ev->key() == Qt::Key_V && key_ev->modifiers() & Qt::ControlModifier) ||
+                (key_ev->key() == Qt::Key_Insert && key_ev->modifiers() & Qt::ShiftModifier)) {
+                pasteCode();
+                return true;
+            }
         }
     }
 
     return QWidget::eventFilter(obj, event);
+}
+
+void CodeInputWidget::updateStyles()
+{
+    if (errorState)
+        setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyleError.second : widgetStyleError.first));
+    else
+        setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+
+    style()->unpolish(this);
+    style()->polish(this);
+    update();
 }
 
 void CodeInputWidget::onTextEdited(const QString &/*txt*/)
@@ -91,6 +136,7 @@ void CodeInputWidget::onTextEdited(const QString &/*txt*/)
     if (!ed->text().isEmpty())
         moveFocus(true);
 
+    code_ = buildCode();
     emit codeChanged();
 }
 
@@ -124,11 +170,17 @@ void CodeInputWidget::pasteCode()
     const QClipboard* clipboard = QApplication::clipboard();
     const QMimeData* mimeData = clipboard->mimeData();
     const auto txt = mimeData->text();
+
     for (int i = 0; i < ed_count; i++) {
         const auto b_ = QSignalBlocker(edPtrs[i]);
-        edPtrs[i]->setText(txt[i]);
+        QString tmp;
+        tmp.append(txt[i]);
+        edPtrs[i]->setText(tmp);
     }
+
     edPtrs[ed_count - 1]->setFocus();
+
+    code_ = buildCode();
     emit codeChanged();
 }
 
@@ -138,4 +190,17 @@ void CodeInputWidget::onContextMenuRequested(const QPoint &/*pos*/)
     m.addAction(pasteCodeAction);
     pasteCodeAction->setEnabled(validateClipboardBuffer());
     m.exec(QCursor::pos());
+}
+
+QString CodeInputWidget::buildCode() const
+{
+    QString code;
+    code += ui->ed1->text();
+    code += ui->ed2->text();
+    code += ui->ed3->text();
+    code += ui->ed4->text();
+    code += ui->ed5->text();
+    code += ui->ed6->text();
+    qDebug() << code;
+    return code;
 }

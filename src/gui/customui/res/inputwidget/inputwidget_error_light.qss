@@ -3,8 +3,16 @@
 }
 
 #inputFrame {
-    border: 1px solid #F44336;
+    border: 1px solid rgba(244, 67, 54, 1);
     border-radius: 20px;
+}
+
+#inputFrame[focusedFrame=true] {
+    border: 3px solid rgba(244, 67, 54, 1);
+}
+
+#inputFrame[focusedFrame=false] {
+    border: 1px solid rgba(244, 67, 54, 1);
 }
 
 #errorFrame {
@@ -14,7 +22,7 @@
 #inputLineEdit {
     border: none;
     border-radius: 0px;
-    background: rgba(0,0,0,0);
+    background: transparent;
     font-size: 16px;
 }
 

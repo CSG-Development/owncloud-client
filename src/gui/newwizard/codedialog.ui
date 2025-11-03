@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>CodeDialog</class>
- <widget class="QDialog" name="CodeDialog">
+ <widget class="QWidget" name="CodeDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -90,7 +90,7 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <property name="spacing">
-          <number>4</number>
+          <number>0</number>
          </property>
          <property name="leftMargin">
           <number>0</number>
@@ -105,7 +105,44 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="CodeInputWidget" name="widget" native="true"/>
+          <widget class="CodeInputWidget" name="codeInputWidget" native="true"/>
+         </item>
+         <item>
+          <widget class="QFrame" name="frameError">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>20</height>
+            </size>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lblError">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -176,6 +213,19 @@
            </property>
            <property name="text">
             <string>Allow access</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnResendCode">
+           <property name="minimumSize">
+            <size>
+             <width>109</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Resend code</string>
            </property>
           </widget>
          </item>

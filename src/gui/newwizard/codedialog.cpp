@@ -6,6 +6,8 @@
 
 #include "theme.h"
 
+#include <QKeyEvent>
+
 namespace {
 QPair<QString,QString> widgetStyle = {
     QStringLiteral(":/res/login/code_dialog_light.qss"),
@@ -14,32 +16,33 @@ QPair<QString,QString> widgetStyle = {
 }
 
 CodeDialog::CodeDialog(QWidget *parent)
-    : QDialog(parent)
+    : QWidget(parent)
     , ui(new Ui::CodeDialog)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::Tool|Qt::FramelessWindowHint|Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
     setAutoFillBackground(false);
+    setWindowModality(Qt::WindowModal);
 
     auto noFocus = new FocusProxyStyle;
     ui->btnAllowAccess->setStyle(noFocus);
     ui->btnSkip->setStyle(noFocus);
 
-    connect(ui->btnAllowAccess, &QPushButton::clicked, this, [&] {
-        accept();
+    connect(ui->btnAllowAccess, &QPushButton::clicked, this, &CodeDialog::allowAccessClicked);
+    connect(ui->btnSkip, &QPushButton::clicked, this, &CodeDialog::skipClicked);
+    connect(ui->btnResendCode, &QPushButton::clicked, this, [&] {
+        showError({});
+        emit resendCodeClicked();
     });
 
-    connect(ui->btnSkip, &QPushButton::clicked, this, [&] {
-        reject();
-    });
-
-    connect(ui->widget, &CodeInputWidget::codeChanged, this, [&] {
-        ui->btnAllowAccess->setEnabled(ui->widget->codeStr().length() == 6);
+    connect(ui->codeInputWidget, &CodeInputWidget::codeChanged, this, [&] {
+        ui->btnAllowAccess->setEnabled(ui->codeInputWidget->codeStr().length() == 6);
     });
 
     ui->spinner->setVisible(false);
     ui->btnAllowAccess->setEnabled(false);
+    showError({});
 
     updateTheme();
 }
@@ -63,7 +66,38 @@ void CodeDialog::updateTheme()
     update();
 }
 
+void CodeDialog::showError(const QString &txt)
+{
+    errorState_ = !txt.isEmpty();
+    ui->codeInputWidget->setErrorState(errorState_);
+
+    ui->lblError->setText(txt);
+
+    if (errorState_) {
+        ui->lblError->setVisible(true);
+        ui->btnResendCode->setVisible(true);
+        ui->btnAllowAccess->setVisible(false);
+    }
+    else {
+        ui->lblError->setVisible(false);
+        ui->btnResendCode->setVisible(false);
+        ui->btnAllowAccess->setVisible(true);
+    }
+}
+
 QString CodeDialog::getCode() const
 {
-    return ui->widget->codeStr();
+    return ui->codeInputWidget->codeStr();
+}
+
+void CodeDialog::clearCode()
+{
+    ui->codeInputWidget->clearCode();
+}
+
+void CodeDialog::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() != Qt::Key_Escape) {
+        QWidget::keyPressEvent(event);
+    }
 }

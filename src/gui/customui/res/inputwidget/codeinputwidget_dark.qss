@@ -1,0 +1,15 @@
+#ed1, #ed2, #ed3, #ed4, #ed5, #ed6 {
+    border-radius: 20px;
+    border: 1px solid rgba(97, 97, 97, 1);
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.87);
+}
+
+#ed1:focus,
+#ed2:focus,
+#ed3:focus,
+#ed4:focus,
+#ed5:focus,
+#ed6:focus {
+    border: 3px solid rgba(100, 181, 246, 1);
+}

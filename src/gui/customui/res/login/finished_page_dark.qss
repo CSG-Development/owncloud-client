@@ -27,7 +27,7 @@
 
 #lblHeader {
     font-size: 34px;
-    color: rgba(0,0,0,0xDE);
+    color: rgba(0,0,0,222);
 }
 
 #frameLocalDir {
@@ -50,7 +50,7 @@
 
 #frameErrorMessage {
     background: rgba(242,143,140,61);
-    border: 1px solid rgba(0, 0, 0, 0);
+    border: 1px solid transparent;
     border-radius: 12px;
 }
 

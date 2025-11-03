@@ -17,14 +17,19 @@ public:
 
     void query();
 
-    [[nodiscard]] const QList<DeviceInfo>& records() {return records_;}
+    [[nodiscard]] const QList<MdnsRecord>& records() {return records_;}
+    // Remove end '.'
+    static QString fixHost(const QString& host);
 
 signals:
     void requestCompleted();
 
 private:
+    static QUrl constructUrlFromLocalDomain(const QString& url, int port);
+
+private:
     QDnsLookup* dns = nullptr;
-    QList<DeviceInfo> records_;
+    QList<MdnsRecord> records_;
 };
 
 } // namespace CUR

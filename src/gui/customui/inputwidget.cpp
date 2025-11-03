@@ -24,6 +24,8 @@ InputWidget::InputWidget(QWidget *parent)
     , ui(new Ui::InputWidget)
 {
     ui->setupUi(this);
+    setMouseTracking(true);
+    setAttribute(Qt::WA_Hover, true);
 
     promptLabel = new QLabel(this);
     promptLabel->setObjectName(QStringLiteral("promptLabel"));
@@ -114,9 +116,17 @@ bool InputWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == ui->inputLineEdit) {
         if (event->type() == QEvent::FocusIn) {
+            ui->inputFrame->setProperty("focusedFrame", true);
+            ui->inputFrame->style()->unpolish(ui->inputFrame);
+            ui->inputFrame->style()->polish(ui->inputFrame);
+            update();
             Q_EMIT focusReceived();
         }
         else if (event->type() == QEvent::FocusOut) {
+            ui->inputFrame->setProperty("focusedFrame", false);
+            ui->inputFrame->style()->unpolish(ui->inputFrame);
+            ui->inputFrame->style()->polish(ui->inputFrame);
+            update();
             Q_EMIT focusLost();
         }
     }
@@ -166,5 +176,7 @@ void InputWidget::updateStyles()
     else
         setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? inputStyle.second : inputStyle.first));
 
+    style()->unpolish(this);
+    style()->polish(this);
     update();
 }

@@ -15,12 +15,19 @@ public:
     ~CodeInputWidget();
 
     QString codeStr() const;
+    void clearCode();
+
+    void setErrorState(bool enable);
 
 signals:
     void codeChanged();
 
+public slots:
+    void setDarkTheme();
+
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;
+    void updateStyles();
 
 private:
     void onTextEdited(const QString& txt);
@@ -30,8 +37,13 @@ private:
     void pasteCode();
     void onContextMenuRequested(const QPoint &pos);
 
+    QString buildCode() const;
+
 private:
     Ui::CodeInputWidget* ui = nullptr;
     QList<QLineEdit*> edPtrs;
     QAction* pasteCodeAction = nullptr;
+    bool isDark = false;
+    bool errorState = false;
+    QString code_;
 };

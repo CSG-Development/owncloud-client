@@ -11,13 +11,13 @@
 
 namespace CUR {
 
-class ServiceConnector: public QObject
+class RemoteConnector: public QObject
 {
     Q_OBJECT
 
 public:
-    explicit ServiceConnector(QObject* parent = nullptr);
-    ~ServiceConnector();
+    explicit RemoteConnector(QObject* parent = nullptr);
+    ~RemoteConnector();
 
     void setRaCert();
 
@@ -42,13 +42,13 @@ signals:
     void fetch_devices_finished();
     void code_requested();
 
-    void error_code(int code);
+    void error_code(int code, const QString& str = QStringLiteral(""));
 
     void request_finished(std::optional<QJsonDocument>, int code, const QString& url);
 
 private:
-    void saveRefreshToken();
-    void loadRefreshToken();
+    void saveRefreshToken(const QString& email);
+    void loadRefreshToken(const QString& email);
     Device* findDevice(const QString& devId);
 
     void parseTokenReply(const QJsonDocument& doc);
@@ -69,6 +69,7 @@ private:
     QString accessToken;
     QString referenceCode;
     QString tokenType;
+    QString currentEmail;
 
     QList<Device> devices;
     QList<QString> devIdsQueue;

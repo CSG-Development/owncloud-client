@@ -97,7 +97,7 @@ const QString useNewBigFolderSizeLimitC() { return QStringLiteral("useNewBigFold
 const QString confirmExternalStorageC() { return QStringLiteral("confirmExternalStorage"); }
 const QString moveToTrashC() { return QStringLiteral("moveToTrash"); }
 
-const QString refreshTokenC() { return QStringLiteral("refreshToken"); }
+const QString refreshTokenC() { return QStringLiteral("RefreshToken"); }
 
 const QString issuesWidgetFilterC()
 {
@@ -838,16 +838,21 @@ void ConfigFile::setClientVersionWithBuildNumberString(const QString &version)
     settings.setValue(clientVersionC(), version);
 }
 
-QString ConfigFile::refreshToken() const
+QString ConfigFile::refreshTokenForEmail(const QString& email) const
 {
     auto settings = makeQSettings();
-    return settings.value(refreshTokenC(), QString()).toString();
+    settings.beginGroup(refreshTokenC());
+    const auto token = settings.value(email, QString()).toString();
+    settings.endGroup();
+    return token;
 }
 
-void ConfigFile::setRefreshToken(const QString &token)
+void ConfigFile::setRefreshTokenForEmail(const QString &token, const QString& email)
 {
     auto settings = makeQSettings();
-    settings.setValue(refreshTokenC(), token);
+    settings.beginGroup(refreshTokenC());
+    settings.setValue(email, token);
+    settings.endGroup();
 }
 
 std::unique_ptr<QSettings> ConfigFile::settingsWithGroup(const QString &group)

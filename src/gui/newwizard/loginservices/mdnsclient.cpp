@@ -2,6 +2,12 @@
 
 #include <QNetworkInterface>
 #include <QTimer>
+#include <QRestReply>
+#include <QLoggingCategory>
+#include <QJsonObject>
+#include <QJsonArray>
+
+Q_LOGGING_CATEGORY(lcMdnsDevice, "mdns.device", QtDebugMsg)
 
 namespace CUR {
 
@@ -9,50 +15,22 @@ MdnsClient::MdnsClient(QObject* parent)
     : QObject(parent)
 {
     dns = new QDnsLookup(this);
+
     connect(dns, &QDnsLookup::finished, this, [&] {
-        qDebug() << "DNS lookup finished";
+        qCDebug(lcMdnsDevice) << "mDNS lookup finished";
 
         if (dns->error() == QDnsLookup::NoError) {
-
-            qDebug() << "serviceRecords";
             const auto srv_records = dns->serviceRecords();
             for (const QDnsServiceRecord& record : srv_records) {
-                //qDebug() << record.name() << record.port() << record.target();
-                DeviceInfo di;
-                di.name = record.name();
-                di.host = record.target();
-                di.port = record.port();
-                records_.append(di);
-            }
-
-            qDebug() << "hostAddressRecords";
-            const auto addr_records = dns->hostAddressRecords();
-            for (const QDnsHostAddressRecord& record : addr_records) {
-                qDebug() << record.name() << record.value();
-            }
-
-            qDebug() << "nameServerRecords";
-            const auto ns_records = dns->nameServerRecords();
-            for (const QDnsDomainNameRecord& record : ns_records) {
-                qDebug() << record.name() << record.value();
-            }
-
-            qDebug() << "pointerRecords";
-            const auto pt_records = dns->pointerRecords();
-            for (const QDnsDomainNameRecord& record : pt_records) {
-                qDebug() << record.name() << record.value();
-            }
-
-            qDebug() << "textRecords";
-            const auto txt_records = dns->textRecords();
-            for (const QDnsTextRecord& record : txt_records) {
-                qDebug() << record.name() << record.values();
+                MdnsRecord rec;
+                rec.name = fixHost(record.name());
+                rec.host = record.target();
+                rec.port = record.port();
+                records_.append(rec);
             }
         }
-
-        emit requestCompleted();
+        requestCompleted();
     });
-
 }
 
 MdnsClient::~MdnsClient()
@@ -66,6 +44,25 @@ void MdnsClient::query()
     dns->setType(QDnsLookup::PTR);
     dns->setName(QStringLiteral("_https._tcp"));
     dns->lookup();
+}
+
+QString MdnsClient::fixHost(const QString &host)
+{
+    QString h(host);
+    if (h.endsWith(QStringLiteral("."))) {
+        h = h.left(h.length() - 1);
+    }
+    return h;
+}
+
+QUrl MdnsClient::constructUrlFromLocalDomain(const QString &url, int port)
+{
+    QUrl result;
+    result = QUrl::fromUserInput(url);
+    result.setScheme(QStringLiteral("https"));
+    if (port > 0)
+        result.setPort(port);
+    return result;
 }
 
 } // namespace CUR
