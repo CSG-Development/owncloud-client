@@ -238,6 +238,7 @@ QList<Device> DeviceListManager::combine_lists(const QList<MdnsRecord>& mdns_rec
     for (const auto& item: mdns_records) {
         if (auto d = find_by_cert(item.about.certificate_common_name)) {
             if (auto p = find_in_paths(d, item.host, item.port)) {
+                Q_UNUSED(p);
                 qCDebug(lcDeviceManager) << "Already in list" << item.host << item.port;
             }
             else {
@@ -252,6 +253,7 @@ QList<Device> DeviceListManager::combine_lists(const QList<MdnsRecord>& mdns_rec
     for (const auto& item: remote_devices) {
         if (auto d = find_by_cert(item.about.certificate_common_name)) {
             if (auto p = find_in_paths(d, item.host, item.port)) {
+                Q_UNUSED(p);
                 qCDebug(lcDeviceManager) << "Already in list" << item.host << item.port;
             }
             else {

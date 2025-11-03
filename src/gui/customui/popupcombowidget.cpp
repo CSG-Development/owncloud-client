@@ -10,7 +10,6 @@
 
 namespace {
 
-constexpr int listPadding = 8;
 constexpr int blurRadius = 4;
 
 QPair<QString,QString> widgetStyle = {
