@@ -5,6 +5,9 @@
 #include "jobs/discoverwebfingerservicejobfactory.h"
 #include "jobs/resolveurljobfactory.h"
 
+#include "loginservices/remoteconnector.h"
+#include "loginservices/devicelistmanager.h"
+
 #include "theme.h"
 
 #include <QClipboard>
@@ -27,18 +30,84 @@ Q_LOGGING_CATEGORY(lcSetupWizardController, "gui.setupwizard.controller")
 SetupController::SetupController(SettingsDialog *parent)
     : QObject(parent)
     , _context(new SetupContext(parent, this))
+    , raConnector(new CUR::RemoteConnector(parent))
+    , deviceMgr(new CUR::DeviceListManager(parent))
 {
     connect(_context->window(), &SetupWidget::rejected, this, [&] {
         qCDebug(lcSetupWizardController) << "wizard window closed";
         Q_EMIT finished(nullptr, SyncMode::Invalid, {});
     });
 
-    connect(_context->window(), &SetupWidget::loginClicked, this, [&](const QString& url, const QString& user, const QString& password) {
-        qCDebug(lcSetupWizardController) << "Login clicked";
-        url_ = url;
+    connect(_context->window(), &SetupWidget::loginEmailClicked, this, [&](const QString& user) {
+        qCDebug(lcSetupWizardController) << "Login email clicked";
         user_ = user;
+        window()->displayPage(SetupWidget::SetupPage::PageCredentials);
+        window()->showCredPageProgress(true);
+
+        raConnector->start_query(user_);
+    });
+
+    connect(raConnector, &RemoteConnector::code_requested, this, [&] {
+        qCDebug(lcSetupWizardController) << "Code requested";
+        window()->displayPage(SetupWidget::SetupPage::PageCredentials);
+        remoteSkipped = false;
+        window()->showCodeDialog();
+    });
+
+    connect(_context->window(), &SetupWidget::codeEntered, this, [&](const QString& code) {
+        qCDebug(lcSetupWizardController) << "Code entered";
+        raConnector->query_token(code);
+    });
+
+    connect(_context->window(), &SetupWidget::codeSkipped, this, [&] {
+        qCDebug(lcSetupWizardController) << "Code skipped";
+        remoteSkipped = true;
+        deviceMgr->query_local();
+    });
+
+    connect(raConnector, &RemoteConnector::fetch_devices_finished, this, [&] {
+        qCDebug(lcSetupWizardController) << "Device list query finished";
+        remoteDevices = raConnector->deviceList();
+        deviceMgr->query_remote(remoteDevices);
+    });
+
+    connect(raConnector, &RemoteConnector::error_code, this, [&](int error_code, const QString& str) {
+        window()->showErrorMessage(tr("Error code: %1 (%2)").arg(error_code).arg(str));
+        window()->showCredPageProgress(false);
+    });
+
+    connect(deviceMgr, &DeviceListManager::local_finished, this, [&] {
+        qCDebug(lcSetupWizardController) << "Local devices discovery finished";
+        localDevices = deviceMgr->mdns_recs();
+
+        fullList = DeviceListManager::combine_lists(localDevices, remoteDevices);
+
+        window()->setDevicesList(fullList);
+        window()->showCredPageProgress(false);
+    });
+
+    connect(deviceMgr, &DeviceListManager::ra_finished, this, [&] {
+        qCDebug(lcSetupWizardController) << "Remote devices discovery finished";
+        remoteDevices = deviceMgr->ra_recs();
+        deviceMgr->query_local();
+    });
+
+    connect(_context->window(), &SetupWidget::refreshDevicesClicked, this, [&] {
+        qCDebug(lcSetupWizardController) << "Refresh devices clicked";
+        raConnector->start_query(user_);
+    });
+
+    connect(_context->window(), &SetupWidget::loginCredentialClicked, this, [&](const QString& url, const QString& user, const QString& password) {
+        qCDebug(lcSetupWizardController) << "Login credential clicked" << url;
+        url_ = url;
+        //user_ = user;
         password_ = password;
-        startLogin(url, user, password);
+        startLogin(url_, user_, password_);
+    });
+
+    connect(_context->window(), &SetupWidget::credPageBackClicked, this, [&] {
+        qCDebug(lcSetupWizardController) << "Login credential back clicked";
+        window()->displayPage(SetupWidget::SetupPage::PageEmail);
     });
 
     connect(this, &SetupController::setupFinishPageDefaults, _context->window(), &SetupWidget::onSetupFinishPageDefaults);

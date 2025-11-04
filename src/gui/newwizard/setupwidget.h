@@ -2,12 +2,14 @@
 
 #include "enums.h"
 #include "gui/settingsdialog.h"
+#include "loginservices/devicetypes.h"
 
 namespace Ui {class SetupWidget;}
 
 class CredentialsPage;
 class WaitPage;
 class FinishedPage;
+class EmailPage;
 
 namespace CUR::Wizard {
 
@@ -19,7 +21,8 @@ class SetupWidget : public QWidget
 
 public:
     enum class SetupPage {
-        PageCredentials = 0,
+        PageEmail = 0,
+        PageCredentials,
         PageWait,
         PageFinished
     };
@@ -32,6 +35,10 @@ public:
     void showErrorMessage(const QString &errorMessage);
     void hideErrorMessage();
 
+    void showCodeDialog();
+    void setDevicesList(const QList<Device> &list);
+    void setEmail(const QString& email);
+
     void onCancelClicked();
     void onSetupFinishPageDefaults(const QString &defaultSyncTargetDir, const QString &userChosenSyncTargetDir,
         bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental);
@@ -39,20 +46,29 @@ public:
     void setInvalidUrlError();
     void setInvalidCredentialsError();
 
+    void showCredPageProgress(bool show);
+
 Q_SIGNALS:
     void rejected();
 
-    void loginClicked(const QString& url, const QString& user, const QString& password);
+    void loginEmailClicked(const QString& user);
+    void loginCredentialClicked(const QString& url, const QString& user, const QString& password);
     void loginSettingsClicked();
     void loginResetPasswordClicked();
+    void refreshDevicesClicked();
     void finishPageBackClicked();
     void finishPageDoneClicked(CUR::Wizard::SyncMode mode, const QString& targetDir);
+    void codeEntered(const QString& code);
+    void codeSkipped();
+    void credPageBackClicked();
+
 
 private:
     void onThemeChanged();
 
-    ::Ui::SetupWidget *_ui;
+    ::Ui::SetupWidget *_ui = nullptr;
 
+    EmailPage* emailPage_ = nullptr;
     CredentialsPage* credPage_ = nullptr;
     WaitPage* waitPage_ = nullptr;
     FinishedPage* finishPage_ = nullptr;

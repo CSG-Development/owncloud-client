@@ -13,7 +13,8 @@
 #frameImage,
 #frameText,
 #frameErrorMessage,
-#frameButton {
+#frameButton,
+#frameRefreshBtn {
     border: none;
 }
 
@@ -31,16 +32,41 @@
     color: #6EBD49;
 }
 
-#btnLogin,
-#btnCancel {
+/**** Login button */
+#btnLogin {
     background: #64B5F6;
-    border-color: rgba(0,0,0,0);
+    border-color: transparent;
     border-width: 1px;
     border-radius: 20px;
     color: #212121;
     font-size: 14px;
-    font: "Segoe UI";
 }
+
+#btnLogin:hover {
+    background: rgba(144, 202, 249, 1);
+}
+
+#btnLogin:pressed {
+    background: rgba(53, 158, 243, 1);
+}
+
+/**** Cancel button */
+#btnCancel {
+    background: transparent;
+    border: 1px solid rgba(100, 181, 246, 1);
+    border-radius: 20px;
+    color: rgba(100, 181, 246, 1);
+    font-size: 14px;
+}
+
+#btnCancel:hover {
+    background: rgba(144, 202, 249, 0.12);
+}
+
+#btnCancel:pressed {
+    background: rgba(144, 202, 249, 0.3);
+}
+
 
 #btnLogin:disabled,
 #btnCancel:disabled {
@@ -48,28 +74,69 @@
     color: #9E9E9E;
 }
 
+#btnRefresh {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+#btnRefresh:hover {
+    background: rgba(144, 202, 249, 0.12);
+}
+
+#btnRefresh:pressed {
+    background: rgba(144, 202, 249, 0.3)
+}
+
 #btnResetPass {
-    background: rgba(0,0,0,0);
+    background: transparent;
     color: #64B5F6;
-    border: none;
+    border: 1px solid transparent;
+    border-radius: 20px;
     font: "Segoe UI";
     font-size: 14px;
 }
-
-#btnSettings {
-    border: none;
-    image: url(":/res/login/gear_dark.svg");
+#btnResetPass:hover {
+    background: rgba(144, 202, 249, 0.12);
+}
+#btnResetPass:pressed {
+    background: rgba(144, 202, 249, 0.3);
 }
 
-#edEmail,
-#edUrl,
+#btnSettings,
+#btnBack {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+#btnSettings:hover,
+#btnBack:hover {
+    background: rgba(144, 202, 249, 0.12);
+}
+
+#btnSettings:pressed,
+#btnBack:pressed {
+    background: rgba(144, 202, 249, 0.3);
+}
+
+#lblEmail {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.87);
+}
+
+#edUrl {
+    background: transparent;
+    border: none;
+    font-size: 16px;
+}
+
 #edPassword {
-    background: rgba(0,0,0,0);
+    background: transparent;
     border: none;
     font: "Segoe UI";
     font-size: 16px;
 }
-
 
 #frameEmail,
 #frameUrl,
@@ -80,13 +147,13 @@
 QToolTip {
     background: #B8B8B8;
     color: rgba(0,0,0,222);
-    border: 1px solid rgba(0, 0, 0, 0);
+    border: 1px solid transparent;
     border-radius: 4px;
 }
 
 #frameErrorMessageInternal {
     background: rgba(242,143,140,61);
-    border: 1px solid rgba(0, 0, 0, 0);
+    border: 1px solid transparent;
     border-radius: 12px;
 }
 

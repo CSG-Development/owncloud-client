@@ -20,12 +20,30 @@ add_library(newwizard STATIC
     pages/credentialspage.cpp
     pages/credentialspage.h
     pages/credentialspage.ui
+    pages/emailpage.cpp
+    pages/emailpage.h
+    pages/emailpage.ui
     pages/waitpage.cpp
     pages/waitpage.h
     pages/waitpage.ui
     pages/finishedpage.cpp
     pages/finishedpage.h
     pages/finishedpage.ui
+
+    codedialog.cpp
+    codedialog.h
+    codedialog.ui
+    loginservices/mdnsclient.cpp
+    loginservices/mdnsclient.h
+    loginservices/remoteconnector.cpp
+    loginservices/remoteconnector.h
+    loginservices/devicetypes.cpp
+    loginservices/devicetypes.h
+    loginservices/deviceapi.cpp
+    loginservices/deviceapi.h
+    loginservices/devicelistmanager.cpp
+    loginservices/devicelistmanager.h
+    loginservices/loginservices_res.qrc
 )
 
 target_link_libraries(newwizard PUBLIC Qt::Widgets libsync curatorResources)

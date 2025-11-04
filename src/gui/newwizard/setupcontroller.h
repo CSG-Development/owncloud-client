@@ -29,7 +29,13 @@ enum class ChangeReason {
 };
 Q_ENUM_NS(ChangeReason)
 
+namespace CUR {
+class RemoteConnector;
+class DeviceListManager;
+}
+
 namespace CUR::Wizard {
+
 
 /**
  * This class is the backbone of the new setup wizard. It instantiates the required UI elements and fills them with the correct data. It also provides the public API for the settings UI.
@@ -72,5 +78,13 @@ private:
     QString url_;
     QString user_;
     QString password_;
+    RemoteConnector* raConnector = nullptr;
+    DeviceListManager* deviceMgr = nullptr;
+    bool remoteSkipped = false;
+
+    QList<DeviceInfo> remoteDevices;
+
+    QList<MdnsRecord> localDevices;
+    QList<Device> fullList;
 };
 }

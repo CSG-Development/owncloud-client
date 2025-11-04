@@ -1,0 +1,45 @@
+#mainFrame {
+    border: none;
+}
+
+#inputFrame {
+    border: 1px solid #CBCDD3;
+    border-radius: 20px;
+}
+
+#errorFrame {
+    border: none;
+}
+
+#lineEdit {
+    border: none;
+    border-radius: 0px;
+    background: transparent;
+    font-size: 16px;
+}
+
+#promptLabel {
+    color: rgba(0,0,0,204);
+    background: #FFFFFF;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+#errorLabel {
+    color: #F44336;
+    background: transparent;
+}
+
+#arrowButton {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+#arrowButton:hover {
+    background: rgba(100, 181, 246, 0.24);
+    border: 1px solid transparent;
+    border-radius: 20px;
+}

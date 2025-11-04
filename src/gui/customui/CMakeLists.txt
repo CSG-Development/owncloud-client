@@ -5,6 +5,11 @@ add_library(${LIBRARY_NAME} STATIC
     style_tool_button_menu.h
     arrow_toolbutton.cpp
     arrow_toolbutton.h
+    dimwidget.cpp
+    dimwidget.h
+    combowidget.cpp
+    combowidget.h
+    combowidget.ui
     menu_toolbutton.cpp
     menu_toolbutton.h
     tool_button_dots.cpp
@@ -26,13 +31,23 @@ add_library(${LIBRARY_NAME} STATIC
     inputwidget.cpp
     inputwidget.h
     inputwidget.ui
+    popupcombomodel.cpp
+    popupcombomodel.h
+    popupcombowidget.cpp
+    popupcombowidget.h
+    popupcombowidget.ui
     progressindicator.cpp
     progressindicator.h
+    overlaywidget.cpp
+    overlaywidget.h
     loginpushbutton.cpp
     loginpushbutton.h
     focusproxy.cpp
     focusproxy.h
     customui_res.qrc
+    codeinputwidget.cpp
+    codeinputwidget.h
+    codeinputwidget.ui
 )
 
 target_link_libraries(${LIBRARY_NAME} PUBLIC 

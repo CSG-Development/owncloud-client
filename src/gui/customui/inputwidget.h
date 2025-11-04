@@ -25,6 +25,8 @@ public:
     void setPasswordMode(bool val);
     void setPasswordButtonImage(const QString& val);
 
+    void setReadOnly(bool ro);
+
     void setPlaceholderText(const QString& str);
 
     QString text() const;
