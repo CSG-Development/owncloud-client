@@ -112,11 +112,7 @@ void LogBrowser::setupLoggingFromConfig()
 
 void LogBrowser::onThemeChanged()
 {
-    for (auto widget: findChildren<QWidget*>()) {
-        if (widget->metaObject()->indexOfSlot("setDarkTheme()") != -1) {
-            QMetaObject::invokeMethod(widget, "setDarkTheme");
-        }
-    }
+    StyleHelper::invoke_setDarkTheme_recursive(this);
 }
 
 void LogBrowser::togglePermanentLogging(bool enabled)

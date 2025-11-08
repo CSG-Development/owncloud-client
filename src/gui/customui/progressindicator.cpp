@@ -11,15 +11,28 @@ QPair<QColor,QColor> bgColor = {QColor("#E0E0E0"), QColor("#616161")};
 
 ProgressIndicator::ProgressIndicator(QWidget *parent)
     : QWidget(parent)
+    , timer_(new QTimer(this))
 {
     setMinimumSize(48, 48);
 
-    timer_ = new QTimer(this);
     connect(timer_, &QTimer::timeout, this, &ProgressIndicator::updateAnimation);
-    timer_->start(16); // ~60 FPS
+    timer_->setInterval(16); // ~60 FPS
+    timer_->start();
 
     startTime_ = QTime::currentTime();
     easingCurve_.setType(QEasingCurve::InOutQuad);
+}
+
+void ProgressIndicator::setIndicatorVisible(bool visible)
+{
+    if (visible) {
+        startTime_ = QTime::currentTime();
+        timer_->start();
+    }
+    else {
+        timer_->stop();
+    }
+    setVisible(visible);
 }
 
 void ProgressIndicator::setDarkTheme()

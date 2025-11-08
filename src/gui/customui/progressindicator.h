@@ -11,6 +11,8 @@ class ProgressIndicator: public QWidget
 public:
     explicit ProgressIndicator(QWidget *parent = nullptr);
 
+    void setIndicatorVisible(bool visible);
+
     Q_INVOKABLE void setDarkTheme();
 
 protected:

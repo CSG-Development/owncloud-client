@@ -24,12 +24,8 @@ WaitPage::~WaitPage()
 void WaitPage::updateTheme()
 {
     bool isDark = CUR::Theme::instance()->isDarkTheme();
-
+    CUR::StyleHelper::invoke_setDarkTheme_recursive(this);
     setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 
-    for (auto widget: findChildren<QWidget*>()) {
-        if (widget->metaObject()->indexOfMethod("setDarkTheme()") != -1)
-            QMetaObject::invokeMethod(widget, "setDarkTheme");
-    }
     update();
 }
