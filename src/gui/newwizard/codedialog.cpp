@@ -88,6 +88,7 @@ void CodeDialog::setDialogState(CodeDialogState state)
             break;
 
         case CodeDialogState::Resend:
+            ui->codeInputWidget->clearCode();
             ui->codeInputWidget->setEnabled(true);
             ui->btnAllowAccess->setVisible(false);
             ui->btnResendCode->setVisible(true);
