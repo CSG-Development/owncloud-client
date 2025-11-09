@@ -57,6 +57,7 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     connect(credPage_, &CredentialsPage::backButtonClicked, this, &SetupWidget::credPageBackClicked);
     connect(credPage_, &CredentialsPage::codeEntered, this, &SetupWidget::codeEntered);
     connect(credPage_, &CredentialsPage::codeSkipped, this, &SetupWidget::codeSkipped);
+    connect(credPage_, &CredentialsPage::codeResend, this, &SetupWidget::codeResendClicked);
 
     waitPage_ = new WaitPage(this);
     _ui->contentWidget->addWidget(waitPage_);

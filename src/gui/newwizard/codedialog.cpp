@@ -29,6 +29,7 @@ CodeDialog::CodeDialog(QWidget *parent)
     auto noFocus = new FocusProxyStyle;
     ui->btnAllowAccess->setStyle(noFocus);
     ui->btnSkip->setStyle(noFocus);
+    ui->btnResendCode->setStyle(noFocus);
 
     connect(ui->btnAllowAccess, &QPushButton::clicked, this, &CodeDialog::onAllowAccessClicked);
     connect(ui->btnSkip, &QPushButton::clicked, this, &CodeDialog::skipClicked);
@@ -36,9 +37,11 @@ CodeDialog::CodeDialog(QWidget *parent)
 
     connect(ui->codeInputWidget, &CodeInputWidget::codeChanged, this, [&] {
         ui->btnAllowAccess->setEnabled(ui->codeInputWidget->codeStr().length() == 6);
+        ui->btnResendCode->setEnabled(ui->codeInputWidget->codeStr().length() == 6);
     });
 
     ui->btnAllowAccess->setEnabled(false);
+    ui->btnResendCode->setEnabled(false);
 
     setDialogState(CodeDialogState::Startup);
 
@@ -161,6 +164,8 @@ void CodeDialog::onAllowAccessClicked()
 void CodeDialog::onResendCodeClicked()
 {
     clearError();
+    ui->btnResendCode->setVisible(false);
+    ui->spinner->setVisible(true);
     emit resendCodeClicked();
 }
 

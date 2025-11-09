@@ -54,6 +54,7 @@ CredentialsPage::CredentialsPage(QWidget *parent)
 
     connect(codeDialog, &CodeDialog::skipClicked, this, [&] {
         showCodeDialog(false);
+        showProgressIndicator(true);
         emit codeSkipped();
     });
 
@@ -71,7 +72,7 @@ CredentialsPage::CredentialsPage(QWidget *parent)
         codeExpireTime = QDateTime::currentDateTime().addSecs(code_expire_seconds);
         isCodeExpired = false;
         codeExpireCheckTimer.start();
-        emit codeResend();
+        emit codeResend(codeDialog->getCode());
     });
 
     connect(ui->btnLogin, &QPushButton::clicked, this, [&] {
@@ -226,6 +227,7 @@ void CredentialsPage::showProgressIndicator(bool show)
 
     ui->btnRefresh->setVisible(!show);
     ui->progressIndicator->setIndicatorVisible(show);
+    update();
     qApp->processEvents();
 }
 

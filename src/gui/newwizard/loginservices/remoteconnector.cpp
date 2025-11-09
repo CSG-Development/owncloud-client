@@ -235,6 +235,7 @@ void RemoteConnector::setRaCert()
 
 void RemoteConnector::start_query(const QString &email)
 {
+    qCDebug(lcLoginService) << "start_query" << email;
     currentEmail  = email;
     loadRefreshToken(currentEmail);
     if (refreshToken.isEmpty()) {
