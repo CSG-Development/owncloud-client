@@ -29,6 +29,9 @@ add_library(newwizard STATIC
     pages/finishedpage.cpp
     pages/finishedpage.h
     pages/finishedpage.ui
+    pages/connecterrorpage.cpp
+    pages/connecterrorpage.h
+    pages/connecterrorpage.ui
 
     codedialog.cpp
     codedialog.h

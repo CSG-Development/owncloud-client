@@ -7,6 +7,7 @@
 #include <QDateTime>
 
 namespace Ui {class CredentialsPage;}
+namespace CUR {enum class RemoteRequest;}
 
 class DimWidget;
 class CodeDialog;
@@ -37,7 +38,15 @@ public:
     void showInvalidUrlError();
     void showInvalidCredentialsError();
     void showProgressIndicator(bool show);
-    void showCodeDialog();
+
+    void showCodeDialog(bool show);
+    bool isCodeDialogVisible() const;
+    void showCodeInvalidError();
+    void showCodeExpiredError();
+    void showCodeServerError();
+    void errorOccured(CUR::RemoteRequest req, int code, const QString& message);
+
+    void codeJustRequested();
 
 Q_SIGNALS:
     void loginClicked(const QString& url, const QString& user, const QString& password);
@@ -49,7 +58,7 @@ Q_SIGNALS:
 
     void codeEntered(const QString& code);
     void codeSkipped();
-    void codeResend();
+    void codeResend(const QString& code);
 
 private:
     void onTextEdited(const QString& txt);
@@ -65,4 +74,5 @@ private:
     QTimer codeExpireCheckTimer;
     QDateTime codeExpireTime;
     CodeDialog* codeDialog = nullptr;
+    bool isCodeExpired = false;
 };

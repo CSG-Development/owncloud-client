@@ -4,6 +4,7 @@
 #include "gui/customui/stylehelper.h"
 #include "gui/customui/focusproxy.h"
 #include "gui/customui/dimwidget.h"
+#include "gui/newwizard/loginservices/remoteconnector.h"
 #include "codedialog.h"
 #include "theme.h"
 
@@ -52,21 +53,26 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     codeDialog->setVisible(false);
 
     connect(codeDialog, &CodeDialog::skipClicked, this, [&] {
-        codeDialog->setVisible(false);
-        codeDialog->clearCode();
-        dim->setVisible(false);
+        showCodeDialog(false);
+        showProgressIndicator(true);
         emit codeSkipped();
     });
+
     connect(codeDialog, &CodeDialog::allowAccessClicked, this, [&] {
-        codeDialog->setVisible(false);
-        codeDialog->clearCode();
-        dim->setVisible(false);
-        emit codeEntered(codeDialog->getCode());
+        if (isCodeExpired) {
+            codeDialog->showCodeExpiredError();
+        }
+        else {
+            codeDialog->setDialogState(CodeDialogState::Waiting);
+            emit codeEntered(codeDialog->getCode());
+        }
     });
+
     connect(codeDialog, &CodeDialog::resendCodeClicked, this, [&] {
         codeExpireTime = QDateTime::currentDateTime().addSecs(code_expire_seconds);
+        isCodeExpired = false;
         codeExpireCheckTimer.start();
-        emit codeResend();
+        emit codeResend(codeDialog->getCode());
     });
 
     connect(ui->btnLogin, &QPushButton::clicked, this, [&] {
@@ -140,12 +146,7 @@ void CredentialsPage::updateTheme()
 {
     bool isDark = CUR::Theme::instance()->isDarkTheme();
 
-    const QList<QWidget*> childrenList = findChildren<QWidget*>();
-    for (auto* widget: childrenList) {
-        if (widget->metaObject()->indexOfSlot("setDarkTheme()") != -1) {
-            QMetaObject::invokeMethod(widget, "setDarkTheme");
-        }
-    }
+    CUR::StyleHelper::invoke_setDarkTheme_recursive(this);
 
     ui->btnRefresh->setIcon(isDark ? QIcon(refreshIcon.second) : QIcon(refreshIcon.first));
     ui->btnBack->setIcon(isDark ? QIcon(backIcon.second) : QIcon(backIcon.first));
@@ -200,6 +201,7 @@ QString CredentialsPage::password() const
 
 void CredentialsPage::showErrorMessage(const QString& msg)
 {
+    showProgressIndicator(false);
     ui->frameErrorMessage->setVisible(!msg.isEmpty());
     ui->lblErrorText->setText(msg);
 }
@@ -218,19 +220,80 @@ void CredentialsPage::showInvalidCredentialsError()
 
 void CredentialsPage::showProgressIndicator(bool show)
 {
+    ui->edPassword->setEnabled(!show);
+    ui->btnResetPass->setEnabled(!show);
+    ui->btnBack->setEnabled(!show);
+    ui->edUrl->setEnabled(!show);
+
     ui->btnRefresh->setVisible(!show);
-    ui->progressIndicator->setVisible(show);
+    ui->progressIndicator->setIndicatorVisible(show);
+    update();
+    qApp->processEvents();
 }
 
-void CredentialsPage::showCodeDialog()
+void CredentialsPage::showCodeDialog(bool show)
 {
     showProgressIndicator(false);
+
+    dim->setVisible(show);
+    codeDialog->setVisible(show);
+    if (!show) {
+        codeDialog->clearCode();
+        codeDialog->clearError();
+    }
+}
+
+bool CredentialsPage::isCodeDialogVisible() const
+{
+    return codeDialog->isVisible();
+}
+
+void CredentialsPage::showCodeInvalidError()
+{
+    codeDialog->showInvalidCodeError();
+}
+
+void CredentialsPage::showCodeExpiredError()
+{
+    codeDialog->showCodeExpiredError();
+}
+
+void CredentialsPage::showCodeServerError()
+{
+    codeDialog->showServerError();
+}
+
+void CredentialsPage::errorOccured(CUR::RemoteRequest req, int code, const QString &message)
+{
+    Q_UNUSED(req);
+    Q_UNUSED(code);
+
+    if (message.isEmpty()) {
+        if (codeDialog->isVisible()) {
+            showCodeServerError();
+        }
+        else {
+            showErrorMessage(tr("Server error. Try again"));
+        }
+    }
+    else {
+        if (message.contains(QStringLiteral("invalid"))) {
+            showCodeInvalidError();
+        }
+        else if (message.contains(QStringLiteral("expired"))) {
+            showCodeExpiredError();
+        }
+        else {
+            showCodeServerError();
+        }
+    }
+}
+
+void CredentialsPage::codeJustRequested()
+{
     codeExpireTime = QDateTime::currentDateTime().addSecs(code_expire_seconds);
+    isCodeExpired = false;
     codeExpireCheckTimer.start();
-
-    dim->setVisible(true);
-
-    codeDialog->show();
 }
 
 void CredentialsPage::onTextEdited(const QString&/*txt*/)
@@ -250,7 +313,8 @@ void CredentialsPage::onCodeExpireCheckTimer()
 {
     if (QDateTime::currentDateTime() > codeExpireTime) {
         codeExpireCheckTimer.stop();
-        codeDialog->showError(tr("Your code has expired"));
+        // codeDialog->showCodeExpiredError();
+        isCodeExpired = true;
     }
 }
 

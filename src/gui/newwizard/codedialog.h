@@ -4,6 +4,13 @@
 
 namespace Ui { class CodeDialog; }
 
+enum class CodeDialogState {
+    Startup,
+    Waiting,
+    AllowAccess,
+    Resend
+};
+
 class CodeDialog : public QWidget
 {
     Q_OBJECT
@@ -13,7 +20,13 @@ public:
     ~CodeDialog();
 
     void updateTheme();
-    void showError(const QString& txt);
+
+    void setDialogState(CodeDialogState state);
+
+    void showCodeExpiredError();
+    void showInvalidCodeError();
+    void showServerError();
+    void clearError();
 
     QString getCode() const;
     void clearCode();
@@ -27,6 +40,14 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 
 private:
+    void onAllowAccessClicked();
+    void onResendCodeClicked();
+
+    void showResendButton();
+    void showAllowButton();
+
+private:
     Ui::CodeDialog *ui = nullptr;
     bool errorState_ = false;
+    CodeDialogState state_ = CodeDialogState::Startup;
 };

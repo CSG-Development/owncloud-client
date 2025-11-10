@@ -100,12 +100,7 @@ void EmailPage::updateTheme()
 {
     bool isDark = CUR::Theme::instance()->isDarkTheme();
 
-    const QList<QWidget*> childrenList = findChildren<QWidget*>();
-    for (auto* widget: childrenList) {
-        if (widget->metaObject()->indexOfSlot("setDarkTheme()") != -1) {
-            QMetaObject::invokeMethod(widget, "setDarkTheme");
-        }
-    }
+    CUR::StyleHelper::invoke_setDarkTheme_recursive(this);
 
     // QToolButton "icon" property does not supported in qss
     ui->btnSettings->setIcon(isDark ? QIcon(settingsIcon.second) : QIcon(settingsIcon.first));

@@ -10,6 +10,9 @@ class CredentialsPage;
 class WaitPage;
 class FinishedPage;
 class EmailPage;
+class ConnectErrorPage;
+
+namespace CUR {enum class RemoteRequest;}
 
 namespace CUR::Wizard {
 
@@ -21,27 +24,34 @@ class SetupWidget : public QWidget
 
 public:
     enum class SetupPage {
-        PageEmail = 0,
+        PageNone = 0,
+        PageEmail,
         PageCredentials,
         PageWait,
-        PageFinished
+        PageFinished,
+        PageConnectError
     };
 
     explicit SetupWidget(SettingsDialog *parent);
     ~SetupWidget() noexcept override;
 
     void displayPage(SetupPage page);
+    void displayPreviousPage();
 
     void showErrorMessage(const QString &errorMessage);
     void hideErrorMessage();
 
-    void showCodeDialog();
+    void codeRequested();
+    void codeAccepted();
+
     void setDevicesList(const QList<Device> &list);
     void setEmail(const QString& email);
 
     void onCancelClicked();
     void onSetupFinishPageDefaults(const QString &defaultSyncTargetDir, const QString &userChosenSyncTargetDir,
         bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental);
+
+    void errorOccured(RemoteRequest req, int code, const QString &message);
 
     void setInvalidUrlError();
     void setInvalidCredentialsError();
@@ -60,8 +70,10 @@ Q_SIGNALS:
     void finishPageDoneClicked(CUR::Wizard::SyncMode mode, const QString& targetDir);
     void codeEntered(const QString& code);
     void codeSkipped();
+    void codeResendClicked(const QString& code);
     void credPageBackClicked();
-
+    void connectErrorPageBackClicked();
+    void connectErrorPageRetryClicked();
 
 private:
     void onThemeChanged();
@@ -72,5 +84,9 @@ private:
     CredentialsPage* credPage_ = nullptr;
     WaitPage* waitPage_ = nullptr;
     FinishedPage* finishPage_ = nullptr;
+    ConnectErrorPage* connectErrorPage_ = nullptr;
+
+    SetupPage currentPage = SetupPage::PageNone;
+    SetupPage previousPage = SetupPage::PageNone;
 };
 }

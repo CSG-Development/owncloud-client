@@ -25,6 +25,7 @@ public:
     static QIcon getArrowIcon(Qt::ArrowType arrow, bool isPressed, bool isDisabled, bool isDark);
 
     static void setDarkMode(bool dark);
+    static void invoke_setDarkTheme_recursive(QWidget* widget);
 
     static QProxyStyle* toolbarMenuStyle() {return tbMenuStyle_;}
     static QProxyStyle* pushButtonStyle() {return pushButtonStyle_;}

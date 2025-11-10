@@ -138,6 +138,18 @@ void StyleHelper::setDarkMode(bool dark)
         s->setDarkMode(dark);
 }
 
+void StyleHelper::invoke_setDarkTheme_recursive(QWidget *widget)
+{
+    Q_ASSERT(widget);
+
+    const QList<QWidget*> childrenList = widget->findChildren<QWidget*>();
+    for (auto* widget: childrenList) {
+        if (widget->metaObject()->indexOfSlot("setDarkTheme()") != -1) {
+            QMetaObject::invokeMethod(widget, "setDarkTheme");
+        }
+    }
+}
+
 StyleHelper *StyleHelper::getInstance()
 {
     return instance_;

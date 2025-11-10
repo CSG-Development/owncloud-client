@@ -8,6 +8,7 @@
 
 #include <QKeyEvent>
 
+
 namespace {
 QPair<QString,QString> widgetStyle = {
     QStringLiteral(":/res/login/code_dialog_light.qss"),
@@ -28,21 +29,21 @@ CodeDialog::CodeDialog(QWidget *parent)
     auto noFocus = new FocusProxyStyle;
     ui->btnAllowAccess->setStyle(noFocus);
     ui->btnSkip->setStyle(noFocus);
+    ui->btnResendCode->setStyle(noFocus);
 
-    connect(ui->btnAllowAccess, &QPushButton::clicked, this, &CodeDialog::allowAccessClicked);
+    connect(ui->btnAllowAccess, &QPushButton::clicked, this, &CodeDialog::onAllowAccessClicked);
     connect(ui->btnSkip, &QPushButton::clicked, this, &CodeDialog::skipClicked);
-    connect(ui->btnResendCode, &QPushButton::clicked, this, [&] {
-        showError({});
-        emit resendCodeClicked();
-    });
+    connect(ui->btnResendCode, &QPushButton::clicked, this, &CodeDialog::onResendCodeClicked);
 
     connect(ui->codeInputWidget, &CodeInputWidget::codeChanged, this, [&] {
         ui->btnAllowAccess->setEnabled(ui->codeInputWidget->codeStr().length() == 6);
+        ui->btnResendCode->setEnabled(ui->codeInputWidget->codeStr().length() == 6);
     });
 
-    ui->spinner->setVisible(false);
     ui->btnAllowAccess->setEnabled(false);
-    showError({});
+    ui->btnResendCode->setEnabled(false);
+
+    setDialogState(CodeDialogState::Startup);
 
     updateTheme();
 }
@@ -55,34 +56,85 @@ CodeDialog::~CodeDialog()
 void CodeDialog::updateTheme()
 {
     bool isDark = CUR::Theme::instance()->isDarkTheme();
-    const QList<QWidget*> childrenList = findChildren<QWidget*>();
-    for (auto* widget: childrenList) {
-        if (widget->metaObject()->indexOfSlot("setDarkTheme()") != -1) {
-            QMetaObject::invokeMethod(widget, "setDarkTheme");
-        }
-    }
+    CUR::StyleHelper::invoke_setDarkTheme_recursive(this);
     setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 
     update();
 }
 
-void CodeDialog::showError(const QString &txt)
+void CodeDialog::setDialogState(CodeDialogState state)
 {
-    errorState_ = !txt.isEmpty();
+    state_ = state;
+    switch (state_)
+    {
+        case CodeDialogState::Startup:
+            ui->codeInputWidget->setEnabled(true);
+            ui->btnAllowAccess->setVisible(true);
+            ui->btnResendCode->setVisible(false);
+            ui->spinner->setVisible(false);
+            clearError();
+            break;
+
+        case CodeDialogState::Waiting:
+            ui->codeInputWidget->setEnabled(false);
+            ui->btnAllowAccess->setVisible(false);
+            ui->btnResendCode->setVisible(false);
+            ui->spinner->setVisible(true);
+            clearError();
+            break;
+
+        case CodeDialogState::AllowAccess:
+            ui->codeInputWidget->setEnabled(true);
+            ui->btnAllowAccess->setVisible(true);
+            ui->btnResendCode->setVisible(false);
+            ui->spinner->setVisible(false);
+            break;
+
+        case CodeDialogState::Resend:
+            ui->codeInputWidget->clearCode();
+            ui->codeInputWidget->setEnabled(true);
+            ui->btnAllowAccess->setVisible(false);
+            ui->btnResendCode->setVisible(true);
+            ui->spinner->setVisible(false);
+            break;
+    }
+}
+
+void CodeDialog::showCodeExpiredError()
+{
+    errorState_ = true;
     ui->codeInputWidget->setErrorState(errorState_);
+    clearCode();
+    ui->lblError->setText(tr("Your code has expired"));
+    ui->lblError->setVisible(true);
+    setDialogState(CodeDialogState::Resend);
+}
 
-    ui->lblError->setText(txt);
+void CodeDialog::showInvalidCodeError()
+{
+    errorState_ = true;
+    ui->codeInputWidget->setErrorState(errorState_);
+    clearCode();
+    ui->lblError->setText(tr("Incorrect code"));
+    ui->lblError->setVisible(true);
+    setDialogState(CodeDialogState::AllowAccess);
+}
 
-    if (errorState_) {
-        ui->lblError->setVisible(true);
-        ui->btnResendCode->setVisible(true);
-        ui->btnAllowAccess->setVisible(false);
-    }
-    else {
-        ui->lblError->setVisible(false);
-        ui->btnResendCode->setVisible(false);
-        ui->btnAllowAccess->setVisible(true);
-    }
+void CodeDialog::showServerError()
+{
+    errorState_ = true;
+    ui->codeInputWidget->setErrorState(errorState_);
+    ui->lblError->setText(tr("Server error. Try again"));
+    ui->lblError->setVisible(true);
+    setDialogState(CodeDialogState::AllowAccess);
+}
+
+void CodeDialog::clearError()
+{
+    errorState_ = false;
+    ui->codeInputWidget->setErrorState(errorState_);
+    ui->lblError->clear();
+    ui->lblError->setVisible(false);
 }
 
 QString CodeDialog::getCode() const
@@ -100,4 +152,35 @@ void CodeDialog::keyPressEvent(QKeyEvent *event)
     if (event->key() != Qt::Key_Escape) {
         QWidget::keyPressEvent(event);
     }
+}
+
+void CodeDialog::onAllowAccessClicked()
+{
+    ui->btnAllowAccess->setVisible(false);
+    ui->spinner->setVisible(true);
+    emit allowAccessClicked();
+}
+
+void CodeDialog::onResendCodeClicked()
+{
+    clearError();
+    ui->btnResendCode->setVisible(false);
+    ui->spinner->setVisible(true);
+    emit resendCodeClicked();
+}
+
+void CodeDialog::showResendButton()
+{
+    clearError();
+    ui->spinner->setVisible(false);
+    ui->btnAllowAccess->setVisible(false);
+    ui->btnResendCode->setVisible(true);
+}
+
+void CodeDialog::showAllowButton()
+{
+    clearError();
+    ui->spinner->setVisible(false);
+    ui->btnAllowAccess->setVisible(true);
+    ui->btnResendCode->setVisible(false);
 }

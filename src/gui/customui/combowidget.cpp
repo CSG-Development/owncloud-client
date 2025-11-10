@@ -108,6 +108,11 @@ void ComboWidget::setItems(const QList<Device> &list)
     QList<Device> tmpitems(list);
     qSwap(tmpitems, deviceList);
     popup->setItems(deviceList);
+
+    if (!list.isEmpty() && ui->lineEdit->text().isEmpty()) {
+        selectedDevice = list.first();
+        ui->lineEdit->setText(selectedDevice->certificateCommonName);
+    }
 }
 
 void ComboWidget::setErrorState(bool enable, const QString& txt)
@@ -197,6 +202,9 @@ void ComboWidget::updateStyles()
         setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? inputStyleError.second : inputStyleError.first));
     else
         setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? inputStyle.second : inputStyle.first));
+
+    style()->unpolish(this);
+    style()->polish(this);
 
     updateButtonIcon();
 }

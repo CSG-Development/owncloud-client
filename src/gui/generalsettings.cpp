@@ -213,11 +213,7 @@ void GeneralSettings::onThemeChanged()
     for (auto* t: btns) {
         t->update();
     }
-    for (auto widget: findChildren<QWidget*>()) {
-        if (widget->metaObject()->indexOfSlot("setDarkTheme()") != -1) {
-            QMetaObject::invokeMethod(widget, "setDarkTheme");
-        }
-    }
+    StyleHelper::invoke_setDarkTheme_recursive(this);
 }
 
 void GeneralSettings::slotUpdateChannelChanged([[maybe_unused]] int index)

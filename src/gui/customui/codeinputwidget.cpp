@@ -112,6 +112,15 @@ bool CodeInputWidget::eventFilter(QObject *obj, QEvent *event)
         }
     }
 
+    // Easy overwrite code digits if the field is not empty
+    if (event->type() == QEvent::FocusIn) {
+        if (auto ed = static_cast<QLineEdit*>(obj)) {
+            if (!ed->text().isEmpty()) {
+                ed->selectAll();
+            }
+        }
+    }
+
     return QWidget::eventFilter(obj, event);
 }
 
@@ -201,6 +210,5 @@ QString CodeInputWidget::buildCode() const
     code += ui->ed4->text();
     code += ui->ed5->text();
     code += ui->ed6->text();
-    qDebug() << code;
     return code;
 }
