@@ -252,8 +252,8 @@ public:
     const QUrl _baseUrl;
     QString _localDir; // absolute path to the local directory. ends with '/'
     QString _remoteFolder; // remote folder, ends with '/'
-    SyncJournalDb *_statedb;
-    ExcludedFiles *_excludes;
+    SyncJournalDb *_statedb = nullptr;
+    ExcludedFiles *_excludes = nullptr;
     QRegularExpression _invalidFilenameRx; // FIXME: maybe move in ExcludedFiles
     QStringList _serverBlacklistedFiles; // The blacklist from the capabilities
     bool _ignoreHiddenFiles = false;

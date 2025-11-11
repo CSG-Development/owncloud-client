@@ -68,7 +68,7 @@ public slots:
 private:
     // FIXME this timer and this variable should be replaced
     // by the propagator emitting the changed limit values to us as signal
-    CuratorPropagator *_propagator;
+    CuratorPropagator *_propagator = nullptr;
 
     // for absolute up/down bw limiting
     QTimer _absoluteLimitTimer;
@@ -83,11 +83,11 @@ private:
     QTimer _relativeUploadDelayTimer;
 
     // the device measured
-    UploadDevice *_relativeLimitCurrentMeasuredDevice;
+    UploadDevice *_relativeLimitCurrentMeasuredDevice = nullptr;
 
     // for measuring how much progress we made at start
-    qint64 _relativeUploadLimitProgressAtMeasuringRestart;
-    qint64 _currentUploadLimit;
+    qint64 _relativeUploadLimitProgressAtMeasuringRestart = 0;
+    qint64 _currentUploadLimit = 0;
 
     std::list<GETFileJob *> _downloadJobList;
     QTimer _relativeDownloadMeasuringTimer;
@@ -96,12 +96,12 @@ private:
     QTimer _relativeDownloadDelayTimer;
 
     // the device measured
-    GETFileJob *_relativeLimitCurrentMeasuredJob;
+    GETFileJob *_relativeLimitCurrentMeasuredJob = nullptr;
 
     // for measuring how much progress we made at start
-    qint64 _relativeDownloadLimitProgressAtMeasuringRestart;
+    qint64 _relativeDownloadLimitProgressAtMeasuringRestart = 0;
 
-    qint64 _currentDownloadLimit;
+    qint64 _currentDownloadLimit = 0;
 };
 }
 

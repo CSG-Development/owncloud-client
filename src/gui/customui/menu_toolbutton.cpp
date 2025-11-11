@@ -46,7 +46,7 @@ void MenuToolButton::paintEvent(QPaintEvent* /*event*/)
     painter.fillRect(rect(), bgColor);
 
     QRect pix_r = rect();
-    QRect text_r = rect();
+    QRect text_r = pix_r;
 
     pix_r.setHeight(::toolbarIconSize.height() + 4);
     text_r.adjust(0, pix_r.height() - 14, 0, -1);

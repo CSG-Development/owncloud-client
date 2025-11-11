@@ -784,12 +784,13 @@ void SocketApi::command_MOVE_ITEM(const QString &localFile, SocketListener *)
 Q_INVOKABLE void CUR::SocketApi::command_OPEN_APP_LINK(const QString &localFile, [[maybe_unused]] SocketListener *listener)
 {
     const auto data = FileData::get(localFile);
-    if (OC_ENSURE(data.folder)) {
-        const auto &provider = data.folder->accountState()->account()->appProvider();
-        const auto record = data.journalRecord();
-        if (record.isValid()) {
-            provider.open(data.folder->accountState()->account(), localFile, record._fileId);
-        }
+    if (!data.folder) {
+        return;
+    }
+    const auto &provider = data.folder->accountState()->account()->appProvider();
+    const auto record = data.journalRecord();
+    if (record.isValid()) {
+        provider.open(data.folder->accountState()->account(), localFile, record._fileId);
     }
 }
 

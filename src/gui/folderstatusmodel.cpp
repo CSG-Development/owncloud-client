@@ -716,9 +716,10 @@ void FolderStatusModel::fetchMore(const QModelIndex &parent)
 
 void FolderStatusModel::resetAndFetch(const QModelIndex &parent)
 {
-    auto info = infoForIndex(parent);
-    info->resetSubs(this, parent);
-    fetchMore(parent);
+    if (auto info = infoForIndex(parent)) {
+        info->resetSubs(this, parent);
+        fetchMore(parent);
+    }
 }
 
 void FolderStatusModel::slotGatherPermissions(const QString &href, const QMap<QString, QString> &map)

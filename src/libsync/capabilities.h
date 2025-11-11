@@ -70,7 +70,7 @@ struct CURATORSYNC_EXPORT TusSupport
     QVersionNumber version;
     QVersionNumber resumable;
     QStringList extensions;
-    quint64 max_chunk_size;
+    quint64 max_chunk_size = 0;
     QString http_method_override;
 
     bool isValid() const;

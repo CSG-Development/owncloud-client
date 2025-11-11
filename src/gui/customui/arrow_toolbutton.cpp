@@ -98,7 +98,7 @@ void ArrowToolButton::paintEvent(QPaintEvent* /*event*/)
     painter.restore();
 
     QRect pix_r = rect();
-    QRect text_r = rect();
+    QRect text_r = pix_r;
 
     constexpr QSize iconSize = {16, 17};
     pix_r = QRect(pix_r.right() - iconSize.width() - 11, (pix_r.height() - iconSize.height()) / 2, iconSize.width(), iconSize.height());

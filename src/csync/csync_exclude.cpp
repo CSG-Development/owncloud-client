@@ -227,7 +227,8 @@ static CSYNC_EXCLUDE_TYPE _csync_excluded_common(QStringView path, bool excludeC
 using namespace CUR;
 
 ExcludedFiles::ExcludedFiles()
-    : _clientVersion(CUR::Version::version())
+    : QObject(nullptr)
+    , _clientVersion(CUR::Version::version())
 {
     // Windows used to use PathMatchSpec which allows *foo to match abc/deffoo.
     _wildcardsMatchSlash = Utility::isWindows();
