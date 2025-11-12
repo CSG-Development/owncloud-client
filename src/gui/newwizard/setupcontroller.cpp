@@ -41,6 +41,7 @@ SetupController::SetupController(SettingsDialog *parent)
     connect(_context->window(), &SetupWidget::loginEmailClicked, this, [&](const QString& user) {
         qCDebug(lcSetupWizardController) << "Login email clicked";
         user_ = user;
+        remoteSkipped = false;
         window()->displayPage(SetupWidget::SetupPage::PageCredentials);
         window()->showCredPageProgress(true);
         raConnector->start_query(user_);
@@ -48,7 +49,6 @@ SetupController::SetupController(SettingsDialog *parent)
 
     connect(raConnector, &RemoteConnector::code_requested, this, [&] {
         qCDebug(lcSetupWizardController) << "Code requested";
-        remoteSkipped = false;
         window()->displayPage(SetupWidget::SetupPage::PageCredentials);
         window()->codeRequested();
     });
@@ -69,7 +69,6 @@ SetupController::SetupController(SettingsDialog *parent)
     });
     connect(_context->window(), &SetupWidget::codeResendClicked, this, [&](const QString& code) {
         qCDebug(lcSetupWizardController) << "Code resend clicked";
-        remoteSkipped = false;
         raConnector->query_token(code);
     });
 
@@ -110,7 +109,10 @@ SetupController::SetupController(SettingsDialog *parent)
 
     connect(_context->window(), &SetupWidget::refreshDevicesClicked, this, [&] {
         qCDebug(lcSetupWizardController) << "Refresh devices clicked";
-        raConnector->start_query(user_);
+        if (remoteSkipped)
+            deviceMgr->query_local();
+        else
+            raConnector->start_query(user_);
     });
 
     connect(_context->window(), &SetupWidget::loginCredentialClicked, this, [&](const QString& url, const QString& user, const QString& password) {
@@ -148,7 +150,10 @@ SetupController::SetupController(SettingsDialog *parent)
         qCDebug(lcSetupWizardController) << "connectErrorPage Retry clicked";
         window()->displayPage(SetupWidget::SetupPage::PageCredentials);
         window()->showCredPageProgress(true);
-        raConnector->start_query(user_);
+        if (remoteSkipped)
+            deviceMgr->query_local();
+        else
+            raConnector->start_query(user_);
     });
 
     connect(this, &SetupController::credentialsEvaluationFailed, this, [&](const QString& msg) {
