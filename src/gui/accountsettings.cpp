@@ -1058,6 +1058,9 @@ void AccountSettings::refreshSelectiveSyncStatus()
 
 void AccountSettings::slotDeleteAccount()
 {
+    if (!_accountState)
+        return;
+
     // Deleting the account potentially deletes 'this', so
     // the QMessageBox should be destroyed before that happens.
     auto messageBox = new QMessageBox(QMessageBox::Question,
@@ -1069,13 +1072,14 @@ void AccountSettings::slotDeleteAccount()
         this);
     auto yesButton = messageBox->addButton(tr("Remove connection"), QMessageBox::YesRole);
     messageBox->addButton(tr("Cancel"), QMessageBox::NoRole);
-    messageBox->setAttribute(Qt::WA_DeleteOnClose);
     StyleHelper::applyPushButtonStyle(messageBox);
-    connect(messageBox, &QMessageBox::finished, this, [this, messageBox, yesButton]{
+
+    connect(messageBox, &QMessageBox::finished, this, [this,yesButton,messageBox]{
         if (messageBox->clickedButton() == yesButton) {
             auto manager = AccountManager::instance();
             manager->deleteAccount(_accountState);
             manager->save();
+            delete _accountState;
         }
     });
     messageBox->open();

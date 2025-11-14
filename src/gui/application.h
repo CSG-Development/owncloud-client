@@ -82,7 +82,7 @@ protected slots:
     void slotUseMonoIconsChanged(bool);
     void slotCleanup();
     void slotAccountStateAdded(AccountStatePtr accountState) const;
-    void slotAccountStateRemoved() const;
+    void slotAccountStateRemoved(AccountStatePtr accountState) const;
 
 private:
     explicit Application(Platform *platform, bool debugMode);

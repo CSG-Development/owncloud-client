@@ -14,7 +14,6 @@
 
 #include "accountmanager.h"
 #include "account.h"
-#include "common/asserts.h"
 #include "configfile.h"
 #include "creds/credentialmanager.h"
 #include <cookiejar.h>
@@ -30,60 +29,17 @@
 #include <QNetworkAccessManager>
 
 namespace {
-auto urlC()
-{
-    return QStringLiteral("url");
-}
-
-auto userC()
-{
-    return QStringLiteral("user");
-}
-
-auto httpUserC()
-{
-    return QStringLiteral("http_user");
-}
-
-auto defaultSyncRootC()
-{
-    return QStringLiteral("default_sync_root");
-}
-
-const QString davUserC()
-{
-    return QStringLiteral("dav_user");
-}
-
-const QString davUserDisplyNameC()
-{
-    return QStringLiteral("display-name");
-}
-
-const QString userUUIDC()
-{
-    return QStringLiteral("uuid");
-}
-
-auto caCertsKeyC()
-{
-    return QStringLiteral("CaCertificates");
-}
-
-auto accountsC()
-{
-    return QStringLiteral("Accounts");
-}
-
-auto versionC()
-{
-    return QStringLiteral("version");
-}
-
-auto capabilitesC()
-{
-    return QStringLiteral("capabilities");
-}
+const QString urlC = QStringLiteral("url");
+const auto userC = QStringLiteral("user");
+const auto httpUserC = QStringLiteral("http_user");
+const auto defaultSyncRootC = QStringLiteral("default_sync_root");
+const auto davUserC = QStringLiteral("dav_user");
+const auto davUserDisplyNameC = QStringLiteral("display-name");
+const auto userUUIDC = QStringLiteral("uuid");
+const auto caCertsKeyC = QStringLiteral("CaCertificates");
+const auto accountsC = QStringLiteral("Accounts");
+const auto versionC = QStringLiteral("version");
+const auto capabilitesC = QStringLiteral("capabilities");
 }
 
 
@@ -99,7 +55,7 @@ AccountManager *AccountManager::instance()
 
 bool AccountManager::restore()
 {
-    auto settings = ConfigFile::settingsWithGroup(accountsC());
+    auto settings = ConfigFile::settingsWithGroup(accountsC);
     if (settings->status() != QSettings::NoError) {
         qCWarning(lcAccountManager) << "Could not read settings from" << settings->fileName()
                                     << settings->status();
@@ -109,7 +65,7 @@ bool AccountManager::restore()
     // If there are no accounts, check the old format.
     const auto &childGroups = settings->childGroups();
     if (childGroups.isEmpty()
-        && !settings->contains(versionC())) {
+        && !settings->contains(versionC)) {
         restoreFromLegacySettings();
         return true;
     }
@@ -166,7 +122,7 @@ bool AccountManager::restoreFromLegacySettings()
                 if (overrideUrl.endsWith(QLatin1Char('/'))) {
                     overrideUrl.chop(1);
                 }
-                QString oCUrl = oCSettings->value(urlC()).toString();
+                QString oCUrl = oCSettings->value(urlC).toString();
                 if (oCUrl.endsWith(QLatin1Char('/'))) {
                     oCUrl.chop(1);
                 }
@@ -205,20 +161,20 @@ void AccountManager::save(bool saveCredentials)
 void AccountManager::saveAccount(Account *account, bool saveCredentials)
 {
     qCDebug(lcAccountManager) << "Saving account" << account->url().toString();
-    auto settings = ConfigFile::settingsWithGroup(accountsC());
-    settings->setValue(versionC(), ConfigFile::UnusedLegacySettingsVersionNumber);
+    auto settings = ConfigFile::settingsWithGroup(accountsC);
+    settings->setValue(versionC, ConfigFile::UnusedLegacySettingsVersionNumber);
     settings->beginGroup(account->uuid().toString());
 
-    settings->setValue(versionC(), ConfigFile::UnusedLegacySettingsVersionNumber);
-    settings->setValue(urlC(), account->_url.toString());
-    settings->setValue(davUserC(), account->_davUser);
-    settings->setValue(davUserDisplyNameC(), account->_displayName);
-    settings->setValue(userUUIDC(), account->uuid());
+    settings->setValue(versionC, ConfigFile::UnusedLegacySettingsVersionNumber);
+    settings->setValue(urlC, account->_url.toString());
+    settings->setValue(davUserC, account->_davUser);
+    settings->setValue(davUserDisplyNameC, account->_displayName);
+    settings->setValue(userUUIDC, account->uuid());
     if (account->hasCapabilities()) {
-        settings->setValue(capabilitesC(), account->capabilities().raw());
+        settings->setValue(capabilitesC, account->capabilities().raw());
     }
     if (account->hasDefaultSyncRoot()) {
-        settings->setValue(defaultSyncRootC(), account->defaultSyncRoot());
+        settings->setValue(defaultSyncRootC, account->defaultSyncRoot());
     }
     if (account->_credentials) {
         if (saveCredentials) {
@@ -234,8 +190,8 @@ void AccountManager::saveAccount(Account *account, bool saveCredentials)
         }
 
         // HACK: Save http_user also as user
-        if (account->_settingsMap.contains(httpUserC()))
-            settings->setValue(userC(), account->_settingsMap.value(httpUserC()));
+        if (account->_settingsMap.contains(httpUserC))
+            settings->setValue(userC, account->_settingsMap.value(httpUserC));
     }
 
     // Save accepted certificates.
@@ -247,7 +203,7 @@ void AccountManager::saveAccount(Account *account, bool saveCredentials)
         certs += cert.toPem() + '\n';
     }
     if (!certs.isEmpty()) {
-        settings->setValue(caCertsKeyC(), certs);
+        settings->setValue(caCertsKeyC, certs);
     }
     settings->endGroup();
 
@@ -272,24 +228,24 @@ QStringList AccountManager::accountNames() const
 
 AccountPtr AccountManager::loadAccountHelper(QSettings &settings)
 {
-    auto urlConfig = settings.value(urlC());
+    auto urlConfig = settings.value(urlC);
     if (!urlConfig.isValid()) {
         // No URL probably means a corrupted entry in the account settings
         qCWarning(lcAccountManager) << "No URL for account " << settings.group();
         return AccountPtr();
     }
 
-    auto acc = createAccount(settings.value(userUUIDC(), QVariant::fromValue(QUuid::createUuid())).toUuid());
+    auto acc = createAccount(settings.value(userUUIDC, QVariant::fromValue(QUuid::createUuid())).toUuid());
 
     acc->setUrl(urlConfig.toUrl());
 
-    acc->_davUser = settings.value(davUserC()).toString();
-    acc->_displayName = settings.value(davUserDisplyNameC()).toString();
-    acc->setCapabilities({acc->url(), settings.value(capabilitesC()).value<QVariantMap>()});
-    acc->setDefaultSyncRoot(settings.value(defaultSyncRootC()).toString());
+    acc->_davUser = settings.value(davUserC).toString();
+    acc->_displayName = settings.value(davUserDisplyNameC).toString();
+    acc->setCapabilities({acc->url(), settings.value(capabilitesC).value<QVariantMap>()});
+    acc->setDefaultSyncRoot(settings.value(defaultSyncRootC).toString());
 
     // We want to only restore settings for that auth type and the user value
-    acc->_settingsMap.insert(userC(), settings.value(userC()));
+    acc->_settingsMap.insert(userC, settings.value(userC));
     const QString authTypePrefix = QStringLiteral("http_");
     const auto childKeys = settings.childKeys();
     for (const auto &key : childKeys) {
@@ -301,7 +257,7 @@ AccountPtr AccountManager::loadAccountHelper(QSettings &settings)
 
     // now the server cert, it is in the general group
     settings.beginGroup(QStringLiteral("General"));
-    const auto certs = QSslCertificate::fromData(settings.value(caCertsKeyC()).toByteArray());
+    const auto certs = QSslCertificate::fromData(settings.value(caCertsKeyC).toByteArray());
     qCInfo(lcAccountManager) << "Restored: " << certs.count() << " unknown certs.";
     acc->setApprovedCerts(certs);
     settings.endGroup();
@@ -348,11 +304,10 @@ void AccountManager::deleteAccount(AccountStatePtr account)
     account->account()->credentials()->forgetSensitiveData();
     account->account()->credentialManager()->clear();
 
-    auto settings = ConfigFile::settingsWithGroup(accountsC());
+    auto settings = ConfigFile::settingsWithGroup(accountsC);
     settings->remove(account->account()->uuid().toString());
 
     emit accountRemoved(account);
-    account->deleteLater();
 }
 
 AccountPtr AccountManager::createAccount(const QUuid &uuid)
