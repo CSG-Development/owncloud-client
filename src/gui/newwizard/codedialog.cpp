@@ -114,9 +114,9 @@ void CodeDialog::showInvalidCodeError()
 {
     errorState_ = true;
     ui->codeInputWidget->setErrorState(errorState_);
-    clearCode();
     ui->lblError->setText(tr("Incorrect code"));
     ui->lblError->setVisible(true);
+    ui->btnAllowAccess->setEnabled(false);
     setDialogState(CodeDialogState::AllowAccess);
 }
 
@@ -126,6 +126,7 @@ void CodeDialog::showServerError()
     ui->codeInputWidget->setErrorState(errorState_);
     ui->lblError->setText(tr("Server error. Try again"));
     ui->lblError->setVisible(true);
+    ui->btnAllowAccess->setEnabled(false);
     setDialogState(CodeDialogState::AllowAccess);
 }
 
