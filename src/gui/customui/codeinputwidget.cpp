@@ -117,6 +117,9 @@ bool CodeInputWidget::eventFilter(QObject *obj, QEvent *event)
         if (auto ed = static_cast<QLineEdit*>(obj)) {
             if (!ed->text().isEmpty()) {
                 ed->selectAll();
+                if (errorState) {
+                    setErrorState(false);
+                }
             }
         }
     }
