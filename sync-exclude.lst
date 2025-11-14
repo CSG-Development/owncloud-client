@@ -10,6 +10,7 @@
 ].ds_store
 ._*
 ]Thumbs.db
+System Volume Information
 
 .*.sw?
 .*.*sw?
@@ -20,6 +21,7 @@
 ].Trash-*
 .fseventd
 .apdisk
+.Spotlight-V100
 
 .directory
 
