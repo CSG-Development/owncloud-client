@@ -72,7 +72,7 @@ CredentialsPage::CredentialsPage(QWidget *parent)
         codeExpireTime = QDateTime::currentDateTime().addSecs(code_expire_seconds);
         isCodeExpired = false;
         codeExpireCheckTimer.start();
-        emit codeResend(codeDialog->getCode());
+        emit codeResend();
     });
 
     connect(ui->btnLogin, &QPushButton::clicked, this, [&] {
@@ -237,6 +237,7 @@ void CredentialsPage::showCodeDialog(bool show)
 
     dim->setVisible(show);
     codeDialog->setVisible(show);
+    codeDialog->setDialogState(CodeDialogState::Startup);
     if (!show) {
         codeDialog->clearCode();
         codeDialog->clearError();

@@ -70,7 +70,7 @@ Q_SIGNALS:
     void finishPageDoneClicked(CUR::Wizard::SyncMode mode, const QString& targetDir);
     void codeEntered(const QString& code);
     void codeSkipped();
-    void codeResendClicked(const QString& code);
+    void codeResendClicked();
     void credPageBackClicked();
     void connectErrorPageBackClicked();
     void connectErrorPageRetryClicked();

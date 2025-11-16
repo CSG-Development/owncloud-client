@@ -41,6 +41,8 @@ public:
 
     static QString RemoteRequestToStr(RemoteRequest req);
 
+    void clearTokens();
+
 signals:
     void initiate_finished(std::optional<QJsonDocument>, int code);
     void refresh_finished(std::optional<QJsonDocument>, int code);

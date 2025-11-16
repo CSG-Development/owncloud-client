@@ -147,6 +147,7 @@ void SetupWidget::hideErrorMessage()
 void SetupWidget::codeRequested()
 {
     if (_ui->contentWidget->currentWidget() == credPage_) {
+        qCDebug(lcSetupWizardWidget) << "[SetupWidget::codeRequested]";
         credPage_->codeJustRequested();
         credPage_->showCodeDialog(true);
     }
