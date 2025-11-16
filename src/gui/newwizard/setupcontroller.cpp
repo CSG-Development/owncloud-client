@@ -67,9 +67,10 @@ SetupController::SetupController(SettingsDialog *parent)
         remoteSkipped = true;
         deviceMgr->query_local();
     });
-    connect(_context->window(), &SetupWidget::codeResendClicked, this, [&](const QString& code) {
+    connect(_context->window(), &SetupWidget::codeResendClicked, this, [&] {
         qCDebug(lcSetupWizardController) << "Code resend clicked";
-        raConnector->query_token(code);
+        raConnector->clearTokens();
+        raConnector->start_query(user_);
     });
 
     connect(raConnector, &RemoteConnector::fetch_devices_finished, this, [&] {

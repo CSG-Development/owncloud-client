@@ -58,7 +58,7 @@ Q_SIGNALS:
 
     void codeEntered(const QString& code);
     void codeSkipped();
-    void codeResend(const QString& code);
+    void codeResend();
 
 private:
     void onTextEdited(const QString& txt);

@@ -36,8 +36,8 @@ CodeDialog::CodeDialog(QWidget *parent)
     connect(ui->btnResendCode, &QPushButton::clicked, this, &CodeDialog::onResendCodeClicked);
 
     connect(ui->codeInputWidget, &CodeInputWidget::codeChanged, this, [&] {
-        ui->btnAllowAccess->setEnabled(ui->codeInputWidget->codeStr().length() == 6);
-        ui->btnResendCode->setEnabled(ui->codeInputWidget->codeStr().length() == 6);
+        clearError();
+        checkCodeValid();
     });
 
     ui->btnAllowAccess->setEnabled(false);
@@ -64,6 +64,7 @@ void CodeDialog::updateTheme()
 
 void CodeDialog::setDialogState(CodeDialogState state)
 {
+    qDebug() << "setDialogState" << CodeDialogStateToStr(state);
     state_ = state;
     switch (state_)
     {
@@ -95,6 +96,7 @@ void CodeDialog::setDialogState(CodeDialogState state)
             ui->codeInputWidget->setEnabled(true);
             ui->btnAllowAccess->setVisible(false);
             ui->btnResendCode->setVisible(true);
+            ui->btnResendCode->setEnabled(true);
             ui->spinner->setVisible(false);
             break;
     }
@@ -184,4 +186,23 @@ void CodeDialog::showAllowButton()
     ui->spinner->setVisible(false);
     ui->btnAllowAccess->setVisible(true);
     ui->btnResendCode->setVisible(false);
+}
+
+void CodeDialog::checkCodeValid()
+{
+    ui->btnAllowAccess->setEnabled(ui->codeInputWidget->codeStr().length() == 6);
+    ui->btnResendCode->setEnabled(ui->codeInputWidget->codeStr().length() == 6);
+}
+
+QString CodeDialog::CodeDialogStateToStr(CodeDialogState state)
+{
+    QMap<CodeDialogState, QString> map = {
+        {CodeDialogState::Startup, QStringLiteral("Startup")},
+        {CodeDialogState::Waiting, QStringLiteral("Waiting")},
+        {CodeDialogState::AllowAccess, QStringLiteral("AllowAccess")},
+        {CodeDialogState::Resend, QStringLiteral("Resend")},
+    };
+    if (map.contains(state))
+        return map[state];
+    return {};
 }

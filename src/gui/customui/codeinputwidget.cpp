@@ -77,6 +77,7 @@ void CodeInputWidget::clearCode()
     for (int i = 0; i < ed_count; i++) {
         edPtrs[i]->clear();
     }
+    code_.clear();
 }
 
 void CodeInputWidget::setErrorState(bool enable)
@@ -149,6 +150,7 @@ void CodeInputWidget::onTextEdited(const QString &/*txt*/)
         moveFocus(true);
 
     code_ = buildCode();
+    setErrorState(false);
     emit codeChanged();
 }
 

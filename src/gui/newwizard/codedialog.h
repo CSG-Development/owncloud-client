@@ -45,6 +45,9 @@ private:
 
     void showResendButton();
     void showAllowButton();
+    void checkCodeValid();
+
+    static QString CodeDialogStateToStr(CodeDialogState state);
 
 private:
     Ui::CodeDialog *ui = nullptr;
