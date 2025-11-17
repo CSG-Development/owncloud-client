@@ -44,6 +44,7 @@ public:
     }
 
 private:
+    Q_DISABLE_COPY(PreparedSqlQuery);
     PreparedSqlQuery(SqlQuery *query, bool ok = true);
 
     SqlQuery *_query;

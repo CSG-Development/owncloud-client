@@ -241,6 +241,7 @@ bool ProcessDirectoryJob::handleExcluded(const QString &path, const QString &loc
         case CSYNC_FILE_EXCLUDE_AND_REMOVE:
         case CSYNC_FILE_EXCLUDE_RESERVED:
             qFatal("These were handled earlier");
+            break;
         case CSYNC_FILE_EXCLUDE_LIST:
             item->_errorString = tr("File is listed on the ignore list.");
             item->_status = SyncFileItem::Excluded;

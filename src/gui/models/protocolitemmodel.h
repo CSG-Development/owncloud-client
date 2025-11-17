@@ -73,8 +73,8 @@ public:
 
 private:
     FixedSizeRingBuffer<ProtocolItem> _data;
-    bool _issueMode;
-    int _maxLogSize;
+    bool _issueMode = false;
+    int _maxLogSize = 0;
 
 };
 

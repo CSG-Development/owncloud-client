@@ -145,8 +145,9 @@ Application::Application(Platform *platform, bool debugMode)
     if (!QNetworkInformation::loadDefaultBackend()) {
         qCWarning(lcApplication) << "Failed to load QNetworkInformation";
     } else {
-        connect(QNetworkInformation::instance(), &QNetworkInformation::reachabilityChanged, this,
-            [this](QNetworkInformation::Reachability reachability) { qCInfo(lcApplication) << "Connection Status changed to:" << reachability; });
+        connect(QNetworkInformation::instance(), &QNetworkInformation::reachabilityChanged, this, [this](QNetworkInformation::Reachability reachability) {
+            qCInfo(lcApplication) << "Connection Status changed to:" << reachability;
+        });
     }
 #endif
 }
@@ -158,8 +159,15 @@ Application::~Application()
     FolderMan::instance()->unloadAndDeleteAllFolders();
 }
 
-void Application::slotAccountStateRemoved() const
+void Application::slotAccountStateRemoved(AccountStatePtr accountState) const
 {
+    if (_gui) {
+        disconnect(accountState.data(), &AccountState::stateChanged, _gui.data(), &CuratorGui::slotAccountStateChanged);
+        disconnect(accountState->account().data(), &Account::serverVersionChanged, _gui.data(), nullptr);
+    }
+    disconnect(accountState.data(), &AccountState::isConnectedChanged, FolderMan::instance(), &FolderMan::slotIsConnectedChanged);
+    disconnect(accountState->account().data(), &Account::serverVersionChanged, FolderMan::instance(), nullptr);
+
     // if there is no more account, show the wizard.
     if (_gui && AccountManager::instance()->accounts().isEmpty()) {
         // allow to add a new account if there is non any more. Always think
@@ -171,17 +179,16 @@ void Application::slotAccountStateRemoved() const
 void Application::slotAccountStateAdded(AccountStatePtr accountState) const
 {
     // Hook up the GUI slots to the account state's signals:
-    connect(accountState.data(), &AccountState::stateChanged,
-        _gui.data(), &CuratorGui::slotAccountStateChanged);
-    connect(accountState->account().data(), &Account::serverVersionChanged,
-        _gui.data(), [account = accountState->account().data(), this] {
-            _gui->slotTrayMessageIfServerUnsupported(account);
-        });
+    connect(accountState.data(), &AccountState::stateChanged, _gui.data(), &CuratorGui::slotAccountStateChanged);
+    connect(accountState->account().data(), &Account::serverVersionChanged, _gui.data(), [account = accountState->account().data(), this] {
+        _gui->slotTrayMessageIfServerUnsupported(account);
+    });
 
     // Hook up the folder manager slots to the account state's signals:
     connect(accountState.data(), &AccountState::isConnectedChanged, FolderMan::instance(), &FolderMan::slotIsConnectedChanged);
-    connect(accountState->account().data(), &Account::serverVersionChanged, FolderMan::instance(),
-        [account = accountState->account().data()] { FolderMan::instance()->slotServerVersionChanged(account); });
+    connect(accountState->account().data(), &Account::serverVersionChanged, FolderMan::instance(), [account = accountState->account().data()] {
+        FolderMan::instance()->slotServerVersionChanged(account);
+    });
     accountState->checkConnectivity();
 }
 

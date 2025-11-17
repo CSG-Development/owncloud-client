@@ -6,10 +6,12 @@
 #include "gui/curatorgui.h"
 #include "gui/settingsdialog.h"
 #include "gui/customui/stylehelper.h"
+#include "gui/newwizard/loginservices/remoteconnector.h"
 #include "pages/emailpage.h"
 #include "pages/credentialspage.h"
 #include "pages/waitpage.h"
 #include "pages/finishedpage.h"
+#include "pages/connecterrorpage.h"
 #include "theme.h"
 #include "setupcontext.h"
 
@@ -55,6 +57,7 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     connect(credPage_, &CredentialsPage::backButtonClicked, this, &SetupWidget::credPageBackClicked);
     connect(credPage_, &CredentialsPage::codeEntered, this, &SetupWidget::codeEntered);
     connect(credPage_, &CredentialsPage::codeSkipped, this, &SetupWidget::codeSkipped);
+    connect(credPage_, &CredentialsPage::codeResend, this, &SetupWidget::codeResendClicked);
 
     waitPage_ = new WaitPage(this);
     _ui->contentWidget->addWidget(waitPage_);
@@ -64,6 +67,11 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
 
     connect(finishPage_, &FinishedPage::doneClicked, this, &SetupWidget::finishPageDoneClicked);
     connect(finishPage_, &FinishedPage::backClicked, this, &SetupWidget::finishPageBackClicked);
+
+    connectErrorPage_ = new ConnectErrorPage(this);
+    _ui->contentWidget->addWidget(connectErrorPage_);
+    connect(connectErrorPage_, &ConnectErrorPage::backClicked, this, &SetupWidget::connectErrorPageBackClicked);
+    connect(connectErrorPage_, &ConnectErrorPage::retryClicked, this, &SetupWidget::connectErrorPageRetryClicked);
 
     connect(Theme::instance(), &Theme::themeChanged, this, &SetupWidget::onThemeChanged);
 
@@ -75,7 +83,12 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
 
 void SetupWidget::displayPage(SetupPage page)
 {
+    previousPage = currentPage;
+
     switch (page) {
+    case SetupPage::PageNone:
+        break;
+
     case SetupPage::PageEmail:
         if (emailPage_)
             _ui->contentWidget->setCurrentWidget(emailPage_);
@@ -95,9 +108,20 @@ void SetupWidget::displayPage(SetupPage page)
         if (finishPage_)
             _ui->contentWidget->setCurrentWidget(finishPage_);
         break;
+
+    case SetupPage::PageConnectError:
+        if (connectErrorPage_)
+            _ui->contentWidget->setCurrentWidget(connectErrorPage_);
+        break;
     }
 
+    currentPage = page;
     CuratorGui::raise();
+}
+
+void SetupWidget::displayPreviousPage()
+{
+    displayPage(previousPage);
 }
 
 void SetupWidget::showErrorMessage(const QString &errorMessage)
@@ -120,10 +144,24 @@ void SetupWidget::hideErrorMessage()
         finishPage_->showErrorMessage({});
 }
 
-void SetupWidget::showCodeDialog()
+void SetupWidget::codeRequested()
 {
-    if (_ui->contentWidget->currentWidget() == credPage_)
-        credPage_->showCodeDialog();
+    if (_ui->contentWidget->currentWidget() == credPage_) {
+        qCDebug(lcSetupWizardWidget) << "[SetupWidget::codeRequested]";
+        credPage_->codeJustRequested();
+        credPage_->showCodeDialog(true);
+    }
+}
+
+void SetupWidget::codeAccepted()
+{
+    if (_ui->contentWidget->currentWidget() == credPage_) {
+        if (credPage_->isCodeDialogVisible()) {
+            showCredPageProgress(true);
+        }
+        credPage_->showCodeDialog(false);
+        showCredPageProgress(true);
+    }
 }
 
 void SetupWidget::setDevicesList(const QList<Device> &list)
@@ -156,6 +194,15 @@ void SetupWidget::onCancelClicked()
 void SetupWidget::onSetupFinishPageDefaults(const QString &defaultSyncTargetDir, const QString &userChosenSyncTargetDir, bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental)
 {
     finishPage_->setupPageDefaults(defaultSyncTargetDir, userChosenSyncTargetDir, vfsIsAvailable, enableVfsByDefault, vfsModeIsExperimental);
+}
+
+void SetupWidget::errorOccured(RemoteRequest req, int code, const QString& message)
+{
+    qCDebug(lcSetupWizardWidget) << "Request:" << RemoteConnector::RemoteRequestToStr(req)
+                                 << "code:" << code
+                                 << "message:" << message;
+
+    credPage_->errorOccured(req, code, message);
 }
 
 void SetupWidget::setInvalidUrlError()

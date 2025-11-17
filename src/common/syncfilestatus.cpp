@@ -62,6 +62,7 @@ QString SyncFileStatus::toSocketAPIString() const
     case StatusSync:
         statusString = QStringLiteral("SYNC");
         break;
+    case StatusExcluded:
     case StatusWarning:
         // The protocol says IGNORE, but all implementations show a yellow warning sign.
         statusString = QStringLiteral("IGNORE");
@@ -71,10 +72,6 @@ QString SyncFileStatus::toSocketAPIString() const
         break;
     case StatusError:
         statusString = QStringLiteral("ERROR");
-        break;
-    case StatusExcluded:
-        // The protocol says IGNORE, but all implementations show a yellow warning sign.
-        statusString = QStringLiteral("IGNORE");
         break;
     }
     if (canBeShared && _shared) {

@@ -775,7 +775,7 @@ void ConfigFile::setCrashReporter(bool enabled)
 bool ConfigFile::automaticLogDir() const
 {
     auto settings = makeQSettings();
-    return settings.value(automaticLogDirC(), false).toBool();
+    return settings.value(automaticLogDirC(), true).toBool();
 }
 
 void ConfigFile::setAutomaticLogDir(bool enabled)

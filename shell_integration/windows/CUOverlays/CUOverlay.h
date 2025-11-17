@@ -30,7 +30,7 @@ public:
     IFACEMETHODIMP_(ULONG) Release();
 
 protected:
-    ~CUOverlay();
+    ~CUOverlay() = default;
 
 private:
     long _referenceCount;

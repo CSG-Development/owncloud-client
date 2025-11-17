@@ -98,6 +98,8 @@
         <file>res/login/eye_closed_light.svg</file>
         <file>res/login/finished_page_dark.qss</file>
         <file>res/login/finished_page_light.qss</file>
+        <file>res/login/connect_error_page_dark.qss</file>
+        <file>res/login/connect_error_page_light.qss</file>
         <file>res/login/gear_dark.svg</file>
         <file>res/login/gear_light.svg</file>
         <file>res/login/reset_dark.svg</file>

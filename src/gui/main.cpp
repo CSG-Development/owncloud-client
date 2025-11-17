@@ -80,8 +80,8 @@ struct CommandLineOptions
 
     QString logDir;
     QString logFile;
-    bool logFlush = false;
-    bool logDebug = false;
+    bool logFlush = true;
+    bool logDebug = true;
 
     bool debugMode = false;
 

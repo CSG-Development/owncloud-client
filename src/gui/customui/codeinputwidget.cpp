@@ -77,6 +77,7 @@ void CodeInputWidget::clearCode()
     for (int i = 0; i < ed_count; i++) {
         edPtrs[i]->clear();
     }
+    code_.clear();
 }
 
 void CodeInputWidget::setErrorState(bool enable)
@@ -112,6 +113,19 @@ bool CodeInputWidget::eventFilter(QObject *obj, QEvent *event)
         }
     }
 
+    // Easy overwrite code digits if the field is not empty
+    if (event->type() == QEvent::FocusIn) {
+        if (auto ed = static_cast<QLineEdit*>(obj)) {
+            if (!ed->text().isEmpty()) {
+                ed->selectAll();
+                if (errorState) {
+                    setErrorState(false);
+                    emit focusGained();
+                }
+            }
+        }
+    }
+
     return QWidget::eventFilter(obj, event);
 }
 
@@ -137,6 +151,7 @@ void CodeInputWidget::onTextEdited(const QString &/*txt*/)
         moveFocus(true);
 
     code_ = buildCode();
+    setErrorState(false);
     emit codeChanged();
 }
 
@@ -201,6 +216,5 @@ QString CodeInputWidget::buildCode() const
     code += ui->ed4->text();
     code += ui->ed5->text();
     code += ui->ed6->text();
-    qDebug() << code;
     return code;
 }

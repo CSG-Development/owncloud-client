@@ -540,7 +540,7 @@ void SyncEngine::slotDiscoveryFinished()
             restoreOldFiles(_syncItems);
         }
 
-        if (_discoveryPhase->_anotherSyncNeeded && _anotherSyncNeeded == AnotherSyncNeeded::NoFollowUpSync) {
+        if (_discoveryPhase && _discoveryPhase->_anotherSyncNeeded && _anotherSyncNeeded == AnotherSyncNeeded::NoFollowUpSync) {
             _anotherSyncNeeded = AnotherSyncNeeded::ImmediateFollowUp;
         }
 

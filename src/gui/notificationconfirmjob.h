@@ -63,7 +63,7 @@ public:
     NotificationWidget *widget();
 
 private:
-    NotificationWidget *_widget;
+    NotificationWidget *_widget = nullptr;
 };
 }
 

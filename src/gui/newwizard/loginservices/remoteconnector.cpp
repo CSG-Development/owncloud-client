@@ -9,14 +9,34 @@
 #include <QLoggingCategory>
 
 namespace {
-const QString ra_cert_file = QStringLiteral("D:/projects/noveo/main/h836/test/src/fake-device-noveo.cer");
+const auto api_ra_url         = QStringLiteral("https://hc-remote-access-env-https.eba-a2nvhpbm.us-west-2.elasticbeanstalk.com/api");
+const auto api_ra_initiate    = QStringLiteral("/client/v1/auth/initiate");   // POST
+const auto api_ra_refresh     = QStringLiteral("/client/v1/auth/refresh");    // GET
+const auto api_ra_token       = QStringLiteral("/client/v1/auth/token");      // POST
+const auto api_ra_devices     = QStringLiteral("/client/v1/devices");         // GET
+const auto api_ra_device_info = QStringLiteral("/client/v1/devices/");        // GET
 
-const QString api_ra_url = QStringLiteral("https://hc-remote-access-env-https.eba-a2nvhpbm.us-west-2.elasticbeanstalk.com/api");
-const QString api_ra_initiate = QStringLiteral("/client/v1/auth/initiate");           // POST
-const QString api_ra_refresh = QStringLiteral("/client/v1/auth/refresh");             // GET
-const QString api_ra_token = QStringLiteral("/client/v1/auth/token");                 // POST
-const QString api_ra_devices = QStringLiteral("/client/v1/devices");                  // GET
-const QString api_ra_device_info = QStringLiteral("/client/v1/devices/");             // GET
+// JSON keys
+const auto jkey_name      = QStringLiteral("name");
+const auto jkey_email     = QStringLiteral("email");
+const auto jkey_code      = QStringLiteral("code");
+const auto jkey_reference = QStringLiteral("reference");
+const auto jkey_hostname  = QStringLiteral("hostname");
+const auto jkey_address   = QStringLiteral("address");
+const auto jkey_port      = QStringLiteral("port");
+const auto jkey_seagateDeviceID = QStringLiteral("seagateDeviceID");
+//const auto jkey_clientFriendlyName = QStringLiteral("clientFriendlyName");
+//const auto jkey_clientId =QStringLiteral("clientId");
+const auto jkey_certificateCommonName = QStringLiteral("certificateCommonName");
+const auto jkey_friendlyName = QStringLiteral("friendlyName");
+const auto jkey_paths        = QStringLiteral("paths");
+const auto jkey_type         = QStringLiteral("type");
+const auto jkey_refreshToken = QStringLiteral("refreshToken");
+const auto jkey_accessToken  = QStringLiteral("accessToken");
+const auto jkey_expiresIn    = QStringLiteral("expiresIn");
+const auto jkey_tokenType    = QStringLiteral("tokenType");
+const auto jkey_stacktrace   = QStringLiteral("stacktrace");
+const auto jkey_reason       = QStringLiteral("reason");
 }
 
 Q_LOGGING_CATEGORY(lcLoginService, "login.service", QtDebugMsg)
@@ -46,6 +66,7 @@ RemoteConnector::RemoteConnector(QObject *parent)
     rest_factory->setBaseUrl(QUrl(api_ra_url));
 
     connect(&net_mgr, &QNetworkAccessManager::finished, this, [&](QNetworkReply *reply){
+        Q_UNUSED(reply);
         //qCDebug(lcLoginService) << "QNetworkAccessManager::finished" << reply->error();
     });
     connect(&net_mgr, &QNetworkAccessManager::sslErrors, this, [&](QNetworkReply *reply, const QList<QSslError> &errors) {
@@ -59,6 +80,7 @@ RemoteConnector::RemoteConnector(QObject *parent)
         reply->ignoreSslErrors();
     });
     connect(&net_mgr, &QNetworkAccessManager::encrypted, this, [&](QNetworkReply *reply){
+        Q_UNUSED(reply);
         // TODO: custom certificate check
         // call reply->abort() if checks fails
         // qInfo() << "encrypted" << reply->url();
@@ -68,16 +90,16 @@ RemoteConnector::RemoteConnector(QObject *parent)
         qCDebug(lcLoginService) << "Initiate request finished, code" << code;
         if (doc) {
             if (code == 200) {
-                referenceCode = (*doc)[QStringLiteral("reference")].toString();
+                referenceCode = (*doc)[jkey_reference].toString();
                 emit code_requested();
             }
             else {
-                emit error_code(code, QStringLiteral("initiate"));
+                emit error_occured(RemoteRequest::Initiate, code, extractErrorMessage(doc.value()));
             }
         }
         else {
             qCWarning(lcLoginService) << "initiate request returns empty data, code" << code;
-            emit error_code(code, QStringLiteral("no data in reply"));
+            emit error_occured(RemoteRequest::Initiate, code, {});
         }
     });
 
@@ -87,15 +109,15 @@ RemoteConnector::RemoteConnector(QObject *parent)
         if (doc) {
             if (code == 200) {
                 parseTokenReply(doc.value());
-                query_devices(accessToken);
+                query_devices_list(accessToken);
             }
             else {
-                emit error_code(code, QStringLiteral("refresh"));
+                emit error_occured(RemoteRequest::Refresh, code, extractErrorMessage(doc.value()));
             }
         }
         else  {
             qCWarning(lcLoginService) << "refresh request returns empty data, code" << code;
-            emit error_code(code, QStringLiteral("no data in reply"));
+            emit error_occured(RemoteRequest::Refresh, code, {});
         }
     });
 
@@ -105,20 +127,21 @@ RemoteConnector::RemoteConnector(QObject *parent)
         if (doc) {
             if (code == 200) {
                 parseTokenReply(doc.value());
-                emit query_devices(accessToken);
+                emit token_success();
+                emit query_devices_list(accessToken);
             }
             else {
-                auto error_str = doc.value()[QStringLiteral("name")].toString();
-                emit error_code(code, QStringLiteral("token, %1").arg(error_str));
+                auto error_str = doc.value()[jkey_name].toString();
+                emit error_occured(RemoteRequest::Token, code, extractErrorMessage(doc.value()));
             }
         }
         else {
             qCWarning(lcLoginService) << "token request returns empty data, code" << code;
-            emit error_code(code, QStringLiteral("no data in reply"));
+            emit error_occured(RemoteRequest::Token, code, {});
         }
     });
 
-    connect(this, &RemoteConnector::devices_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
+    connect(this, &RemoteConnector::devices_list_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
         qCDebug(lcLoginService) << "Devices list request finished, code" << code;
 
         if (doc) {
@@ -136,13 +159,13 @@ RemoteConnector::RemoteConnector(QObject *parent)
                 emit fetch_devices();
             }
             else {
-                auto error_str = doc.value()[QStringLiteral("name")].toString();
-                emit error_code(code, QStringLiteral("devices, %1").arg(error_str));
+                auto error_str = doc.value()[jkey_name].toString();
+                emit error_occured(RemoteRequest::DeviceList, code, extractErrorMessage(doc.value()));
             }
         }
         else {
-            qCWarning(lcLoginService) << "devices request returns empty data";
-            emit error_code(code, QStringLiteral("no data in reply"));
+            qCWarning(lcLoginService) << "devices list request returns empty data";
+            emit error_occured(RemoteRequest::DeviceList, code, {});
         }
     });
 
@@ -155,13 +178,13 @@ RemoteConnector::RemoteConnector(QObject *parent)
                 emit fetch_devices();
             }
             else {
-                auto error_str = doc.value()[QStringLiteral("name")].toString();
-                emit error_code(code, QStringLiteral("device_info, %1").arg(error_str));
+                auto error_str = doc.value()[jkey_name].toString();
+                emit error_occured(RemoteRequest::DeviceInfo, code, extractErrorMessage(doc.value()));
             }
         }
         else {
             qCWarning(lcLoginService) << "device info request returns empty data, code" << code;
-            emit error_code(code, QStringLiteral("no data in reply"));
+            emit error_occured(RemoteRequest::DeviceInfo, code, {});
         }
     });
 
@@ -212,6 +235,7 @@ void RemoteConnector::setRaCert()
 
 void RemoteConnector::start_query(const QString &email)
 {
+    qCDebug(lcLoginService) << "start_query" << email;
     currentEmail  = email;
     loadRefreshToken(currentEmail);
     if (refreshToken.isEmpty()) {
@@ -222,7 +246,7 @@ void RemoteConnector::start_query(const QString &email)
             query_refresh(refreshToken);
         }
         else {
-            query_devices(accessToken);
+            query_devices_list(accessToken);
         }
     }
 }
@@ -235,8 +259,12 @@ void RemoteConnector::query_initiate(const QString &email)
     QJsonObject obj;
     obj[QStringLiteral("clientFriendlyName")] = tr("Curator Manager");
     obj[QStringLiteral("clientId")] = tr("");
-    obj[QStringLiteral("email")] = email;
+    obj[jkey_email] = email;
     doc.setObject(obj);
+
+    referenceCode.clear();
+    accessToken.clear();
+    refreshToken.clear();
 
     rest_factory->setQueryParameters({qMakePair(QStringLiteral("type"), QStringLiteral("email"))});
 
@@ -264,8 +292,8 @@ void RemoteConnector::query_token(const QString& code)
 
     QJsonDocument doc;
     QJsonObject payload;
-    payload[QStringLiteral("code")] = code;
-    payload[QStringLiteral("reference")] = referenceCode;
+    payload[jkey_code] = code;
+    payload[jkey_reference] = referenceCode;
     doc.setObject(payload);
 
     rest_factory->setQueryParameters({qMakePair(QStringLiteral("type"), QStringLiteral("email"))});
@@ -276,7 +304,7 @@ void RemoteConnector::query_token(const QString& code)
     });
 }
 
-void RemoteConnector::query_devices(const QString& access_token)
+void RemoteConnector::query_devices_list(const QString& access_token)
 {
     qCDebug(lcLoginService) << "query_devices" << access_token;
 
@@ -286,7 +314,7 @@ void RemoteConnector::query_devices(const QString& access_token)
     req.setRawHeader("authorization", QStringLiteral("Bearer %1").arg(access_token).toUtf8());
 
     rest_mgr->get(req, this, [&](QRestReply &reply) {
-        emit devices_finished(reply.readJson(), reply.httpStatus());
+        emit devices_list_finished(reply.readJson(), reply.httpStatus());
     });
 }
 
@@ -305,6 +333,27 @@ void RemoteConnector::query_device_info(const QString &access_token, const QStri
     });
 }
 
+QString RemoteConnector::RemoteRequestToStr(RemoteRequest req)
+{
+    QMap<RemoteRequest,QString> map = {
+        {RemoteRequest::Initiate, QStringLiteral("Initiate")},
+        {RemoteRequest::Refresh, QStringLiteral("Refresh")},
+        {RemoteRequest::Token, QStringLiteral("Token")},
+        {RemoteRequest::DeviceList, QStringLiteral("DeviceList")},
+        {RemoteRequest::DeviceInfo, QStringLiteral("DeviceInfo")},
+    };
+    if (map.contains(req))
+        return map[req];
+    return {};
+}
+
+void RemoteConnector::clearTokens()
+{
+    refreshToken.clear();
+    accessToken.clear();
+    referenceCode.clear();
+}
+
 void RemoteConnector::saveRefreshToken(const QString& email)
 {
     if (email.isEmpty()) {
@@ -312,7 +361,10 @@ void RemoteConnector::saveRefreshToken(const QString& email)
         return;
     }
     ConfigFile cf;
-    cf.setRefreshTokenForEmail(refreshToken, email);
+    // TODO: use qt6keychain
+    QByteArray ba = refreshToken.toLatin1();
+    QString enc = QString::fromUtf8(ba.toBase64());
+    cf.setRefreshTokenForEmail(enc, email);
 }
 
 void RemoteConnector::loadRefreshToken(const QString& email)
@@ -322,15 +374,18 @@ void RemoteConnector::loadRefreshToken(const QString& email)
         return;
     }
     ConfigFile cf;
-    refreshToken = cf.refreshTokenForEmail(email);
+    // TODO: use qt6keychain
+    QString dec = cf.refreshTokenForEmail(email);
+    QByteArray ba = QByteArray::fromBase64(dec.toUtf8());
+    refreshToken = QString::fromUtf8(ba);
 }
 
 void RemoteConnector::parseTokenReply(const QJsonDocument& doc)
 {
-    refreshToken = doc[QStringLiteral("refreshToken")].toString();
-    accessToken = doc[QStringLiteral("accessToken")].toString();
-    int expiresIn = doc[QStringLiteral("expiresIn")].toInt();
-    tokenType = doc[QStringLiteral("tokenType")].toString();
+    refreshToken = doc[jkey_refreshToken].toString();
+    accessToken = doc[jkey_accessToken].toString();
+    int expiresIn = doc[jkey_expiresIn].toInt();
+    tokenType = doc[jkey_tokenType].toString();
 
     if (expiresIn > 0)
         accessTokenExpireTime = QDateTime::currentDateTime().addSecs(expiresIn);
@@ -340,28 +395,49 @@ void RemoteConnector::parseTokenReply(const QJsonDocument& doc)
 
 void RemoteConnector::parseDeviceInfoReply(const QJsonDocument &doc)
 {
-    QString devId = doc[QStringLiteral("seagateDeviceID")].toString();
-    const auto& paths = doc[QStringLiteral("paths")].toArray();
+    QString devId = doc[jkey_seagateDeviceID].toString();
+    const auto& paths = doc[jkey_paths].toArray();
 
     if (auto d = findDevice(devId)) {
         for (const auto p: paths) {
             DevicePath dpath;
-            dpath.deviceType = DevicePath::strToDevType(p[QStringLiteral("type")].toString());
-            dpath.address = p[QStringLiteral("address")].toString();
-            dpath.port = p[QStringLiteral("port")].toInt();
+            dpath.deviceType = DevicePath::strToDevType(p[jkey_type].toString());
+            dpath.address = p[jkey_address].toString();
+            dpath.port = p[jkey_port].toInt();
             d->paths.append(dpath);
             qCDebug(lcLoginService) << "Device" << d->seagateDeviceID << "path" << dpath.address;
         }
     }
 }
 
+QString RemoteConnector::extractErrorMessage(const QJsonDocument &doc)
+{
+    QString message;
+    const auto reason = doc[jkey_reason].toString();
+
+    if (reason.isEmpty()) {
+        message = reason;
+    }
+    else {
+        message = doc[jkey_stacktrace].toString();
+    }
+
+    if (message.contains(QStringLiteral(":"))) {
+        const auto& parts = message.split(QStringLiteral(":"), Qt::SkipEmptyParts);
+        if (!parts.isEmpty())
+            message = parts.last().trimmed();
+    }
+
+    return message;
+}
+
 void RemoteConnector::addDevice(const QJsonValue &val)
 {
     Device d;
-    d.seagateDeviceID = val[QStringLiteral("seagateDeviceID")].toString();
-    d.certificateCommonName = val[QStringLiteral("certificateCommonName")].toString();
-    d.friendlyName = val[QStringLiteral("friendlyName")].toString();
-    d.hostname = val[QStringLiteral("hostname")].toString();
+    d.seagateDeviceID = val[jkey_seagateDeviceID].toString();
+    d.certificateCommonName = val[jkey_certificateCommonName].toString();
+    d.friendlyName = val[jkey_friendlyName].toString();
+    d.hostname = val[jkey_hostname].toString();
     devices.append(d);
     devIdsQueue.append(d.seagateDeviceID);
     qCDebug(lcLoginService) << "Device" << d.seagateDeviceID << d.certificateCommonName << "added";

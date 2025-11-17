@@ -1,0 +1,79 @@
+#frameContent {
+    background-color: #FFFFFF;
+    border-radius: 24px;
+}
+
+#frame,
+#frameHalign,
+#frameContent,
+#frameButton,
+#frameLogo,
+#frameText,
+#frameToolbar {
+    border: none;
+}
+
+#lblHeader {
+    font-size: 22px;
+    font: "Segoe UI";
+}
+
+#lblInfo1,
+#lblInfo2,
+#lblInfo3,
+#lblInfo4,
+#lblInfo5,
+#lblInfo6,
+#lblInfo7 {
+    font-size: 14px;
+}
+
+#btnUnused {
+    background: transparent;
+    border: 1px solid transparent;
+}
+
+/**** Retry button */
+#btnRetry {
+    background: #1976D2;
+    border-color: transparent;
+    border-width: 1px;
+    border-radius: 20px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font: "Segoe UI";
+}
+
+#btnRetry:hover {
+    background: rgba(30, 136, 229, 1);
+}
+
+#btnRetry:pressed {
+    background: rgba(20, 92, 164, 1);
+}
+
+#btnRetry:disabled {
+    background: #EEEEEE;
+    color: #9E9E9E;
+}
+
+#btnBack {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+#btnBack:hover {
+    background: rgba(30, 136, 229, 0.12);
+}
+
+#btnBack:pressed {
+    background: rgba(30, 136, 229, 0.3);
+}
+
+QToolTip {
+    background: #4E4E4E;
+    color: rgba(255, 255, 255, 222);
+    border: 1px solid transparent;
+    border-radius: 4px;
+}

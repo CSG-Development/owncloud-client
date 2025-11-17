@@ -163,12 +163,7 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
 void FinishedPage::updateTheme()
 {
     bool isDark = CUR::Theme::instance()->isDarkTheme();
-
-    auto widgets = findChildren<QWidget*>();
-    for (QWidget* widget: std::as_const(widgets)) {
-        if (widget->metaObject()->indexOfMethod("setDarkTheme()") != -1)
-            QMetaObject::invokeMethod(widget, "setDarkTheme");
-    }
+    CUR::StyleHelper::invoke_setDarkTheme_recursive(this);
 
     setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
     ui->btnDone->setSideIcon(QIcon(isDark ? doneIcon.second : doneIcon.first));

@@ -56,11 +56,6 @@ CUOverlay::CUOverlay(int state)
 {
 }
 
-CUOverlay::~CUOverlay(void)
-{
-}
-
-
 IFACEMETHODIMP_(ULONG) CUOverlay::AddRef()
 {
     return InterlockedIncrement(&_referenceCount);
@@ -151,7 +146,6 @@ IFACEMETHODIMP CUOverlay::IsMemberOf(PCWSTR pwszPath, DWORD dwAttrib)
 
 IFACEMETHODIMP CUOverlay::GetOverlayInfo(PWSTR pwszIconFile, int cchMax, int *pIndex, DWORD *pdwFlags)
 {
-    *pIndex = 0;
     *pdwFlags = ISIOI_ICONFILE | ISIOI_ICONINDEX;
     *pIndex = _state;
 

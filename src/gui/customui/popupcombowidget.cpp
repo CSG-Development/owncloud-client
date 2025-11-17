@@ -102,6 +102,8 @@ bool PopupComboWidget::eventFilter(QObject *watched, QEvent *event)
 void PopupComboWidget::setDarkTheme(bool dark)
 {
     setStyleSheet(CUR::StyleHelper::loadFileToString(dark ? widgetStyle.second : widgetStyle.first));
+    style()->unpolish(this);
+    style()->polish(this);
 }
 
 void PopupComboWidget::mousePressEvent(QMouseEvent *event)

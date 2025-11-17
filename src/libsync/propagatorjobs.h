@@ -43,7 +43,7 @@ public:
 
 private:
     bool removeRecursively(const QString &absolute);
-    bool _moveToTrash;
+    bool _moveToTrash = false;
 };
 
 /**

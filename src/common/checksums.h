@@ -134,7 +134,7 @@ private slots:
 private:
     void startImpl(std::unique_ptr<QIODevice> device);
 
-    CheckSums::Algorithm _checksumType;
+    CheckSums::Algorithm _checksumType = CheckSums::Algorithm::NONE;
 
     // watcher for the checksum calculation thread
     QFutureWatcher<QByteArray> _watcher;

@@ -41,17 +41,20 @@ SetupController::SetupController(SettingsDialog *parent)
     connect(_context->window(), &SetupWidget::loginEmailClicked, this, [&](const QString& user) {
         qCDebug(lcSetupWizardController) << "Login email clicked";
         user_ = user;
+        remoteSkipped = false;
         window()->displayPage(SetupWidget::SetupPage::PageCredentials);
         window()->showCredPageProgress(true);
-
         raConnector->start_query(user_);
     });
 
     connect(raConnector, &RemoteConnector::code_requested, this, [&] {
         qCDebug(lcSetupWizardController) << "Code requested";
         window()->displayPage(SetupWidget::SetupPage::PageCredentials);
-        remoteSkipped = false;
-        window()->showCodeDialog();
+        window()->codeRequested();
+    });
+    connect(raConnector, &RemoteConnector::token_success, this, [&] {
+        qCDebug(lcSetupWizardController) << "Token received success";
+        window()->codeAccepted();
     });
 
     connect(_context->window(), &SetupWidget::codeEntered, this, [&](const QString& code) {
@@ -64,6 +67,11 @@ SetupController::SetupController(SettingsDialog *parent)
         remoteSkipped = true;
         deviceMgr->query_local();
     });
+    connect(_context->window(), &SetupWidget::codeResendClicked, this, [&] {
+        qCDebug(lcSetupWizardController) << "Code resend clicked";
+        raConnector->clearTokens();
+        raConnector->start_query(user_);
+    });
 
     connect(raConnector, &RemoteConnector::fetch_devices_finished, this, [&] {
         qCDebug(lcSetupWizardController) << "Device list query finished";
@@ -71,9 +79,12 @@ SetupController::SetupController(SettingsDialog *parent)
         deviceMgr->query_remote(remoteDevices);
     });
 
-    connect(raConnector, &RemoteConnector::error_code, this, [&](int error_code, const QString& str) {
-        window()->showErrorMessage(tr("Error code: %1 (%2)").arg(error_code).arg(str));
-        window()->showCredPageProgress(false);
+    connect(raConnector, &RemoteConnector::error_occured, this, [&](RemoteRequest req, int error_code, const QString& message) {
+        qCDebug(lcSetupWizardController)
+            << "Error occured, code:" << error_code
+            << ", request:" << RemoteConnector::RemoteRequestToStr(req)
+            << ", message:" << message;
+        window()->errorOccured(req, error_code, message);
     });
 
     connect(deviceMgr, &DeviceListManager::local_finished, this, [&] {
@@ -82,8 +93,13 @@ SetupController::SetupController(SettingsDialog *parent)
 
         fullList = DeviceListManager::combine_lists(localDevices, remoteDevices);
 
-        window()->setDevicesList(fullList);
         window()->showCredPageProgress(false);
+        if (fullList.isEmpty()) {
+            window()->displayPage(SetupWidget::SetupPage::PageConnectError);
+        }
+        else {
+            window()->setDevicesList(fullList);
+        }
     });
 
     connect(deviceMgr, &DeviceListManager::ra_finished, this, [&] {
@@ -94,7 +110,10 @@ SetupController::SetupController(SettingsDialog *parent)
 
     connect(_context->window(), &SetupWidget::refreshDevicesClicked, this, [&] {
         qCDebug(lcSetupWizardController) << "Refresh devices clicked";
-        raConnector->start_query(user_);
+        if (remoteSkipped)
+            deviceMgr->query_local();
+        else
+            raConnector->start_query(user_);
     });
 
     connect(_context->window(), &SetupWidget::loginCredentialClicked, this, [&](const QString& url, const QString& user, const QString& password) {
@@ -121,6 +140,21 @@ SetupController::SetupController(SettingsDialog *parent)
     connect(_context->window(), &SetupWidget::finishPageDoneClicked, this, [&](CUR::Wizard::SyncMode mode, const QString& targetDir) {
         qCDebug(lcSetupWizardController) << "finishPage Done clicked";
         evaluateFinishPage(mode, targetDir);
+    });
+
+    connect(_context->window(), &SetupWidget::connectErrorPageBackClicked, this, [&] {
+        qCDebug(lcSetupWizardController) << "connectErrorPage Back clicked";
+        window()->displayPreviousPage();
+    });
+
+    connect(_context->window(), &SetupWidget::connectErrorPageRetryClicked, this, [&] {
+        qCDebug(lcSetupWizardController) << "connectErrorPage Retry clicked";
+        window()->displayPage(SetupWidget::SetupPage::PageCredentials);
+        window()->showCredPageProgress(true);
+        if (remoteSkipped)
+            deviceMgr->query_local();
+        else
+            raConnector->start_query(user_);
     });
 
     connect(this, &SetupController::credentialsEvaluationFailed, this, [&](const QString& msg) {
@@ -225,6 +259,9 @@ void SetupController::startLogin(const QString& url, const QString& user, const 
 
 void SetupController::evaluateCredentials(const QString& url, const QString &login, const QString &password)
 {
+    Q_UNUSED(login);
+    Q_UNUSED(password);
+
     const QUrl serverUrl = [url]() {
         QString userProvidedUrl = url;
 

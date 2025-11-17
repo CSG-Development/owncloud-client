@@ -11,6 +11,14 @@
 
 namespace CUR {
 
+enum class RemoteRequest {
+    Initiate,
+    Refresh,
+    Token,
+    DeviceList,
+    DeviceInfo
+};
+
 class RemoteConnector: public QObject
 {
     Q_OBJECT
@@ -26,23 +34,28 @@ public:
     void query_initiate(const QString& email);
     void query_refresh(const QString &refresh_token);
     void query_token(const QString& code);
-    void query_devices(const QString &access_token);
+    void query_devices_list(const QString &access_token);
     void query_device_info(const QString &access_token, const QString& deviceId);
 
     [[nodiscard]] const QList<DeviceInfo>& deviceList() const {return devInfoList;}
+
+    static QString RemoteRequestToStr(RemoteRequest req);
+
+    void clearTokens();
 
 signals:
     void initiate_finished(std::optional<QJsonDocument>, int code);
     void refresh_finished(std::optional<QJsonDocument>, int code);
     void token_finished(std::optional<QJsonDocument>, int code);
-    void devices_finished(std::optional<QJsonDocument>, int code);
+    void devices_list_finished(std::optional<QJsonDocument>, int code);
     void device_info_finished(std::optional<QJsonDocument>, int code);
 
     void fetch_devices();
     void fetch_devices_finished();
     void code_requested();
+    void token_success();
 
-    void error_code(int code, const QString& str = QStringLiteral(""));
+    void error_occured(RemoteRequest request, int code, const QString& message);
 
     void request_finished(std::optional<QJsonDocument>, int code, const QString& url);
 
@@ -53,6 +66,10 @@ private:
 
     void parseTokenReply(const QJsonDocument& doc);
     void parseDeviceInfoReply(const QJsonDocument& doc);
+
+    // Partialy port from dart code
+    QString extractErrorMessage(const QJsonDocument& doc);
+
     void addDevice(const QJsonValue& val);
     void prepareDevList();
 

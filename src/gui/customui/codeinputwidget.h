@@ -21,6 +21,7 @@ public:
 
 signals:
     void codeChanged();
+    void focusGained();
 
 public slots:
     void setDarkTheme();
