@@ -120,6 +120,7 @@ bool CodeInputWidget::eventFilter(QObject *obj, QEvent *event)
                 ed->selectAll();
                 if (errorState) {
                     setErrorState(false);
+                    emit focusGained();
                 }
             }
         }

@@ -40,6 +40,10 @@ CodeDialog::CodeDialog(QWidget *parent)
         checkCodeValid();
     });
 
+    connect(ui->codeInputWidget, &CodeInputWidget::focusGained, this, [&] {
+        clearError();
+    });
+
     ui->btnAllowAccess->setEnabled(false);
     ui->btnResendCode->setEnabled(false);
 
