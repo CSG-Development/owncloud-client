@@ -1,6 +1,6 @@
 #pragma once
 
-#include "loginservices/devicetypes.h"
+#include "devicetypes.h"
 
 #include <QWidget>
 #include <QTimer>
@@ -49,7 +49,7 @@ public:
     void codeJustRequested();
 
 Q_SIGNALS:
-    void loginClicked(const QString& url, const QString& user, const QString& password);
+    void loginClicked(const Device& dev, const QString& url, const QString& user, const QString& password);
     void cancelClicked();
     void settingsClicked();
     void resetPasswordClicked();

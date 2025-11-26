@@ -464,7 +464,9 @@ int main(int argc, char **argv)
         }();
 
 
-        ctx.account->setUrl(baseUrl);
+        auto device = Device::MakeStatic(baseUrl.toString(), baseUrl.toString());
+        //ctx.account->setUrl(baseUrl);
+        ctx.account->setDevice(device);
 
         auto *checkServerJob = CheckServerJobFactory(ctx.account->accessManager()).startJob(ctx.account->url(), qApp);
 

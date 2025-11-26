@@ -30,6 +30,7 @@ private:
 private:
     QDnsLookup* dns = nullptr;
     QList<MdnsRecord> records_;
+    QMap<QString,QStringList> ptr_url;
 };
 
 } // namespace CUR

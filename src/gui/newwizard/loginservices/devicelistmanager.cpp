@@ -27,16 +27,17 @@ DeviceListManager::DeviceListManager(QObject *parent)
             emit local_finished();
             return;
         }
-        query_local_about_queue();
-    });
-
-    connect(this, &DeviceListManager::about_queue_local_finished, this, [&] {
-        mdns_records_queue = mdns_records;
+        //query_local_about_queue();
         query_local_status_queue();
     });
 
-    connect(this, &DeviceListManager::status_queue_local_finished, this, [&] {
+    connect(this, &DeviceListManager::about_queue_local_finished, this, [&] {
         emit local_finished();
+    });
+
+    connect(this, &DeviceListManager::status_queue_local_finished, this, [&] {
+        mdns_records_queue = mdns_records;
+        query_local_about_queue();
     });
 
     connect(this, &DeviceListManager::about_queue_ra_finished, this, [&] {
@@ -136,28 +137,28 @@ void DeviceListManager::query_ra_about_queue()
 
 void DeviceListManager::query_local_status(const MdnsRecord &rec)
 {
-    auto url = normalizeUrl(rec.host, rec.port, false);
+    auto url = Device::normalizeUrl(rec.host, rec.port, false);
     qCDebug(lcDeviceManager) << "Query local status" << url;
     devApi->query_device_status(url);
 }
 
 void DeviceListManager::query_local_about(const MdnsRecord &rec)
 {
-    auto url = normalizeUrl(rec.host, rec.port, false);
+    auto url = Device::normalizeUrl(rec.host, rec.port, false);
     qCDebug(lcDeviceManager) << "Query local about" << url;
     devApi->query_device_about(url);
 }
 
 void DeviceListManager::query_ra_status(const DeviceInfo &rec)
 {
-    auto url = normalizeUrl(rec.host, rec.port, false);
+    auto url = Device::normalizeUrl(rec.host, rec.port, false);
     qCDebug(lcDeviceManager) << "Query remote status" << url;
     devApi->query_device_status(url);
 }
 
 void DeviceListManager::query_ra_about(const DeviceInfo &rec)
 {
-    auto url = normalizeUrl(rec.host, rec.port, false);
+    auto url = Device::normalizeUrl(rec.host, rec.port, false);
     qCDebug(lcDeviceManager) << "Query remote about" << url;
     devApi->query_device_about(url);
 }

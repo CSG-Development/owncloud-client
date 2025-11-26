@@ -19,6 +19,7 @@ DeviceApi::DeviceApi(QObject *parent)
     : QObject(parent)
     , rest_mgr(std::make_unique<QRestAccessManager>(&net_mgr))
 {
+    net_mgr.setTransferTimeout(5 * 1000);
     rest_factory = std::make_unique<QNetworkRequestFactory>();
 
     connect(&net_mgr, &QNetworkAccessManager::sslErrors, this, [&](QNetworkReply *reply, const QList<QSslError>&/*errors*/) {

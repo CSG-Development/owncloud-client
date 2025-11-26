@@ -76,7 +76,10 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     });
 
     connect(ui->btnLogin, &QPushButton::clicked, this, [&] {
-        Q_EMIT loginClicked(url(), email(), password());
+        if (currentDevice().has_value())
+            Q_EMIT loginClicked(currentDevice().value(), url(), email(), password());
+        else
+            Q_EMIT loginClicked({}, url(), email(), password());
     });
     connect(ui->btnCancel, &QPushButton::clicked, this, &CredentialsPage::cancelClicked);
     connect(ui->btnSettings, &QToolButton::clicked, this, &CredentialsPage::settingsClicked);
@@ -169,7 +172,12 @@ QString CredentialsPage::url() const
 {
     if (auto currDevice = currentDevice()) {
         if (!currDevice->paths.isEmpty()) {
-            auto path = Device::firstRemotePath(currDevice.value());
+
+            if (currDevice->isStatic) {
+                return currDevice->paths.first().address;
+            }
+
+            auto path = Device::firstLocalPath(currDevice.value());
             DevicePath devPath;
             if (path) {
                 devPath = path.value();
@@ -178,7 +186,7 @@ QString CredentialsPage::url() const
                 devPath = currDevice->paths.first();
             }
 
-            return normalizeUrl(devPath.address, devPath.port, true);
+            return Device::normalizeUrl(devPath.address, devPath.port, true);
         }
     }
     return {};

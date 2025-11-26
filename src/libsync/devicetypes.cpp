@@ -37,6 +37,13 @@ const auto apps_C = QStringLiteral("apps");
 const auto apps_files_C = QStringLiteral("files");
 const auto apps_photos_C = QStringLiteral("photos");
 const auto state_C = QStringLiteral("state");
+const auto address_C = QStringLiteral("address");
+const auto deviceType_C = QStringLiteral("device_type");
+const auto port_C = QStringLiteral("port");
+const auto device_id_C = QStringLiteral("device_id");
+const auto cert_common_name_C = QStringLiteral("certificate_common_name");
+const auto friendly_name_C = QStringLiteral("friendly_name");
+const auto paths_C = QStringLiteral("paths");
 }
 
 DeviceType DevicePath::strToDevType(const QString &str)
@@ -50,6 +57,35 @@ DeviceType DevicePath::strToDevType(const QString &str)
     if (map.contains(str))
         return map[str];
     return DeviceType::Unknown;
+}
+
+QString DevicePath::devTypeToStr(DeviceType val)
+{
+    QMap<DeviceType,QString> map = {
+        {DeviceType::Unknown, QStringLiteral("unknown")},
+        {DeviceType::Local, QStringLiteral("local")},
+        {DeviceType::Public, QStringLiteral("public")},
+        {DeviceType::Remote, QStringLiteral("remote")}
+    };
+    if (map.contains(val))
+        return map[val];
+    return {};
+}
+
+QJsonObject DevicePath::toJson() const
+{
+    QJsonObject result;
+    result[address_C] = address;
+    result[deviceType_C] = devTypeToStr(deviceType);
+    result[port_C] = port;
+    return result;
+}
+
+void DevicePath::fromJson(const QJsonObject& val)
+{
+    address = val[address_C].toString();
+    deviceType = strToDevType(val[deviceType_C].toString());
+    port = val[port_C].toInt();
 }
 
 DeviceInfoAbout DeviceInfoAbout::fromJson(const QJsonDocument &doc)
@@ -106,7 +142,7 @@ DeviceInfoStatus DeviceInfoStatus::fromJson(const QJsonDocument &doc)
     return ds;
 }
 
-QString normalizeUrl(const QString &url, int port, bool add_folder)
+QString Device::normalizeUrl(const QString &url, int port, bool add_folder)
 {
     QString result;
 
@@ -135,19 +171,134 @@ QString normalizeUrl(const QString &url, int port, bool add_folder)
     }
 
     QUrl tmpurl(result);
-    if (port > 0)
-        tmpurl.setPort(port);
+    if (!add_folder) {
+        if (port > 0)
+            tmpurl.setPort(port);
+    }
 
     return tmpurl.toString();
 }
 
 std::optional<DevicePath> Device::firstRemotePath(const Device &dev)
 {
+    return getPath(dev, {DeviceType::Public, DeviceType::Remote});
+}
+
+std::optional<DevicePath> Device::firstLocalPath(const Device& dev)
+{
+    return getPath(dev, {DeviceType::Local});
+}
+
+std::optional<DevicePath> Device::getBestPath(const Device &dev)
+{
+    if (dev.paths.isEmpty())
+        return std::nullopt;
+
+    auto paths = dev.paths;
+
+    std::stable_sort(paths.begin(), paths.end(), [&](const DevicePath& a, const DevicePath& b) {
+        return a.deviceType > b.deviceType;
+    });
+
+    for (const auto& p: paths) {
+        if (p.deviceType != DeviceType::Unknown)
+            return p;
+    }
+
+    return std::nullopt;
+}
+
+std::optional<DevicePath> Device::getPath(const Device& dev, QList<DeviceType> types)
+{
     if (dev.paths.isEmpty())
         return std::nullopt;
     for (const auto& p: dev.paths) {
-        if (p.deviceType != DeviceType::Local)
+        if (types.contains(p.deviceType))
             return p;
     }
     return std::nullopt;
 }
+
+Device Device::MakeStatic(const QString &url, const QString &name)
+{
+    Device dev;
+    dev.certificateCommonName = name;
+    dev.isStatic = true;
+    DevicePath dp;
+    dp.deviceType = DeviceType::Public;
+    dp.origin = DevicePathOrigin::Static;
+    dp.address = url;
+    dev.paths.append(dp);
+    return dev;
+}
+
+QJsonDocument Device::toJson(const Device& dev)
+{
+    QJsonDocument doc;
+    QJsonObject obj;
+    obj[device_id_C] = dev.seagateDeviceID;
+    obj[cert_common_name_C] = dev.certificateCommonName;
+    obj[friendly_name_C] = dev.friendlyName;
+    obj[hostname_C] = dev.hostname;
+    QJsonArray arr;
+    for (const auto& dev_path: std::as_const(dev.paths)) {
+        arr.append(dev_path.toJson());
+    }
+    obj[paths_C] = arr;
+    doc.setObject(obj);
+    return doc;
+}
+
+QByteArray Device::toJsonStr(const Device& dev)
+{
+    const auto doc = Device::toJson(dev);
+    return doc.toJson(QJsonDocument::Compact);
+}
+
+Device Device::fromJson(const QJsonDocument &doc)
+{
+    Device d;
+    if (doc.isEmpty())
+        return {};
+
+    QJsonObject obj = doc.object();
+    d.seagateDeviceID = obj[device_id_C].toString();
+    d.certificateCommonName = obj[cert_common_name_C].toString();
+    d.friendlyName = obj[friendly_name_C].toString();
+    d.hostname = obj[hostname_C].toString();
+    d.paths = Device::jsonToPaths(obj[paths_C].toArray());
+
+    return d;
+}
+
+Device Device::fromJsonStr(const QByteArray &ba)
+{
+    QJsonDocument doc = QJsonDocument::fromJson(ba);
+    return Device::fromJson(doc);
+}
+
+QJsonArray Device::pathsToJson(const QList<DevicePath> &devicePaths)
+{
+    QList<DevicePath> paths;
+    QJsonArray array;
+    for (const auto& item: devicePaths) {
+        array.append(item.toJson());
+    }
+    return array;
+}
+
+QList<DevicePath> Device::jsonToPaths(const QJsonArray& val)
+{
+    if (val.isEmpty())
+        return {};
+
+    QList<DevicePath> ret;
+    for (const auto& item: val) {
+        DevicePath dev;
+        dev.fromJson(item.toObject());
+        ret.append(dev);
+    }
+
+    return ret;
+}
+

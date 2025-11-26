@@ -1,39 +1,71 @@
 #pragma once
 
+#include "curatorlib.h"
+
 #include <QString>
 #include <QList>
 #include <QDateTime>
 
-enum class DeviceType {
-    Unknown,
+// Ordered by connection priority
+enum class DeviceType : quint8 {
+    Unknown = 0,
     Local,
     Public,
     Remote
 };
 
-class DevicePath
+enum class DevicePathOrigin {
+    Unknown,
+    Remote,
+    MDNS,
+    Static
+};
+
+class CURATORSYNC_EXPORT DevicePath
 {
 public:
     QString address;
     DeviceType deviceType = DeviceType::Unknown;
+    DevicePathOrigin origin = DevicePathOrigin::Unknown;    // Mostly for debug
     int port = 0;
 
     static DeviceType strToDevType(const QString& str);
+    static QString devTypeToStr(DeviceType val);
+
+    QJsonObject toJson() const;
+    void fromJson(const QJsonObject &val);
 };
 
-class Device
+class CURATORSYNC_EXPORT Device
 {
 public:
     QString seagateDeviceID;
     QString certificateCommonName;
     QString friendlyName;
     QString hostname;
+    bool isStatic = false;
     QList<DevicePath> paths;
 
     static std::optional<DevicePath> firstRemotePath(const Device& dev);
+    static std::optional<DevicePath> firstLocalPath(const Device& dev);
+    static std::optional<DevicePath> getPath(const Device& dev, QList<DeviceType> types);
+    static std::optional<DevicePath> getBestPath(const Device& dev);
+
+    static Device MakeStatic(const QString& url, const QString& name);
+
+    static QJsonDocument toJson(const Device& dev);
+    static QByteArray toJsonStr(const Device& dev);
+
+    static Device fromJson(const QJsonDocument &obj);
+    static Device fromJsonStr(const QByteArray& ba);
+
+    static QJsonArray pathsToJson(const QList<DevicePath>& devicePaths);
+    static QList<DevicePath> jsonToPaths(const QJsonArray& val);
+
+    static QString normalizeUrl(const QString &url, int port, bool add_folder);
 };
 
-class DeviceHardwareInfo
+class CURATORSYNC_EXPORT DeviceHardwareInfo
 {
 public:
     qint64 memory = 0;
@@ -41,14 +73,14 @@ public:
     QString processor_type;
 };
 
-class DeviceIpv4Info {
+class CURATORSYNC_EXPORT DeviceIpv4Info {
 public:
     QString gateway;
     QString ipv4;
     QString netmask;
 };
 
-class LocalDeviceInterface
+class CURATORSYNC_EXPORT LocalDeviceInterface
 {
 public:
     DeviceIpv4Info ipv4_info;
@@ -58,7 +90,7 @@ public:
     QString type;
 };
 
-class DeviceInfoAbout
+class CURATORSYNC_EXPORT DeviceInfoAbout
 {
 public:
     QString certificate_common_name;
@@ -86,7 +118,7 @@ inline QDebug operator<< (QDebug d, const DeviceInfoAbout& info) {
     return d;
 }
 
-class DeviceInfoStatus
+class CURATORSYNC_EXPORT DeviceInfoStatus
 {
 public:
     bool oobe_done = false;
@@ -104,7 +136,7 @@ inline QDebug operator<< (QDebug d, const DeviceInfoStatus& info) {
     return d;
 }
 
-class MdnsRecord
+class CURATORSYNC_EXPORT MdnsRecord
 {
 public:
     QString name;
@@ -114,7 +146,7 @@ public:
     DeviceInfoStatus status;
 };
 
-class DeviceInfo
+class CURATORSYNC_EXPORT DeviceInfo
 {
 public:
     DeviceInfoAbout about;
@@ -134,7 +166,6 @@ public:
     }
 };
 
-QString normalizeUrl(const QString &url, int port, bool add_folder);
 
 Q_DECLARE_METATYPE(DeviceInfo);
 Q_DECLARE_METATYPE(Device);
