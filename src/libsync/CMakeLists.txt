@@ -40,6 +40,8 @@ set(libsync_SRCS
     syncresult.cpp
     syncoptions.cpp
     theme.cpp
+    devicetypes.cpp
+    devicetypes.h
     creds/credentialmanager.cpp
     creds/abstractcredentials.cpp
     creds/oauth.cpp

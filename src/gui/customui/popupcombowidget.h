@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gui/newwizard/loginservices/devicetypes.h"
+#include "devicetypes.h"
 #include "popupcombomodel.h"
 #include <QWidget>
 

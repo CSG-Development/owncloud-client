@@ -3,7 +3,7 @@
 #include <QFrame>
 #include <QTimer>
 
-#include "gui/newwizard/loginservices/devicetypes.h"
+#include "devicetypes.h"
 
 class QLineEdit;
 class QLabel;

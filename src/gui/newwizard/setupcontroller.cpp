@@ -9,6 +9,7 @@
 #include "loginservices/devicelistmanager.h"
 
 #include "theme.h"
+#include "configfile.h"
 
 #include <QClipboard>
 #include <QTimer>
@@ -94,6 +95,15 @@ SetupController::SetupController(SettingsDialog *parent)
         fullList = DeviceListManager::combine_lists(localDevices, remoteDevices);
 
         window()->showCredPageProgress(false);
+
+        // Check development settings
+        ConfigFile cf;
+        const auto dev = cf.staticDevice();
+        if (!dev.second.isEmpty()) {
+            auto d = Device::MakeStatic(dev.second, dev.first);
+            fullList.append(d);
+        }
+
         if (fullList.isEmpty()) {
             window()->displayPage(SetupWidget::SetupPage::PageConnectError);
         }
@@ -116,12 +126,13 @@ SetupController::SetupController(SettingsDialog *parent)
             raConnector->start_query(user_);
     });
 
-    connect(_context->window(), &SetupWidget::loginCredentialClicked, this, [&](const QString& url, const QString& user, const QString& password) {
+    connect(_context->window(), &SetupWidget::loginCredentialClicked, this, [&](const Device& dev, const QString& url, const QString& user, const QString& password) {
         qCDebug(lcSetupWizardController) << "Login credential clicked" << url;
         url_ = url;
         //user_ = user;
         password_ = password;
-        startLogin(url_, user_, password_);
+        device_ = dev;
+        startLogin(device_, url_, user_, password_);
     });
 
     connect(_context->window(), &SetupWidget::credPageBackClicked, this, [&] {
@@ -251,13 +262,13 @@ void SetupController::setupFinishPage()
     Q_EMIT setupFinishPageDefaults(defaultSyncTargetDir, syncTargetDir, vfsIsAvailable, enableVfsByDefault, vfsModeIsExperimental);
 }
 
-void SetupController::startLogin(const QString& url, const QString& user, const QString& password)
+void SetupController::startLogin(const Device& dev, const QString& url, const QString& user, const QString& password)
 {
     window()->displayPage(SetupWidget::SetupPage::PageWait);
-    evaluateCredentials(url, user, password);
+    evaluateCredentials(dev, url, user, password);
 }
 
-void SetupController::evaluateCredentials(const QString& url, const QString &login, const QString &password)
+void SetupController::evaluateCredentials(const Device& dev, const QString& url, const QString &login, const QString &password)
 {
     Q_UNUSED(login);
     Q_UNUSED(password);
@@ -349,6 +360,7 @@ void SetupController::evaluateCredentials(const QString& url, const QString &log
                         }
 
                         _context->accountBuilder().setServerUrl(resolvedUrl, qvariant_cast<DetermineAuthTypeJob::AuthType>(authTypeJob->result()));
+                        _context->accountBuilder().setDevice(device_);
                         Q_EMIT credentialsEvaluationSuccessful();
                     });
                 });

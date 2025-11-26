@@ -196,6 +196,8 @@ public:
     /// Add the system and user exclude file path to the ExcludedFiles instance.
     static void setupDefaultExcludeFilePaths(ExcludedFiles &excludedFiles);
 
+    QPair<QString,QString> staticDevice();
+
     /**
      * The maximum versions that this client can read.
      *

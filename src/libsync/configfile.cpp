@@ -46,63 +46,57 @@ namespace CUR {
 namespace chrono = std::chrono;
 
 Q_LOGGING_CATEGORY(lcConfigFile, "sync.configfile", QtInfoMsg)
+
 namespace  {
-const QString logHttpC() { return QStringLiteral("logHttp"); }
-const QString remotePollIntervalC() { return QStringLiteral("remotePollInterval"); }
-//const QString caCertsKeyC() { return QStringLiteral("CaCertificates"); } only used from account.cpp
-const QString forceSyncIntervalC() { return QStringLiteral("forceSyncInterval"); }
-const QString fullLocalDiscoveryIntervalC() { return QStringLiteral("fullLocalDiscoveryInterval"); }
-const QString notificationRefreshIntervalC() { return QStringLiteral("notificationRefreshInterval"); }
-const QString monoIconsC() { return QStringLiteral("monoIcons"); }
-const QString promptDeleteC() { return QStringLiteral("promptDeleteAllFiles"); }
-const QString crashReporterC() { return QStringLiteral("crashReporter"); }
-const QString optionalDesktopNoficationsC()
-{
-    return QStringLiteral("optionalDesktopNotifications");
-}
-const QString skipUpdateCheckC() { return QStringLiteral("skipUpdateCheck"); }
-const QString updateCheckIntervalC() { return QStringLiteral("updateCheckInterval"); }
-const QString updateChannelC() { return QStringLiteral("updateChannel"); }
-const QString uiLanguageC() { return QStringLiteral("uiLanguage"); }
-const QString geometryC() { return QStringLiteral("geometry"); }
-const QString timeoutC() { return QStringLiteral("timeout"); }
-const QString chunkSizeC() { return QStringLiteral("chunkSize"); }
-const QString minChunkSizeC() { return QStringLiteral("minChunkSize"); }
-const QString maxChunkSizeC() { return QStringLiteral("maxChunkSize"); }
-const QString targetChunkUploadDurationC() { return QStringLiteral("targetChunkUploadDuration"); }
-const QString automaticLogDirC() { return QStringLiteral("logToTemporaryLogDir"); }
-const QString numberOfLogsToKeepC() { return QStringLiteral("numberOfLogsToKeep"); }
-const QString showExperimentalOptionsC() { return QStringLiteral("showExperimentalOptions"); }
+const auto logHttpC = QStringLiteral("logHttp");
+const auto remotePollIntervalC = QStringLiteral("remotePollInterval");
+//const auto caCertsKeyC = QStringLiteral("CaCertificates"); } only used from account.c
+const auto forceSyncIntervalC = QStringLiteral("forceSyncInterval");
+const auto fullLocalDiscoveryIntervalC = QStringLiteral("fullLocalDiscoveryInterval");
+const auto notificationRefreshIntervalC = QStringLiteral("notificationRefreshInterval");
+const auto monoIconsC = QStringLiteral("monoIcons");
+const auto promptDeleteC = QStringLiteral("promptDeleteAllFiles");
+const auto crashReporterC = QStringLiteral("crashReporter");
+const auto optionalDesktopNoficationsC = QStringLiteral("optionalDesktopNotifications");
+const auto skipUpdateCheckC = QStringLiteral("skipUpdateCheck");
+const auto updateCheckIntervalC = QStringLiteral("updateCheckInterval");
+const auto updateChannelC = QStringLiteral("updateChannel");
+const auto uiLanguageC = QStringLiteral("uiLanguage");
+const auto geometryC = QStringLiteral("geometry");
+const auto timeoutC = QStringLiteral("timeout");
+const auto chunkSizeC = QStringLiteral("chunkSize");
+const auto minChunkSizeC = QStringLiteral("minChunkSize");
+const auto maxChunkSizeC = QStringLiteral("maxChunkSize");
+const auto targetChunkUploadDurationC = QStringLiteral("targetChunkUploadDuration");
+const auto automaticLogDirC = QStringLiteral("logToTemporaryLogDir");
+const auto numberOfLogsToKeepC = QStringLiteral("numberOfLogsToKeep");
+const auto showExperimentalOptionsC = QStringLiteral("showExperimentalOptions");
 
 // The key `clientVersion` stores the version *with* build number of the config file. It is named
 // this way, because before 5.0, only the version *without* build number was stored.
-const QString clientVersionC() { return QStringLiteral("clientVersion"); }
+const auto clientVersionC = QStringLiteral("clientVersion");
 
-const QString proxyHostC() { return QStringLiteral("Proxy/host"); }
-const QString proxyTypeC() { return QStringLiteral("Proxy/type"); }
-const QString proxyPortC() { return QStringLiteral("Proxy/port"); }
-const QString proxyUserC()
-{
-    return QStringLiteral("Proxy/user");
-}
-const QString proxyNeedsAuthC() { return QStringLiteral("Proxy/needsAuth"); }
+const auto proxyHostC = QStringLiteral("Proxy/host");
+const auto proxyTypeC = QStringLiteral("Proxy/type");
+const auto proxyPortC = QStringLiteral("Proxy/port");
+const auto proxyUserC = QStringLiteral("Proxy/user");
+const auto proxyNeedsAuthC = QStringLiteral("Proxy/needsAuth");
 
-const QString useUploadLimitC() { return QStringLiteral("BWLimit/useUploadLimit"); }
-const QString useDownloadLimitC() { return QStringLiteral("BWLimit/useDownloadLimit"); }
-const QString uploadLimitC() { return QStringLiteral("BWLimit/uploadLimit"); }
-const QString downloadLimitC() { return QStringLiteral("BWLimit/downloadLimit"); }
+const auto useUploadLimitC = QStringLiteral("BWLimit/useUploadLimit");
+const auto useDownloadLimitC = QStringLiteral("BWLimit/useDownloadLimit");
+const auto uploadLimitC = QStringLiteral("BWLimit/uploadLimit");
+const auto downloadLimitC = QStringLiteral("BWLimit/downloadLimit");
 
-const QString newBigFolderSizeLimitC() { return QStringLiteral("newBigFolderSizeLimit"); }
-const QString useNewBigFolderSizeLimitC() { return QStringLiteral("useNewBigFolderSizeLimit"); }
-const QString confirmExternalStorageC() { return QStringLiteral("confirmExternalStorage"); }
-const QString moveToTrashC() { return QStringLiteral("moveToTrash"); }
+const auto newBigFolderSizeLimitC = QStringLiteral("newBigFolderSizeLimit");
+const auto useNewBigFolderSizeLimitC = QStringLiteral("useNewBigFolderSizeLimit");
+const auto confirmExternalStorageC = QStringLiteral("confirmExternalStorage");
+const auto moveToTrashC = QStringLiteral("moveToTrash");
+const auto refreshTokenC = QStringLiteral("RefreshToken");
+const auto developmentGroupC = QStringLiteral("Development");
+const auto staticDeviceNameC = QStringLiteral("StaticDeviceName");
+const auto staticDeviceUrlC = QStringLiteral("StaticDeviceUrl");
 
-const QString refreshTokenC() { return QStringLiteral("RefreshToken"); }
-
-const QString issuesWidgetFilterC()
-{
-    return QStringLiteral("issuesWidgetFilter");
-}
+const auto issuesWidgetFilterC = QStringLiteral("issuesWidgetFilter");
 
 QString excludeFileNameC()
 {
@@ -149,14 +143,14 @@ bool ConfigFile::setConfDir(const QString &value)
 bool ConfigFile::optionalDesktopNotifications() const
 {
     auto settings = makeQSettings();
-    return settings.value(optionalDesktopNoficationsC(), true).toBool();
+    return settings.value(optionalDesktopNoficationsC, true).toBool();
 }
 
 std::optional<QStringList> ConfigFile::issuesWidgetFilter() const
 {
     auto settings = makeQSettings();
-    if (settings.contains(issuesWidgetFilterC())) {
-        return settings.value(issuesWidgetFilterC()).toStringList();
+    if (settings.contains(issuesWidgetFilterC)) {
+        return settings.value(issuesWidgetFilterC).toStringList();
     }
 
     return {};
@@ -165,45 +159,45 @@ std::optional<QStringList> ConfigFile::issuesWidgetFilter() const
 void ConfigFile::setIssuesWidgetFilter(const QStringList &checked)
 {
     auto settings = makeQSettings();
-    settings.setValue(issuesWidgetFilterC(), checked);
+    settings.setValue(issuesWidgetFilterC, checked);
     settings.sync();
 }
 
 std::chrono::seconds ConfigFile::timeout() const
 {
     auto settings = makeQSettings();
-    const auto val = settings.value(timeoutC()).toInt(); // default to 5 min
+    const auto val = settings.value(timeoutC).toInt(); // default to 5 min
     return val ? std::chrono::seconds(val) : 5min;
 }
 
 qint64 ConfigFile::chunkSize() const
 {
     auto settings = makeQSettings();
-    return settings.value(chunkSizeC(), 10 * 1000 * 1000).toLongLong(); // default to 10 MB
+    return settings.value(chunkSizeC, 10 * 1000 * 1000).toLongLong(); // default to 10 MB
 }
 
 qint64 ConfigFile::maxChunkSize() const
 {
     auto settings = makeQSettings();
-    return settings.value(maxChunkSizeC(), 100 * 1000 * 1000).toLongLong(); // default to 100 MB
+    return settings.value(maxChunkSizeC, 100 * 1000 * 1000).toLongLong(); // default to 100 MB
 }
 
 qint64 ConfigFile::minChunkSize() const
 {
     auto settings = makeQSettings();
-    return settings.value(minChunkSizeC(), 1000 * 1000).toLongLong(); // default to 1 MB
+    return settings.value(minChunkSizeC, 1000 * 1000).toLongLong(); // default to 1 MB
 }
 
 chrono::milliseconds ConfigFile::targetChunkUploadDuration() const
 {
     auto settings = makeQSettings();
-    return millisecondsValue(settings, targetChunkUploadDurationC(), chrono::minutes(1));
+    return millisecondsValue(settings, targetChunkUploadDurationC, chrono::minutes(1));
 }
 
 void ConfigFile::setOptionalDesktopNotifications(bool show)
 {
     auto settings = makeQSettings();
-    settings.setValue(optionalDesktopNoficationsC(), show);
+    settings.setValue(optionalDesktopNoficationsC, show);
     settings.sync();
 }
 
@@ -212,13 +206,13 @@ void ConfigFile::saveGeometry(QWidget *w)
     OC_ASSERT(!w->objectName().isNull());
     auto settings = makeQSettings();
     settings.beginGroup(w->objectName());
-    settings.setValue(geometryC(), w->saveGeometry());
+    settings.setValue(geometryC, w->saveGeometry());
     settings.sync();
 }
 
 void ConfigFile::restoreGeometry(QWidget *w)
 {
-    w->restoreGeometry(getValue(geometryC(), w->objectName()).toByteArray());
+    w->restoreGeometry(getValue(geometryC, w->objectName()).toByteArray());
 }
 
 void ConfigFile::saveGeometryHeader(QHeaderView *header)
@@ -229,7 +223,7 @@ void ConfigFile::saveGeometryHeader(QHeaderView *header)
 
     auto settings = makeQSettings();
     settings.beginGroup(header->objectName());
-    settings.setValue(geometryC(), header->saveState());
+    settings.setValue(geometryC, header->saveState());
     settings.sync();
 }
 
@@ -239,8 +233,8 @@ bool ConfigFile::restoreGeometryHeader(QHeaderView *header)
 
     auto settings = makeQSettings();
     settings.beginGroup(header->objectName());
-    if (settings.contains(geometryC())) {
-        header->restoreState(settings.value(geometryC()).toByteArray());
+    if (settings.contains(geometryC)) {
+        header->restoreState(settings.value(geometryC).toByteArray());
         return true;
     }
     return false;
@@ -429,7 +423,7 @@ chrono::milliseconds ConfigFile::remotePollInterval(std::chrono::seconds default
     if (defaultVal > chrono::seconds(5)) {
         defaultPollInterval = defaultVal;
     }
-    auto remoteInterval = millisecondsValue(settings, remotePollIntervalC(), defaultPollInterval);
+    auto remoteInterval = millisecondsValue(settings, remotePollIntervalC, defaultPollInterval);
     if (remoteInterval < chrono::seconds(5)) {
         remoteInterval = defaultPollInterval;
         qCWarning(lcConfigFile) << "Remote Interval is less than 5 seconds, reverting to" << remoteInterval.count();
@@ -449,7 +443,7 @@ void ConfigFile::setRemotePollInterval(chrono::milliseconds interval, const QStr
     }
     auto settings = makeQSettings();
     settings.beginGroup(con);
-    settings.setValue(remotePollIntervalC(), qlonglong(interval.count()));
+    settings.setValue(remotePollIntervalC, qlonglong(interval.count()));
     settings.sync();
 }
 
@@ -464,7 +458,7 @@ chrono::milliseconds ConfigFile::forceSyncInterval(std::chrono::seconds remoteFr
     settings.beginGroup(con);
 
     auto defaultInterval = chrono::hours(2);
-    auto interval = millisecondsValue(settings, forceSyncIntervalC(), defaultInterval);
+    auto interval = millisecondsValue(settings, forceSyncIntervalC, defaultInterval);
     if (interval < pollInterval) {
         qCWarning(lcConfigFile) << "Force sync interval is less than the remote poll inteval, reverting to" << pollInterval.count();
         interval = pollInterval;
@@ -476,7 +470,7 @@ chrono::milliseconds CUR::ConfigFile::fullLocalDiscoveryInterval() const
 {
     auto settings = makeQSettings();
     settings.beginGroup(defaultConnection());
-    return millisecondsValue(settings, fullLocalDiscoveryIntervalC(), 1h);
+    return millisecondsValue(settings, fullLocalDiscoveryIntervalC, 1h);
 }
 
 chrono::milliseconds ConfigFile::notificationRefreshInterval(const QString &connection) const
@@ -488,7 +482,7 @@ chrono::milliseconds ConfigFile::notificationRefreshInterval(const QString &conn
     settings.beginGroup(con);
 
     auto defaultInterval = chrono::minutes(5);
-    auto interval = millisecondsValue(settings, notificationRefreshIntervalC(), defaultInterval);
+    auto interval = millisecondsValue(settings, notificationRefreshIntervalC, defaultInterval);
     if (interval < chrono::minutes(1)) {
         qCWarning(lcConfigFile) << "Notification refresh interval smaller than one minute, setting to one minute";
         interval = chrono::minutes(1);
@@ -505,7 +499,7 @@ chrono::milliseconds ConfigFile::updateCheckInterval(const QString &connection) 
     settings.beginGroup(con);
 
     auto defaultInterval = chrono::hours(10);
-    auto interval = millisecondsValue(settings, updateCheckIntervalC(), defaultInterval);
+    auto interval = millisecondsValue(settings, updateCheckIntervalC, defaultInterval);
 
     auto minInterval = chrono::minutes(5);
     if (interval < minInterval) {
@@ -521,10 +515,10 @@ bool ConfigFile::skipUpdateCheck(const QString &connection) const
     if (connection.isEmpty())
         con = defaultConnection();
 
-    QVariant fallback = getValue(skipUpdateCheckC(), con, false);
-    fallback = getValue(skipUpdateCheckC(), QString(), fallback);
+    QVariant fallback = getValue(skipUpdateCheckC, con, false);
+    fallback = getValue(skipUpdateCheckC, QString(), fallback);
 
-    QVariant value = getPolicySetting(skipUpdateCheckC(), fallback);
+    QVariant value = getPolicySetting(skipUpdateCheckC, fallback);
     return value.toBool();
 }
 
@@ -537,7 +531,7 @@ void ConfigFile::setSkipUpdateCheck(bool skip, const QString &connection)
     auto settings = makeQSettings();
     settings.beginGroup(con);
 
-    settings.setValue(skipUpdateCheckC(), QVariant(skip));
+    settings.setValue(skipUpdateCheckC, QVariant(skip));
     settings.sync();
 }
 
@@ -554,38 +548,38 @@ QString ConfigFile::updateChannel() const
     }
 
     auto settings = makeQSettings();
-    return settings.value(updateChannelC(), defaultUpdateChannel).toString();
+    return settings.value(updateChannelC, defaultUpdateChannel).toString();
 }
 
 void ConfigFile::setUpdateChannel(const QString &channel)
 {
     auto settings = makeQSettings();
-    settings.setValue(updateChannelC(), channel);
+    settings.setValue(updateChannelC, channel);
 }
 
 QString ConfigFile::uiLanguage() const
 {
     auto settings = makeQSettings();
-    return settings.value(uiLanguageC(), QString()).toString();
+    return settings.value(uiLanguageC, QString()).toString();
 }
 
 void ConfigFile::setUiLanguage(const QString &uiLanguage)
 {
     auto settings = makeQSettings();
-    settings.setValue(uiLanguageC(), uiLanguage);
+    settings.setValue(uiLanguageC, uiLanguage);
 }
 
 void ConfigFile::setProxyType(QNetworkProxy::ProxyType proxyType, const QString &host, int port, bool needsAuth, const QString &user)
 {
     auto settings = makeQSettings();
 
-    settings.setValue(proxyTypeC(), proxyType);
+    settings.setValue(proxyTypeC, proxyType);
 
     if (proxyType == QNetworkProxy::HttpProxy || proxyType == QNetworkProxy::Socks5Proxy) {
-        settings.setValue(proxyHostC(), host);
-        settings.setValue(proxyPortC(), port);
-        settings.setValue(proxyNeedsAuthC(), needsAuth);
-        settings.setValue(proxyUserC(), user);
+        settings.setValue(proxyHostC, host);
+        settings.setValue(proxyPortC, port);
+        settings.setValue(proxyNeedsAuthC, needsAuth);
+        settings.setValue(proxyUserC, user);
     }
     settings.sync();
 }
@@ -634,113 +628,113 @@ int ConfigFile::proxyType() const
     if (Theme::instance()->forceSystemNetworkProxy()) {
         return QNetworkProxy::DefaultProxy;
     }
-    return getValue(proxyTypeC()).toInt();
+    return getValue(proxyTypeC).toInt();
 }
 
 QString ConfigFile::proxyHostName() const
 {
-    return getValue(proxyHostC()).toString();
+    return getValue(proxyHostC).toString();
 }
 
 int ConfigFile::proxyPort() const
 {
-    return getValue(proxyPortC()).toInt();
+    return getValue(proxyPortC).toInt();
 }
 
 bool ConfigFile::proxyNeedsAuth() const
 {
-    return getValue(proxyNeedsAuthC()).toBool();
+    return getValue(proxyNeedsAuthC).toBool();
 }
 
 QString ConfigFile::proxyUser() const
 {
-    return getValue(proxyUserC()).toString();
+    return getValue(proxyUserC).toString();
 }
 
 int ConfigFile::useUploadLimit() const
 {
-    return getValue(useUploadLimitC(), QString(), 0).toInt();
+    return getValue(useUploadLimitC, QString(), 0).toInt();
 }
 
 int ConfigFile::useDownloadLimit() const
 {
-    return getValue(useDownloadLimitC(), QString(), 0).toInt();
+    return getValue(useDownloadLimitC, QString(), 0).toInt();
 }
 
 void ConfigFile::setUseUploadLimit(int val)
 {
-    setValue(useUploadLimitC(), val);
+    setValue(useUploadLimitC, val);
 }
 
 void ConfigFile::setUseDownloadLimit(int val)
 {
-    setValue(useDownloadLimitC(), val);
+    setValue(useDownloadLimitC, val);
 }
 
 int ConfigFile::uploadLimit() const
 {
-    return getValue(uploadLimitC(), QString(), 10).toInt();
+    return getValue(uploadLimitC, QString(), 10).toInt();
 }
 
 int ConfigFile::downloadLimit() const
 {
-    return getValue(downloadLimitC(), QString(), 80).toInt();
+    return getValue(downloadLimitC, QString(), 80).toInt();
 }
 
 void ConfigFile::setUploadLimit(int kbytes)
 {
-    setValue(uploadLimitC(), kbytes);
+    setValue(uploadLimitC, kbytes);
 }
 
 void ConfigFile::setDownloadLimit(int kbytes)
 {
-    setValue(downloadLimitC(), kbytes);
+    setValue(downloadLimitC, kbytes);
 }
 
 QPair<bool, qint64> ConfigFile::newBigFolderSizeLimit() const
 {
     auto defaultValue = Theme::instance()->newBigFolderSizeLimit();
-    qint64 value = getValue(newBigFolderSizeLimitC(), QString(), defaultValue).toLongLong();
-    bool use = value >= 0 && getValue(useNewBigFolderSizeLimitC(), QString(), true).toBool();
+    qint64 value = getValue(newBigFolderSizeLimitC, QString(), defaultValue).toLongLong();
+    bool use = value >= 0 && getValue(useNewBigFolderSizeLimitC, QString(), true).toBool();
     return qMakePair(use, qMax<qint64>(0, value));
 }
 
 void ConfigFile::setNewBigFolderSizeLimit(bool isChecked, qint64 mbytes)
 {
-    setValue(newBigFolderSizeLimitC(), mbytes);
-    setValue(useNewBigFolderSizeLimitC(), isChecked);
+    setValue(newBigFolderSizeLimitC, mbytes);
+    setValue(useNewBigFolderSizeLimitC, isChecked);
 }
 
 bool ConfigFile::confirmExternalStorage() const
 {
-    return getValue(confirmExternalStorageC(), QString(), true).toBool();
+    return getValue(confirmExternalStorageC, QString(), true).toBool();
 }
 
 void ConfigFile::setConfirmExternalStorage(bool isChecked)
 {
-    setValue(confirmExternalStorageC(), isChecked);
+    setValue(confirmExternalStorageC, isChecked);
 }
 
 bool ConfigFile::moveToTrash() const
 {
-    return getValue(moveToTrashC(), QString(), false).toBool();
+    return getValue(moveToTrashC, QString(), false).toBool();
 }
 
 void ConfigFile::setMoveToTrash(bool isChecked)
 {
-    setValue(moveToTrashC(), isChecked);
+    setValue(moveToTrashC, isChecked);
 }
 
 bool ConfigFile::promptDeleteFiles() const
 {
     auto settings = makeQSettings();
-    return settings.value(promptDeleteC(), true).toBool();
+    return settings.value(promptDeleteC, true).toBool();
 }
 
 void ConfigFile::setPromptDeleteFiles(bool promptDeleteFiles)
 {
     auto settings = makeQSettings();
-    settings.setValue(promptDeleteC(), promptDeleteFiles);
+    settings.setValue(promptDeleteC, promptDeleteFiles);
 }
 
 bool ConfigFile::monoIcons() const
@@ -751,49 +745,49 @@ bool ConfigFile::monoIcons() const
     // OEM themes are not obliged to ship mono icons
     monoDefault = Theme::instance()->appNameGUI() == QStringLiteral("Curator");
 #endif
-    return settings.value(monoIconsC(), monoDefault).toBool();
+    return settings.value(monoIconsC, monoDefault).toBool();
 }
 
 void ConfigFile::setMonoIcons(bool useMonoIcons)
 {
     auto settings = makeQSettings();
-    settings.setValue(monoIconsC(), useMonoIcons);
+    settings.setValue(monoIconsC, useMonoIcons);
 }
 
 bool ConfigFile::crashReporter() const
 {
     auto settings = makeQSettings();
-    return settings.value(crashReporterC(), true).toBool();
+    return settings.value(crashReporterC, true).toBool();
 }
 
 void ConfigFile::setCrashReporter(bool enabled)
 {
     auto settings = makeQSettings();
-    settings.setValue(crashReporterC(), enabled);
+    settings.setValue(crashReporterC, enabled);
 }
 
 bool ConfigFile::automaticLogDir() const
 {
     auto settings = makeQSettings();
-    return settings.value(automaticLogDirC(), true).toBool();
+    return settings.value(automaticLogDirC, true).toBool();
 }
 
 void ConfigFile::setAutomaticLogDir(bool enabled)
 {
     auto settings = makeQSettings();
-    settings.setValue(automaticLogDirC(), enabled);
+    settings.setValue(automaticLogDirC, enabled);
 }
 
 int ConfigFile::automaticDeleteOldLogs() const
 {
     auto settings = makeQSettings();
-    return settings.value(numberOfLogsToKeepC()).toInt();
+    return settings.value(numberOfLogsToKeepC).toInt();
 }
 
 void ConfigFile::setAutomaticDeleteOldLogs(int number)
 {
     auto settings = makeQSettings();
-    settings.setValue(numberOfLogsToKeepC(), number);
+    settings.setValue(numberOfLogsToKeepC, number);
 }
 
 void ConfigFile::configureHttpLogging(std::optional<bool> enable)
@@ -803,7 +797,7 @@ void ConfigFile::configureHttpLogging(std::optional<bool> enable)
     }
 
     auto settings = makeQSettings();
-    settings.setValue(logHttpC(), enable.value());
+    settings.setValue(logHttpC, enable.value());
 
     static const QSet<QString> rule = { QStringLiteral("sync.httplogger=true") };
 
@@ -817,31 +811,31 @@ void ConfigFile::configureHttpLogging(std::optional<bool> enable)
 bool ConfigFile::logHttp() const
 {
     auto settings = makeQSettings();
-    return settings.value(logHttpC(), false).toBool();
+    return settings.value(logHttpC, false).toBool();
 }
 
 bool ConfigFile::showExperimentalOptions() const
 {
     auto settings = makeQSettings();
-    return settings.value(showExperimentalOptionsC(), false).toBool();
+    return settings.value(showExperimentalOptionsC, false).toBool();
 }
 
 QString ConfigFile::clientVersionWithBuildNumberString() const
 {
     auto settings = makeQSettings();
-    return settings.value(clientVersionC(), QString()).toString();
+    return settings.value(clientVersionC, QString()).toString();
 }
 
 void ConfigFile::setClientVersionWithBuildNumberString(const QString &version)
 {
     auto settings = makeQSettings();
-    settings.setValue(clientVersionC(), version);
+    settings.setValue(clientVersionC, version);
 }
 
 QString ConfigFile::refreshTokenForEmail(const QString& email) const
 {
     auto settings = makeQSettings();
-    settings.beginGroup(refreshTokenC());
+    settings.beginGroup(refreshTokenC);
     const auto token = settings.value(email, QString()).toString();
     settings.endGroup();
     return token;
@@ -850,7 +844,7 @@ QString ConfigFile::refreshTokenForEmail(const QString& email) const
 void ConfigFile::setRefreshTokenForEmail(const QString &token, const QString& email)
 {
     auto settings = makeQSettings();
-    settings.beginGroup(refreshTokenC());
+    settings.beginGroup(refreshTokenC);
     settings.setValue(email, token);
     settings.endGroup();
 }
@@ -876,4 +870,18 @@ void ConfigFile::setupDefaultExcludeFilePaths(ExcludedFiles &excludedFiles)
         excludedFiles.addExcludeFilePath(userList);
     }
 }
+
+QPair<QString, QString> ConfigFile::staticDevice()
+{
+    auto settings = makeQSettings();
+    settings.beginGroup(developmentGroupC);
+    QString name = settings.value(staticDeviceNameC).toString();
+    QString url = settings.value(staticDeviceUrlC).toString();
+    if (url.isEmpty())
+        return {};
+    if (name.isEmpty())
+        name = url;
+    return qMakePair(name, url);
+}
+
 }

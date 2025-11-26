@@ -141,7 +141,7 @@ QString Account::displayName() const
     QString user = davDisplayName();
     if (user.isEmpty())
         user = davUser();
-    QString host = _url.host();
+    QString host = url().toString();//_url.host();
     const int port = url().port();
     if (port > 0 && port != 80 && port != 443) {
         host += QStringLiteral(":%1").arg(QString::number(port));
@@ -163,6 +163,15 @@ void Account::setDavDisplayName(const QString &newDisplayName)
 QString Account::id() const
 {
     return _id;
+}
+
+QUrl Account::url() const
+{
+    auto dev = Device::getBestPath(_device);
+    if (dev.has_value()) {
+        return QUrl(Device::normalizeUrl(dev->address, dev->port, true));
+    }
+    return QUrl();
 }
 
 AbstractCredentials *Account::credentials() const
@@ -258,10 +267,10 @@ void Account::addApprovedCerts(const QSet<QSslCertificate> &certs)
     Q_EMIT wantsAccountSaved(this);
 }
 
-void Account::setUrl(const QUrl &url)
-{
-    _url = url;
-}
+// void Account::setUrl(const QUrl &url)
+// {
+//     _url = url;
+// }
 
 QVariant Account::credentialSetting(const QString &key) const
 {
