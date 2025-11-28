@@ -24,7 +24,9 @@ set(client_UI_SRCS
 set(client_SRCS
     aboutdialog.cpp
     accountmanager.cpp
+    accountmanager.h
     accountsettings.cpp
+    accountsettings.h
     application.cpp
     askexperimentalvirtualfilesfeaturemessagebox.cpp
     fetchserversettings.cpp
@@ -32,7 +34,11 @@ set(client_SRCS
     commonstrings.cpp
     connectionvalidator.cpp
     folder.cpp
+    folder.h
+    folderdefinition.cpp
+    folderdefinition.h
     folderman.cpp
+    folderman.h
     folderstatusmodel.cpp
     folderstatusdelegate.cpp
     folderwatcher.cpp

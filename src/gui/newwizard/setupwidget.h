@@ -62,7 +62,7 @@ Q_SIGNALS:
     void rejected();
 
     void loginEmailClicked(const QString& user);
-    void loginCredentialClicked(const Device& dev, const QString& url, const QString& user, const QString& password);
+    void loginCredentialClicked(const Device& dev, const QString& user, const QString& password);
     void loginSettingsClicked();
     void loginResetPasswordClicked();
     void refreshDevicesClicked();

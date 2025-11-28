@@ -167,11 +167,24 @@ QString Account::id() const
 
 QUrl Account::url() const
 {
-    auto dev = Device::getBestPath(_device);
+    auto dev = _device.findPath(_activePath);
     if (dev.has_value()) {
         return QUrl(Device::normalizeUrl(dev->address, dev->port, true));
     }
     return QUrl();
+}
+
+void Account::setDevice(const Device &dev)
+{
+    _device = dev;
+    auto id = _device.getBestPathId();
+    if (id)
+        _activePath = id.value();
+}
+
+void Account::setActivePath(const QUuid &id)
+{
+    _activePath = id;
 }
 
 AbstractCredentials *Account::credentials() const
@@ -213,7 +226,9 @@ void Account::setCredentials(AbstractCredentials *cred)
     connect(_credentials.data(), &AbstractCredentials::authenticationStarted, this, [this] {
         _queueGuard.block();
     });
-    connect(_credentials.data(), &AbstractCredentials::authenticationFailed, this, [this] { _queueGuard.clear(); });
+    connect(_credentials.data(), &AbstractCredentials::authenticationFailed, this, [this] {
+        _queueGuard.clear();
+    });
 }
 
 QUrl Account::davUrl() const

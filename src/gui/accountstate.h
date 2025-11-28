@@ -37,6 +37,7 @@ class Account;
 class QuotaInfo;
 class TlsErrorDialog;
 class FetchServerSettingsJob;
+class EvaluatePath;
 
 /**
  * @brief Extra info about an ownCloud server account.
@@ -189,8 +190,8 @@ private:
     QPointer<ConnectionValidator> _connectionValidator;
     QPointer<UpdateUrlDialog> _updateUrlDialog;
     QPointer<TlsErrorDialog> _tlsDialog;
+    EvaluatePath* _evaluator = nullptr;
     bool _supportsSpaces = true;
-
     bool _settingUp = false;
 
     /**

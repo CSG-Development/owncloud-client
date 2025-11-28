@@ -64,35 +64,17 @@ namespace {
  * 1\Folders\4\version=2
  * 1\FoldersWithPlaceholders\3\version=3
  */
-auto versionC()
-{
-    return QLatin1String("version");
-}
+auto versionC()     {return QLatin1String("version");}
+auto davUrlC()      {return QStringLiteral("davUrl");}
+auto spaceIdC()     {return QStringLiteral("spaceId");}
+auto displayNameC() {return QLatin1String("displayString");}
+auto deployedC()    {return QStringLiteral("deployed");}
+auto priorityC()    {return QStringLiteral("priority");}
 
-auto davUrlC()
-{
-    return QStringLiteral("davUrl");
-}
-
-auto spaceIdC()
-{
-    return QStringLiteral("spaceId");
-}
-
-auto displayNameC()
-{
-    return QLatin1String("displayString");
-}
-
-auto deployedC()
-{
-    return QStringLiteral("deployed");
-}
-
-auto priorityC()
-{
-    return QStringLiteral("priority");
-}
+/* How oftern to retry a sync
+ * Either due to _engine->isAnotherSyncNeeded or a sync error
+ */
+constexpr int retrySyncLimitC = 3;
 }
 
 namespace CUR {
@@ -140,29 +122,22 @@ Folder::Folder(const FolderDefinition &definition,
         connect(_engine.data(), &SyncEngine::started, this, &Folder::slotSyncStarted, Qt::QueuedConnection);
         connect(_engine.data(), &SyncEngine::finished, this, &Folder::slotSyncFinished, Qt::QueuedConnection);
 
-        connect(_engine.data(), &SyncEngine::aboutToRemoveAllFiles,
-            this, &Folder::slotAboutToRemoveAllFiles);
+        connect(_engine.data(), &SyncEngine::aboutToRemoveAllFiles, this, &Folder::slotAboutToRemoveAllFiles);
         connect(_engine.data(), &SyncEngine::transmissionProgress, this, [this](const ProgressInfo &pi) {
             emit ProgressDispatcher::instance()->progressInfo(this, pi);
         });
-        connect(_engine.data(), &SyncEngine::itemCompleted,
-            this, &Folder::slotItemCompleted);
-        connect(_engine.data(), &SyncEngine::newBigFolder,
-            this, &Folder::slotNewBigFolderDiscovered);
+        connect(_engine.data(), &SyncEngine::itemCompleted, this, &Folder::slotItemCompleted);
+        connect(_engine.data(), &SyncEngine::newBigFolder, this, &Folder::slotNewBigFolderDiscovered);
         connect(_engine.data(), &SyncEngine::seenLockedFile, FolderMan::instance(), &FolderMan::slotSyncOnceFileUnlocks);
-        connect(_engine.data(), &SyncEngine::aboutToPropagate,
-            this, &Folder::slotLogPropagationStart);
+        connect(_engine.data(), &SyncEngine::aboutToPropagate, this, &Folder::slotLogPropagationStart);
         connect(_engine.data(), &SyncEngine::syncError, this, &Folder::slotSyncError);
 
-        connect(ProgressDispatcher::instance(), &ProgressDispatcher::folderConflicts,
-            this, &Folder::slotFolderConflicts);
+        connect(ProgressDispatcher::instance(), &ProgressDispatcher::folderConflicts, this, &Folder::slotFolderConflicts);
         connect(_engine.data(), &SyncEngine::excluded, this, [this](const QString &path) { Q_EMIT ProgressDispatcher::instance()->excluded(this, path); });
 
         _localDiscoveryTracker.reset(new LocalDiscoveryTracker);
-        connect(_engine.data(), &SyncEngine::finished,
-            _localDiscoveryTracker.data(), &LocalDiscoveryTracker::slotSyncFinished);
-        connect(_engine.data(), &SyncEngine::itemCompleted,
-            _localDiscoveryTracker.data(), &LocalDiscoveryTracker::slotItemCompleted);
+        connect(_engine.data(), &SyncEngine::finished, _localDiscoveryTracker.data(), &LocalDiscoveryTracker::slotSyncFinished);
+        connect(_engine.data(), &SyncEngine::itemCompleted, _localDiscoveryTracker.data(), &LocalDiscoveryTracker::slotItemCompleted);
 
         // Potentially upgrade suffix vfs to windows vfs
         OC_ENFORCE(_vfs);
@@ -191,6 +166,14 @@ Result<void, QString> Folder::checkPathLength(const QString &path)
     }
 #endif
     return {};
+}
+
+GraphApi::Space *Folder::space() const
+{
+    if (_accountState && _accountState->account() && _accountState->account()->spacesManager()) {
+        return _accountState->account()->spacesManager()->space(_definition.spaceId());
+    }
+    return nullptr;
 }
 
 bool Folder::checkLocalPath()
@@ -309,6 +292,9 @@ QByteArray Folder::id() const
 
 QString Folder::displayName() const
 {
+    if (auto *s = space()) {
+        return s->displayName();
+    }
     return _definition.displayName();
 }
 
@@ -367,12 +353,9 @@ QString Folder::remotePath() const
 
 QUrl Folder::webDavUrl() const
 {
-    const QString spaceId = _definition.spaceId();
-    if (!spaceId.isEmpty()) {
-        if (auto *space = _accountState->account()->spacesManager()->space(spaceId)) {
-            return QUrl(space->drive().getRoot().getWebDavUrl());
-        }
-    }
+    if (auto sp = space())
+        return QUrl(sp->drive().getRoot().getWebDavUrl());
+
     return _definition.webDavUrl();
 }
 
@@ -398,7 +381,9 @@ bool Folder::syncPaused() const
 
 bool Folder::canSync() const
 {
-    return _engine && !syncPaused() && accountState()->readyForSync() && isReady() && _accountState->account()->hasCapabilities() && _folderWatcher;
+    if (!_engine || !_accountState || !_accountState->account() || !_folderWatcher)
+        return false;
+    return !syncPaused() && _accountState->readyForSync() && isReady() && _accountState->account()->hasCapabilities();
 }
 
 bool Folder::isReady() const
@@ -546,6 +531,9 @@ void Folder::createGuiLog(const QString &filename, LogStatus status, int count,
 
 void Folder::startVfs()
 {
+    if (!_accountState || !_accountState->account())
+        return;
+
     OC_ENFORCE(_vfs);
     OC_ENFORCE(_vfs->mode() == _definition.virtualFilesMode);
 
@@ -1030,7 +1018,7 @@ void Folder::slotSyncFinished(bool success)
     _fileLog->finish();
     showSyncResultPopup();
 
-    auto anotherSyncNeeded = _engine->isAnotherSyncNeeded();
+    auto anotherSyncNeeded = false;
 
     auto syncStatus = SyncResult::Status::Undefined;
 
@@ -1050,6 +1038,7 @@ void Folder::slotSyncFinished(bool success)
         _consecutiveFailingSyncs = 0;
     } else {
         _consecutiveFailingSyncs++;
+        anotherSyncNeeded |= _consecutiveFailingSyncs <= retrySyncLimitC;
         qCInfo(lcFolder) << "the last" << _consecutiveFailingSyncs << "syncs failed";
     }
 
@@ -1075,8 +1064,9 @@ void Folder::slotSyncFinished(bool success)
     _timeSinceLastSyncDone.start();
 
     // Increment the follow-up sync counter if necessary.
-    if (anotherSyncNeeded == AnotherSyncNeeded::ImmediateFollowUp) {
+    if (_engine->isAnotherSyncNeeded()) {
         _consecutiveFollowUpSyncs++;
+        anotherSyncNeeded |= _consecutiveFollowUpSyncs <= retrySyncLimitC;
         qCInfo(lcFolder) << "another sync was requested by the finished sync, this has"
                          << "happened" << _consecutiveFollowUpSyncs << "times";
     } else {
@@ -1084,7 +1074,7 @@ void Folder::slotSyncFinished(bool success)
     }
 
     // Maybe force a follow-up sync to take place, but only a couple of times.
-    if (anotherSyncNeeded == AnotherSyncNeeded::ImmediateFollowUp && _consecutiveFollowUpSyncs <= 3) {
+    if (anotherSyncNeeded && canSync()) {
         // Sometimes another sync is requested because a local file is still
         // changing, so wait at least a small amount of time before syncing
         // the folder again.
@@ -1410,7 +1400,7 @@ QString FolderDefinition::displayName() const
 
 bool Folder::groupInSidebar() const
 {
-    if (_accountState->account()->hasDefaultSyncRoot()) {
+    if (_accountState && _accountState->account() && _accountState->account()->hasDefaultSyncRoot()) {
         // QFileInfo is horrible and "/foo/" is treated different to "/foo"
         const QString parentDir = QFileInfo(Utility::stripTrailingSlash(path())).dir().path();
         Q_ASSERT(QFileInfo(parentDir) != QFileInfo(path()));
@@ -1425,32 +1415,4 @@ QString Folder::spaceId() const
     return _definition.spaceId();
 }
 
-bool FolderDefinition::isDeployed() const
-{
-    return _deployed;
-}
-
-QUrl FolderDefinition::webDavUrl() const
-{
-    Q_ASSERT(_webDavUrl.isValid());
-    return _webDavUrl;
-}
-
-QString FolderDefinition::targetPath() const
-{
-    return _targetPath;
-}
-
-QString FolderDefinition::localPath() const
-{
-    return _localPath;
-}
-
-QString FolderDefinition::spaceId() const
-{
-    // we might call the function to check for the id
-    // anyhow one of the conditions needs to be true
-    Q_ASSERT(_webDavUrl.isValid() || !_spaceId.isEmpty());
-    return _spaceId;
-}
 } // namespace CUR

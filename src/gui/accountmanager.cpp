@@ -233,16 +233,7 @@ QStringList AccountManager::accountNames() const
 
 AccountPtr AccountManager::loadAccountHelper(QSettings &settings)
 {
-    auto urlConfig = settings.value(urlC);
-    if (!urlConfig.isValid()) {
-        // No URL probably means a corrupted entry in the account settings
-        qCWarning(lcAccountManager) << "No URL for account " << settings.group();
-        return AccountPtr();
-    }
-
     auto acc = createAccount(settings.value(userUUIDC, QVariant::fromValue(QUuid::createUuid())).toUuid());
-
-    //acc->setUrl(urlConfig.toUrl());
 
     acc->_davUser = settings.value(davUserC).toString();
     acc->_displayName = settings.value(davUserDisplyNameC).toString();

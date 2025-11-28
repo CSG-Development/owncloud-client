@@ -28,8 +28,8 @@ QString credentialKeyC()
 
 QString accountKey(const Account *acc)
 {
-    OC_ASSERT(!acc->url().isEmpty());
-    return QStringLiteral("%1:%2:%3").arg(credentialKeyC(), acc->url().host(), acc->uuid().toString(QUuid::WithoutBraces));
+    OC_ASSERT(!acc->deviceName().isEmpty());
+    return QStringLiteral("%1:%2:%3").arg(credentialKeyC(), acc->deviceName(), acc->uuid().toString(QUuid::WithoutBraces));
 }
 
 QString scope(const CredentialManager *const manager)
@@ -149,6 +149,7 @@ QStringList CredentialManager::knownKeys(const QString &group) const
         out.append(group + QLatin1Char('/') + k);
     }
     credentialsList().endGroup();
+    qCInfo(lcCredentialsManager) << "knownKeys" << out;
     return out;
 }
 
@@ -191,6 +192,8 @@ QKeychain::Error CredentialJob::error() const
 
 void CredentialJob::start()
 {
+    qCInfo(lcCredentialsManager) << "key" << _key;
+
     if (!_parent->contains(_key)) {
         _error = QKeychain::EntryNotFound;
         // QKeychain is started delayed, emit the signal delayed to make sure we are connected
@@ -201,6 +204,8 @@ void CredentialJob::start()
 
     _job = new QKeychain::ReadPasswordJob(Theme::instance()->appName());
     _job->setKey(scopedKey(_parent, _key));
+
+
     connect(_job, &QKeychain::ReadPasswordJob::finished, this, [this] {
 #if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
         if (_retryOnKeyChainError && (_job->error() == QKeychain::NoBackendAvailable || _job->error() == QKeychain::OtherError)) {
@@ -222,6 +227,7 @@ void CredentialJob::start()
                 return;
             }
             _data = obj.toVariant();
+            qCInfo(lcCredentialsManager) << "Credentials received. Valid: " << _data.isValid();
             OC_ASSERT(_data.isValid());
         } else {
             qCWarning(lcCredentialsManager) << "Failed to get password" << scopedKey(_parent, _key) << _job->errorString();

@@ -400,12 +400,9 @@ void RemoteConnector::parseDeviceInfoReply(const QJsonDocument &doc)
 
     if (auto d = findDevice(devId)) {
         for (const auto p: paths) {
-            DevicePath dpath;
-            dpath.deviceType = DevicePath::strToDevType(p[jkey_type].toString());
-            dpath.address = p[jkey_address].toString();
-            dpath.port = p[jkey_port].toInt();
+            DevicePath dpath(p[jkey_address].toString(), DevicePath::strToDevType(p[jkey_type].toString()), DevicePathOrigin::Remote, p[jkey_port].toInt());
             d->paths.append(dpath);
-            qCDebug(lcLoginService) << "Device" << d->seagateDeviceID << "path" << dpath.address;
+            qCDebug(lcLoginService) << "Device" << d->seagateDeviceID << "path" << dpath.address << "port" << dpath.port;
         }
     }
 }
@@ -449,11 +446,12 @@ void RemoteConnector::prepareDevList()
     for (const auto& dev: std::as_const(devices)) {
         for (const auto& path: dev.paths) {
             DeviceInfo di;
-            di.name = dev.friendlyName;
+            di.name = dev.certificateCommonName;
             di.host = path.address;
             di.port = path.port;
             di.deviceType = path.deviceType;
             devInfoList.append(di);
+            qDebug() << di;
         }
     }
 }

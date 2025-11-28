@@ -131,8 +131,12 @@ public:
     //void setUrl(const QUrl &url);
     QUrl url() const;
 
-    void setDevice(const Device& dev) {_device = dev;}
+    void setDevice(const Device& dev);
+    void setActivePath(const QUuid& id);
     const Device& device() const {return _device;}
+    Device& device() {return _device;}
+    Device* devicePtr() {return &_device;}
+    QString deviceName() const {return _device.certificateCommonName;}
 
     bool isStaticDevice() const { return _device.isStatic; }
 
@@ -263,6 +267,7 @@ private:
     QMap<QString, QVariant> _settingsMap;
     //QUrl _url;
     QString _cacheDirectory;
+    QUuid _activePath;
 
     QSet<QSslCertificate> _approvedCerts;
     Capabilities _capabilities;

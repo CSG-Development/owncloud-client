@@ -27,7 +27,6 @@ DeviceListManager::DeviceListManager(QObject *parent)
             emit local_finished();
             return;
         }
-        //query_local_about_queue();
         query_local_status_queue();
     });
 
@@ -188,10 +187,7 @@ QList<Device> DeviceListManager::combine_lists(const QList<MdnsRecord>& mdns_rec
         if (rec.status.state != QStringLiteral("ready") || !rec.status.oobe_done)
             return;
 
-        DevicePath dev_path;
-        dev_path.address = rec.host;
-        dev_path.port = rec.port;
-        dev_path.deviceType = DeviceType::Local;
+        DevicePath dev_path(rec.host, DeviceType::Local, DevicePathOrigin::MDNS, rec.port);
         dev->paths.append(dev_path);
     };
 
@@ -199,10 +195,7 @@ QList<Device> DeviceListManager::combine_lists(const QList<MdnsRecord>& mdns_rec
         if (rec.status.state != QStringLiteral("ready") || !rec.status.oobe_done)
             return;
 
-        DevicePath dev_path;
-        dev_path.address = rec.host;
-        dev_path.port = rec.port;
-        dev_path.deviceType = rec.deviceType;
+        DevicePath dev_path(rec.host, rec.deviceType, DevicePathOrigin::Remote, rec.port);
         dev->paths.append(dev_path);
     };
 
@@ -213,10 +206,8 @@ QList<Device> DeviceListManager::combine_lists(const QList<MdnsRecord>& mdns_rec
         Device dev;
         dev.certificateCommonName = rec.about.certificate_common_name;
         dev.hostname = rec.about.hostname;
-        DevicePath dev_path;
-        dev_path.address = rec.host;
-        dev_path.port = rec.port;
-        dev_path.deviceType = DeviceType::Local;
+
+        DevicePath dev_path(rec.host, DeviceType::Local, DevicePathOrigin::MDNS, rec.port);
         dev.paths.append(dev_path);
         result.append(dev);
     };
@@ -228,10 +219,8 @@ QList<Device> DeviceListManager::combine_lists(const QList<MdnsRecord>& mdns_rec
         Device dev;
         dev.certificateCommonName = rec.about.certificate_common_name;
         dev.hostname = rec.about.hostname;
-        DevicePath dev_path;
-        dev_path.address = rec.host;
-        dev_path.port = rec.port;
-        dev_path.deviceType = rec.deviceType;
+
+        DevicePath dev_path(rec.host, rec.deviceType, DevicePathOrigin::Remote, rec.port);
         dev.paths.append(dev_path);
         result.append(dev);
     };
@@ -317,8 +306,9 @@ DeviceInfo *DeviceListManager::findRaRec(const DeviceInfo &rec)
 
 void DeviceListManager::on_about_local_finished(const DeviceInfoAbout &info, int code)
 {
-    qCDebug(lcDeviceManager) << "about_local_finished" << info << "code" << code;
+    qCDebug(lcDeviceManager) << "about_local_finished code" << code;
     if (code == 200) {
+        qCDebug(lcDeviceManager) << info;
         append_local_about(info, processingRecord);
     }
     else {
@@ -337,8 +327,9 @@ void DeviceListManager::on_about_local_finished(const DeviceInfoAbout &info, int
 
 void DeviceListManager::on_status_local_finished(const DeviceInfoStatus &info, int code)
 {
-    qCDebug(lcDeviceManager) << "status_local_finished" << info << "code" << code;
+    qCDebug(lcDeviceManager) << "status_local_finished code" << code;
     if (code == 200) {
+        qCDebug(lcDeviceManager) << info;
         append_local_status(info, processingRecord);
     }
     else {
@@ -357,8 +348,9 @@ void DeviceListManager::on_status_local_finished(const DeviceInfoStatus &info, i
 
 void DeviceListManager::on_about_ra_finished(const DeviceInfoAbout &info, int code)
 {
-    qCDebug(lcDeviceManager) << "about_ra_finished" << info << "code" << code;
+    qCDebug(lcDeviceManager) << "about_ra_finished code" << code;
     if (code == 200) {
+        qCDebug(lcDeviceManager) << info;
         append_ra_about(info, processingRaRecord);
     }
     else {
@@ -377,8 +369,9 @@ void DeviceListManager::on_about_ra_finished(const DeviceInfoAbout &info, int co
 
 void DeviceListManager::on_status_ra_finished(const DeviceInfoStatus &info, int code)
 {
-    qCDebug(lcDeviceManager) << "status_ra_finished" << info << "code" << code;
+    qCDebug(lcDeviceManager) << "status_ra_finished code" << code;
     if (code == 200) {
+        qCDebug(lcDeviceManager) << info;
         append_ra_status(info, processingRaRecord);
     }
     else {
