@@ -171,6 +171,7 @@ signals:
     void stateChanged(State state);
     void isConnectedChanged();
     void urlUpdated();
+    void urlChanged(const QUuid& id);
     void isSettingUpChanged();
 
 protected Q_SLOTS:

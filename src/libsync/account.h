@@ -127,6 +127,8 @@ public:
     /// The internal id of the account.
     Q_DECL_DEPRECATED_X("Use uuid") QString id() const;
 
+    QUuid getUuid() const {return _uuid;}
+
     /** Server url of the account */
     //void setUrl(const QUrl &url);
     QUrl url() const;

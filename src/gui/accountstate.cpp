@@ -241,7 +241,7 @@ void AccountState::setState(State state)
                 auto dev_path = _account->devicePtr()->getBestPathId();
                 if (dev_path) {
                     _account->setActivePath(dev_path.value());
-                    emit urlUpdated();
+                    emit urlChanged(_account->uuid());
                 }
             });
         }
@@ -324,7 +324,6 @@ void AccountState::checkConnectivity(bool blockJobs)
         qCDebug(lcAccountState) << "Skip checkConnectivity, waiting for tls dialog";
         return;
     }
-
 
     if (_connectionValidator && blockJobs && !_queueGuard.queue()->isBlocked()) {
         // abort already running non blocking validator
@@ -423,7 +422,6 @@ void AccountState::slotConnectionValidatorResult(ConnectionValidator::Status sta
         qCWarning(lcAccountState) << "Signed out, ignoring" << status << _account->url().toString();
         return;
     }
-
 
     if (status == ConnectionValidator::Connected && !_account->hasCapabilities()) {
         // this code should only be needed when upgrading from a < 3.0 release where capabilities where not cached
