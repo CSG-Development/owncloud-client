@@ -43,7 +43,7 @@ DeviceApi::DeviceApi(QObject *parent)
                 qCWarning(lcDeviceApi) << code << error_str;
             }
             else {
-                qCWarning(lcDeviceApi) << "error" << code;
+                qCWarning(lcDeviceApi) << "about_request error" << code;
             }
         }
 
@@ -68,9 +68,6 @@ DeviceApi::DeviceApi(QObject *parent)
             if (doc) {
                 auto error_str = doc.value()[QStringLiteral("message")].toString();
                 qCWarning(lcDeviceApi) << code << error_str;
-            }
-            else {
-                qCWarning(lcDeviceApi) << "error" << code;
             }
         }
 

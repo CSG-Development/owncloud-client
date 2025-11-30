@@ -55,7 +55,7 @@ private:
      */
     void clear();
 
-    Account *_account;
+    Account *_account = nullptr;
     uint _blocked = 0;
     std::vector<QPointer<AbstractNetworkJob>> _jobs;
 
@@ -75,7 +75,7 @@ public:
     JobQueue *queue() const;
 
 private:
-    JobQueue *_queue;
+    JobQueue *_queue = nullptr;
     bool _blocked = false;
 };
 }

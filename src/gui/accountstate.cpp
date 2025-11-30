@@ -21,12 +21,14 @@
 
 #include "libsync/creds/abstractcredentials.h"
 #include "libsync/creds/httpcredentials.h"
+#include "libsync/networkjobs/networkmonitor.h"
 
 #include "gui/quotainfo.h"
 #include "gui/settingsdialog.h"
 #include "gui/spacemigration.h"
 #include "gui/tlserrordialog.h"
 
+#include "networkjobs/evaluatepaths.h"
 #include "settingsdialog.h"
 #include "socketapi/socketapi.h"
 #include "theme.h"
@@ -89,30 +91,37 @@ AccountState::AccountState(AccountPtr account)
     , _state(AccountState::Disconnected)
     , _connectionStatus(ConnectionValidator::Undefined)
     , _waitingForNewCredentials(false)
+    , _evaluator(new EvaluatePath(this))
     , _maintenanceToConnectedDelay(1min + minutes(QRandomGenerator::global()->generate() % 4)) // 1-5min delay
 {
     qRegisterMetaType<AccountState *>("AccountState*");
 
-    connect(account.data(), &Account::invalidCredentials,
-        this, &AccountState::slotInvalidCredentials);
-    connect(account.data(), &Account::credentialsFetched,
-        this, &AccountState::slotCredentialsFetched);
-    connect(account.data(), &Account::credentialsAsked,
-        this, &AccountState::slotCredentialsAsked);
-    connect(account.data(), &Account::unknownConnectionState,
-        this, [this] {
+    connect(account.data(), &Account::invalidCredentials, this, &AccountState::slotInvalidCredentials);
+    connect(account.data(), &Account::credentialsFetched, this, &AccountState::slotCredentialsFetched);
+    connect(account.data(), &Account::credentialsAsked, this, &AccountState::slotCredentialsAsked);
+    connect(account.data(), &Account::unknownConnectionState, this, [this] {
             checkConnectivity(true);
-        });
+    });
     connect(account.data(), &Account::requestUrlUpdate, this, &AccountState::updateUrlDialog);
     connect(this, &AccountState::urlUpdated, this, [this] {
         checkConnectivity(false);
     });
     connect(account.data(), &Account::requestUrlUpdate, this, &AccountState::updateUrlDialog, Qt::QueuedConnection);
-    connect(
-        this, &AccountState::urlUpdated, this, [this] {
-            checkConnectivity(false);
-        },
-        Qt::QueuedConnection);
+    connect(this, &AccountState::urlUpdated, this, [this] {
+        checkConnectivity(false);
+    }, Qt::QueuedConnection);
+
+    connect(_evaluator, &EvaluatePath::evaluate_finished, this, [&] {
+        if (_account && _account->devicePtr()) {
+            auto dev_path = _account->devicePtr()->getBestPathId();
+            if (dev_path) {
+                _account->setActivePath(dev_path.value());
+                emit urlChanged(_account->uuid());
+                // Update UI
+                stateChanged(_state);
+            }
+        }
+    });
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
     if (QNetworkInformation::loadDefaultBackend()) {
@@ -124,7 +133,9 @@ AccountState::AccountState(AccountPtr account)
                 [[fallthrough]];
             case QNetworkInformation::Reachability::Unknown:
                 // the connection might not yet be established
-                QTimer::singleShot(0, this, [this] { checkConnectivity(false); });
+                QTimer::singleShot(0, this, [this] {
+                    checkConnectivity(false);
+                });
                 break;
             case QNetworkInformation::Reachability::Disconnected:
                 // explicitly set disconnected, this way a successful checkConnectivity call above will trigger a local discover
@@ -143,7 +154,9 @@ AccountState::AccountState(AccountPtr account)
     // as a fallback and to recover after server issues we also poll
     auto timer = new QTimer(this);
     timer->setInterval(ConnectionValidator::DefaultCallingInterval);
-    connect(timer, &QTimer::timeout, this, [this] { checkConnectivity(false); });
+    connect(timer, &QTimer::timeout, this, [this] {
+        checkConnectivity(false);
+    });
     timer->start();
 
     connect(account->credentials(), &AbstractCredentials::requestLogout, this, [this] {
@@ -159,6 +172,12 @@ AccountState::AccountState(AccountPtr account)
         msgBox->setAttribute(Qt::WA_DeleteOnClose);
         CuratorGui::raise();
         msgBox->open();
+    });
+
+    // Network configuration changed
+    connect(NetworkMonitor::instance(), &NetworkMonitor::network_changed, this, [&] {
+        // Find another URL
+        _evaluator->start_evaluate(_account->devicePtr());
     });
 }
 
@@ -233,6 +252,9 @@ void AccountState::setState(State state)
             _connectionValidator->deleteLater();
             _connectionValidator.clear();
             checkConnectivity();
+        } else if (_state == NetworkError) {
+            // Find another URL
+            _evaluator->start_evaluate(_account->devicePtr());
         }
     }
 
@@ -313,7 +335,6 @@ void AccountState::checkConnectivity(bool blockJobs)
         qCDebug(lcAccountState) << "Skip checkConnectivity, waiting for tls dialog";
         return;
     }
-
 
     if (_connectionValidator && blockJobs && !_queueGuard.queue()->isBlocked()) {
         // abort already running non blocking validator
@@ -412,7 +433,6 @@ void AccountState::slotConnectionValidatorResult(ConnectionValidator::Status sta
         qCWarning(lcAccountState) << "Signed out, ignoring" << status << _account->url().toString();
         return;
     }
-
 
     if (status == ConnectionValidator::Connected && !_account->hasCapabilities()) {
         // this code should only be needed when upgrading from a < 3.0 release where capabilities where not cached

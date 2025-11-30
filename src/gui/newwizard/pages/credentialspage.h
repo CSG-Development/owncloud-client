@@ -27,8 +27,6 @@ public:
     void setDevicesList(const QList<Device>& list);
     std::optional<Device> currentDevice() const;
 
-    QString url() const;
-
     QString email() const;
     void setEmail(const QString& user);
 
@@ -48,8 +46,10 @@ public:
 
     void codeJustRequested();
 
+    void showDevicesInfo(bool show);
+
 Q_SIGNALS:
-    void loginClicked(const Device& dev, const QString& url, const QString& user, const QString& password);
+    void loginClicked(const Device& dev, const QString& user, const QString& password);
     void cancelClicked();
     void settingsClicked();
     void resetPasswordClicked();
@@ -75,4 +75,5 @@ private:
     QDateTime codeExpireTime;
     CodeDialog* codeDialog = nullptr;
     bool isCodeExpired = false;
+    QList<Device> dev_list;
 };

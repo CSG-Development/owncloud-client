@@ -4,6 +4,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QLoggingCategory>
 
 namespace {
 const auto certificate_common_name_C = QStringLiteral("certificate_common_name");
@@ -39,12 +40,15 @@ const auto apps_photos_C = QStringLiteral("photos");
 const auto state_C = QStringLiteral("state");
 const auto address_C = QStringLiteral("address");
 const auto deviceType_C = QStringLiteral("device_type");
+const auto deviceOrigin_C = QStringLiteral("device_origin");
 const auto port_C = QStringLiteral("port");
 const auto device_id_C = QStringLiteral("device_id");
 const auto cert_common_name_C = QStringLiteral("certificate_common_name");
 const auto friendly_name_C = QStringLiteral("friendly_name");
 const auto paths_C = QStringLiteral("paths");
 }
+
+Q_LOGGING_CATEGORY(lcDevice, "device", QtInfoMsg)
 
 DeviceType DevicePath::strToDevType(const QString &str)
 {
@@ -72,20 +76,50 @@ QString DevicePath::devTypeToStr(DeviceType val)
     return {};
 }
 
+DevicePathOrigin DevicePath::strToDevOrigin(const QString& str)
+{
+    QMap<QString, DevicePathOrigin> map = {
+        {QStringLiteral("remote"), DevicePathOrigin::Remote},
+        {QStringLiteral("mdns"), DevicePathOrigin::MDNS},
+        {QStringLiteral("static"), DevicePathOrigin::Static},
+        {QStringLiteral("unknown"), DevicePathOrigin::Unknown},
+    };
+    if (map.contains(str))
+        return map[str];
+    return DevicePathOrigin::Unknown;
+}
+
+QString DevicePath::originToStr(DevicePathOrigin val)
+{
+    QMap<DevicePathOrigin,QString> map = {
+        {DevicePathOrigin::Unknown, QStringLiteral("unknown")},
+        {DevicePathOrigin::MDNS, QStringLiteral("mdns")},
+        {DevicePathOrigin::Remote, QStringLiteral("remote")},
+        {DevicePathOrigin::Static, QStringLiteral("static")}
+    };
+    if (map.contains(val))
+        return map[val];
+    return {};
+}
+
 QJsonObject DevicePath::toJson() const
 {
     QJsonObject result;
     result[address_C] = address;
     result[deviceType_C] = devTypeToStr(deviceType);
+    result[deviceOrigin_C] = originToStr(origin);
     result[port_C] = port;
     return result;
 }
 
-void DevicePath::fromJson(const QJsonObject& val)
+DevicePath DevicePath::fromJson(const QJsonObject& val)
 {
-    address = val[address_C].toString();
-    deviceType = strToDevType(val[deviceType_C].toString());
-    port = val[port_C].toInt();
+    DevicePath dp(
+        val[address_C].toString(),
+        strToDevType(val[deviceType_C].toString()),
+        strToDevOrigin(val[deviceOrigin_C].toString()),
+        val[port_C].toInt());
+    return dp;
 }
 
 DeviceInfoAbout DeviceInfoAbout::fromJson(const QJsonDocument &doc)
@@ -179,6 +213,57 @@ QString Device::normalizeUrl(const QString &url, int port, bool add_folder)
     return tmpurl.toString();
 }
 
+std::optional<DevicePath> Device::findPath(const QUuid &id) const
+{
+    if (paths.isEmpty()) {
+        qCWarning(lcDevice) << "[findPath] No paths defined";
+        return std::nullopt;
+    }
+
+    for (const auto& p: std::as_const(paths)) {
+        if (p.id == id)
+            return p;
+    }
+
+    qCWarning(lcDevice) << "Path ID" << id << "not found";
+    return std::nullopt;
+}
+
+std::optional<QUuid> Device::getBestPathId()
+{
+    return getBestPathId(*this);
+}
+
+std::optional<QUuid> Device::getBestPathId(const Device &dev)
+{
+    if (dev.paths.isEmpty()) {
+        qCWarning(lcDevice) << "[getBestPathId] No paths defined";
+        return std::nullopt;
+    }
+
+    if (dev.paths.size() == 1)
+        return dev.paths.first().id;
+
+    QList<DevicePath> paths;
+    for (const auto& p: dev.paths) {
+        if (p.deviceType != DeviceType::Unknown && p.isOnline) {
+            paths.append(p);
+        }
+    }
+
+    if (paths.isEmpty())
+        return dev.paths.first().id;
+
+    if (paths.size() == 1)
+        return paths.first().id;
+
+    std::stable_sort(paths.begin(), paths.end(), [&](const DevicePath& a, const DevicePath& b) {
+        return a.deviceType > b.deviceType;
+    });
+
+    return paths.first().id;
+}
+
 std::optional<DevicePath> Device::firstRemotePath(const Device &dev)
 {
     return getPath(dev, {DeviceType::Public, DeviceType::Remote});
@@ -187,25 +272,6 @@ std::optional<DevicePath> Device::firstRemotePath(const Device &dev)
 std::optional<DevicePath> Device::firstLocalPath(const Device& dev)
 {
     return getPath(dev, {DeviceType::Local});
-}
-
-std::optional<DevicePath> Device::getBestPath(const Device &dev)
-{
-    if (dev.paths.isEmpty())
-        return std::nullopt;
-
-    auto paths = dev.paths;
-
-    std::stable_sort(paths.begin(), paths.end(), [&](const DevicePath& a, const DevicePath& b) {
-        return a.deviceType > b.deviceType;
-    });
-
-    for (const auto& p: paths) {
-        if (p.deviceType != DeviceType::Unknown)
-            return p;
-    }
-
-    return std::nullopt;
 }
 
 std::optional<DevicePath> Device::getPath(const Device& dev, QList<DeviceType> types)
@@ -224,10 +290,7 @@ Device Device::MakeStatic(const QString &url, const QString &name)
     Device dev;
     dev.certificateCommonName = name;
     dev.isStatic = true;
-    DevicePath dp;
-    dp.deviceType = DeviceType::Public;
-    dp.origin = DevicePathOrigin::Static;
-    dp.address = url;
+    DevicePath dp(url, DeviceType::Public, DevicePathOrigin::Static, 0);
     dev.paths.append(dp);
     return dev;
 }
@@ -294,11 +357,32 @@ QList<DevicePath> Device::jsonToPaths(const QJsonArray& val)
 
     QList<DevicePath> ret;
     for (const auto& item: val) {
-        DevicePath dev;
-        dev.fromJson(item.toObject());
+        auto dev = DevicePath::fromJson(item.toObject());
         ret.append(dev);
     }
 
     return ret;
 }
 
+void Device::setActicvePath(const QUuid &id)
+{
+    for (auto& p: paths) {
+        p.isActive = (p.id == id);
+    }
+}
+
+void Device::setOnlinePath(const QUuid& id)
+{
+    for (auto& p: paths) {
+        if (p.id == id) {
+            p.isOnline = true;
+            break;
+        }
+    }
+}
+
+void Device::clearOnlinePaths()
+{
+    for (auto& p: paths)
+        p.isOnline = false;
+}
