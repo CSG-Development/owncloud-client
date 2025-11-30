@@ -28,6 +28,7 @@
 #include "common/version.h"
 #include "gui/translations.h"
 #include "libsync/logger.h"
+#include "libsync/networkjobs/networkmonitor.h"
 #include "socketapi/socketapi.h"
 
 #include <kdsingleapplication.h>
@@ -368,6 +369,7 @@ int main(int argc, char **argv)
 
     platform->setApplication(&app);
 
+    NetworkMonitor::instance()->start();
     auto folderManager = FolderMan::createInstance();
 
     if (!AccountManager::instance()->restore()) {

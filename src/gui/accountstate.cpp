@@ -21,6 +21,7 @@
 
 #include "libsync/creds/abstractcredentials.h"
 #include "libsync/creds/httpcredentials.h"
+#include "libsync/networkjobs/networkmonitor.h"
 
 #include "gui/quotainfo.h"
 #include "gui/settingsdialog.h"
@@ -110,6 +111,18 @@ AccountState::AccountState(AccountPtr account)
         checkConnectivity(false);
     }, Qt::QueuedConnection);
 
+    connect(_evaluator, &EvaluatePath::evaluate_finished, this, [&] {
+        if (_account && _account->devicePtr()) {
+            auto dev_path = _account->devicePtr()->getBestPathId();
+            if (dev_path) {
+                _account->setActivePath(dev_path.value());
+                emit urlChanged(_account->uuid());
+                // Update UI
+                stateChanged(_state);
+            }
+        }
+    });
+
 #if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
     if (QNetworkInformation::loadDefaultBackend()) {
         connect(QNetworkInformation::instance(), &QNetworkInformation::reachabilityChanged, this, [this](QNetworkInformation::Reachability reachability) {
@@ -159,6 +172,12 @@ AccountState::AccountState(AccountPtr account)
         msgBox->setAttribute(Qt::WA_DeleteOnClose);
         CuratorGui::raise();
         msgBox->open();
+    });
+
+    // Network configuration changed
+    connect(NetworkMonitor::instance(), &NetworkMonitor::network_changed, this, [&] {
+        // Find another URL
+        _evaluator->start_evaluate(_account->devicePtr());
     });
 }
 
@@ -234,16 +253,8 @@ void AccountState::setState(State state)
             _connectionValidator.clear();
             checkConnectivity();
         } else if (_state == NetworkError) {
-
+            // Find another URL
             _evaluator->start_evaluate(_account->devicePtr());
-            connect(_evaluator, &EvaluatePath::evaluate_finished, this, [&] {
-                disconnect(_evaluator, &EvaluatePath::evaluate_finished, this, nullptr);
-                auto dev_path = _account->devicePtr()->getBestPathId();
-                if (dev_path) {
-                    _account->setActivePath(dev_path.value());
-                    emit urlChanged(_account->uuid());
-                }
-            });
         }
     }
 

@@ -2,7 +2,11 @@
 #include "simpleresolveurljobfactory.h"
 #include "determineauthtypejobfactory.h"
 
+#include <QLoggingCategory>
+
 namespace CUR {
+
+Q_LOGGING_CATEGORY(lcEvaluator, "device.evaluaror", QtInfoMsg)
 
 EvaluatePath::EvaluatePath(QObject *parent)
     : QObject(parent)
@@ -11,10 +15,12 @@ EvaluatePath::EvaluatePath(QObject *parent)
 
 void EvaluatePath::start_evaluate(Device *dev)
 {
+    qCDebug(lcEvaluator) << "Starting device path evaluate";
     device_ = dev;
     device_->clearOnlinePaths();
 
     if (device_->paths.isEmpty()) {
+        qCWarning(lcEvaluator) << "Path list is empty, evaluating finished";
         emit evaluate_finished();
         return;
     }
@@ -30,6 +36,7 @@ void EvaluatePath::start_evaluate(Device *dev)
 
         if (id_queue.isEmpty()) {
             disconnect(this, &EvaluatePath::path_evaluated, this, nullptr);
+            qCWarning(lcEvaluator) << "Evaluating finished";
             Q_EMIT evaluate_finished();
             return;
         }

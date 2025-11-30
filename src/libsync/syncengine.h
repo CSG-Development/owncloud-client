@@ -59,9 +59,11 @@ public:
     void setNetworkLimits(int upload, int download);
 
     /* Abort the sync.  Called from the main thread */
-    void abort();
+    void abort(const QString& errorMessage = {});
 
     bool isSyncRunning() const { return _syncRunning; }
+
+    void changeBaseUrl(const QUrl& url);
 
     const SyncOptions &syncOptions() const
     {
@@ -221,7 +223,7 @@ private:
     SyncFileItemSet _syncItems;
 
     AccountPtr _account;
-    const QUrl _baseUrl;
+    QUrl _baseUrl;
     bool _needsUpdate;
     bool _syncRunning;
     QString _localPath;

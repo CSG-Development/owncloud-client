@@ -852,10 +852,10 @@ bool SyncEngine::shouldDiscoverLocally(const QString &path) const
     return false;
 }
 
-void SyncEngine::abort()
+void SyncEngine::abort(const QString& errorMessage)
 {
     if (_propagator)
-        qCInfo(lcEngine) << "Aborting sync";
+        qCInfo(lcEngine) << "Aborting sync, message" << errorMessage;
 
     if (_propagator) {
         // If we're already in the propagation phase, aborting that is sufficient
@@ -867,10 +867,23 @@ void SyncEngine::abort()
         _discoveryPhase.release()->deleteLater();
 
         if (!_goingDown) {
-            Q_EMIT syncError(tr("Aborted"));
+            if (!errorMessage.isEmpty())
+                Q_EMIT syncError(tr("Aborted"));
+            else
+                Q_EMIT syncError(errorMessage);
         }
         finalize(false);
     }
+}
+
+void SyncEngine::changeBaseUrl(const QUrl &url)
+{
+    if (isSyncRunning()) {
+        abort(tr("Synchronization aborted due to IP address change"));
+    }
+
+    _baseUrl = url;
+    startSync();
 }
 
 void SyncEngine::slotSummaryError(const QString &message)

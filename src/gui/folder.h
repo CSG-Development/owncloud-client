@@ -332,6 +332,7 @@ private slots:
     void slotSyncStarted();
     void slotSyncFinished(bool);
 
+    void slotUrlChanged(const QUuid& accountId);
     /** Adds a error message that's not tied to a specific item.
      */
     void slotSyncError(const QString &message, ErrorCategory category = ErrorCategory::Normal);

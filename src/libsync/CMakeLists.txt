@@ -55,6 +55,8 @@ set(libsync_SRCS
     networkjobs/evaluatepaths.h
     networkjobs/simpleresolveurljobfactory.cpp
     networkjobs/simpleresolveurljobfactory.h
+    networkjobs/networkmonitor.cpp
+    networkjobs/networkmonitor.h
 
     abstractcorejob.cpp
     determineauthtypejobfactory.cpp

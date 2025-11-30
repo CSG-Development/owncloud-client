@@ -244,9 +244,9 @@ bool FolderMan::setupFoldersHelper(QSettings &settings, AccountStatePtr account)
         }();
 
         // migration: 2.10 did not specify a webdav url
-        if (folderDefinition._webDavUrl.isEmpty()) {
+        //if (folderDefinition._webDavUrl.isEmpty()) {
             folderDefinition._webDavUrl = account->account()->davUrl();
-        }
+        //}
 
         // Migration: Old settings don't have journalPath
         if (folderDefinition.journalPath.isEmpty()) {

@@ -118,6 +118,7 @@ Folder::Folder(const FolderDefinition &definition,
         }
 
         connect(_accountState.data(), &AccountState::isConnectedChanged, this, &Folder::canSyncChanged);
+        connect(_accountState.data(), &AccountState::urlChanged, this, &Folder::slotUrlChanged);
 
         connect(_engine.data(), &SyncEngine::started, this, &Folder::slotSyncStarted, Qt::QueuedConnection);
         connect(_engine.data(), &SyncEngine::finished, this, &Folder::slotSyncFinished, Qt::QueuedConnection);
@@ -1009,7 +1010,9 @@ void Folder::slotSyncFinished(bool success)
     }
     qCInfo(lcFolder) << "Client version" << Theme::instance()->aboutVersions(Theme::VersionFormat::OneLiner);
 
-    bool syncError = !_syncResult.errorStrings().isEmpty();
+    const auto errorStr = _syncResult.errorStrings();
+    qCDebug(lcFolder) << "Sync error string" << errorStr;
+    bool syncError = !errorStr.isEmpty();
     if (syncError) {
         qCWarning(lcFolder) << "SyncEngine finished with ERROR";
     } else {
@@ -1079,6 +1082,20 @@ void Folder::slotSyncFinished(bool success)
         // changing, so wait at least a small amount of time before syncing
         // the folder again.
         QTimer::singleShot(SyncEngine::minimumFileAgeForUpload, this, [this] { FolderMan::instance()->scheduler()->enqueueFolder(this); });
+    }
+}
+
+void Folder::slotUrlChanged(const QUuid &accountId)
+{
+    AccountStatePtr accStatePtr = AccountManager::instance()->account(accountId);
+    if (accStatePtr && accStatePtr->account()) {
+        const auto newUrl = accStatePtr->account()->davUrl();
+        qCInfo(lcFolder) << "URL changed from" << _definition.webDavUrl() << "to" << newUrl;
+        _definition.setWebDavUrl(newUrl);
+        _engine->changeBaseUrl(webDavUrl());
+    }
+    else {
+        qCWarning(lcFolder) << "Unable to find account" << accountId;
     }
 }
 
