@@ -259,10 +259,10 @@ public:
     QString toString() const {
         QStringList l;
         l << QStringLiteral("DeviceInfo{");
-        l << QStringLiteral("name:%1").arg(name);
-        l << QStringLiteral("host:%1").arg(host);
-        l << QStringLiteral("port:%1").arg(port);
-        l << QStringLiteral("deviceType:%1").arg(DevicePath::devTypeToStr(deviceType));
+        l << QStringLiteral("name:%1,").arg(name);
+        l << QStringLiteral("host:%1,").arg(host);
+        l << QStringLiteral("port:%1,").arg(port);
+        l << QStringLiteral("deviceType:%1,").arg(DevicePath::devTypeToStr(deviceType));
         l << QStringLiteral("status:%1").arg(status.toString());
         l << QStringLiteral("}");
         return l.join(QStringLiteral(""));

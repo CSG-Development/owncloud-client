@@ -16,11 +16,20 @@ EvaluatePath::EvaluatePath(QObject *parent)
 void EvaluatePath::start_evaluate(Device *dev)
 {
     qCDebug(lcEvaluator) << "Starting device path evaluate";
+    if (isRunning()) {
+        qCWarning(lcEvaluator) << "Already running";
+        emit evaluate_finished();
+    }
+
+    disconnect(this, &EvaluatePath::path_evaluated, this, nullptr);
+
+    _isRunning = true;
     device_ = dev;
     device_->clearOnlinePaths();
 
     if (device_->paths.isEmpty()) {
         qCWarning(lcEvaluator) << "Path list is empty, evaluating finished";
+        _isRunning = false;
         emit evaluate_finished();
         return;
     }
@@ -37,6 +46,7 @@ void EvaluatePath::start_evaluate(Device *dev)
         if (id_queue.isEmpty()) {
             disconnect(this, &EvaluatePath::path_evaluated, this, nullptr);
             qCWarning(lcEvaluator) << "Evaluating finished";
+            _isRunning = false;
             Q_EMIT evaluate_finished();
             return;
         }
