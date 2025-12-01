@@ -19,6 +19,7 @@ DeviceApi::DeviceApi(QObject *parent)
     : QObject(parent)
     , rest_mgr(std::make_unique<QRestAccessManager>(&net_mgr))
 {
+    net_mgr.setTransferTimeout(5 * 1000);
     rest_factory = std::make_unique<QNetworkRequestFactory>();
 
     connect(&net_mgr, &QNetworkAccessManager::sslErrors, this, [&](QNetworkReply *reply, const QList<QSslError>&/*errors*/) {
@@ -42,7 +43,7 @@ DeviceApi::DeviceApi(QObject *parent)
                 qCWarning(lcDeviceApi) << code << error_str;
             }
             else {
-                qCWarning(lcDeviceApi) << "error" << code;
+                qCWarning(lcDeviceApi) << "about_request error" << code;
             }
         }
 
@@ -67,9 +68,6 @@ DeviceApi::DeviceApi(QObject *parent)
             if (doc) {
                 auto error_str = doc.value()[QStringLiteral("message")].toString();
                 qCWarning(lcDeviceApi) << code << error_str;
-            }
-            else {
-                qCWarning(lcDeviceApi) << "error" << code;
             }
         }
 

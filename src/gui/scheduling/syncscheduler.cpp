@@ -127,8 +127,10 @@ SyncScheduler::~SyncScheduler()
 
 void SyncScheduler::enqueueFolder(Folder *folder, Priority priority)
 {
-    Q_ASSERT(folder->isReady());
-    Q_ASSERT(folder->canSync());
+    if (!folder->canSync()) {
+        qCWarning(lcSyncScheduler) << "Cannot enqueue folder" << folder->path() << ": folder is marked as cannot sync";
+        return;
+    }
     qCInfo(lcSyncScheduler) << "Enqueue" << folder->path() << priority << "QueueSize:" << _queue->size();
     _queue->enqueueFolder(folder, priority);
     if (!_currentSync) {
@@ -158,30 +160,6 @@ void SyncScheduler::startNext()
             _currentSync, &Folder::syncFinished, this,
             [this](const SyncResult &result) {
                 qCInfo(lcSyncScheduler) << "Sync finished for" << _currentSync->path() << "with status" << result.status();
-                if (result.status() != SyncResult::Success) {
-                    auto reschedule = [this]() {
-                        QTimer::singleShot(SyncEngine::minimumFileAgeForUpload, this, [folder = _currentSync, this] {
-                            if (folder->canSync()) {
-                                enqueueFolder(folder);
-                            } else {
-                                qCInfo(lcSyncScheduler) << "Cannot schedule sync for" << folder->path();
-                            }
-                        });
-                    };
-
-                    // Retry a couple of times after failure; or regularly if requested
-                    if (_currentSync->consecutiveFailingSyncs() > 0) {
-                        if (_currentSync->consecutiveFailingSyncs() < 3) {
-                            qCInfo(lcSyncScheduler) << "Sync failed, rescheduling sync for" << _currentSync->path();
-                            reschedule();
-                        } else {
-                            qCInfo(lcSyncScheduler) << "Sync for" << _currentSync->path() << "failed 3 times, not rescheduling";
-                        }
-                    } else if (_currentSync->syncEngine().isAnotherSyncNeeded() == AnotherSyncNeeded::DelayedFollowUp) {
-                        qCInfo(lcSyncScheduler) << "Delayed follow-up needed, rescheduling sync for" << _currentSync->path();
-                        reschedule();
-                    }
-                }
                 _currentSync = nullptr;
                 startNext();
             },

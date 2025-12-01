@@ -194,6 +194,11 @@ void ConnectionValidator::checkAuthentication()
     // continue in slotAuthCheck here :-)
     qCDebug(lcConnectionValidator) << "# Check whether authenticated propfind works.";
 
+    if (_account && _account->url().toString().isEmpty()) {
+        qCWarning(lcConnectionValidator) << "No URL defined";
+        return;
+    }
+
     // we explicitly use a legacy dav path here
     auto *job = new PropfindJob(_account, _account->url(), Theme::instance()->webDavPath(), PropfindJob::Depth::Zero, this);
     job->setAuthenticationJob(true); // don't retry

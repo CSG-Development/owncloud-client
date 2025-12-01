@@ -21,6 +21,7 @@
 #include "appprovider.h"
 #include "capabilities.h"
 #include "jobqueue.h"
+#include "devicetypes.h"
 
 #include <QByteArray>
 #include <QNetworkAccessManager>
@@ -72,7 +73,8 @@ class CURATORSYNC_EXPORT Account : public QObject
     Q_PROPERTY(QString id MEMBER _id)
     Q_PROPERTY(QString davUser MEMBER _davUser)
     Q_PROPERTY(QString displayName MEMBER _displayName)
-    Q_PROPERTY(QUrl url MEMBER _url)
+    //Q_PROPERTY(QUrl url MEMBER _url)
+    Q_PROPERTY(QUrl url READ url)
 
 public:
     /**
@@ -125,9 +127,20 @@ public:
     /// The internal id of the account.
     Q_DECL_DEPRECATED_X("Use uuid") QString id() const;
 
+    QUuid getUuid() const {return _uuid;}
+
     /** Server url of the account */
-    void setUrl(const QUrl &url);
-    QUrl url() const { return _url; }
+    //void setUrl(const QUrl &url);
+    QUrl url() const;
+
+    void setDevice(const Device& dev);
+    void setActivePath(const QUuid& id);
+    const Device& device() const {return _device;}
+    Device& device() {return _device;}
+    Device* devicePtr() {return &_device;}
+    QString deviceName() const {return _device.certificateCommonName;}
+
+    bool isStaticDevice() const { return _device.isStatic; }
 
     /**
      * @brief The possibly themed dav path for the account. It has
@@ -248,13 +261,15 @@ private:
     QWeakPointer<Account> _sharedThis;
     QString _id;
     QUuid _uuid;
+    Device _device;
     QString _davUser;
     QString _displayName;
     QString _defaultSyncRoot;
     QPixmap _avatarImg;
     QMap<QString, QVariant> _settingsMap;
-    QUrl _url;
+    //QUrl _url;
     QString _cacheDirectory;
+    QUuid _activePath;
 
     QSet<QSslCertificate> _approvedCerts;
     Capabilities _capabilities;

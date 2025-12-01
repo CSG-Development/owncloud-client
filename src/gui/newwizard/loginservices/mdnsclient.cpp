@@ -20,13 +20,27 @@ MdnsClient::MdnsClient(QObject* parent)
         qCDebug(lcMdnsDevice) << "mDNS lookup finished";
 
         if (dns->error() == QDnsLookup::NoError) {
+
             const auto srv_records = dns->serviceRecords();
+            QString name;
+            QString host;
+            int port = 0;
             for (const QDnsServiceRecord& record : srv_records) {
-                MdnsRecord rec;
-                rec.name = fixHost(record.name());
-                rec.host = record.target();
-                rec.port = record.port();
-                records_.append(rec);
+                name = fixHost(record.name());
+                //host = record.target();
+                port = record.port();
+            }
+
+            const auto hosts = dns->hostAddressRecords();
+            for (const auto& record : hosts) {
+                if (record.value().protocol() == QAbstractSocket::IPv4Protocol) {
+                    ptr_url[record.name()].append(record.value().toString());
+                    MdnsRecord rec;
+                    rec.name = name;
+                    rec.host = record.value().toString();
+                    rec.port = port;
+                    records_.append(rec);
+                }
             }
         }
         requestCompleted();
@@ -40,6 +54,7 @@ MdnsClient::~MdnsClient()
 void MdnsClient::query()
 {
     records_.clear();
+    ptr_url.clear();
 
     dns->setType(QDnsLookup::PTR);
     dns->setName(QStringLiteral("_https._tcp"));

@@ -9,6 +9,8 @@
 #include "loginservices/devicelistmanager.h"
 
 #include "theme.h"
+#include "configfile.h"
+#include "networkjobs/evaluatepaths.h"
 
 #include <QClipboard>
 #include <QTimer>
@@ -32,6 +34,7 @@ SetupController::SetupController(SettingsDialog *parent)
     , _context(new SetupContext(parent, this))
     , raConnector(new CUR::RemoteConnector(parent))
     , deviceMgr(new CUR::DeviceListManager(parent))
+    , evaluator_(new CUR::EvaluatePath(parent))
 {
     connect(_context->window(), &SetupWidget::rejected, this, [&] {
         qCDebug(lcSetupWizardController) << "wizard window closed";
@@ -94,6 +97,15 @@ SetupController::SetupController(SettingsDialog *parent)
         fullList = DeviceListManager::combine_lists(localDevices, remoteDevices);
 
         window()->showCredPageProgress(false);
+
+        // Check development settings
+        ConfigFile cf;
+        const auto dev = cf.staticDevice();
+        if (!dev.second.isEmpty()) {
+            auto d = Device::MakeStatic(dev.second, dev.first);
+            fullList.append(d);
+        }
+
         if (fullList.isEmpty()) {
             window()->displayPage(SetupWidget::SetupPage::PageConnectError);
         }
@@ -116,12 +128,14 @@ SetupController::SetupController(SettingsDialog *parent)
             raConnector->start_query(user_);
     });
 
-    connect(_context->window(), &SetupWidget::loginCredentialClicked, this, [&](const QString& url, const QString& user, const QString& password) {
-        qCDebug(lcSetupWizardController) << "Login credential clicked" << url;
-        url_ = url;
+    connect(_context->window(), &SetupWidget::loginCredentialClicked, this, [&](const Device& dev, const QString& user, const QString& password) {
+        Q_UNUSED(user);
+        qCDebug(lcSetupWizardController) << "Login credential clicked";
+        // url_ = url;
         //user_ = user;
         password_ = password;
-        startLogin(url_, user_, password_);
+        device_ = dev;
+        startLogin(user_, password_);
     });
 
     connect(_context->window(), &SetupWidget::credPageBackClicked, this, [&] {
@@ -200,6 +214,23 @@ SetupController::SetupController(SettingsDialog *parent)
         window()->showErrorMessage(msg);
     });
 
+    connect(evaluator_, &CUR::EvaluatePath::evaluate_finished, this, [&]{
+
+        for (const auto& p: std::as_const(device_.paths)) {
+            qCDebug(lcSetupWizardController) << "evaluate_finished" << p;
+        }
+
+        auto id = Device::getBestPathId(device_);
+
+        if (id.has_value()) {
+            evaluateCredentialsNew(id.value());
+        }
+        else {
+            window()->displayPage(SetupWidget::SetupPage::PageCredentials);
+            window()->showErrorMessage(tr("Device has no URL defined"));
+        }
+    });
+
     setupFinishPage();
 }
 
@@ -251,16 +282,20 @@ void SetupController::setupFinishPage()
     Q_EMIT setupFinishPageDefaults(defaultSyncTargetDir, syncTargetDir, vfsIsAvailable, enableVfsByDefault, vfsModeIsExperimental);
 }
 
-void SetupController::startLogin(const QString& url, const QString& user, const QString& password)
+void SetupController::startLogin(const QString& user, const QString& password)
 {
+    Q_UNUSED(user);
+    Q_UNUSED(password);
     window()->displayPage(SetupWidget::SetupPage::PageWait);
-    evaluateCredentials(url, user, password);
+
+    evaluator_->start_evaluate(&device_);
 }
 
-void SetupController::evaluateCredentials(const QString& url, const QString &login, const QString &password)
+void SetupController::evaluateCredentials(const Device& dev, const QString& url, const QString &login, const QString &password)
 {
     Q_UNUSED(login);
     Q_UNUSED(password);
+    Q_UNUSED(dev);
 
     const QUrl serverUrl = [url]() {
         QString userProvidedUrl = url;
@@ -280,6 +315,7 @@ void SetupController::evaluateCredentials(const QString& url, const QString &log
     // (ab)use the account builder as temporary storage for the URL we are about to probe (after sanitation)
     // in case of errors, the user can just edit the previous value
     _context->accountBuilder().setServerUrl(serverUrl, DetermineAuthTypeJob::AuthType::Unknown);
+    qCDebug(lcSetupWizardController) << "ServerUrl" << serverUrl.toString();
 
     // TODO: perform some better validation
     if (!serverUrl.isValid()) {
@@ -349,6 +385,7 @@ void SetupController::evaluateCredentials(const QString& url, const QString &log
                         }
 
                         _context->accountBuilder().setServerUrl(resolvedUrl, qvariant_cast<DetermineAuthTypeJob::AuthType>(authTypeJob->result()));
+                        _context->accountBuilder().setDevice(device_);
                         Q_EMIT credentialsEvaluationSuccessful();
                     });
                 });
@@ -379,6 +416,67 @@ void SetupController::evaluateCredentials(const QString& url, const QString &log
         messageBox->show();
     }
 
+}
+
+void SetupController::evaluateCredentialsNew(const QUuid& id)
+{
+    auto dev_path = device_.findPath(id);
+    if (!dev_path) {
+        Q_EMIT invalidServerUrl();
+        return;
+    }
+
+    QUrl serverUrl = QUrl(Device::normalizeUrl(dev_path->address, dev_path->port, true));
+
+    _context->accountBuilder().setServerUrl(serverUrl, DetermineAuthTypeJob::AuthType::Unknown);
+    qCDebug(lcSetupWizardController) << "ServerUrl" << serverUrl.toString();
+
+    // TODO: perform some better validation
+    if (!serverUrl.isValid()) {
+        Q_EMIT invalidServerUrl();
+        return;
+    }
+
+    _context->resetAccessManager();
+
+    // first, we must resolve the actual server URL
+    auto resolveJob = Jobs::ResolveUrlJobFactory(_context->accessManager()).startJob(serverUrl, this);
+
+    connect(resolveJob, &CoreJob::finished, resolveJob, [this, resolveJob, dev_id = id]() {
+        resolveJob->deleteLater();
+
+        if (!resolveJob->success()) {
+            Q_EMIT credentialsEvaluationFailed(resolveJob->errorMessage());
+            return;
+        }
+
+        const auto resolvedUrl = resolveJob->result().toUrl();
+
+        // next, we need to find out which kind of authentication page we have to present to the user
+        auto authTypeJob = DetermineAuthTypeJobFactory(_context->accessManager()).startJob(resolvedUrl, this);
+
+        connect(authTypeJob, &CoreJob::finished, authTypeJob, [this, authTypeJob, resolvedUrl, dev_id]() {
+            authTypeJob->deleteLater();
+
+            if (authTypeJob->result().isNull()) {
+                Q_EMIT credentialsEvaluationFailed(authTypeJob->errorMessage());
+                return;
+            }
+
+            _context->accountBuilder().setServerUrl(resolvedUrl, qvariant_cast<DetermineAuthTypeJob::AuthType>(authTypeJob->result()));
+            _context->accountBuilder().setDevice(device_);
+            device_.setActicvePath(dev_id);
+            Q_EMIT credentialsEvaluationSuccessful();
+        });
+    });
+
+    connect(resolveJob, &CoreJob::caCertificateAccepted, this, [this](const QSslCertificate &caCertificate) {
+        // future requests made through this access manager should accept the certificate
+        _context->accessManager()->addCustomTrustedCaCertificates({caCertificate});
+
+        // the account maintains a list, too, which is also saved in the config file
+        _context->accountBuilder().addCustomTrustedCaCertificate(caCertificate);
+    }, Qt::DirectConnection);
 }
 
 void SetupController::performLogin()

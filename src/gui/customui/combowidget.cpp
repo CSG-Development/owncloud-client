@@ -60,7 +60,7 @@ ComboWidget::ComboWidget(QWidget *parent)
         auto selected = popup->selectedDevice();
         if (selected) {
             selectedDevice = selected;
-            ui->lineEdit->setText(selectedDevice->certificateCommonName);
+            setText(selectedDevice->certificateCommonName);
         }
     });
 
@@ -75,6 +75,11 @@ ComboWidget::ComboWidget(QWidget *parent)
     connect(ui->lineEdit, &QLineEdit::textChanged, this, &ComboWidget::onTextChanged);
     ui->lineEdit->installEventFilter(this);
     ui->lineEdit->setReadOnly(true);
+
+    // Disable selections
+    connect(ui->lineEdit, &QLineEdit::selectionChanged, this, [&] {
+        ui->lineEdit->setSelection(0, 0);
+    });
 
     setErrorState(false);
     updatePromptPosition();
@@ -101,6 +106,8 @@ QString ComboWidget::text() const
 void ComboWidget::setText(const QString &val)
 {
     ui->lineEdit->setText(val);
+    ui->lineEdit->setToolTip(val);
+    ui->lineEdit->setSelection(0, 0);
 }
 
 void ComboWidget::setItems(const QList<Device> &list)
@@ -109,9 +116,9 @@ void ComboWidget::setItems(const QList<Device> &list)
     qSwap(tmpitems, deviceList);
     popup->setItems(deviceList);
 
-    if (!list.isEmpty() && ui->lineEdit->text().isEmpty()) {
+    if (!list.isEmpty() && text().isEmpty()) {
         selectedDevice = list.first();
-        ui->lineEdit->setText(selectedDevice->certificateCommonName);
+        setText(selectedDevice->certificateCommonName);
     }
 }
 

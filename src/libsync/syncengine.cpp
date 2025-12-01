@@ -64,7 +64,6 @@ SyncEngine::SyncEngine(AccountPtr account, const QUrl &baseUrl, const QString &l
     , _hasRemoveFile(false)
     , _uploadLimit(0)
     , _downloadLimit(0)
-    , _anotherSyncNeeded(AnotherSyncNeeded::NoFollowUpSync)
 {
     qRegisterMetaType<SyncFileItem>("SyncFileItem");
     qRegisterMetaType<SyncFileItemPtr>("SyncFileItemPtr");
@@ -330,7 +329,7 @@ void SyncEngine::startSync()
     }
 
     _syncRunning = true;
-    _anotherSyncNeeded = AnotherSyncNeeded::NoFollowUpSync;
+    _anotherSyncNeeded = false;
 
     _hasNoneFiles = false;
     _hasRemoveFile = false;
@@ -339,7 +338,6 @@ void SyncEngine::startSync()
     _progressInfo->reset();
 
     if (!QFileInfo::exists(_localPath)) {
-        _anotherSyncNeeded = AnotherSyncNeeded::DelayedFollowUp;
         // No _tr, it should only occur in non-mirall
         Q_EMIT syncError(QStringLiteral("Unable to find local sync folder."));
         finalize(false);
@@ -351,9 +349,8 @@ void SyncEngine::startSync()
     const qint64 freeBytes = Utility::freeDiskSpace(_localPath);
     if (freeBytes >= 0) {
         if (freeBytes < minFree) {
-            qCWarning(lcEngine()) << "Too little space available at" << _localPath << ". Have"
-                                  << freeBytes << "bytes and require at least" << minFree << "bytes";
-            _anotherSyncNeeded = AnotherSyncNeeded::DelayedFollowUp;
+            qCWarning(lcEngine()) << "Too little space available at" << _localPath << ". Have" << freeBytes << "bytes and require at least" << minFree
+                                  << "bytes";
             Q_EMIT syncError(tr("Only %1 are available, need at least %2 to start",
                 "Placeholders are postfixed with file sizes using Utility::octetsToString()")
                                  .arg(
@@ -540,8 +537,8 @@ void SyncEngine::slotDiscoveryFinished()
             restoreOldFiles(_syncItems);
         }
 
-        if (_discoveryPhase && _discoveryPhase->_anotherSyncNeeded && _anotherSyncNeeded == AnotherSyncNeeded::NoFollowUpSync) {
-            _anotherSyncNeeded = AnotherSyncNeeded::ImmediateFollowUp;
+        if (_discoveryPhase && _discoveryPhase->_anotherSyncNeeded) {
+            _anotherSyncNeeded = true;
         }
 
         Q_ASSERT(std::is_sorted(_syncItems.begin(), _syncItems.end()));
@@ -690,8 +687,8 @@ void SyncEngine::slotItemCompleted(const SyncFileItemPtr &item)
 
 void SyncEngine::slotPropagationFinished(bool success)
 {
-    if (_propagator->_anotherSyncNeeded && _anotherSyncNeeded == AnotherSyncNeeded::NoFollowUpSync) {
-        _anotherSyncNeeded = AnotherSyncNeeded::ImmediateFollowUp;
+    if (_propagator && _propagator->_anotherSyncNeeded) {
+        _anotherSyncNeeded = true;
     }
 
     if (success && _discoveryPhase) {
@@ -855,10 +852,10 @@ bool SyncEngine::shouldDiscoverLocally(const QString &path) const
     return false;
 }
 
-void SyncEngine::abort()
+void SyncEngine::abort(const QString& errorMessage)
 {
     if (_propagator)
-        qCInfo(lcEngine) << "Aborting sync";
+        qCInfo(lcEngine) << "Aborting sync, message" << errorMessage;
 
     if (_propagator) {
         // If we're already in the propagation phase, aborting that is sufficient
@@ -870,10 +867,23 @@ void SyncEngine::abort()
         _discoveryPhase.release()->deleteLater();
 
         if (!_goingDown) {
-            Q_EMIT syncError(tr("Aborted"));
+            if (!errorMessage.isEmpty())
+                Q_EMIT syncError(tr("Aborted"));
+            else
+                Q_EMIT syncError(errorMessage);
         }
         finalize(false);
     }
+}
+
+void SyncEngine::changeBaseUrl(const QUrl &url)
+{
+    if (isSyncRunning()) {
+        abort(tr("Synchronization aborted due to IP address change"));
+    }
+
+    _baseUrl = url;
+    startSync();
 }
 
 void SyncEngine::slotSummaryError(const QString &message)

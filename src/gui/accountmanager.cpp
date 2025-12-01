@@ -29,7 +29,9 @@
 #include <QNetworkAccessManager>
 
 namespace {
-const QString urlC = QStringLiteral("url");
+const auto urlC = QStringLiteral("url");
+const auto staticDeviceC = QStringLiteral("static_device");
+const auto deviceC = QStringLiteral("device");
 const auto userC = QStringLiteral("user");
 const auto httpUserC = QStringLiteral("http_user");
 const auto defaultSyncRootC = QStringLiteral("default_sync_root");
@@ -166,7 +168,11 @@ void AccountManager::saveAccount(Account *account, bool saveCredentials)
     settings->beginGroup(account->uuid().toString());
 
     settings->setValue(versionC, ConfigFile::UnusedLegacySettingsVersionNumber);
-    settings->setValue(urlC, account->_url.toString());
+    //settings->setValue(urlC, account->_url.toString());
+    //settings->setValue(staticDeviceC, account->isStaticDevice());
+    settings->setValue(deviceC, Device::toJsonStr(account->device()));
+    qCDebug(lcAccountManager) << "Saving device" << account->device().toString();
+
     settings->setValue(davUserC, account->_davUser);
     settings->setValue(davUserDisplyNameC, account->_displayName);
     settings->setValue(userUUIDC, account->uuid());
@@ -228,21 +234,14 @@ QStringList AccountManager::accountNames() const
 
 AccountPtr AccountManager::loadAccountHelper(QSettings &settings)
 {
-    auto urlConfig = settings.value(urlC);
-    if (!urlConfig.isValid()) {
-        // No URL probably means a corrupted entry in the account settings
-        qCWarning(lcAccountManager) << "No URL for account " << settings.group();
-        return AccountPtr();
-    }
-
     auto acc = createAccount(settings.value(userUUIDC, QVariant::fromValue(QUuid::createUuid())).toUuid());
-
-    acc->setUrl(urlConfig.toUrl());
 
     acc->_davUser = settings.value(davUserC).toString();
     acc->_displayName = settings.value(davUserDisplyNameC).toString();
     acc->setCapabilities({acc->url(), settings.value(capabilitesC).value<QVariantMap>()});
     acc->setDefaultSyncRoot(settings.value(defaultSyncRootC).toString());
+    acc->setDevice(Device::fromJsonStr(settings.value(deviceC).toByteArray()));
+    qCDebug(lcAccountManager) << "Loaded device" << acc->device().toString();
 
     // We want to only restore settings for that auth type and the user value
     acc->_settingsMap.insert(userC, settings.value(userC));

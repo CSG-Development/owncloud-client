@@ -32,6 +32,7 @@ Q_ENUM_NS(ChangeReason)
 namespace CUR {
 class RemoteConnector;
 class DeviceListManager;
+class EvaluatePath;
 }
 
 namespace CUR::Wizard {
@@ -66,8 +67,11 @@ Q_SIGNALS:
     void finishFailed(const QString& msg);
 
 private:
-    void startLogin(const QString& url, const QString& user, const QString& password);
-    void evaluateCredentials(const QString &url, const QString &login, const QString &password);
+    void startLogin(const QString& user, const QString& password);
+    void evaluateCredentials(const Device &dev, const QString &url, const QString &login, const QString &password);
+
+    void evaluateCredentialsNew(const QUuid& id);
+
     void performLogin();
     void evaluateFinishPage(CUR::Wizard::SyncMode mode, const QString& targetDir);
 
@@ -75,12 +79,13 @@ private:
     // keeping a pointer on the current page allows us to check whether the controller has been initialized yet
     // the pointer is also used to clean up the page
     // QPointer<AbstractState> _currentState = nullptr;
-    QString url_;
     QString user_;
     QString password_;
+    Device device_;
     RemoteConnector* raConnector = nullptr;
     DeviceListManager* deviceMgr = nullptr;
     bool remoteSkipped = false;
+    EvaluatePath* evaluator_ = nullptr;
 
     QList<DeviceInfo> remoteDevices;
 

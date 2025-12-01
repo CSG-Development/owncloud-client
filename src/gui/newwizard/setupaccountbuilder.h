@@ -111,6 +111,9 @@ public:
     void setServerUrl(const QUrl &serverUrl, DetermineAuthTypeJob::AuthType workflowType);
     QUrl serverUrl() const;
 
+    void setDevice(const Device& dev);
+    Device device() const;
+
     /**
      * Set URL of WebFinger server used to look up the user's server.
      * Only used when WebFinger support is enabled by the theme.
@@ -180,6 +183,7 @@ public:
 
 private:
     QUrl _serverUrl;
+    Device _device;
 
     QString _legacyWebFingerUsername;
     QUrl _legacyWebFingerServerUrl;

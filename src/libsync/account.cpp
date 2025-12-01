@@ -141,7 +141,7 @@ QString Account::displayName() const
     QString user = davDisplayName();
     if (user.isEmpty())
         user = davUser();
-    QString host = _url.host();
+    QString host = url().toString();//_url.host();
     const int port = url().port();
     if (port > 0 && port != 80 && port != 443) {
         host += QStringLiteral(":%1").arg(QString::number(port));
@@ -163,6 +163,28 @@ void Account::setDavDisplayName(const QString &newDisplayName)
 QString Account::id() const
 {
     return _id;
+}
+
+QUrl Account::url() const
+{
+    auto dev = _device.findPath(_activePath);
+    if (dev.has_value()) {
+        return QUrl(Device::normalizeUrl(dev->address, dev->port, true));
+    }
+    return QUrl();
+}
+
+void Account::setDevice(const Device &dev)
+{
+    _device = dev;
+    auto id = _device.getBestPathId();
+    if (id)
+        _activePath = id.value();
+}
+
+void Account::setActivePath(const QUuid &id)
+{
+    _activePath = id;
 }
 
 AbstractCredentials *Account::credentials() const
@@ -204,7 +226,9 @@ void Account::setCredentials(AbstractCredentials *cred)
     connect(_credentials.data(), &AbstractCredentials::authenticationStarted, this, [this] {
         _queueGuard.block();
     });
-    connect(_credentials.data(), &AbstractCredentials::authenticationFailed, this, [this] { _queueGuard.clear(); });
+    connect(_credentials.data(), &AbstractCredentials::authenticationFailed, this, [this] {
+        _queueGuard.clear();
+    });
 }
 
 QUrl Account::davUrl() const
@@ -258,10 +282,10 @@ void Account::addApprovedCerts(const QSet<QSslCertificate> &certs)
     Q_EMIT wantsAccountSaved(this);
 }
 
-void Account::setUrl(const QUrl &url)
-{
-    _url = url;
-}
+// void Account::setUrl(const QUrl &url)
+// {
+//     _url = url;
+// }
 
 QVariant Account::credentialSetting(const QString &key) const
 {

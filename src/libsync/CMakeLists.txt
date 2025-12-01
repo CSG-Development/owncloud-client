@@ -40,6 +40,8 @@ set(libsync_SRCS
     syncresult.cpp
     syncoptions.cpp
     theme.cpp
+    devicetypes.cpp
+    devicetypes.h
     creds/credentialmanager.cpp
     creds/abstractcredentials.cpp
     creds/oauth.cpp
@@ -49,6 +51,12 @@ set(libsync_SRCS
     networkjobs/checkserverjobfactory.cpp
     networkjobs/jsonjob.cpp
     networkjobs/resources.cpp
+    networkjobs/evaluatepaths.cpp
+    networkjobs/evaluatepaths.h
+    networkjobs/simpleresolveurljobfactory.cpp
+    networkjobs/simpleresolveurljobfactory.h
+    networkjobs/networkmonitor.cpp
+    networkjobs/networkmonitor.h
 
     abstractcorejob.cpp
     determineauthtypejobfactory.cpp

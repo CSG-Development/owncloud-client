@@ -73,7 +73,8 @@ void SyncRunFileLog::start(const QString &folderPath)
 
     _totalDuration.start();
     _lapDuration.start();
-    *_out << "#=#=#=# Syncrun started " << dateTimeStr() << Qt::endl;
+    if (_out)
+        *_out << "#=#=#=# Syncrun started " << dateTimeStr() << Qt::endl;
 }
 
 void SyncRunFileLog::logItem(const SyncFileItem &item)
@@ -92,7 +93,8 @@ void SyncRunFileLog::logItem(const SyncFileItem &item)
                                << item._fileId << L << item._status << L << item._errorString << L << item._httpErrorCode << L << item._previousSize << L
                                << item._previousModtime << L << item._requestId << L << Qt::endl;
     }
-    *_out << tmp;
+    if (_out)
+        *_out << tmp;
 }
 
 void SyncRunFileLog::logLap(const QString &name)
@@ -102,7 +104,8 @@ void SyncRunFileLog::logLap(const QString &name)
         QDebug(&tmp).noquote() << "#=#=#=#=#" << name << dateTimeStr() << "(last step:" << _lapDuration.restart() << "msec"
                                << ", total:" << _totalDuration.elapsed() << "msec)" << Qt::endl;
     }
-    *_out << tmp;
+    if (_out)
+        *_out << tmp;
 }
 
 void SyncRunFileLog::finish()
@@ -112,6 +115,9 @@ void SyncRunFileLog::finish()
         QDebug(&tmp).noquote() << "#=#=#=# Syncrun finished" << dateTimeStr() << "(last step:" << _lapDuration.elapsed() << "msec"
                                << ", total:" << _totalDuration.elapsed() << "msec)" << Qt::endl;
     }
+    if (!_out)
+        return;
+
     *_out << tmp;
     _out->flush();
     _out->reset();

@@ -37,6 +37,7 @@ class Account;
 class QuotaInfo;
 class TlsErrorDialog;
 class FetchServerSettingsJob;
+class EvaluatePath;
 
 /**
  * @brief Extra info about an ownCloud server account.
@@ -170,6 +171,7 @@ signals:
     void stateChanged(State state);
     void isConnectedChanged();
     void urlUpdated();
+    void urlChanged(const QUuid& id);
     void isSettingUpChanged();
 
 protected Q_SLOTS:
@@ -189,8 +191,8 @@ private:
     QPointer<ConnectionValidator> _connectionValidator;
     QPointer<UpdateUrlDialog> _updateUrlDialog;
     QPointer<TlsErrorDialog> _tlsDialog;
+    EvaluatePath* _evaluator = nullptr;
     bool _supportsSpaces = true;
-
     bool _settingUp = false;
 
     /**

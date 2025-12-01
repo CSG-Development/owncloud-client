@@ -12,6 +12,7 @@
 #include <QComboBox>
 #include <QRegularExpression>
 #include <QHostAddress>
+#include <QToolTip>
 
 namespace {
 constexpr int fontSize = 16;
@@ -76,10 +77,16 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     });
 
     connect(ui->btnLogin, &QPushButton::clicked, this, [&] {
-        Q_EMIT loginClicked(url(), email(), password());
+        if (currentDevice().has_value())
+            Q_EMIT loginClicked(currentDevice().value(), email(), password());
+        else
+            Q_EMIT loginClicked({}, email(), password());
     });
     connect(ui->btnCancel, &QPushButton::clicked, this, &CredentialsPage::cancelClicked);
-    connect(ui->btnSettings, &QToolButton::clicked, this, &CredentialsPage::settingsClicked);
+    connect(ui->btnSettings, &QToolButton::clicked, this, [&] {
+        showDevicesInfo(true);
+        emit settingsClicked();
+    });
     connect(ui->btnResetPass, &QPushButton::clicked, this, &CredentialsPage::resetPasswordClicked);
     connect(ui->btnRefresh, &QToolButton::clicked, this, [&] {
         showErrorMessage({});
@@ -157,31 +164,13 @@ void CredentialsPage::updateTheme()
 
 void CredentialsPage::setDevicesList(const QList<Device> &list)
 {
+    dev_list = list;
     ui->edUrl->setItems(list);
 }
 
 std::optional<Device> CredentialsPage::currentDevice() const
 {
     return ui->edUrl->currentDevice();
-}
-
-QString CredentialsPage::url() const
-{
-    if (auto currDevice = currentDevice()) {
-        if (!currDevice->paths.isEmpty()) {
-            auto path = Device::firstRemotePath(currDevice.value());
-            DevicePath devPath;
-            if (path) {
-                devPath = path.value();
-            }
-            else {
-                devPath = currDevice->paths.first();
-            }
-
-            return normalizeUrl(devPath.address, devPath.port, true);
-        }
-    }
-    return {};
 }
 
 QString CredentialsPage::email() const
@@ -295,6 +284,26 @@ void CredentialsPage::codeJustRequested()
     codeExpireTime = QDateTime::currentDateTime().addSecs(code_expire_seconds);
     isCodeExpired = false;
     codeExpireCheckTimer.start();
+}
+
+void CredentialsPage::showDevicesInfo(bool show)
+{
+    QString s;
+    for (const auto& d: std::as_const(dev_list)) {
+        s += QStringLiteral("<b>%1</b><br>").arg(d.certificateCommonName);
+        for (const auto& p: d.paths) {
+            s += QStringLiteral("  %1 %2 type: %3 origin: %4<br>")
+                     .arg(p.address)
+                     .arg(p.port == 0 ? QStringLiteral("") : QStringLiteral("port: %1").arg(p.port))
+                     .arg(DevicePath::devTypeToStr(p.deviceType))
+                     .arg(DevicePath::originToStr(p.origin));
+        }
+    }
+    auto r = mapToGlobal(geometry().topLeft());
+    if (show)
+        QToolTip::showText(r, s);
+    else
+        QToolTip::showText(r, QStringLiteral(""));
 }
 
 void CredentialsPage::onTextEdited(const QString&/*txt*/)

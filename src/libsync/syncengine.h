@@ -43,19 +43,6 @@ class SyncJournalDb;
 class CuratorPropagator;
 class ProcessDirectoryJob;
 
-
-// work around for only having one namespace CUR, and this enum not beeing in a QObject
-namespace AnotherSyncNeededPrivate {
-    CURATORSYNC_EXPORT Q_NAMESPACE;
-    enum class AnotherSyncNeeded {
-        NoFollowUpSync,
-        ImmediateFollowUp, // schedule this again immediately (limited amount of times)
-        DelayedFollowUp // regularly schedule this folder again (around 1/minute, unlimited)
-    };
-    Q_ENUM_NS(AnotherSyncNeeded);
-}
-using AnotherSyncNeededPrivate::AnotherSyncNeeded;
-
 /**
  * @brief The SyncEngine class
  * @ingroup libsync
@@ -72,9 +59,11 @@ public:
     void setNetworkLimits(int upload, int download);
 
     /* Abort the sync.  Called from the main thread */
-    void abort();
+    void abort(const QString& errorMessage = {});
 
     bool isSyncRunning() const { return _syncRunning; }
+
+    void changeBaseUrl(const QUrl& url);
 
     const SyncOptions &syncOptions() const
     {
@@ -99,7 +88,7 @@ public:
     SyncFileStatusTracker &syncFileStatusTracker() { return *_syncFileStatusTracker; }
 
     /* Returns whether another sync is needed to complete the sync */
-    AnotherSyncNeeded isAnotherSyncNeeded() { return _anotherSyncNeeded; }
+    bool isAnotherSyncNeeded() { return _anotherSyncNeeded; }
 
     AccountPtr account() const;
     SyncJournalDb *journal() const { return _journal; }
@@ -234,7 +223,7 @@ private:
     SyncFileItemSet _syncItems;
 
     AccountPtr _account;
-    const QUrl _baseUrl;
+    QUrl _baseUrl;
     bool _needsUpdate;
     bool _syncRunning;
     QString _localPath;
@@ -273,7 +262,7 @@ private:
 
     std::optional<SyncOptions> _syncOptions;
 
-    AnotherSyncNeeded _anotherSyncNeeded;
+    bool _anotherSyncNeeded = false;
 
     QElapsedTimer _lastUpdateProgressCallbackCall;
 

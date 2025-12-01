@@ -71,7 +71,6 @@ RemoteConnector::RemoteConnector(QObject *parent)
     });
     connect(&net_mgr, &QNetworkAccessManager::sslErrors, this, [&](QNetworkReply *reply, const QList<QSslError> &errors) {
         qCInfo(lcLoginService) << "***";
-        qCInfo(lcLoginService) << "URL:" << reply->request().url();
         qCWarning(lcLoginService) << "sslErrors:";
         for (const auto& err: errors)
             qCInfo(lcLoginService) << "  " << err;
@@ -306,7 +305,7 @@ void RemoteConnector::query_token(const QString& code)
 
 void RemoteConnector::query_devices_list(const QString& access_token)
 {
-    qCDebug(lcLoginService) << "query_devices" << access_token;
+    qCDebug(lcLoginService) << "query_devices";
 
     rest_factory->clearQueryParameters();
 
@@ -400,12 +399,9 @@ void RemoteConnector::parseDeviceInfoReply(const QJsonDocument &doc)
 
     if (auto d = findDevice(devId)) {
         for (const auto p: paths) {
-            DevicePath dpath;
-            dpath.deviceType = DevicePath::strToDevType(p[jkey_type].toString());
-            dpath.address = p[jkey_address].toString();
-            dpath.port = p[jkey_port].toInt();
+            DevicePath dpath(p[jkey_address].toString(), DevicePath::strToDevType(p[jkey_type].toString()), DevicePathOrigin::Remote, p[jkey_port].toInt());
             d->paths.append(dpath);
-            qCDebug(lcLoginService) << "Device" << d->seagateDeviceID << "path" << dpath.address;
+            qCDebug(lcLoginService) << "Device" << d->seagateDeviceID << "path" << dpath.toString();
         }
     }
 }
@@ -440,7 +436,7 @@ void RemoteConnector::addDevice(const QJsonValue &val)
     d.hostname = val[jkey_hostname].toString();
     devices.append(d);
     devIdsQueue.append(d.seagateDeviceID);
-    qCDebug(lcLoginService) << "Device" << d.seagateDeviceID << d.certificateCommonName << "added";
+    qCDebug(lcLoginService) << "Device added:" << d.toString();
 }
 
 void RemoteConnector::prepareDevList()
@@ -449,11 +445,12 @@ void RemoteConnector::prepareDevList()
     for (const auto& dev: std::as_const(devices)) {
         for (const auto& path: dev.paths) {
             DeviceInfo di;
-            di.name = dev.friendlyName;
+            di.name = dev.certificateCommonName;
             di.host = path.address;
             di.port = path.port;
             di.deviceType = path.deviceType;
             devInfoList.append(di);
+            qDebug() << di;
         }
     }
 }

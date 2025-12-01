@@ -104,6 +104,16 @@ QUrl SetupAccountBuilder::serverUrl() const
     return _serverUrl;
 }
 
+void SetupAccountBuilder::setDevice(const Device& dev)
+{
+    _device = dev;
+}
+
+Device SetupAccountBuilder::device() const
+{
+    return _device;
+}
+
 DetermineAuthTypeJob::AuthType SetupAccountBuilder::authType()
 {
     return _authType;
@@ -119,21 +129,20 @@ AccountPtr SetupAccountBuilder::build()
     auto newAccountPtr = Account::create(QUuid::createUuid());
 
     Q_ASSERT(!_serverUrl.isEmpty() && _serverUrl.isValid());
-    newAccountPtr->setUrl(_serverUrl);
+    //newAccountPtr->setUrl(_serverUrl);
+    newAccountPtr->setDevice(_device);
 
-    if (!_webFingerSelectedInstance.isEmpty()) {
-        Q_ASSERT(_serverUrl.isValid());
-        newAccountPtr->setUrl(_webFingerSelectedInstance);
-    }
+    //if (!_webFingerSelectedInstance.isEmpty()) {
+    //    Q_ASSERT(_serverUrl.isValid());
+    //    newAccountPtr->setUrl(_webFingerSelectedInstance);
+    //}
 
     Q_ASSERT(hasValidCredentials());
 
     // TODO: perhaps _authenticationStrategy->setUpAccountPtr(...) would be more elegant? no need for getters then
     newAccountPtr->setDavUser(_authenticationStrategy->davUser());
     newAccountPtr->setCredentials(_authenticationStrategy->makeCreds());
-
     newAccountPtr->setDavDisplayName(_displayName);
-
     newAccountPtr->addApprovedCerts({ _customTrustedCaCertificates.begin(), _customTrustedCaCertificates.end() });
 
     if (!_defaultSyncTargetDir.isEmpty()) {
