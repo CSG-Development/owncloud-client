@@ -904,8 +904,12 @@ bool Folder::reloadExcludes()
 
 void Folder::startSync()
 {
-    Q_ASSERT(isReady());
-    Q_ASSERT(_folderWatcher);
+    Q_ASSERT(isReady() && _folderWatcher);
+
+    if (!isReady() || !_folderWatcher) {
+        qCWarning(lcFolder) << "Folder sync attempted before ready and/or without valid folder watcher";
+        return;
+    }
 
     if (!OC_ENSURE(!isSyncRunning())) {
         qCCritical(lcFolder) << "ERROR sync is still running and new sync requested.";
@@ -970,6 +974,11 @@ void Folder::startSync()
 void Folder::setDirtyNetworkLimits()
 {
     Q_ASSERT(isReady());
+    if (!isReady()) {
+        qCWarning(lcFolder) << "Folder is not ready";
+        return;
+    }
+
     ConfigFile cfg;
     int downloadLimit = -75; // 75%
     int useDownLimit = cfg.useDownloadLimit();
@@ -1006,6 +1015,7 @@ void Folder::slotSyncFinished(bool success)
 {
     if (!isReady()) {
         // probably removing the folder
+        qCWarning(lcFolder) << "Folder not ready after sync finished";
         return;
     }
     qCInfo(lcFolder) << "Client version" << Theme::instance()->aboutVersions(Theme::VersionFormat::OneLiner);

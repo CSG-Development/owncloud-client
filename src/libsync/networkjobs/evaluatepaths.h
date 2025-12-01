@@ -17,6 +17,7 @@ public:
     explicit EvaluatePath(QObject* parent = nullptr);
 
     void start_evaluate(Device* dev);
+    bool isRunning() const {return _isRunning;}
 
 signals:
     void path_evaluated(const QUuid& id, bool success);
@@ -30,6 +31,7 @@ private:
     Device* device_ = nullptr;
     QList<QUuid> id_queue;
     AccessManager* mgr = nullptr;
+    bool _isRunning = false;
 };
 
 } // namespace CUR

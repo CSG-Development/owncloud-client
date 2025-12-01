@@ -171,6 +171,7 @@ void AccountManager::saveAccount(Account *account, bool saveCredentials)
     //settings->setValue(urlC, account->_url.toString());
     //settings->setValue(staticDeviceC, account->isStaticDevice());
     settings->setValue(deviceC, Device::toJsonStr(account->device()));
+    qCDebug(lcAccountManager) << "Saving device" << account->device().toString();
 
     settings->setValue(davUserC, account->_davUser);
     settings->setValue(davUserDisplyNameC, account->_displayName);
@@ -240,6 +241,7 @@ AccountPtr AccountManager::loadAccountHelper(QSettings &settings)
     acc->setCapabilities({acc->url(), settings.value(capabilitesC).value<QVariantMap>()});
     acc->setDefaultSyncRoot(settings.value(defaultSyncRootC).toString());
     acc->setDevice(Device::fromJsonStr(settings.value(deviceC).toByteArray()));
+    qCDebug(lcAccountManager) << "Loaded device" << acc->device().toString();
 
     // We want to only restore settings for that auth type and the user value
     acc->_settingsMap.insert(userC, settings.value(userC));
