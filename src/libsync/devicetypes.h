@@ -82,10 +82,6 @@ public:
     bool isStatic = false;
     QList<DevicePath> paths;
 
-    static std::optional<DevicePath> firstRemotePath(const Device& dev);
-    static std::optional<DevicePath> firstLocalPath(const Device& dev);
-    static std::optional<DevicePath> getPath(const Device& dev, QList<DeviceType> types);
-
     static Device MakeStatic(const QString& url, const QString& name);
 
     static QJsonDocument toJson(const Device& dev);

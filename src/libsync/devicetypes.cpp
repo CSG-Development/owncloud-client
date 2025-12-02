@@ -258,31 +258,10 @@ std::optional<QUuid> Device::getBestPathId(const Device &dev)
         return paths.first().id;
 
     std::stable_sort(paths.begin(), paths.end(), [&](const DevicePath& a, const DevicePath& b) {
-        return a.deviceType > b.deviceType;
+        return a.deviceType < b.deviceType;
     });
 
     return paths.first().id;
-}
-
-std::optional<DevicePath> Device::firstRemotePath(const Device &dev)
-{
-    return getPath(dev, {DeviceType::Public, DeviceType::Remote});
-}
-
-std::optional<DevicePath> Device::firstLocalPath(const Device& dev)
-{
-    return getPath(dev, {DeviceType::Local});
-}
-
-std::optional<DevicePath> Device::getPath(const Device& dev, QList<DeviceType> types)
-{
-    if (dev.paths.isEmpty())
-        return std::nullopt;
-    for (const auto& p: dev.paths) {
-        if (types.contains(p.deviceType))
-            return p;
-    }
-    return std::nullopt;
 }
 
 Device Device::MakeStatic(const QString &url, const QString &name)
