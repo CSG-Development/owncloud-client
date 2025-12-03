@@ -1,4 +1,5 @@
 #include "devicetypes.h"
+#include "configfile.h"
 
 #include <QMap>
 #include <QJsonDocument>
@@ -176,9 +177,11 @@ DeviceInfoStatus DeviceInfoStatus::fromJson(const QJsonDocument &doc)
     return ds;
 }
 
-QString Device::normalizeUrl(const QString &url, int port, bool add_folder)
+QString Device::makeServerUrl(const QString &url, int port, bool add_folder, bool add_port)
 {
     QString result;
+
+    bool apiOnlyPort = CUR::ConfigFile::useLocalPortForApiOnly();
 
     if (!url.startsWith(QStringLiteral("http://")) && !url.startsWith(QStringLiteral("https://"))) {
         result = QStringLiteral("https://");
@@ -205,10 +208,17 @@ QString Device::normalizeUrl(const QString &url, int port, bool add_folder)
     }
 
     QUrl tmpurl(result);
-    if (!add_folder) {
-        if (port > 0)
+    if (port > 0) {
+        if (apiOnlyPort) {
+            if (add_port)
+                tmpurl.setPort(port);
+        }
+        else {
             tmpurl.setPort(port);
+        }
     }
+
+    //qCInfo(lcDevice) << "Make URL" << url << ":" << port << "--->" << tmpurl.toString();
 
     return tmpurl.toString();
 }
@@ -258,31 +268,10 @@ std::optional<QUuid> Device::getBestPathId(const Device &dev)
         return paths.first().id;
 
     std::stable_sort(paths.begin(), paths.end(), [&](const DevicePath& a, const DevicePath& b) {
-        return a.deviceType > b.deviceType;
+        return a.deviceType < b.deviceType;
     });
 
     return paths.first().id;
-}
-
-std::optional<DevicePath> Device::firstRemotePath(const Device &dev)
-{
-    return getPath(dev, {DeviceType::Public, DeviceType::Remote});
-}
-
-std::optional<DevicePath> Device::firstLocalPath(const Device& dev)
-{
-    return getPath(dev, {DeviceType::Local});
-}
-
-std::optional<DevicePath> Device::getPath(const Device& dev, QList<DeviceType> types)
-{
-    if (dev.paths.isEmpty())
-        return std::nullopt;
-    for (const auto& p: dev.paths) {
-        if (types.contains(p.deviceType))
-            return p;
-    }
-    return std::nullopt;
 }
 
 Device Device::MakeStatic(const QString &url, const QString &name)

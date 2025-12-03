@@ -426,7 +426,7 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
         return;
     }
 
-    QUrl serverUrl = QUrl(Device::normalizeUrl(dev_path->address, dev_path->port, true));
+    QUrl serverUrl = QUrl(Device::makeServerUrl(dev_path->address, dev_path->port, true, dev_path->origin != DevicePathOrigin::MDNS));
 
     _context->accountBuilder().setServerUrl(serverUrl, DetermineAuthTypeJob::AuthType::Unknown);
     qCDebug(lcSetupWizardController) << "ServerUrl" << serverUrl.toString();

@@ -198,6 +198,10 @@ public:
 
     QPair<QString,QString> staticDevice();
 
+    // Use mDNS port only for API requests
+    // For Testing only
+    static bool useLocalPortForApiOnly();
+
     /**
      * The maximum versions that this client can read.
      *
