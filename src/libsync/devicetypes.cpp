@@ -176,7 +176,7 @@ DeviceInfoStatus DeviceInfoStatus::fromJson(const QJsonDocument &doc)
     return ds;
 }
 
-QString Device::normalizeUrl(const QString &url, int port, bool add_folder)
+QString Device::makeServerUrl(const QString &url, int port, bool add_folder, bool add_port)
 {
     QString result;
 
@@ -205,10 +205,8 @@ QString Device::normalizeUrl(const QString &url, int port, bool add_folder)
     }
 
     QUrl tmpurl(result);
-    if (!add_folder) {
-        if (port > 0)
-            tmpurl.setPort(port);
-    }
+    if (port > 0 && add_port)
+        tmpurl.setPort(port);
 
     return tmpurl.toString();
 }

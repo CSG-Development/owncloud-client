@@ -169,7 +169,7 @@ QUrl Account::url() const
 {
     auto dev = _device.findPath(_activePath);
     if (dev.has_value()) {
-        return QUrl(Device::normalizeUrl(dev->address, dev->port, true));
+        return QUrl(Device::makeServerUrl(dev->address, dev->port, true, (dev->origin == DevicePathOrigin::MDNS) ? false : true));
     }
     return QUrl();
 }

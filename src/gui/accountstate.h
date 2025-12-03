@@ -161,6 +161,9 @@ public slots:
     /// verifyServerState indicates that we must check the server
     void checkConnectivity(bool verifyServerState = false);
 
+    /// Triggers checks and update status for all device URLs
+    void updateDeviceAccessibility();
+
 private:
     /// Use the account as parent
     explicit AccountState(AccountPtr account);

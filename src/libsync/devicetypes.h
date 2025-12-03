@@ -96,7 +96,8 @@ public:
     void setActicvePath(const QUuid& id);
     void setOnlinePath(const QUuid& id);
     void clearOnlinePaths();
-    static QString normalizeUrl(const QString &url, int port, bool add_folder);
+
+    static QString makeServerUrl(const QString &url, int port, bool add_folder, bool add_port);
 
     std::optional<DevicePath> findPath(const QUuid& id) const;
     std::optional<QUuid> getBestPathId();
@@ -231,6 +232,15 @@ public:
     int port = 0;
     DeviceInfoAbout about;
     DeviceInfoStatus status;
+    QString toString() const {
+        QStringList l;
+        l << QStringLiteral("MdnsRecord{");
+        l << QStringLiteral("name:%1,").arg(name);
+        l << QStringLiteral("host:%1,").arg(host);
+        l << QStringLiteral("port:%1,").arg(port);
+        l << QStringLiteral("}");
+        return l.join(QStringLiteral(""));
+    }
 };
 
 class CURATORSYNC_EXPORT DeviceInfo

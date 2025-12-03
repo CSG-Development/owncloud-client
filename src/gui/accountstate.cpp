@@ -427,6 +427,11 @@ void AccountState::checkConnectivity(bool blockJobs)
     _connectionValidator->checkServer(mode);
 }
 
+void AccountState::updateDeviceAccessibility()
+{
+    _evaluator->start_evaluate(_account->devicePtr());
+}
+
 void AccountState::slotConnectionValidatorResult(ConnectionValidator::Status status, const QStringList &errors)
 {
     if (isSignedOut()) {

@@ -67,7 +67,7 @@ void EvaluatePath::evaluate(const QUuid &id)
         return;
     }
 
-    QUrl serverUrl = QUrl(Device::normalizeUrl(dev_path->address, dev_path->port, true));
+    QUrl serverUrl = QUrl(Device::makeServerUrl(dev_path->address, dev_path->port, true, (dev_path->origin == DevicePathOrigin::MDNS) ? false : true));
 
     if (!serverUrl.isValid()) {
         Q_EMIT path_evaluated(id, false);
