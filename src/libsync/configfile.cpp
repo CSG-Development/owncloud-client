@@ -95,6 +95,7 @@ const auto refreshTokenC = QStringLiteral("RefreshToken");
 const auto developmentGroupC = QStringLiteral("Development");
 const auto staticDeviceNameC = QStringLiteral("StaticDeviceName");
 const auto staticDeviceUrlC = QStringLiteral("StaticDeviceUrl");
+const auto usePortForApiOnly_C = QStringLiteral("UsePortForApiOnly");
 
 const auto issuesWidgetFilterC = QStringLiteral("issuesWidgetFilter");
 
@@ -882,6 +883,13 @@ QPair<QString, QString> ConfigFile::staticDevice()
     if (name.isEmpty())
         name = url;
     return qMakePair(name, url);
+}
+
+bool ConfigFile::useLocalPortForApiOnly()
+{
+    auto settings = makeQSettings();
+    settings.beginGroup(developmentGroupC);
+    return settings.value(usePortForApiOnly_C, false).toBool();
 }
 
 }

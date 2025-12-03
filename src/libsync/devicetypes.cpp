@@ -1,4 +1,5 @@
 #include "devicetypes.h"
+#include "configfile.h"
 
 #include <QMap>
 #include <QJsonDocument>
@@ -180,6 +181,8 @@ QString Device::makeServerUrl(const QString &url, int port, bool add_folder, boo
 {
     QString result;
 
+    bool apiOnlyPort = CUR::ConfigFile::useLocalPortForApiOnly();
+
     if (!url.startsWith(QStringLiteral("http://")) && !url.startsWith(QStringLiteral("https://"))) {
         result = QStringLiteral("https://");
     }
@@ -205,8 +208,17 @@ QString Device::makeServerUrl(const QString &url, int port, bool add_folder, boo
     }
 
     QUrl tmpurl(result);
-    if (port > 0 && add_port)
-        tmpurl.setPort(port);
+    if (port > 0) {
+        if (apiOnlyPort) {
+            if (add_port)
+                tmpurl.setPort(port);
+        }
+        else {
+            tmpurl.setPort(port);
+        }
+    }
+
+    //qCInfo(lcDevice) << "Make URL" << url << ":" << port << "--->" << tmpurl.toString();
 
     return tmpurl.toString();
 }

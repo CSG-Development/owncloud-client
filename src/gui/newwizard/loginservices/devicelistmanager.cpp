@@ -136,14 +136,14 @@ void DeviceListManager::query_ra_about_queue()
 
 void DeviceListManager::query_local_status(const MdnsRecord &rec)
 {
-    auto url = Device::makeServerUrl(rec.host, rec.port, false, false);
+    auto url = Device::makeServerUrl(rec.host, rec.port, false, true);
     qCDebug(lcDeviceManager) << "Query local status" << url;
     devApi->query_device_status(url);
 }
 
 void DeviceListManager::query_local_about(const MdnsRecord &rec)
 {
-    auto url = Device::makeServerUrl(rec.host, rec.port, false, false);
+    auto url = Device::makeServerUrl(rec.host, rec.port, false, true);
     qCDebug(lcDeviceManager) << "Query local about" << url;
     devApi->query_device_about(url);
 }
