@@ -118,7 +118,7 @@ void ComboWidget::setItems(const QList<Device> &list)
 
     if (!list.isEmpty() && text().isEmpty()) {
         selectedDevice = list.first();
-        setText(selectedDevice->certificateCommonName);
+        setText(selectedDevice->friendlyName);
     }
 }
 
