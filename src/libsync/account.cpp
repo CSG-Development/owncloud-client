@@ -141,11 +141,14 @@ QString Account::displayName() const
     QString user = davDisplayName();
     if (user.isEmpty())
         user = davUser();
-    QString host = url().toString();//_url.host();
-    const int port = url().port();
-    if (port > 0 && port != 80 && port != 443) {
-        host += QStringLiteral(":%1").arg(QString::number(port));
-    }
+
+    QString host;
+    QUrl displayHost = url();
+    if (displayHost.port() == 80 || displayHost.port() == 443)
+        host = displayHost.host();
+    else
+        host = displayHost.toString();
+
     return tr("%1@%2").arg(user, host);
 }
 
@@ -169,7 +172,7 @@ QUrl Account::url() const
 {
     auto dev = _device.findPath(_activePath);
     if (dev.has_value()) {
-        return QUrl(Device::normalizeUrl(dev->address, dev->port, true));
+        return QUrl(Device::makeServerUrl(dev->address, dev->port, true, dev->origin != DevicePathOrigin::MDNS));
     }
     return QUrl();
 }

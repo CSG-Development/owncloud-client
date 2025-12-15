@@ -43,6 +43,15 @@ MdnsClient::MdnsClient(QObject* parent)
                 }
             }
         }
+
+        if (!records_.isEmpty()) {
+            for (const auto& r: std::as_const(records_)) {
+                qCInfo(lcMdnsDevice) << r.toString();
+            }
+        }
+        else {
+            qCInfo(lcMdnsDevice) << "No mDNS records found";
+        }
         requestCompleted();
     });
 }

@@ -136,28 +136,28 @@ void DeviceListManager::query_ra_about_queue()
 
 void DeviceListManager::query_local_status(const MdnsRecord &rec)
 {
-    auto url = Device::normalizeUrl(rec.host, rec.port, false);
+    auto url = Device::makeServerUrl(rec.host, rec.port, false, true);
     qCDebug(lcDeviceManager) << "Query local status" << url;
     devApi->query_device_status(url);
 }
 
 void DeviceListManager::query_local_about(const MdnsRecord &rec)
 {
-    auto url = Device::normalizeUrl(rec.host, rec.port, false);
+    auto url = Device::makeServerUrl(rec.host, rec.port, false, true);
     qCDebug(lcDeviceManager) << "Query local about" << url;
     devApi->query_device_about(url);
 }
 
 void DeviceListManager::query_ra_status(const DeviceInfo &rec)
 {
-    auto url = Device::normalizeUrl(rec.host, rec.port, false);
+    auto url = Device::makeServerUrl(rec.host, rec.port, false, true);
     qCDebug(lcDeviceManager) << "Query remote status" << url;
     devApi->query_device_status(url);
 }
 
 void DeviceListManager::query_ra_about(const DeviceInfo &rec)
 {
-    auto url = Device::normalizeUrl(rec.host, rec.port, false);
+    auto url = Device::makeServerUrl(rec.host, rec.port, false, true);
     qCDebug(lcDeviceManager) << "Query remote about" << url;
     devApi->query_device_about(url);
 }
@@ -218,6 +218,7 @@ QList<Device> DeviceListManager::combine_lists(const QList<MdnsRecord>& mdns_rec
 
         Device dev;
         dev.certificateCommonName = rec.about.certificate_common_name;
+        dev.setFriendlyName(rec.friendlyName);
         dev.hostname = rec.about.hostname;
 
         DevicePath dev_path(rec.host, rec.deviceType, DevicePathOrigin::Remote, rec.port);

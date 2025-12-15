@@ -189,6 +189,7 @@ void Application::slotAccountStateAdded(AccountStatePtr accountState) const
     connect(accountState->account().data(), &Account::serverVersionChanged, FolderMan::instance(), [account = accountState->account().data()] {
         FolderMan::instance()->slotServerVersionChanged(account);
     });
+    accountState->updateDeviceAccessibility();
     accountState->checkConnectivity();
 }
 
