@@ -218,6 +218,7 @@ QList<Device> DeviceListManager::combine_lists(const QList<MdnsRecord>& mdns_rec
 
         Device dev;
         dev.certificateCommonName = rec.about.certificate_common_name;
+        dev.setFriendlyName(rec.friendlyName);
         dev.hostname = rec.about.hostname;
 
         DevicePath dev_path(rec.host, rec.deviceType, DevicePathOrigin::Remote, rec.port);

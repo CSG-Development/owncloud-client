@@ -291,6 +291,8 @@ void CredentialsPage::showDevicesInfo(bool show)
     QString s;
     for (const auto& d: std::as_const(dev_list)) {
         s += QStringLiteral("<b>%1</b><br>").arg(d.certificateCommonName);
+        s += QStringLiteral("  Friendly: %1<br>").arg(d.friendlyName());
+        s += QStringLiteral("  CN: %1<br>").arg(d.certificateCommonName);
         for (const auto& p: d.paths) {
             s += QStringLiteral("  %1 %2 type: %3 origin: %4<br>")
                      .arg(p.address)

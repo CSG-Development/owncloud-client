@@ -432,7 +432,7 @@ void RemoteConnector::addDevice(const QJsonValue &val)
     Device d;
     d.seagateDeviceID = val[jkey_seagateDeviceID].toString();
     d.certificateCommonName = val[jkey_certificateCommonName].toString();
-    d.friendlyName = val[jkey_friendlyName].toString();
+    d.setFriendlyName(val[jkey_friendlyName].toString());
     d.hostname = val[jkey_hostname].toString();
     devices.append(d);
     devIdsQueue.append(d.seagateDeviceID);
@@ -445,7 +445,8 @@ void RemoteConnector::prepareDevList()
     for (const auto& dev: std::as_const(devices)) {
         for (const auto& path: dev.paths) {
             DeviceInfo di;
-            di.name = dev.certificateCommonName;
+            di.certName = dev.certificateCommonName;
+            di.friendlyName = dev.friendlyName();
             di.host = path.address;
             di.port = path.port;
             di.deviceType = path.deviceType;

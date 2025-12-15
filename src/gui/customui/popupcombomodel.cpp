@@ -22,7 +22,7 @@ QVariant PopupComboModel::data(const QModelIndex &idx, int role) const
     {
     case Qt::DisplayRole:
         if (col == clName) {
-            return data_[row].certificateCommonName;
+            return data_[row].friendlyName();
         }
         break;
 

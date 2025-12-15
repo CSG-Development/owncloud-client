@@ -51,6 +51,15 @@ const auto paths_C = QStringLiteral("paths");
 
 Q_LOGGING_CATEGORY(lcDevice, "device", QtInfoMsg)
 
+DevicePath::DevicePath(const QString &addr, DeviceType devType, DevicePathOrigin org, int pport)
+    : address(addr)
+    , deviceType(devType)
+    , origin(org)
+    , port(pport)
+{
+    id = QUuid::createUuid();
+}
+
 DeviceType DevicePath::strToDevType(const QString &str)
 {
     QMap<QString, DeviceType> map = {
@@ -123,6 +132,21 @@ DevicePath DevicePath::fromJson(const QJsonObject& val)
     return dp;
 }
 
+QString DevicePath::toString() const
+{
+    QStringList l;
+    l << QStringLiteral("DevicePath{");
+    l << QStringLiteral("address:%1,").arg(address);
+    l << QStringLiteral("port:%1,").arg(port);
+    l << QStringLiteral("deviceType:%1,").arg(devTypeToStr(deviceType));
+    l << QStringLiteral("origin:%1,").arg(originToStr(origin));
+    l << QStringLiteral("online:%1,").arg(isOnline);
+    l << QStringLiteral("active:%1,").arg(isActive);
+    l << QStringLiteral("id:%1").arg(id.toString());
+    l << QStringLiteral("}");
+    return l.join(QStringLiteral(""));
+}
+
 DeviceInfoAbout DeviceInfoAbout::fromJson(const QJsonDocument &doc)
 {
     DeviceInfoAbout di;
@@ -163,6 +187,25 @@ DeviceInfoAbout DeviceInfoAbout::fromJson(const QJsonDocument &doc)
     return di;
 }
 
+QString DeviceInfoAbout::toString() const
+{
+    QStringList l;
+    l << QStringLiteral("DeviceInfoAbout{");
+    l << QStringLiteral("cert_common_name:%1,").arg(certificate_common_name);
+    l << QStringLiteral("date:%1,").arg(date.toString(QStringLiteral("yyyy-MM-dd hh:mm")));
+    l << QStringLiteral("default_mac_addr:%1,").arg(default_mac_addr);
+    l << QStringLiteral("hostname:%1,").arg(hostname);
+    l << QStringLiteral("install_id:%1,").arg(install_id);
+    l << QStringLiteral("model_name:%1,").arg(model_name);
+    l << QStringLiteral("model_number:%1,").arg(model_number);
+    l << QStringLiteral("os_state:%1,").arg(os_state);
+    l << QStringLiteral("product_id:%1,").arg(product_id);
+    l << QStringLiteral("serial_number:%1,").arg(serial_number);
+    l << QStringLiteral("version:%1").arg(version);
+    l << QStringLiteral("}");
+    return l.join(QStringLiteral(""));
+}
+
 DeviceInfoStatus DeviceInfoStatus::fromJson(const QJsonDocument &doc)
 {
     DeviceInfoStatus ds;
@@ -175,6 +218,11 @@ DeviceInfoStatus DeviceInfoStatus::fromJson(const QJsonDocument &doc)
 
     ds.state = doc[state_C].toString();
     return ds;
+}
+
+QString DeviceInfoStatus::toString() const
+{
+    return QStringLiteral("DeviceInfoStatus{oobe:%1,state:%2}").arg(oobe_done).arg(state);
 }
 
 QString Device::makeServerUrl(const QString &url, int port, bool add_folder, bool add_port)
@@ -274,6 +322,27 @@ std::optional<QUuid> Device::getBestPathId(const Device &dev)
     return paths.first().id;
 }
 
+QString Device::toString() const
+{
+    QStringList l;
+    l << QStringLiteral("Device{");
+    l << QStringLiteral("seagateDeviceID:%1,").arg(seagateDeviceID);
+    l << QStringLiteral("certificateCommonName:%1,").arg(certificateCommonName);
+    l << QStringLiteral("friendlyName:%1,").arg(friendlyName());
+    l << QStringLiteral("hostname:%1,").arg(hostname);
+    l << QStringLiteral("isStatic:%1,").arg(isStatic);
+    for (const auto& p: paths) {
+        l << p.toString();
+    }
+    l << QStringLiteral("}");
+    return l.join(QStringLiteral(""));
+}
+
+void Device::setFriendlyName(const QString &name)
+{
+    _friendlyName = name;
+}
+
 Device Device::MakeStatic(const QString &url, const QString &name)
 {
     Device dev;
@@ -290,7 +359,7 @@ QJsonDocument Device::toJson(const Device& dev)
     QJsonObject obj;
     obj[device_id_C] = dev.seagateDeviceID;
     obj[cert_common_name_C] = dev.certificateCommonName;
-    obj[friendly_name_C] = dev.friendlyName;
+    obj[friendly_name_C] = dev.friendlyName();
     obj[hostname_C] = dev.hostname;
     QJsonArray arr;
     for (const auto& dev_path: std::as_const(dev.paths)) {
@@ -316,7 +385,7 @@ Device Device::fromJson(const QJsonDocument &doc)
     QJsonObject obj = doc.object();
     d.seagateDeviceID = obj[device_id_C].toString();
     d.certificateCommonName = obj[cert_common_name_C].toString();
-    d.friendlyName = obj[friendly_name_C].toString();
+    d.setFriendlyName(obj[friendly_name_C].toString());
     d.hostname = obj[hostname_C].toString();
     d.paths = Device::jsonToPaths(obj[paths_C].toArray());
 
@@ -374,4 +443,49 @@ void Device::clearOnlinePaths()
 {
     for (auto& p: paths)
         p.isOnline = false;
+}
+
+void DeviceInfo::assignIds(QList<DeviceInfo> &list)
+{
+    int id = 0;
+    for (auto& item: list) {
+        item.tempId = id;
+        id++;
+    }
+}
+
+QString DeviceInfo::toString() const
+{
+    QStringList l;
+    l << QStringLiteral("DeviceInfo{");
+    l << QStringLiteral("cert name:%1,").arg(certName);
+    l << QStringLiteral("friendly name:%1,").arg(friendlyName);
+    l << QStringLiteral("host:%1,").arg(host);
+    l << QStringLiteral("port:%1,").arg(port);
+    l << QStringLiteral("deviceType:%1,").arg(DevicePath::devTypeToStr(deviceType));
+    l << QStringLiteral("status:%1").arg(status.toString());
+    l << QStringLiteral("}");
+    return l.join(QStringLiteral(""));
+}
+
+QString DeviceHardwareInfo::toString() const
+{
+    QStringList l;
+    l << QStringLiteral("DeviceHardwareInfo{");
+    l << QStringLiteral("memory:%1,").arg(memory);
+    l << QStringLiteral("processor_count:%1,").arg(processor_count);
+    l << QStringLiteral("processor_type:%1").arg(processor_type);
+    l << QStringLiteral("}");
+    return l.join(QStringLiteral(""));
+}
+
+QString MdnsRecord::toString() const
+{
+    QStringList l;
+    l << QStringLiteral("MdnsRecord{");
+    l << QStringLiteral("name:%1,").arg(name);
+    l << QStringLiteral("host:%1,").arg(host);
+    l << QStringLiteral("port:%1,").arg(port);
+    l << QStringLiteral("}");
+    return l.join(QStringLiteral(""));
 }
