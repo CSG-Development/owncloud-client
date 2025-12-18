@@ -178,7 +178,7 @@ AccountState::AccountState(AccountPtr account)
     connect(NetworkMonitor::instance(), &NetworkMonitor::network_changed, this, [&] {
         // Find another URL
         _evaluator->start_evaluate(_account->devicePtr());
-    });
+    }, Qt::QueuedConnection);
 }
 
 AccountState::~AccountState() { }

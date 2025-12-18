@@ -21,7 +21,7 @@
 #include "appprovider.h"
 #include "capabilities.h"
 #include "jobqueue.h"
-#include "devicetypes.h"
+#include "device/devicetypes.h"
 
 #include <QByteArray>
 #include <QNetworkAccessManager>

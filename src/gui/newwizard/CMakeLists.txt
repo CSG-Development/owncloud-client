@@ -40,8 +40,6 @@ add_library(newwizard STATIC
     loginservices/mdnsclient.h
     loginservices/remoteconnector.cpp
     loginservices/remoteconnector.h
-    loginservices/deviceapi.cpp
-    loginservices/deviceapi.h
     loginservices/devicelistmanager.cpp
     loginservices/devicelistmanager.h
     loginservices/loginservices_res.qrc

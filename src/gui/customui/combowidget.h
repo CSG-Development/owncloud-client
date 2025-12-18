@@ -3,7 +3,7 @@
 #include <QFrame>
 #include <QTimer>
 
-#include "devicetypes.h"
+#include "device/devicetypes.h"
 
 class QLineEdit;
 class QLabel;

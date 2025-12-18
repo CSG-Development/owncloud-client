@@ -293,9 +293,7 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
             tr("Are you sure you want to quit %1?").arg(appNameGui), QMessageBox::Yes | QMessageBox::No, this);
         box->setAttribute(Qt::WA_DeleteOnClose);
         StyleHelper::applyPushButtonStyle(box);
-        connect(box, &QMessageBox::accepted, this, [] {
-            qApp->quit();
-        });
+        connect(box, &QMessageBox::accepted, qApp, &QCoreApplication::quit, Qt::QueuedConnection);
         box->open();
     });
     _ui->toolBar->addAction(quitAction);

@@ -287,6 +287,22 @@ std::optional<DevicePath> Device::findPath(const QUuid &id) const
     return std::nullopt;
 }
 
+DevicePath *Device::getPathPtr(const QUuid &id)
+{
+    if (paths.isEmpty()) {
+        qCWarning(lcDevice) << "[getPathPtr] No paths defined";
+        return nullptr;
+    }
+
+    for (int i = 0; i < paths.size(); i++) {
+        if (paths[i].id == id)
+            return &(paths[i]);
+    }
+
+    qCWarning(lcDevice) << "Path ID" << id << "not found";
+    return nullptr;
+}
+
 std::optional<QUuid> Device::getBestPathId()
 {
     return getBestPathId(*this);

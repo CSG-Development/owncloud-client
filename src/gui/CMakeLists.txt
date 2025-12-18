@@ -87,6 +87,10 @@ set(client_SRCS
 
     scheduling/syncscheduler.cpp
     scheduling/etagwatcher.cpp
+
+    devwidget.cpp
+    devwidget.h
+    devwidget.ui
 )
 
 set(3rdparty_SRC
