@@ -57,4 +57,9 @@ void NetworkMonitor::start()
     _timer.start();
 }
 
+void NetworkMonitor::emit_network_changed()
+{
+    emit network_changed();
+}
+
 } // namespace CUR

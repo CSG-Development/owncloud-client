@@ -96,6 +96,7 @@ const auto developmentGroupC = QStringLiteral("Development");
 const auto staticDeviceNameC = QStringLiteral("StaticDeviceName");
 const auto staticDeviceUrlC = QStringLiteral("StaticDeviceUrl");
 const auto usePortForApiOnly_C = QStringLiteral("UsePortForApiOnly");
+const auto enableDeviceEditor_C = QStringLiteral("EnableDeviceEditor");
 
 const auto issuesWidgetFilterC = QStringLiteral("issuesWidgetFilter");
 
@@ -891,5 +892,14 @@ bool ConfigFile::useLocalPortForApiOnly()
     settings.beginGroup(developmentGroupC);
     return settings.value(usePortForApiOnly_C, false).toBool();
 }
+
+bool ConfigFile::isDeviceEditorEnabled()
+{
+    auto settings = makeQSettings();
+    settings.beginGroup(developmentGroupC);
+    return settings.value(enableDeviceEditor_C, false).toBool();
+}
+
+
 
 }

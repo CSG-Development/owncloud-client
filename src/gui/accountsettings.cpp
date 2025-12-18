@@ -34,6 +34,7 @@
 #include "theme.h"
 #include "tooltipupdater.h"
 #include "customui/stylehelper.h"
+#include "devwidget.h"
 
 #include "folderwizard/folderwizard.h"
 
@@ -249,6 +250,25 @@ void AccountSettings::createAccountToolbox()
     connect(_toggleReconnect, &QAction::triggered, this, [this] {
         _accountState->checkConnectivity(true);
     });
+
+    _developerWindow = new QAction(tr("Show device info"), this);
+
+    if (CUR::ConfigFile::isDeviceEditorEnabled()) {
+        connect(_developerWindow, &QAction::triggered, this, [&] {
+            if (devWidget) {
+                devWidget->setAccout(_accountState->account().data());
+                devWidget->show();
+                devWidget->activateWindow();
+            }
+            else {
+                devWidget = new DevWidget;
+                devWidget->setAccout(_accountState->account().data());
+                devWidget->show();
+                devWidget->activateWindow();
+            }
+        });
+        _accountToolboxMenu->addAction(_developerWindow);
+    }
 
     QAction *action = new QAction(tr("Remove"), this);
     _accountToolboxMenu->addAction(action);
