@@ -89,6 +89,7 @@ public:
     DevicePath* getPathPtr(const QUuid& id);
     std::optional<QUuid> getBestPathId();
     static std::optional<QUuid> getBestPathId(const Device& dev);
+    std::optional<QUuid> getRemoteOnlyPath() const;
 
     QString toString() const;
 };

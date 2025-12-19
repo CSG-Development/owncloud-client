@@ -90,8 +90,11 @@ ShareUserGroupWidget::ShareUserGroupWidget(AccountPtr account,
     connect(_ui->privateLinkText, &QLabel::linkActivated, this, &ShareUserGroupWidget::slotPrivateLinkShare);
 
     if (account->capabilities().privateLinkPropertyAvailable()) {
-        _ui->privateLinkText->setText(tr("You can direct people to this shared file or folder %1 by giving them a private link")
-                                          .arg(QStringLiteral("<a href=\"%1\"><span style=\"text-decoration: underline\">").arg(_privateLinkUrl)));
+        QUrl privateUrl(_privateLinkUrl);
+        if (account->replaceUrlToRemote(privateUrl)) {
+            _ui->privateLinkText->setText(tr("You can direct people to this shared file or folder %1 by giving them a private link")
+                                              .arg(QStringLiteral("<a href=\"%1\"><span style=\"text-decoration: underline\">").arg(privateLinkUrl)));
+        }
     }
     // By making the next two QueuedConnections we can override
     // the strings the completer sets on the line edit.

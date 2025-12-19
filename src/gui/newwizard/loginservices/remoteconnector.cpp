@@ -256,8 +256,6 @@ void RemoteConnector::query_initiate(const QString &email)
 
     QJsonDocument doc;
     QJsonObject obj;
-    obj[QStringLiteral("clientFriendlyName")] = tr("Curator Manager");
-    obj[QStringLiteral("clientId")] = tr("");
     obj[jkey_email] = email;
     doc.setObject(obj);
 

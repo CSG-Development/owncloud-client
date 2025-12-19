@@ -152,6 +152,9 @@ public:
     /** Returns webdav entry URL, based on url() */
     QUrl davUrl() const;
 
+    // Replace IP address or hostname to remote item
+    bool replaceUrlToRemote(QUrl& urlToReplace);
+
     /** Holds the accounts credentials */
     AbstractCredentials *credentials() const;
     void setCredentials(AbstractCredentials *cred);

@@ -123,14 +123,21 @@ void Share::deleteShare()
 
 QUrl LinkShare::getLink() const
 {
-    return _url;
+    QUrl url = _url;
+    if (_account->replaceUrlToRemote(url))
+        return url;
+
+    return QUrl();
 }
 
 QUrl LinkShare::getDirectDownloadLink() const
 {
     QUrl url = _url;
-    url.setPath(url.path() + QStringLiteral("/download"));
-    return url;
+    if (_account->replaceUrlToRemote(url)) {
+        url.setPath(url.path() + QStringLiteral("/download"));
+        return url;
+    }
+    return QUrl();
 }
 
 QDate LinkShare::getExpireDate() const

@@ -58,7 +58,7 @@ private slots:
 private:
     void showSharingUi();
 
-    Ui::ShareDialog *_ui;
+    Ui::ShareDialog *_ui = nullptr;
     AccountStatePtr _accountState;
     QString _sharePath;
     QString _localPath;
@@ -67,10 +67,10 @@ private:
     QString _privateLinkUrl;
     ShareDialogStartPage _startPage;
 
-    ShareLinkWidget *_linkWidget;
-    ShareUserGroupWidget *_userGroupWidget;
-    QProgressIndicator *_progressIndicator;
     const QUrl _baseUrl;
+    ShareLinkWidget *_linkWidget = nullptr;
+    ShareUserGroupWidget *_userGroupWidget = nullptr;
+    QProgressIndicator *_progressIndicator = nullptr;
 };
 }
 

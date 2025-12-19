@@ -23,6 +23,7 @@
 #include "networkjobs.h"
 #include "networkjobs/resources.h"
 #include "theme.h"
+#include "configfile.h"
 
 #include <QAuthenticator>
 #include <QDir>
@@ -237,6 +238,23 @@ void Account::setCredentials(AbstractCredentials *cred)
 QUrl Account::davUrl() const
 {
     return Utility::concatUrlPath(url(), davPath());
+}
+
+bool Account::replaceUrlToRemote(QUrl &urlToReplace)
+{
+    auto id = _device.getRemoteOnlyPath();
+    if (id.has_value()) {
+        auto dev = _device.findPath(id.value());
+        if (dev) {
+            QUrl remote(Device::makeServerUrl(dev->address, dev->port, false, true));
+            urlToReplace.setHost(remote.host());
+            if (!CUR::ConfigFile::useLocalPortForApiOnly()) {
+                urlToReplace.setPort(remote.port());
+            }
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
