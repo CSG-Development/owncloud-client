@@ -338,6 +338,27 @@ std::optional<QUuid> Device::getBestPathId(const Device &dev)
     return paths.first().id;
 }
 
+std::optional<QUuid> Device::getRemoteOnlyPath() const
+{
+    if (paths.isEmpty()) {
+        qCWarning(lcDevice) << "[getRemoteOnlyPath] No paths defined";
+        return std::nullopt;
+    }
+
+    QList<DevicePath> plist;
+    for (const auto &p: std::as_const(paths)) {
+        if (p.deviceType == DeviceType::Remote) {
+            plist.append(p);
+        }
+    }
+    if (plist.isEmpty()) {
+        qCWarning(lcDevice) << "No remote paths found";
+        return std::nullopt;
+    }
+
+    return plist.first().id;
+}
+
 QString Device::toString() const
 {
     QStringList l;

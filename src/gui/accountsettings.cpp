@@ -276,8 +276,12 @@ void AccountSettings::createAccountToolbox()
 
     ui->_accountToolbox->setText(tr("Account") + QLatin1Char(' '));
 
-    connect(_accountToolboxMenu, &QMenu::aboutToShow, this, [&] {ui->_accountToolbox->setArrowType(Qt::UpArrow);});
-    connect(_accountToolboxMenu, &QMenu::aboutToHide, this, [&] {ui->_accountToolbox->setArrowType(Qt::DownArrow);});
+    connect(_accountToolboxMenu, &QMenu::aboutToShow, this, [&] {
+        ui->_accountToolbox->setArrowType(Qt::UpArrow);
+    });
+    connect(_accountToolboxMenu, &QMenu::aboutToHide, this, [&] {
+        ui->_accountToolbox->setArrowType(Qt::DownArrow);
+    });
 
     connect(ui->_accountToolbox, &QToolButton::clicked, this, [&] {
         auto pos = mapToGlobal(ui->_accountToolbox->frameGeometry().bottomLeft());

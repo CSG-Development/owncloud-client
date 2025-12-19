@@ -1020,12 +1020,14 @@ void CuratorGui::slotShowShareDialog(const QString &sharePath, const QString &lo
         qCWarning(lcApplication) << "Could not open share dialog for" << localPath << "no responsible folder found";
         return;
     }
+
     if (folder->accountState()->account()->capabilities().filesSharing().sharing_roles) {
         fetchPrivateLinkUrl(folder->accountState()->account(), folder->webDavUrl(), sharePath, this, [](const QUrl &url) {
             const auto queryUrl = Utility::concatUrlPath(url, QString(), {{QStringLiteral("details"), QStringLiteral("sharing")}});
             Utility::openBrowser(queryUrl, nullptr);
         });
-    } else {
+    }
+    else {
         const auto accountState = folder->accountState();
 
         SyncJournalFileRecord fileRecord;
@@ -1051,14 +1053,18 @@ void CuratorGui::slotShowShareDialog(const QString &sharePath, const QString &lo
             maxSharingPermissions = SharePermission(0);
         }
 
-
         ShareDialog *w = nullptr;
         if (_shareDialogs.contains(localPath) && _shareDialogs[localPath]) {
-            qCInfo(lcApplication) << "Raising share dialog" << sharePath << localPath;
+            qCInfo(lcApplication) << "Raising share dialog"
+                                  << "sharePath:" << sharePath
+                                  << "localPath" << localPath;
             w = _shareDialogs[localPath];
         } else {
-            qCInfo(lcApplication) << "Opening share dialog" << sharePath << localPath << maxSharingPermissions;
-            w = new ShareDialog(accountState, folder->webDavUrl(), sharePath, localPath, maxSharingPermissions, startPage, settingsDialog());
+            qCInfo(lcApplication) << "Opening share dialog"
+                                  << "sharePath" << sharePath
+                                  << "localPath" << localPath
+                                  << "maxSharingPermissions" << maxSharingPermissions;
+            w = new ShareDialog(accountState, folder->remoteUrl(), sharePath, localPath, maxSharingPermissions, startPage, settingsDialog());
             w->setAttribute(Qt::WA_DeleteOnClose, true);
 
             _shareDialogs[localPath] = w;

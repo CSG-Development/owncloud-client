@@ -64,12 +64,13 @@ namespace {
  * 1\Folders\4\version=2
  * 1\FoldersWithPlaceholders\3\version=3
  */
-auto versionC()     {return QLatin1String("version");}
-auto davUrlC()      {return QStringLiteral("davUrl");}
-auto spaceIdC()     {return QStringLiteral("spaceId");}
-auto displayNameC() {return QLatin1String("displayString");}
-auto deployedC()    {return QStringLiteral("deployed");}
-auto priorityC()    {return QStringLiteral("priority");}
+auto versionC     = QLatin1String("version");
+auto davUrlC      = QStringLiteral("davUrl");
+auto davPublicUrlC = QStringLiteral("davPublicUrl");
+auto spaceIdC     = QStringLiteral("spaceId");
+auto displayNameC = QLatin1String("displayString");
+auto deployedC    = QStringLiteral("deployed");
+auto priorityC    = QStringLiteral("priority");
 
 /* How oftern to retry a sync
  * Either due to _engine->isAnotherSyncNeeded or a sync error
@@ -1338,31 +1339,31 @@ void FolderDefinition::save(QSettings &settings, const FolderDefinition &folder)
     settings.setValue(QStringLiteral("journalPath"), folder.journalPath);
     settings.setValue(QStringLiteral("targetPath"), folder.targetPath());
     if (!folder.spaceId().isEmpty()) {
-        settings.setValue(spaceIdC(), folder.spaceId());
+        settings.setValue(spaceIdC, folder.spaceId());
     }
-    settings.setValue(davUrlC(), folder.webDavUrl());
-    settings.setValue(displayNameC(), folder.displayName());
+    settings.setValue(davUrlC, folder.webDavUrl());
+    settings.setValue(displayNameC, folder.displayName());
     settings.setValue(QStringLiteral("paused"), folder.paused);
     settings.setValue(QStringLiteral("ignoreHiddenFiles"), folder.ignoreHiddenFiles);
-    settings.setValue(deployedC(), folder.isDeployed());
-    settings.setValue(priorityC(), folder.priority());
+    settings.setValue(deployedC, folder.isDeployed());
+    settings.setValue(priorityC, folder.priority());
 
     settings.setValue(QStringLiteral("virtualFilesMode"), Utility::enumToString(folder.virtualFilesMode));
 
     // Prevent loading of profiles in old clients
-    settings.setValue(versionC(), ConfigFile::UnusedLegacySettingsVersionNumber);
+    settings.setValue(versionC, ConfigFile::UnusedLegacySettingsVersionNumber);
 }
 
 FolderDefinition FolderDefinition::load(QSettings &settings, const QByteArray &id)
 {
-    FolderDefinition folder{id, settings.value(davUrlC()).toUrl(), settings.value(spaceIdC()).toString(), settings.value(displayNameC()).toString()};
+    FolderDefinition folder{id, settings.value(davUrlC).toUrl(), settings.value(spaceIdC).toString(), settings.value(displayNameC).toString()};
     folder.setLocalPath(settings.value(QStringLiteral("localPath")).toString());
     folder.journalPath = settings.value(QStringLiteral("journalPath")).toString();
     folder.setTargetPath(settings.value(QStringLiteral("targetPath")).toString());
     folder.paused = settings.value(QStringLiteral("paused")).toBool();
     folder.ignoreHiddenFiles = settings.value(QStringLiteral("ignoreHiddenFiles"), QVariant(true)).toBool();
-    folder._deployed = settings.value(deployedC(), false).toBool();
-    folder._priority = settings.value(priorityC(), 0).toInt();
+    folder._deployed = settings.value(deployedC, false).toBool();
+    folder._priority = settings.value(priorityC, 0).toInt();
 
     folder.virtualFilesMode = Vfs::Off;
     QString vfsModeString = settings.value(QStringLiteral("virtualFilesMode")).toString();

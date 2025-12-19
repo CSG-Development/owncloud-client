@@ -595,7 +595,13 @@ signals:
 private:
     void success(const QString &link)
     {
-        emit done(link);
+        QUrl url(link);
+        if (_account->replaceUrlToRemote(url)) {
+            emit done(url.toString());
+        } else {
+            qCWarning(lcPublicLink) << "Can't get remote url for" << link;
+            emit done({});
+        }
         deleteLater();
     }
 
@@ -612,10 +618,12 @@ void SocketApi::command_COPY_PUBLIC_LINK(const QString &localFile, SocketListene
 
     AccountPtr account = fileData.folder->accountState()->account();
     auto job = new GetOrCreatePublicLinkShare(account, fileData.serverRelativePath, this);
-    connect(job, &GetOrCreatePublicLinkShare::done, this,
-        [](const QString &url) { copyUrlToClipboard(QUrl(url)); });
-    connect(job, &GetOrCreatePublicLinkShare::error, this,
-        [=]() { emit shareCommandReceived(fileData.serverRelativePath, fileData.localPath, ShareDialogStartPage::PublicLinks); });
+    connect(job, &GetOrCreatePublicLinkShare::done, this, [](const QString &url) {
+        copyUrlToClipboard(QUrl(url));
+    });
+    connect(job, &GetOrCreatePublicLinkShare::error, this, [=]() {
+        emit shareCommandReceived(fileData.serverRelativePath, fileData.localPath, ShareDialogStartPage::PublicLinks);
+    });
     job->run();
 }
 
@@ -630,13 +638,23 @@ void SocketApi::fetchPrivateLinkUrlHelper(const QString &localFile, const std::f
 
     if (!fileData.isSyncFolder()) {
         auto record = fileData.journalRecord();
-        if (!record.isValid())
+        if (!record.isValid()) {
+            qCWarning(lcSocketApi) << "[fetchPrivateLinkUrlHelper] Invalid record";
             return;
+        }
+    }
+
+    QUrl url = fileData.folder->webDavUrl();
+    if (fileData.folder->accountState() && fileData.folder->accountState()->account()) {
+        auto acc = fileData.folder->accountState()->account();
+        if (!acc->replaceUrlToRemote(url)) {
+            qCWarning(lcSocketApi) << "Can't get remote URL for" << url;
+        }
     }
 
     fetchPrivateLinkUrl(
         fileData.folder->accountState()->account(),
-        fileData.folder->webDavUrl(),
+        url,
         fileData.serverRelativePath,
         this,
         targetFun);
@@ -661,9 +679,16 @@ void SocketApi::command_OPEN_PRIVATE_LINK_VERSIONS(const QString &localFile, Soc
 {
     const auto fileData = FileData::get(localFile);
     if (fileData.isValid() && fileData.folder->accountState()->account()->capabilities().filesSharing().sharing_roles) {
-        fetchPrivateLinkUrl(fileData.folder->accountState()->account(), fileData.folder->webDavUrl(), fileData.serverRelativePath, this, [](const QUrl &url) {
-            const auto queryUrl = Utility::concatUrlPath(url, QString(), {{QStringLiteral("details"), QStringLiteral("versions")}});
-            Utility::openBrowser(queryUrl, nullptr);
+        fetchPrivateLinkUrl(fileData.folder->accountState()->account(), fileData.folder->webDavUrl(), fileData.serverRelativePath, this, [localFile](const QUrl &url) {
+            const auto fileData = FileData::get(localFile);
+            auto acc = fileData.folder->accountState()->account();
+            QUrl remote_url(url);
+            if (acc->replaceUrlToRemote(remote_url)) {
+                const auto queryUrl = Utility::concatUrlPath(url, QString(), {{QStringLiteral("details"), QStringLiteral("versions")}});
+                Utility::openBrowser(queryUrl, nullptr);
+            } else {
+                qCWarning(lcSocketApi) << "Can't get remote url for" << url.toDisplayString();
+            }
         });
     } else {
         fetchPrivateLinkUrlHelper(localFile, [this](const QUrl &link) {
@@ -891,6 +916,9 @@ void SocketApi::sendSharingContextMenuOptions(const FileData &fileData, SocketLi
     if (!capabilities.shareAPI() || !(theme->userGroupSharing() || (theme->linkSharing() && capabilities.sharePublicLink())))
         return;
 
+    auto device = fileData.folder->accountState()->account()->device();
+    bool is_share_possible = device.getRemoteOnlyPath().has_value();
+
     // If sharing is globally disabled, do not show any sharing entries.
     // If there is no permission to share for this file, add a disabled entry saying so
     if (isOnTheServer && !record._remotePerm.isNull() && !record._remotePerm.hasPermission(RemotePermissions::CanReshare)) {
@@ -902,23 +930,25 @@ void SocketApi::sendSharingContextMenuOptions(const FileData &fileData, SocketLi
         bool publicLinksEnabled = theme->linkSharing() && capabilities.sharePublicLink();
 
         // Is is possible to create a public link without user choices?
-        bool canCreateDefaultPublicLink = publicLinksEnabled
-            && !capabilities.sharePublicLinkEnforcePasswordForReadOnly();
+        bool canCreateDefaultPublicLink = publicLinksEnabled && !capabilities.sharePublicLinkEnforcePasswordForReadOnly();
 
         if (canCreateDefaultPublicLink) {
             if (fileData.folder->accountState()->supportsSpaces()) {
                 // TODO: See https://github.com/owncloud/client/issues/10845 : oCIS is getting a new sharing API, waiting for that before implementing a
                 // temporary solution.
             } else {
-                listener->sendMessage(QStringLiteral("MENU_ITEM:COPY_PUBLIC_LINK") + flagString + tr("Create and copy public link to clipboard"));
+                if (is_share_possible)
+                    listener->sendMessage(QStringLiteral("MENU_ITEM:COPY_PUBLIC_LINK") + flagString + tr("Create and copy public link to clipboard"));
             }
         } else if (publicLinksEnabled) {
-            listener->sendMessage(QStringLiteral("MENU_ITEM:MANAGE_PUBLIC_LINKS") + flagString + tr("Copy public link to clipboard"));
+            if (is_share_possible)
+                listener->sendMessage(QStringLiteral("MENU_ITEM:MANAGE_PUBLIC_LINKS") + flagString + tr("Copy public link to clipboard"));
         }
     }
 
     if (capabilities.privateLinkPropertyAvailable()) {
-        listener->sendMessage(QStringLiteral("MENU_ITEM:COPY_PRIVATE_LINK") + flagString + tr("Copy private link to clipboard"));
+        if (is_share_possible)
+            listener->sendMessage(QStringLiteral("MENU_ITEM:COPY_PRIVATE_LINK") + flagString + tr("Copy private link to clipboard"));
     }
 }
 

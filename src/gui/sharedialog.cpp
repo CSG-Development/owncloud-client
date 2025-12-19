@@ -110,12 +110,27 @@ ShareDialog::ShareDialog(AccountStatePtr accountState,
     this->setWindowTitle(tr("%1 Sharing").arg(Theme::instance()->appNameGUI()));
 
     if (!accountState->account()->capabilities().shareAPI()) {
+        qCWarning(lcSharing) << QStringLiteral("The server does not allow sharing");
         auto label = new QLabel(tr("The server does not allow sharing"));
         label->setWordWrap(true);
         label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         layout()->replaceWidget(_ui->shareWidgets, label);
         _ui->shareWidgets->hide();
         return;
+    }
+
+    const auto account = accountState->account();
+    if (account) {
+        const auto& dev = account->device();
+        if (!dev.getRemoteOnlyPath().has_value()) {
+            qCWarning(lcSharing) << QStringLiteral("Device has no remote path registered. Sharing not possible");
+            auto label = new QLabel(tr("Device has no remote path registered. Sharing not possible"));
+            label->setWordWrap(true);
+            label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            layout()->replaceWidget(_ui->shareWidgets, label);
+            _ui->shareWidgets->hide();
+            return;
+        }
     }
 
     if (QFileInfo(_localPath).isFile()) {
@@ -187,12 +202,17 @@ void ShareDialog::showSharingUi()
 
     if (!canReshare) {
         auto label = new QLabel(this);
+        qCWarning(lcSharing) << QStringLiteral("The file can not be shared because it was shared without sharing permission.");
         label->setText(tr("The file can not be shared because it was shared without sharing permission."));
         label->setWordWrap(true);
         label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         layout()->replaceWidget(_ui->shareWidgets, label);
         return;
     }
+
+    auto acc = _accountState->account();
+    QUrl privateLink(_privateLinkUrl);
+    acc->replaceUrlToRemote(privateLink);
 
     if (theme->userGroupSharing()) {
         _userGroupWidget = new ShareUserGroupWidget(_accountState->account(), _sharePath, _localPath, _maxSharingPermissions, _privateLinkUrl, this);
