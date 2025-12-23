@@ -57,6 +57,7 @@ private slots:
 
 private:
     void showSharingUi();
+    bool isRemotePathAvailable() const;
 
     Ui::ShareDialog *_ui = nullptr;
     AccountStatePtr _accountState;

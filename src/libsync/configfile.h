@@ -198,11 +198,13 @@ public:
 
     QPair<QString,QString> staticDevice();
 
+    // ! For Testing only
     // Use mDNS port only for API requests
-    // For Testing only
     static bool useLocalPortForApiOnly();
     // Enables GUI device editor for account
     static bool isDeviceEditorEnabled();
+    static bool shareFromUi();
+    // ! For Testing only
 
     /**
      * The maximum versions that this client can read.

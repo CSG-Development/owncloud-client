@@ -55,6 +55,10 @@ public:
 
     void startShellIntegration();
 
+    void emit_shareCommandReceived(const QString &sharePath, const QString &localPath, ShareDialogStartPage startPage) {
+        Q_EMIT shareCommandReceived(sharePath, localPath, startPage);
+    }
+
 public slots:
     void registerAccount(const AccountPtr &a);
     void unregisterAccount(const AccountPtr &a);

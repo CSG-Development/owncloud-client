@@ -35,6 +35,7 @@
 #include "tooltipupdater.h"
 #include "customui/stylehelper.h"
 #include "devwidget.h"
+#include "socketapi/socketapi.h"
 
 #include "folderwizard/folderwizard.h"
 
@@ -387,6 +388,12 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
                     Utility::openBrowser(url, nullptr);
                 });
             });
+
+            if (CUR::ConfigFile::shareFromUi()) {
+                menu->addAction(tr("Open share page"), [localpath = info->_folder->path(), path] {
+                    FolderMan::instance()->socketApi()->emit_shareCommandReceived(path, localpath, ShareDialogStartPage::UsersAndGroups);
+                });
+            }
         }
     }
 

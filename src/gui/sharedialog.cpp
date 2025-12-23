@@ -56,10 +56,10 @@ ShareDialog::ShareDialog(AccountStatePtr accountState,
     , _localPath(localPath)
     , _maxSharingPermissions(maxSharingPermissions)
     , _startPage(startPage)
+    , _baseUrl(baseUrl)
     , _linkWidget(nullptr)
     , _userGroupWidget(nullptr)
     , _progressIndicator(nullptr)
-    , _baseUrl(baseUrl)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setObjectName(QStringLiteral("SharingDialog"));
@@ -118,21 +118,6 @@ ShareDialog::ShareDialog(AccountStatePtr accountState,
         _ui->shareWidgets->hide();
         return;
     }
-
-    const auto account = accountState->account();
-    if (account) {
-        const auto& dev = account->device();
-        if (!dev.getRemoteOnlyPath().has_value()) {
-            qCWarning(lcSharing) << QStringLiteral("Device has no remote path registered. Sharing not possible");
-            auto label = new QLabel(tr("Device has no remote path registered. Sharing not possible"));
-            label->setWordWrap(true);
-            label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-            layout()->replaceWidget(_ui->shareWidgets, label);
-            _ui->shareWidgets->hide();
-            return;
-        }
-    }
-
     if (QFileInfo(_localPath).isFile()) {
         ThumbnailJob *job = new ThumbnailJob(_sharePath, _accountState->account(), this);
         connect(job, &ThumbnailJob::jobFinished, this, &ShareDialog::slotThumbnailFetched);
@@ -216,19 +201,34 @@ void ShareDialog::showSharingUi()
 
     if (theme->userGroupSharing()) {
         _userGroupWidget = new ShareUserGroupWidget(_accountState->account(), _sharePath, _localPath, _maxSharingPermissions, _privateLinkUrl, this);
+        _userGroupWidget->setPrivateLinkVisible(isRemotePathAvailable());
         _ui->shareWidgets->addTab(_userGroupWidget, tr("Users and Groups"));
         _userGroupWidget->getShares();
     }
 
-    if (theme->linkSharing()) {
-        _linkWidget = new ShareLinkWidget(_accountState->account(), _sharePath, _localPath, _maxSharingPermissions, this);
-        _linkWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-        _ui->shareWidgets->addTab(_linkWidget, tr("Public Links"));
-        _linkWidget->getShares();
+    if (isRemotePathAvailable()) {
+        if (theme->linkSharing()) {
+            _linkWidget = new ShareLinkWidget(_accountState->account(), _sharePath, _localPath, _maxSharingPermissions, this);
+            _linkWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+            _ui->shareWidgets->addTab(_linkWidget, tr("Public Links"));
+            _linkWidget->getShares();
 
-        if (_startPage == ShareDialogStartPage::PublicLinks)
-            _ui->shareWidgets->setCurrentWidget(_linkWidget);
+            if (_startPage == ShareDialogStartPage::PublicLinks)
+                _ui->shareWidgets->setCurrentWidget(_linkWidget);
+        }
     }
+}
+
+bool ShareDialog::isRemotePathAvailable() const
+{
+    const auto account = _accountState->account();
+    if (account) {
+        const auto& dev = account->device();
+        if (dev.getRemoteOnlyPath().has_value()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void ShareDialog::slotThumbnailFetched(const int &statusCode, const QPixmap &reply)
