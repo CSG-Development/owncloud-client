@@ -97,6 +97,7 @@ const auto staticDeviceNameC = QStringLiteral("StaticDeviceName");
 const auto staticDeviceUrlC = QStringLiteral("StaticDeviceUrl");
 const auto usePortForApiOnly_C = QStringLiteral("UsePortForApiOnly");
 const auto enableDeviceEditor_C = QStringLiteral("EnableDeviceEditor");
+const auto enableShareFromUi_C = QStringLiteral("EnableShareFromUi");
 
 const auto issuesWidgetFilterC = QStringLiteral("issuesWidgetFilter");
 
@@ -898,6 +899,13 @@ bool ConfigFile::isDeviceEditorEnabled()
     auto settings = makeQSettings();
     settings.beginGroup(developmentGroupC);
     return settings.value(enableDeviceEditor_C, false).toBool();
+}
+
+bool ConfigFile::shareFromUi()
+{
+    auto settings = makeQSettings();
+    settings.beginGroup(developmentGroupC);
+    return settings.value(enableShareFromUi_C, false).toBool();
 }
 
 
