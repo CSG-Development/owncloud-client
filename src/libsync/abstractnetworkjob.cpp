@@ -158,6 +158,11 @@ bool AbstractNetworkJob::needsRetry() const
 void AbstractNetworkJob::sendRequest(const QByteArray &verb,
     const QNetworkRequest &req, QIODevice *requestBody)
 {
+    if (!_account) {
+        slotFinished();
+        return;
+    }
+
     _verb = verb;
 
     _request = req;
@@ -196,7 +201,11 @@ void AbstractNetworkJob::sendRequest(const QByteArray &verb,
 void AbstractNetworkJob::adoptRequest(QPointer<QNetworkReply> reply)
 {
     std::swap(_reply, reply);
-    delete reply;
+    if (reply) {
+        reply->disconnect();
+        reply->abort();
+        reply->deleteLater();
+    }
 
     _request = _reply->request();
 
@@ -208,6 +217,13 @@ void AbstractNetworkJob::adoptRequest(QPointer<QNetworkReply> reply)
 void AbstractNetworkJob::slotFinished()
 {
     _finished = true;
+
+    if (!_reply || !_account) {
+        qCWarning(lcNetworkJob) << "Network job finished but reply and/or account is nullptr - aborting" << this;
+        Q_EMIT networkError(nullptr);
+        deleteLater();
+        return;
+    }
 
     if (!_account->credentials()->stillValid(_reply) && !ignoreCredentialFailure()) {
         _account->invalidCredentialsEncountered();
@@ -301,8 +317,12 @@ AbstractNetworkJob::~AbstractNetworkJob()
     if (!_finished && !_aborted && !_timedout) {
         qCCritical(lcNetworkJob) << "Deleting running job" << this;
     }
-    delete _reply;
-    _reply = nullptr;
+    if (_reply) {
+        _reply->disconnect();
+        _reply->abort();
+        _reply->deleteLater();
+        _reply.clear();
+    }
 }
 
 void AbstractNetworkJob::start()

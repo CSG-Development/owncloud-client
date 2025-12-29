@@ -1,13 +1,19 @@
 #pragma once
 
 #include "curatorlib.h"
-#include "devicetypes.h"
+#include "device/devicetypes.h"
 #include "accessmanager.h"
+
 #include <QObject>
+#include <QNetworkAccessManager>
+#include <QRestAccessManager>
+#include <QNetworkRequestFactory>
 
 class Device;
 
 namespace CUR {
+
+class DeviceApi;
 
 class CURATORSYNC_EXPORT EvaluatePath: public QObject
 {
@@ -25,13 +31,14 @@ signals:
 
 private:
     void evaluate(const QUuid& id);
-    void resetAccessManager();
+    void query_device_status(const DevicePath& dpath);
 
 private:
+    DeviceApi* devApi = nullptr;
     Device* device_ = nullptr;
     QList<QUuid> id_queue;
-    AccessManager* mgr = nullptr;
     bool _isRunning = false;
+    QUuid current_id;
 };
 
 } // namespace CUR

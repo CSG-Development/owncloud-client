@@ -30,6 +30,7 @@ class QModelIndex;
 class QNetworkReply;
 class QLabel;
 class QSortFilterProxyModel;
+class DevWidget;
 
 namespace CUR {
 
@@ -109,6 +110,8 @@ private:
     QAction *_toggleSignInOutAction = nullptr;
     QAction *_toggleReconnect = nullptr;
     QMenu* _accountToolboxMenu = nullptr;
+    QAction* _developerWindow = nullptr;
+    DevWidget* devWidget = nullptr;
     // are we already in the destructor
     bool _goingDown = false;
 

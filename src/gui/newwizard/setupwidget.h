@@ -2,7 +2,7 @@
 
 #include "enums.h"
 #include "gui/settingsdialog.h"
-#include "devicetypes.h"
+#include "device/devicetypes.h"
 
 namespace Ui {class SetupWidget;}
 

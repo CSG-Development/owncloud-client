@@ -61,7 +61,7 @@ ComboWidget::ComboWidget(QWidget *parent)
         if (selected) {
             selectedDevice = selected;
             if (selectedDevice->friendlyName().isEmpty())
-                setText(tr("<No name>"));
+                setText(selectedDevice->certificateCommonName);
             else
                 setText(selectedDevice->friendlyName());
         }
@@ -122,7 +122,7 @@ void ComboWidget::setItems(const QList<Device> &list)
     if (!list.isEmpty() && text().isEmpty()) {
         selectedDevice = list.first();
         if (selectedDevice->friendlyName().isEmpty())
-            setText(tr("<No name>"));
+            setText(selectedDevice->certificateCommonName);
         else
             setText(selectedDevice->friendlyName());
     }

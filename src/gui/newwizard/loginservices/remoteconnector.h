@@ -1,6 +1,6 @@
 #pragma once
 
-#include "devicetypes.h"
+#include "device/devicetypes.h"
 
 #include <QObject>
 #include <QNetworkAccessManager>

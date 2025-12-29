@@ -86,8 +86,10 @@ public:
     static QString makeServerUrl(const QString &url, int port, bool add_folder, bool add_port);
 
     std::optional<DevicePath> findPath(const QUuid& id) const;
+    DevicePath* getPathPtr(const QUuid& id);
     std::optional<QUuid> getBestPathId();
     static std::optional<QUuid> getBestPathId(const Device& dev);
+    std::optional<QUuid> getRemoteOnlyPath() const;
 
     QString toString() const;
 };

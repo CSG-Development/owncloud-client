@@ -287,6 +287,22 @@ std::optional<DevicePath> Device::findPath(const QUuid &id) const
     return std::nullopt;
 }
 
+DevicePath *Device::getPathPtr(const QUuid &id)
+{
+    if (paths.isEmpty()) {
+        qCWarning(lcDevice) << "[getPathPtr] No paths defined";
+        return nullptr;
+    }
+
+    for (int i = 0; i < paths.size(); i++) {
+        if (paths[i].id == id)
+            return &(paths[i]);
+    }
+
+    qCWarning(lcDevice) << "Path ID" << id << "not found";
+    return nullptr;
+}
+
 std::optional<QUuid> Device::getBestPathId()
 {
     return getBestPathId(*this);
@@ -320,6 +336,27 @@ std::optional<QUuid> Device::getBestPathId(const Device &dev)
     });
 
     return paths.first().id;
+}
+
+std::optional<QUuid> Device::getRemoteOnlyPath() const
+{
+    if (paths.isEmpty()) {
+        qCWarning(lcDevice) << "[getRemoteOnlyPath] No paths defined";
+        return std::nullopt;
+    }
+
+    QList<DevicePath> plist;
+    for (const auto &p: std::as_const(paths)) {
+        if (p.deviceType == DeviceType::Remote) {
+            plist.append(p);
+        }
+    }
+    if (plist.isEmpty()) {
+        qCWarning(lcDevice) << "No remote paths found";
+        return std::nullopt;
+    }
+
+    return plist.first().id;
 }
 
 QString Device::toString() const

@@ -60,6 +60,8 @@ public:
         QWidget *parent = nullptr);
     ~ShareUserGroupWidget() override;
 
+    void setPrivateLinkVisible(bool visible);
+
 public slots:
     void getShares();
 

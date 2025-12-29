@@ -21,7 +21,7 @@
 #include "appprovider.h"
 #include "capabilities.h"
 #include "jobqueue.h"
-#include "devicetypes.h"
+#include "device/devicetypes.h"
 
 #include <QByteArray>
 #include <QNetworkAccessManager>
@@ -151,6 +151,9 @@ public:
 
     /** Returns webdav entry URL, based on url() */
     QUrl davUrl() const;
+
+    // Replace IP address or hostname to remote item
+    bool replaceUrlToRemote(QUrl& urlToReplace);
 
     /** Holds the accounts credentials */
     AbstractCredentials *credentials() const;

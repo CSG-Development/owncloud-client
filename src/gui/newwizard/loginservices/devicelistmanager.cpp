@@ -1,6 +1,6 @@
 #include "devicelistmanager.h"
 #include "mdnsclient.h"
-#include "deviceapi.h"
+#include "device/deviceapi.h"
 
 #include <QLoggingCategory>
 

@@ -34,6 +34,8 @@
 #include "theme.h"
 #include "tooltipupdater.h"
 #include "customui/stylehelper.h"
+#include "devwidget.h"
+#include "socketapi/socketapi.h"
 
 #include "folderwizard/folderwizard.h"
 
@@ -250,14 +252,37 @@ void AccountSettings::createAccountToolbox()
         _accountState->checkConnectivity(true);
     });
 
+    _developerWindow = new QAction(tr("Show device info"), this);
+
+    if (CUR::ConfigFile::isDeviceEditorEnabled()) {
+        connect(_developerWindow, &QAction::triggered, this, [&] {
+            if (devWidget) {
+                devWidget->setAccout(_accountState->account().data());
+                devWidget->show();
+                devWidget->activateWindow();
+            }
+            else {
+                devWidget = new DevWidget;
+                devWidget->setAccout(_accountState->account().data());
+                devWidget->show();
+                devWidget->activateWindow();
+            }
+        });
+        _accountToolboxMenu->addAction(_developerWindow);
+    }
+
     QAction *action = new QAction(tr("Remove"), this);
     _accountToolboxMenu->addAction(action);
     connect(action, &QAction::triggered, this, &AccountSettings::slotDeleteAccount);
 
     ui->_accountToolbox->setText(tr("Account") + QLatin1Char(' '));
 
-    connect(_accountToolboxMenu, &QMenu::aboutToShow, this, [&] {ui->_accountToolbox->setArrowType(Qt::UpArrow);});
-    connect(_accountToolboxMenu, &QMenu::aboutToHide, this, [&] {ui->_accountToolbox->setArrowType(Qt::DownArrow);});
+    connect(_accountToolboxMenu, &QMenu::aboutToShow, this, [&] {
+        ui->_accountToolbox->setArrowType(Qt::UpArrow);
+    });
+    connect(_accountToolboxMenu, &QMenu::aboutToHide, this, [&] {
+        ui->_accountToolbox->setArrowType(Qt::DownArrow);
+    });
 
     connect(ui->_accountToolbox, &QToolButton::clicked, this, [&] {
         auto pos = mapToGlobal(ui->_accountToolbox->frameGeometry().bottomLeft());
@@ -363,6 +388,12 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
                     Utility::openBrowser(url, nullptr);
                 });
             });
+
+            if (CUR::ConfigFile::shareFromUi()) {
+                menu->addAction(tr("Open share page"), [localpath = info->_folder->path(), path] {
+                    FolderMan::instance()->socketApi()->emit_shareCommandReceived(path, localpath, ShareDialogStartPage::UsersAndGroups);
+                });
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "curatorlib.h"
 #include "devicetypes.h"
 
 #include <QObject>
@@ -10,7 +11,7 @@
 
 namespace CUR {
 
-class DeviceApi: public QObject
+class CURATORSYNC_EXPORT DeviceApi: public QObject
 {
     Q_OBJECT
 

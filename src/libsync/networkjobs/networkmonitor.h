@@ -18,6 +18,8 @@ public:
 
     void start();
 
+    void emit_network_changed();
+
 signals:
     void network_changed();
 

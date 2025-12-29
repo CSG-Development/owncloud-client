@@ -1,8 +1,15 @@
 #include "evaluatepaths.h"
 #include "simpleresolveurljobfactory.h"
 #include "determineauthtypejobfactory.h"
+#include "device/deviceapi.h"
 
 #include <QLoggingCategory>
+#include <QRestReply>
+#include <QJsonDocument>
+
+namespace {
+const QString api_dev_status = QStringLiteral("/api/v1/status"); // GET
+}
 
 namespace CUR {
 
@@ -10,6 +17,7 @@ Q_LOGGING_CATEGORY(lcEvaluator, "device.evaluaror", QtInfoMsg)
 
 EvaluatePath::EvaluatePath(QObject *parent)
     : QObject(parent)
+    , devApi(new DeviceApi(this))
 {
 }
 
@@ -22,6 +30,8 @@ void EvaluatePath::start_evaluate(Device *dev)
     }
 
     disconnect(this, &EvaluatePath::path_evaluated, this, nullptr);
+    disconnect(devApi, &DeviceApi::status_finished, this, nullptr);
+    current_id = QUuid();
 
     _isRunning = true;
     device_ = dev;
@@ -45,18 +55,27 @@ void EvaluatePath::start_evaluate(Device *dev)
 
         if (id_queue.isEmpty()) {
             disconnect(this, &EvaluatePath::path_evaluated, this, nullptr);
-            qCWarning(lcEvaluator) << "Evaluating finished";
+            qCInfo(lcEvaluator) << "Evaluating finished";
             _isRunning = false;
             Q_EMIT evaluate_finished();
             return;
         }
 
-        auto curr_id = id_queue.takeFirst();
-        evaluate(curr_id);
+        current_id = id_queue.takeFirst();
+        evaluate(current_id);
     });
 
-    auto curr_id = id_queue.takeFirst();
-    evaluate(curr_id);
+    connect(devApi, &DeviceApi::status_finished, this, [&](const DeviceInfoStatus& info, int code) {
+        bool status_ok = false;
+        if (code == 200) {
+            if (info.oobe_done)
+                status_ok = true;
+        }
+        Q_EMIT path_evaluated(current_id, status_ok);
+    });
+
+    current_id = id_queue.takeFirst();
+    evaluate(current_id);
 }
 
 void EvaluatePath::evaluate(const QUuid &id)
@@ -67,56 +86,15 @@ void EvaluatePath::evaluate(const QUuid &id)
         return;
     }
 
-    QUrl serverUrl = QUrl(Device::makeServerUrl(dev_path->address, dev_path->port, true, dev_path->origin != DevicePathOrigin::MDNS));
-
-    if (!serverUrl.isValid()) {
-        Q_EMIT path_evaluated(id, false);
-        return;
-    }
-
-    resetAccessManager();
-
-    // first, we must resolve the actual server URL
-    auto resolveJob = SimpleResolveUrlJobFactory(mgr).startJob(serverUrl, this);
-
-    connect(resolveJob, &CoreJob::finished, resolveJob, [this, resolveJob, dev_id = id]() {
-        resolveJob->deleteLater();
-
-        if (!resolveJob->success()) {
-            Q_EMIT path_evaluated(dev_id, false);
-            return;
-        }
-
-        const auto resolvedUrl = resolveJob->result().toUrl();
-
-        // next, we need to find out which kind of authentication page we have to present to the user
-        auto authTypeJob = DetermineAuthTypeJobFactory(mgr).startJob(resolvedUrl, this);
-
-        connect(authTypeJob, &CoreJob::finished, authTypeJob, [this, authTypeJob, resolvedUrl, dev_id]() {
-            authTypeJob->deleteLater();
-
-            if (authTypeJob->result().isNull()) {
-                Q_EMIT path_evaluated(dev_id, false);
-                return;
-            }
-
-            Q_EMIT path_evaluated(dev_id, true);
-        });
-    });
-
-    connect(resolveJob, &CoreJob::caCertificateAccepted, this, [this](const QSslCertificate &caCertificate) {
-        mgr->addCustomTrustedCaCertificates({caCertificate});
-    }, Qt::DirectConnection);
+    query_device_status(dev_path.value());
 }
 
-void EvaluatePath::resetAccessManager()
+void EvaluatePath::query_device_status(const DevicePath& dpath)
 {
-    if (mgr != nullptr) {
-        mgr->deleteLater();
-    }
-
-    mgr = new AccessManager(this);
-    mgr->setTransferTimeout(3 * 1000);
+    auto url = Device::makeServerUrl(dpath.address, dpath.port, false, true);
+    qCDebug(lcEvaluator) << "Query remote status" << url;
+    devApi->query_device_status(url);
 }
+
 
 } // namespace CUR
