@@ -33,9 +33,14 @@ QString CommonStrings::showInFileBrowser()
     return QCoreApplication::translate("CommonStrings", "Show in %1").arg(fileBrowser());
 }
 
-QString CommonStrings::showInWebBrowser()
+QString CommonStrings::showFilesInWebBrowser()
 {
-    return QCoreApplication::translate("CommonStrings", "Show in web browser");
+    return QCoreApplication::translate("CommonStrings", "Show Files in web browser");
+}
+
+QString CommonStrings::showPhotosInWebBrowser()
+{
+    return QCoreApplication::translate("CommonStrings", "Show Photos in web browser");
 }
 
 QString CommonStrings::copyToClipBoard()

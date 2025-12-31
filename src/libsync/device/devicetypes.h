@@ -84,6 +84,7 @@ public:
     void clearOnlinePaths();
 
     static QString makeServerUrl(const QString &url, int port, bool add_folder, bool add_port);
+    static QUrl makePhotosUrl(const QUrl& other);
 
     std::optional<DevicePath> findPath(const QUuid& id) const;
     DevicePath* getPathPtr(const QUuid& id);
