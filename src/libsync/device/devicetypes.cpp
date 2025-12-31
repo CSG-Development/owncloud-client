@@ -271,6 +271,16 @@ QString Device::makeServerUrl(const QString &url, int port, bool add_folder, boo
     return tmpurl.toString();
 }
 
+QUrl Device::makePhotosUrl(const QUrl &other)
+{
+    QUrl url;
+    url.setUrl(other.url());
+    url.setScheme(QStringLiteral("https"));
+    url.setPort(other.port());
+    url.setPath(QStringLiteral("/photos"));
+    return url;
+}
+
 std::optional<DevicePath> Device::findPath(const QUuid &id) const
 {
     if (paths.isEmpty()) {

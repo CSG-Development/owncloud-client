@@ -383,9 +383,14 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
                 // Only add the path of subfolders, because the remote path is the path of the root folder.
                 path += info->_path;
             }
-            menu->addAction(CommonStrings::showInWebBrowser(), [path, davUrl = info->_folder->webDavUrl(), this] {
+            menu->addAction(CommonStrings::showFilesInWebBrowser(), [path, davUrl = info->_folder->webDavUrl(), this] {
                 fetchPrivateLinkUrl(_accountState->account(), davUrl, path, this, [](const QUrl &url) {
                     Utility::openBrowser(url, nullptr);
+                });
+            });
+            menu->addAction(CommonStrings::showPhotosInWebBrowser(), [path, davUrl = info->_folder->webDavUrl(), this] {
+                fetchPrivateLinkUrl(_accountState->account(), davUrl, path, this, [](const QUrl &url) {
+                    Utility::openBrowser(Device::makePhotosUrl(url), nullptr);
                 });
             });
 

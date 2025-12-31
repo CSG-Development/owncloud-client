@@ -20,7 +20,8 @@ namespace CUR {
 namespace CommonStrings {
     QString fileBrowser();
     QString showInFileBrowser();
-    QString showInWebBrowser();
+    QString showFilesInWebBrowser();
+    QString showPhotosInWebBrowser();
     QString copyToClipBoard();
     QString filterButtonText(int filterCount);
 }

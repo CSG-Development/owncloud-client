@@ -131,8 +131,11 @@ void ProtocolWidget::showContextMenu(QWidget *parent, ProtocolItemModel *model, 
                 fetchPrivateLinkUrl(data.folder()->accountState()->account(), data.folder()->webDavUrl(), data.folder()->remotePathTrailingSlash() + data.path(), parent, [parent, menu = QPointer<QMenu>(menu)](const QUrl &url) {
                     // as fetchPrivateLinkUrl is async we need to check the menu still exists
                     if (menu) {
-                        menu->addAction(CommonStrings::showInWebBrowser(), parent, [url, parent] {
+                        menu->addAction(CommonStrings::showFilesInWebBrowser(), parent, [url, parent] {
                             Utility::openBrowser(url, parent);
+                        });
+                        menu->addAction(CommonStrings::showPhotosInWebBrowser(), parent, [url, parent] {
+                            Utility::openBrowser(Device::makePhotosUrl(url), parent);
                         });
                     }
                 });
