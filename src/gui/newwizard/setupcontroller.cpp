@@ -83,7 +83,7 @@ SetupController::SetupController(SettingsDialog *parent)
     });
 
     connect(raConnector, &RemoteConnector::error_occured, this, [&](RemoteRequest req, int error_code, const QString& message) {
-        qCDebug(lcSetupWizardController)
+        qCWarning(lcSetupWizardController)
             << "Error occured, code:" << error_code
             << ", request:" << RemoteConnector::RemoteRequestToStr(req)
             << ", message:" << message;
@@ -131,8 +131,6 @@ SetupController::SetupController(SettingsDialog *parent)
     connect(_context->window(), &SetupWidget::loginCredentialClicked, this, [&](const Device& dev, const QString& user, const QString& password) {
         Q_UNUSED(user);
         qCDebug(lcSetupWizardController) << "Login credential clicked";
-        // url_ = url;
-        //user_ = user;
         password_ = password;
         device_ = dev;
         startLogin(user_, password_);

@@ -67,9 +67,7 @@ private:
     void parseTokenReply(const QJsonDocument& doc);
     void parseDeviceInfoReply(const QJsonDocument& doc);
 
-    // Partialy port from dart code
     QString extractErrorMessage(const QJsonDocument& doc);
-
     void addDevice(const QJsonValue& val);
     void prepareDevList();
 

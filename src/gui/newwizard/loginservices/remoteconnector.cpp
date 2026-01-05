@@ -130,7 +130,6 @@ RemoteConnector::RemoteConnector(QObject *parent)
                 emit query_devices_list(accessToken);
             }
             else {
-                auto error_str = doc.value()[jkey_name].toString();
                 emit error_occured(RemoteRequest::Token, code, extractErrorMessage(doc.value()));
             }
         }
@@ -158,7 +157,6 @@ RemoteConnector::RemoteConnector(QObject *parent)
                 emit fetch_devices();
             }
             else {
-                auto error_str = doc.value()[jkey_name].toString();
                 emit error_occured(RemoteRequest::DeviceList, code, extractErrorMessage(doc.value()));
             }
         }
@@ -177,7 +175,6 @@ RemoteConnector::RemoteConnector(QObject *parent)
                 emit fetch_devices();
             }
             else {
-                auto error_str = doc.value()[jkey_name].toString();
                 emit error_occured(RemoteRequest::DeviceInfo, code, extractErrorMessage(doc.value()));
             }
         }
@@ -406,23 +403,8 @@ void RemoteConnector::parseDeviceInfoReply(const QJsonDocument &doc)
 
 QString RemoteConnector::extractErrorMessage(const QJsonDocument &doc)
 {
-    QString message;
-    const auto reason = doc[jkey_reason].toString();
-
-    if (reason.isEmpty()) {
-        message = reason;
-    }
-    else {
-        message = doc[jkey_stacktrace].toString();
-    }
-
-    if (message.contains(QStringLiteral(":"))) {
-        const auto& parts = message.split(QStringLiteral(":"), Qt::SkipEmptyParts);
-        if (!parts.isEmpty())
-            message = parts.last().trimmed();
-    }
-
-    return message;
+    const auto reason = doc[jkey_name].toString();
+    return reason;
 }
 
 void RemoteConnector::addDevice(const QJsonValue &val)
