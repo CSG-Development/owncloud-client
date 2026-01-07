@@ -1,0 +1,14 @@
+#ToolTipContainer {
+    background-color: rgba(78, 78, 78, 1);
+    border: 1px solid rgba(203, 205, 211, 1);
+    border-radius: 4px;
+}
+
+#ToolTipLabel {
+    color: rgba(255, 255, 255, 0.87);
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 5px;
+    padding-bottom: 7px;
+}
+

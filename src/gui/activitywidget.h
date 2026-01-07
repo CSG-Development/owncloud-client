@@ -93,6 +93,8 @@ private slots:
     void slotCheckToCleanWidgets();
 
 private:
+    bool eventFilter(QObject* obj, QEvent* event) override;
+
     void slotItemContextMenu();
     void showLabels();
     QString timeString(QDateTime dt, QLocale::FormatType format) const;

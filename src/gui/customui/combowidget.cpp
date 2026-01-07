@@ -76,7 +76,6 @@ ComboWidget::ComboWidget(QWidget *parent)
     ui->arrowButton->setAttribute(Qt::WA_Hover, true);
 
     connect(ui->lineEdit, &QLineEdit::textChanged, this, &ComboWidget::onTextChanged);
-    ui->lineEdit->installEventFilter(this);
     ui->lineEdit->setReadOnly(true);
 
     // Disable selections
@@ -136,17 +135,6 @@ void ComboWidget::setErrorState(bool enable, const QString& txt)
     else
         ui->errorLabel->setText(txt);
     updateStyles();
-}
-
-bool ComboWidget::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == ui->lineEdit) {
-        if (event->type() == QEvent::ToolTip) {
-            //ui->lineEdit->setToolTip(ui->lineEdit->text().isEmpty() ? QStringLiteral("") : currentDevice()->host);
-        }
-    }
-
-    return QFrame::eventFilter(watched, event);
 }
 
 void ComboWidget::setDarkTheme()

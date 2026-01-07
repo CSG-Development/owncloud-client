@@ -61,6 +61,8 @@ private slots:
     void slotItemContextMenu();
 
 private:
+    bool eventFilter(QObject* obj, QEvent* event) override;
+
     static void addResetFiltersAction(QMenu *menu, const QList<std::function<void()>> &resetFunctions);
     std::function<void()> addStatusFilter(QMenu *menu);
 

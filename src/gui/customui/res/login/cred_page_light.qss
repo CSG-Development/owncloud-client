@@ -147,13 +147,6 @@
     border: none;
 }
 
-QToolTip {
-    background: #4E4E4E;
-    color: rgba(255, 255, 255, 222);
-    border: 1px solid transparent;
-    border-radius: 4px;
-}
-
 #frameErrorMessageInternal {
     background: rgba(244,67,54,31);
     border: 1px solid transparent;

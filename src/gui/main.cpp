@@ -30,6 +30,7 @@
 #include "libsync/logger.h"
 #include "libsync/networkjobs/networkmonitor.h"
 #include "socketapi/socketapi.h"
+#include "tooltip_manager.h"
 
 #include <kdsingleapplication.h>
 
@@ -369,8 +370,12 @@ int main(int argc, char **argv)
 
     platform->setApplication(&app);
 
+    // Monitor network configuration changes
     NetworkMonitor::instance()->start();
     auto folderManager = FolderMan::createInstance();
+
+    // Application wide tooltip manager
+    app.installEventFilter(ToolTipManager::instance());
 
     if (!AccountManager::instance()->restore()) {
         // If there is an error reading the account settings, try again
