@@ -15,6 +15,7 @@
 #include <QCursor>
 #include <QtGui>
 #include <QtWidgets>
+#include <tooltip_manager.h>
 
 #include "accountmanager.h"
 #include "accountstate.h"
@@ -44,6 +45,7 @@ ProtocolWidget::ProtocolWidget(QWidget *parent)
     connect(ProgressDispatcher::instance(), &ProgressDispatcher::itemCompleted,
         this, &ProtocolWidget::slotItemCompleted);
 
+    _ui->_tableView->viewport()->installEventFilter(this);
     connect(_ui->_tableView, &QTreeWidget::customContextMenuRequested, this, &ProtocolWidget::slotItemContextMenu);
 
     // Build the model-view "stack":
@@ -169,6 +171,19 @@ void ProtocolWidget::slotItemContextMenu()
         rows[i] = _sortModel->mapToSource(rows[i]);
     }
     showContextMenu(this, _model, rows);
+}
+
+bool ProtocolWidget::eventFilter(QObject */*obj*/, QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip) {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        auto toolTipPos = helpEvent->globalPos();
+
+        const QModelIndex index = _ui->_tableView->indexAt(helpEvent->pos());
+        ToolTipManager::instance()->showText(toolTipPos, _ui->_tableView->model()->data(index, Qt::ToolTipRole).toString());
+        return true;
+    }
+    return false;
 }
 
 void ProtocolWidget::slotItemCompleted(Folder *folder, const SyncFileItemPtr &item)

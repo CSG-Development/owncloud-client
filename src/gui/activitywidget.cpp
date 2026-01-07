@@ -14,6 +14,7 @@
 
 #include <QtGui>
 #include <QtWidgets>
+#include <tooltip_manager.h>
 
 #include "QProgressIndicator.h"
 
@@ -146,6 +147,8 @@ ActivityWidget::ActivityWidget(QWidget *parent)
             }
         }
     });
+
+    _ui->_activityList->viewport()->installEventFilter(this);
 
     connect(_model, &ActivityListModel::activityJobStatusCode, this, &ActivityWidget::dataChanged);
     connect(_ui->_activityList, &QListView::customContextMenuRequested, this, &ActivityWidget::slotItemContextMenu);
@@ -475,6 +478,19 @@ void ActivityWidget::slotCheckToCleanWidgets()
         _ui->_notifyLabel->setHidden(true);
         _ui->_notifyScroll->setHidden(true);
     }
+}
+
+bool ActivityWidget::eventFilter(QObject */*obj*/, QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip) {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        auto toolTipPos = helpEvent->globalPos();
+
+        const QModelIndex index = _ui->_activityList->indexAt(helpEvent->pos());
+        ToolTipManager::instance()->showText(toolTipPos, _ui->_activityList->model()->data(index, Qt::ToolTipRole).toString());
+        return true;
+    }
+    return false;
 }
 
 void ActivityWidget::slotItemContextMenu()
