@@ -198,6 +198,9 @@ public:
 
     QPair<QString,QString> staticDevice();
 
+    QString clientId() const;
+    void setClientId(const QString& id);
+
     // ! For Testing only
     // Use mDNS port only for API requests
     static bool useLocalPortForApiOnly();

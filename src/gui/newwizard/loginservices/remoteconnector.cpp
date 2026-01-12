@@ -24,9 +24,9 @@ const auto jkey_reference = QStringLiteral("reference");
 const auto jkey_hostname  = QStringLiteral("hostname");
 const auto jkey_address   = QStringLiteral("address");
 const auto jkey_port      = QStringLiteral("port");
-const auto jkey_seagateDeviceID = QStringLiteral("seagateDeviceID");
-//const auto jkey_clientFriendlyName = QStringLiteral("clientFriendlyName");
-//const auto jkey_clientId =QStringLiteral("clientId");
+const auto jkey_seagateDeviceID    = QStringLiteral("seagateDeviceID");
+const auto jkey_clientFriendlyName = QStringLiteral("clientFriendlyName");
+const auto jkey_clientId     = QStringLiteral("clientId");
 const auto jkey_certificateCommonName = QStringLiteral("certificateCommonName");
 const auto jkey_friendlyName = QStringLiteral("friendlyName");
 const auto jkey_paths        = QStringLiteral("paths");
@@ -251,9 +251,13 @@ void RemoteConnector::query_initiate(const QString &email)
 {
     qCDebug(lcLoginService) << "query_initiate";
 
+    ConfigFile cf;
+
     QJsonDocument doc;
     QJsonObject obj;
     obj[jkey_email] = email;
+    obj[jkey_clientId] = cf.clientId();
+    obj[jkey_clientFriendlyName] = QStringLiteral("Desktop client");
     doc.setObject(obj);
 
     referenceCode.clear();
@@ -284,10 +288,12 @@ void RemoteConnector::query_token(const QString& code)
 {
     qCDebug(lcLoginService) << "query_token";
 
+    ConfigFile cf;
     QJsonDocument doc;
     QJsonObject payload;
     payload[jkey_code] = code;
     payload[jkey_reference] = referenceCode;
+    payload[jkey_clientId] = cf.clientId();
     doc.setObject(payload);
 
     rest_factory->setQueryParameters({qMakePair(QStringLiteral("type"), QStringLiteral("email"))});

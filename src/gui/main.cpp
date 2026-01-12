@@ -42,6 +42,7 @@
 #include <QCommandLineParser>
 #include <QMessageBox>
 #include <QProcess>
+#include <QRandomGenerator>
 #include <QTimer>
 #ifdef Q_OS_WIN
 #include <qt_windows.h>
@@ -220,6 +221,23 @@ void showDowngradeDialog()
     QTimer::singleShot(0, qApp, &QApplication::quit);
 }
 
+QString generateClientId()
+{
+    const QString possibleCharacters = QStringLiteral("abcdefghijklmnopqrstuvwxyz0123456789");
+    const int charactersCount = possibleCharacters.length();
+    const int strLength = 42;
+
+    QString randomString;
+    randomString.reserve(strLength);
+
+    for(int i = 0; i < strLength; ++i) {
+        quint32 index = QRandomGenerator::global()->bounded(charactersCount);
+        randomString.append(possibleCharacters.at(index));
+    }
+
+    return randomString;
+}
+
 /**
  * Check if the last version used to write the config file differs from the current version.
  * If the current version is newer, update the config file with our current version. If the
@@ -234,6 +252,13 @@ bool checkClientVersion()
     // (The client version is adjusted further down)
     auto configVersion = QVersionNumber::fromString(configFile.clientVersionWithBuildNumberString());
     auto clientVersion = CUR::Version::versionWithBuildNumber();
+
+    // Check clientId
+    if (configFile.clientId().isEmpty()) {
+        // Generate new clientId (42 alphabet locase and digit)
+        const auto id = generateClientId();
+        configFile.setClientId(id);
+    }
 
     if (configVersion == clientVersion) {
         // no config backup needed
@@ -251,6 +276,7 @@ bool checkClientVersion()
     // version we store in the config file.
     configFile.backup();
     configFile.setClientVersionWithBuildNumberString(CUR::Version::versionWithBuildNumber().toString());
+
     return true;
 }
 
