@@ -98,6 +98,7 @@ const auto staticDeviceUrlC = QStringLiteral("StaticDeviceUrl");
 const auto usePortForApiOnly_C = QStringLiteral("UsePortForApiOnly");
 const auto enableDeviceEditor_C = QStringLiteral("EnableDeviceEditor");
 const auto enableShareFromUi_C = QStringLiteral("EnableShareFromUi");
+const auto clientIdC = QStringLiteral("ClientId");
 
 const auto issuesWidgetFilterC = QStringLiteral("issuesWidgetFilter");
 
@@ -885,6 +886,19 @@ QPair<QString, QString> ConfigFile::staticDevice()
     if (name.isEmpty())
         name = url;
     return qMakePair(name, url);
+}
+
+QString ConfigFile::clientId() const
+{
+    auto settings = makeQSettings();
+    return settings.value(clientIdC).toString();
+}
+
+void ConfigFile::setClientId(const QString &id)
+{
+    auto settings = makeQSettings();
+    settings.setValue(clientIdC, id);
+    settings.sync();
 }
 
 bool ConfigFile::useLocalPortForApiOnly()
