@@ -276,10 +276,18 @@ void RemoteConnector::query_refresh(const QString& refresh_token)
 {
     qCDebug(lcLoginService) << "query_refresh";
 
+    ConfigFile cf;
+
+    QJsonDocument doc;
+    QJsonObject obj;
+    obj[jkey_clientId] = cf.clientId();
+    obj[jkey_refreshToken] = refresh_token;
+    doc.setObject(obj);
+
     rest_factory->setQueryParameters({qMakePair(QStringLiteral("refresh_token"), refresh_token)});
 
     auto req = rest_factory->createRequest(api_ra_refresh);
-    rest_mgr->get(req, this, [&](QRestReply &reply) {
+    rest_mgr->post(req, doc, this, [&](QRestReply &reply) {
         emit refresh_finished(reply.readJson(), reply.httpStatus());
     });
 }
