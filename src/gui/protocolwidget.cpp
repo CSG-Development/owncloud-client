@@ -136,11 +136,13 @@ void ProtocolWidget::showContextMenu(QWidget *parent, ProtocolItemModel *model, 
                         menu->addAction(CommonStrings::showFilesInWebBrowser(), parent, [url, parent] {
                             Utility::openBrowser(url, parent);
                         });
-                        menu->addAction(CommonStrings::showPhotosInWebBrowser(), parent, [url, parent] {
-                            Utility::openBrowser(Device::makePhotosUrl(url), parent);
-                        });
                     }
                 });
+                if (menu) {
+                    menu->addAction(CommonStrings::showPhotosInWebBrowser(), parent, [url = data.folder()->accountState()->account()->url(), parent] {
+                        Utility::openBrowser(Device::makePhotosUrl(url), parent);
+                    });
+                }
             }
             {
                 switch (data.status()) {

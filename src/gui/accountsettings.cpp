@@ -388,10 +388,8 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
                     Utility::openBrowser(url, nullptr);
                 });
             });
-            menu->addAction(CommonStrings::showPhotosInWebBrowser(), [path, davUrl = info->_folder->webDavUrl(), this] {
-                fetchPrivateLinkUrl(_accountState->account(), davUrl, path, this, [](const QUrl &url) {
-                    Utility::openBrowser(Device::makePhotosUrl(url), nullptr);
-                });
+            menu->addAction(CommonStrings::showPhotosInWebBrowser(), [path, accUrl = info->_folder->accountState()->account()->url()] {
+                Utility::openBrowser(Device::makePhotosUrl(accUrl), nullptr);
             });
 
             if (CUR::ConfigFile::shareFromUi()) {
