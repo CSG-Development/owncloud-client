@@ -24,9 +24,9 @@ const auto jkey_reference = QStringLiteral("reference");
 const auto jkey_hostname  = QStringLiteral("hostname");
 const auto jkey_address   = QStringLiteral("address");
 const auto jkey_port      = QStringLiteral("port");
-const auto jkey_seagateDeviceID = QStringLiteral("seagateDeviceID");
-//const auto jkey_clientFriendlyName = QStringLiteral("clientFriendlyName");
-//const auto jkey_clientId =QStringLiteral("clientId");
+const auto jkey_seagateDeviceID    = QStringLiteral("seagateDeviceID");
+const auto jkey_clientFriendlyName = QStringLiteral("clientFriendlyName");
+const auto jkey_clientId     = QStringLiteral("clientId");
 const auto jkey_certificateCommonName = QStringLiteral("certificateCommonName");
 const auto jkey_friendlyName = QStringLiteral("friendlyName");
 const auto jkey_paths        = QStringLiteral("paths");
@@ -130,7 +130,6 @@ RemoteConnector::RemoteConnector(QObject *parent)
                 emit query_devices_list(accessToken);
             }
             else {
-                auto error_str = doc.value()[jkey_name].toString();
                 emit error_occured(RemoteRequest::Token, code, extractErrorMessage(doc.value()));
             }
         }
@@ -158,7 +157,6 @@ RemoteConnector::RemoteConnector(QObject *parent)
                 emit fetch_devices();
             }
             else {
-                auto error_str = doc.value()[jkey_name].toString();
                 emit error_occured(RemoteRequest::DeviceList, code, extractErrorMessage(doc.value()));
             }
         }
@@ -177,7 +175,6 @@ RemoteConnector::RemoteConnector(QObject *parent)
                 emit fetch_devices();
             }
             else {
-                auto error_str = doc.value()[jkey_name].toString();
                 emit error_occured(RemoteRequest::DeviceInfo, code, extractErrorMessage(doc.value()));
             }
         }
@@ -254,9 +251,13 @@ void RemoteConnector::query_initiate(const QString &email)
 {
     qCDebug(lcLoginService) << "query_initiate";
 
+    ConfigFile cf;
+
     QJsonDocument doc;
     QJsonObject obj;
     obj[jkey_email] = email;
+    obj[jkey_clientId] = cf.clientId();
+    obj[jkey_clientFriendlyName] = QStringLiteral("Desktop client");
     doc.setObject(obj);
 
     referenceCode.clear();
@@ -275,10 +276,18 @@ void RemoteConnector::query_refresh(const QString& refresh_token)
 {
     qCDebug(lcLoginService) << "query_refresh";
 
+    ConfigFile cf;
+
+    QJsonDocument doc;
+    QJsonObject obj;
+    obj[jkey_clientId] = cf.clientId();
+    obj[jkey_refreshToken] = refresh_token;
+    doc.setObject(obj);
+
     rest_factory->setQueryParameters({qMakePair(QStringLiteral("refresh_token"), refresh_token)});
 
     auto req = rest_factory->createRequest(api_ra_refresh);
-    rest_mgr->get(req, this, [&](QRestReply &reply) {
+    rest_mgr->post(req, doc, this, [&](QRestReply &reply) {
         emit refresh_finished(reply.readJson(), reply.httpStatus());
     });
 }
@@ -287,10 +296,12 @@ void RemoteConnector::query_token(const QString& code)
 {
     qCDebug(lcLoginService) << "query_token";
 
+    ConfigFile cf;
     QJsonDocument doc;
     QJsonObject payload;
     payload[jkey_code] = code;
     payload[jkey_reference] = referenceCode;
+    payload[jkey_clientId] = cf.clientId();
     doc.setObject(payload);
 
     rest_factory->setQueryParameters({qMakePair(QStringLiteral("type"), QStringLiteral("email"))});
@@ -406,23 +417,8 @@ void RemoteConnector::parseDeviceInfoReply(const QJsonDocument &doc)
 
 QString RemoteConnector::extractErrorMessage(const QJsonDocument &doc)
 {
-    QString message;
-    const auto reason = doc[jkey_reason].toString();
-
-    if (reason.isEmpty()) {
-        message = reason;
-    }
-    else {
-        message = doc[jkey_stacktrace].toString();
-    }
-
-    if (message.contains(QStringLiteral(":"))) {
-        const auto& parts = message.split(QStringLiteral(":"), Qt::SkipEmptyParts);
-        if (!parts.isEmpty())
-            message = parts.last().trimmed();
-    }
-
-    return message;
+    const auto reason = doc[jkey_name].toString();
+    return reason;
 }
 
 void RemoteConnector::addDevice(const QJsonValue &val)

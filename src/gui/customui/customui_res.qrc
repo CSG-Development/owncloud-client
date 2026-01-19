@@ -153,5 +153,7 @@
         <file>res/combowidget/triangle_up.svg</file>
         <file>res/combowidget/popup_combo_dark.qss</file>
         <file>res/combowidget/popup_combo_light.qss</file>
+        <file>res/tooltips/tooltip_dark.qss</file>
+        <file>res/tooltips/tooltip_light.qss</file>
     </qresource>
 </RCC>

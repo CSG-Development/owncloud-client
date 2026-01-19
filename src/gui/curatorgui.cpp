@@ -362,7 +362,11 @@ void CuratorGui::slotComputeOverallSyncStatus()
 
 void CuratorGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *menu)
 {
-    menu->addAction(CommonStrings::showInWebBrowser(), this, [accountState] { QDesktopServices::openUrl(accountState->account()->url()); });
+    menu->addAction(CommonStrings::showFilesInWebBrowser(), this, [accountState] { QDesktopServices::openUrl(accountState->account()->url()); });
+    menu->addAction(CommonStrings::showPhotosInWebBrowser(), this, [accountState] {
+        auto photosUrl = Device::makePhotosUrl(accountState->account()->url());
+        QDesktopServices::openUrl(photosUrl);
+    });
 
     FolderMan *folderMan = FolderMan::instance();
     const auto &map = folderMan->folders();

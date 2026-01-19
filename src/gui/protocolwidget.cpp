@@ -15,6 +15,7 @@
 #include <QCursor>
 #include <QtGui>
 #include <QtWidgets>
+#include <tooltip_manager.h>
 
 #include "accountmanager.h"
 #include "accountstate.h"
@@ -44,6 +45,7 @@ ProtocolWidget::ProtocolWidget(QWidget *parent)
     connect(ProgressDispatcher::instance(), &ProgressDispatcher::itemCompleted,
         this, &ProtocolWidget::slotItemCompleted);
 
+    _ui->_tableView->viewport()->installEventFilter(this);
     connect(_ui->_tableView, &QTreeWidget::customContextMenuRequested, this, &ProtocolWidget::slotItemContextMenu);
 
     // Build the model-view "stack":
@@ -131,11 +133,16 @@ void ProtocolWidget::showContextMenu(QWidget *parent, ProtocolItemModel *model, 
                 fetchPrivateLinkUrl(data.folder()->accountState()->account(), data.folder()->webDavUrl(), data.folder()->remotePathTrailingSlash() + data.path(), parent, [parent, menu = QPointer<QMenu>(menu)](const QUrl &url) {
                     // as fetchPrivateLinkUrl is async we need to check the menu still exists
                     if (menu) {
-                        menu->addAction(CommonStrings::showInWebBrowser(), parent, [url, parent] {
+                        menu->addAction(CommonStrings::showFilesInWebBrowser(), parent, [url, parent] {
                             Utility::openBrowser(url, parent);
                         });
                     }
                 });
+                if (menu) {
+                    menu->addAction(CommonStrings::showPhotosInWebBrowser(), parent, [url = data.folder()->accountState()->account()->url(), parent] {
+                        Utility::openBrowser(Device::makePhotosUrl(url), parent);
+                    });
+                }
             }
             {
                 switch (data.status()) {
@@ -166,6 +173,19 @@ void ProtocolWidget::slotItemContextMenu()
         rows[i] = _sortModel->mapToSource(rows[i]);
     }
     showContextMenu(this, _model, rows);
+}
+
+bool ProtocolWidget::eventFilter(QObject */*obj*/, QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip) {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        auto toolTipPos = helpEvent->globalPos();
+
+        const QModelIndex index = _ui->_tableView->indexAt(helpEvent->pos());
+        ToolTipManager::instance()->showText(toolTipPos, _ui->_tableView->model()->data(index, Qt::ToolTipRole).toString());
+        return true;
+    }
+    return false;
 }
 
 void ProtocolWidget::slotItemCompleted(Folder *folder, const SyncFileItemPtr &item)

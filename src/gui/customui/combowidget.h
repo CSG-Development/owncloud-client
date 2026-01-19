@@ -32,8 +32,6 @@ public:
 
     void setErrorState(bool enable, const QString& txt = QString());
 
-    bool eventFilter(QObject *watched, QEvent *event) override;
-
 public slots:
     void setDarkTheme();
 

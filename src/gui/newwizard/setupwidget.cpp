@@ -90,8 +90,11 @@ void SetupWidget::displayPage(SetupPage page)
         break;
 
     case SetupPage::PageEmail:
-        if (emailPage_)
+        if (emailPage_) {
             _ui->contentWidget->setCurrentWidget(emailPage_);
+            if (previousPage == SetupPage::PageCredentials)
+                credPage_->showErrorMessage({});
+        }
         break;
 
     case SetupPage::PageCredentials:
@@ -198,9 +201,9 @@ void SetupWidget::onSetupFinishPageDefaults(const QString &defaultSyncTargetDir,
 
 void SetupWidget::errorOccured(RemoteRequest req, int code, const QString& message)
 {
-    qCDebug(lcSetupWizardWidget) << "Request:" << RemoteConnector::RemoteRequestToStr(req)
-                                 << "code:" << code
-                                 << "message:" << message;
+    qCWarning(lcSetupWizardWidget) << "Request:" << RemoteConnector::RemoteRequestToStr(req)
+                                   << "code:" << code
+                                   << "message:" << message;
 
     credPage_->errorOccured(req, code, message);
 }

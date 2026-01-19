@@ -48,6 +48,10 @@ add_library(${LIBRARY_NAME} STATIC
     codeinputwidget.cpp
     codeinputwidget.h
     codeinputwidget.ui
+    tooltip_manager.cpp
+    tooltip_manager.h
+    custom_tooltip.cpp
+    custom_tooltip.h
 )
 
 target_link_libraries(${LIBRARY_NAME} PUBLIC 

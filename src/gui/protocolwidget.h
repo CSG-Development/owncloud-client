@@ -60,6 +60,8 @@ private slots:
     void slotItemContextMenu();
 
 private:
+    bool eventFilter(QObject* obj, QEvent* event) override;
+
     ProtocolItemModel *_model;
     Models::SignalledQSortFilterProxyModel *_sortModel;
     Ui::ProtocolWidget *_ui;

@@ -1033,7 +1033,7 @@ void SocketApi::command_GET_MENU_ITEMS(const QString &argument, CUR::SocketListe
                 sendSharingContextMenuOptions(fileData, listener);
 
                 if (capabilities.privateLinkPropertyAvailable()) {
-                    listener->sendMessage(QLatin1String("MENU_ITEM:OPEN_PRIVATE_LINK") + flagString + CommonStrings::showInWebBrowser());
+                    listener->sendMessage(QLatin1String("MENU_ITEM:OPEN_PRIVATE_LINK") + flagString + CommonStrings::showFilesInWebBrowser());
                 }
                 // Add link to versions pane if possible
                 if (capabilities.versioningEnabled() && isOnTheServer && !record.isDirectory()) {
@@ -1091,7 +1091,7 @@ void SocketApi::command_GET_MENU_ITEMS(const QString &argument, CUR::SocketListe
             } else {
                 // we are a sync root
                 if (capabilities.privateLinkPropertyAvailable()) {
-                    listener->sendMessage(QLatin1String("MENU_ITEM:OPEN_PRIVATE_LINK::") + CommonStrings::showInWebBrowser());
+                    listener->sendMessage(QLatin1String("MENU_ITEM:OPEN_PRIVATE_LINK::") + CommonStrings::showFilesInWebBrowser());
                 }
             }
         }

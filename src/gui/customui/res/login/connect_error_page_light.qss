@@ -71,9 +71,3 @@
     background: rgba(30, 136, 229, 0.3);
 }
 
-QToolTip {
-    background: #4E4E4E;
-    color: rgba(255, 255, 255, 222);
-    border: 1px solid transparent;
-    border-radius: 4px;
-}

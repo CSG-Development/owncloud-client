@@ -14,6 +14,7 @@
 
 #include <QtGui>
 #include <QtWidgets>
+#include <tooltip_manager.h>
 
 #include "account.h"
 #include "accountmanager.h"
@@ -230,6 +231,8 @@ IssuesWidget::IssuesWidget(QWidget *parent)
     header->setExpandingColumn(static_cast<int>(ProtocolItemModel::ProtocolItemRole::Action));
     header->setSortIndicator(static_cast<int>(ProtocolItemModel::ProtocolItemRole::Time), Qt::DescendingOrder);
 
+    _ui->_tableView->viewport()->installEventFilter(this);
+
     connect(_ui->_tableView, &QTreeView::customContextMenuRequested, this, &IssuesWidget::slotItemContextMenu);
     _ui->_tableView->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(header, &QHeaderView::customContextMenuRequested, [this, header]() {
@@ -372,6 +375,19 @@ void IssuesWidget::slotItemContextMenu()
         rows[i] = _sortModel->mapToSource(rows[i]);
     }
     ProtocolWidget::showContextMenu(this, _model, rows);
+}
+
+bool IssuesWidget::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip) {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        auto toolTipPos = helpEvent->globalPos();
+
+        const QModelIndex index = _ui->_tableView->indexAt(helpEvent->pos());
+        ToolTipManager::instance()->showText(toolTipPos, _ui->_tableView->model()->data(index, Qt::ToolTipRole).toString());
+        return true;
+    }
+    return false;
 }
 
 std::function<void(void)> IssuesWidget::addStatusFilter(QMenu *menu)
