@@ -36,6 +36,11 @@ add_library(newwizard STATIC
     pages/setuppagetype.h
 )
 
+if(APPLE)
+    string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    add_compile_options(-fexceptions)
+endif()
+
 target_link_libraries(newwizard PUBLIC Qt::Widgets Qt::Concurrent libsync curatorResources)
 
 set_target_properties(newwizard PROPERTIES AUTOUIC ON AUTORCC ON)

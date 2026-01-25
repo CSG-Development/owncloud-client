@@ -124,6 +124,11 @@ target_link_libraries(curatorCore
         Qt6Keychain::Qt6Keychain
 )
 
+if(APPLE)
+    string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    add_compile_options(-fexceptions)
+endif()
+
 apply_common_target_settings(curatorCore)
 
 
