@@ -85,6 +85,11 @@ elseif(UNIX)
     endif()
 endif()
 
+if(APPLE)
+    string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    add_compile_options(-fexceptions)
+endif()
+
 set(libsync_SRCS ${libsync_SRCS} creds/httpcredentials.cpp)
 
 # These headers are installed for libcuratorsync to be used by 3rd party apps
