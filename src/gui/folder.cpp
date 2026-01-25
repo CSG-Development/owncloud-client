@@ -912,8 +912,12 @@ void Folder::startSync()
         return;
     }
 
-    if (!OC_ENSURE(!isSyncRunning())) {
-        qCCritical(lcFolder) << "ERROR sync is still running and new sync requested.";
+    // if (!OC_ENSURE(!isSyncRunning())) {
+    //     qCCritical(lcFolder) << "ERROR sync is still running and new sync requested.";
+    //     return;
+    // }
+    if (isSyncRunning()) {
+        qCWarning(lcFolder) << "ERROR sync is still running and new sync requested.";
         return;
     }
 

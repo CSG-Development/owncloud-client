@@ -80,7 +80,7 @@ LogBrowser::LogBrowser(QWidget *parent)
     ConfigFile cfg;
     cfg.restoreGeometry(this);
 
-    connect(Theme::instance(), &Theme::themeChanged, this, [&] {
+    connect(Theme::instance(), &Theme::themeChanged, this, [this] {
         onThemeChanged();
         update();
     });

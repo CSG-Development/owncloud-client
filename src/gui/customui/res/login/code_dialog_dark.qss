@@ -1,3 +1,8 @@
+#frameInnerVert,
+#frameInnerHoriz {
+    border: none;
+}
+
 #frame {
     background-color: #262729;
     border-radius: 28px;
@@ -23,31 +28,30 @@
 #btnResendCode,
 #btnSkip,
 #btnAllowAccess {
-    border: none;
     color: rgba(100, 181, 246, 1);
     font-size: 14px;
+    min-height: 40px;
+    max-height: 40px;
+    outline: none;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    background: transparent;
 }
 
 #btnResendCode:disabled,
 #btnSkip:disabled,
 #btnAllowAccess:disabled {
-    border: none;
     color: rgba(158, 158, 158, 1);
-    font-size: 14px;
 }
 
 #btnResendCode:hover,
 #btnSkip:hover,
 #btnAllowAccess:hover {
     background: rgba(144, 202, 249, 0.12);
-    border: 1px solid transparent;
-    border-radius: 20px;
 }
 
 #btnResendCode:pressed,
 #btnSkip:pressed,
 #btnAllowAccess:pressed {
     background: rgba(144, 202, 249, 0.3);
-    border: 1px solid transparent;
-    border-radius: 20px;
 }

@@ -99,6 +99,9 @@ const auto usePortForApiOnly_C = QStringLiteral("UsePortForApiOnly");
 const auto enableDeviceEditor_C = QStringLiteral("EnableDeviceEditor");
 const auto enableShareFromUi_C = QStringLiteral("EnableShareFromUi");
 const auto clientIdC = QStringLiteral("ClientId");
+const auto favoriteGroupC = QStringLiteral("Favorites");
+const auto emailC = QStringLiteral("Email");
+const auto deviceCN_C = QStringLiteral("DeviceCN");
 
 const auto issuesWidgetFilterC = QStringLiteral("issuesWidgetFilter");
 
@@ -840,7 +843,7 @@ QString ConfigFile::refreshTokenForEmail(const QString& email) const
 {
     auto settings = makeQSettings();
     settings.beginGroup(refreshTokenC);
-    const auto token = settings.value(email, QString()).toString();
+    const auto token = settings.value(email.toLower(), QString()).toString();
     settings.endGroup();
     return token;
 }
@@ -849,7 +852,8 @@ void ConfigFile::setRefreshTokenForEmail(const QString &token, const QString& em
 {
     auto settings = makeQSettings();
     settings.beginGroup(refreshTokenC);
-    settings.setValue(email, token);
+    settings.setValue(email.toLower(), token);
+    settings.sync();
     settings.endGroup();
 }
 
@@ -898,6 +902,36 @@ void ConfigFile::setClientId(const QString &id)
 {
     auto settings = makeQSettings();
     settings.setValue(clientIdC, id);
+    settings.sync();
+}
+
+QString ConfigFile::favoriteEmail() const
+{
+    auto settings = makeQSettings();
+    settings.beginGroup(favoriteGroupC);
+    return settings.value(emailC).toString();
+}
+
+void ConfigFile::setFavoriteEmail(const QString &email)
+{
+    auto settings = makeQSettings();
+    settings.beginGroup(favoriteGroupC);
+    settings.setValue(emailC, email);
+    settings.sync();
+}
+
+QString ConfigFile::favoriteDeviceCN() const
+{
+    auto settings = makeQSettings();
+    settings.beginGroup(favoriteGroupC);
+    return settings.value(deviceCN_C).toString();
+}
+
+void ConfigFile::setFavoriteDeviceCN(const QString &devCN)
+{
+    auto settings = makeQSettings();
+    settings.beginGroup(favoriteGroupC);
+    settings.setValue(deviceCN_C, devCN);
     settings.sync();
 }
 

@@ -18,7 +18,7 @@ public:
         clPort,
         clType,
         clOrigin,
-        clOnline,
+        clOobeDone,
         clCount
     };
 
@@ -57,9 +57,17 @@ public:
     void updatePathInfo();
 
 private:
+    void showPathInfoText();
+    void beginTable();
+    void endTable();
+    void insertData(const QString &key, const QString &value);
+
+
+private:
     Ui::DevWidget *ui = nullptr;
     DevModel model_;
     CUR::Account* acc_ = nullptr;
     QUuid currentId_;
     Device device_;
+    QString _htmlBuffer;
 };

@@ -20,6 +20,7 @@
 #include "gui/settingsdialog.h"
 #include "setupcontext.h"
 #include "setupwidget.h"
+#include "pages/pagecontext.h"
 
 #include <QDialog>
 
@@ -29,14 +30,19 @@ enum class ChangeReason {
 };
 Q_ENUM_NS(ChangeReason)
 
+class DeviceController;
+
 namespace CUR {
-class RemoteConnector;
 class DeviceListManager;
 class EvaluatePath;
 }
 
 namespace CUR::Wizard {
 
+enum class SetupResult {
+    Success,
+    Fail
+};
 
 /**
  * This class is the backbone of the new setup wizard. It instantiates the required UI elements and fills them with the correct data. It also provides the public API for the settings UI.
@@ -57,20 +63,39 @@ public:
 
 Q_SIGNALS:
     void setupFinishPageDefaults(const QString &defaultSyncTargetDir, const QString &userChosenSyncTargetDir, bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental);
-    void finished(AccountPtr newAccount, SyncMode syncMode, const QVariantMap &dynamicRegistrationData);
-    void credentialsEvaluationFailed(const QString& msg);
+    void finished(CUR::AccountPtr newAccount, CUR::Wizard::SyncMode syncMode, const QVariantMap &dynamicRegistrationData);
     void invalidServerUrl();
-    void credentialsEvaluationSuccessful();
-    void loginFailed(const QString& msg);
-    void loginSuccessful();
-    void finishSuccessful(SyncMode mode);
-    void finishFailed(const QString& msg);
+
+    // private, internal use
+    void handleCredentialsEvaluation(CUR::Wizard::SetupResult result, const QString& msg = QString());
+    void handleLoginResult(CUR::Wizard::SetupResult result, const QString& msg = QString());
+    void handleFinishResult(CUR::Wizard::SetupResult result, const QString &msg = QString(), CUR::Wizard::SyncMode mode = SyncMode::Invalid);
+
+    void cantFindDevice(QPrivateSignal);
+    void evaluateCredentialsError(const QString& errStr, QPrivateSignal);
 
 private:
-    void startLogin(const QString& user, const QString& password);
-    void evaluateCredentials(const Device &dev, const QString &url, const QString &login, const QString &password);
+    void onCredentialsAction(CredentialsAction action, std::optional<CredentialsContext> ctx = std::nullopt);
+
+    void onLoginEmailClicked(const QString& email);
+    void onDevicesUpdated(bool raQueried);
+
+    void onFinishPageBackClicked();
+    void onFinishPageDoneClicked(CUR::Wizard::SyncMode mode, const QString& targetDir);
+
+    void onConnectErrorPageBackClicked();
+    void onConnectErrorPageRetryClicked();
+
+    void onInvalidServerUrl();
+
+    void onHandleCredentialsEvaluation(SetupResult result, const QString& msg = QString());
+    void onHandleLoginResult(SetupResult result, const QString& msg = QString());
+    void onHandleFinishResult(SetupResult result, const QString &msg = QString(), SyncMode mode = SyncMode::Invalid);
+
+    void onCantFindDevice();
 
     void evaluateCredentialsNew(const QUuid& id);
+    void onEvaluateCredError(const QString& errStr);
 
     void performLogin();
     void evaluateFinishPage(CUR::Wizard::SyncMode mode, const QString& targetDir);
@@ -79,17 +104,11 @@ private:
     // keeping a pointer on the current page allows us to check whether the controller has been initialized yet
     // the pointer is also used to clean up the page
     // QPointer<AbstractState> _currentState = nullptr;
-    QString user_;
+    QString email_;
     QString password_;
     Device device_;
-    RemoteConnector* raConnector = nullptr;
-    DeviceListManager* deviceMgr = nullptr;
     bool remoteSkipped = false;
-    EvaluatePath* evaluator_ = nullptr;
-
-    QList<DeviceInfo> remoteDevices;
-
-    QList<MdnsRecord> localDevices;
     QList<Device> fullList;
+    DeviceController* _deviceController = nullptr;
 };
 }

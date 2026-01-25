@@ -250,78 +250,97 @@ bool fromPacket(QByteArray const& packet, Message& message)
 
 } // anonymous namespace
 
-namespace CUR {
-
 
 MdnsClient::MdnsClient(QObject *parent)
     : QObject(parent)
 {
-    const auto all = QNetworkInterface::allInterfaces();
-    for (const auto& item: all) {
-        if (!item.isValid() || !item.flags().testFlag(QNetworkInterface::IsRunning))
-            continue;
+    setupSockets();
+    scanTimer_.setInterval(5000);
+    connect(&scanTimer_, &QTimer::timeout, this, &MdnsClient::performScanCycle);
+    debounceTimer_.setInterval(2000);
+    debounceTimer_.setSingleShot(true);
+    notFoundTimer_.setInterval(3000);
+    notFoundTimer_.setSingleShot(true);
 
-        for (const auto& ip: item.addressEntries()) {
-            if (ip.ip().protocol() == QAbstractSocket::IPv6Protocol)
-                continue;
-
-            createSocket(ip.ip());
-        }
-    }
-
-    timer_.setInterval(2 * 1000);
-    timer_.setSingleShot(true);
-    connect(&timer_, &QTimer::timeout, this, [&] {
-        emit requestCompleted();
+    connect(&notFoundTimer_, &QTimer::timeout, this, [this] {
+        debounceTimer_.start();
     });
 
-    connect(this, &MdnsClient::messageReceived, this, &MdnsClient::onMessageReveived);
+    connect(&debounceTimer_, &QTimer::timeout, this, [this] {
+        notFoundTimer_.stop();
+        emit resultsChanged(lastData_);
+    });
+
+    connect(this, &MdnsClient::resultsChanged_internal, this, [this](const QList<DevicePath>& records) {
+        lastData_ = records;
+        debounceTimer_.start();
+    });
 }
 
 MdnsClient::~MdnsClient()
 {
-    for (auto socket: std::as_const(sockets)) {
+    stop();
+    for (auto socket: sockets) {
         socket->abort();
     }
 }
 
-void MdnsClient::query()
+void MdnsClient::start()
 {
-    qCDebug(lcMdnsDevice) << "Starting mDNS query";
-    records_.clear();
-    QByteArray ba(reinterpret_cast<const char*>(request_data), sizeof(request_data));
-
-    timer_.start();
-    for (auto socket: std::as_const(sockets)) {
-        socket->writeDatagram(ba, QHostAddress(QStringLiteral("224.0.0.251")), 5353);
+    if (scanTimer_.isActive()) {
+        scanTimer_.stop();
     }
+
+    discoveredRecords_.clear();
+    lastSeen_.clear();
+    notFoundTimer_.start();
+
+    performScanCycle();
+    scanTimer_.start();
+}
+
+void MdnsClient::stop()
+{
+    scanTimer_.stop();
 }
 
 void MdnsClient::onReadyRead()
 {
-    QUdpSocket* sender_socket = qobject_cast<QUdpSocket*>(sender());
-    QByteArray packet;
-    packet.resize(sender_socket->pendingDatagramSize());
+    auto* sender_socket = qobject_cast<QUdpSocket*>(sender());
+    if (!sender_socket)
+        return;
 
-    QHostAddress address;
-    quint16 port = 0;
-    sender_socket->readDatagram(packet.data(), packet.size(), &address, &port);
+    bool changed = false;
+    while (sender_socket->hasPendingDatagrams()) {
+        QByteArray packet;
+        packet.resize(sender_socket->pendingDatagramSize());
 
-    Message message;
-    if (fromPacket(packet, message)) {
-        message.address = address;
-        emit messageReceived(message);
+        QHostAddress senderAddress;
+        quint16 senderPort = 0;
+
+        sender_socket->readDatagram(packet.data(), packet.size(), &senderAddress, &senderPort);
+
+        Message message;
+        if (fromPacket(packet, message) && message.isHomecloud) {
+
+            QString key = QStringLiteral("%1:%2").arg(senderAddress.toString()).arg(message.port);
+            lastSeen_[key] = QDateTime::currentDateTime();
+
+            if (!discoveredRecords_.contains(key)) {
+                DevicePath rec;
+                rec.origin = DeviceOrigin::MDNS;
+                rec.deviceType = DeviceType::Local;
+                rec.address = senderAddress.toString();
+                rec.port = message.port;
+                discoveredRecords_.insert(key, rec);
+                changed = true;
+            }
+
+            if (changed) {
+                emit resultsChanged_internal(discoveredRecords_.values());
+            }
+        }
     }
-}
-
-void MdnsClient::onMessageReveived(Message msg)
-{
-    MdnsRecord rec;
-    if (msg.isHomecloud) {
-        rec.host = msg.address.toString();
-        rec.port = msg.port;
-    }
-    records_.append(rec);
 }
 
 void MdnsClient::createSocket(const QHostAddress &addr)
@@ -331,6 +350,58 @@ void MdnsClient::createSocket(const QHostAddress &addr)
         connect(socket, &QUdpSocket::readyRead, this, &MdnsClient::onReadyRead);
         sockets.append(socket);
     }
+    else {
+        socket->deleteLater();
+    }
 }
 
-} // namespace CUR
+void MdnsClient::performScanCycle()
+{
+    bool changed = false;
+    auto now = QDateTime::currentDateTime();
+
+    // Check timeout and delete no answer more than 12 seconds
+    // 12 seconds ~> 2 query cycle (5+5)
+    auto it = lastSeen_.begin();
+    while (it != lastSeen_.end()) {
+        if (it.value().secsTo(now) > 12) {
+            discoveredRecords_.remove(it.key());
+            it = lastSeen_.erase(it);
+            changed = true;
+        } else {
+            ++it;
+        }
+    }
+
+    if (changed) {
+        emit resultsChanged_internal(discoveredRecords_.values());
+    }
+
+    // new request
+    QByteArray ba(reinterpret_cast<const char*>(request_data), sizeof(request_data));
+    for (auto socket : std::as_const(sockets)) {
+        socket->writeDatagram(ba, QHostAddress(QStringLiteral("224.0.0.251")), 5353);
+    }
+}
+
+void MdnsClient::setupSockets()
+{
+    const auto interfaces = QNetworkInterface::allInterfaces();
+    for (const auto& iface : interfaces) {
+        if (!iface.isValid() || !iface.flags().testFlag(QNetworkInterface::IsRunning))
+            continue;
+
+        for (const auto& entry : iface.addressEntries()) {
+            if (entry.ip().protocol() == QAbstractSocket::IPv4Protocol) {
+                auto socket = new QUdpSocket(this);
+                if (socket->bind(entry.ip(), 0, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint)) {
+                    connect(socket, &QUdpSocket::readyRead, this, &MdnsClient::onReadyRead);
+                    sockets.append(socket);
+                } else {
+                    socket->deleteLater();
+                }
+            }
+        }
+    }
+}
+

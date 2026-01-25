@@ -32,20 +32,11 @@ add_library(newwizard STATIC
     pages/connecterrorpage.cpp
     pages/connecterrorpage.h
     pages/connecterrorpage.ui
-
-    codedialog.cpp
-    codedialog.h
-    codedialog.ui
-    loginservices/mdnsclient.cpp
-    loginservices/mdnsclient.h
-    loginservices/remoteconnector.cpp
-    loginservices/remoteconnector.h
-    loginservices/devicelistmanager.cpp
-    loginservices/devicelistmanager.h
-    loginservices/loginservices_res.qrc
+    pages/pagecontext.h
+    pages/setuppagetype.h
 )
 
-target_link_libraries(newwizard PUBLIC Qt::Widgets libsync curatorResources)
+target_link_libraries(newwizard PUBLIC Qt::Widgets Qt::Concurrent libsync curatorResources)
 
 set_target_properties(newwizard PROPERTIES AUTOUIC ON AUTORCC ON)
 target_include_directories(newwizard PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")

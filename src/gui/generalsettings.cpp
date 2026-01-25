@@ -61,7 +61,7 @@ GeneralSettings::GeneralSettings(QWidget *parent)
 
     setObjectName(QStringLiteral("CUR_GeneralSettings"));
     StyleHelper::applyPushButtonStyle(this);
-    connect(Theme::instance(), &Theme::themeChanged, this, [&] {
+    connect(Theme::instance(), &Theme::themeChanged, this, [this] {
         onThemeChanged();
         update();
     });

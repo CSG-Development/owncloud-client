@@ -36,6 +36,7 @@
 #include "customui/stylehelper.h"
 #include "devwidget.h"
 #include "socketapi/socketapi.h"
+#include "device/devicedefines.h"
 
 #include "folderwizard/folderwizard.h"
 
@@ -255,7 +256,7 @@ void AccountSettings::createAccountToolbox()
     _developerWindow = new QAction(tr("Show device info"), this);
 
     if (CUR::ConfigFile::isDeviceEditorEnabled()) {
-        connect(_developerWindow, &QAction::triggered, this, [&] {
+        connect(_developerWindow, &QAction::triggered, this, [this] {
             if (devWidget) {
                 devWidget->setAccout(_accountState->account().data());
                 devWidget->show();
@@ -277,14 +278,14 @@ void AccountSettings::createAccountToolbox()
 
     ui->_accountToolbox->setText(tr("Account") + QLatin1Char(' '));
 
-    connect(_accountToolboxMenu, &QMenu::aboutToShow, this, [&] {
+    connect(_accountToolboxMenu, &QMenu::aboutToShow, this, [this] {
         ui->_accountToolbox->setArrowType(Qt::UpArrow);
     });
-    connect(_accountToolboxMenu, &QMenu::aboutToHide, this, [&] {
+    connect(_accountToolboxMenu, &QMenu::aboutToHide, this, [this] {
         ui->_accountToolbox->setArrowType(Qt::DownArrow);
     });
 
-    connect(ui->_accountToolbox, &QToolButton::clicked, this, [&] {
+    connect(ui->_accountToolbox, &QToolButton::clicked, this, [this] {
         auto pos = mapToGlobal(ui->_accountToolbox->frameGeometry().bottomLeft());
         pos.setY(pos.y() + 4);
         _accountToolboxMenu->exec(pos);
@@ -389,7 +390,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
                 });
             });
             menu->addAction(CommonStrings::showPhotosInWebBrowser(), [path, accUrl = info->_folder->accountState()->account()->url()] {
-                Utility::openBrowser(Device::makePhotosUrl(accUrl), nullptr);
+                Utility::openBrowser(DevHelpers::makePhotosUrl(accUrl), nullptr);
             });
 
             if (CUR::ConfigFile::shareFromUi()) {

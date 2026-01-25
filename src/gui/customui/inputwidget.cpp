@@ -120,14 +120,14 @@ bool InputWidget::eventFilter(QObject *watched, QEvent *event)
             ui->inputFrame->style()->unpolish(ui->inputFrame);
             ui->inputFrame->style()->polish(ui->inputFrame);
             update();
-            Q_EMIT focusReceived();
+            emit focusChanged(true);
         }
         else if (event->type() == QEvent::FocusOut) {
             ui->inputFrame->setProperty("focusedFrame", false);
             ui->inputFrame->style()->unpolish(ui->inputFrame);
             ui->inputFrame->style()->polish(ui->inputFrame);
             update();
-            Q_EMIT focusLost();
+            emit focusChanged(false);
         }
     }
     return QFrame::eventFilter(watched, event);

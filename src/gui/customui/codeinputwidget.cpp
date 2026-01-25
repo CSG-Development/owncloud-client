@@ -59,11 +59,6 @@ CodeInputWidget::~CodeInputWidget()
 
 QString CodeInputWidget::codeStr() const
 {
-    // QString s;
-    // for (int i = 0; i < ed_count; i++) {
-    //     s += edPtrs[i]->text().trimmed();
-    //     qDebug() << i << edPtrs[i]->text().trimmed();
-    // }
     QString s = code_;
 
     if (s.length() != ed_count)

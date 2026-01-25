@@ -1,29 +1,24 @@
 #include "setupcontroller.h"
 #include "gui/customui/stylehelper.h"
 #include "gui/folderman.h"
+#include "gui/application.h"
+#include "gui/curatorgui.h"
+#include "gui/settingsdialog.h"
 #include "determineauthtypejobfactory.h"
 #include "jobs/discoverwebfingerservicejobfactory.h"
 #include "jobs/resolveurljobfactory.h"
 
-#include "loginservices/remoteconnector.h"
-#include "loginservices/devicelistmanager.h"
+#include "device/devicecontroller.h"
+#include "gui/codedialog.h"
 
 #include "theme.h"
 #include "configfile.h"
-#include "networkjobs/evaluatepaths.h"
 
 #include <QClipboard>
 #include <QTimer>
 #include <QDir>
 
 using namespace std::chrono_literals;
-
-namespace {
-
-const QString defaultUrlSchemeC = QStringLiteral("https://");
-const QStringList supportedUrlSchemesC({ defaultUrlSchemeC, QStringLiteral("http://") });
-
-}
 
 namespace CUR::Wizard {
 
@@ -32,200 +27,95 @@ Q_LOGGING_CATEGORY(lcSetupWizardController, "gui.setupwizard.controller")
 SetupController::SetupController(SettingsDialog *parent)
     : QObject(parent)
     , _context(new SetupContext(parent, this))
-    , raConnector(new CUR::RemoteConnector(parent))
-    , deviceMgr(new CUR::DeviceListManager(parent))
-    , evaluator_(new CUR::EvaluatePath(parent))
+    , _deviceController(new DeviceController(parent))
 {
-    connect(_context->window(), &SetupWidget::rejected, this, [&] {
+    connect(_context->window(), &SetupWidget::rejected, this, [this] {
         qCDebug(lcSetupWizardController) << "wizard window closed";
         Q_EMIT finished(nullptr, SyncMode::Invalid, {});
     });
 
-    connect(_context->window(), &SetupWidget::loginEmailClicked, this, [&](const QString& user) {
-        qCDebug(lcSetupWizardController) << "Login email clicked";
-        user_ = user;
-        remoteSkipped = false;
-        window()->displayPage(SetupWidget::SetupPage::PageCredentials);
-        window()->showCredPageProgress(true);
-        raConnector->start_query(user_);
-    });
-
-    connect(raConnector, &RemoteConnector::code_requested, this, [&] {
-        qCDebug(lcSetupWizardController) << "Code requested";
-        window()->displayPage(SetupWidget::SetupPage::PageCredentials);
-        window()->codeRequested();
-    });
-    connect(raConnector, &RemoteConnector::token_success, this, [&] {
-        qCDebug(lcSetupWizardController) << "Token received success";
-        window()->codeAccepted();
-    });
-
-    connect(_context->window(), &SetupWidget::codeEntered, this, [&](const QString& code) {
-        qCDebug(lcSetupWizardController) << "Code entered";
-        raConnector->query_token(code);
-    });
-
-    connect(_context->window(), &SetupWidget::codeSkipped, this, [&] {
-        qCDebug(lcSetupWizardController) << "Code skipped";
-        remoteSkipped = true;
-        deviceMgr->query_local();
-    });
-    connect(_context->window(), &SetupWidget::codeResendClicked, this, [&] {
-        qCDebug(lcSetupWizardController) << "Code resend clicked";
-        raConnector->clearTokens();
-        raConnector->start_query(user_);
-    });
-
-    connect(raConnector, &RemoteConnector::fetch_devices_finished, this, [&] {
-        qCDebug(lcSetupWizardController) << "Device list query finished";
-        remoteDevices = raConnector->deviceList();
-        deviceMgr->query_remote(remoteDevices);
-    });
-
-    connect(raConnector, &RemoteConnector::error_occured, this, [&](RemoteRequest req, int error_code, const QString& message) {
-        qCWarning(lcSetupWizardController)
-            << "Error occured, code:" << error_code
-            << ", request:" << RemoteConnector::RemoteRequestToStr(req)
-            << ", message:" << message;
-        window()->errorOccured(req, error_code, message);
-    });
-
-    connect(deviceMgr, &DeviceListManager::local_finished, this, [&] {
-        qCDebug(lcSetupWizardController) << "Local devices discovery finished";
-        localDevices = deviceMgr->mdns_recs();
-
-        fullList = DeviceListManager::combine_lists(localDevices, remoteDevices);
-
-        window()->showCredPageProgress(false);
-
-        // Check development settings
-        ConfigFile cf;
-        const auto dev = cf.staticDevice();
-        if (!dev.second.isEmpty()) {
-            auto d = Device::MakeStatic(dev.second, dev.first);
-            fullList.append(d);
-        }
-
-        if (fullList.isEmpty()) {
-            window()->displayPage(SetupWidget::SetupPage::PageConnectError);
-        }
-        else {
-            window()->setDevicesList(fullList);
-        }
-    });
-
-    connect(deviceMgr, &DeviceListManager::ra_finished, this, [&] {
-        qCDebug(lcSetupWizardController) << "Remote devices discovery finished";
-        remoteDevices = deviceMgr->ra_recs();
-        deviceMgr->query_local();
-    });
-
-    connect(_context->window(), &SetupWidget::refreshDevicesClicked, this, [&] {
-        qCDebug(lcSetupWizardController) << "Refresh devices clicked";
-        if (remoteSkipped)
-            deviceMgr->query_local();
-        else
-            raConnector->start_query(user_);
-    });
-
-    connect(_context->window(), &SetupWidget::loginCredentialClicked, this, [&](const Device& dev, const QString& user, const QString& password) {
-        Q_UNUSED(user);
-        qCDebug(lcSetupWizardController) << "Login credential clicked";
-        password_ = password;
-        device_ = dev;
-        startLogin(user_, password_);
-    });
-
-    connect(_context->window(), &SetupWidget::credPageBackClicked, this, [&] {
-        qCDebug(lcSetupWizardController) << "Login credential back clicked";
-        window()->displayPage(SetupWidget::SetupPage::PageEmail);
-    });
+    connect(_context->window(), &SetupWidget::credentialsAction, this, &SetupController::onCredentialsAction);
+    connect(_context->window(), &SetupWidget::loginEmailClicked, this, &SetupController::onLoginEmailClicked);
+    connect(_context->window(), &SetupWidget::finishPageBackClicked, this, &SetupController::onFinishPageBackClicked);
+    connect(_context->window(), &SetupWidget::finishPageDoneClicked, this, &SetupController::onFinishPageDoneClicked);
+    connect(_context->window(), &SetupWidget::connectErrorPageBackClicked, this, &SetupController::onConnectErrorPageBackClicked);
+    connect(_context->window(), &SetupWidget::connectErrorPageRetryClicked, this, &SetupController::onConnectErrorPageRetryClicked);
 
     connect(this, &SetupController::setupFinishPageDefaults, _context->window(), &SetupWidget::onSetupFinishPageDefaults);
+    connect(this, &SetupController::invalidServerUrl, this, &SetupController::onInvalidServerUrl);
 
-    connect(_context->window(), &SetupWidget::finishPageBackClicked, this, [&] {
-        qCDebug(lcSetupWizardController) << "finishPage Back clicked";
-        window()->hideErrorMessage();
-        window()->displayPage(SetupWidget::SetupPage::PageCredentials);
-    });
+    connect(this, &SetupController::handleCredentialsEvaluation, this, &SetupController::onHandleCredentialsEvaluation);
+    connect(this, &SetupController::handleLoginResult, this, &SetupController::onHandleLoginResult);
+    connect(this, &SetupController::handleFinishResult, this, &SetupController::onHandleFinishResult);
 
-    connect(_context->window(), &SetupWidget::finishPageDoneClicked, this, [&](CUR::Wizard::SyncMode mode, const QString& targetDir) {
-        qCDebug(lcSetupWizardController) << "finishPage Done clicked";
-        evaluateFinishPage(mode, targetDir);
-    });
+    connect(this, &SetupController::evaluateCredentialsError, this, &SetupController::onEvaluateCredError);
 
-    connect(_context->window(), &SetupWidget::connectErrorPageBackClicked, this, [&] {
-        qCDebug(lcSetupWizardController) << "connectErrorPage Back clicked";
-        window()->displayPreviousPage();
-    });
+    connect(this, &SetupController::cantFindDevice, this, &SetupController::onCantFindDevice);
 
-    connect(_context->window(), &SetupWidget::connectErrorPageRetryClicked, this, [&] {
-        qCDebug(lcSetupWizardController) << "connectErrorPage Retry clicked";
-        window()->displayPage(SetupWidget::SetupPage::PageCredentials);
-        window()->showCredPageProgress(true);
-        if (remoteSkipped)
-            deviceMgr->query_local();
-        else
-            raConnector->start_query(user_);
-    });
+    connect(_deviceController, &DeviceController::devices_updated, this, &SetupController::onDevicesUpdated);
 
-    connect(this, &SetupController::credentialsEvaluationFailed, this, [&](const QString& msg) {
-        qCWarning(lcSetupWizardController) << "Credentials evaluation failed:" << msg;
-        window()->displayPage(SetupWidget::SetupPage::PageCredentials);
-        window()->setInvalidCredentialsError();
-        window()->showErrorMessage(msg);
-    });
-
-    connect(this, &SetupController::invalidServerUrl, this, [&] {
-        qCWarning(lcSetupWizardController) << "Invalid server URL";
-        window()->displayPage(SetupWidget::SetupPage::PageCredentials);
-        window()->setInvalidUrlError();
-    });
-
-    connect(this, &SetupController::credentialsEvaluationSuccessful, this, [&] {
-        qCWarning(lcSetupWizardController) << "Credentials evaluation successful";
-        performLogin();
-    });
-
-    connect(this, &SetupController::loginFailed, this, [&](const QString& msg) {
-        qCWarning(lcSetupWizardController) << "Login failed:" << msg;
-        window()->displayPage(SetupWidget::SetupPage::PageCredentials);
-        window()->setInvalidCredentialsError();
-        window()->showErrorMessage(msg);
-    });
-
-    connect(this, &SetupController::loginSuccessful, this, [&] {
-        qCWarning(lcSetupWizardController) << "Login successful";
-        window()->displayPage(SetupWidget::SetupPage::PageFinished);
-    });
-
-    connect(this, &SetupController::finishSuccessful, this, [&](SyncMode mode) {
-        qCWarning(lcSetupWizardController) << "Finish page successful";
-        auto account = _context->accountBuilder().build();
-        Q_ASSERT(account != nullptr);
-        Q_EMIT finished(account, mode, _context->accountBuilder().dynamicRegistrationData());
-    });
-
-    connect(this, &SetupController::finishFailed, this, [&](const QString& msg) {
-        qCWarning(lcSetupWizardController) << "Finish page failed:" << msg;
-        window()->displayPage(SetupWidget::SetupPage::PageFinished);
-        window()->showErrorMessage(msg);
-    });
-
-    connect(evaluator_, &CUR::EvaluatePath::evaluate_finished, this, [&]{
-
-        for (const auto& p: std::as_const(device_.paths)) {
-            qCDebug(lcSetupWizardController) << "evaluate_finished" << p;
-        }
+    connect(_deviceController, &DeviceController::prepareLoginFinished, this, [this](const Device& device) {
+        device_ = device;
 
         auto id = Device::getBestPathId(device_);
 
         if (id.has_value()) {
+            qCWarning(lcSetupWizardController) << "Device path found, login...";
             evaluateCredentialsNew(id.value());
         }
         else {
-            window()->displayPage(SetupWidget::SetupPage::PageCredentials);
-            window()->showErrorMessage(tr("Device has no URL defined"));
+            qCWarning(lcSetupWizardController) << "No device path found";
+            window()->displayPage(SetupPage::PageConnectError);
+            //window()->showErrorMessage(tr("Device has no URL defined"));
+        }
+    });
+
+    // Setup code dialog
+    ocApp()->gui()->settingsDialog()->attachCodeDialog(false);
+
+    connect(ocApp()->gui()->settingsDialog()->codeDlg(), &CodeDialog::codeAction, this, [this](CodeAction act, const QString& code) {
+        qCDebug(lcSetupWizardController) << "code action:" << CodeActionToStr(act);
+        switch (act) {
+        case CodeAction::Entered:
+            ocApp()->gui()->settingsDialog()->codeDlg()->setDialogState(CodeDialogState::Waiting);
+            _deviceController->enterAccessCode(code);
+            break;
+
+        case CodeAction::Resend:
+            ocApp()->gui()->settingsDialog()->codeDlg()->setDialogState(CodeDialogState::Waiting);
+            _deviceController->initAccessCode();
+            break;
+
+        case CodeAction::Skip:
+            ocApp()->gui()->settingsDialog()->showCodePage(false, false);
+            remoteSkipped = true;
+            window()->displayPage(SetupPage::PageCredentials);
+            window()->showCredPageProgress(false);
+            break;
+        }
+    });
+
+    connect(_deviceController, &DeviceController::accessCodeRequest, this, [] {
+        qCDebug(lcSetupWizardController) << "accessCodeRequest";
+        ocApp()->gui()->settingsDialog()->showCodePage(true, false);
+    });
+
+    connect(_deviceController, &DeviceController::accessCodeResult, this, [this](DeviceController::AccessCodeResult result, const QString& errorString, const QString& errorStacktrace) {
+        window()->displayPage(SetupPage::PageCredentials);
+        window()->showCredPageProgress(false);
+        if (result == DeviceController::AccessCodeResult::Accepted) {
+            qCDebug(lcSetupWizardController) << "accessCodeResult Accepted";
+            ocApp()->gui()->settingsDialog()->showCodePage(false, false);
+            remoteSkipped = false;
+        }
+        else {
+            qCDebug(lcSetupWizardController) << "accessCodeResult Error" << errorString << errorStacktrace;
+            if (ocApp()->gui()->settingsDialog()->codeDlg()->isVisible()) {
+                ocApp()->gui()->settingsDialog()->codeDlg()->setError(CodeDialogState::Resend, errorString, errorStacktrace);
+            }
+            else {
+                window()->setCredErrorMessage(errorString, errorStacktrace);
+            }
         }
     });
 
@@ -280,151 +170,194 @@ void SetupController::setupFinishPage()
     Q_EMIT setupFinishPageDefaults(defaultSyncTargetDir, syncTargetDir, vfsIsAvailable, enableVfsByDefault, vfsModeIsExperimental);
 }
 
-void SetupController::startLogin(const QString& user, const QString& password)
+void SetupController::onCredentialsAction(CredentialsAction action, std::optional<CredentialsContext> ctx)
 {
-    Q_UNUSED(user);
-    Q_UNUSED(password);
-    window()->displayPage(SetupWidget::SetupPage::PageWait);
+    qCDebug(lcSetupWizardController) << "action:" << CredentialsActionToStr(action);
 
-    evaluator_->start_evaluate(&device_);
+    switch (action) {
+    case CredentialsAction::CancelClicked:
+        // already processed in SetupWidget
+        break;
+
+    case CredentialsAction::LoginClicked:
+        {
+            window()->displayPage(SetupPage::PageWait);
+            if (ctx) {
+                password_ = ctx->password;
+                if (ctx->device) {
+                    device_ = ctx->device.value();
+                    _deviceController->prepareLogin(device_);
+                }
+            }
+        }
+        break;
+
+    case CredentialsAction::SettingsClicked:
+        break;
+
+    case CredentialsAction::ResetPasswordClicked:
+        break;
+
+    case CredentialsAction::RefreshDevicesClicked:
+        _deviceController->start_new_account();
+        break;
+
+    case CredentialsAction::BackButtonClicked:
+        window()->displayPage(SetupPage::PageEmail);
+        remoteSkipped = false;
+        break;
+
+    case CredentialsAction::CantFindDeviceClicked:
+        emit cantFindDevice(QPrivateSignal());
+        break;
+    }
 }
 
-void SetupController::evaluateCredentials(const Device& dev, const QString& url, const QString &login, const QString &password)
+void SetupController::onLoginEmailClicked(const QString& email)
 {
-    Q_UNUSED(login);
-    Q_UNUSED(password);
-    Q_UNUSED(dev);
+    qCDebug(lcSetupWizardController) << "Login email clicked";
+    email_ = email;
+    remoteSkipped = false;
 
-    const QUrl serverUrl = [url]() {
-        QString userProvidedUrl = url;
+    ConfigFile cf;
+    cf.setFavoriteEmail(email_);
 
-        // fix scheme if necessary
-        // using HTTPS as a default is a real ly good idea nowadays, users can still enter http:// explicitly if they wish to
-        if (!std::any_of(supportedUrlSchemesC.begin(), supportedUrlSchemesC.end(), [userProvidedUrl](const QString &scheme) {
-                return userProvidedUrl.startsWith(scheme);
-            })) {
-            qInfo(lcSetupWizardController) << "no URL scheme provided, prepending default URL scheme" << defaultUrlSchemeC;
-            userProvidedUrl.prepend(defaultUrlSchemeC);
-        }
+    window()->setEmail(email_);
+    window()->displayPage(SetupPage::PageCredentials);
+    window()->showCredPageProgress(true);
 
-        return QUrl::fromUserInput(userProvidedUrl);
-    }();
+    _deviceController->setEmail(email);
+    _deviceController->start_new_account();
+}
 
-    // (ab)use the account builder as temporary storage for the URL we are about to probe (after sanitation)
-    // in case of errors, the user can just edit the previous value
-    _context->accountBuilder().setServerUrl(serverUrl, DetermineAuthTypeJob::AuthType::Unknown);
-    qCDebug(lcSetupWizardController) << "ServerUrl" << serverUrl.toString();
-
-    // TODO: perform some better validation
-    if (!serverUrl.isValid()) {
-        Q_EMIT invalidServerUrl();
+void SetupController::onHandleCredentialsEvaluation(SetupResult result, const QString &msg)
+{
+    if (result == SetupResult::Success) {
+        qCWarning(lcSetupWizardController) << "Credentials evaluation successful";
+        performLogin();
         return;
     }
+    qCWarning(lcSetupWizardController) << "Credentials evaluation failed:" << msg;
+    window()->displayPage(SetupPage::PageCredentials);
+    window()->setInvalidCredentialsError();
+}
 
-    auto *messageBox = new QMessageBox(
-        QMessageBox::Warning,
-        tr("Insecure connection"),
-        tr("The connection to %1 is insecure.\nAre you sure you want to proceed?").arg(serverUrl.toString()),
-        QMessageBox::NoButton,
-        _context->window());
+void SetupController::onDevicesUpdated(bool raQueried)
+{
+    fullList = _deviceController->getDevices();
+    window()->setDevicesList(fullList);
+    window()->showCredPageProgress(false);
 
-    messageBox->setAttribute(Qt::WA_DeleteOnClose);
+    if (fullList.isEmpty()) {
+        qCDebug(lcSetupWizardController) << "Empty device list";
 
-    messageBox->addButton(QMessageBox::Cancel);
-    messageBox->addButton(tr("Confirm"), QMessageBox::YesRole);
-    StyleHelper::applyPushButtonStyle(messageBox);
-
-    connect(messageBox, &QMessageBox::rejected, this, [this]() {
-        Q_EMIT credentialsEvaluationFailed(tr("Insecure server rejected by user"));
-    });
-
-    connect(messageBox, &QMessageBox::accepted, this, [this, serverUrl]() {
-        // when moving back to this page (or retrying a failed credentials check), we need to make sure existing cookies
-        // and certificates are deleted from the access manager
-        _context->resetAccessManager();
-
-        // since classic WebFinger is not enabled, we need to check whether modern (oCIS) WebFinger is available
-        // therefore, we run the corresponding discovery job
-        auto checkWebFingerAuthJob = Jobs::DiscoverWebFingerServiceJobFactory(_context->accessManager()).startJob(serverUrl, this);
-
-        connect(checkWebFingerAuthJob, &CoreJob::finished, this, [job = checkWebFingerAuthJob, serverUrl, this]() {
-            // in case any kind of error occurs, we assume the WebFinger service is not available
-            if (!job->success()) {
-                // first, we must resolve the actual server URL
-                auto resolveJob = Jobs::ResolveUrlJobFactory(_context->accessManager()).startJob(serverUrl, this);
-
-                connect(resolveJob, &CoreJob::finished, resolveJob, [this, resolveJob]() {
-                    resolveJob->deleteLater();
-
-                    if (!resolveJob->success()) {
-                        Q_EMIT credentialsEvaluationFailed(resolveJob->errorMessage());
-                        return;
-                    }
-
-                    const auto resolvedUrl = resolveJob->result().toUrl();
-
-                    // classic WebFinger workflow: auth type determination is delegated to whatever server the WebFinger service points us to in a dedicated
-                    // step we can skip it here therefore
-                    if (Theme::instance()->wizardEnableWebfinger()) {
-                        _context->accountBuilder().setLegacyWebFingerServerUrl(resolvedUrl);
-                        Q_EMIT credentialsEvaluationSuccessful();
-                        return;
-                    }
-
-                           // next, we need to find out which kind of authentication page we have to present to the user
-                    auto authTypeJob = DetermineAuthTypeJobFactory(_context->accessManager()).startJob(resolvedUrl, this);
-
-                    connect(authTypeJob, &CoreJob::finished, authTypeJob, [this, authTypeJob, resolvedUrl]() {
-                        authTypeJob->deleteLater();
-
-                        if (authTypeJob->result().isNull()) {
-                            Q_EMIT credentialsEvaluationFailed(authTypeJob->errorMessage());
-                            return;
-                        }
-
-                        _context->accountBuilder().setServerUrl(resolvedUrl, qvariant_cast<DetermineAuthTypeJob::AuthType>(authTypeJob->result()));
-                        _context->accountBuilder().setDevice(device_);
-                        Q_EMIT credentialsEvaluationSuccessful();
-                    });
-                });
-
-                connect(
-                    resolveJob, &CoreJob::caCertificateAccepted, this,
-                    [this](const QSslCertificate &caCertificate) {
-                        // future requests made through this access manager should accept the certificate
-                        _context->accessManager()->addCustomTrustedCaCertificates({caCertificate});
-
-                               // the account maintains a list, too, which is also saved in the config file
-                        _context->accountBuilder().addCustomTrustedCaCertificate(caCertificate);
-                    },
-                    Qt::DirectConnection);
-            } else {
-                _context->accountBuilder().setWebFingerAuthenticationServerUrl(job->result().toUrl());
-                Q_EMIT credentialsEvaluationSuccessful();
-            }
-
-        });
-    });
-
-    // instead of defining a lambda that we could call from here as well as the message box, we can put the
-    // handler into the accepted() signal handler, and emit that signal here
-    if (serverUrl.scheme() == QStringLiteral("https")) {
-        Q_EMIT messageBox->accepted();
-    } else {
-        messageBox->show();
+        if (raQueried) {
+            qCDebug(lcSetupWizardController) << "RA was queried but returns empty device list";
+            window()->displayPage(SetupPage::PageConnectError);
+        }
+        else {
+            qCDebug(lcSetupWizardController) << "Empty device list and RA was not queried, exec Can't find device...";
+            emit cantFindDevice(QPrivateSignal());
+        }
     }
+    else {
+        window()->displayPage(SetupPage::PageCredentials);
+    }
+}
 
+void SetupController::onFinishPageBackClicked()
+{
+    qCDebug(lcSetupWizardController) << "finishPage Back clicked";
+    window()->hideErrorMessage();
+    window()->displayPage(SetupPage::PageCredentials);
+}
+
+void SetupController::onFinishPageDoneClicked(SyncMode mode, const QString &targetDir)
+{
+    qCDebug(lcSetupWizardController) << "finishPage Done clicked";
+    evaluateFinishPage(mode, targetDir);
+}
+
+void SetupController::onConnectErrorPageBackClicked()
+{
+    qCDebug(lcSetupWizardController) << "connectErrorPage Back clicked";
+    window()->hideErrorMessage();
+    window()->displayPage(SetupPage::PageCredentials);
+    window()->showCredPageProgress(false);
+}
+
+void SetupController::onConnectErrorPageRetryClicked()
+{
+    qCDebug(lcSetupWizardController) << "connectErrorPage Retry clicked";
+    window()->displayPage(SetupPage::PageCredentials);
+    window()->showCredPageProgress(true);
+    _deviceController->start_new_account();
+}
+
+void SetupController::onInvalidServerUrl()
+{
+    qCWarning(lcSetupWizardController) << "Invalid server URL";
+    window()->displayPage(SetupPage::PageCredentials);
+    window()->setInvalidUrlError();
+}
+
+void SetupController::onHandleLoginResult(SetupResult result, const QString &msg)
+{
+    if (result == SetupResult::Success) {
+        qCWarning(lcSetupWizardController) << "Login successful";
+        window()->displayPage(SetupPage::PageFinished);
+        return;
+    }
+    qCWarning(lcSetupWizardController) << "Login failed:" << msg;
+    window()->displayPage(SetupPage::PageCredentials);
+    window()->setInvalidCredentialsError();
+    window()->showErrorMessage(msg);
+}
+
+void SetupController::onHandleFinishResult(SetupResult result, const QString &msg, SyncMode mode)
+{
+    if (result == SetupResult::Success) {
+        qCWarning(lcSetupWizardController) << "Finish page successful";
+        auto account = _context->accountBuilder().build();
+        Q_ASSERT(account != nullptr);
+        emit finished(account, mode, _context->accountBuilder().dynamicRegistrationData());
+        return;
+    }
+    qCWarning(lcSetupWizardController) << "Finish page failed:" << msg;
+    window()->displayPage(SetupPage::PageFinished);
+    window()->showErrorMessage(msg);
+}
+
+void SetupController::onCantFindDevice()
+{
+    window()->hideErrorMessage();
+    window()->showCredPageProgress(true);
+    _deviceController->force_ra_account();
 }
 
 void SetupController::evaluateCredentialsNew(const QUuid& id)
 {
+    qCDebug(lcSetupWizardController) << "evaluateCredentialsNew";
     auto dev_path = device_.findPath(id);
     if (!dev_path) {
         Q_EMIT invalidServerUrl();
         return;
     }
 
-    QUrl serverUrl = QUrl(Device::makeServerUrl(dev_path->address, dev_path->port, true, dev_path->origin != DevicePathOrigin::MDNS));
+    if (dev_path->about.os_state != QStringLiteral("normal")) {
+        QString stateStr = tr("OS state: %1").arg(dev_path->about.os_state.isEmpty() ? tr("<empty>") : dev_path->about.os_state);
+        qCDebug(lcSetupWizardController) << stateStr;
+        Q_EMIT evaluateCredentialsError(stateStr, QPrivateSignal());
+        return;
+    }
+
+    if (!dev_path->status.oobe_done) {
+        qCDebug(lcSetupWizardController) << "OOBE done" << dev_path->status.oobe_done;
+        Q_EMIT evaluateCredentialsError(tr("OOBE is not done"), QPrivateSignal());
+        return;
+    }
+
+    QUrl serverUrl = QUrl(DevHelpers::makeServerUrl(dev_path->address, dev_path->port, true, dev_path->origin != DeviceOrigin::MDNS));
 
     _context->accountBuilder().setServerUrl(serverUrl, DetermineAuthTypeJob::AuthType::Unknown);
     qCDebug(lcSetupWizardController) << "ServerUrl" << serverUrl.toString();
@@ -444,7 +377,7 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
         resolveJob->deleteLater();
 
         if (!resolveJob->success()) {
-            Q_EMIT credentialsEvaluationFailed(resolveJob->errorMessage());
+            Q_EMIT handleCredentialsEvaluation(SetupResult::Fail, resolveJob->errorMessage());
             return;
         }
 
@@ -457,14 +390,14 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
             authTypeJob->deleteLater();
 
             if (authTypeJob->result().isNull()) {
-                Q_EMIT credentialsEvaluationFailed(authTypeJob->errorMessage());
+                Q_EMIT handleCredentialsEvaluation(SetupResult::Fail, authTypeJob->errorMessage());
                 return;
             }
 
             _context->accountBuilder().setServerUrl(resolvedUrl, qvariant_cast<DetermineAuthTypeJob::AuthType>(authTypeJob->result()));
             _context->accountBuilder().setDevice(device_);
             device_.setActicvePath(dev_id);
-            Q_EMIT credentialsEvaluationSuccessful();
+            Q_EMIT handleCredentialsEvaluation(SetupResult::Success);
         });
     });
 
@@ -477,12 +410,18 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
     }, Qt::DirectConnection);
 }
 
+void SetupController::onEvaluateCredError(const QString &errStr)
+{
+    window()->displayPage(SetupPage::PageCredentials);
+    window()->setCredErrorMessage(errStr);
+}
+
 void SetupController::performLogin()
 {
-    _context->accountBuilder().setAuthenticationStrategy(new HttpBasicAuthenticationStrategy(user_, password_));
+    _context->accountBuilder().setAuthenticationStrategy(new HttpBasicAuthenticationStrategy(email_, password_));
 
     if (!_context->accountBuilder().hasValidCredentials()) {
-        Q_EMIT loginFailed(tr("Invalid credentials"));
+        Q_EMIT handleLoginResult(SetupResult::Fail, tr("Invalid credentials"));
     }
 
     // not a fan of performing this job here, should be moved into its own (headless) state IMO
@@ -494,11 +433,13 @@ void SetupController::performLogin()
             auto result = fetchUserInfoJob->result().value<FetchUserInfoResult>();
             _context->accountBuilder().setDisplayName(result.displayName());
             _context->accountBuilder().authenticationStrategy()->setDavUser(result.userName());
-            Q_EMIT loginSuccessful();
-        } else if (fetchUserInfoJob->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 401) {
-            Q_EMIT credentialsEvaluationFailed(tr("Invalid credentials"));
-        } else {
-            Q_EMIT credentialsEvaluationFailed(tr("Failed to retrieve user information from server"));
+            Q_EMIT handleLoginResult(SetupResult::Success);
+        }
+        else if (fetchUserInfoJob->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 401) {
+            Q_EMIT handleCredentialsEvaluation(SetupResult::Fail, tr("Invalid credentials"));
+        }
+        else {
+            Q_EMIT handleCredentialsEvaluation(SetupResult::Fail, tr("Failed to retrieve user information from server"));
         }
     });
 
@@ -515,18 +456,18 @@ void SetupController::evaluateFinishPage(SyncMode mode, const QString &targetDir
         const QString errorMessageTemplate = tr("Invalid local download directory: %1");
 
         if (!QDir::isAbsolutePath(syncTargetDir)) {
-            Q_EMIT finishFailed(errorMessageTemplate.arg(QStringLiteral("path must be absolute")));
+            Q_EMIT handleFinishResult(SetupResult::Fail, errorMessageTemplate.arg(QStringLiteral("path must be absolute")));
             return;
         }
 
         QString invalidPathErrorMessage = FolderMan::checkPathValidityRecursive(syncTargetDir);
         if (!invalidPathErrorMessage.isEmpty()) {
-            Q_EMIT finishFailed(errorMessageTemplate.arg(invalidPathErrorMessage));
+            Q_EMIT handleFinishResult(SetupResult::Fail, errorMessageTemplate.arg(invalidPathErrorMessage));
             return;
         }
     }
 
-    Q_EMIT finishSuccessful(mode);
+    Q_EMIT handleFinishResult(SetupResult::Success, {}, mode);
 }
 
 SetupController::~SetupController() noexcept

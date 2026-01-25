@@ -1,5 +1,4 @@
 #include "devicetypes.h"
-#include "configfile.h"
 
 #include <QMap>
 #include <QJsonDocument>
@@ -9,36 +8,10 @@
 
 namespace {
 const auto certificate_common_name_C = QStringLiteral("certificate_common_name");
-const auto date_C = QStringLiteral("date");
-const auto default_mac_addr_C = QStringLiteral("default_mac_addr");
-const auto hostname_C = QStringLiteral("hostname");
-const auto install_id_C = QStringLiteral("install_id");
-const auto model_name_C = QStringLiteral("model_name");
-const auto model_number_C = QStringLiteral("model_number");
-const auto os_state_C = QStringLiteral("os_state");
-const auto product_id_C = QStringLiteral("product_id");
-const auto serial_number_C = QStringLiteral("serial_number");
-const auto version_C = QStringLiteral("version");
-const auto hardware_info_C = QStringLiteral("hardware_info");
-const auto memory_C = QStringLiteral("memory");
-const auto processor_count_C = QStringLiteral("processor_count");
-const auto processor_type_C = QStringLiteral("processor_type");
-const auto network_interfaces_C = QStringLiteral("network_interfaces");
-const auto link_C = QStringLiteral("link");
-const auto mac_address_C = QStringLiteral("mac_address");
 const auto name_C = QStringLiteral("name");
 const auto type_C = QStringLiteral("type");
-const auto ipv4_info_C = QStringLiteral("ipv4_info");
-const auto ipv4_C = QStringLiteral("ipv4");
-const auto gateway_C = QStringLiteral("gateway");
-const auto netmask_C = QStringLiteral("netmask");
+const auto hostname_C = QStringLiteral("hostname");
 
-const auto oobe_C = QStringLiteral("OOBE");
-const auto oobe_done_C = QStringLiteral("done");
-const auto apps_C = QStringLiteral("apps");
-const auto apps_files_C = QStringLiteral("files");
-const auto apps_photos_C = QStringLiteral("photos");
-const auto state_C = QStringLiteral("state");
 const auto address_C = QStringLiteral("address");
 const auto deviceType_C = QStringLiteral("device_type");
 const auto deviceOrigin_C = QStringLiteral("device_origin");
@@ -51,7 +24,12 @@ const auto paths_C = QStringLiteral("paths");
 
 Q_LOGGING_CATEGORY(lcDevice, "device", QtInfoMsg)
 
-DevicePath::DevicePath(const QString &addr, DeviceType devType, DevicePathOrigin org, int pport)
+DevicePath::DevicePath()
+{
+    id = QUuid::createUuid();
+}
+
+DevicePath::DevicePath(const QString &addr, DeviceType devType, DeviceOrigin org, int pport)
     : address(addr)
     , deviceType(devType)
     , origin(org)
@@ -60,64 +38,12 @@ DevicePath::DevicePath(const QString &addr, DeviceType devType, DevicePathOrigin
     id = QUuid::createUuid();
 }
 
-DeviceType DevicePath::strToDevType(const QString &str)
-{
-    QMap<QString, DeviceType> map = {
-        {QStringLiteral("local"), DeviceType::Local},
-        {QStringLiteral("public"), DeviceType::Public},
-        {QStringLiteral("remote"), DeviceType::Remote}
-    };
-
-    if (map.contains(str))
-        return map[str];
-    return DeviceType::Unknown;
-}
-
-QString DevicePath::devTypeToStr(DeviceType val)
-{
-    QMap<DeviceType,QString> map = {
-        {DeviceType::Unknown, QStringLiteral("unknown")},
-        {DeviceType::Local, QStringLiteral("local")},
-        {DeviceType::Public, QStringLiteral("public")},
-        {DeviceType::Remote, QStringLiteral("remote")}
-    };
-    if (map.contains(val))
-        return map[val];
-    return {};
-}
-
-DevicePathOrigin DevicePath::strToDevOrigin(const QString& str)
-{
-    QMap<QString, DevicePathOrigin> map = {
-        {QStringLiteral("remote"), DevicePathOrigin::Remote},
-        {QStringLiteral("mdns"), DevicePathOrigin::MDNS},
-        {QStringLiteral("static"), DevicePathOrigin::Static},
-        {QStringLiteral("unknown"), DevicePathOrigin::Unknown},
-    };
-    if (map.contains(str))
-        return map[str];
-    return DevicePathOrigin::Unknown;
-}
-
-QString DevicePath::originToStr(DevicePathOrigin val)
-{
-    QMap<DevicePathOrigin,QString> map = {
-        {DevicePathOrigin::Unknown, QStringLiteral("unknown")},
-        {DevicePathOrigin::MDNS, QStringLiteral("mdns")},
-        {DevicePathOrigin::Remote, QStringLiteral("remote")},
-        {DevicePathOrigin::Static, QStringLiteral("static")}
-    };
-    if (map.contains(val))
-        return map[val];
-    return {};
-}
-
 QJsonObject DevicePath::toJson() const
 {
     QJsonObject result;
     result[address_C] = address;
-    result[deviceType_C] = devTypeToStr(deviceType);
-    result[deviceOrigin_C] = originToStr(origin);
+    result[deviceType_C] = DevHelpers::devTypeToStr(deviceType);
+    result[deviceOrigin_C] = DevHelpers::originToStr(origin);
     result[port_C] = port;
     return result;
 }
@@ -126,10 +52,21 @@ DevicePath DevicePath::fromJson(const QJsonObject& val)
 {
     DevicePath dp(
         val[address_C].toString(),
-        strToDevType(val[deviceType_C].toString()),
-        strToDevOrigin(val[deviceOrigin_C].toString()),
+        DevHelpers::strToDevType(val[deviceType_C].toString()),
+        DevHelpers::strToDevOrigin(val[deviceOrigin_C].toString()),
         val[port_C].toInt());
     return dp;
+}
+
+int DevicePath::pathPriority(DeviceType devType)
+{
+    switch (devType) {
+    case DeviceType::Local: return 1000;
+    case DeviceType::Public: return 100;
+    case DeviceType::Remote: return 10;
+    case DeviceType::Unknown: return 0;
+    }
+    return 0;
 }
 
 QString DevicePath::toString() const
@@ -138,147 +75,15 @@ QString DevicePath::toString() const
     l << QStringLiteral("DevicePath{");
     l << QStringLiteral("address:%1,").arg(address);
     l << QStringLiteral("port:%1,").arg(port);
-    l << QStringLiteral("deviceType:%1,").arg(devTypeToStr(deviceType));
-    l << QStringLiteral("origin:%1,").arg(originToStr(origin));
+    l << QStringLiteral("deviceType:%1,").arg(DevHelpers::devTypeToStr(deviceType));
+    l << QStringLiteral("origin:%1,").arg(DevHelpers::originToStr(origin));
     l << QStringLiteral("online:%1,").arg(isOnline);
     l << QStringLiteral("active:%1,").arg(isActive);
-    l << QStringLiteral("id:%1").arg(id.toString());
+    l << QStringLiteral("id:%1,").arg(id.toString());
+    l << QStringLiteral("%1,").arg(about.toString());
+    l << status.toString();
     l << QStringLiteral("}");
     return l.join(QStringLiteral(""));
-}
-
-DeviceInfoAbout DeviceInfoAbout::fromJson(const QJsonDocument &doc)
-{
-    DeviceInfoAbout di;
-    di.certificate_common_name = doc[certificate_common_name_C].toString();
-    di.date = QDateTime::fromString(doc[date_C].toString(), Qt::ISODateWithMs);
-    di.default_mac_addr = doc[default_mac_addr_C].toString();
-    di.hostname = doc[hostname_C].toString();
-    di.install_id = doc[install_id_C].toString();
-    di.model_name = doc[model_name_C].toString();
-    di.model_number = doc[model_number_C].toString();
-    di.os_state = doc[os_state_C].toString();
-    di.product_id = doc[product_id_C].toString();
-    di.serial_number = doc[serial_number_C].toString();
-    di.version = doc[version_C].toString();
-
-    const auto& obj = doc[hardware_info_C].toObject();
-    di.hardware_info.memory = obj[memory_C].toInteger(0);
-    di.hardware_info.processor_count = obj[processor_count_C].toInteger(0);
-    di.hardware_info.processor_type = obj[processor_type_C].toString();
-
-    const auto& interfaces = doc[network_interfaces_C].toArray();
-    for (auto item: interfaces) {
-        LocalDeviceInterface iface;
-        auto element = item.toObject();
-        iface.link = element[link_C].toString();
-        iface.mac_address = element[mac_address_C].toString();
-        iface.name = element[name_C].toString();
-        iface.type = element[type_C].toString();
-
-        const auto& ipinfo = element[ipv4_info_C].toObject();
-
-        iface.ipv4_info.ipv4 = ipinfo[ipv4_C].toString();
-        iface.ipv4_info.gateway = ipinfo[gateway_C].toString();
-        iface.ipv4_info.netmask = ipinfo[netmask_C].toString();
-
-        di.network_interfaces.append(iface);
-    }
-    return di;
-}
-
-QString DeviceInfoAbout::toString() const
-{
-    QStringList l;
-    l << QStringLiteral("DeviceInfoAbout{");
-    l << QStringLiteral("cert_common_name:%1,").arg(certificate_common_name);
-    l << QStringLiteral("date:%1,").arg(date.toString(QStringLiteral("yyyy-MM-dd hh:mm")));
-    l << QStringLiteral("default_mac_addr:%1,").arg(default_mac_addr);
-    l << QStringLiteral("hostname:%1,").arg(hostname);
-    l << QStringLiteral("install_id:%1,").arg(install_id);
-    l << QStringLiteral("model_name:%1,").arg(model_name);
-    l << QStringLiteral("model_number:%1,").arg(model_number);
-    l << QStringLiteral("os_state:%1,").arg(os_state);
-    l << QStringLiteral("product_id:%1,").arg(product_id);
-    l << QStringLiteral("serial_number:%1,").arg(serial_number);
-    l << QStringLiteral("version:%1").arg(version);
-    l << QStringLiteral("}");
-    return l.join(QStringLiteral(""));
-}
-
-DeviceInfoStatus DeviceInfoStatus::fromJson(const QJsonDocument &doc)
-{
-    DeviceInfoStatus ds;
-    const auto& oobe = doc[oobe_C].toObject();
-    ds.oobe_done = oobe[oobe_done_C].toBool();
-
-    const auto& apps = doc[apps_C].toObject();
-    ds.app_files = apps[apps_files_C].toString();
-    ds.app_photos = apps[apps_photos_C].toString();
-
-    ds.state = doc[state_C].toString();
-    return ds;
-}
-
-QString DeviceInfoStatus::toString() const
-{
-    return QStringLiteral("DeviceInfoStatus{oobe:%1,state:%2}").arg(oobe_done).arg(state);
-}
-
-QString Device::makeServerUrl(const QString &url, int port, bool add_folder, bool add_port)
-{
-    QString result;
-
-    bool apiOnlyPort = CUR::ConfigFile::useLocalPortForApiOnly();
-
-    if (!url.startsWith(QStringLiteral("http://")) && !url.startsWith(QStringLiteral("https://"))) {
-        result = QStringLiteral("https://");
-    }
-
-    if (add_folder) {
-        if (url.endsWith(QStringLiteral("files")) || url.endsWith(QStringLiteral("files/"))) {
-            result += url;
-            if (!result.endsWith(QStringLiteral("/")))
-                result += QStringLiteral("/");
-        }
-        else {
-            result += url;
-            if (result.endsWith(QStringLiteral("/")))
-                result += QStringLiteral("files/");
-            else
-                result += QStringLiteral("/files/");
-        }
-    }
-    else {
-        result += url;
-        if (!result.endsWith(QStringLiteral("/")))
-            result += QStringLiteral("/");
-    }
-
-    QUrl tmpurl(result);
-    if (port > 0) {
-        if (apiOnlyPort) {
-            if (add_port)
-                tmpurl.setPort(port);
-        }
-        else {
-            tmpurl.setPort(port);
-        }
-    }
-
-    //qCInfo(lcDevice) << "Make URL" << url << ":" << port << "--->" << tmpurl.toString();
-
-    return tmpurl.toString();
-}
-
-QUrl Device::makePhotosUrl(const QUrl &other)
-{
-    QUrl url;
-    url.setUrl(other.url());
-    url.setScheme(QStringLiteral("https"));
-    url.setPort(other.port());
-    url.setPath(QStringLiteral("/photos"));
-    return url;
 }
 
 std::optional<DevicePath> Device::findPath(const QUuid &id) const
@@ -325,16 +130,18 @@ std::optional<QUuid> Device::getBestPathId(const Device &dev)
         return std::nullopt;
     }
 
+    // Only one path exist
     if (dev.paths.size() == 1)
         return dev.paths.first().id;
 
     QList<DevicePath> paths;
     for (const auto& p: dev.paths) {
-        if (p.deviceType != DeviceType::Unknown && p.isOnline) {
+        if (p.deviceType != DeviceType::Unknown && p.status.oobe_done) {
             paths.append(p);
         }
     }
 
+    // No online paths found
     if (paths.isEmpty())
         return dev.paths.first().id;
 
@@ -342,7 +149,7 @@ std::optional<QUuid> Device::getBestPathId(const Device &dev)
         return paths.first().id;
 
     std::stable_sort(paths.begin(), paths.end(), [&](const DevicePath& a, const DevicePath& b) {
-        return a.deviceType < b.deviceType;
+        return DevicePath::pathPriority(a.deviceType) > DevicePath::pathPriority(b.deviceType);
     });
 
     return paths.first().id;
@@ -377,6 +184,7 @@ QString Device::toString() const
     l << QStringLiteral("certificateCommonName:%1,").arg(certificateCommonName);
     l << QStringLiteral("friendlyName:%1,").arg(friendlyName());
     l << QStringLiteral("hostname:%1,").arg(hostname);
+    l << QStringLiteral("origin:%1,").arg(DevHelpers::originToStr(origin));
     l << QStringLiteral("isStatic:%1,").arg(isStatic);
     for (const auto& p: paths) {
         l << p.toString();
@@ -395,7 +203,8 @@ Device Device::MakeStatic(const QString &url, const QString &name)
     Device dev;
     dev.certificateCommonName = name;
     dev.isStatic = true;
-    DevicePath dp(url, DeviceType::Public, DevicePathOrigin::Static, 0);
+    dev.origin = DeviceOrigin::Static;
+    DevicePath dp(url, DeviceType::Public, DeviceOrigin::Static, 0);
     dev.paths.append(dp);
     return dev;
 }
@@ -492,29 +301,6 @@ void Device::clearOnlinePaths()
         p.isOnline = false;
 }
 
-void DeviceInfo::assignIds(QList<DeviceInfo> &list)
-{
-    int id = 0;
-    for (auto& item: list) {
-        item.tempId = id;
-        id++;
-    }
-}
-
-QString DeviceInfo::toString() const
-{
-    QStringList l;
-    l << QStringLiteral("DeviceInfo{");
-    l << QStringLiteral("cert name:%1,").arg(certName);
-    l << QStringLiteral("friendly name:%1,").arg(friendlyName);
-    l << QStringLiteral("host:%1,").arg(host);
-    l << QStringLiteral("port:%1,").arg(port);
-    l << QStringLiteral("deviceType:%1,").arg(DevicePath::devTypeToStr(deviceType));
-    l << QStringLiteral("status:%1").arg(status.toString());
-    l << QStringLiteral("}");
-    return l.join(QStringLiteral(""));
-}
-
 QString DeviceHardwareInfo::toString() const
 {
     QStringList l;
@@ -526,13 +312,3 @@ QString DeviceHardwareInfo::toString() const
     return l.join(QStringLiteral(""));
 }
 
-QString MdnsRecord::toString() const
-{
-    QStringList l;
-    l << QStringLiteral("MdnsRecord{");
-    l << QStringLiteral("name:%1,").arg(name);
-    l << QStringLiteral("host:%1,").arg(host);
-    l << QStringLiteral("port:%1,").arg(port);
-    l << QStringLiteral("}");
-    return l.join(QStringLiteral(""));
-}
