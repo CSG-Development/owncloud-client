@@ -92,6 +92,7 @@ EmailPage::EmailPage(QWidget *parent)
 
     updateTheme();
     syncUI();
+    ui->btnSettings->setVisible(false);
 }
 
 EmailPage::~EmailPage()
