@@ -51,7 +51,7 @@ ComboWidget::ComboWidget(QWidget *parent)
     popup->setVisible(false);
     popup->setAnchorWidget(ui->inputFrame);
 
-    connect(popup, &PopupComboWidget::clickedOutside, this, [&] {
+    connect(popup, &PopupComboWidget::clickedOutside, this, [this] {
         popup->hide();
         updateButtonIcon();
         //blockMouseTimer.start(QApplication::doubleClickInterval());
@@ -79,7 +79,7 @@ ComboWidget::ComboWidget(QWidget *parent)
     ui->lineEdit->setReadOnly(true);
 
     // Disable selections
-    connect(ui->lineEdit, &QLineEdit::selectionChanged, this, [&] {
+    connect(ui->lineEdit, &QLineEdit::selectionChanged, this, [this] {
         ui->lineEdit->setSelection(0, 0);
     });
 
@@ -116,10 +116,16 @@ void ComboWidget::setItems(const QList<Device> &list)
 {
     QList<Device> tmpitems(list);
     qSwap(tmpitems, deviceList);
+
     popup->setItems(deviceList);
 
-    if (!list.isEmpty() && text().isEmpty()) {
-        selectedDevice = list.first();
+    // List is empty, but some device already selected - clear device selection
+    if (deviceList.isEmpty() && !text().isEmpty()) {
+        selectedDevice = std::nullopt;
+        setText(QStringLiteral(""));
+    }
+    else if (!deviceList.isEmpty() && text().isEmpty()) {
+        selectedDevice = deviceList.first();
         if (selectedDevice->friendlyName().isEmpty())
             setText(selectedDevice->certificateCommonName);
         else

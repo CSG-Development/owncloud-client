@@ -26,6 +26,7 @@
 #include "openfilemanager.h"
 #include "protocolwidget.h"
 #include "syncfileitem.h"
+#include "device/devicetypes.h"
 
 #include "models/expandingheaderview.h"
 #include "gui/customui/stylehelper.h"
@@ -140,7 +141,7 @@ void ProtocolWidget::showContextMenu(QWidget *parent, ProtocolItemModel *model, 
                 });
                 if (menu) {
                     menu->addAction(CommonStrings::showPhotosInWebBrowser(), parent, [url = data.folder()->accountState()->account()->url(), parent] {
-                        Utility::openBrowser(Device::makePhotosUrl(url), parent);
+                        Utility::openBrowser(DevHelpers::makePhotosUrl(url), parent);
                     });
                 }
             }

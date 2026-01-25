@@ -48,8 +48,7 @@ Q_SIGNALS:
     void textChanged(const QString &);
     void textEdited(const QString &);
     void editingFinished();
-    void focusReceived();
-    void focusLost();
+    void focusChanged(bool focused);
 
     void buttonClicked();
 

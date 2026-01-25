@@ -27,6 +27,7 @@ class QAction;
 class QActionGroup;
 class QToolBar;
 class QStandardItemModel;
+class CodeDialog;
 
 namespace CUR {
 
@@ -61,6 +62,9 @@ public:
     AccountSettings *accountSettings(Account *account);
 
     QWidget* currentPage();
+    CodeDialog* codeDlg() const {return _codeDialog;}
+    // connect (or disconnect) code dialog from this (to work locally in the new account wizard)
+    void attachCodeDialog(bool attach);
 
 public slots:
     void showFirstPage();
@@ -69,6 +73,8 @@ public slots:
     void slotSwitchPage(QAction *action);
     void slotAccountAvatarChanged();
     void slotAccountDisplayNameChanged();
+
+    void showCodePage(bool show, bool startSync);
 
 protected:
     void changeEvent(QEvent *) override;
@@ -100,6 +106,7 @@ private:
     QList<QAction *> _accountActions;
     CuratorGui *_gui = nullptr;
     QList<Account *> _modalStack;
+    CodeDialog* _codeDialog = nullptr;
 };
 
 }

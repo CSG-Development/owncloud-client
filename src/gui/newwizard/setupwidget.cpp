@@ -6,14 +6,15 @@
 #include "gui/curatorgui.h"
 #include "gui/settingsdialog.h"
 #include "gui/customui/stylehelper.h"
-#include "gui/newwizard/loginservices/remoteconnector.h"
 #include "pages/emailpage.h"
 #include "pages/credentialspage.h"
 #include "pages/waitpage.h"
 #include "pages/finishedpage.h"
 #include "pages/connecterrorpage.h"
+#include "pages/pagecontext.h"
 #include "theme.h"
 #include "setupcontext.h"
+#include "configfile.h"
 
 #include <QLabel>
 #include <QMessageBox>
@@ -36,6 +37,8 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     : QWidget(parent)
     , _ui(new ::Ui::SetupWidget)
 {
+    qRegisterMetaType<PageContext>();
+
     setWindowFlag(Qt::WindowCloseButtonHint, false);
     setObjectName(QStringLiteral("SetupWidget"));
 
@@ -49,15 +52,7 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     credPage_ = new CredentialsPage(this);
     _ui->contentWidget->addWidget(credPage_);
 
-    connect(credPage_, &CredentialsPage::cancelClicked, this, &SetupWidget::onCancelClicked);
-    connect(credPage_, &CredentialsPage::loginClicked, this, &SetupWidget::loginCredentialClicked);
-    connect(credPage_, &CredentialsPage::settingsClicked, this, &SetupWidget::loginSettingsClicked);
-    connect(credPage_, &CredentialsPage::resetPasswordClicked, this, &SetupWidget::loginResetPasswordClicked);
-    connect(credPage_, &CredentialsPage::refreshDevicesClicked, this, &SetupWidget::refreshDevicesClicked);
-    connect(credPage_, &CredentialsPage::backButtonClicked, this, &SetupWidget::credPageBackClicked);
-    connect(credPage_, &CredentialsPage::codeEntered, this, &SetupWidget::codeEntered);
-    connect(credPage_, &CredentialsPage::codeSkipped, this, &SetupWidget::codeSkipped);
-    connect(credPage_, &CredentialsPage::codeResend, this, &SetupWidget::codeResendClicked);
+    connect(credPage_, &CredentialsPage::actionTriggered, this, &SetupWidget::onCredentialsAction);
 
     waitPage_ = new WaitPage(this);
     _ui->contentWidget->addWidget(waitPage_);
@@ -78,104 +73,42 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     hideErrorMessage();
 
     onThemeChanged();
+
+    ConfigFile cf;
+    emailPage_->setEmail(cf.favoriteEmail());
     displayPage(SetupPage::PageEmail);
 }
 
-void SetupWidget::displayPage(SetupPage page)
+void SetupWidget::displayPage(SetupPage page, std::optional<GuiContext> ctx)
 {
-    previousPage = currentPage;
-
-    switch (page) {
-    case SetupPage::PageNone:
-        break;
-
-    case SetupPage::PageEmail:
-        if (emailPage_) {
-            _ui->contentWidget->setCurrentWidget(emailPage_);
-            if (previousPage == SetupPage::PageCredentials)
-                credPage_->showErrorMessage({});
-        }
-        break;
-
-    case SetupPage::PageCredentials:
-        if (credPage_)
-            _ui->contentWidget->setCurrentWidget(credPage_);
-        break;
-
-    case SetupPage::PageWait:
-        if (waitPage_)
-            _ui->contentWidget->setCurrentWidget(waitPage_);
-        break;
-
-    case SetupPage::PageFinished:
-        if (finishPage_)
-            _ui->contentWidget->setCurrentWidget(finishPage_);
-        break;
-
-    case SetupPage::PageConnectError:
-        if (connectErrorPage_)
-            _ui->contentWidget->setCurrentWidget(connectErrorPage_);
-        break;
-    }
-
-    currentPage = page;
-    CuratorGui::raise();
+    guiContext = ctx;
+    transitionTo(page);
 }
 
 void SetupWidget::displayPreviousPage()
 {
-    displayPage(previousPage);
+    transitionTo(previousPage);
 }
 
 void SetupWidget::showErrorMessage(const QString &errorMessage)
 {
-    if (_ui->contentWidget->currentWidget() == emailPage_)
-        emailPage_->showErrorMessage(errorMessage);
-    if (_ui->contentWidget->currentWidget() == credPage_)
-        credPage_->showErrorMessage(errorMessage);
-    else if (_ui->contentWidget->currentWidget() == finishPage_)
-        finishPage_->showErrorMessage(errorMessage);
+    _ui->contentWidget->currentWidget()->setProperty("errorMessage", errorMessage);
 }
 
 void SetupWidget::hideErrorMessage()
 {
-    if (_ui->contentWidget->currentWidget() == emailPage_)
-        emailPage_->showErrorMessage({});
-    if (_ui->contentWidget->currentWidget() == credPage_)
-        credPage_->showErrorMessage({});
-    else if (_ui->contentWidget->currentWidget() == finishPage_)
-        finishPage_->showErrorMessage({});
-}
-
-void SetupWidget::codeRequested()
-{
-    if (_ui->contentWidget->currentWidget() == credPage_) {
-        qCDebug(lcSetupWizardWidget) << "[SetupWidget::codeRequested]";
-        credPage_->codeJustRequested();
-        credPage_->showCodeDialog(true);
-    }
-}
-
-void SetupWidget::codeAccepted()
-{
-    if (_ui->contentWidget->currentWidget() == credPage_) {
-        if (credPage_->isCodeDialogVisible()) {
-            showCredPageProgress(true);
-        }
-        credPage_->showCodeDialog(false);
-        showCredPageProgress(true);
-    }
+    showErrorMessage({});
 }
 
 void SetupWidget::setDevicesList(const QList<Device> &list)
 {
-    if (_ui->contentWidget->currentWidget() == credPage_)
+    if (credPage_)
         credPage_->setDevicesList(list);
 }
 
 void SetupWidget::setEmail(const QString &email)
 {
-    if (_ui->contentWidget->currentWidget() == credPage_)
+    if (credPage_)
         credPage_->setEmail(email);
 }
 
@@ -199,15 +132,6 @@ void SetupWidget::onSetupFinishPageDefaults(const QString &defaultSyncTargetDir,
     finishPage_->setupPageDefaults(defaultSyncTargetDir, userChosenSyncTargetDir, vfsIsAvailable, enableVfsByDefault, vfsModeIsExperimental);
 }
 
-void SetupWidget::errorOccured(RemoteRequest req, int code, const QString& message)
-{
-    qCWarning(lcSetupWizardWidget) << "Request:" << RemoteConnector::RemoteRequestToStr(req)
-                                   << "code:" << code
-                                   << "message:" << message;
-
-    credPage_->errorOccured(req, code, message);
-}
-
 void SetupWidget::setInvalidUrlError()
 {
     credPage_->showInvalidUrlError();
@@ -218,9 +142,64 @@ void SetupWidget::setInvalidCredentialsError()
     credPage_->showInvalidCredentialsError();
 }
 
+void SetupWidget::setCredErrorMessage(const QString &error, const QString& tooltip)
+{
+    credPage_->showErrorMessage(error, tooltip);
+}
+
 void SetupWidget::showCredPageProgress(bool show)
 {
     credPage_->showProgressIndicator(show);
+}
+
+void SetupWidget::onCredentialsAction(CredentialsAction action, std::optional<CredentialsContext> ctx)
+{
+    if (action == CredentialsAction::CancelClicked) {
+        onCancelClicked();
+        return;
+    }
+    emit credentialsAction(action, ctx);
+}
+
+void SetupWidget::transitionTo(SetupPage newPage)
+{
+    if (previousPage != newPage)
+        previousPage = currentPage_;
+    currentPage_ = newPage;
+
+    QMetaObject::invokeMethod(this, [this] {
+        processPageChange();
+    }, Qt::QueuedConnection);
+}
+
+void SetupWidget::processPageChange()
+{
+    switch (currentPage_) {
+    case SetupPage::PageNone:
+        break;
+
+    case SetupPage::PageEmail:
+        setSafeCurrentWidget(emailPage_);
+        if (previousPage == SetupPage::PageCredentials)
+            credPage_->showErrorMessage({});
+        break;
+
+    case SetupPage::PageCredentials:
+        setSafeCurrentWidget(credPage_);
+        break;
+
+    case SetupPage::PageWait:
+        setSafeCurrentWidget(waitPage_);
+        break;
+
+    case SetupPage::PageFinished:
+        setSafeCurrentWidget(finishPage_);
+        break;
+
+    case SetupPage::PageConnectError:
+        setSafeCurrentWidget(connectErrorPage_);
+        break;
+    }
 }
 
 SetupWidget::~SetupWidget() noexcept
@@ -233,17 +212,23 @@ void SetupWidget::onThemeChanged()
     bool isDark = CUR::Theme::instance()->isDarkTheme();
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 
-    if (emailPage_)
-        emailPage_->updateTheme();
+    safeUpdateTheme(emailPage_);
+    safeUpdateTheme(credPage_);
+    safeUpdateTheme(waitPage_);
+    safeUpdateTheme(finishPage_);
+}
 
-    if (credPage_)
-        credPage_->updateTheme();
+void SetupWidget::setSafeCurrentWidget(QWidget *w)
+{
+    if (w)
+        _ui->contentWidget->setCurrentWidget(w);
+}
 
-    if (waitPage_)
-        waitPage_->updateTheme();
-
-    if (finishPage_)
-        finishPage_->updateTheme();
+template<typename T>
+void SetupWidget::safeUpdateTheme(T *w)
+{
+    if (w)
+        w->updateTheme();
 }
 
 }

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "device/devicetypes.h"
+#include "setuppagetype.h"
+#include "pagecontext.h"
 
 #include <QWidget>
 #include <QTimer>
@@ -15,6 +17,8 @@ class CodeDialog;
 class CredentialsPage : public QWidget
 {
     Q_OBJECT
+
+    Q_PROPERTY(bool progressVisible READ progressVisible WRITE setProgressVisible NOTIFY progressVisibleChanged FINAL)
 
 public:
     explicit CredentialsPage(QWidget *parent = nullptr);
@@ -32,37 +36,22 @@ public:
 
     QString password() const;
 
-    void showErrorMessage(const QString& msg);
+    void showErrorMessage(const QString& msg, const QString& tooltip = QStringLiteral(""));
     void showInvalidUrlError();
     void showInvalidCredentialsError();
     void showProgressIndicator(bool show);
 
-    void showCodeDialog(bool show);
-    bool isCodeDialogVisible() const;
-    void showCodeInvalidError();
-    void showCodeExpiredError();
-    void showCodeServerError();
-    void errorOccured(CUR::RemoteRequest req, int code, const QString& message);
-
-    void codeJustRequested();
-
     void showDevicesInfo(bool show);
 
-Q_SIGNALS:
-    void loginClicked(const Device& dev, const QString& user, const QString& password);
-    void cancelClicked();
-    void settingsClicked();
-    void resetPasswordClicked();
-    void refreshDevicesClicked();
-    void backButtonClicked();
+    void setProgressVisible(bool visible);
+    bool progressVisible() const {return progressVisible_;}
 
-    void codeEntered(const QString& code);
-    void codeSkipped();
-    void codeResend();
+Q_SIGNALS:
+    void actionTriggered(CredentialsAction action, std::optional<CredentialsContext> ctx = std::nullopt);
+    void progressVisibleChanged();
 
 private:
     void onTextEdited(const QString& txt);
-    void onCodeExpireCheckTimer();
 
     void validateFormData();
     bool isAllFieldNotEmpty();
@@ -70,10 +59,6 @@ private:
 private:
     Ui::CredentialsPage* ui = nullptr;
 
-    DimWidget* dim = nullptr;
-    QTimer codeExpireCheckTimer;
-    QDateTime codeExpireTime;
-    CodeDialog* codeDialog = nullptr;
-    bool isCodeExpired = false;
     QList<Device> dev_list;
+    bool progressVisible_ = false;
 };

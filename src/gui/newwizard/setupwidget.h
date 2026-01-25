@@ -1,8 +1,10 @@
 #pragma once
 
 #include "enums.h"
+#include "pages/setuppagetype.h"
 #include "gui/settingsdialog.h"
 #include "device/devicetypes.h"
+#include "pages/pagecontext.h"
 
 namespace Ui {class SetupWidget;}
 
@@ -23,26 +25,21 @@ class SetupWidget : public QWidget
     Q_OBJECT
 
 public:
-    enum class SetupPage {
-        PageNone = 0,
-        PageEmail,
-        PageCredentials,
-        PageWait,
-        PageFinished,
-        PageConnectError
+    struct GuiContext {
+        QString errorString;
+        QString email;
+        bool showBusy = false;
+        bool showError = false;
     };
 
     explicit SetupWidget(SettingsDialog *parent);
     ~SetupWidget() noexcept override;
 
-    void displayPage(SetupPage page);
+    void displayPage(SetupPage page, std::optional<GuiContext> ctx = std::nullopt);
     void displayPreviousPage();
 
     void showErrorMessage(const QString &errorMessage);
     void hideErrorMessage();
-
-    void codeRequested();
-    void codeAccepted();
 
     void setDevicesList(const QList<Device> &list);
     void setEmail(const QString& email);
@@ -51,32 +48,36 @@ public:
     void onSetupFinishPageDefaults(const QString &defaultSyncTargetDir, const QString &userChosenSyncTargetDir,
         bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental);
 
-    void errorOccured(RemoteRequest req, int code, const QString &message);
-
     void setInvalidUrlError();
     void setInvalidCredentialsError();
+    void setCredErrorMessage(const QString& error, const QString& tooltip = QStringLiteral(""));
 
     void showCredPageProgress(bool show);
+
+    SetupPage currentPage() const {return currentPage_;}
 
 Q_SIGNALS:
     void rejected();
 
+    void credentialsAction(CredentialsAction action, std::optional<CredentialsContext> ctx = std::nullopt);
+
+    // void startDeviceListManager(const QString& email);
     void loginEmailClicked(const QString& user);
-    void loginCredentialClicked(const Device& dev, const QString& user, const QString& password);
-    void loginSettingsClicked();
-    void loginResetPasswordClicked();
-    void refreshDevicesClicked();
     void finishPageBackClicked();
     void finishPageDoneClicked(CUR::Wizard::SyncMode mode, const QString& targetDir);
-    void codeEntered(const QString& code);
-    void codeSkipped();
-    void codeResendClicked();
-    void credPageBackClicked();
     void connectErrorPageBackClicked();
     void connectErrorPageRetryClicked();
 
 private:
+    void onCredentialsAction(CredentialsAction action, std::optional<CredentialsContext> ctx = std::nullopt);
+
+    void transitionTo(SetupPage newPage);
+    void processPageChange();
+
     void onThemeChanged();
+    void setSafeCurrentWidget(QWidget* w);
+    template<typename T>
+    void safeUpdateTheme(T* w);
 
     ::Ui::SetupWidget *_ui = nullptr;
 
@@ -86,7 +87,8 @@ private:
     FinishedPage* finishPage_ = nullptr;
     ConnectErrorPage* connectErrorPage_ = nullptr;
 
-    SetupPage currentPage = SetupPage::PageNone;
+    SetupPage currentPage_ = SetupPage::PageNone;
     SetupPage previousPage = SetupPage::PageNone;
+    std::optional<GuiContext> guiContext;
 };
 }

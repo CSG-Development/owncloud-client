@@ -22,6 +22,7 @@
 #include "configfile.h"
 #include "generalsettings.h"
 #include "curatorgui.h"
+#include "codedialog.h"
 #include "theme.h"
 
 #include "customui/stylehelper.h"
@@ -196,11 +197,12 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
     ConfigFile cfg;
     _ui->setupUi(this);
 
-    connect(Theme::instance(), &Theme::themeChanged, this, [&] {
+    _codeDialog = new CodeDialog(this);
+    attachCodeDialog(true);
+
+    connect(Theme::instance(), &Theme::themeChanged, this, [this] {
         StyleHelper::setDarkMode(Theme::instance()->isDarkTheme());
-
         StyleHelper::invoke_setDarkTheme_recursive(this);
-
         updateToolbarTheme();
         update();
         _ui->stack->currentWidget()->update();
@@ -211,14 +213,13 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
     auto themeTimer = new QTimer(this);
     themeTimer->setInterval(700);
     themeTimer->start();
-    connect(themeTimer, &QTimer::timeout, this, [&] {
+    connect(themeTimer, &QTimer::timeout, this, [] {
         bool nowTheme = Theme::instance()->isDarkTheme();
         if (nowTheme != prevDarkTheme) {
             prevDarkTheme = nowTheme;
             Theme::instance()->emit_theme_change();
         }
     }, Qt::QueuedConnection);
-
 
     StyleHelper::applyPushButtonStyle(this);
     _ui->toolBar->layout()->setContentsMargins(0, 0, 0, 0);
@@ -255,10 +256,9 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
 
     _activitySettings = new ActivitySettings;
     _ui->stack->addWidget(_activitySettings);
-    connect(_activitySettings, &ActivitySettings::guiLog, _gui,
-        [this](const QString &title, const QString &msg) {
-            _gui->slotShowOptionalTrayMessage(title, msg);
-        });
+    connect(_activitySettings, &ActivitySettings::guiLog, _gui, [this](const QString &title, const QString &msg) {
+        _gui->slotShowOptionalTrayMessage(title, msg);
+    });
     _activitySettings->setNotificationRefreshInterval(cfg.notificationRefreshInterval());
 
     auto generalAction = new ToolButtonAction(QStringLiteral("settings"), tr("Settings"), this);
@@ -303,10 +303,8 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
 
     connect(_actionGroup, &QActionGroup::triggered, this, &SettingsDialog::slotSwitchPage);
 
-    connect(AccountManager::instance(), &AccountManager::accountAdded,
-        this, &SettingsDialog::accountAdded);
-    connect(AccountManager::instance(), &AccountManager::accountRemoved,
-        this, &SettingsDialog::accountRemoved);
+    connect(AccountManager::instance(), &AccountManager::accountAdded, this, &SettingsDialog::accountAdded);
+    connect(AccountManager::instance(), &AccountManager::accountRemoved, this, &SettingsDialog::accountRemoved);
     for (const auto &ai : AccountManager::instance()->accounts()) {
         accountAdded(ai);
     }
@@ -403,6 +401,21 @@ QWidget* SettingsDialog::currentPage()
     return _ui->stack->currentWidget();
 }
 
+void SettingsDialog::attachCodeDialog(bool attach)
+{
+    // seems not necessary
+    return;
+
+    disconnect(_codeDialog, &CodeDialog::codeAction, this, nullptr);
+
+    if (attach) {
+        connect(_codeDialog, &CodeDialog::codeAction, this, [this](CodeAction act, const QString& /*code*/) {
+            if (act == CodeAction::Skip)
+                showCodePage(false, true);
+        });
+    }
+}
+
 void SettingsDialog::changeEvent(QEvent *e)
 {
     switch (e->type()) {
@@ -485,7 +498,6 @@ void SettingsDialog::accountAdded(AccountStatePtr accountStatePtr)
         accountAction = new ToolButtonAction(icon, actionText, this);
     }
 
-
     _accountActions.append(accountAction);
 
     if (!brandingSingleAccount) {
@@ -551,6 +563,39 @@ void SettingsDialog::slotAccountDisplayNameChanged()
             QString displayName = account->displayName();
             action->setText(displayName);
             action->setIconText(shortDisplayNameForSettings(account));
+        }
+    }
+}
+
+void SettingsDialog::showCodePage(bool show, bool startSync)
+{
+    int codeDlgIndex = _ui->dialogStack->indexOf(_codeDialog);
+    int currentIndex = _ui->dialogStack->currentIndex();
+    static int prevIndex = -1;
+
+    if (show) {
+        if (codeDlgIndex == -1) {
+            codeDlgIndex = _ui->dialogStack->addWidget(_codeDialog);
+        }
+
+        if (codeDlgIndex != currentIndex) {
+            prevIndex = currentIndex;
+
+            // Disable sync
+            FolderMan::instance()->setSyncEnabled(false);
+            _ui->dialogStack->setCurrentWidget(_codeDialog);
+        }
+        CuratorGui::raise();
+    }
+    else {
+        if (prevIndex != -1)
+            _ui->dialogStack->setCurrentIndex(prevIndex);
+
+        _ui->dialogStack->removeWidget(_codeDialog);
+
+        if (startSync) {
+            // Enable sync back
+            FolderMan::instance()->setSyncEnabled(true);
         }
     }
 }

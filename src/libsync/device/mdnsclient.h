@@ -1,10 +1,12 @@
 #pragma once
 
+#include "curatorlib.h"
 #include "device/devicetypes.h"
 
 #include <QObject>
 #include <QUdpSocket>
 #include <QTimer>
+#include <QFuture>
 
 enum mdns_record_type {
     MDNS_RECORDTYPE_IGNORE = 0,
@@ -60,9 +62,7 @@ public:
     QList<DnsRecord> records;
 };
 
-namespace CUR {
-
-class MdnsClient: public QObject
+class CURATORSYNC_EXPORT MdnsClient: public QObject
 {
     Q_OBJECT
 
@@ -70,27 +70,28 @@ public:
     explicit MdnsClient(QObject* parent = nullptr);
     ~MdnsClient();
 
-    void query();
-
-    [[nodiscard]] const QList<MdnsRecord>& records() {return records_;}
+    void start();
+    void stop();
 
 signals:
-    void requestCompleted();
-    void message(const QString& msg);
-    void messageReceived(Message msg);
+    void resultsChanged(const QList<DevicePath>& records);
+    void resultsChanged_internal(const QList<DevicePath>& records);
 
 private slots:
     void onReadyRead();
-    void onMessageReveived(Message msg);
 
 private:
     void createSocket(const QHostAddress& addr);
+    void performScanCycle();
+    void setupSockets();
 
-    QList<MdnsRecord> records_;
     QList<QUdpSocket*> sockets;
-    QTimer timer_;
+    QMap<QString, DevicePath> discoveredRecords_;
+    QMap<QString, QDateTime> lastSeen_;
+    QTimer scanTimer_;
+    QTimer debounceTimer_;
+    QTimer notFoundTimer_;        // Emits resultChanged first time, even no records found
+    QList<DevicePath> lastData_;
 };
-
-} // namespace CUR
 
 QString mdns_record_type_to_str(int t);
