@@ -19,6 +19,7 @@ set(client_UI_SRCS
     tlserrordialog.ui
     notificationwidget.ui
     logbrowser.ui
+    codedialog.ui
 )
 
 set(client_SRCS
@@ -31,6 +32,8 @@ set(client_SRCS
     askexperimentalvirtualfilesfeaturemessagebox.cpp
     fetchserversettings.cpp
     clientproxy.cpp
+    codedialog.cpp
+    codedialog.h
     commonstrings.cpp
     connectionvalidator.cpp
     folder.cpp
@@ -113,13 +116,18 @@ add_library(curatorCore STATIC ${final_src})
 set_target_properties(curatorCore PROPERTIES AUTOUIC ON AUTORCC ON)
 target_link_libraries(curatorCore
     PUBLIC
-        Qt::Widgets Qt::Network Qt::Xml
+        Qt::Widgets Qt::Network Qt::Xml Qt::Concurrent
         newwizard folderwizard spaces loginrequireddialog
         customui
         libsync
 #        telemetry
         Qt6Keychain::Qt6Keychain
 )
+
+if(APPLE)
+    string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    add_compile_options(-fexceptions)
+endif()
 
 apply_common_target_settings(curatorCore)
 

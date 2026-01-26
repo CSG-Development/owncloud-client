@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QLoggingCategory>
+#include <QtConcurrent>
 
 namespace {
 const QString api_dev_about = QStringLiteral("/api/v1/about"); // GET
@@ -13,90 +14,111 @@ const QString api_dev_status = QStringLiteral("/api/v1/status"); // GET
 
 Q_LOGGING_CATEGORY(lcDeviceApi, "device.api", QtDebugMsg)
 
-namespace CUR {
-
 DeviceApi::DeviceApi(QObject *parent)
     : QObject(parent)
-    , rest_mgr(std::make_unique<QRestAccessManager>(&net_mgr))
+    , _rest(new QNetworkAccessManager(this))
 {
-    net_mgr.setTransferTimeout(5 * 1000);
-    rest_factory = std::make_unique<QNetworkRequestFactory>();
+    _rest.networkAccessManager()->setTransferTimeout(5 * 1000);
 
-    connect(&net_mgr, &QNetworkAccessManager::sslErrors, this, [&](QNetworkReply *reply, const QList<QSslError>&/*errors*/) {
+    connect(_rest.networkAccessManager(), &QNetworkAccessManager::sslErrors, this, [](QNetworkReply *reply, const QList<QSslError> &/*errors*/) {
         reply->ignoreSslErrors();
     });
+}
 
-    connect(this, &DeviceApi::about_request_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
-        DeviceInfoAbout localDevice;
-
-        if (code == 200) {
-            if (doc) {
-                localDevice = DeviceInfoAbout::fromJson(doc.value());
+QFuture<AboutCtx> DeviceApi::query_about(const QString &url)
+{
+    _factory.setBaseUrl(QUrl(url));
+    auto reply = _rest.get(_factory.createRequest(api_dev_about));
+    return execRequest<AboutCtx>(std::move(reply), [](const std::optional<QJsonDocument>& doc, int status) {
+        AboutCtx ctx;
+        ctx.status = status;
+        if (doc && !doc->isNull()) {
+            if (status == 200) {
+                ctx.deviceAbout = DeviceInfoAbout::fromJson(doc.value());
             }
             else {
-                qCWarning(lcDeviceApi) << "device about returns empty data, code" << code;
+                //ctx.errorString = (*doc)[jkey_name].toString();
+                ctx.deviceAbout = {};
+                qCWarning(lcDeviceApi) << "about status code:" << status;
             }
         }
-        else {
-            if (doc) {
-                auto error_str = doc.value()[QStringLiteral("message")].toString();
-                qCWarning(lcDeviceApi) << code << error_str;
+        return ctx;
+    });
+}
+
+QFuture<StatusCtx> DeviceApi::query_status(const QString &url)
+{
+    qCDebug(lcDeviceApi) << "query_status";
+    _factory.setBaseUrl(QUrl(url));
+    auto reply = _rest.get(_factory.createRequest(api_dev_status));
+    return execRequest<StatusCtx>(std::move(reply), [](const std::optional<QJsonDocument>& doc, int status) {
+        qCDebug(lcDeviceApi) << "query_status code" << status;
+        StatusCtx ctx;
+        ctx.status = status;
+        if (doc && !doc->isNull()) {
+            if (status == 200) {
+                ctx.deviceStatus = DeviceInfoStatus::fromJson(doc.value());
             }
             else {
-                qCWarning(lcDeviceApi) << "about_request error" << code;
+                //ctx.errorString = (*doc)[jkey_name].toString();
+                qCWarning(lcDeviceApi) << "status code:" << status;
             }
         }
-
-        emit about_finished(localDevice, code);
+        return ctx;
     });
+}
 
-    connect(this, &DeviceApi::status_request_finished, this, [&](std::optional<QJsonDocument> doc, int code) {
-        DeviceInfoStatus devStatus;
+QFuture<QList<DevicePath> > DeviceApi::query_status_all(QList<DevicePath> paths)
+{
+    QList<QFuture<StatusCtx>> futures;
+    for (const auto& path : paths) {
+        QString url = DevHelpers::makeServerUrl(path.address, path.port, false, true);
+        futures.append(this->query_status(url));
+    }
 
-        if (!doc) {
-            qCWarning(lcDeviceApi) << "device status returns empty data, code" << code;
+    return QtFuture::whenAll(futures.begin(), futures.end()).then([paths](QList<QFuture<StatusCtx>> finishedFutures) {
+        QList<DevicePath> updatedPaths = paths;
+        for (int i = 0; i < finishedFutures.size(); ++i) {
+            auto ctx = finishedFutures[i].result();
+            updatedPaths[i].status = ctx.deviceStatus;
+            if (ctx.status != 200) {
+                qWarning() << "status API returned error status:" << ctx.status;
+            }
         }
-        if (code == 200) {
-            if (doc) {
-                devStatus = DeviceInfoStatus::fromJson(doc.value());
+        return updatedPaths;
+    });
+}
+
+QFuture<std::pair<AboutCtx, StatusCtx> > DeviceApi::query_about_status(const QString &url)
+{
+    auto futureAbout = query_about(url);
+    auto futureStatus = query_status(url);
+
+    return QtFuture::whenAll(futureAbout, futureStatus).then([futureAbout, futureStatus](auto &&) {
+        return std::make_pair(futureAbout.result(), futureStatus.result());
+    });
+}
+
+
+QFuture<QList<DevicePath>> DeviceApi::query_about_all(QList<DevicePath> paths)
+{
+    QList<QFuture<AboutCtx>> futures;
+    for (const auto& path : paths) {
+        QString url = DevHelpers::makeServerUrl(path.address, path.port, false, true);
+        futures.append(this->query_about(url));
+    }
+
+    return QtFuture::whenAll(futures.begin(), futures.end()).then([paths](QList<QFuture<AboutCtx>> finishedFutures) {
+        QList<DevicePath> updatedPaths = paths;
+        for (int i = 0; i < finishedFutures.size(); ++i) {
+            auto ctx = finishedFutures[i].result();
+            if (ctx.status == 200) {
+                updatedPaths[i].about = ctx.deviceAbout;
             }
             else {
-                qCWarning(lcDeviceApi) << "device status returns empty data, code" << code;
+                qWarning() << "API returned error status:" << ctx.status;
             }
         }
-        else {
-            if (doc) {
-                auto error_str = doc.value()[QStringLiteral("message")].toString();
-                qCWarning(lcDeviceApi) << code << error_str;
-            }
-        }
-
-        emit status_finished(devStatus, code);
+        return updatedPaths;
     });
 }
-
-DeviceApi::~DeviceApi()
-{
-}
-
-void DeviceApi::query_device_about(const QString &url)
-{
-    rest_factory->setBaseUrl(QUrl(url));
-
-    auto req = rest_factory->createRequest(api_dev_about);
-    rest_mgr->get(req, this, [&](QRestReply &reply) {
-        emit about_request_finished(reply.readJson(), reply.httpStatus());
-    });
-}
-
-void DeviceApi::query_device_status(const QString& url)
-{
-    rest_factory->setBaseUrl(QUrl(url));
-
-    auto req = rest_factory->createRequest(api_dev_status);
-    rest_mgr->get(req, this, [&](QRestReply &reply) {
-        emit status_request_finished(reply.readJson(), reply.httpStatus());
-    });
-}
-
-} // namespace CUR

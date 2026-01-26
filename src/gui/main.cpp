@@ -28,7 +28,7 @@
 #include "common/version.h"
 #include "gui/translations.h"
 #include "libsync/logger.h"
-#include "libsync/networkjobs/networkmonitor.h"
+#include "libsync/device/networkmonitor.h"
 #include "socketapi/socketapi.h"
 #include "tooltip_manager.h"
 
@@ -44,6 +44,8 @@
 #include <QProcess>
 #include <QRandomGenerator>
 #include <QTimer>
+#include <QDir>
+#include <QtEnvironmentVariables>
 #ifdef Q_OS_WIN
 #include <qt_windows.h>
 #endif
@@ -352,8 +354,15 @@ int main(int argc, char **argv)
     // initialisation that needs to be done before creating a QApplication
     const auto platform = Platform::create();
 
+    QString appDir = QFileInfo(QString::fromLocal8Bit(argv[0])).absolutePath();
+    QByteArray fileLocation = QDir::toNativeSeparators(
+                                  QStringLiteral("%1/qtlogging.ini").arg(appDir)).toUtf8();
+    qputenv("QT_LOGGING_CONF", fileLocation);
+
     // Create the (Q)Application instance:
     QApplication app(argc, argv);
+
+
     // TODO: Can't set this without breaking current config paths
     //    setOrganizationName(QLatin1String(APPLICATION_VENDOR));
     app.setOrganizationDomain(Theme::instance()->orgDomainName());
@@ -434,20 +443,22 @@ int main(int argc, char **argv)
 
     QObject::connect(platform.get(), &Platform::requestAttention, ocApp->gui(), &CuratorGui::slotShowSettings);
 
-    QObject::connect(&singleApplication, &KDSingleApplication::messageReceived, ocApp.get(), [&](const QByteArray &message) {
+    QObject::connect(&singleApplication, &KDSingleApplication::messageReceived, CUR::ocApp(), [](const QByteArray &message) {
         const QString msg = QString::fromUtf8(message);
         qCInfo(lcMain) << Q_FUNC_INFO << msg;
         if (msg.startsWith(msgParseOptionsC())) {
             const QStringList optionsStrings = msg.mid(msgParseOptionsC().size()).split(QLatin1Char('|'));
             CommandLineOptions options = parseOptions(optionsStrings);
             if (options.show) {
-                ocApp->gui()->slotShowSettings();
+                CUR::ocApp()->gui()->slotShowSettings();
             }
             if (options.quitInstance) {
                 qApp->quit();
             }
             if (!options.fileToOpen.isEmpty()) {
-                QTimer::singleShot(0, ocApp.get(), [ocApp = ocApp.get(), fileToOpen = options.fileToOpen] { ocApp->openVirtualFile(fileToOpen); });
+                QTimer::singleShot(0, CUR::ocApp(), [fileToOpen = options.fileToOpen] {
+                    CUR::ocApp()->openVirtualFile(fileToOpen);
+                });
             }
         }
     });

@@ -3,12 +3,10 @@
 
 #include "gui/customui/stylehelper.h"
 #include "gui/customui/focusproxy.h"
-#include "gui/customui/dimwidget.h"
-#include "codedialog.h"
 #include "theme.h"
 
 #include <QLineEdit>
-#include <QRegularExpression>
+#include <configfile.h>
 
 namespace {
 constexpr int fontSize = 16;
@@ -23,42 +21,68 @@ QPair<QString,QString> settingsIcon = {
 const QString loginBtnTooltip = QObject::tr("Enter a valid email address");
 }
 
+EmailPageController::EmailPageController(QObject *parent)
+    : QObject(parent)
+{
+    canLogin.setBinding([this]() {
+        return isEmailValid(email.value());
+    });
+    buttonTooltip.setBinding([this]() {
+        auto s = canLogin.value() ? QStringLiteral("") : loginBtnTooltip;
+        return s;
+    });
+    errorState.setBinding([this]() {
+        const auto& currentEmail = email.value();
+        return !canLogin.value() && !isFocused.value() && !currentEmail.trimmed().isEmpty();
+    });
+}
+
 EmailPage::EmailPage(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::EmailPage)
 {
+    controller_ = new EmailPageController(this);
+
     ui->setupUi(this);
+    ui->frameErrorMessage->setVisible(false);
+
     setObjectName("emailPage");
     setMouseTracking(true);
 
-    auto noFocus = new FocusProxyStyle;
-    ui->btnLogin->setStyle(noFocus);
-    ui->btnCancel->setStyle(noFocus);
+    auto syncUI = [this]() {
+        ui->btnLogin->setToolTip(controller_->buttonTooltip.value());
+        ui->btnLogin->setEnabled(controller_->canLogin.value());
+        ui->edEmail->setErrorState(controller_->errorState.value(), controller_->errorState.value() ? tr("Invalid email") : QStringLiteral(""));
+        if (ui->edEmail->text() != controller_->email.value()) {
+            QSignalBlocker blocker(ui->edEmail);
+            ui->edEmail->setText(controller_->email.value());
+        }
+    };
+
+    notifiers_.emplace_back(controller_->buttonTooltip.addNotifier(syncUI));
+    notifiers_.emplace_back(controller_->canLogin.addNotifier(syncUI));
+    notifiers_.emplace_back(controller_->errorState.addNotifier(syncUI));
+
+    ui->btnLogin->setStyle(new FocusProxyStyle(ui->btnLogin));
+    ui->btnCancel->setStyle(new FocusProxyStyle(ui->btnCancel));
     ui->btnSettings->setIconSize({20, 20});
 
     setAttribute(Qt::WA_TranslucentBackground, true);
 
-    connect(ui->btnLogin, &QPushButton::clicked, this, [&] {
-        Q_EMIT loginClicked(email());
-    });
+    connect(ui->btnLogin, &QPushButton::clicked, this, [this] { emit loginClicked(email()); });
+
     connect(ui->btnCancel, &QPushButton::clicked, this, &EmailPage::cancelClicked);
     connect(ui->btnSettings, &QPushButton::clicked, this, &EmailPage::settingsClicked);
-
-    ui->btnLogin->setMouseTracking(true);
 
     ui->edEmail->setPlaceholderText(tr("Email"));
     ui->edEmail->setFontPixelSize(fontSize);
 
-    connect(ui->edEmail, &InputWidget::textEdited, this, &EmailPage::onTextEdited);
-
-    connect(ui->edEmail, &InputWidget::focusReceived, this, [&] {
-        ui->edEmail->setErrorState(false);
+    connect(ui->edEmail, &InputWidget::textEdited, this, [this](const QString &txt) {
+        controller_->email.setValue(txt);
     });
-    connect(ui->edEmail, &InputWidget::focusLost, this, [&] {
-        if (!simpleEmailValidate(email())) {
-            ui->edEmail->setErrorState(true, tr("Invalid email"));
-            ui->btnLogin->setEnabled(false);
-        }
+
+    connect(ui->edEmail, &InputWidget::focusChanged, this, [this](bool focused) {
+        controller_->isFocused.setValue(focused);
     });
 
     // MacOS hover enable
@@ -66,34 +90,15 @@ EmailPage::EmailPage(QWidget *parent)
     ui->btnCancel->setAttribute(Qt::WA_Hover, true);
     ui->btnSettings->setAttribute(Qt::WA_Hover, true);
 
-    validateFormData();
-
-    ui->btnLogin->installEventFilter(this);
-    ui->btnLogin->setToolTip(loginBtnTooltip);
-    showErrorMessage({});
-
     updateTheme();
+    syncUI();
+    ui->btnSettings->setVisible(false);
 }
 
 EmailPage::~EmailPage()
 {
     delete ui;
-}
-
-bool EmailPage::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == ui->btnLogin) {
-        if (event->type() == QEvent::EnabledChange) {
-            if (ui->btnLogin->isEnabled()) {
-                ui->btnLogin->setToolTip({});
-            }
-            else {
-                ui->btnLogin->setToolTip(loginBtnTooltip);
-            }
-
-        }
-    }
-    return QWidget::eventFilter(watched, event);
+    //delete noFocus;
 }
 
 void EmailPage::updateTheme()
@@ -109,57 +114,13 @@ void EmailPage::updateTheme()
     update();
 }
 
+void EmailPage::setEmail(const QString &email)
+{
+    controller_->email.setValue(email);
+    emit emailChanged();
+}
+
 QString EmailPage::email() const
 {
-    return ui->edEmail->text();
-}
-
-void EmailPage::showErrorMessage(const QString& msg)
-{
-    ui->frameErrorMessage->setVisible(!msg.isEmpty());
-    ui->lblErrorText->setText(msg);
-}
-
-void EmailPage::showInvalidCredentialsError()
-{
-    ui->edEmail->setErrorState(true, {});
-    ui->btnLogin->setEnabled(false);
-}
-
-void EmailPage::moveEvent(QMoveEvent *event)
-{
-    QWidget::moveEvent(event);
-}
-
-void EmailPage::onTextEdited(const QString&/*txt*/)
-{
-    if (sender() == ui->edEmail) {
-        ui->edEmail->setErrorState(false);
-    }
-
-    validateFormData();
-    showErrorMessage({});
-}
-
-void EmailPage::validateFormData()
-{
-    bool valid = isAllFieldNotEmpty() &&
-                 simpleEmailValidate(email());
-
-    ui->btnLogin->setEnabled(valid);
-}
-
-bool EmailPage::simpleEmailValidate(const QString& email)
-{
-    if (email.trimmed().isEmpty())
-        return true;
-
-    static QRegularExpression rx(QStringLiteral("^[0-9a-zA-Z]+([0-9a-zA-Z]*[-._+])*[0-9a-zA-Z]+@[0-9a-zA-Z]+([-.][0-9a-zA-Z]+)*([0-9a-zA-Z]*[.])[a-zA-Z]{2,6}$"),
-                                 QRegularExpression::CaseInsensitiveOption);
-    return rx.match(email).hasMatch();
-}
-
-bool EmailPage::isAllFieldNotEmpty()
-{
-    return !ui->edEmail->text().trimmed().isEmpty();
+    return controller_->email.value();
 }

@@ -49,17 +49,25 @@ set(libsync_SRCS
     networkjobs/checkserverjobfactory.cpp
     networkjobs/jsonjob.cpp
     networkjobs/resources.cpp
-    networkjobs/evaluatepaths.cpp
-    networkjobs/evaluatepaths.h
     networkjobs/simpleresolveurljobfactory.cpp
     networkjobs/simpleresolveurljobfactory.h
-    networkjobs/networkmonitor.cpp
-    networkjobs/networkmonitor.h
 
+    device/networkmonitor.cpp
+    device/networkmonitor.h
+    device/apiclient.cpp
+    device/apiclient.h
+    device/mdnsclient.cpp
+    device/mdnsclient.h
     device/devicetypes.cpp
     device/devicetypes.h
     device/deviceapi.cpp
     device/deviceapi.h
+    device/devicedefines.cpp
+    device/devicedefines.h
+    device/deviceaggregator.cpp
+    device/deviceaggregator.h
+    device/devicecontroller.cpp
+    device/devicecontroller.h
 
     abstractcorejob.cpp
     determineauthtypejobfactory.cpp
@@ -75,6 +83,11 @@ elseif(UNIX)
     else()
         list(APPEND libsync_SRCS platform_unix.cpp)
     endif()
+endif()
+
+if(APPLE)
+    string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    add_compile_options(-fexceptions)
 endif()
 
 set(libsync_SRCS ${libsync_SRCS} creds/httpcredentials.cpp)

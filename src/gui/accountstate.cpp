@@ -21,14 +21,14 @@
 
 #include "libsync/creds/abstractcredentials.h"
 #include "libsync/creds/httpcredentials.h"
-#include "libsync/networkjobs/networkmonitor.h"
+#include "libsync/device/networkmonitor.h"
 
 #include "gui/quotainfo.h"
 #include "gui/settingsdialog.h"
 #include "gui/spacemigration.h"
 #include "gui/tlserrordialog.h"
+#include "gui/codedialog.h"
 
-#include "networkjobs/evaluatepaths.h"
 #include "settingsdialog.h"
 #include "socketapi/socketapi.h"
 #include "theme.h"
@@ -91,7 +91,6 @@ AccountState::AccountState(AccountPtr account)
     , _state(AccountState::Disconnected)
     , _connectionStatus(ConnectionValidator::Undefined)
     , _waitingForNewCredentials(false)
-    , _evaluator(new EvaluatePath(this))
     , _maintenanceToConnectedDelay(1min + minutes(QRandomGenerator::global()->generate() % 4)) // 1-5min delay
 {
     qRegisterMetaType<AccountState *>("AccountState*");
@@ -110,18 +109,6 @@ AccountState::AccountState(AccountPtr account)
     connect(this, &AccountState::urlUpdated, this, [this] {
         checkConnectivity(false);
     }, Qt::QueuedConnection);
-
-    connect(_evaluator, &EvaluatePath::evaluate_finished, this, [&] {
-        if (_account && _account->devicePtr()) {
-            auto dev_path = _account->devicePtr()->getBestPathId();
-            if (dev_path) {
-                _account->setActivePath(dev_path.value());
-                emit urlChanged(_account->uuid());
-                // Update UI
-                stateChanged(_state);
-            }
-        }
-    });
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
     if (QNetworkInformation::loadDefaultBackend()) {
@@ -175,9 +162,9 @@ AccountState::AccountState(AccountPtr account)
     });
 
     // Network configuration changed
-    connect(NetworkMonitor::instance(), &NetworkMonitor::network_changed, this, [&] {
+    connect(NetworkMonitor::instance(), &NetworkMonitor::network_changed, this, [this] {
         // Find another URL
-        _evaluator->start_evaluate(_account->devicePtr());
+        updateDeviceAccessibility();
     }, Qt::QueuedConnection);
 }
 
@@ -254,7 +241,7 @@ void AccountState::setState(State state)
             checkConnectivity();
         } else if (_state == NetworkError) {
             // Find another URL
-            _evaluator->start_evaluate(_account->devicePtr());
+            updateDeviceAccessibility();
         }
     }
 
@@ -429,7 +416,255 @@ void AccountState::checkConnectivity(bool blockJobs)
 
 void AccountState::updateDeviceAccessibility()
 {
-    _evaluator->start_evaluate(_account->devicePtr());
+    if (isSignedOut() || _waitingForNewCredentials) {
+        qCDebug(lcAccountState) << "Skip device availability check, signed out";
+        return;
+    }
+    if (_tlsDialog) {
+        qCDebug(lcAccountState) << "Skip device availability check, waiting for tls dialog";
+        return;
+    }
+    if (_updateDeviceInProgress) {
+        qCDebug(lcAccountState) << "Device availability check already in progress";
+        return;
+    }
+
+    if (_deviceController) {
+        qCDebug(lcAccountState) << "Update device availability started";
+        connect(_deviceController, &DeviceController::evaluate_finished, this, [this]() {
+            qCDebug(lcAccountState) << "Device controller evaluate finished";
+            // Check if dev_path is really online (status.oobe_done)
+            checkAndSwitchDevicePath();
+        }, Qt::SingleShotConnection);
+
+        _updateDeviceInProgress = true;
+        _deviceController->evaluateDeviceStatus(_account->devicePtr());
+    }
+    else {
+        qCWarning(lcAccountState) << "No device controller created";
+    }
+}
+
+void AccountState::checkAndSwitchDevicePath()
+{
+    if (!_account || !_account->devicePtr()) {
+        qCWarning(lcAccountState) << "Error get account or current device";
+        return;
+    }
+
+    auto* currentDevice = _account->devicePtr();
+
+    // Update status for all paths
+    _deviceController->query_status_all(*currentDevice)
+        .then(this, [currentDevice,this](const QList<DevicePath>& paths){
+            currentDevice->paths = paths;
+
+            // DEBUG
+            for (const auto& it: _account->devicePtr()->paths) {
+                qCDebug(lcAccountState) << it.address << it.status.oobe_done;
+            }
+
+            if (!doDevicePathSwitch()) {
+                requestRAupdate();
+            }
+            else {
+                _updateDeviceInProgress = false;
+            }
+        });
+}
+
+bool AccountState::doDevicePathSwitch()
+{
+    qCDebug(lcAccountState) << "doDevicePathSwitch";
+    auto devPathId = _account->devicePtr()->getBestPathId();
+    if (devPathId) {
+
+        bool isPathOk = false;
+        auto* d = _account->devicePtr()->getPathPtr(devPathId.value());
+        if (d) {
+            if (d->status.oobe_done) {
+                isPathOk = true;
+            }
+        }
+
+        if (isPathOk) {
+            qCDebug(lcAccountState) << "Path is OK and online";
+            _account->setActivePath(devPathId.value());
+            qCInfo(lcAccountState) << "Found path" << devPathId.value();
+            emit urlChanged(_account->uuid());
+            // Update UI
+            stateChanged(_state);
+            return true;
+        }
+        else {
+            qCDebug(lcAccountState) << "Path is offline, requesting RA update...";
+            return false;
+        }
+    }
+    else {
+        qCWarning(lcAccountState) << "No best path found for device";
+        return false;
+    }
+    _updateDeviceInProgress = false;
+}
+
+void AccountState::enableCodeDialogProcessing(bool enable)
+{
+    if (!enable) {
+        qCDebug(lcAccountState) << "Disable access code processing";
+        disconnect(ocApp()->gui()->settingsDialog()->codeDlg(), &CodeDialog::codeAction, this, nullptr);
+        disconnect(_deviceController, &DeviceController::accessCodeRequest, this, nullptr);
+        disconnect(_deviceController, &DeviceController::accessCodeResult, this, nullptr);
+        ocApp()->gui()->settingsDialog()->codeDlg()->reset();
+        return;
+    }
+
+    connect(ocApp()->gui()->settingsDialog()->codeDlg(), &CodeDialog::codeAction, this, [this](CodeAction act, const QString& code) {
+        switch (act) {
+        case CodeAction::Entered:
+            qCDebug(lcAccountState) << "Code dialog: code entered";
+            ocApp()->gui()->settingsDialog()->codeDlg()->setDialogState(CodeDialogState::Waiting);
+            _deviceController->enterAccessCodeFromAccount(code);
+            break;
+
+        case CodeAction::Resend:
+            qCDebug(lcAccountState) << "Code dialog: code resend";
+            ocApp()->gui()->settingsDialog()->codeDlg()->setDialogState(CodeDialogState::Waiting);
+            _deviceController->initAccessCode();
+            break;
+
+        case CodeAction::Skip:
+            qCDebug(lcAccountState) << "Code dialog: code skipped";
+            // Close code dialog
+            ocApp()->gui()->settingsDialog()->showCodePage(false, false);
+            _accessCodeDialog = false;
+            emit pathUpdateFinished(true, {});
+            break;
+        }
+    });
+
+    // Requested acces code enter
+    connect(_deviceController, &DeviceController::accessCodeRequest, this, [this]{
+        qCDebug(lcAccountState) << "Wanted access code dialog";
+        _accessCodeDialog = true;
+        ocApp()->gui()->settingsDialog()->showCodePage(true, false);
+    });
+
+    connect(_deviceController, &DeviceController::accessCodeResult, this, [this](DeviceController::AccessCodeResult result, const QString& errorString, const QString& errorStacktrace) {
+        if (result == DeviceController::AccessCodeResult::Accepted) {
+            qCDebug(lcAccountState) << "Access code accepted";
+            // Close code dialog
+            ocApp()->gui()->settingsDialog()->showCodePage(false, false);
+            _accessCodeDialog = false;
+            _deviceController->account_update_device_continue(*getDevice());
+        }
+        else {
+            qCDebug(lcAccountState) << "Access code rejected" << errorString;
+            if (ocApp()->gui()->settingsDialog()->codeDlg()->isVisible()) {
+                qCDebug(lcAccountState) << "Access code dialog active, show error";
+                ocApp()->gui()->settingsDialog()->codeDlg()->setError(CodeDialogState::Resend, errorString, errorStacktrace);
+            }
+            else {
+                qCDebug(lcAccountState) << "Access code dialog is not active. Finish device checks";
+                emit pathUpdateFinished(true, {});
+            }
+        }
+    });
+    qCDebug(lcAccountState) << "Access code processing enabled";
+}
+
+void AccountState::requestRAupdate()
+{
+    qCDebug(lcAccountState) << "Requesting device update from RA";
+    // Turn on AccessCodeDialog processing
+    enableCodeDialogProcessing(true);
+
+    connect(_deviceController, &DeviceController::account_update_device_finished, this, [this](const QList<DevicePath>& paths) {
+        qCDebug(lcAccountState) << "DeviceController::account_update_device_finished";
+        emit pathUpdateFinished(false, paths);
+    }, Qt::SingleShotConnection);
+
+    connect(this, &AccountState::pathUpdateFinished, this, [this](bool skippedCode, const QList<DevicePath>& paths) {
+        qCDebug(lcAccountState) << "pathUpdateFinished. Skip code" << skippedCode;
+        _updateDeviceInProgress = false;
+        enableCodeDialogProcessing(false);
+
+        if (skippedCode) {
+            qCDebug(lcAccountState) << "Code skipped, no path update";
+            return;
+        }
+        if (auto dev = getDevice()) {
+            dev->paths = paths;
+            for (const auto& it: paths) {
+                qCDebug(lcAccountState) << "UPDATED" << it.address << it.status.oobe_done;
+            }
+            doDevicePathSwitch();
+        }
+    }, Qt::SingleShotConnection);
+
+    /*
+    connect(_deviceController, &DeviceController::devices_updated, this, [this] {
+        qCDebug(lcAccountState) << "DeviceController::devices_updated";
+        emit pathUpdateFinished(false);
+    }, Qt::SingleShotConnection);
+
+    connect(this, &AccountState::pathUpdateFinished, this, [this](bool skippedCode) {
+        qCDebug(lcAccountState) << "RA Device update finished. Skip code" << skippedCode;
+        _updateDeviceInProgress = false;
+        enableCodeDialogProcessing(false);
+
+        if (skippedCode) {
+            qCDebug(lcAccountState) << "Code skipped, no path update";
+            return;
+        }
+
+        auto* currentDevice = _account->devicePtr();
+        if (currentDevice) {
+            qCDebug(lcAccountState) << "Current device" << currentDevice->certificateCommonName;
+
+            auto dev = _deviceController->getDevice(currentDevice->certificateCommonName);
+            if (dev) {
+
+                qCDebug(lcAccountState) << "Update device info, id:" << dev->seagateDeviceID;
+                if (!dev->seagateDeviceID.isEmpty()) {
+                    // now get path for device
+                    _deviceController->queryDeviceInfo(dev->seagateDeviceID)
+                        .then(this, [currentDevice](const DevicePathListCtx& ctx) {
+                            if (ctx.res.status == 200) {
+                                currentDevice->paths = ctx.devicePathList;
+
+                                // DEBUG
+                                if (currentDevice->paths.isEmpty()) {
+                                    qCDebug(lcAccountState) << "No path items found";
+                                }
+                                else {
+                                    for (const auto& it: currentDevice->paths) {
+                                        qCDebug(lcAccountState) << "UPDATED" << it.address << it.status.oobe_done;
+                                    }
+                                }
+                            }
+                        });
+                }
+                else {
+                    qCDebug(lcAccountState) << "Device id empty, not updated";
+                }
+            }
+            else {
+                qCDebug(lcAccountState) << "Device" << currentDevice->certificateCommonName << "not found";
+            }
+        }
+
+    }, Qt::SingleShotConnection);
+    */
+
+    _deviceController->account_update_device(*getDevice());
+}
+
+Device *AccountState::getDevice()
+{
+    if (_account)
+        return _account->devicePtr();
+    return nullptr;
 }
 
 void AccountState::slotConnectionValidatorResult(ConnectionValidator::Status status, const QStringList &errors)
@@ -618,6 +853,18 @@ void AccountState::setSettingUp(bool settingUp)
         Q_EMIT isSettingUpChanged();
     }
 }
+
+void AccountState::createDeviceController()
+{
+    if (_deviceController) {
+        qCWarning(lcAccountState) << "DeviceController already created";
+        return;
+    }
+
+    _deviceController = new DeviceController(this);
+    _deviceController->setEmail(_account->credentials()->user());
+}
+
 bool AccountState::readyForSync() const
 {
     return !_fetchCapabilitiesJob && isConnected();

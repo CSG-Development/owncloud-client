@@ -4,8 +4,6 @@
 #include "gui/customui/stylehelper.h"
 #include "gui/customui/focusproxy.h"
 #include "gui/customui/dimwidget.h"
-#include "gui/newwizard/loginservices/remoteconnector.h"
-#include "codedialog.h"
 #include "theme.h"
 
 #include <QLineEdit>
@@ -13,6 +11,7 @@
 #include <QRegularExpression>
 #include <QHostAddress>
 #include <QToolTip>
+#include <QLoggingCategory>
 
 namespace {
 constexpr int fontSize = 16;
@@ -31,6 +30,8 @@ QPair<QString,QString> backIcon = {
 constexpr int code_expire_seconds = 10 * 60;     // 10 min
 }
 
+Q_LOGGING_CATEGORY(lcCredPage, "gui.page.credential", QtDebugMsg)
+
 CredentialsPage::CredentialsPage(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::CredentialsPage)
@@ -40,60 +41,41 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     setMouseTracking(true);
     setAttribute(Qt::WA_Hover, true);
 
-    auto noFocus = new FocusProxyStyle;
-    ui->btnLogin->setStyle(noFocus);
-    ui->btnCancel->setStyle(noFocus);
-    ui->btnResetPass->setStyle(noFocus);
+    ui->btnLogin->setStyle(new FocusProxyStyle(ui->btnLogin));
+    ui->btnCancel->setStyle(new FocusProxyStyle(ui->btnCancel));
+    ui->btnResetPass->setStyle(new FocusProxyStyle(ui->btnResetPass));
+    ui->btnCantFindDevice->setStyle(new FocusProxyStyle(ui->btnCantFindDevice));
 
     setAttribute(Qt::WA_TranslucentBackground, true);
 
-    dim = new DimWidget(this);
-    dim->setVisible(false);
-
-    codeDialog = new CodeDialog(this);
-    codeDialog->setVisible(false);
-
-    connect(codeDialog, &CodeDialog::skipClicked, this, [&] {
-        showCodeDialog(false);
-        showProgressIndicator(true);
-        emit codeSkipped();
+    connect(ui->btnLogin, &QPushButton::clicked, this, [this] {
+        CredentialsContext ctx{currentDevice(), email(), password()};
+        emit actionTriggered(CredentialsAction::LoginClicked, ctx);
     });
 
-    connect(codeDialog, &CodeDialog::allowAccessClicked, this, [&] {
-        if (isCodeExpired) {
-            codeDialog->showCodeExpiredError();
-        }
-        else {
-            codeDialog->setDialogState(CodeDialogState::Waiting);
-            emit codeEntered(codeDialog->getCode());
-        }
+    connect(ui->btnCancel, &QPushButton::clicked, this, [this] {
+        emit actionTriggered(CredentialsAction::CancelClicked);
     });
-
-    connect(codeDialog, &CodeDialog::resendCodeClicked, this, [&] {
-        codeExpireTime = QDateTime::currentDateTime().addSecs(code_expire_seconds);
-        isCodeExpired = false;
-        codeExpireCheckTimer.start();
-        emit codeResend();
-    });
-
-    connect(ui->btnLogin, &QPushButton::clicked, this, [&] {
-        if (currentDevice().has_value())
-            Q_EMIT loginClicked(currentDevice().value(), email(), password());
-        else
-            Q_EMIT loginClicked({}, email(), password());
-    });
-    connect(ui->btnCancel, &QPushButton::clicked, this, &CredentialsPage::cancelClicked);
-    connect(ui->btnSettings, &QToolButton::clicked, this, [&] {
+    connect(ui->btnSettings, &QToolButton::clicked, this, [this] {
         showDevicesInfo(true);
-        emit settingsClicked();
+        emit actionTriggered(CredentialsAction::SettingsClicked);
     });
-    connect(ui->btnResetPass, &QPushButton::clicked, this, &CredentialsPage::resetPasswordClicked);
-    connect(ui->btnRefresh, &QToolButton::clicked, this, [&] {
+
+    connect(ui->btnCantFindDevice, &QPushButton::clicked, this, [this] {
+        emit actionTriggered(CredentialsAction::CantFindDeviceClicked);
+    });
+    connect(ui->btnResetPass, &QPushButton::clicked, this, [this] {
+        emit actionTriggered(CredentialsAction::ResetPasswordClicked);
+    });
+
+    connect(ui->btnRefresh, &QToolButton::clicked, this, [this] {
         showErrorMessage({});
         showProgressIndicator(true);
-        emit refreshDevicesClicked();
+        emit actionTriggered(CredentialsAction::RefreshDevicesClicked);
     });
-    connect(ui->btnBack, &QToolButton::clicked, this, &CredentialsPage::backButtonClicked);
+    connect(ui->btnBack, &QToolButton::clicked, this, [this] {
+        emit actionTriggered(CredentialsAction::BackButtonClicked);
+    });
 
     // MacOS hover enable
     ui->btnLogin->setAttribute(Qt::WA_Hover, true);
@@ -121,9 +103,6 @@ CredentialsPage::CredentialsPage(QWidget *parent)
 
     showErrorMessage({});
     showProgressIndicator(false);
-
-    codeExpireCheckTimer.setInterval(1000);
-    connect(&codeExpireCheckTimer, &QTimer::timeout, this, &CredentialsPage::onCodeExpireCheckTimer);
 
     updateTheme();
 }
@@ -165,6 +144,9 @@ void CredentialsPage::updateTheme()
 void CredentialsPage::setDevicesList(const QList<Device> &list)
 {
     dev_list = list;
+    // DEBUG
+    // for (const auto& d: dev_list)
+    //     qCDebug(lcCredPage) << d.toString();
     ui->edUrl->setItems(list);
 }
 
@@ -188,11 +170,12 @@ QString CredentialsPage::password() const
     return ui->edPassword->text();
 }
 
-void CredentialsPage::showErrorMessage(const QString& msg)
+void CredentialsPage::showErrorMessage(const QString& msg, const QString& tooltip)
 {
     showProgressIndicator(false);
     ui->frameErrorMessage->setVisible(!msg.isEmpty());
     ui->lblErrorText->setText(msg);
+    ui->lblErrorText->setToolTip(tooltip);
 }
 
 void CredentialsPage::showInvalidUrlError()
@@ -210,6 +193,7 @@ void CredentialsPage::showInvalidCredentialsError()
 void CredentialsPage::showProgressIndicator(bool show)
 {
     ui->edPassword->setEnabled(!show);
+    ui->btnCantFindDevice->setEnabled(!show);
     ui->btnResetPass->setEnabled(!show);
     ui->btnBack->setEnabled(!show);
     ui->edUrl->setEnabled(!show);
@@ -220,72 +204,6 @@ void CredentialsPage::showProgressIndicator(bool show)
     qApp->processEvents();
 }
 
-void CredentialsPage::showCodeDialog(bool show)
-{
-    showProgressIndicator(false);
-
-    dim->setVisible(show);
-    codeDialog->setVisible(show);
-    codeDialog->setDialogState(CodeDialogState::Startup);
-    if (!show) {
-        codeDialog->clearCode();
-        codeDialog->clearError();
-    }
-}
-
-bool CredentialsPage::isCodeDialogVisible() const
-{
-    return codeDialog->isVisible();
-}
-
-void CredentialsPage::showCodeInvalidError()
-{
-    codeDialog->showInvalidCodeError();
-}
-
-void CredentialsPage::showCodeExpiredError()
-{
-    codeDialog->showCodeExpiredError();
-}
-
-void CredentialsPage::showCodeServerError()
-{
-    codeDialog->showServerError();
-}
-
-void CredentialsPage::errorOccured(CUR::RemoteRequest req, int code, const QString &message)
-{
-    Q_UNUSED(req);
-    Q_UNUSED(code);
-
-    if (message.isEmpty()) {
-        if (codeDialog->isVisible()) {
-            showCodeServerError();
-        }
-        else {
-            showErrorMessage(tr("Server error. Try again"));
-        }
-    }
-    else {
-        if (message.contains(QStringLiteral("invalid"))) {
-            showCodeInvalidError();
-        }
-        else if (message.contains(QStringLiteral("expired"))) {
-            showCodeExpiredError();
-        }
-        else {
-            showCodeServerError();
-        }
-    }
-}
-
-void CredentialsPage::codeJustRequested()
-{
-    codeExpireTime = QDateTime::currentDateTime().addSecs(code_expire_seconds);
-    isCodeExpired = false;
-    codeExpireCheckTimer.start();
-}
-
 void CredentialsPage::showDevicesInfo(bool show)
 {
     QString s;
@@ -293,12 +211,17 @@ void CredentialsPage::showDevicesInfo(bool show)
         s += QStringLiteral("<b>%1</b><br>").arg(d.certificateCommonName);
         s += QStringLiteral("  Friendly: %1<br>").arg(d.friendlyName());
         s += QStringLiteral("  CN: %1<br>").arg(d.certificateCommonName);
-        for (const auto& p: d.paths) {
-            s += QStringLiteral("  %1 %2 type: %3 origin: %4<br>")
-                     .arg(p.address)
-                     .arg(p.port == 0 ? QStringLiteral("") : QStringLiteral("port: %1").arg(p.port))
-                     .arg(DevicePath::devTypeToStr(p.deviceType))
-                     .arg(DevicePath::originToStr(p.origin));
+        if (d.paths.isEmpty()) {
+            s += QStringLiteral("  no paths defined<br>");
+        }
+        else {
+            for (const auto& p: d.paths) {
+                s += QStringLiteral("  %1 %2 type: %3 origin: %4<br>")
+                         .arg(p.address)
+                         .arg(p.port == 0 ? QStringLiteral("") : QStringLiteral("port: %1").arg(p.port))
+                         .arg(DevHelpers::devTypeToStr(p.deviceType))
+                         .arg(DevHelpers::originToStr(p.origin));
+            }
         }
     }
     auto r = mapToGlobal(geometry().topLeft());
@@ -306,6 +229,12 @@ void CredentialsPage::showDevicesInfo(bool show)
         QToolTip::showText(r, s);
     else
         QToolTip::showText(r, QStringLiteral(""));
+}
+
+void CredentialsPage::setProgressVisible(bool visible)
+{
+    progressVisible_ = visible;
+    emit progressVisibleChanged();
 }
 
 void CredentialsPage::onTextEdited(const QString&/*txt*/)
@@ -319,15 +248,6 @@ void CredentialsPage::onTextEdited(const QString&/*txt*/)
 
     validateFormData();
     showErrorMessage({});
-}
-
-void CredentialsPage::onCodeExpireCheckTimer()
-{
-    if (QDateTime::currentDateTime() > codeExpireTime) {
-        codeExpireCheckTimer.stop();
-        // codeDialog->showCodeExpiredError();
-        isCodeExpired = true;
-    }
 }
 
 void CredentialsPage::validateFormData()

@@ -1,0 +1,130 @@
+#include "deviceaggregator.h"
+
+namespace {
+int getPriority(DeviceOrigin origin)
+{
+    switch (origin) {
+    case DeviceOrigin::Static: return 100;
+    case DeviceOrigin::MDNS:   return 50;
+    case DeviceOrigin::Remote: return 10;
+    default:                   return 0;
+    }
+}
+}
+
+DeviceAggregator::DeviceAggregator(QObject *parent)
+    : QObject(parent)
+{
+}
+
+QList<DevicePath> DeviceAggregator::getDevicePaths() const
+{
+    QReadLocker locker(&lock_);
+    return mergedList_;
+}
+
+void DeviceAggregator::updateSource(DeviceOrigin origin, const QList<DevicePath> &newDevices)
+{
+    {
+        QWriteLocker locker(&lock_);
+        sourceStorage_[origin] = newDevices;
+        rebuildInternal();
+    }
+
+    // !! emit outside lock scope
+    emit listUpdated();
+}
+
+void DeviceAggregator::clearAll()
+{
+    {
+        QWriteLocker locker(&lock_);
+        sourceStorage_.clear();
+        mergedList_.clear();
+    }
+}
+
+void DeviceAggregator::rebuildInternal()
+{
+    QMap<QString, DevicePath> uniqueMap;
+
+    for (auto it = sourceStorage_.begin(); it != sourceStorage_.end(); ++it) {
+
+        const DeviceOrigin currentOrigin = it.key();
+        const QList<DevicePath>& devices = it.value();
+
+        for (const auto& newDev : devices) {
+            QString key = QStringLiteral("%1:%2").arg(newDev.address).arg(newDev.port);
+
+            if (!uniqueMap.contains(key) ||
+                getPriority(currentOrigin) > getPriority(uniqueMap[key].origin)) {
+                uniqueMap.insert(key, newDev);
+            }
+        }
+    }
+    mergedList_ = uniqueMap.values();
+}
+
+void DeviceAggregator::merge(Device &target, const QList<DevicePath> &path_sources)
+{
+    QHash<QString, int> existingPathIndices;
+    for (int i = 0; i < target.paths.size(); ++i) {
+        QString key = target.paths[i].address + QStringLiteral(":") + QString::number(target.paths[i].port);
+        existingPathIndices[key] = i;
+    }
+
+    for (const auto &newPath : path_sources) {
+        if (target.certificateCommonName != newPath.about.certificate_common_name) {
+            continue;
+        }
+
+        QString key = newPath.address + QStringLiteral(":") + QString::number(newPath.port);
+
+        if (existingPathIndices.contains(key)) {
+            int index = existingPathIndices[key];
+            if (getPriority(newPath.origin) > getPriority(target.paths[index].origin)) {
+                target.paths[index] = newPath;
+            }
+        } else {
+            target.paths.append(newPath);
+            existingPathIndices[key] = target.paths.size() - 1;
+        }
+    }
+}
+
+QList<Device> DeviceAggregator::build_devices(const QList<DevicePath> &records)
+{
+    QHash<QString, Device> deviceMap;
+
+    for (const auto& record : records) {
+        const QString& cn = record.about.certificate_common_name;
+
+        if (!deviceMap.contains(cn)) {
+            Device newDevice;
+            newDevice.certificateCommonName = cn;
+            deviceMap.insert(cn, newDevice);
+        }
+
+        Device& device = deviceMap[cn];
+        bool foundDuplicate = false;
+
+        for (int i = 0; i < device.paths.size(); ++i) {
+            if (device.paths[i].address == record.address &&
+                device.paths[i].port == record.port) {
+
+                foundDuplicate = true;
+                if (getPriority(record.origin) > getPriority(device.paths[i].origin)) {
+                    device.paths[i] = record;
+                }
+                break;
+            }
+        }
+
+        if (!foundDuplicate) {
+            device.paths.append(record);
+        }
+    }
+
+    return deviceMap.values();
+}
+

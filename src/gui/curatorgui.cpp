@@ -122,8 +122,7 @@ CuratorGui::CuratorGui(Application *parent)
     // for the beginning, set the offline icon until the account was verified
     _tray->setIcon(Theme::instance()->syncStateIcon(SyncResult::Status::Offline, true, false));
 
-    connect(_tray, &QSystemTrayIcon::activated,
-        this, &CuratorGui::slotTrayClicked);
+    connect(_tray, &QSystemTrayIcon::activated, this, &CuratorGui::slotTrayClicked);
 
     setupActions();
     setupContextMenu();
@@ -131,17 +130,13 @@ CuratorGui::CuratorGui(Application *parent)
     _tray->show();
 
     ProgressDispatcher *pd = ProgressDispatcher::instance();
-    connect(pd, &ProgressDispatcher::progressInfo, this,
-        &CuratorGui::slotUpdateProgress);
+    connect(pd, &ProgressDispatcher::progressInfo, this, &CuratorGui::slotUpdateProgress);
 
     FolderMan *folderMan = FolderMan::instance();
-    connect(folderMan, &FolderMan::folderSyncStateChange,
-        this, &CuratorGui::slotSyncStateChange);
+    connect(folderMan, &FolderMan::folderSyncStateChange, this, &CuratorGui::slotSyncStateChange);
 
-    connect(AccountManager::instance(), &AccountManager::accountAdded,
-        this, &CuratorGui::updateContextMenuNeeded);
-    connect(AccountManager::instance(), &AccountManager::accountRemoved,
-        this, &CuratorGui::updateContextMenuNeeded);
+    connect(AccountManager::instance(), &AccountManager::accountAdded, this, &CuratorGui::updateContextMenuNeeded);
+    connect(AccountManager::instance(), &AccountManager::accountRemoved, this, &CuratorGui::updateContextMenuNeeded);
 }
 
 CuratorGui::~CuratorGui()
@@ -241,7 +236,7 @@ void CuratorGui::slotComputeOverallSyncStatus()
     bool allPaused = true;
     bool allDisconnected = true;
     QVector<AccountStatePtr> problemAccounts;
-    auto setStatusText = [&](const QString &text) {
+    auto setStatusText = [this](const QString &text) {
         // Don't overwrite the status if we're currently syncing
         if (FolderMan::instance()->isAnySyncRunning())
             return;
@@ -364,7 +359,7 @@ void CuratorGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *menu
 {
     menu->addAction(CommonStrings::showFilesInWebBrowser(), this, [accountState] { QDesktopServices::openUrl(accountState->account()->url()); });
     menu->addAction(CommonStrings::showPhotosInWebBrowser(), this, [accountState] {
-        auto photosUrl = Device::makePhotosUrl(accountState->account()->url());
+        auto photosUrl = DevHelpers::makePhotosUrl(accountState->account()->url());
         QDesktopServices::openUrl(photosUrl);
     });
 
@@ -824,6 +819,7 @@ void CuratorGui::slotUpdateProgress(Folder *folder, const ProgressInfo &progress
 void CuratorGui::runNewAccountWizard()
 {
     if (_wizardController.isNull()) {
+
         // passing the settings dialog as parent makes sure the wizard will be shown above it
         // as the settingsDialog's lifetime spans across the entire application but the dialog will live much shorter,
         // we have to clean it up manually when finished() is emitted
@@ -928,8 +924,6 @@ void CuratorGui::runNewAccountWizard()
                             }
                             validator->deleteLater();
                         });
-
-
                     validator->checkServer();
                 } else {
                     FolderMan::instance()->setSyncEnabled(true);
@@ -942,6 +936,7 @@ void CuratorGui::runNewAccountWizard()
         // all we have to do is show the dialog...
         ocApp()->gui()->settingsDialog()->addModalWidget(_wizardController->window());
     }
+
 }
 
 void CuratorGui::setPauseOnAllFoldersHelper(const QList<AccountStatePtr> &accounts, bool pause)

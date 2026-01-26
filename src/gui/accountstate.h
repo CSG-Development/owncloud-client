@@ -20,7 +20,9 @@
 
 #include "connectionvalidator.h"
 #include "creds/abstractcredentials.h"
+#include "device/devicecontroller.h"
 #include "updateurldialog.h"
+
 #include <QByteArray>
 #include <QElapsedTimer>
 #include <QPointer>
@@ -37,7 +39,6 @@ class Account;
 class QuotaInfo;
 class TlsErrorDialog;
 class FetchServerSettingsJob;
-class EvaluatePath;
 
 /**
  * @brief Extra info about an ownCloud server account.
@@ -155,6 +156,8 @@ public:
     bool isSettingUp() const;
     void setSettingUp(bool settingUp);
 
+    void createDeviceController();
+
 public slots:
     /// Triggers a ping to the server to update state and
     /// connection status and errors.
@@ -170,12 +173,21 @@ private:
 
     void setState(State state);
 
+    void checkAndSwitchDevicePath();
+    bool doDevicePathSwitch();
+    void enableCodeDialogProcessing(bool enable);
+    void requestRAupdate();
+    Device* getDevice();
+
 signals:
     void stateChanged(State state);
     void isConnectedChanged();
     void urlUpdated();
     void urlChanged(const QUuid& id);
     void isSettingUpChanged();
+
+    // internal signal to be able to finish processing device path update when "Skip" code dialog pressed
+    void pathUpdateFinished(bool skippedCode, const QList<DevicePath>& paths);
 
 protected Q_SLOTS:
     void slotConnectionValidatorResult(ConnectionValidator::Status status, const QStringList &errors);
@@ -194,9 +206,11 @@ private:
     QPointer<ConnectionValidator> _connectionValidator;
     QPointer<UpdateUrlDialog> _updateUrlDialog;
     QPointer<TlsErrorDialog> _tlsDialog;
-    EvaluatePath* _evaluator = nullptr;
     bool _supportsSpaces = true;
     bool _settingUp = false;
+    DeviceController* _deviceController = nullptr;
+    bool _accessCodeDialog = false;
+    bool _updateDeviceInProgress = false;
 
     /**
      * Starts counting when the server starts being back up after 503 or

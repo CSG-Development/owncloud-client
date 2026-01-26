@@ -7,9 +7,22 @@
 #include <QNetworkAccessManager>
 #include <QRestAccessManager>
 #include <QNetworkRequestFactory>
+#include <QNetworkReply>
+#include <QRestReply>
 #include <QJsonDocument>
+#include <QFuture>
+#include <QPromise>
 
-namespace CUR {
+struct AboutCtx {
+    DeviceInfoAbout deviceAbout;
+    QString errorString;
+    int status = 0;
+};
+struct StatusCtx {
+    DeviceInfoStatus deviceStatus;
+    QString errorString;
+    int status = 0;
+};
 
 class CURATORSYNC_EXPORT DeviceApi: public QObject
 {
@@ -17,22 +30,48 @@ class CURATORSYNC_EXPORT DeviceApi: public QObject
 
 public:
     explicit DeviceApi(QObject* parent = nullptr);
-    ~DeviceApi();
 
-    void query_device_about(const QString &url);
-    void query_device_status(const QString &url);
+    QFuture<AboutCtx> query_about(const QString &url);
+    QFuture<StatusCtx> query_status(const QString &url);
 
-signals:
-    void about_finished(const DeviceInfoAbout& info, int code);
-    void status_finished(const DeviceInfoStatus& info, int code);
+    QFuture<QList<DevicePath>> query_about_all(QList<DevicePath> paths);
+    QFuture<QList<DevicePath>> query_status_all(QList<DevicePath> paths);
 
-    void about_request_finished(std::optional<QJsonDocument>, int code);
-    void status_request_finished(std::optional<QJsonDocument>, int code);
+    QFuture<std::pair<AboutCtx,StatusCtx>> query_about_status(const QString &url);
 
-private:
-    QNetworkAccessManager net_mgr;
-    std::unique_ptr<QRestAccessManager> rest_mgr;
-    std::unique_ptr<QNetworkRequestFactory> rest_factory;
+protected:
+
+    template <typename T>
+    QFuture<T> execRequest(QNetworkReply* netReply, std::function<T(const std::optional<QJsonDocument>&,int)> parser) {
+        auto promise = std::make_shared<QPromise<T>>();
+        auto future = promise->future();
+
+        if (!netReply) {
+            promise->finish();
+            return future;
+        }
+
+        connect(netReply, &QNetworkReply::finished, this, [promise, parser, netReply]() mutable {
+
+            QRestReply restReply(netReply);
+            int statusCode = restReply.httpStatus();
+            auto doc = restReply.readJson();
+
+            try {
+                promise->addResult(parser(doc, statusCode));
+            } catch (const std::exception& e) {
+                //promise->setException(std::make_exception_ptr(e));
+                T errCtx;
+                errCtx.status = -1;
+                promise->addResult(errCtx);
+            }
+            promise->finish();
+            netReply->deleteLater();
+        });
+
+        return future;
+    }
+
+    QRestAccessManager _rest;
+    QNetworkRequestFactory _factory;
 };
-
-} // namespace CUR

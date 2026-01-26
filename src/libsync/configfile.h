@@ -201,6 +201,12 @@ public:
     QString clientId() const;
     void setClientId(const QString& id);
 
+    QString favoriteEmail() const;
+    void setFavoriteEmail(const QString& email);
+
+    QString favoriteDeviceCN() const;
+    void setFavoriteDeviceCN(const QString& devCN);
+
     // ! For Testing only
     // Use mDNS port only for API requests
     static bool useLocalPortForApiOnly();

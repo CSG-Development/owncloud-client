@@ -38,21 +38,21 @@ FinishedPage::FinishedPage(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->chkAdvanced, &QCheckBox::checkStateChanged, this, [&](Qt::CheckState state) {
+    connect(ui->chkAdvanced, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
         advancedStateChanged(state == Qt::Checked);
     });
     advancedStateChanged(false);
 
     connect(ui->btnBrowse, &QToolButton::clicked, this, &FinishedPage::onBrowseClicked);
     connect(ui->btnBack, &QPushButton::clicked, this, &FinishedPage::backClicked);
-    connect(ui->btnDone, &QPushButton::clicked, this, [&] {
+    connect(ui->btnDone, &QPushButton::clicked, this, [this] {
         Q_EMIT doneClicked(syncMode(), syncTargetDir());
     });
 
-    connect(ui->edDownloadDir, &InputWidget::textChanged, this, [&] {
+    connect(ui->edDownloadDir, &InputWidget::textChanged, this, [this] {
         ui->btnReset->setEnabled(ui->edDownloadDir->text() != QDir::toNativeSeparators(defaultTargetDir_));
     });
-    connect(ui->btnReset, &QToolButton::clicked, this, [&] {
+    connect(ui->btnReset, &QToolButton::clicked, this, [this] {
         ui->edDownloadDir->setText(QDir::toNativeSeparators(defaultTargetDir_));
     });
 

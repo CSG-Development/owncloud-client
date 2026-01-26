@@ -291,6 +291,8 @@ AccountStatePtr AccountManager::addAccount(const AccountPtr &newAccount)
 
 void AccountManager::deleteAccount(AccountStatePtr account)
 {
+
+
     auto it = std::find(_accounts.begin(), _accounts.end(), account);
     if (it == _accounts.end()) {
         return;
@@ -357,6 +359,7 @@ AccountStatePtr AccountManager::addAccountState(std::unique_ptr<AccountState> &&
 
     AccountStatePtr statePtr = accountState.release();
     _accounts.insert(statePtr->account()->uuid(), statePtr);
+    statePtr->createDeviceController();
     emit accountAdded(statePtr);
     return statePtr;
 }

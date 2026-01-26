@@ -88,18 +88,21 @@
     background: rgba(144, 202, 249, 0.3)
 }
 
-#btnResetPass {
+#btnResetPass,
+#btnCantFindDevice {
     background: transparent;
     color: #64B5F6;
     border: 1px solid transparent;
-    border-radius: 20px;
+    border-radius: 18px;
     font: "Segoe UI";
     font-size: 14px;
 }
-#btnResetPass:hover {
+#btnResetPass:hover,
+#btnCantFindDevice:hover {
     background: rgba(144, 202, 249, 0.12);
 }
-#btnResetPass:pressed {
+#btnResetPass:pressed,
+#btnCantFindDevice:pressed {
     background: rgba(144, 202, 249, 0.3);
 }
 
@@ -140,6 +143,7 @@
 
 #frameEmail,
 #frameUrl,
+#frameCantFindDevice,
 #framePassword {
     border: none;
 }

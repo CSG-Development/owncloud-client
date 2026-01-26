@@ -173,7 +173,7 @@ QUrl Account::url() const
 {
     auto dev = _device.findPath(_activePath);
     if (dev.has_value()) {
-        return QUrl(Device::makeServerUrl(dev->address, dev->port, true, dev->origin != DevicePathOrigin::MDNS));
+        return QUrl(DevHelpers::makeServerUrl(dev->address, dev->port, true, dev->origin != DeviceOrigin::MDNS));
     }
     return QUrl();
 }
@@ -246,7 +246,7 @@ bool Account::replaceUrlToRemote(QUrl &urlToReplace)
     if (id.has_value()) {
         auto dev = _device.findPath(id.value());
         if (dev) {
-            QUrl remote(Device::makeServerUrl(dev->address, dev->port, false, true));
+            QUrl remote(DevHelpers::makeServerUrl(dev->address, dev->port, false, true));
             urlToReplace.setHost(remote.host());
             if (!CUR::ConfigFile::useLocalPortForApiOnly()) {
                 urlToReplace.setPort(remote.port());

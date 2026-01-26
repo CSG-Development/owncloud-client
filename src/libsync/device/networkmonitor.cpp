@@ -14,7 +14,7 @@ NetworkMonitor::NetworkMonitor()
     qInfo(lcNetworkMonitor) << "NetworkMonitor created";
     _timer.setInterval(5000);
 
-    connect(&_timer, &QTimer::timeout, this, [&] {
+    connect(&_timer, &QTimer::timeout, this, [this] {
         const auto all = QNetworkInterface::allInterfaces();
 
         QSet<QString> actual;
@@ -32,8 +32,14 @@ NetworkMonitor::NetworkMonitor()
 
         if (isDiff(actual, ip_addresses)) {
             ip_addresses = actual;
-            qCInfo(lcNetworkMonitor) << "Network configuration changed";
-            emit network_changed();
+            if (_startup) {
+                qCInfo(lcNetworkMonitor) << "Network configuration startup";
+                _startup = false;
+            }
+            else {
+                qCInfo(lcNetworkMonitor) << "Network configuration changed";
+                emit network_changed();
+            }
         }
     });
 }
@@ -60,6 +66,19 @@ void NetworkMonitor::start()
 void NetworkMonitor::emit_network_changed()
 {
     emit network_changed();
+}
+
+bool NetworkMonitor::isWifiEthAvailable()
+{
+    return false;
+    const auto all = QNetworkInterface::allInterfaces();
+
+    for (const auto& item: all) {
+        if (item.type() == QNetworkInterface::Wifi || item.type() == QNetworkInterface::Ethernet)
+            return true;
+    }
+
+    return false;
 }
 
 } // namespace CUR

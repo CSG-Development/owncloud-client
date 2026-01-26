@@ -20,6 +20,8 @@ public:
 
     void emit_network_changed();
 
+    static bool isWifiEthAvailable();
+
 signals:
     void network_changed();
 
@@ -31,6 +33,7 @@ private:
 private:
     QSet<QString> ip_addresses;
     QTimer _timer;
+    bool _startup = true;
 };
 
 } // namespace CUR
