@@ -19,12 +19,9 @@ public:
     DeviceOrigin origin = DeviceOrigin::Unknown;    // Mostly for debug
     int port = 0;
 
-    bool isOnline = false;      // Not saved in config, runtime only
-    bool isActive = false;      // Not saved in config, runtime only
     QUuid id;                   // Not saved in config, runtime only
     DeviceInfoAbout about;      // Not saved in config, runtime only
     DeviceInfoStatus status;    // Not saved in config, runtime only
-    QString certName;           // Not saved in config, runtime only
     QString friendlyName;       // Not saved in config, runtime only
 
     QJsonObject toJson() const;
@@ -32,23 +29,19 @@ public:
     static int pathPriority(DeviceType devType);
 
     QString toString() const;
+    QString toStringShort() const;
 };
 
 class CURATORSYNC_EXPORT Device
 {
-private:
-    QString _friendlyName;
-
 public:
     QString seagateDeviceID;
     QString certificateCommonName;
+    QString friendlyName;
     QString hostname;
     bool isStatic = false;
     DeviceOrigin origin = DeviceOrigin::Unknown;
     QList<DevicePath> paths;
-
-    void setFriendlyName(const QString& name);
-    QString friendlyName() const {return _friendlyName;}
 
     static Device MakeStatic(const QString& url, const QString& name);
 
@@ -61,10 +54,6 @@ public:
     static QJsonArray pathsToJson(const QList<DevicePath>& devicePaths);
     static QList<DevicePath> jsonToPaths(const QJsonArray& val);
 
-    void setActicvePath(const QUuid& id);
-    void setOnlinePath(const QUuid& id);
-    void clearOnlinePaths();
-
     std::optional<DevicePath> findPath(const QUuid& id) const;
     DevicePath* getPathPtr(const QUuid& id);
     std::optional<QUuid> getBestPathId();
@@ -72,15 +61,16 @@ public:
     std::optional<QUuid> getRemoteOnlyPath() const;
 
     QString toString() const;
+    QString toStringShort() const;
 };
 
 inline QDebug operator<< (QDebug d, const DevicePath& info) {
-    d << info.toString();
+    d << info.toStringShort();
     return d;
 }
 
 inline QDebug operator<< (QDebug d, const Device& info) {
-    d << info.toString();
+    d << info.toStringShort();
     return d;
 }
 

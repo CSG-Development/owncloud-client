@@ -209,7 +209,7 @@ void CredentialsPage::showDevicesInfo(bool show)
     QString s;
     for (const auto& d: std::as_const(dev_list)) {
         s += QStringLiteral("<b>%1</b><br>").arg(d.certificateCommonName);
-        s += QStringLiteral("  Friendly: %1<br>").arg(d.friendlyName());
+        s += QStringLiteral("  Friendly: %1<br>").arg(d.friendlyName);
         s += QStringLiteral("  CN: %1<br>").arg(d.certificateCommonName);
         if (d.paths.isEmpty()) {
             s += QStringLiteral("  no paths defined<br>");

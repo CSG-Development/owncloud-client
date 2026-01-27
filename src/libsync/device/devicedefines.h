@@ -65,6 +65,7 @@ public:
 
     static DeviceInfoAbout fromJson(const QJsonDocument& doc);
     QString toString() const;
+    QString toStringShort() const;
 };
 
 class CURATORSYNC_EXPORT DeviceInfoStatus
@@ -97,7 +98,7 @@ inline QDebug operator<< (QDebug d, const DeviceHardwareInfo& info) {
 }
 
 inline QDebug operator<< (QDebug d, const DeviceInfoAbout& info) {
-    d << info.toString();
+    d << info.toStringShort();
     return d;
 }
 

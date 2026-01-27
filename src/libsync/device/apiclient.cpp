@@ -133,7 +133,7 @@ QFuture<DeviceListCtx> ApiClient::ra_device_list()
                         Device d;
                         d.seagateDeviceID = item[jkey_seagateDeviceID].toString();
                         d.certificateCommonName = item[jkey_certificateCommonName].toString();
-                        d.setFriendlyName(item[jkey_friendlyName].toString());
+                        d.friendlyName = item[jkey_friendlyName].toString();
                         d.hostname = item[jkey_hostname].toString();
                         d.origin = DeviceOrigin::Remote;
                         ctx.deviceList.append(d);

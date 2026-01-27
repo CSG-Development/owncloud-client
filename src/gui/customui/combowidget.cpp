@@ -60,10 +60,10 @@ ComboWidget::ComboWidget(QWidget *parent)
         auto selected = popup->selectedDevice();
         if (selected) {
             selectedDevice = selected;
-            if (selectedDevice->friendlyName().isEmpty())
+            if (selectedDevice->friendlyName.isEmpty())
                 setText(selectedDevice->certificateCommonName);
             else
-                setText(selectedDevice->friendlyName());
+                setText(selectedDevice->friendlyName);
         }
     });
 
@@ -119,17 +119,31 @@ void ComboWidget::setItems(const QList<Device> &list)
 
     popup->setItems(deviceList);
 
-    // List is empty, but some device already selected - clear device selection
-    if (deviceList.isEmpty() && !text().isEmpty()) {
+    // List is empty
+    if (deviceList.isEmpty()) {
         selectedDevice = std::nullopt;
         setText(QStringLiteral(""));
+        return;
     }
-    else if (!deviceList.isEmpty() && text().isEmpty()) {
+
+    // Update text if already selected
+    if (selectedDevice) {
+        const auto& dev = findByCN(deviceList, selectedDevice->certificateCommonName);
+        if (dev) {
+            if (dev->friendlyName.isEmpty())
+                setText(dev->certificateCommonName);
+            else
+                setText(dev->friendlyName);
+        }
+    }
+
+    // Still no selected
+    if (text().isEmpty()) {
         selectedDevice = deviceList.first();
-        if (selectedDevice->friendlyName().isEmpty())
+        if (selectedDevice->friendlyName.isEmpty())
             setText(selectedDevice->certificateCommonName);
         else
-            setText(selectedDevice->friendlyName());
+            setText(selectedDevice->friendlyName);
     }
 }
 
@@ -179,11 +193,6 @@ void ComboWidget::setFontPixelSize(int val)
     ui->lineEdit->setFont(font);
 }
 
-void ComboWidget::paintEvent(QPaintEvent *event)
-{
-    QFrame::paintEvent(event);
-}
-
 void ComboWidget::resizeEvent(QResizeEvent */*event*/)
 {
     updatePromptPosition();
@@ -195,7 +204,7 @@ void ComboWidget::onTextChanged(const QString& str)
         promptLabel->setVisible(!str.isEmpty());
     }
 
-    Q_EMIT textChanged(str);
+    emit textChanged(str);
 }
 
 void ComboWidget::updatePromptPosition()
@@ -225,4 +234,16 @@ void ComboWidget::updateButtonIcon()
         ui->arrowButton->setIcon(popup->isVisible() ? QIcon(arrowButtonLight.second) : QIcon(arrowButtonLight.first));
     }
     update();
+}
+
+std::optional<Device> ComboWidget::findByCN(const QList<Device> &list, const QString& cn)
+{
+    const auto& it = std::find_if(list.cbegin(), list.cend(), [cn](const Device& dev) {
+        return dev.certificateCommonName == cn;
+    });
+
+    if (it != list.cbegin())
+        return *it;
+
+    return std::nullopt;
 }

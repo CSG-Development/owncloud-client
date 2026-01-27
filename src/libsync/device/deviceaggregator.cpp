@@ -1,4 +1,8 @@
 #include "deviceaggregator.h"
+#include "devicedefines.h"
+#include <QLoggingCategory>
+
+Q_LOGGING_CATEGORY(lcDeviceAggregator, "device.aggregator", QtDebugMsg)
 
 namespace {
 int getPriority(DeviceOrigin origin)
@@ -53,6 +57,8 @@ void DeviceAggregator::rebuildInternal()
         const DeviceOrigin currentOrigin = it.key();
         const QList<DevicePath>& devices = it.value();
 
+        qCDebug(lcDeviceAggregator) << "srcStorage" << DevHelpers::originToStr(currentOrigin) << devices;
+
         for (const auto& newDev : devices) {
             QString key = QStringLiteral("%1:%2").arg(newDev.address).arg(newDev.port);
 
@@ -62,6 +68,7 @@ void DeviceAggregator::rebuildInternal()
             }
         }
     }
+
     mergedList_ = uniqueMap.values();
 }
 
@@ -96,26 +103,41 @@ QList<Device> DeviceAggregator::build_devices(const QList<DevicePath> &records)
 {
     QHash<QString, Device> deviceMap;
 
+    qCDebug(lcDeviceAggregator) << records;
+
     for (const auto& record : records) {
         const QString& cn = record.about.certificate_common_name;
 
         if (!deviceMap.contains(cn)) {
             Device newDevice;
             newDevice.certificateCommonName = cn;
+            if (!record.friendlyName.isEmpty()) {
+                newDevice.friendlyName = record.friendlyName;
+            }
+            else {
+                newDevice.friendlyName = record.about.hostname;
+            }
+
             deviceMap.insert(cn, newDevice);
+            qCDebug(lcDeviceAggregator) << "new device" << newDevice;
         }
 
         Device& device = deviceMap[cn];
         bool foundDuplicate = false;
 
         for (int i = 0; i < device.paths.size(); ++i) {
-            if (device.paths[i].address == record.address &&
-                device.paths[i].port == record.port) {
+            if (device.paths[i].address == record.address && device.paths[i].port == record.port) {
 
                 foundDuplicate = true;
                 if (getPriority(record.origin) > getPriority(device.paths[i].origin)) {
                     device.paths[i] = record;
+                    qCDebug(lcDeviceAggregator) << "updated by priority" << record;
                 }
+                if (device.friendlyName.isEmpty() && record.friendlyName.isEmpty()) {
+                    device.friendlyName = record.friendlyName;
+                    qCDebug(lcDeviceAggregator) << "updated friendlyName to" << device.friendlyName;
+                }
+
                 break;
             }
         }

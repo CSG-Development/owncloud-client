@@ -77,10 +77,22 @@ QString DevicePath::toString() const
     l << QStringLiteral("port:%1,").arg(port);
     l << QStringLiteral("deviceType:%1,").arg(DevHelpers::devTypeToStr(deviceType));
     l << QStringLiteral("origin:%1,").arg(DevHelpers::originToStr(origin));
-    l << QStringLiteral("online:%1,").arg(isOnline);
-    l << QStringLiteral("active:%1,").arg(isActive);
     l << QStringLiteral("id:%1,").arg(id.toString());
     l << QStringLiteral("%1,").arg(about.toString());
+    l << status.toString();
+    l << QStringLiteral("}");
+    return l.join(QStringLiteral(""));
+}
+
+QString DevicePath::toStringShort() const
+{
+    QStringList l;
+    l << QStringLiteral("path{");
+    l << QStringLiteral("addr:%1:%2,").arg(address).arg(port);
+    l << QStringLiteral("type:%1,").arg(DevHelpers::devTypeToStr(deviceType));
+    l << QStringLiteral("origin:%1,").arg(DevHelpers::originToStr(origin));
+    l << QStringLiteral("id:%1,").arg(id.toString());
+    l << QStringLiteral("%1,").arg(about.toStringShort());
     l << status.toString();
     l << QStringLiteral("}");
     return l.join(QStringLiteral(""));
@@ -182,7 +194,7 @@ QString Device::toString() const
     l << QStringLiteral("Device{");
     l << QStringLiteral("seagateDeviceID:%1,").arg(seagateDeviceID);
     l << QStringLiteral("certificateCommonName:%1,").arg(certificateCommonName);
-    l << QStringLiteral("friendlyName:%1,").arg(friendlyName());
+    l << QStringLiteral("friendlyName:%1,").arg(friendlyName);
     l << QStringLiteral("hostname:%1,").arg(hostname);
     l << QStringLiteral("origin:%1,").arg(DevHelpers::originToStr(origin));
     l << QStringLiteral("isStatic:%1,").arg(isStatic);
@@ -193,9 +205,21 @@ QString Device::toString() const
     return l.join(QStringLiteral(""));
 }
 
-void Device::setFriendlyName(const QString &name)
+QString Device::toStringShort() const
 {
-    _friendlyName = name;
+    QStringList l;
+    l << QStringLiteral("Device{");
+    l << QStringLiteral("id:%1,").arg(seagateDeviceID);
+    l << QStringLiteral("certCN:%1,").arg(certificateCommonName);
+    l << QStringLiteral("friendlyName:%1,").arg(friendlyName);
+    l << QStringLiteral("hostname:%1,").arg(hostname);
+    l << QStringLiteral("origin:%1,").arg(DevHelpers::originToStr(origin));
+    l << QStringLiteral("static:%1,").arg(isStatic);
+    for (const auto& p: paths) {
+        l << p.toStringShort();
+    }
+    l << QStringLiteral("}");
+    return l.join(QStringLiteral(""));
 }
 
 Device Device::MakeStatic(const QString &url, const QString &name)
@@ -215,7 +239,7 @@ QJsonDocument Device::toJson(const Device& dev)
     QJsonObject obj;
     obj[device_id_C] = dev.seagateDeviceID;
     obj[cert_common_name_C] = dev.certificateCommonName;
-    obj[friendly_name_C] = dev.friendlyName();
+    obj[friendly_name_C] = dev.friendlyName;
     obj[hostname_C] = dev.hostname;
     QJsonArray arr;
     for (const auto& dev_path: std::as_const(dev.paths)) {
@@ -241,7 +265,7 @@ Device Device::fromJson(const QJsonDocument &doc)
     QJsonObject obj = doc.object();
     d.seagateDeviceID = obj[device_id_C].toString();
     d.certificateCommonName = obj[cert_common_name_C].toString();
-    d.setFriendlyName(obj[friendly_name_C].toString());
+    d.friendlyName = obj[friendly_name_C].toString();
     d.hostname = obj[hostname_C].toString();
     d.paths = Device::jsonToPaths(obj[paths_C].toArray());
 
@@ -276,29 +300,6 @@ QList<DevicePath> Device::jsonToPaths(const QJsonArray& val)
     }
 
     return ret;
-}
-
-void Device::setActicvePath(const QUuid &id)
-{
-    for (auto& p: paths) {
-        p.isActive = (p.id == id);
-    }
-}
-
-void Device::setOnlinePath(const QUuid& id)
-{
-    for (auto& p: paths) {
-        if (p.id == id) {
-            p.isOnline = true;
-            break;
-        }
-    }
-}
-
-void Device::clearOnlinePaths()
-{
-    for (auto& p: paths)
-        p.isOnline = false;
 }
 
 QString DeviceHardwareInfo::toString() const

@@ -9,10 +9,6 @@
 #include <QDateTime>
 
 namespace Ui {class CredentialsPage;}
-namespace CUR {enum class RemoteRequest;}
-
-class DimWidget;
-class CodeDialog;
 
 class CredentialsPage : public QWidget
 {

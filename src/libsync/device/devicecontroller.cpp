@@ -132,7 +132,7 @@ void DeviceController::start_new_account()
 
 void DeviceController::prepareLogin(Device &dev)
 {
-    qCDebug(lcDeviceController) << "Prepare login started, device" << dev.toString();
+    qCDebug(lcDeviceController) << "Prepare login started, device" << dev.toStringShort();
 
     currentDevice = dev;
 

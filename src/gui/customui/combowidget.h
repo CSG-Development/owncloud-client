@@ -45,13 +45,14 @@ Q_SIGNALS:
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
-    void paintEvent(QPaintEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
     void onTextChanged(const QString&);
     void updatePromptPosition();
     void updateStyles();
     void updateButtonIcon();
+
+    std::optional<Device> findByCN(const QList<Device> &list, const QString& cn);
 
 private:
     Ui::ComboWidget* ui = nullptr;

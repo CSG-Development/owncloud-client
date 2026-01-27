@@ -373,7 +373,7 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
     // first, we must resolve the actual server URL
     auto resolveJob = Jobs::ResolveUrlJobFactory(_context->accessManager()).startJob(serverUrl, this);
 
-    connect(resolveJob, &CoreJob::finished, resolveJob, [this, resolveJob, dev_id = id]() {
+    connect(resolveJob, &CoreJob::finished, resolveJob, [this, resolveJob]() {
         resolveJob->deleteLater();
 
         if (!resolveJob->success()) {
@@ -386,7 +386,7 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
         // next, we need to find out which kind of authentication page we have to present to the user
         auto authTypeJob = DetermineAuthTypeJobFactory(_context->accessManager()).startJob(resolvedUrl, this);
 
-        connect(authTypeJob, &CoreJob::finished, authTypeJob, [this, authTypeJob, resolvedUrl, dev_id]() {
+        connect(authTypeJob, &CoreJob::finished, authTypeJob, [this, authTypeJob, resolvedUrl]() {
             authTypeJob->deleteLater();
 
             if (authTypeJob->result().isNull()) {
@@ -396,7 +396,6 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
 
             _context->accountBuilder().setServerUrl(resolvedUrl, qvariant_cast<DetermineAuthTypeJob::AuthType>(authTypeJob->result()));
             _context->accountBuilder().setDevice(device_);
-            device_.setActicvePath(dev_id);
             Q_EMIT handleCredentialsEvaluation(SetupResult::Success);
         });
     });

@@ -396,8 +396,10 @@ void MdnsClient::setupSockets()
                 auto socket = new QUdpSocket(this);
                 if (socket->bind(entry.ip(), 0, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint)) {
                     connect(socket, &QUdpSocket::readyRead, this, &MdnsClient::onReadyRead);
+                    qDebug(lcMdnsDevice) << "Socket binded to" << entry.ip();
                     sockets.append(socket);
                 } else {
+                    qDebug(lcMdnsDevice) << "Failed bind socket to" << entry.ip();
                     socket->deleteLater();
                 }
             }
