@@ -602,61 +602,6 @@ void AccountState::requestRAupdate()
         }
     }, Qt::SingleShotConnection);
 
-    /*
-    connect(_deviceController, &DeviceController::devices_updated, this, [this] {
-        qCDebug(lcAccountState) << "DeviceController::devices_updated";
-        emit pathUpdateFinished(false);
-    }, Qt::SingleShotConnection);
-
-    connect(this, &AccountState::pathUpdateFinished, this, [this](bool skippedCode) {
-        qCDebug(lcAccountState) << "RA Device update finished. Skip code" << skippedCode;
-        _updateDeviceInProgress = false;
-        enableCodeDialogProcessing(false);
-
-        if (skippedCode) {
-            qCDebug(lcAccountState) << "Code skipped, no path update";
-            return;
-        }
-
-        auto* currentDevice = _account->devicePtr();
-        if (currentDevice) {
-            qCDebug(lcAccountState) << "Current device" << currentDevice->certificateCommonName;
-
-            auto dev = _deviceController->getDevice(currentDevice->certificateCommonName);
-            if (dev) {
-
-                qCDebug(lcAccountState) << "Update device info, id:" << dev->seagateDeviceID;
-                if (!dev->seagateDeviceID.isEmpty()) {
-                    // now get path for device
-                    _deviceController->queryDeviceInfo(dev->seagateDeviceID)
-                        .then(this, [currentDevice](const DevicePathListCtx& ctx) {
-                            if (ctx.res.status == 200) {
-                                currentDevice->paths = ctx.devicePathList;
-
-                                // DEBUG
-                                if (currentDevice->paths.isEmpty()) {
-                                    qCDebug(lcAccountState) << "No path items found";
-                                }
-                                else {
-                                    for (const auto& it: currentDevice->paths) {
-                                        qCDebug(lcAccountState) << "UPDATED" << it.address << it.status.oobe_done;
-                                    }
-                                }
-                            }
-                        });
-                }
-                else {
-                    qCDebug(lcAccountState) << "Device id empty, not updated";
-                }
-            }
-            else {
-                qCDebug(lcAccountState) << "Device" << currentDevice->certificateCommonName << "not found";
-            }
-        }
-
-    }, Qt::SingleShotConnection);
-    */
-
     _deviceController->account_update_device(*getDevice());
 }
 
