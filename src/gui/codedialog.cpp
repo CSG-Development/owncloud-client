@@ -65,7 +65,10 @@ CodeDialog::CodeDialog(QWidget *parent)
     , controller_(new CodeDialogController(this))
 {
     ui->setupUi(this);
+
+    connect(CUR::Theme::instance(), &CUR::Theme::themeChanged, this, &CodeDialog::updateTheme);
     updateTheme();
+
     setWindowFlags(Qt::Tool|Qt::FramelessWindowHint|Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
     setAutoFillBackground(false);
