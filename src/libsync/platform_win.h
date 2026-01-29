@@ -16,6 +16,8 @@
 
 #include "platform.h"
 
+class QTimer;
+
 namespace CUR {
 
 class WinPlatform : public Platform
