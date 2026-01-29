@@ -87,8 +87,7 @@ SetupController::SetupController(SettingsDialog *parent)
             break;
 
         case CodeAction::Skip:
-            ocApp()->gui()->settingsDialog()->showCodePage(false, false);
-            remoteSkipped = true;
+            ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Hide, SyncState::Disabled);
             window()->displayPage(SetupPage::PageCredentials);
             window()->showCredPageProgress(false);
             break;
@@ -97,7 +96,7 @@ SetupController::SetupController(SettingsDialog *parent)
 
     connect(_deviceController, &DeviceController::accessCodeRequest, this, [] {
         qCDebug(lcSetupWizardController) << "accessCodeRequest";
-        ocApp()->gui()->settingsDialog()->showCodePage(true, false);
+        ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Show, SyncState::Disabled);
     });
 
     connect(_deviceController, &DeviceController::accessCodeResult, this, [this](DeviceController::AccessCodeResult result, const QString& errorString, const QString& errorStacktrace) {
@@ -105,8 +104,10 @@ SetupController::SetupController(SettingsDialog *parent)
         window()->showCredPageProgress(false);
         if (result == DeviceController::AccessCodeResult::Accepted) {
             qCDebug(lcSetupWizardController) << "accessCodeResult Accepted";
-            ocApp()->gui()->settingsDialog()->showCodePage(false, false);
-            remoteSkipped = false;
+            ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Hide, SyncState::Disabled);
+            window()->displayPage(SetupPage::PageCredentials);
+            window()->showCredPageProgress(true);
+            _deviceController->start_new_account();
         }
         else {
             qCDebug(lcSetupWizardController) << "accessCodeResult Error" << errorString << errorStacktrace;
@@ -204,7 +205,6 @@ void SetupController::onCredentialsAction(CredentialsAction action, std::optiona
 
     case CredentialsAction::BackButtonClicked:
         window()->displayPage(SetupPage::PageEmail);
-        remoteSkipped = false;
         break;
 
     case CredentialsAction::CantFindDeviceClicked:
@@ -217,7 +217,6 @@ void SetupController::onLoginEmailClicked(const QString& email)
 {
     qCDebug(lcSetupWizardController) << "Login email clicked";
     email_ = email;
-    remoteSkipped = false;
 
     ConfigFile cf;
     cf.setFavoriteEmail(email_);
@@ -373,7 +372,7 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
     // first, we must resolve the actual server URL
     auto resolveJob = Jobs::ResolveUrlJobFactory(_context->accessManager()).startJob(serverUrl, this);
 
-    connect(resolveJob, &CoreJob::finished, resolveJob, [this, resolveJob, dev_id = id]() {
+    connect(resolveJob, &CoreJob::finished, resolveJob, [this, resolveJob]() {
         resolveJob->deleteLater();
 
         if (!resolveJob->success()) {
@@ -386,7 +385,7 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
         // next, we need to find out which kind of authentication page we have to present to the user
         auto authTypeJob = DetermineAuthTypeJobFactory(_context->accessManager()).startJob(resolvedUrl, this);
 
-        connect(authTypeJob, &CoreJob::finished, authTypeJob, [this, authTypeJob, resolvedUrl, dev_id]() {
+        connect(authTypeJob, &CoreJob::finished, authTypeJob, [this, authTypeJob, resolvedUrl]() {
             authTypeJob->deleteLater();
 
             if (authTypeJob->result().isNull()) {
@@ -396,7 +395,6 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
 
             _context->accountBuilder().setServerUrl(resolvedUrl, qvariant_cast<DetermineAuthTypeJob::AuthType>(authTypeJob->result()));
             _context->accountBuilder().setDevice(device_);
-            device_.setActicvePath(dev_id);
             Q_EMIT handleCredentialsEvaluation(SetupResult::Success);
         });
     });

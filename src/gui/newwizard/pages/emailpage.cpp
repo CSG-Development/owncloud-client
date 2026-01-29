@@ -4,22 +4,22 @@
 #include "gui/customui/stylehelper.h"
 #include "gui/customui/focusproxy.h"
 #include "theme.h"
+#include "configfile.h"
 
 #include <QLineEdit>
-#include <configfile.h>
+#include <QLoggingCategory>
 
 namespace {
 constexpr int fontSize = 16;
-QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/login/cred_page_light.qss"),
-    QStringLiteral(":/res/login/cred_page_dark.qss")
-};
 QPair<QString,QString> settingsIcon = {
     QStringLiteral(":/res/login/gear_light.svg"),
     QStringLiteral(":/res/login/gear_dark.svg")
 };
 const QString loginBtnTooltip = QObject::tr("Enter a valid email address");
 }
+
+Q_LOGGING_CATEGORY(lcEmailPage, "gui.emailpage")
+
 
 EmailPageController::EmailPageController(QObject *parent)
     : QObject(parent)
@@ -46,6 +46,8 @@ EmailPage::EmailPage(QWidget *parent)
     ui->setupUi(this);
     ui->frameErrorMessage->setVisible(false);
 
+    setStyleSheet(CUR::StyleHelper::loadFileToString(QStringLiteral(":/res/login/cred_page.qss")));
+
     setObjectName("emailPage");
     setMouseTracking(true);
 
@@ -58,10 +60,16 @@ EmailPage::EmailPage(QWidget *parent)
             ui->edEmail->setText(controller_->email.value());
         }
     };
+    auto updateThemeFunc = [this]() {
+        updateTheme();
+    };
 
     notifiers_.emplace_back(controller_->buttonTooltip.addNotifier(syncUI));
     notifiers_.emplace_back(controller_->canLogin.addNotifier(syncUI));
     notifiers_.emplace_back(controller_->errorState.addNotifier(syncUI));
+    notifiers_.emplace_back(controller_->darkTheme.addNotifier(updateThemeFunc));
+
+    controller_->darkTheme.setValue(CUR::Theme::instance()->isDarkTheme());
 
     ui->btnLogin->setStyle(new FocusProxyStyle(ui->btnLogin));
     ui->btnCancel->setStyle(new FocusProxyStyle(ui->btnCancel));
@@ -70,7 +78,6 @@ EmailPage::EmailPage(QWidget *parent)
     setAttribute(Qt::WA_TranslucentBackground, true);
 
     connect(ui->btnLogin, &QPushButton::clicked, this, [this] { emit loginClicked(email()); });
-
     connect(ui->btnCancel, &QPushButton::clicked, this, &EmailPage::cancelClicked);
     connect(ui->btnSettings, &QPushButton::clicked, this, &EmailPage::settingsClicked);
 
@@ -90,7 +97,7 @@ EmailPage::EmailPage(QWidget *parent)
     ui->btnCancel->setAttribute(Qt::WA_Hover, true);
     ui->btnSettings->setAttribute(Qt::WA_Hover, true);
 
-    updateTheme();
+    updateThemeFunc();
     syncUI();
     ui->btnSettings->setVisible(false);
 }
@@ -103,13 +110,12 @@ EmailPage::~EmailPage()
 
 void EmailPage::updateTheme()
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
-
+    qCDebug(lcEmailPage) << controller_->darkTheme.value();
     CUR::StyleHelper::invoke_setDarkTheme_recursive(this);
 
     // QToolButton "icon" property does not supported in qss
-    ui->btnSettings->setIcon(isDark ? QIcon(settingsIcon.second) : QIcon(settingsIcon.first));
-    setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    ui->btnSettings->setIcon(controller_->darkTheme.value() ? QIcon(settingsIcon.second) : QIcon(settingsIcon.first));
+    CUR::StyleHelper::setTheme(this, controller_->darkTheme.value());
 
     update();
 }

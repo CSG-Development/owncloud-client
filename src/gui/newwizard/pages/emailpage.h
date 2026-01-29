@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QRegularExpression>
 #include <QProperty>
+#include <utility>
 
 namespace Ui {class EmailPage;}
 
@@ -11,6 +12,7 @@ class FocusProxyStyle;
 class EmailPageController : public QObject
 {
     Q_OBJECT
+
 public:
     explicit EmailPageController(QObject* parent = nullptr);
 
@@ -19,6 +21,7 @@ public:
     QProperty<bool> isFocused{false};
     QProperty<bool> canLogin {false};
     QProperty<bool> errorState {false};
+    QProperty<bool> darkTheme {false};
 
 private:
     bool isEmailValid(const QString& email_text) const {
@@ -35,15 +38,20 @@ class EmailPage : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QString email READ email WRITE setEmail NOTIFY emailChanged FINAL);
+    Q_PROPERTY(bool darkTheme READ isDarkTheme WRITE setDarkTheme BINDABLE bindableDarkTheme)
 
 public:
     explicit EmailPage(QWidget *parent = nullptr);
     ~EmailPage();
-
+    
     void updateTheme();
 
     void setEmail(const QString& email);
     QString email() const;
+
+    bool isDarkTheme() const { return controller_->darkTheme.value(); }
+    void setDarkTheme(bool v) { controller_->darkTheme.setValue(v); }
+    QBindable<bool> bindableDarkTheme() {return &controller_->darkTheme;}
 
 Q_SIGNALS:
     void loginClicked(const QString& user);
@@ -56,4 +64,5 @@ private:
     Ui::EmailPage* ui = nullptr;
     EmailPageController* controller_ = nullptr;
     std::list<QPropertyNotifier> notifiers_;
+    std::pair<QString,QString> widgetStyle;
 };

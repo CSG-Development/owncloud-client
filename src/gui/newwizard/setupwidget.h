@@ -74,10 +74,8 @@ private:
     void transitionTo(SetupPage newPage);
     void processPageChange();
 
-    void onThemeChanged();
+    void onThemeChanged(bool isDark);
     void setSafeCurrentWidget(QWidget* w);
-    template<typename T>
-    void safeUpdateTheme(T* w);
 
     ::Ui::SetupWidget *_ui = nullptr;
 

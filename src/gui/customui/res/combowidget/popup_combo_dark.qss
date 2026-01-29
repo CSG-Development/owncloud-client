@@ -1,5 +1,0 @@
-#frame {
-    background: #FFFFFF;
-    border: 1px solid #CBCDD3;
-    border-radius: 20px;
-}

@@ -95,7 +95,7 @@ public:
     explicit IgnoreListEditor(QWidget *parent = nullptr);
     ~IgnoreListEditor() override;
 
-    void updateTheme();
+    void updateTheme(bool isDark);
 
 private slots:
     void slotItemSelectionChanged();

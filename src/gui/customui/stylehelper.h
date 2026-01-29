@@ -18,6 +18,7 @@ public:
     ~StyleHelper();
 
     static void applyPushButtonStyle(QWidget* root);
+    static void setTheme(QWidget *target, bool isDark);
     
     static QIcon getIcon(const QString& name, bool isDark);
 

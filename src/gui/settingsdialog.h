@@ -41,6 +41,16 @@ class CuratorGui;
 class ActivitySettings;
 class ProxyStyleToolWin;
 
+enum class CodeRequestDialog {
+    Show,
+    Hide
+};
+
+enum class SyncState {
+    Enabled,
+    Disabled
+};
+
 /**
  * @brief The SettingsDialog class
  * @ingroup gui
@@ -74,7 +84,7 @@ public slots:
     void slotAccountAvatarChanged();
     void slotAccountDisplayNameChanged();
 
-    void showCodePage(bool show, bool startSync);
+    void showCodePage(CodeRequestDialog visible, SyncState syncState);
 
 protected:
     void changeEvent(QEvent *) override;

@@ -1,6 +1,7 @@
 #include "popupcombowidget.h"
 #include "ui_popupcombowidget.h"
 #include "stylehelper.h"
+#include "theme.h"
 
 #include <QMouseEvent>
 #include <QLineEdit>
@@ -9,14 +10,7 @@
 #include <QGraphicsDropShadowEffect>
 
 namespace {
-
 constexpr int blurRadius = 4;
-
-QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/combowidget/popup_combo_light.qss"),
-    QStringLiteral(":/res/combowidget/popup_combo_dark.qss")
-};
-
 }
 
 PopupComboWidget::PopupComboWidget(QWidget* parent)
@@ -26,12 +20,18 @@ PopupComboWidget::PopupComboWidget(QWidget* parent)
     ui->setupUi(this);
     setObjectName(QStringLiteral("popupComboWidget"));
 
+    setStyleSheet(CUR::StyleHelper::loadFileToString(QStringLiteral(":/res/combowidget/popup_combo.qss")));
+    themeNotifier = darkTheme_.addNotifier([this] {
+        CUR::StyleHelper::setTheme(this, darkTheme_.value());
+    });
+    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
+
     setWindowFlags(Qt::Popup|Qt::FramelessWindowHint|Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
     setAutoFillBackground(false);
     setMouseTracking(true);
 
-    setDarkTheme(false);
+    setDarkTheme(CUR::Theme::instance()->isDarkTheme());
 
     QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect(this);
     effect->setBlurRadius(blurRadius);
@@ -97,13 +97,6 @@ bool PopupComboWidget::eventFilter(QObject *watched, QEvent *event)
     }
 
     return QWidget::eventFilter(watched, event);
-}
-
-void PopupComboWidget::setDarkTheme(bool dark)
-{
-    setStyleSheet(CUR::StyleHelper::loadFileToString(dark ? widgetStyle.second : widgetStyle.first));
-    style()->unpolish(this);
-    style()->polish(this);
 }
 
 void PopupComboWidget::mousePressEvent(QMouseEvent *event)

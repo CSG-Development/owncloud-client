@@ -403,15 +403,12 @@ QWidget* SettingsDialog::currentPage()
 
 void SettingsDialog::attachCodeDialog(bool attach)
 {
-    // seems not necessary
-    return;
-
     disconnect(_codeDialog, &CodeDialog::codeAction, this, nullptr);
 
     if (attach) {
         connect(_codeDialog, &CodeDialog::codeAction, this, [this](CodeAction act, const QString& /*code*/) {
             if (act == CodeAction::Skip)
-                showCodePage(false, true);
+                showCodePage(CodeRequestDialog::Hide, SyncState::Enabled);
         });
     }
 }
@@ -567,13 +564,13 @@ void SettingsDialog::slotAccountDisplayNameChanged()
     }
 }
 
-void SettingsDialog::showCodePage(bool show, bool startSync)
+void SettingsDialog::showCodePage(CodeRequestDialog visible, SyncState syncState)
 {
     int codeDlgIndex = _ui->dialogStack->indexOf(_codeDialog);
     int currentIndex = _ui->dialogStack->currentIndex();
     static int prevIndex = -1;
 
-    if (show) {
+    if (visible == CodeRequestDialog::Show) {
         if (codeDlgIndex == -1) {
             codeDlgIndex = _ui->dialogStack->addWidget(_codeDialog);
         }
@@ -593,7 +590,7 @@ void SettingsDialog::showCodePage(bool show, bool startSync)
 
         _ui->dialogStack->removeWidget(_codeDialog);
 
-        if (startSync) {
+        if (syncState == SyncState::Enabled) {
             // Enable sync back
             FolderMan::instance()->setSyncEnabled(true);
         }

@@ -536,7 +536,7 @@ void AccountState::enableCodeDialogProcessing(bool enable)
         case CodeAction::Skip:
             qCDebug(lcAccountState) << "Code dialog: code skipped";
             // Close code dialog
-            ocApp()->gui()->settingsDialog()->showCodePage(false, false);
+            ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Hide, SyncState::Disabled);
             _accessCodeDialog = false;
             emit pathUpdateFinished(true, {});
             break;
@@ -547,14 +547,14 @@ void AccountState::enableCodeDialogProcessing(bool enable)
     connect(_deviceController, &DeviceController::accessCodeRequest, this, [this]{
         qCDebug(lcAccountState) << "Wanted access code dialog";
         _accessCodeDialog = true;
-        ocApp()->gui()->settingsDialog()->showCodePage(true, false);
+        ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Show, SyncState::Disabled);
     });
 
     connect(_deviceController, &DeviceController::accessCodeResult, this, [this](DeviceController::AccessCodeResult result, const QString& errorString, const QString& errorStacktrace) {
         if (result == DeviceController::AccessCodeResult::Accepted) {
             qCDebug(lcAccountState) << "Access code accepted";
             // Close code dialog
-            ocApp()->gui()->settingsDialog()->showCodePage(false, false);
+            ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Hide, SyncState::Disabled);
             _accessCodeDialog = false;
             _deviceController->account_update_device_continue(*getDevice());
         }
@@ -601,61 +601,6 @@ void AccountState::requestRAupdate()
             doDevicePathSwitch();
         }
     }, Qt::SingleShotConnection);
-
-    /*
-    connect(_deviceController, &DeviceController::devices_updated, this, [this] {
-        qCDebug(lcAccountState) << "DeviceController::devices_updated";
-        emit pathUpdateFinished(false);
-    }, Qt::SingleShotConnection);
-
-    connect(this, &AccountState::pathUpdateFinished, this, [this](bool skippedCode) {
-        qCDebug(lcAccountState) << "RA Device update finished. Skip code" << skippedCode;
-        _updateDeviceInProgress = false;
-        enableCodeDialogProcessing(false);
-
-        if (skippedCode) {
-            qCDebug(lcAccountState) << "Code skipped, no path update";
-            return;
-        }
-
-        auto* currentDevice = _account->devicePtr();
-        if (currentDevice) {
-            qCDebug(lcAccountState) << "Current device" << currentDevice->certificateCommonName;
-
-            auto dev = _deviceController->getDevice(currentDevice->certificateCommonName);
-            if (dev) {
-
-                qCDebug(lcAccountState) << "Update device info, id:" << dev->seagateDeviceID;
-                if (!dev->seagateDeviceID.isEmpty()) {
-                    // now get path for device
-                    _deviceController->queryDeviceInfo(dev->seagateDeviceID)
-                        .then(this, [currentDevice](const DevicePathListCtx& ctx) {
-                            if (ctx.res.status == 200) {
-                                currentDevice->paths = ctx.devicePathList;
-
-                                // DEBUG
-                                if (currentDevice->paths.isEmpty()) {
-                                    qCDebug(lcAccountState) << "No path items found";
-                                }
-                                else {
-                                    for (const auto& it: currentDevice->paths) {
-                                        qCDebug(lcAccountState) << "UPDATED" << it.address << it.status.oobe_done;
-                                    }
-                                }
-                            }
-                        });
-                }
-                else {
-                    qCDebug(lcAccountState) << "Device id empty, not updated";
-                }
-            }
-            else {
-                qCDebug(lcAccountState) << "Device" << currentDevice->certificateCommonName << "not found";
-            }
-        }
-
-    }, Qt::SingleShotConnection);
-    */
 
     _deviceController->account_update_device(*getDevice());
 }

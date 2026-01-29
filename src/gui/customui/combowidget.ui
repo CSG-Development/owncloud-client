@@ -131,6 +131,9 @@
              <height>20</height>
             </size>
            </property>
+           <property name="class" stdset="0">
+            <string>button_icon_tool</string>
+           </property>
           </widget>
          </item>
         </layout>

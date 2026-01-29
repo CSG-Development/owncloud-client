@@ -50,7 +50,7 @@ public:
      */
     static void setupLoggingFromConfig();
 
-    void onThemeChanged();
+    void onThemeChanged(bool isDark);
 
 
 protected slots:

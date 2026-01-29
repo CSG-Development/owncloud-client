@@ -153,7 +153,7 @@ signals:
     void guiLog(const QString &, const QString &);
 
 private:
-    void onThemeChanged();
+    void onThemeChanged(bool isDark);
     bool event(QEvent *e) override;
 
     QTabWidget *_tab;

@@ -10,10 +10,10 @@
 namespace {
 constexpr int smallHeight = 232;
 constexpr int advHeight = 530;
-QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/login/finished_page_light.qss"),
-    QStringLiteral(":/res/login/finished_page_dark.qss")
-};
+// QPair<QString,QString> widgetStyle = {
+//     QStringLiteral(":/res/login/finished_page_light.qss"),
+//     QStringLiteral(":/res/login/finished_page_dark.qss")
+// };
 QPair<QString,QString> doneIcon = {
     QStringLiteral(":/res/login/done_light.svg"),
     QStringLiteral(":/res/login/done_dark.svg")
@@ -38,6 +38,13 @@ FinishedPage::FinishedPage(QWidget *parent)
 {
     ui->setupUi(this);
 
+    setStyleSheet(CUR::StyleHelper::loadFileToString(QStringLiteral(":/res/login/finished_page.qss")));
+
+    themeNotifier = darkTheme_.addNotifier([this] {
+        updateTheme();
+    });
+    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
+
     connect(ui->chkAdvanced, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
         advancedStateChanged(state == Qt::Checked);
     });
@@ -56,9 +63,7 @@ FinishedPage::FinishedPage(QWidget *parent)
         ui->edDownloadDir->setText(QDir::toNativeSeparators(defaultTargetDir_));
     });
 
-
     ui->btnDone->setIconSidePosition(LoginPushButton::IconSidePosition::Right);
-    updateTheme();
     showErrorMessage({});
 }
 
@@ -162,12 +167,9 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
 
 void FinishedPage::updateTheme()
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
-    CUR::StyleHelper::invoke_setDarkTheme_recursive(this);
-
-    setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
-    ui->btnDone->setSideIcon(QIcon(isDark ? doneIcon.second : doneIcon.first));
-    ui->btnBack->setSideIcon(QIcon(isDark ? backIcon.second : backIcon.first));
+    ui->btnDone->setSideIcon(QIcon(darkTheme_.value() ? doneIcon.second : doneIcon.first));
+    ui->btnBack->setSideIcon(QIcon(darkTheme_.value() ? backIcon.second : backIcon.first));
+    CUR::StyleHelper::setTheme(this, darkTheme_.value());
     update();
 }
 

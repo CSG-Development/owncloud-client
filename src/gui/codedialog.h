@@ -2,6 +2,7 @@
 
 #include <QProperty>
 #include <QWidget>
+#include <utility>
 
 namespace Ui { class CodeDialog; }
 
@@ -31,6 +32,7 @@ public:
     QProperty<bool> btnResendCodeVisible {false};
     QProperty<bool> btnResendCodeEnabled {false};
     QProperty<bool> spinnerVisible {false};
+    QProperty<bool> darkTheme{false};
     QProperty<CodeDialogState> state {CodeDialogState::AllowAccess};
     QProperty<QString> errorString {};
     QProperty<QString> errorTooltip {};
@@ -45,12 +47,11 @@ public:
 class CodeDialog : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(bool darkTheme READ isDarkTheme WRITE setDarkTheme BINDABLE bindableDarkTheme)
 
 public:
     explicit CodeDialog(QWidget *parent = nullptr);
     ~CodeDialog();
-
-    void updateTheme();
 
     void reset();
     void setDialogState(CodeDialogState state);
@@ -58,6 +59,10 @@ public:
 
     QString getCode() const;
     void clearCode();
+
+    bool isDarkTheme() const { return controller_->darkTheme.value(); }
+    void setDarkTheme(bool v) { controller_->darkTheme.setValue(v); }
+    QBindable<bool> bindableDarkTheme() {return &controller_->darkTheme;}
 
 signals:
     void codeAction(CodeAction act, const QString& code = QString());
@@ -72,7 +77,6 @@ private:
     Ui::CodeDialog *ui = nullptr;
     bool errorState_ = false;
     CodeDialogState state_ = CodeDialogState::AllowAccess;
-    QGraphicsDropShadowEffect* shadowEffect = nullptr;
     CodeDialogController* controller_ = nullptr;
     std::list<QPropertyNotifier> notifiers_;
 };

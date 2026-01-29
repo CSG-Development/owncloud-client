@@ -32,6 +32,8 @@ public:
 private:
     /// Utility thread that takes care of proper Windows logout handling.
     void startShutdownWatcher();
+
+    QTimer* debounceTimer = nullptr;
 };
 
 } // namespace CUR

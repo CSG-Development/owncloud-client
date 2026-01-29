@@ -44,6 +44,8 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
 
     _ui->setupUi(this);
 
+    setStyleSheet(StyleHelper::loadFileToString(QStringLiteral(":/res/login/setupwidget.qss")));
+
     emailPage_ = new EmailPage(this);
     _ui->contentWidget->addWidget(emailPage_);
     connect(emailPage_, &EmailPage::loginClicked, this, &SetupWidget::loginEmailClicked);
@@ -69,10 +71,9 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     connect(connectErrorPage_, &ConnectErrorPage::retryClicked, this, &SetupWidget::connectErrorPageRetryClicked);
 
     connect(Theme::instance(), &Theme::themeChanged, this, &SetupWidget::onThemeChanged);
+    onThemeChanged(CUR::Theme::instance()->isDarkTheme());
 
     hideErrorMessage();
-
-    onThemeChanged();
 
     ConfigFile cf;
     emailPage_->setEmail(cf.favoriteEmail());
@@ -207,28 +208,16 @@ SetupWidget::~SetupWidget() noexcept
     delete _ui;
 }
 
-void SetupWidget::onThemeChanged()
+void SetupWidget::onThemeChanged(bool isDark)
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
-    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
-
-    safeUpdateTheme(emailPage_);
-    safeUpdateTheme(credPage_);
-    safeUpdateTheme(waitPage_);
-    safeUpdateTheme(finishPage_);
+    StyleHelper::setTheme(this, isDark);
+    qCDebug(lcSetupWizardWidget) << isDark;
 }
 
 void SetupWidget::setSafeCurrentWidget(QWidget *w)
 {
     if (w)
         _ui->contentWidget->setCurrentWidget(w);
-}
-
-template<typename T>
-void SetupWidget::safeUpdateTheme(T *w)
-{
-    if (w)
-        w->updateTheme();
 }
 
 }

@@ -2,10 +2,12 @@
 
 #include <QRadioButton>
 #include <QPainterPath>
+#include <QProperty>
 
 class CRadioButton: public QRadioButton
 {
     Q_OBJECT
+    Q_PROPERTY(bool darkTheme READ isDarkTheme WRITE setDarkTheme BINDABLE bindableDarkTheme)
 
 public:
     explicit CRadioButton(QWidget* parent = nullptr);
@@ -14,7 +16,10 @@ public:
     QSize minimumSizeHint() const override;
     QSize sizeHint() const override;
 
-    Q_INVOKABLE void setDarkTheme();
+    bool isDarkTheme() const { return darkTheme_.value(); }
+    void setDarkTheme(bool v) { darkTheme_.setValue(v); }
+
+    QBindable<bool> bindableDarkTheme() {return &darkTheme_;}
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -28,5 +33,6 @@ private:
     int frameRadius_ = 7;
     QColor frameColor_;
     QColor textColor_;
-    bool isDark = false;
+    QPropertyNotifier themeNotifier;
+    QProperty<bool> darkTheme_ {false};
 };

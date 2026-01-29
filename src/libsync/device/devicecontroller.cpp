@@ -132,7 +132,7 @@ void DeviceController::start_new_account()
 
 void DeviceController::prepareLogin(Device &dev)
 {
-    qCDebug(lcDeviceController) << "Prepare login started, device" << dev.toString();
+    qCDebug(lcDeviceController) << "Prepare login started, device" << dev.toStringShort();
 
     currentDevice = dev;
 
@@ -207,6 +207,7 @@ void DeviceController::prepareLogin(Device &dev)
 // - emit account_update_device_finished when complete
 void DeviceController::account_update_device(const Device& dev)
 {
+    qCDebug(lcDeviceController) << "[account_update_device]";
     loadRefreshToken();
     mdns_finished = false;
     ra_finished = false;
@@ -246,6 +247,7 @@ void DeviceController::account_update_device(const Device& dev)
 
     }, Qt::SingleShotConnection);
 
+    qDebug() << "Query device info for" << dev.seagateDeviceID;
     _api->ra_device_info(dev.seagateDeviceID)
         .then(this, [this,dev](const DevicePathListCtx& ctx) {
             qCDebug(lcDeviceController) << "acc update ra_device_info code" << ctx.res.status << ctx.res.errorString;

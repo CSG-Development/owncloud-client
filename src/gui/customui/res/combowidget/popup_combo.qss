@@ -1,0 +1,25 @@
+#frame {
+    border-radius: 20px;
+}
+
+/*** Light theme */
+
+[theme="light"] #frame {
+    background: #FFFFFF;
+    border: 1px solid #E8E8E8;
+}
+
+[theme="light"] #tableView::item:selected {
+    background: rgba(25, 118, 210, 0.2);
+}
+
+/*** Dark theme */
+
+[theme="dark"] #frame {
+    background: #000;
+    border: 1px solid #CBCDD3;
+}
+
+[theme="dark"] #tableView::item:selected {
+    background: rgba(100, 181, 246, 0.24);
+}
