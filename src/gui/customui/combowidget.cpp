@@ -22,20 +22,31 @@ QPair<QString,QString> inputStyleError = {
     QStringLiteral(":/res/combowidget/combowidget_error_dark.qss")
 };
 QPair<QString,QString> arrowButtonLight = {
-    QStringLiteral(":/res/combowidget/triangle_down.svg"),
-    QStringLiteral(":/res/combowidget/triangle_up.svg")
+    QStringLiteral(":/res/combowidget/triangle_down_light.svg"),
+    QStringLiteral(":/res/combowidget/triangle_up_light.svg")
 };
 QPair<QString,QString> arrowButtonDark = {
-    QStringLiteral(":/res/combowidget/triangle_down.svg"),
-    QStringLiteral(":/res/combowidget/triangle_up.svg")
+    QStringLiteral(":/res/combowidget/triangle_down_dark.svg"),
+    QStringLiteral(":/res/combowidget/triangle_up_dark.svg")
 };
 }
 
 ComboWidget::ComboWidget(QWidget *parent)
     : QFrame(parent)
     , ui(new Ui::ComboWidget)
+    , popup(new PopupComboWidget(this))
 {
     ui->setupUi(this);
+
+    popup->setVisible(false);
+    popup->setAnchorWidget(ui->inputFrame);
+
+    themeNotifier = darkTheme_.addNotifier([this] {
+        qDebug() << "darkTheme_ Notifier" << darkTheme_.value();
+        CUR::StyleHelper::setTheme(this, darkTheme_.value());
+        updateStyles();
+    });
+    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
 
     promptLabel = new QLabel(this);
     promptLabel->setObjectName(QStringLiteral("promptLabel"));
@@ -47,9 +58,6 @@ ComboWidget::ComboWidget(QWidget *parent)
 
     ui->arrowButton->setCursor(Qt::PointingHandCursor);
 
-    popup = new PopupComboWidget(this);
-    popup->setVisible(false);
-    popup->setAnchorWidget(ui->inputFrame);
 
     connect(popup, &PopupComboWidget::clickedOutside, this, [this] {
         popup->hide();
@@ -85,7 +93,6 @@ ComboWidget::ComboWidget(QWidget *parent)
 
     setErrorState(false);
     updatePromptPosition();
-    setDarkTheme();
 }
 
 ComboWidget::~ComboWidget()
@@ -157,13 +164,6 @@ void ComboWidget::setErrorState(bool enable, const QString& txt)
     updateStyles();
 }
 
-void ComboWidget::setDarkTheme()
-{
-    isDark = CUR::Theme::instance()->isDarkTheme();
-    popup->setDarkTheme(isDark);
-    updateStyles();
-}
-
 void ComboWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
@@ -209,25 +209,22 @@ void ComboWidget::onTextChanged(const QString& str)
 
 void ComboWidget::updatePromptPosition()
 {
-    promptLabel->move(ui->lineEdit->pos().x() + 12, rect().top());
+    promptLabel->move(ui->lineEdit->pos().x() + 4, rect().top());
 }
 
 void ComboWidget::updateStyles()
 {
     if (errorState)
-        setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? inputStyleError.second : inputStyleError.first));
+        setStyleSheet(CUR::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyleError.second : inputStyleError.first));
     else
-        setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? inputStyle.second : inputStyle.first));
-
-    style()->unpolish(this);
-    style()->polish(this);
+        setStyleSheet(CUR::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyle.second : inputStyle.first));
 
     updateButtonIcon();
 }
 
 void ComboWidget::updateButtonIcon()
 {
-    if (isDark) {
+    if (darkTheme_.value()) {
         ui->arrowButton->setIcon(popup->isVisible() ? QIcon(arrowButtonDark.second) : QIcon(arrowButtonDark.first));
     }
     else {

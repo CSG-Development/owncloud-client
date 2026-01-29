@@ -54,7 +54,7 @@ protected:
     void showEvent(QShowEvent *event) override;
 
 private:
-    void onThemeChanged();
+    void onThemeChanged(bool isDark);
     void reloadConfig();
     void loadLanguageNamesIntoDropdown();
 

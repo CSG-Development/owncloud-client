@@ -12,15 +12,6 @@
 
 Q_LOGGING_CATEGORY(lcCodeDialog, "gui.codedialog", QtInfoMsg)
 
-namespace {
-QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/login/code_dialog_light.qss"),
-    QStringLiteral(":/res/login/code_dialog_dark.qss")
-};
-const int shadowOffset = 8;
-const int shadowBlur = 12;
-}
-
 CodeDialogController::CodeDialogController(QObject *parent)
     : QObject(parent)
 {
@@ -66,8 +57,10 @@ CodeDialog::CodeDialog(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(CUR::Theme::instance(), &CUR::Theme::themeChanged, this, &CodeDialog::updateTheme);
-    updateTheme();
+    setStyleSheet(CUR::StyleHelper::loadFileToString(QStringLiteral(":/res/login/code_dialog.qss")));
+    connect(CUR::Theme::instance(), &CUR::Theme::themeChanged, this, [this](bool isDark) {
+        controller_->darkTheme.setValue(isDark);
+    });
 
     setWindowFlags(Qt::Tool|Qt::FramelessWindowHint|Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
@@ -78,13 +71,6 @@ CodeDialog::CodeDialog(QWidget *parent)
     ui->btnAllowAccess->setAttribute(Qt::WA_Hover, true);
     ui->btnSkip->setAttribute(Qt::WA_Hover, true);
     ui->btnResendCode->setAttribute(Qt::WA_Hover, true);
-
-    shadowEffect = new QGraphicsDropShadowEffect(this);
-    shadowEffect->setXOffset(shadowOffset);
-    shadowEffect->setYOffset(shadowOffset);
-    shadowEffect->setBlurRadius(shadowBlur);
-    shadowEffect->setColor(QColor(0, 0, 0, 30));
-    ui->frame->setGraphicsEffect(shadowEffect);
 
     ui->btnAllowAccess->setStyle(new FocusProxyStyle(ui->btnAllowAccess));
     ui->btnSkip->setStyle(new FocusProxyStyle(ui->btnSkip));
@@ -102,6 +88,10 @@ CodeDialog::CodeDialog(QWidget *parent)
         ui->lblError->setToolTip(controller_->errorTooltip.value());
         ui->codeInputWidget->setErrorState(controller_->errorState.value());
     };
+    auto updateTheme = [this]() {
+        CUR::StyleHelper::setTheme(this, controller_->darkTheme.value());
+    };
+
     notifiers_.emplace_back(controller_->errorState.addNotifier(syncUI));
     notifiers_.emplace_back(controller_->errorString.addNotifier(syncUI));
     notifiers_.emplace_back(controller_->errorTooltip.addNotifier(syncUI));
@@ -112,6 +102,7 @@ CodeDialog::CodeDialog(QWidget *parent)
     notifiers_.emplace_back(controller_->btnResendCodeEnabled.addNotifier(syncUI));
     notifiers_.emplace_back(controller_->spinnerVisible.addNotifier(syncUI));
     notifiers_.emplace_back(controller_->state.addNotifier(syncUI));
+    notifiers_.emplace_back(controller_->darkTheme.addNotifier(updateTheme));
 
     connect(ui->btnAllowAccess, &QPushButton::clicked, this, [this] {
         qCDebug(lcCodeDialog) << "Allow clicked";
@@ -142,23 +133,13 @@ CodeDialog::CodeDialog(QWidget *parent)
     });
 
     setDialogState(CodeDialogState::AllowAccess);
-
     syncUI();
+    controller_->darkTheme.setValue(CUR::Theme::instance()->isDarkTheme());
 }
 
 CodeDialog::~CodeDialog()
 {
     delete ui;
-}
-
-void CodeDialog::updateTheme()
-{
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
-    CUR::StyleHelper::invoke_setDarkTheme_recursive(this);
-    setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
-    style()->unpolish(this);
-    style()->polish(this);
-    update();
 }
 
 void CodeDialog::reset()

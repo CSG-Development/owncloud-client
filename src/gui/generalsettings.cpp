@@ -61,10 +61,11 @@ GeneralSettings::GeneralSettings(QWidget *parent)
 
     setObjectName(QStringLiteral("CUR_GeneralSettings"));
     StyleHelper::applyPushButtonStyle(this);
-    connect(Theme::instance(), &Theme::themeChanged, this, [this] {
-        onThemeChanged();
+    connect(Theme::instance(), &Theme::themeChanged, this, [this](bool isDark) {
+        onThemeChanged(isDark);
         update();
     });
+    onThemeChanged(CUR::Theme::instance()->isDarkTheme());
 
     connect(_ui->desktopNotificationsCheckBox, &QAbstractButton::toggled, this, &GeneralSettings::slotToggleOptionalDesktopNotifications);
 
@@ -170,8 +171,6 @@ GeneralSettings::GeneralSettings(QWidget *parent)
     if (Theme::instance()->forceVirtualFilesOption() && VfsPluginManager::instance().bestAvailableVfsMode() == Vfs::WindowsCfApi) {
         _ui->groupBox_non_vfs->hide();
     }
-
-    onThemeChanged();
 }
 
 GeneralSettings::~GeneralSettings()
@@ -205,9 +204,8 @@ void GeneralSettings::showEvent(QShowEvent *)
     reloadConfig();
 }
 
-void GeneralSettings::onThemeChanged()
+void GeneralSettings::onThemeChanged(bool isDark)
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
     const auto& btns = findChildren<QPushButton*>();
     for (auto* t: btns) {

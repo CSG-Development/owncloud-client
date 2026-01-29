@@ -456,7 +456,7 @@ public:
 
     Q_INVOKABLE void systemThemeChanged();
     bool isDarkTheme() const;
-    Q_INVOKABLE void emit_theme_change() {emit themeChanged();}
+    Q_INVOKABLE void emit_theme_change() {emit themeChanged(isDarkTheme());}
 
 protected:
     QIcon themeTrayIcon(const QString &name, bool sysTrayMenuVisible = false, IconType iconType = IconType::BrandedIconWithFallbackToVanillaIcon) const;
@@ -465,7 +465,7 @@ protected:
 
 signals:
     void systrayUseMonoIconsChanged(bool);
-    void themeChanged();
+    void themeChanged(bool isDark);
 
 private:
     Theme(Theme const &);

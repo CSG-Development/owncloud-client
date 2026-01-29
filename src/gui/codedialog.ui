@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>566</width>
-    <height>470</height>
+    <width>545</width>
+    <height>502</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,6 +28,9 @@
    </property>
    <item>
     <widget class="QFrame" name="frameInnerVert">
+     <property name="class" stdset="0">
+      <string notr="true">helper_frame</string>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <property name="leftMargin">
        <number>12</number>
@@ -56,6 +59,9 @@
       </item>
       <item>
        <widget class="QFrame" name="frameInnerHoriz">
+        <property name="class" stdset="0">
+         <string notr="true">helper_frame</string>
+        </property>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <property name="leftMargin">
           <number>1</number>
@@ -119,6 +125,9 @@
               <property name="text">
                <string>Allow remote access</string>
               </property>
+              <property name="class" stdset="0">
+               <string notr="true">text_label</string>
+              </property>
              </widget>
             </item>
             <item>
@@ -133,6 +142,9 @@
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+              <property name="class" stdset="0">
+               <string notr="true">text_label</string>
               </property>
              </widget>
             </item>
@@ -217,6 +229,9 @@
                 <height>42</height>
                </size>
               </property>
+              <property name="class" stdset="0">
+               <string notr="true">helper_frame</string>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout">
                <property name="spacing">
                 <number>1</number>
@@ -263,6 +278,9 @@
                  <property name="text">
                   <string>Skip</string>
                  </property>
+                 <property name="class" stdset="0">
+                  <string notr="true">text_button</string>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -282,6 +300,9 @@
                  <property name="text">
                   <string>Allow access</string>
                  </property>
+                 <property name="class" stdset="0">
+                  <string notr="true">text_button</string>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -300,6 +321,9 @@
                  </property>
                  <property name="text">
                   <string>Resend code</string>
+                 </property>
+                 <property name="class" stdset="0">
+                  <string notr="true">text_button</string>
                  </property>
                 </widget>
                </item>

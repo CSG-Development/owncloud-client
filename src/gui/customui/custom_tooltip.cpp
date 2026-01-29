@@ -1,5 +1,6 @@
 #include "custom_tooltip.h"
 #include "stylehelper.h"
+#include "theme.h"
 
 #include <QVBoxLayout>
 #include <QFrame>
@@ -53,7 +54,7 @@ CustomToolTip::CustomToolTip(QWidget */*parent*/)
     shadowEffect = new QGraphicsDropShadowEffect(this);
     container->setGraphicsEffect(shadowEffect);
 
-    onThemeChanged(false);
+    onThemeChanged(CUR::Theme::instance()->isDarkTheme());
 }
 
 QPoint CustomToolTip::offset() const

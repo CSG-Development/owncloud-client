@@ -1,0 +1,85 @@
+.helper_frame { border: none; }
+
+.button_accent {
+    border-color: transparent;
+    border-width: 1px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.button_normal {
+    background: transparent;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.button_radio { font-size: 14px; }
+
+.button_icon_tool {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+#frameContent { border-radius: 24px; }
+#lblHeader { font-size: 34px; }
+#btnBrowse, #btnReset { border: none; }
+
+#chkAdvanced, #lblConfigDownload, #lblLocalDir {
+    font-size: 16px;
+    font-style: bold;
+}
+
+#frameErrorMessage {
+    border: 1px solid transparent;
+    border-radius: 12px;
+}
+
+
+/*** Light theme */
+
+[theme="light"] .button_accent {background: #1976D2; color: #FFFFFF;}
+[theme="light"] .button_accent:hover { background: rgba(30, 136, 229, 1); }
+[theme="light"] .button_accent:pressed { background: rgba(20, 92, 164, 1); }
+
+[theme="light"] .button_normal { border: 1px solid #1976D2; color: #1976D2; }
+[theme="light"] .button_normal:hover { background: rgba(30, 136, 229, 0.12); }
+[theme="light"] .button_normal:pressed { background: rgba(30, 136, 229, 0.3); }
+
+[theme="light"] .button_icon_tool:hover { background: rgba(30, 136, 229, 0.12); }
+[theme="light"] .button_icon_tool:pressed { background: rgba(30, 136, 229, 0.3); }
+
+[theme="light"] .button_radio,
+[theme="light"] #lblHeader,
+[theme="light"] #lblErrorText { color: rgba(0, 0, 0, 0.87); }
+[theme="light"] #frameContent { background-color: #FFFFFF; }
+
+[theme="light"] #btnBrowse { image: url(":/res/login/browse_light.svg"); }
+[theme="light"] #btnReset { image: url(":/res/login/reset_light.svg"); }
+[theme="light"] #lblErrorIcon { image: url(":/res/login/error_light.svg"); }
+
+[theme="light"] #frameErrorMessage { background: rgba(244,67,54,31); }
+
+/*** Dark theme */
+
+[theme="dark"] .button_accent { background: #64B5F6; color: #212121; }
+[theme="dark"] .button_accent:hover { background: rgba(144, 202, 249, 1); }
+[theme="dark"] .button_accent:pressed { background: rgba(53, 158, 243, 1); }
+
+[theme="dark"] .button_normal { border: 1px solid rgba(100, 181, 246, 1); color: rgba(100, 181, 246, 1); }
+[theme="dark"] .button_normal:hover { background: rgba(144, 202, 249, 0.12); }
+[theme="dark"] .button_normal:pressed { background: rgba(144, 202, 249, 0.3); }
+
+[theme="dark"] .button_icon_tool:hover { background: rgba(144, 202, 249, 0.12); }
+[theme="dark"] .button_icon_tool:pressed { background: rgba(144, 202, 249, 0.3); }
+
+[theme="dark"] .button_radio,
+[theme="dark"] #lblHeader,
+[theme="dark"] #lblErrorText { color: rgba(255, 255, 255, 0.87); }
+[theme="dark"] #frameContent { background-color: #262729; }
+
+[theme="dark"] #btnBrowse { image: url(":/res/login/browse_dark.svg"); }
+[theme="dark"] #btnReset { image: url(":/res/login/reset_dark.svg"); }
+[theme="dark"] #lblErrorIcon { image: url(":/res/login/error_dark.svg"); }
+
+[theme="dark"] #frameErrorMessage { background: rgba(242,143,140,61); }

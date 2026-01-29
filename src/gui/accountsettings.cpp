@@ -236,7 +236,7 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     ui->stackedWidget->setCurrentWidget(ui->folderListPage);
 
     connect(Theme::instance(), &Theme::themeChanged, this, &AccountSettings::onThemeChanged);
-    onThemeChanged();
+    onThemeChanged(Theme::instance()->isDarkTheme());
 }
 
 
@@ -964,9 +964,8 @@ void AccountSettings::slotLinkActivated(const QString &link)
     }
 }
 
-void AccountSettings::onThemeChanged()
+void AccountSettings::onThemeChanged(bool isDark)
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 }
 

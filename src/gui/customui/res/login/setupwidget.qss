@@ -1,0 +1,11 @@
+/*** Light */
+
+[theme="light"] #SetupWidget {
+    background-color: #F0F1F5;
+}
+
+/*** Dark */
+
+[theme="dark"] #SetupWidget {
+    background-color: #3D3E41;
+}

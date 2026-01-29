@@ -566,7 +566,7 @@ ActivitySettings::ActivitySettings(QWidget *parent)
         [this](const AccountStatePtr &accountStatePtr) { _timeSinceLastCheck.take(accountStatePtr); });
 
     connect(Theme::instance(), &Theme::themeChanged, this, &ActivitySettings::onThemeChanged);
-    onThemeChanged();
+    onThemeChanged(Theme::instance()->isDarkTheme());
 }
 
 void ActivitySettings::setNotificationRefreshInterval(std::chrono::milliseconds interval)
@@ -608,9 +608,8 @@ void ActivitySettings::slotShowActivityTab()
     }
 }
 
-void ActivitySettings::onThemeChanged()
+void ActivitySettings::onThemeChanged(bool isDark)
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 #ifdef Q_OS_MACOS
     onCurrentTabChanged(_tab->currentIndex());

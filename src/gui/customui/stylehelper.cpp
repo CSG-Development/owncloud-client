@@ -81,6 +81,22 @@ void StyleHelper::applyPushButtonStyle(QWidget *root)
     }
 }
 
+void StyleHelper::setTheme(QWidget* target, bool isDark)
+{
+    if (!target)
+        return;
+
+    target->setProperty("theme", isDark ? QStringLiteral("dark") : QStringLiteral("light"));
+
+    target->style()->unpolish(target);
+    target->style()->polish(target);
+
+    for (auto child : target->findChildren<QWidget*>()) {
+        child->style()->unpolish(child);
+        child->style()->polish(child);
+    }
+}
+
 QIcon StyleHelper::getIcon(const QString &name, bool isDark)
 {
     if (name == QStringLiteral("plus-solid"))
@@ -138,14 +154,16 @@ void StyleHelper::setDarkMode(bool dark)
         s->setDarkMode(dark);
 }
 
-void StyleHelper::invoke_setDarkTheme_recursive(QWidget *widget)
+void StyleHelper::invoke_setDarkTheme_recursive(QWidget *w)
 {
-    Q_ASSERT(widget);
+    Q_ASSERT(w);
 
-    const QList<QWidget*> childrenList = widget->findChildren<QWidget*>();
+    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    const auto& childrenList = w->findChildren<QWidget*>();
     for (auto* widget: childrenList) {
-        if (widget->metaObject()->indexOfSlot("setDarkTheme()") != -1) {
-            QMetaObject::invokeMethod(widget, "setDarkTheme");
+        if (widget->metaObject()->indexOfProperty("darkTheme") != -1) {
+            widget->setProperty("darkTheme", isDark);
+            qApp->processEvents();
         }
     }
 }
@@ -157,14 +175,21 @@ StyleHelper *StyleHelper::getInstance()
 
 QString StyleHelper::loadFileToString(const QString &fileName)
 {
-    QFile file(fileName);
-    if (file.open(QIODevice::ReadOnly))
-    {
-        QByteArray data = file.readAll();
-        return QString::fromUtf8(data);
-    }
-    qCWarning(lcStyleHelper) << "Unable to load file" << fileName;
+    // Static cache 'filePath' -> 'content'
+    static QHash<QString, QString> styleCache;
 
+    if (styleCache.contains(fileName)) {
+        return styleCache.value(fileName);
+    }
+
+    QFile file(fileName);
+    if (file.open(QIODevice::ReadOnly)) {
+        QString content = QString::fromUtf8(file.readAll());
+        styleCache.insert(fileName, content);
+        return content;
+    }
+
+    qCWarning(lcStyleHelper) << "Unable to load file" << fileName;
     return {};
 }
 

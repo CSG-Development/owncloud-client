@@ -642,7 +642,7 @@ bool Theme::withCrashReporter() const
 
 void Theme::systemThemeChanged()
 {
-    Q_EMIT themeChanged();
+    Q_EMIT themeChanged(isDarkTheme());
 }
 
 bool Theme::isDarkTheme() const

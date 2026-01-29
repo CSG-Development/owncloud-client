@@ -73,7 +73,7 @@ IgnoreListEditor::IgnoreListEditor(QWidget *parent)
     ui->tableWidget->verticalHeader()->setVisible(false);
 
     connect(Theme::instance(), &Theme::themeChanged, this, &IgnoreListEditor::updateTheme);
-    updateTheme();
+    updateTheme(CUR::Theme::instance()->isDarkTheme());
 }
 
 IgnoreListEditor::~IgnoreListEditor()
@@ -81,9 +81,8 @@ IgnoreListEditor::~IgnoreListEditor()
     delete ui;
 }
 
-void IgnoreListEditor::updateTheme()
+void IgnoreListEditor::updateTheme(bool isDark)
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
     StyleHelper::applyPushButtonStyle(ui->buttonBox);
 }

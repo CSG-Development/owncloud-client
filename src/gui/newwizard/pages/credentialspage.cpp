@@ -15,15 +15,11 @@
 
 namespace {
 constexpr int fontSize = 16;
-QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/login/cred_page_light.qss"),
-    QStringLiteral(":/res/login/cred_page_dark.qss")
-};
-QPair<QString,QString> refreshIcon = {
+std::pair<QString,QString> refreshIcon = {
     QStringLiteral(":/res/login/refresh_light.svg"),
     QStringLiteral(":/res/login/refresh_dark.svg")
 };
-QPair<QString,QString> backIcon = {
+std::pair<QString,QString> backIcon = {
     QStringLiteral(":/res/login/arrow_back_btn_light.svg"),
     QStringLiteral(":/res/login/arrow_back_btn_dark.svg")
 };
@@ -37,6 +33,14 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     , ui(new Ui::CredentialsPage)
 {
     ui->setupUi(this);
+
+    setStyleSheet(CUR::StyleHelper::loadFileToString(QStringLiteral(":/res/login/cred_page.qss")));
+
+    themeNotifier = darkTheme_.addNotifier([this] {
+        updateTheme();
+    });
+    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
+
     setObjectName("credentialsPage");
     setMouseTracking(true);
     setAttribute(Qt::WA_Hover, true);
@@ -101,6 +105,8 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     ui->btnLogin->installEventFilter(this);
     ui->btnLogin->setToolTip(tr("Enter a valid email address and password"));
 
+    ui->btnSettings->setVisible(false);
+
     showErrorMessage({});
     showProgressIndicator(false);
 
@@ -130,13 +136,9 @@ bool CredentialsPage::eventFilter(QObject *watched, QEvent *event)
 
 void CredentialsPage::updateTheme()
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
-
-    CUR::StyleHelper::invoke_setDarkTheme_recursive(this);
-
-    ui->btnRefresh->setIcon(isDark ? QIcon(refreshIcon.second) : QIcon(refreshIcon.first));
-    ui->btnBack->setIcon(isDark ? QIcon(backIcon.second) : QIcon(backIcon.first));
-    setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    ui->btnRefresh->setIcon(darkTheme_.value() ? QIcon(refreshIcon.second) : QIcon(refreshIcon.first));
+    ui->btnBack->setIcon(darkTheme_.value() ? QIcon(backIcon.second) : QIcon(backIcon.first));
+    CUR::StyleHelper::setTheme(this, darkTheme_.value());
 
     update();
 }

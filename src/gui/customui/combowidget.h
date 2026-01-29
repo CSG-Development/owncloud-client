@@ -2,6 +2,7 @@
 
 #include <QFrame>
 #include <QTimer>
+#include <QProperty>
 
 #include "device/devicetypes.h"
 
@@ -16,6 +17,7 @@ namespace Ui {class ComboWidget;}
 class ComboWidget: public QFrame
 {
     Q_OBJECT
+    Q_PROPERTY(bool darkTheme READ isDarkTheme WRITE setDarkTheme BINDABLE bindableDarkTheme)
 
 public:
     explicit ComboWidget(QWidget* parent = nullptr);
@@ -32,8 +34,9 @@ public:
 
     void setErrorState(bool enable, const QString& txt = QString());
 
-public slots:
-    void setDarkTheme();
+    bool isDarkTheme() const { return darkTheme_; }
+    void setDarkTheme(bool v) { darkTheme_ = v; }
+    QBindable<bool> bindableDarkTheme() {return &darkTheme_;}
 
 Q_SIGNALS:
     void textChanged(const QString &);
@@ -60,9 +63,11 @@ private:
     QLabel* promptLabel = nullptr;
     PopupComboWidget* popup = nullptr;
 
-    bool isDark = false;
     bool errorState = false;
     QList<Device> deviceList;
     QTimer blockMouseTimer;
     std::optional<Device> selectedDevice;
+
+    QProperty<bool> darkTheme_ {false};
+    QPropertyNotifier themeNotifier;
 };

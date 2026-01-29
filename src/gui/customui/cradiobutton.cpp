@@ -7,14 +7,8 @@
 #include <QFlags>
 
 namespace {
-QPair<QColor,QColor> textColor = {
-    QColor(0,0,0,0xDE),
-    QColor(0xFF,0xFF,0xFF,0xDE)
-};
-QPair<QColor,QColor> focusFrameColor = {
-    QColor(0,0,0,0xDE),
-    QColor(0xFF,0xFF,0xFF,0xDE)
-};
+std::pair<QColor,QColor> textColor =       { QColor(0,0,0,0xDE), QColor(0xFF,0xFF,0xFF,0xDE) };
+std::pair<QColor,QColor> focusFrameColor = { QColor(0,0,0,0xDE), QColor(0xFF,0xFF,0xFF,0xDE) };
 }
 
 CRadioButton::CRadioButton(QWidget* parent)
@@ -25,6 +19,11 @@ CRadioButton::CRadioButton(QWidget* parent)
 #ifdef Q_OS_MACOS
     setAttribute(Qt::WA_MacShowFocusRect, false);
 #endif
+
+    themeNotifier = darkTheme_.addNotifier([this] {
+        update();
+    });
+    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
 }
 
 CRadioButton::CRadioButton(const QString &text, QWidget *parent)
@@ -48,12 +47,6 @@ QSize CRadioButton::sizeHint() const
     return szHint;
 }
 
-void CRadioButton::setDarkTheme()
-{
-    isDark = CUR::Theme::instance()->isDarkTheme();
-    update();
-}
-
 void CRadioButton::paintEvent(QPaintEvent */*event*/)
 {
     QStyleOptionButton so;
@@ -68,12 +61,12 @@ void CRadioButton::paintEvent(QPaintEvent */*event*/)
 
     int icon_offs = (contentRect.height() - iconSize_.height()) / 2;
 
-    const auto& icon = RadiobuttonRes::getRbIcon(so.state, isDark);
+    const auto& icon = RadiobuttonRes::getRbIcon(so.state, darkTheme_.value());
     icon.paint(&painter, QRect(QPoint(contentRect.x() + icon_offs, contentRect.y() + icon_offs), iconSize_));
 
     if (so.state.testFlag(QStyle::State_Enabled)) {
         if (so.state.testFlag(QStyle::State_HasFocus)) {
-            painter.setPen(QPen(isDark ? focusFrameColor.second : focusFrameColor.first, frameWidth_, Qt::SolidLine));
+            painter.setPen(QPen(darkTheme_.value() ? focusFrameColor.second : focusFrameColor.first, frameWidth_, Qt::SolidLine));
             painter.drawPath(focusFrame(controlRect));
         }
     }
@@ -89,7 +82,7 @@ void CRadioButton::paintEvent(QPaintEvent */*event*/)
         alignment |= Qt::TextShowMnemonic;
     }
 
-    painter.setPen(isDark ? textColor.second : textColor.first);
+    painter.setPen(darkTheme_.value() ? textColor.second : textColor.first);
     painter.drawText(textRect, alignment, text());
 }
 
