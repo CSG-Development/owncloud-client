@@ -114,12 +114,12 @@ QList<Device> DeviceAggregator::build_devices(const QList<DevicePath> &records)
             if (!record.friendlyName.isEmpty()) {
                 newDevice.friendlyName = record.friendlyName;
             }
-            else {
+            if (newDevice.friendlyName.isEmpty() && !record.about.hostname.isEmpty()) {
                 newDevice.friendlyName = record.about.hostname;
             }
 
             deviceMap.insert(cn, newDevice);
-            qCDebug(lcDeviceAggregator) << "new device" << newDevice;
+            qCDebug(lcDeviceAggregator) << "insert new device" << newDevice;
         }
 
         Device& device = deviceMap[cn];
@@ -135,7 +135,7 @@ QList<Device> DeviceAggregator::build_devices(const QList<DevicePath> &records)
                 }
                 if (device.friendlyName.isEmpty() && record.friendlyName.isEmpty()) {
                     device.friendlyName = record.friendlyName;
-                    qCDebug(lcDeviceAggregator) << "updated friendlyName to" << device.friendlyName;
+                    qCDebug(lcDeviceAggregator) << "updated empty friendlyName to" << device.friendlyName;
                 }
 
                 break;
