@@ -88,8 +88,9 @@ CodeDialog::CodeDialog(QWidget *parent)
         ui->lblError->setToolTip(controller_->errorTooltip.value());
         ui->codeInputWidget->setErrorState(controller_->errorState.value());
     };
-    auto updateTheme = [this]() {
+    auto updateThemeFunc = [this]() {
         CUR::StyleHelper::setTheme(this, controller_->darkTheme.value());
+        qCDebug(lcCodeDialog) << "isDark" << controller_->darkTheme.value();
     };
 
     notifiers_.emplace_back(controller_->errorState.addNotifier(syncUI));
@@ -102,7 +103,7 @@ CodeDialog::CodeDialog(QWidget *parent)
     notifiers_.emplace_back(controller_->btnResendCodeEnabled.addNotifier(syncUI));
     notifiers_.emplace_back(controller_->spinnerVisible.addNotifier(syncUI));
     notifiers_.emplace_back(controller_->state.addNotifier(syncUI));
-    notifiers_.emplace_back(controller_->darkTheme.addNotifier(updateTheme));
+    notifiers_.emplace_back(controller_->darkTheme.addNotifier(updateThemeFunc));
 
     connect(ui->btnAllowAccess, &QPushButton::clicked, this, [this] {
         qCDebug(lcCodeDialog) << "Allow clicked";
@@ -135,6 +136,7 @@ CodeDialog::CodeDialog(QWidget *parent)
     setDialogState(CodeDialogState::AllowAccess);
     syncUI();
     controller_->darkTheme.setValue(CUR::Theme::instance()->isDarkTheme());
+    updateThemeFunc();
 }
 
 CodeDialog::~CodeDialog()
