@@ -9,11 +9,7 @@
 
 namespace {
 constexpr int smallHeight = 232;
-constexpr int advHeight = 530;
-// QPair<QString,QString> widgetStyle = {
-//     QStringLiteral(":/res/login/finished_page_light.qss"),
-//     QStringLiteral(":/res/login/finished_page_dark.qss")
-// };
+constexpr int advHeight = 540;
 QPair<QString,QString> doneIcon = {
     QStringLiteral(":/res/login/done_light.svg"),
     QStringLiteral(":/res/login/done_dark.svg")
