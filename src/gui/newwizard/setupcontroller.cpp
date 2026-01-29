@@ -87,8 +87,7 @@ SetupController::SetupController(SettingsDialog *parent)
             break;
 
         case CodeAction::Skip:
-            ocApp()->gui()->settingsDialog()->showCodePage(false, false);
-            remoteSkipped = true;
+            ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Hide, SyncState::Disabled);
             window()->displayPage(SetupPage::PageCredentials);
             window()->showCredPageProgress(false);
             break;
@@ -97,7 +96,7 @@ SetupController::SetupController(SettingsDialog *parent)
 
     connect(_deviceController, &DeviceController::accessCodeRequest, this, [] {
         qCDebug(lcSetupWizardController) << "accessCodeRequest";
-        ocApp()->gui()->settingsDialog()->showCodePage(true, false);
+        ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Show, SyncState::Disabled);
     });
 
     connect(_deviceController, &DeviceController::accessCodeResult, this, [this](DeviceController::AccessCodeResult result, const QString& errorString, const QString& errorStacktrace) {
@@ -105,8 +104,10 @@ SetupController::SetupController(SettingsDialog *parent)
         window()->showCredPageProgress(false);
         if (result == DeviceController::AccessCodeResult::Accepted) {
             qCDebug(lcSetupWizardController) << "accessCodeResult Accepted";
-            ocApp()->gui()->settingsDialog()->showCodePage(false, false);
-            remoteSkipped = false;
+            ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Hide, SyncState::Disabled);
+            window()->displayPage(SetupPage::PageCredentials);
+            window()->showCredPageProgress(true);
+            _deviceController->start_new_account();
         }
         else {
             qCDebug(lcSetupWizardController) << "accessCodeResult Error" << errorString << errorStacktrace;
@@ -204,7 +205,6 @@ void SetupController::onCredentialsAction(CredentialsAction action, std::optiona
 
     case CredentialsAction::BackButtonClicked:
         window()->displayPage(SetupPage::PageEmail);
-        remoteSkipped = false;
         break;
 
     case CredentialsAction::CantFindDeviceClicked:
@@ -217,7 +217,6 @@ void SetupController::onLoginEmailClicked(const QString& email)
 {
     qCDebug(lcSetupWizardController) << "Login email clicked";
     email_ = email;
-    remoteSkipped = false;
 
     ConfigFile cf;
     cf.setFavoriteEmail(email_);

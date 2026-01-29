@@ -536,7 +536,7 @@ void AccountState::enableCodeDialogProcessing(bool enable)
         case CodeAction::Skip:
             qCDebug(lcAccountState) << "Code dialog: code skipped";
             // Close code dialog
-            ocApp()->gui()->settingsDialog()->showCodePage(false, false);
+            ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Hide, SyncState::Disabled);
             _accessCodeDialog = false;
             emit pathUpdateFinished(true, {});
             break;
@@ -547,14 +547,14 @@ void AccountState::enableCodeDialogProcessing(bool enable)
     connect(_deviceController, &DeviceController::accessCodeRequest, this, [this]{
         qCDebug(lcAccountState) << "Wanted access code dialog";
         _accessCodeDialog = true;
-        ocApp()->gui()->settingsDialog()->showCodePage(true, false);
+        ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Show, SyncState::Disabled);
     });
 
     connect(_deviceController, &DeviceController::accessCodeResult, this, [this](DeviceController::AccessCodeResult result, const QString& errorString, const QString& errorStacktrace) {
         if (result == DeviceController::AccessCodeResult::Accepted) {
             qCDebug(lcAccountState) << "Access code accepted";
             // Close code dialog
-            ocApp()->gui()->settingsDialog()->showCodePage(false, false);
+            ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Hide, SyncState::Disabled);
             _accessCodeDialog = false;
             _deviceController->account_update_device_continue(*getDevice());
         }

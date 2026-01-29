@@ -107,7 +107,6 @@ private:
     QString email_;
     QString password_;
     Device device_;
-    bool remoteSkipped = false;
     QList<Device> fullList;
     DeviceController* _deviceController = nullptr;
 };
