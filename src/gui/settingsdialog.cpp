@@ -242,7 +242,7 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
     _addAccountAction->setCheckable(false);
     connect(_addAccountAction, &QAction::triggered, this, [] {
         // don't directly connect here, ocApp might not be defined yet
-        ocApp()->gui()->runNewAccountWizard();
+        ocApp()->gui()->runNewAccountWizard(RunAccountWizardReason::CreateAccoundCommand);
     });
     _ui->toolBar->addAction(_addAccountAction);
 

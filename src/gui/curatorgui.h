@@ -37,6 +37,12 @@ class ShareDialog;
 class Application;
 class LogBrowser;
 
+enum class RunAccountWizardReason {
+    ApplicationStartup,
+    RemovedAndNoMoreAccounts,
+    CreateAccoundCommand
+};
+
 enum class ShareDialogStartPage {
     UsersAndGroups,
     PublicLinks,
@@ -67,7 +73,7 @@ public:
 
     SettingsDialog *settingsDialog() const;
 
-    void runNewAccountWizard();
+    void runNewAccountWizard(RunAccountWizardReason reason);
 
 signals:
     void setupProxy();

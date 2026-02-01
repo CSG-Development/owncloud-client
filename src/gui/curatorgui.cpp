@@ -156,7 +156,7 @@ void CuratorGui::slotOpenSettingsDialog()
         }
     } else {
         qCInfo(lcApplication) << "No configured folders yet, starting setup wizard";
-        runNewAccountWizard();
+        runNewAccountWizard(RunAccountWizardReason::CreateAccoundCommand);
     }
 }
 
@@ -607,7 +607,9 @@ void CuratorGui::updateContextMenu()
     _contextMenu->addSeparator();
 
     if (accountList.isEmpty()) {
-        _contextMenu->addAction(tr("Create a new account"), this, &CuratorGui::runNewAccountWizard);
+        _contextMenu->addAction(tr("Create a new account"), this, [this] {
+            runNewAccountWizard(RunAccountWizardReason::CreateAccoundCommand);
+        });
     } else {
         if (atLeastOnePaused) {
             _contextMenu->addAction(
@@ -816,14 +818,14 @@ void CuratorGui::slotUpdateProgress(Folder *folder, const ProgressInfo &progress
     }
 }
 
-void CuratorGui::runNewAccountWizard()
+void CuratorGui::runNewAccountWizard(RunAccountWizardReason reason)
 {
     if (_wizardController.isNull()) {
 
         // passing the settings dialog as parent makes sure the wizard will be shown above it
         // as the settingsDialog's lifetime spans across the entire application but the dialog will live much shorter,
         // we have to clean it up manually when finished() is emitted
-        _wizardController = new Wizard::SetupController(settingsDialog());
+        _wizardController = new Wizard::SetupController(settingsDialog(), reason);
 
         // while the wizard is shown, new syncs are disabled
         FolderMan::instance()->setSyncEnabled(false);

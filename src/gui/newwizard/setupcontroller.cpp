@@ -24,10 +24,11 @@ namespace CUR::Wizard {
 
 Q_LOGGING_CATEGORY(lcSetupWizardController, "gui.setupwizard.controller")
 
-SetupController::SetupController(SettingsDialog *parent)
+SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason reason)
     : QObject(parent)
     , _context(new SetupContext(parent, this))
     , _deviceController(new DeviceController(parent))
+    , reason_(reason)
 {
     connect(_context->window(), &SetupWidget::rejected, this, [this] {
         qCDebug(lcSetupWizardController) << "wizard window closed";
@@ -121,6 +122,16 @@ SetupController::SetupController(SettingsDialog *parent)
     });
 
     setupFinishPage();
+
+    if (reason_ == RunAccountWizardReason::RemovedAndNoMoreAccounts) {
+        qCDebug(lcSetupWizardController) << "start reason is RemovedAndNoMoreAccounts";
+        ConfigFile cf;
+        const auto email = cf.favoriteEmail();
+        if (!email.isEmpty()) {
+            qCDebug(lcSetupWizardController) << "moving to credentials with email" << email;
+            onLoginEmailClicked(email);
+        }
+    }
 }
 
 SetupWidget* SetupController::window()
