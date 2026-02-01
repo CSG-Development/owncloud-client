@@ -54,7 +54,7 @@ class SetupController : public QObject
     Q_OBJECT
 
 public:
-    explicit SetupController(SettingsDialog *parent);
+    explicit SetupController(SettingsDialog *parent, RunAccountWizardReason reason);
     ~SetupController() noexcept override;
 
     SetupWidget *window();
@@ -109,5 +109,6 @@ private:
     Device device_;
     QList<Device> fullList;
     DeviceController* _deviceController = nullptr;
+    RunAccountWizardReason reason_ = RunAccountWizardReason::ApplicationStartup;
 };
 }

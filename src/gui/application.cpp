@@ -172,7 +172,7 @@ void Application::slotAccountStateRemoved(AccountStatePtr accountState) const
     if (_gui && AccountManager::instance()->accounts().isEmpty()) {
         // allow to add a new account if there is non any more. Always think
         // about single account theming!
-        gui()->runNewAccountWizard();
+        gui()->runNewAccountWizard(RunAccountWizardReason::RemovedAndNoMoreAccounts);
     }
 }
 
