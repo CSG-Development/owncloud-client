@@ -21,14 +21,14 @@
 class QByteArray;
 class QUrl;
 
-namespace CUR {
+namespace APP {
 class CookieJar;
 
 /**
  * @brief The AccessManager class
  * @ingroup libsync
  */
-class CURATORSYNC_EXPORT AccessManager : public QNetworkAccessManager
+class APPLICATIONSYNC_EXPORT AccessManager : public QNetworkAccessManager
 {
     Q_OBJECT
 
@@ -62,6 +62,6 @@ private:
     QSet<QSslCertificate> _customTrustedCaCertificates;
 };
 
-} // namespace CUR
+} // namespace APP
 
 #endif

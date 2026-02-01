@@ -36,7 +36,7 @@ QPair<QString,QString> widgetStyle = {
 
 }
 
-namespace CUR {
+namespace APP {
 
 static const int patternCol = 0;
 static const int deletableCol = 1;
@@ -73,7 +73,7 @@ IgnoreListEditor::IgnoreListEditor(QWidget *parent)
     ui->tableWidget->verticalHeader()->setVisible(false);
 
     connect(Theme::instance(), &Theme::themeChanged, this, &IgnoreListEditor::updateTheme);
-    updateTheme(CUR::Theme::instance()->isDarkTheme());
+    updateTheme(APP::Theme::instance()->isDarkTheme());
 }
 
 IgnoreListEditor::~IgnoreListEditor()
@@ -224,4 +224,4 @@ int IgnoreListEditor::addPattern(const QString &pattern, bool deletable, bool re
     return newRow;
 }
 
-} // namespace CUR
+} // namespace APP

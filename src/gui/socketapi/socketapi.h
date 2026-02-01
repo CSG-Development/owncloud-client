@@ -31,7 +31,7 @@ using SocketApiSocket = QLocalSocket;
 class QUrl;
 class QLocalSocket;
 
-namespace CUR {
+namespace APP {
 
 class SyncFileStatus;
 class Folder;

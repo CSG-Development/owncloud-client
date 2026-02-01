@@ -20,13 +20,13 @@
 #include <QBuffer>
 #include <QFile>
 
-namespace CUR {
+namespace APP {
 
 /**
  * @brief Downloads the remote file via GET
  * @ingroup libsync
  */
-class CURATORSYNC_EXPORT GETFileJob : public AbstractNetworkJob
+class APPLICATIONSYNC_EXPORT GETFileJob : public AbstractNetworkJob
 {
     Q_OBJECT
     QIODevice *_device;

@@ -1,6 +1,6 @@
 #include "stylebase.h"
 
-namespace CUR {
+namespace APP {
 
 ProxyStyleBase::ProxyStyleBase(QStyle* style)
     : QProxyStyle(style)
@@ -23,4 +23,4 @@ QColor ProxyStyleBase::buttonBackgroundCheckedNormal() const {return QColor();}
 QColor ProxyStyleBase::buttonBackgroundCheckedPressed() const {return QColor();}
 QColor ProxyStyleBase::buttonBackgroundCheckedHovered() const {return QColor();}
 
-} // namespace CUR
+} // namespace APP

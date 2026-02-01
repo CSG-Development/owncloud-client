@@ -11,7 +11,7 @@
 #include "csync_exclude.h"
 #include "testutils.h"
 
-using namespace CUR;
+using namespace APP;
 
 namespace {
 const QString excludeListFileC = QStringLiteral(SOURCEDIR "/sync-exclude.lst");
@@ -60,7 +60,7 @@ private slots:
         bool keepHidden = false;
 
         auto check_isExcluded = [&](const QString &a, bool keepHidden, bool create = true) {
-            auto tmp = CUR::TestUtils::createTempDir();
+            auto tmp = APP::TestUtils::createTempDir();
             Q_ASSERT(tmp.isValid());
 
             auto createTree = [&](const QString &path) {

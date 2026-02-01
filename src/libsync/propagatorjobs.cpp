@@ -33,7 +33,7 @@
 #include <time.h>
 
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcPropagateLocalRemove, "sync.propagator.localremove", QtInfoMsg)
 Q_LOGGING_CATEGORY(lcPropagateLocalMkdir, "sync.propagator.localmkdir", QtInfoMsg)

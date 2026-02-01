@@ -17,7 +17,7 @@
 #include "abstractsetupwizardstate.h"
 #include "pages/oauthcredentialssetupwizardpage.h"
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 class OAuthCredentialsSetupWizardState : public AbstractSetupWizardState
 {
@@ -31,4 +31,4 @@ public:
     void evaluatePage() override;
 };
 
-} // CUR::Wizard
+} // APP::Wizard

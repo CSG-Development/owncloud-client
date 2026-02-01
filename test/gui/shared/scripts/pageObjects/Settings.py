@@ -20,8 +20,8 @@ class Settings:
         "visible": 1,
     }
     ABOUT_DIALOG = {
-        "name": "OCC__AboutDialog",
-        "type": "OCC::AboutDialog",
+        "name": "APP__AboutDialog",
+        "type": "APP::AboutDialog",
         "visible": 1,
     }
     ABOUT_DIALOG_OK_BUTTON = {

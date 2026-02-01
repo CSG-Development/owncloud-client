@@ -28,7 +28,7 @@
 #include "appimageupdateavailabledialog.h"
 #include "application.h"
 
-using namespace CUR;
+using namespace APP;
 using namespace std::chrono_literals;
 
 namespace {
@@ -185,7 +185,7 @@ void AppImageUpdater::versionInfoArrived(const UpdateInfo &info)
     });
 
     dialog->open();
-    CuratorGui::raiseDialog(dialog);
+    ApplicationGui::raiseDialog(dialog);
 }
 
 void AppImageUpdater::backgroundCheckForUpdate()

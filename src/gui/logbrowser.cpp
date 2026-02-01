@@ -39,7 +39,7 @@
 
 #include "resources/resources.h"
 
-namespace CUR {
+namespace APP {
 
 // ==============================================================================
 
@@ -86,7 +86,7 @@ LogBrowser::LogBrowser(QWidget *parent)
     });
 
 
-    onThemeChanged(CUR::Theme::instance()->isDarkTheme());
+    onThemeChanged(APP::Theme::instance()->isDarkTheme());
 }
 
 LogBrowser::~LogBrowser()

@@ -3,7 +3,7 @@
 #include <QProxyStyle>
 #include <QDebug>
 
-namespace CUR {
+namespace APP {
 
 class ProxyStyleBase: public QProxyStyle
 {
@@ -35,4 +35,4 @@ protected:
     bool isDark = false;
 };
 
-} // namespace CUR
+} // namespace APP

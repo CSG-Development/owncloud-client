@@ -21,7 +21,7 @@
 
 #include "resources/resources.h"
 
-using namespace CUR;
+using namespace APP;
 using namespace GraphApi;
 
 namespace {

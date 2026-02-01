@@ -20,7 +20,7 @@
 
 #include <QTabBar>
 
-namespace CUR {
+namespace APP {
 
 AboutDialog::AboutDialog(QWidget *parent)
     : QDialog(parent)

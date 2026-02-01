@@ -1,9 +1,9 @@
 if(APPLE)
     if (SPARKLE_FOUND)
-        list(APPEND CURATOR_BUNDLED_RESOURCES
+        list(APPEND APPLICATION_BUNDLED_RESOURCES
             "${PROJECT_SOURCE_DIR}/admin/osx/deny_autoupdate_com.curator.desktopclient.plist"
             "${PROJECT_SOURCE_DIR}/admin/osx/sparkle/dsa_pub.pem")
-        set(CURATOR_BUNDLED_RESOURCES ${CURATOR_BUNDLED_RESOURCES} PARENT_SCOPE)
+        set(APPLICATION_BUNDLED_RESOURCES ${APPLICATION_BUNDLED_RESOURCES} PARENT_SCOPE)
     endif()
 endif()
 

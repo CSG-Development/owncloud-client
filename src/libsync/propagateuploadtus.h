@@ -16,7 +16,7 @@
 
 #include "propagateupload.h"
 
-namespace CUR {
+namespace APP {
 Q_DECLARE_LOGGING_CATEGORY(lcPropagateUploadTUS)
 
 class PropagateUploadFileTUS : public PropagateUploadFileCommon

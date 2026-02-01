@@ -13,7 +13,7 @@
 
 #include <QTest>
 
-using namespace CUR;
+using namespace APP;
 
 class TestJob : public AbstractNetworkJob
 {

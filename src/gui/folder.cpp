@@ -78,7 +78,7 @@ auto priorityC    = QStringLiteral("priority");
 constexpr int retrySyncLimitC = 3;
 }
 
-namespace CUR {
+namespace APP {
 
 using namespace FileSystem::SizeLiterals;
 
@@ -1238,7 +1238,7 @@ void Folder::slotWatcherUnreliable(const QString &message)
 
     msgBox->setAttribute(Qt::WA_DeleteOnClose);
     StyleHelper::applyPushButtonStyle(msgBox);
-    CuratorGui::raise();
+    ApplicationGui::raise();
     msgBox->open();
 }
 
@@ -1267,7 +1267,7 @@ bool Folder::virtualFilesEnabled() const
 void Folder::slotAboutToRemoveAllFiles(SyncFileItem::Direction direction)
 {
     if (_removeAllFilesDialog) {
-        CuratorGui::raise();
+        ApplicationGui::raise();
         return;
     }
     const QString msg = [direction] {
@@ -1447,4 +1447,4 @@ QString Folder::spaceId() const
     return _definition.spaceId();
 }
 
-} // namespace CUR
+} // namespace APP

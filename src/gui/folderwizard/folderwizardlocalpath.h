@@ -22,7 +22,7 @@
 #include "gui/folderwizard/folderwizard_p.h"
 
 class Ui_FolderWizardSourcePage;
-namespace CUR {
+namespace APP {
 
 
 /**

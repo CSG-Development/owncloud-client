@@ -17,7 +17,7 @@
 
 #include <QRegularExpression>
 
-using namespace CUR;
+using namespace APP;
 
 SyncOptions::SyncOptions(QSharedPointer<Vfs> vfs)
     : _vfs(vfs)

@@ -33,7 +33,7 @@
 #include <QMenu>
 #include <QToolButton>
 
-namespace CUR {
+namespace APP {
 
 const char propertyShareC[] = "oc_share";
 

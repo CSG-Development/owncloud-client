@@ -13,7 +13,7 @@
 #include "folderman.h"
 #include "testutils/testutils.h"
 
-using namespace CUR;
+using namespace APP;
 
 namespace {
 auto Settings_2_4()
@@ -76,7 +76,7 @@ private slots:
     {
         QFETCH(QStringList, journalPaths);
         QFETCH(QString, url);
-        auto tmp = CUR::TestUtils::createTempDir();
+        auto tmp = APP::TestUtils::createTempDir();
         const auto settings = writeSettings(tmp, Settings_2_4());
         settings->setValue(QStringLiteral("0/url"), url);
         settings->remove(QStringLiteral("0/Folders/1/journalPath"));

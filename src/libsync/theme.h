@@ -29,7 +29,7 @@ class QPixmap;
 class QColor;
 class QPaintDevice;
 
-namespace CUR {
+namespace APP {
 
 class SyncResult;
 
@@ -37,7 +37,7 @@ class SyncResult;
  * @brief The Theme class
  * @ingroup libsync
  */
-class CURATORSYNC_EXPORT Theme : public QObject
+class APPLICATIONSYNC_EXPORT Theme : public QObject
 {
     Q_OBJECT
 public:
@@ -486,6 +486,6 @@ private:
 };
 
 template <>
-QString CUR::Utility::enumToDisplayName(Theme::UserIDType userIdType);
+QString APP::Utility::enumToDisplayName(Theme::UserIDType userIdType);
 }
 #endif // _THEME_H

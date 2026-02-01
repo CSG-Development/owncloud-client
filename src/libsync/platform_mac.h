@@ -19,7 +19,7 @@
 #include <QProcess>
 #include <qglobal.h>
 
-namespace CUR {
+namespace APP {
 
 class MacPlatformPrivate;
 
@@ -38,4 +38,4 @@ private:
     QScopedPointer<MacPlatformPrivate> d_ptr;
 };
 
-} // namespace CUR
+} // namespace APP

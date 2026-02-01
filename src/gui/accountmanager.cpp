@@ -45,7 +45,7 @@ const auto capabilitesC = QStringLiteral("capabilities");
 }
 
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcAccountManager, "gui.account.manager", QtInfoMsg)
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "ProviderBase.h"
 
-namespace CUR {
+namespace APP {
 
 class ProviderNull: public ProviderBase
 {
@@ -14,4 +14,4 @@ public:
     void sendEvent(const std::string& /*requestType*/, std::any& /*event*/) override {}
 };
 
-} // namespace CUR
+} // namespace APP

@@ -97,7 +97,7 @@ void DeviceController::setEmail(const QString &email)
 {
     qCDebug(lcDeviceController) << "set email" << email;
     _email = email;
-    CUR::ConfigFile cf;
+    APP::ConfigFile cf;
     _api->setClientId(cf.clientId());
     _api->setRefreshToken(cf.refreshTokenForEmail(_email));
 }
@@ -353,14 +353,14 @@ bool DeviceController::hasRefreshToken() const
 
 void DeviceController::saveRefreshToken()
 {
-    CUR::ConfigFile cf;
+    APP::ConfigFile cf;
     cf.setRefreshTokenForEmail(_api->tokenCtx().refreshToken, _email);
     qCDebug(lcDeviceController) << "Refresh token save, token exist" << !_api->tokenCtx().refreshToken.isEmpty();
 }
 
 void DeviceController::loadRefreshToken()
 {
-    CUR::ConfigFile cf;
+    APP::ConfigFile cf;
     const auto& token = cf.refreshTokenForEmail(_email);
     _api->setRefreshToken(token);
     qCDebug(lcDeviceController) << "Refresh token load, token exist" << !token.isEmpty();

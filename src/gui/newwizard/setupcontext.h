@@ -19,9 +19,9 @@
 
 #include <QtGlobal>
 
-namespace CUR {class SettingsDialog;}
+namespace APP {class SettingsDialog;}
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 class SetupWidget;
 
@@ -59,4 +59,4 @@ private:
     SetupAccountBuilder _accountBuilder;
 };
 
-} // CUR::Wizard
+} // APP::Wizard

@@ -22,7 +22,7 @@
 
 #include "common/pinstate.h"
 
-namespace CUR {
+namespace APP {
 
 Q_DECLARE_LOGGING_CATEGORY(lcGuiUtility)
 
@@ -52,6 +52,6 @@ namespace Utility {
     QString socketApiSocketPath();
 
 } // namespace Utility
-} // namespace CUR
+} // namespace APP
 
 #endif

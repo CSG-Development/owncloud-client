@@ -19,7 +19,7 @@
 #include <QHelpEvent>
 #include <QToolTip>
 
-using namespace CUR;
+using namespace APP;
 
 ToolTipUpdater::ToolTipUpdater(QTreeView *treeView)
     : QObject(treeView)

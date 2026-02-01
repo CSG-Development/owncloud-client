@@ -2,7 +2,7 @@
 
 #include <QMessageBox>
 
-namespace CUR {
+namespace APP {
 
 /**
  * A simple message box used whenever we have to ask the user whether to enable VFS, which is an experimental feature.

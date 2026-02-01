@@ -23,7 +23,7 @@ LoginPushButton::LoginPushButton(QWidget *parent)
     themeNotifier = darkTheme_.addNotifier([this] {
         update();
     });
-    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
 }
 
 void LoginPushButton::paintEvent(QPaintEvent* /*event*/)

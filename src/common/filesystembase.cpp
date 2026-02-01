@@ -46,7 +46,7 @@ constexpr qsizetype fileNameMaxC = 255 - 10;
 constexpr auto replacementCharC = QLatin1Char('_');
 }
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcFileSystem, "sync.filesystem", QtInfoMsg)
 
@@ -667,6 +667,6 @@ QString FileSystem::pathEscape(const QString &s)
     return tmp.trimmed();
 }
 
-} // namespace CUR
+} // namespace APP
 
 #include "moc_filesystembase.cpp"

@@ -2,9 +2,9 @@
 
 #include "abstractcorejob.h"
 
-namespace CUR {
+namespace APP {
 
-class CURATORSYNC_EXPORT SimpleResolveUrlJobFactory : public AbstractCoreJobFactory
+class APPLICATIONSYNC_EXPORT SimpleResolveUrlJobFactory : public AbstractCoreJobFactory
 {
 public:
     explicit SimpleResolveUrlJobFactory(QNetworkAccessManager *nam);
@@ -12,4 +12,4 @@ public:
     CoreJob *startJob(const QUrl &url, QObject *parent) override;
 };
 
-} // namespace CUR
+} // namespace APP

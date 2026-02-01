@@ -2,7 +2,7 @@
 #include "gui/customui/stylehelper.h"
 #include "gui/folderman.h"
 #include "gui/application.h"
-#include "gui/curatorgui.h"
+#include "gui/applicationgui.h"
 #include "gui/settingsdialog.h"
 #include "determineauthtypejobfactory.h"
 #include "jobs/discoverwebfingerservicejobfactory.h"
@@ -20,7 +20,7 @@
 
 using namespace std::chrono_literals;
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 Q_LOGGING_CATEGORY(lcSetupWizardController, "gui.setupwizard.controller")
 
@@ -483,4 +483,4 @@ SetupController::~SetupController() noexcept
 {
 }
 
-} // namespace CUR::Wizard
+} // namespace APP::Wizard

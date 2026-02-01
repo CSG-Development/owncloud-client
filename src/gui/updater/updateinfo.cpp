@@ -9,7 +9,7 @@
 #include <QtCore/QtDebug>
 #include <QtCore/QFile>
 
-namespace CUR {
+namespace APP {
 
 void UpdateInfo::setVersion(const QString &v)
 {
@@ -105,4 +105,4 @@ UpdateInfo UpdateInfo::parseString(const QString &xml, bool *ok)
     return c;
 }
 
-} // namespace CUR
+} // namespace APP

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CUR::TlsErrorDialog</class>
- <widget class="QDialog" name="CUR::TlsErrorDialog">
+ <class>APP::TlsErrorDialog</class>
+ <widget class="QDialog" name="APP::TlsErrorDialog">
   <property name="geometry">
    <rect>
     <x>0</x>

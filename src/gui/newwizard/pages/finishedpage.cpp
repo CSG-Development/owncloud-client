@@ -34,12 +34,12 @@ FinishedPage::FinishedPage(QWidget *parent)
 {
     ui->setupUi(this);
 
-    setStyleSheet(CUR::StyleHelper::loadFileToString(QStringLiteral(":/res/login/finished_page.qss")));
+    setStyleSheet(APP::StyleHelper::loadFileToString(QStringLiteral(":/res/login/finished_page.qss")));
 
     themeNotifier = darkTheme_.addNotifier([this] {
         updateTheme();
     });
-    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
 
     connect(ui->chkAdvanced, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
         advancedStateChanged(state == Qt::Checked);
@@ -82,12 +82,12 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
         ui->rbUseVfs->setIcon(QIcon(QStringLiteral(":/res/login/warning_light.svg")));
 
         // when a feature is experimental and experimental features are disabled globally, it should be hidden
-        if (!CUR::Theme::instance()->enableExperimentalFeatures()) {
+        if (!APP::Theme::instance()->enableExperimentalFeatures()) {
             ui->rbUseVfs->hide();
         }
     }
 
-    if (!CUR::Theme::instance()->showVirtualFilesOption()) {
+    if (!APP::Theme::instance()->showVirtualFilesOption()) {
         ui->rbUseVfs->setVisible(false);
         enableVfsByDefault = false;
     }
@@ -106,7 +106,7 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
     }
 
     // this should be handled on application startup, too
-    if (CUR::Theme::instance()->forceVirtualFilesOption()) {
+    if (APP::Theme::instance()->forceVirtualFilesOption()) {
         if (!vfsModeIsExperimental) {
             // note: this might fail when the VFS plugins have not been built (yet) as well
             Q_ASSERT(vfsIsAvailable);
@@ -114,7 +114,7 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
     }
 
     // vfsIsAvailable is false when experimental features are not enabled and the mode is experimental even if a plugin is found
-    if (vfsIsAvailable && CUR::Theme::instance()->forceVirtualFilesOption()) {
+    if (vfsIsAvailable && APP::Theme::instance()->forceVirtualFilesOption()) {
         // this has no visual effect, but is needed for syncMode()
         ui->rbUseVfs->setChecked(true);
 
@@ -146,7 +146,7 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
             messageBox->addButton(tr("Stay safe"), QMessageBox::RejectRole);
 
             messageBox->setAttribute(Qt::WA_DeleteOnClose);
-            CUR::StyleHelper::applyPushButtonStyle(messageBox);
+            APP::StyleHelper::applyPushButtonStyle(messageBox);
 
             connect(messageBox, &QMessageBox::rejected, this, [this]() {
                 // bring back to "safety"
@@ -165,7 +165,7 @@ void FinishedPage::updateTheme()
 {
     ui->btnDone->setSideIcon(QIcon(darkTheme_.value() ? doneIcon.second : doneIcon.first));
     ui->btnBack->setSideIcon(QIcon(darkTheme_.value() ? backIcon.second : backIcon.first));
-    CUR::StyleHelper::setTheme(this, darkTheme_.value());
+    APP::StyleHelper::setTheme(this, darkTheme_.value());
     update();
 }
 
@@ -175,18 +175,18 @@ void FinishedPage::showErrorMessage(const QString &msg)
     ui->lblErrorText->setText(msg);
 }
 
-CUR::Wizard::SyncMode FinishedPage::syncMode() const
+APP::Wizard::SyncMode FinishedPage::syncMode() const
 {
     if (ui->rbDownloadEverything->isChecked()) {
-        return CUR::Wizard::SyncMode::SyncEverything;
+        return APP::Wizard::SyncMode::SyncEverything;
     }
     if (ui->rbConfigManually->isChecked()) {
-        return CUR::Wizard::SyncMode::ConfigureUsingFolderWizard;
+        return APP::Wizard::SyncMode::ConfigureUsingFolderWizard;
     }
     if (ui->rbUseVfs->isChecked()) {
-        return CUR::Wizard::SyncMode::UseVfs;
+        return APP::Wizard::SyncMode::UseVfs;
     }
-    return CUR::Wizard::SyncMode::SyncEverything;
+    return APP::Wizard::SyncMode::SyncEverything;
 }
 
 QString FinishedPage::syncTargetDir() const

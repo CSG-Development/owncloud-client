@@ -15,28 +15,28 @@ class PublicLinkDialog:
         "name": "label_name",
         "type": "QLabel",
         "visible": 1,
-        "window": names.sharingDialog_OCC_ShareDialog,
+        "window": names.sharingDialog_APP_ShareDialog,
     }
     PASSWORD_CHECKBOX = {
-        "container": names.qt_tabwidget_stackedwidget_OCC_ShareLinkWidget_OCC_ShareLinkWidget,
+        "container": names.qt_tabwidget_stackedwidget_APP_ShareLinkWidget_APP_ShareLinkWidget,
         "name": "checkBox_password",
         "type": "QCheckBox",
         "visible": 1,
     }
     PASSWORD_INPUT_FIELD = {
-        "container": names.qt_tabwidget_stackedwidget_OCC_ShareLinkWidget_OCC_ShareLinkWidget,
+        "container": names.qt_tabwidget_stackedwidget_APP_ShareLinkWidget_APP_ShareLinkWidget,
         "name": "lineEdit_password",
         "type": "QLineEdit",
         "visible": 1,
     }
     EXPIRYDATE_CHECKBOX = {
-        "container": names.qt_tabwidget_stackedwidget_OCC_ShareLinkWidget_OCC_ShareLinkWidget,
+        "container": names.qt_tabwidget_stackedwidget_APP_ShareLinkWidget_APP_ShareLinkWidget,
         "name": "checkBox_expire",
         "type": "QCheckBox",
         "visible": 1,
     }
     CREATE_SHARE_BUTTON = {
-        "container": names.qt_tabwidget_stackedwidget_OCC_ShareLinkWidget_OCC_ShareLinkWidget,
+        "container": names.qt_tabwidget_stackedwidget_APP_ShareLinkWidget_APP_ShareLinkWidget,
         "name": "createShareButton",
         "type": "QPushButton",
         "visible": 1,
@@ -48,25 +48,25 @@ class PublicLinkDialog:
         "type": "QModelIndex",
     }
     EXPIRATION_DATE_FIELD = {
-        "container": names.qt_tabwidget_stackedwidget_OCC_ShareLinkWidget_OCC_ShareLinkWidget,
+        "container": names.qt_tabwidget_stackedwidget_APP_ShareLinkWidget_APP_ShareLinkWidget,
         "name": "qt_spinbox_lineedit",
         "type": "QLineEdit",
         "visible": 1,
     }
     READ_ONLY_RADIO_BUTTON = {
-        "container": names.qt_tabwidget_stackedwidget_OCC_ShareLinkWidget_OCC_ShareLinkWidget,
+        "container": names.qt_tabwidget_stackedwidget_APP_ShareLinkWidget_APP_ShareLinkWidget,
         "name": "radio_readOnly",
         "type": "QRadioButton",
         "visible": 1,
     }
     READ_WRITE_RADIO_BUTTON = {
-        "container": names.qt_tabwidget_stackedwidget_OCC_ShareLinkWidget_OCC_ShareLinkWidget,
+        "container": names.qt_tabwidget_stackedwidget_APP_ShareLinkWidget_APP_ShareLinkWidget,
         "name": "radio_readWrite",
         "type": "QRadioButton",
         "visible": 1,
     }
     UPLOAD_ONLY_RADIO_BUTTON = {
-        "container": names.qt_tabwidget_stackedwidget_OCC_ShareLinkWidget_OCC_ShareLinkWidget,
+        "container": names.qt_tabwidget_stackedwidget_APP_ShareLinkWidget_APP_ShareLinkWidget,
         "name": "radio_uploadOnly",
         "type": "QRadioButton",
         "visible": 1,
@@ -77,12 +77,12 @@ class PublicLinkDialog:
         "occurrence": 2,
     }
     CONFIRM_LINK_DELETE_BUTTON = {
-        "container": names.qt_tabwidget_stackedwidget_OCC_ShareLinkWidget_OCC_ShareLinkWidget,
+        "container": names.qt_tabwidget_stackedwidget_APP_ShareLinkWidget_APP_ShareLinkWidget,
         "text": "Delete",
         "type": "QPushButton",
     }
     UPDATE_PASSWORD_BUTTON = {
-        "container": names.qt_tabwidget_stackedwidget_OCC_ShareLinkWidget_OCC_ShareLinkWidget,
+        "container": names.qt_tabwidget_stackedwidget_APP_ShareLinkWidget_APP_ShareLinkWidget,
         "name": "pushButton_setPassword",
         "type": "QPushButton",
         "visible": 1,

@@ -23,7 +23,7 @@
 #include <QDataStream>
 #include <QDir>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcCookieJar, "sync.cookiejar", QtInfoMsg)
 
@@ -36,4 +36,4 @@ CookieJar::~CookieJar()
 {
 }
 
-} // namespace CUR
+} // namespace APP

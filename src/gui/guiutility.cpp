@@ -29,11 +29,11 @@
 
 #include "common/asserts.h"
 
-namespace CUR {
+namespace APP {
 Q_LOGGING_CATEGORY(lcGuiUtility, "gui.utility", QtInfoMsg)
 }
 
-using namespace CUR;
+using namespace APP;
 
 bool Utility::openBrowser(const QUrl &url, QWidget *errorWidgetParent)
 {

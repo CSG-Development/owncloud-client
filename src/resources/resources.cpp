@@ -18,17 +18,17 @@
 #include <QDebug>
 #include <QFile>
 
-using namespace CUR;
+using namespace APP;
 using namespace Resources;
 
-bool CUR::Resources::isUsingDarkTheme()
+bool APP::Resources::isUsingDarkTheme()
 {
     // TODO: replace by a command line switch
     static bool forceDark = qEnvironmentVariableIntValue("CURATOR_FORCE_DARK_MODE") != 0;
     return forceDark || QPalette().base().color().lightnessF() <= 0.5;
 }
 
-QIcon CUR::Resources::getCoreIcon(const QString &icon_name)
+QIcon APP::Resources::getCoreIcon(const QString &icon_name)
 {
     if (icon_name.isEmpty()) {
         return {};

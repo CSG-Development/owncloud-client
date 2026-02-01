@@ -49,7 +49,7 @@ bool isDebuggerPresent()
 }
 #endif
 }
-namespace CUR {
+namespace APP {
 
 Logger *Logger::instance()
 {
@@ -334,7 +334,7 @@ void Logger::rotateLog()
     }
 }
 
-void CUR::Logger::attacheToConsole()
+void APP::Logger::attacheToConsole()
 {
     if (_consoleIsAttached) {
         return;
@@ -352,4 +352,4 @@ void CUR::Logger::attacheToConsole()
 #endif
 }
 
-} // namespace CUR
+} // namespace APP

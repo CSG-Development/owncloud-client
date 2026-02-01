@@ -19,7 +19,7 @@
 
 #include <QtGlobal>
 
-using namespace CUR::Utility;
+using namespace APP::Utility;
 
 ChronoElapsedTimer::ChronoElapsedTimer()
     : _start(std::chrono::steady_clock::now())

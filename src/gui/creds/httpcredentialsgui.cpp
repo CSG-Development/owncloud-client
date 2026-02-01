@@ -31,7 +31,7 @@
 #include <QTimer>
 
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcHttpCredentialsGui, "sync.credentials.http.gui", QtInfoMsg)
 
@@ -162,4 +162,4 @@ void HttpCredentialsGui::restartOAuth()
     _asyncAuth->startAuthentication();
 }
 
-} // namespace CUR
+} // namespace APP

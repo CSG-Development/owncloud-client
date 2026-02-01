@@ -21,7 +21,7 @@
 
 #include <sqlite3.h>
 
-using namespace CUR;
+using namespace APP;
 
 PreparedSqlQuery::PreparedSqlQuery(SqlQuery *query, bool ok)
     : _query(query)

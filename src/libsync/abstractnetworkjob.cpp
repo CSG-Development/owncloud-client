@@ -48,7 +48,7 @@ constexpr int MaxRetryCount = 5;
 }
 
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcNetworkJob, "sync.networkjob", QtInfoMsg)
 
@@ -268,7 +268,7 @@ QByteArray AbstractNetworkJob::responseTimestamp() const
     return _responseTimestamp;
 }
 
-QDateTime CUR::AbstractNetworkJob::responseQTimeStamp() const
+QDateTime APP::AbstractNetworkJob::responseQTimeStamp() const
 {
     return Utility::parseRFC1123Date(QString::fromUtf8(responseTimestamp()));
 }
@@ -444,9 +444,9 @@ void AbstractNetworkJob::setCacheLoadControl(QNetworkRequest::CacheLoadControl c
     _cacheLoadControl = cacheLoadControl;
 }
 
-} // namespace CUR
+} // namespace APP
 
-QDebug operator<<(QDebug debug, const CUR::AbstractNetworkJob *job)
+QDebug operator<<(QDebug debug, const APP::AbstractNetworkJob *job)
 {
     QDebugStateSaver saver(debug);
     debug.setAutoInsertSpaces(false);

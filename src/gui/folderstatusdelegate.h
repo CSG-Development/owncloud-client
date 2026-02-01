@@ -16,7 +16,7 @@
 #pragma once
 #include <QStyledItemDelegate>
 
-namespace CUR {
+namespace APP {
 
 class FolderStatusModel;
 
@@ -64,4 +64,4 @@ private:
     QRect checkboxRect;
 };
 
-} // namespace CUR
+} // namespace APP

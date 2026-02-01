@@ -18,9 +18,9 @@
 
 #include <QJsonObject>
 
-namespace CUR {
+namespace APP {
 
-class CURATORSYNC_EXPORT CheckServerJobResult
+class APPLICATIONSYNC_EXPORT CheckServerJobResult
 {
 
 public:
@@ -36,7 +36,7 @@ private:
 };
 
 
-class CURATORSYNC_EXPORT CheckServerJobFactory : public AbstractCoreJobFactory
+class APPLICATIONSYNC_EXPORT CheckServerJobFactory : public AbstractCoreJobFactory
 {
 public:
     using AbstractCoreJobFactory::AbstractCoreJobFactory;
@@ -53,6 +53,6 @@ private:
     int _maxRedirectsAllowed = 5;
 };
 
-} // CUR
+} // APP
 
-Q_DECLARE_METATYPE(CUR::CheckServerJobResult)
+Q_DECLARE_METATYPE(APP::CheckServerJobResult)

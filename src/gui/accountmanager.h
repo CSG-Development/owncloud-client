@@ -17,7 +17,7 @@
 #include "account.h"
 #include "accountstate.h"
 
-namespace CUR {
+namespace APP {
 
 /**
    @brief The AccountManager class

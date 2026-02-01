@@ -17,12 +17,12 @@
 
 #include <QIcon>
 
-namespace CUR::Resources {
+namespace APP::Resources {
 /**
  * Whether use the dark icon theme
  * The function also ensures the theme supports the dark theme
  */
-bool CURATORRESOURCES_EXPORT isUsingDarkTheme();
+bool APPLICATIONRESOURCES_EXPORT isUsingDarkTheme();
 
-QIcon CURATORRESOURCES_EXPORT getCoreIcon(const QString &icon_name);
+QIcon APPLICATIONRESOURCES_EXPORT getCoreIcon(const QString &icon_name);
 }

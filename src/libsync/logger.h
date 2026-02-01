@@ -25,13 +25,13 @@
 
 #include "curatorlib.h"
 
-namespace CUR {
+namespace APP {
 
 /**
  * @brief The Logger class
  * @ingroup libsync
  */
-class CURATORSYNC_EXPORT Logger : public QObject
+class APPLICATIONSYNC_EXPORT Logger : public QObject
 {
     Q_OBJECT
 public:
@@ -107,6 +107,6 @@ private:
     int _maxLogFiles;
 };
 
-} // namespace CUR
+} // namespace APP
 
 #endif // LOGGER_H

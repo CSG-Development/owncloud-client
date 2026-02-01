@@ -17,7 +17,7 @@
 #endif
 
 using namespace std::chrono_literals;
-using namespace CUR;
+using namespace APP;
 
 static constexpr auto stopAfter = 3_mb;
 
@@ -177,7 +177,7 @@ private slots:
             });
             fakeFolder.syncJournal().wipeErrorBlacklist();
             // perform a partial sync
-            fakeFolder.syncEngine().setLocalDiscoveryOptions(CUR::LocalDiscoveryStyle::DatabaseAndFilesystem, {});
+            fakeFolder.syncEngine().setLocalDiscoveryOptions(APP::LocalDiscoveryStyle::DatabaseAndFilesystem, {});
             QVERIFY(fakeFolder.applyLocalModificationsAndSync()); // now this should succeed
             QCOMPARE(ranges, QByteArray("bytes=" + QByteArray::number(stopAfter) + "-"));
             QCOMPARE(fakeFolder.currentLocalState(), fakeFolder.currentRemoteState());

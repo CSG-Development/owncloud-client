@@ -20,7 +20,7 @@
 
 #include "common/fixedsizeringbuffer.h"
 
-namespace CUR {
+namespace APP {
 
 class ProtocolItem
 {

@@ -23,12 +23,12 @@
 #include "models/expandingheaderview.h"
 #include "models/models.h"
 #include "models/protocolitemmodel.h"
-#include "curatorgui.h"
+#include "applicationgui.h"
 #include "progressdispatcher.h"
 
 class QSortFilterProxyModel;
 
-namespace CUR {
+namespace APP {
 class SyncResult;
 class SyncFileItemStatusSetSortFilterProxyModel;
 

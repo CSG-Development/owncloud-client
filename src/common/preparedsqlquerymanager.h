@@ -22,7 +22,7 @@
 #include "ownsql.h"
 #include "common/asserts.h"
 
-namespace CUR {
+namespace APP {
 
 class OCSYNC_EXPORT PreparedSqlQuery
 {

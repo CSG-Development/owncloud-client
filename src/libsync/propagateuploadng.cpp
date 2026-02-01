@@ -33,7 +33,7 @@
 
 #include <memory>
 
-namespace CUR {
+namespace APP {
 
 QString PropagateUploadFileNG::chunkPath(qint64 chunkOffset)
 {

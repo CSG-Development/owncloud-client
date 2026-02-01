@@ -21,7 +21,7 @@ namespace Ui {
 class SpacesBrowser;
 }
 
-namespace CUR::Spaces {
+namespace APP::Spaces {
 class SpacesModel;
 
 class SpacesBrowser : public QWidget
@@ -32,7 +32,7 @@ public:
     explicit SpacesBrowser(QWidget *parent = nullptr);
     ~SpacesBrowser();
 
-    void setAccount(CUR::AccountPtr acc);
+    void setAccount(APP::AccountPtr acc);
 
     QModelIndex currentSpace();
 
@@ -42,7 +42,7 @@ Q_SIGNALS:
 private:
     Ui::SpacesBrowser *ui;
 
-    CUR::AccountPtr _acc;
+    APP::AccountPtr _acc;
     SpacesModel *_model;
 };
 

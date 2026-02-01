@@ -19,7 +19,7 @@
 
 #include <QBuffer>
 
-namespace CUR {
+namespace APP {
 
 Q_DECLARE_LOGGING_CATEGORY(lcNotifications)
 

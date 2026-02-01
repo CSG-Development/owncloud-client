@@ -66,7 +66,7 @@ int csync_vio_local_closedir(csync_vio_handle_t *dhandle) {
     return rc;
 }
 
-std::unique_ptr<csync_file_stat_t> csync_vio_local_readdir(csync_vio_handle_t *handle, CUR::Vfs *vfs) {
+std::unique_ptr<csync_file_stat_t> csync_vio_local_readdir(csync_vio_handle_t *handle, APP::Vfs *vfs) {
     struct dirent *dirent = nullptr;
     std::unique_ptr<csync_file_stat_t> file_stat;
 

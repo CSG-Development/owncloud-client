@@ -18,7 +18,7 @@
 
 class QTimer;
 
-namespace CUR {
+namespace APP {
 
 class WinPlatform : public Platform
 {
@@ -38,4 +38,4 @@ private:
     QTimer* debounceTimer = nullptr;
 };
 
-} // namespace CUR
+} // namespace APP

@@ -334,7 +334,7 @@
     </message>
 </context>
 <context>
-    <name>OCC::AboutDialog</name>
+    <name>APP::AboutDialog</name>
     <message>
         <location filename="../src/gui/aboutdialog.ui" line="24"/>
         <source>About</source>
@@ -352,7 +352,7 @@
     </message>
 </context>
 <context>
-    <name>OCC::AbstractNetworkJob</name>
+    <name>APP::AbstractNetworkJob</name>
     <message>
         <location filename="../src/libsync/abstractnetworkjob.cpp" line="268"/>
         <source>Connection timed out</source>
@@ -370,7 +370,7 @@
     </message>
 </context>
 <context>
-    <name>OCC::Account</name>
+    <name>APP::Account</name>
     <message>
         <location filename="../src/libsync/account.cpp" line="149"/>
         <source>%1@%2</source>
@@ -378,7 +378,7 @@
     </message>
 </context>
 <context>
-    <name>OCC::AccountSettings</name>
+    <name>APP::AccountSettings</name>
     <message>
         <location filename="../src/gui/accountsettings.ui" line="14"/>
         <source>Form</source>
@@ -674,7 +674,7 @@ Bitte über den Browser authentifizieren.</translation>
     </message>
 </context>
 <context>
-    <name>OCC::ActivityListModel</name>
+    <name>APP::ActivityListModel</name>
     <message>
         <location filename="../src/gui/models/activitylistmodel.cpp" line="97"/>
         <source>%1 %2 on %3</source>
@@ -702,7 +702,7 @@ Bitte über den Browser authentifizieren.</translation>
     </message>
 </context>
 <context>
-    <name>OCC::ActivitySettings</name>
+    <name>APP::ActivitySettings</name>
     <message>
         <location filename="../src/gui/activitywidget.cpp" line="466"/>
         <location filename="../src/gui/activitywidget.cpp" line="513"/>
@@ -727,7 +727,7 @@ Bitte über den Browser authentifizieren.</translation>
     </message>
 </context>
 <context>
-    <name>OCC::ActivityWidget</name>
+    <name>APP::ActivityWidget</name>
     <message>
         <location filename="../src/gui/activitywidget.ui" line="14"/>
         <source>Form</source>
@@ -781,7 +781,7 @@ Bitte über den Browser authentifizieren.</translation>
     </message>
 </context>
 <context>
-    <name>OCC::AppImageUpdateAvailableDialog</name>
+    <name>APP::AppImageUpdateAvailableDialog</name>
     <message>
         <location filename="../src/gui/updater/appimageupdateavailabledialog.cpp" line="35"/>
         <source>Installed version: %1</source>
@@ -803,7 +803,7 @@ Die Aktualisierung wird im Hintergrund durchgeführt und überschreibt die aktue
     </message>
 </context>
 <context>
-    <name>OCC::Application</name>
+    <name>APP::Application</name>
     <message>
         <location filename="../src/gui/main.cpp" line="213"/>
         <source>Quit</source>
@@ -811,7 +811,7 @@ Die Aktualisierung wird im Hintergrund durchgeführt und überschreibt die aktue
     </message>
 </context>
 <context>
-    <name>OCC::AskExperimentalVirtualFilesFeatureMessageBox</name>
+    <name>APP::AskExperimentalVirtualFilesFeatureMessageBox</name>
     <message>
         <location filename="../src/gui/askexperimentalvirtualfilesfeaturemessagebox.cpp" line="7"/>
         <source>Enable experimental feature?</source>
@@ -844,7 +844,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>OCC::ConnectionValidator</name>
+    <name>APP::ConnectionValidator</name>
     <message>
         <location filename="../src/gui/connectionvalidator.cpp" line="67"/>
         <source>No Curator account configured</source>
@@ -877,7 +877,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>OCC::CredentialJob</name>
+    <name>APP::CredentialJob</name>
     <message>
         <location filename="../src/libsync/creds/credentialmanager.cpp" line="221"/>
         <source>Failed to parse credentials %1</source>
@@ -885,7 +885,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>OCC::DiscoverySingleDirectoryJob</name>
+    <name>APP::DiscoverySingleDirectoryJob</name>
     <message>
         <location filename="../src/libsync/discoveryphase.cpp" line="468"/>
         <location filename="../src/libsync/discoveryphase.cpp" line="489"/>
@@ -899,7 +899,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>OCC::DiscoverySingleLocalDirectoryJob</name>
+    <name>APP::DiscoverySingleLocalDirectoryJob</name>
     <message>
         <location filename="../src/libsync/discoveryphase.cpp" line="269"/>
         <source>Error while opening directory %1</source>
@@ -922,7 +922,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>OCC::ExpandingHeaderView</name>
+    <name>APP::ExpandingHeaderView</name>
     <message>
         <location filename="../src/gui/models/expandingheaderview.cpp" line="104"/>
         <source>Reset column sizes</source>
@@ -930,7 +930,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>OCC::Folder</name>
+    <name>APP::Folder</name>
     <message>
         <location filename="../src/gui/folder.cpp" line="228"/>
         <source>Local folder %1 does not exist.</source>
@@ -1124,7 +1124,7 @@ Falls dies ein Missgeschick war und du dich zum Behalten der Datei entscheidest,
     </message>
 </context>
 <context>
-    <name>OCC::FolderMan</name>
+    <name>APP::FolderMan</name>
     <message>
         <location filename="../src/gui/folderman.cpp" line="293"/>
         <source>Could not reset folder state</source>
@@ -1216,7 +1216,7 @@ Erwägung Sie diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen.
     </message>
 </context>
 <context>
-    <name>OCC::FolderStatusDelegate</name>
+    <name>APP::FolderStatusDelegate</name>
     <message>
         <location filename="../src/gui/folderstatusdelegate.cpp" line="204"/>
         <source>%1 of %2 in use</source>
@@ -1224,7 +1224,7 @@ Erwägung Sie diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen.
     </message>
 </context>
 <context>
-    <name>OCC::FolderStatusModel</name>
+    <name>APP::FolderStatusModel</name>
     <message>
         <location filename="../src/gui/folderstatusmodel.cpp" line="229"/>
         <source>Error while loading the list of folders from the server.</source>
@@ -1361,7 +1361,7 @@ Erwägung Sie diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen.
     </message>
 </context>
 <context>
-    <name>OCC::FolderWatcher</name>
+    <name>APP::FolderWatcher</name>
     <message>
         <location filename="../src/gui/folderwatcher.cpp" line="139"/>
         <source>The watcher did not receive a test notification.</source>
@@ -1369,7 +1369,7 @@ Erwägung Sie diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen.
     </message>
 </context>
 <context>
-    <name>OCC::FolderWatcherPrivate</name>
+    <name>APP::FolderWatcherPrivate</name>
     <message>
         <location filename="../src/gui/folderwatcher_linux.cpp" line="82"/>
         <source>This problem usually happens when the inotify watches are exhausted. Check the FAQ for details.</source>
@@ -1377,7 +1377,7 @@ Erwägung Sie diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen.
     </message>
 </context>
 <context>
-    <name>OCC::FolderWizard</name>
+    <name>APP::FolderWizard</name>
     <message>
         <location filename="../src/gui/folderwizard/folderwizard.cpp" line="166"/>
         <source>Virtual files are not available for the selected folder</source>
@@ -1395,7 +1395,7 @@ Erwägung Sie diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen.
     </message>
 </context>
 <context>
-    <name>OCC::FolderWizardLocalPath</name>
+    <name>APP::FolderWizardLocalPath</name>
     <message>
         <location filename="../src/gui/folderwizard/folderwizardlocalpath.cpp" line="40"/>
         <source>Click to select a local folder to sync.</source>
@@ -1413,7 +1413,7 @@ Erwägung Sie diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen.
     </message>
 </context>
 <context>
-    <name>OCC::FolderWizardRemotePath</name>
+    <name>APP::FolderWizardRemotePath</name>
     <message>
         <location filename="../src/gui/folderwizard/folderwizardremotepath.cpp" line="74"/>
         <source>Create Remote Folder</source>
@@ -1471,7 +1471,7 @@ Erwägung Sie diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen.
     </message>
 </context>
 <context>
-    <name>OCC::FolderWizardSelectiveSync</name>
+    <name>APP::FolderWizardSelectiveSync</name>
     <message>
         <location filename="../src/gui/folderwizard/folderwizardselectivesync.cpp" line="50"/>
         <source>Use virtual files instead of downloading content immediately%1</source>
@@ -1484,7 +1484,7 @@ Erwägung Sie diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen.
     </message>
 </context>
 <context>
-    <name>OCC::GETFileJob</name>
+    <name>APP::GETFileJob</name>
     <message>
         <location filename="../src/libsync/propagatedownload.cpp" line="170"/>
         <source>Connection Timeout</source>
@@ -1512,7 +1512,7 @@ Erwägung Sie diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen.
     </message>
 </context>
 <context>
-    <name>OCC::GeneralSettings</name>
+    <name>APP::GeneralSettings</name>
     <message>
         <location filename="../src/gui/generalsettings.ui" line="14"/>
         <source>Form</source>
@@ -1674,7 +1674,7 @@ Beachte, das dies nur bestimmt von welchem Bereich Sie Aktualisierungen erhalten
     </message>
 </context>
 <context>
-    <name>OCC::GraphApi::Space</name>
+    <name>APP::GraphApi::Space</name>
     <message>
         <location filename="../src/libsync/graphapi/space.cpp" line="64"/>
         <source>Personal</source>
@@ -1687,7 +1687,7 @@ Beachte, das dies nur bestimmt von welchem Bereich Sie Aktualisierungen erhalten
     </message>
 </context>
 <context>
-    <name>OCC::HttpCredentialsGui</name>
+    <name>APP::HttpCredentialsGui</name>
     <message>
         <location filename="../src/gui/creds/httpcredentialsgui.cpp" line="117"/>
         <source>Please enter your password to log in to the account %1.</source>
@@ -1695,7 +1695,7 @@ Beachte, das dies nur bestimmt von welchem Bereich Sie Aktualisierungen erhalten
     </message>
 </context>
 <context>
-    <name>OCC::IgnoreListEditor</name>
+    <name>APP::IgnoreListEditor</name>
     <message>
         <location filename="../src/gui/ignorelisteditor.ui" line="14"/>
         <source>Ignored Files Editor</source>
@@ -1762,7 +1762,7 @@ Objekte bei denen das Löschen erlaubt ist werden gelöscht, wenn sie die Lösch
     </message>
 </context>
 <context>
-    <name>OCC::IssuesWidget</name>
+    <name>APP::IssuesWidget</name>
     <message>
         <location filename="../src/gui/issueswidget.ui" line="14"/>
         <source>Form</source>
@@ -1810,7 +1810,7 @@ Objekte bei denen das Löschen erlaubt ist werden gelöscht, wenn sie die Lösch
     </message>
 </context>
 <context>
-    <name>OCC::LogBrowser</name>
+    <name>APP::LogBrowser</name>
     <message>
         <location filename="../src/gui/logbrowser.ui" line="14"/>
         <source>Log Output</source>
@@ -1867,7 +1867,7 @@ Beachten Sie, dass Kommandozeilenoptionen zum Logging diese Einstellungen übers
     </message>
 </context>
 <context>
-    <name>OCC::LoginRequiredDialog</name>
+    <name>APP::LoginRequiredDialog</name>
     <message>
         <location filename="../src/gui/loginrequireddialog/loginrequireddialog.cpp" line="36"/>
         <source>Log out</source>
@@ -1880,7 +1880,7 @@ Beachten Sie, dass Kommandozeilenoptionen zum Logging diese Einstellungen übers
     </message>
 </context>
 <context>
-    <name>OCC::Models</name>
+    <name>APP::Models</name>
     <message>
         <location filename="../src/gui/models/models.cpp" line="89"/>
         <source>%1 Filter:</source>
@@ -1903,7 +1903,7 @@ Beachten Sie, dass Kommandozeilenoptionen zum Logging diese Einstellungen übers
     </message>
 </context>
 <context>
-    <name>OCC::NSISUpdater</name>
+    <name>APP::NSISUpdater</name>
     <message>
         <location filename="../src/gui/updater/ocupdater.cpp" line="417"/>
         <source>New Version Available</source>
@@ -1957,7 +1957,7 @@ Beachten Sie, dass Kommandozeilenoptionen zum Logging diese Einstellungen übers
     </message>
 </context>
 <context>
-    <name>OCC::NetworkSettings</name>
+    <name>APP::NetworkSettings</name>
     <message>
         <location filename="../src/gui/networksettings.ui" line="14"/>
         <source>Form</source>
@@ -2070,7 +2070,7 @@ Beachten Sie, dass Kommandozeilenoptionen zum Logging diese Einstellungen übers
     </message>
 </context>
 <context>
-    <name>OCC::NotificationWidget</name>
+    <name>APP::NotificationWidget</name>
     <message>
         <location filename="../src/gui/notificationwidget.cpp" line="67"/>
         <source>Created at %1</source>
@@ -2095,7 +2095,7 @@ Beachten Sie, dass Kommandozeilenoptionen zum Logging diese Einstellungen übers
     </message>
 </context>
 <context>
-    <name>OCC::OAuth</name>
+    <name>APP::OAuth</name>
     <message>
         <location filename="../src/libsync/creds/oauth.cpp" line="355"/>
         <source>Error returned from the server: &lt;em&gt;%1&lt;/em&gt;</source>
@@ -2161,7 +2161,7 @@ Beachten Sie, dass Kommandozeilenoptionen zum Logging diese Einstellungen übers
     </message>
 </context>
 <context>
-    <name>OCC::OCUpdater</name>
+    <name>APP::OCUpdater</name>
     <message>
         <location filename="../src/gui/updater/ocupdater.cpp" line="111"/>
         <source>New %1 Update Ready</source>
@@ -2225,7 +2225,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::OwncloudPropagator</name>
+    <name>APP::OwncloudPropagator</name>
     <message>
         <location filename="../src/libsync/curatorpropagator.cpp" line="766"/>
         <source>File %1 is currently in use</source>
@@ -2233,7 +2233,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::ProcessDirectoryJob</name>
+    <name>APP::ProcessDirectoryJob</name>
     <message>
         <location filename="../src/libsync/discovery.cpp" line="236"/>
         <source>Symbolic links are not supported in syncing.</source>
@@ -2376,7 +2376,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::PropagateDirectory</name>
+    <name>APP::PropagateDirectory</name>
     <message>
         <location filename="../src/libsync/curatorpropagator.cpp" line="1126"/>
         <source>Error updating metadata: %1</source>
@@ -2389,7 +2389,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::PropagateDownloadFile</name>
+    <name>APP::PropagateDownloadFile</name>
     <message>
         <location filename="../src/libsync/propagatedownload.cpp" line="434"/>
         <source>Failed to free up space, the file %1 is currently in use</source>
@@ -2457,7 +2457,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::PropagateItemJob</name>
+    <name>APP::PropagateItemJob</name>
     <message>
         <location filename="../src/libsync/curatorpropagator.cpp" line="240"/>
         <source>; Restoration Failed: %1</source>
@@ -2465,7 +2465,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::PropagateLocalMkdir</name>
+    <name>APP::PropagateLocalMkdir</name>
     <message>
         <location filename="../src/libsync/propagatorjobs.cpp" line="162"/>
         <source>could not delete file %1, error: %2</source>
@@ -2493,7 +2493,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::PropagateLocalRemove</name>
+    <name>APP::PropagateLocalRemove</name>
     <message>
         <location filename="../src/libsync/propagatorjobs.cpp" line="79"/>
         <source>%1 failed with: %2</source>
@@ -2512,7 +2512,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::PropagateLocalRename</name>
+    <name>APP::PropagateLocalRename</name>
     <message>
         <location filename="../src/libsync/propagatorjobs.cpp" line="234"/>
         <source>File %1 can not be renamed to %2 because of a local file name clash</source>
@@ -2545,7 +2545,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::PropagateRemoteDelete</name>
+    <name>APP::PropagateRemoteDelete</name>
     <message>
         <location filename="../src/libsync/propagateremotedelete.cpp" line="97"/>
         <source>Wrong HTTP code returned by server. Expected 204, but received &quot;%1 %2&quot;.</source>
@@ -2553,7 +2553,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::PropagateRemoteMkdir</name>
+    <name>APP::PropagateRemoteMkdir</name>
     <message>
         <location filename="../src/libsync/propagateremotemkdir.cpp" line="108"/>
         <source>Wrong HTTP code returned by server. Expected 201, but received &quot;%1 %2&quot;.</source>
@@ -2571,7 +2571,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::PropagateRemoteMove</name>
+    <name>APP::PropagateRemoteMove</name>
     <message>
         <location filename="../src/libsync/propagateremotemove.cpp" line="120"/>
         <source>Could not rename %1 to %2, error: %3</source>
@@ -2604,7 +2604,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::PropagateUpdateMetaDataJob</name>
+    <name>APP::PropagateUpdateMetaDataJob</name>
     <message>
         <location filename="../src/libsync/curatorpropagator.cpp" line="1310"/>
         <source>Could not update file : %1</source>
@@ -2617,7 +2617,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::PropagateUploadFileCommon</name>
+    <name>APP::PropagateUploadFileCommon</name>
     <message>
         <location filename="../src/libsync/propagateupload.cpp" line="128"/>
         <source>File %1 cannot be uploaded because another file with the same name, differing only in case, exists</source>
@@ -2652,7 +2652,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::PropagateUploadFileNG</name>
+    <name>APP::PropagateUploadFileNG</name>
     <message>
         <location filename="../src/libsync/propagateuploadng.cpp" line="95"/>
         <source>%1 the file is currently in use</source>
@@ -2685,7 +2685,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::PropagateUploadFileTUS</name>
+    <name>APP::PropagateUploadFileTUS</name>
     <message>
         <location filename="../src/libsync/propagateuploadtus.cpp" line="63"/>
         <source>%1 the file is currently in use</source>
@@ -2703,7 +2703,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::PropagateUploadFileV1</name>
+    <name>APP::PropagateUploadFileV1</name>
     <message>
         <location filename="../src/libsync/propagateuploadv1.cpp" line="47"/>
         <source>%1 the file is currently in use</source>
@@ -2726,7 +2726,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::ProtocolItemModel</name>
+    <name>APP::ProtocolItemModel</name>
     <message>
         <location filename="../src/gui/models/protocolitemmodel.cpp" line="128"/>
         <source>Time</source>
@@ -2769,7 +2769,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::ProtocolWidget</name>
+    <name>APP::ProtocolWidget</name>
     <message>
         <location filename="../src/gui/protocolwidget.ui" line="14"/>
         <source>Form</source>
@@ -2798,7 +2798,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::SelectiveSyncWidget</name>
+    <name>APP::SelectiveSyncWidget</name>
     <message>
         <location filename="../src/gui/selectivesyncwidget.cpp" line="71"/>
         <source>Loading ...</source>
@@ -2832,7 +2832,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::ServerNotificationHandler</name>
+    <name>APP::ServerNotificationHandler</name>
     <message>
         <location filename="../src/gui/servernotificationhandler.cpp" line="96"/>
         <source>Dismiss</source>
@@ -2840,7 +2840,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::SettingsDialog</name>
+    <name>APP::SettingsDialog</name>
     <message>
         <location filename="../src/gui/settingsdialog.cpp" line="218"/>
         <source>Settings</source>
@@ -2884,7 +2884,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::ShareDialog</name>
+    <name>APP::ShareDialog</name>
     <message>
         <location filename="../src/gui/sharedialog.ui" line="40"/>
         <source>share label</source>
@@ -2942,7 +2942,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::ShareLinkWidget</name>
+    <name>APP::ShareLinkWidget</name>
     <message>
         <location filename="../src/gui/sharelinkwidget.ui" line="14"/>
         <source>Share NewDocument.odt</source>
@@ -3109,7 +3109,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::ShareUserGroupWidget</name>
+    <name>APP::ShareUserGroupWidget</name>
     <message>
         <location filename="../src/gui/shareusergroupwidget.ui" line="14"/>
         <source>Share NewDocument.odt</source>
@@ -3157,7 +3157,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::ShareUserLine</name>
+    <name>APP::ShareUserLine</name>
     <message>
         <location filename="../src/gui/shareuserline.ui" line="17"/>
         <source>Form</source>
@@ -3195,7 +3195,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::ShareeModel</name>
+    <name>APP::ShareeModel</name>
     <message>
         <location filename="../src/gui/sharee.cpp" line="157"/>
         <source>%1 (%2)</source>
@@ -3204,7 +3204,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::SocketApi</name>
+    <name>APP::SocketApi</name>
     <message>
         <location filename="../src/gui/socketapi/socketapi.cpp" line="509"/>
         <source>Share with %1</source>
@@ -3345,7 +3345,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::Spaces::SpacesDelegate</name>
+    <name>APP::Spaces::SpacesDelegate</name>
     <message>
         <location filename="../src/gui/spaces/spacesdelegate.cpp" line="183"/>
         <source>Open in Web</source>
@@ -3353,7 +3353,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::Spaces::SpacesModel</name>
+    <name>APP::Spaces::SpacesModel</name>
     <message>
         <location filename="../src/gui/spaces/spacesmodel.cpp" line="50"/>
         <source>Sync</source>
@@ -3396,7 +3396,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::SyncEngine</name>
+    <name>APP::SyncEngine</name>
     <message>
         <location filename="../src/libsync/syncengine.cpp" line="159"/>
         <source>%1 (skipped due to earlier error, trying again in %2)</source>
@@ -3455,7 +3455,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::SyncJournalDb</name>
+    <name>APP::SyncJournalDb</name>
     <message>
         <location filename="../src/common/syncjournaldb.cpp" line="967"/>
         <source>Failed to connect database.</source>
@@ -3463,7 +3463,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::Systray</name>
+    <name>APP::Systray</name>
     <message>
         <location filename="../src/gui/systray.cpp" line="93"/>
         <source>%1: %2</source>
@@ -3471,7 +3471,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::Theme</name>
+    <name>APP::Theme</name>
     <message>
         <location filename="../src/libsync/theme.cpp" line="399"/>
         <source>&lt;p&gt;Version %1. For more information visit &lt;a href=&quot;%2&quot;&gt;https://%3&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For known issues and help, please visit: &lt;a href=&quot;https://central.owncloud.com/c/desktop-client&quot;&gt;https://central.owncloud.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;small&gt;By Klaas Freitag, Daniel Molkentin, Olivier Goffart, Markus Götz,  Jan-Christoph Borchardt, Thomas Müller,&lt;br&gt;Dominik Schmidt, Michael Stingl, Hannah von Reth, Fabian Müller and others.&lt;/small&gt;&lt;/p&gt;&lt;p&gt;Copyright Seagate Technologies LLC&lt;/p&gt;&lt;p&gt;Distributed by %4 and licensed under the GNU General Public License (GPL) Version 2.0.&lt;br/&gt;%5 and the %5 logo are registered trademarks of %4 in the United States, other countries, or both.&lt;/p&gt;&lt;p&gt;&lt;small&gt;%6&lt;/small&gt;&lt;/p&gt;</source>
@@ -3479,7 +3479,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::TlsErrorDialog</name>
+    <name>APP::TlsErrorDialog</name>
     <message>
         <location filename="../src/gui/tlserrordialog.ui" line="14"/>
         <source>TLS Certificate Error</source>
@@ -3507,7 +3507,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::UpdateUrlDialog</name>
+    <name>APP::UpdateUrlDialog</name>
     <message>
         <location filename="../src/gui/updateurldialog.cpp" line="40"/>
         <source>Change url permanently to %1</source>
@@ -3530,7 +3530,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::ValidateChecksumHeader</name>
+    <name>APP::ValidateChecksumHeader</name>
     <message>
         <location filename="../src/common/checksums.cpp" line="387"/>
         <source>The downloaded file does not match the checksum, it will be resumed. &apos;%1&apos; != &apos;%2&apos;</source>
@@ -3538,7 +3538,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::Vfs</name>
+    <name>APP::Vfs</name>
     <message>
         <location filename="../src/common/vfs.cpp" line="84"/>
         <source>The Virtual filesystem feature does not support a drive as sync root</source>
@@ -3556,7 +3556,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::VfsSuffix</name>
+    <name>APP::VfsSuffix</name>
     <message>
         <location filename="../src/plugins/vfs/suffix/vfs_suffix.cpp" line="110"/>
         <source>Cannot create a placeholder because a file with the placeholder name already exist</source>
@@ -3564,7 +3564,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::Wizard::AccountConfiguredSetupWizardState</name>
+    <name>APP::Wizard::AccountConfiguredSetupWizardState</name>
     <message>
         <location filename="../src/gui/newwizard/states/accountconfiguredsetupwizardstate.cpp" line="84"/>
         <source>Invalid local download directory: %1</source>
@@ -3572,7 +3572,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>OCC::Wizard::AccountConfiguredWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredWizardPage</name>
     <message>
         <location filename="../src/gui/newwizard/pages/accountconfiguredwizardpage.cpp" line="33"/>
         <source>Use &amp;virtual files instead of downloading content immediately</source>
@@ -3630,7 +3630,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>OCC::Wizard::BasicCredentialsSetupWizardPage</name>
+    <name>APP::Wizard::BasicCredentialsSetupWizardPage</name>
     <message>
         <location filename="../src/gui/newwizard/pages/basiccredentialssetupwizardpage.cpp" line="27"/>
         <source>Please enter your credentials to log in to your account.</source>
@@ -3643,7 +3643,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>OCC::Wizard::BasicCredentialsSetupWizardState</name>
+    <name>APP::Wizard::BasicCredentialsSetupWizardState</name>
     <message>
         <location filename="../src/gui/newwizard/states/basiccredentialssetupwizardstate.cpp" line="43"/>
         <source>Invalid credentials</source>
@@ -3651,7 +3651,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>OCC::Wizard::LegacyWebFingerSetupWizardPage</name>
+    <name>APP::Wizard::LegacyWebFingerSetupWizardPage</name>
     <message>
         <location filename="../src/gui/newwizard/pages/legacywebfingersetupwizardpage.cpp" line="28"/>
         <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
@@ -3665,7 +3665,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>OCC::Wizard::LegacyWebFingerSetupWizardState</name>
+    <name>APP::Wizard::LegacyWebFingerSetupWizardState</name>
     <message>
         <location filename="../src/gui/newwizard/states/legacywebfingersetupwizardstate.cpp" line="39"/>
         <source>Failed to parse WebFinger response: %1</source>
@@ -3678,7 +3678,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>OCC::Wizard::OAuthCredentialsSetupWizardPage</name>
+    <name>APP::Wizard::OAuthCredentialsSetupWizardPage</name>
     <message>
         <location filename="../src/gui/newwizard/pages/oauthcredentialssetupwizardpage.cpp" line="33"/>
         <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
@@ -3696,7 +3696,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>OCC::Wizard::OAuthCredentialsSetupWizardState</name>
+    <name>APP::Wizard::OAuthCredentialsSetupWizardState</name>
     <message>
         <location filename="../src/gui/newwizard/states/oauthcredentialssetupwizardstate.cpp" line="52"/>
         <source>Error while trying to log in to OAuth2-enabled server.</source>
@@ -3714,7 +3714,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>OCC::Wizard::ServerUrlSetupWizardPage</name>
+    <name>APP::Wizard::ServerUrlSetupWizardPage</name>
     <message>
         <location filename="../src/gui/newwizard/pages/serverurlsetupwizardpage.cpp" line="16"/>
         <source>Welcome to %1</source>
@@ -3722,7 +3722,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>OCC::Wizard::ServerUrlSetupWizardState</name>
+    <name>APP::Wizard::ServerUrlSetupWizardState</name>
     <message>
         <location filename="../src/gui/newwizard/states/serverurlsetupwizardstate.cpp" line="84"/>
         <source>Invalid server URL</source>
@@ -3752,7 +3752,7 @@ Möchtest du fortfahren?</translation>
     </message>
 </context>
 <context>
-    <name>OCC::Wizard::SetupWizardController</name>
+    <name>APP::Wizard::SetupWizardController</name>
     <message>
         <location filename="../src/gui/newwizard/setupwizardcontroller.cpp" line="198"/>
         <source>Invalid credentials</source>
@@ -3765,7 +3765,7 @@ Möchtest du fortfahren?</translation>
     </message>
 </context>
 <context>
-    <name>OCC::Wizard::SetupWizardWindow</name>
+    <name>APP::Wizard::SetupWizardWindow</name>
     <message>
         <location filename="../src/gui/newwizard/setupwizardwindow.cpp" line="110"/>
         <source>Finish</source>
@@ -3788,196 +3788,196 @@ Möchtest du fortfahren?</translation>
     </message>
 </context>
 <context>
-    <name>OCC::CuratorGui</name>
+    <name>APP::ApplicationGui</name>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="300"/>
+        <location filename="../src/gui/applicationgui.cpp" line="300"/>
         <source>Please sign in</source>
         <translation>Bitte melde Dich an</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="328"/>
+        <location filename="../src/gui/applicationgui.cpp" line="328"/>
         <source>Folder %1: %2</source>
         <translation>Ordner %1: %2</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="337"/>
+        <location filename="../src/gui/applicationgui.cpp" line="337"/>
         <source>Unresolved %1 conflicts</source>
         <translation>Ungelöste %1 Konflikte</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="340"/>
+        <location filename="../src/gui/applicationgui.cpp" line="340"/>
         <source>Ignored errors %1</source>
         <translation>Ignorierte Fehler %1 </translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="355"/>
+        <location filename="../src/gui/applicationgui.cpp" line="355"/>
         <source>There are no sync folders configured.</source>
         <translation>Es wurden keine Synchonisationsordner konfiguriert.</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="389"/>
+        <location filename="../src/gui/applicationgui.cpp" line="389"/>
         <source>Log in...</source>
         <translation>Anmelden...</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="391"/>
+        <location filename="../src/gui/applicationgui.cpp" line="391"/>
         <source>Log out</source>
         <translation>Abmelden</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="488"/>
+        <location filename="../src/gui/applicationgui.cpp" line="488"/>
         <source>Recent Changes</source>
         <translation>Letzte Änderungen</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="378"/>
+        <location filename="../src/gui/applicationgui.cpp" line="378"/>
         <source>Open folder &apos;%1&apos;</source>
         <translation>Ordner »%1« öffnen</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="231"/>
+        <location filename="../src/gui/applicationgui.cpp" line="231"/>
         <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
         <translation>Der Server für Konto %1 benutzt eine nicht unterstützte Version %2. Die Client Software funktioniert möglicherweise mit nicht unterstützten Versionen, dies ist jedoch nicht getestet. Weiter auf eigenes Risiko.</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="287"/>
+        <location filename="../src/gui/applicationgui.cpp" line="287"/>
         <source>Account %1</source>
         <translation>Konto %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="385"/>
-        <location filename="../src/gui/curatorgui.cpp" line="618"/>
+        <location filename="../src/gui/applicationgui.cpp" line="385"/>
+        <location filename="../src/gui/applicationgui.cpp" line="618"/>
         <source>Stop synchronization</source>
         <translation>Synchronisation stoppen</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="611"/>
+        <location filename="../src/gui/applicationgui.cpp" line="611"/>
         <source>Create a new account</source>
         <translation>Neues Konto erstellen</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="725"/>
+        <location filename="../src/gui/applicationgui.cpp" line="725"/>
         <source>Unknown status</source>
         <translation>Unbekannter Status</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="741"/>
+        <location filename="../src/gui/applicationgui.cpp" line="741"/>
         <source>Details...</source>
         <translation>Details …</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="651"/>
+        <location filename="../src/gui/applicationgui.cpp" line="651"/>
         <source>Help</source>
         <translation>Hilfe</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="383"/>
-        <location filename="../src/gui/curatorgui.cpp" line="615"/>
+        <location filename="../src/gui/applicationgui.cpp" line="383"/>
+        <location filename="../src/gui/applicationgui.cpp" line="615"/>
         <source>Resume synchronization</source>
         <translation>Synchronisation fortsetzen</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="658"/>
+        <location filename="../src/gui/applicationgui.cpp" line="658"/>
         <source>Quit %1</source>
         <translation>%1 beenden</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="282"/>
+        <location filename="../src/gui/applicationgui.cpp" line="282"/>
         <source>Disconnected from %1</source>
         <translation>Getrennt von %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="230"/>
+        <location filename="../src/gui/applicationgui.cpp" line="230"/>
         <source>Unsupported Server Version</source>
         <translation>Nicht unterstützte Server Version</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="272"/>
+        <location filename="../src/gui/applicationgui.cpp" line="272"/>
         <source>Disconnected</source>
         <translation>Getrennt</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="274"/>
+        <location filename="../src/gui/applicationgui.cpp" line="274"/>
         <source>Disconnected from some accounts</source>
         <translation>Die Verbindungen zu einigen Konnten wurde getrennt</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="285"/>
+        <location filename="../src/gui/applicationgui.cpp" line="285"/>
         <source>Disconnected from accounts:</source>
         <translation>Die Verbindungen zu Konnten wurde getrennt:</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="301"/>
+        <location filename="../src/gui/applicationgui.cpp" line="301"/>
         <source>Signed out</source>
         <translation>Ausgeloggt</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="305"/>
+        <location filename="../src/gui/applicationgui.cpp" line="305"/>
         <source>Account synchronization is disabled</source>
         <translation>Synchronisieren der Konten ist deaktiviert</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="306"/>
+        <location filename="../src/gui/applicationgui.cpp" line="306"/>
         <source>Synchronization is paused</source>
         <translation>Synchronisation pausiert</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="352"/>
+        <location filename="../src/gui/applicationgui.cpp" line="352"/>
         <source>Up to date (%1)</source>
         <translation>Aktuell (%1) </translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="356"/>
+        <location filename="../src/gui/applicationgui.cpp" line="356"/>
         <source>No sync folders configured</source>
         <translation>Keine Ordner für die Synchronisation konfiguriert</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="607"/>
+        <location filename="../src/gui/applicationgui.cpp" line="607"/>
         <source>Show %1</source>
         <translation>Zeige %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="655"/>
+        <location filename="../src/gui/applicationgui.cpp" line="655"/>
         <source>About %1</source>
         <translation>Über %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="738"/>
+        <location filename="../src/gui/applicationgui.cpp" line="738"/>
         <source>No items synced recently</source>
         <translation>Keine kürzlich synchronisierten Elemente</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="755"/>
+        <location filename="../src/gui/applicationgui.cpp" line="755"/>
         <source>Checking for changes in remote &apos;%1&apos;</source>
         <translation>Prüfe Änderungen der entfernten &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="758"/>
+        <location filename="../src/gui/applicationgui.cpp" line="758"/>
         <source>Checking for changes in local &apos;%1&apos;</source>
         <translation>Prüfe Änderungen der lokalen &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="773"/>
+        <location filename="../src/gui/applicationgui.cpp" line="773"/>
         <source>Syncing %1 of %2  (%3 left)</source>
         <translation>Synchronisiere %1 von %2  (%3 übrig)</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="778"/>
+        <location filename="../src/gui/applicationgui.cpp" line="778"/>
         <source>Syncing %1 of %2</source>
         <translation>Synchronisiere %1 von %2</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="787"/>
+        <location filename="../src/gui/applicationgui.cpp" line="787"/>
         <source>Syncing %1 (%2 left)</source>
         <translation>Synchronisiere %1 (%2 übrig)</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="790"/>
+        <location filename="../src/gui/applicationgui.cpp" line="790"/>
         <source>Syncing %1</source>
         <translation>Synchronisiere %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/curatorgui.cpp" line="799"/>
+        <location filename="../src/gui/applicationgui.cpp" line="799"/>
         <source>%1 (%2, %3)</source>
         <translation>%1 (%2, %3)</translation>
     </message>
@@ -4286,7 +4286,7 @@ Möchtest du fortfahren?</translation>
     </message>
 </context>
 <context>
-    <name>CuratorTheme::aboutVersions()</name>
+    <name>ApplicationTheme::aboutVersions()</name>
     <message>
         <location filename="../src/libsync/theme.cpp" line="383"/>
         <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
@@ -4294,7 +4294,7 @@ Möchtest du fortfahren?</translation>
     </message>
 </context>
 <context>
-    <name>CuratorTheme::qtVer</name>
+    <name>ApplicationTheme::qtVer</name>
     <message>
         <location filename="../src/libsync/theme.cpp" line="367"/>
         <source>%1 (Built against Qt %2)</source>
@@ -4302,7 +4302,7 @@ Möchtest du fortfahren?</translation>
     </message>
 </context>
 <context>
-    <name>CuratorTheme::versionWithSha</name>
+    <name>ApplicationTheme::versionWithSha</name>
     <message>
         <location filename="../src/libsync/theme.cpp" line="372"/>
         <source>%1 %2</source>

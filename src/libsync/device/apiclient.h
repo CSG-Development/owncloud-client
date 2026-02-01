@@ -43,7 +43,7 @@ struct DevicePathListCtx {
     ResultContext res;
 };
 
-class CURATORSYNC_EXPORT ApiClient : public QObject
+class APPLICATIONSYNC_EXPORT ApiClient : public QObject
 {
     Q_OBJECT
 

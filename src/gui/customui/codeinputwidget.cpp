@@ -125,9 +125,9 @@ bool CodeInputWidget::eventFilter(QObject *obj, QEvent *event)
 void CodeInputWidget::updateStyles()
 {
     if (errorState)
-        setStyleSheet(CUR::StyleHelper::loadFileToString(darkTheme_.value() ? widgetStyleError.second : widgetStyleError.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? widgetStyleError.second : widgetStyleError.first));
     else
-        setStyleSheet(CUR::StyleHelper::loadFileToString(darkTheme_.value() ? widgetStyle.second : widgetStyle.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? widgetStyle.second : widgetStyle.first));
 
     style()->unpolish(this);
     style()->polish(this);

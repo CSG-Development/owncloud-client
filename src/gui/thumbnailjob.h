@@ -18,7 +18,7 @@
 #include "networkjobs.h"
 #include "accountfwd.h"
 
-namespace CUR {
+namespace APP {
 
 /**
  * @brief Job to fetch a thumbnail for a file

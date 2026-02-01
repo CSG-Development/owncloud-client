@@ -9,7 +9,7 @@
 #include "testutils/syncenginetestutils.h"
 #include "csync_exclude.h"
 
-using namespace CUR;
+using namespace APP;
 
 class StatusPushSpy : public QSignalSpy
 {

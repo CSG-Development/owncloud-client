@@ -15,7 +15,7 @@
 #pragma once
 
 #include "abstractcorejob.h"
-namespace CUR::Wizard::Jobs {
+namespace APP::Wizard::Jobs {
 
 class WebFingerInstanceLookupJobFactory : public AbstractCoreJobFactory
 {
@@ -28,4 +28,4 @@ private:
     QString _authorizationHeader;
 };
 
-} // CUR::Wizard::Jobs
+} // APP::Wizard::Jobs

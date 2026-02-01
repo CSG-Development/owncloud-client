@@ -46,7 +46,7 @@ EmailPage::EmailPage(QWidget *parent)
     ui->setupUi(this);
     ui->frameErrorMessage->setVisible(false);
 
-    setStyleSheet(CUR::StyleHelper::loadFileToString(QStringLiteral(":/res/login/cred_page.qss")));
+    setStyleSheet(APP::StyleHelper::loadFileToString(QStringLiteral(":/res/login/cred_page.qss")));
 
     setObjectName("emailPage");
     setMouseTracking(true);
@@ -69,7 +69,7 @@ EmailPage::EmailPage(QWidget *parent)
     notifiers_.emplace_back(controller_->errorState.addNotifier(syncUI));
     notifiers_.emplace_back(controller_->darkTheme.addNotifier(updateThemeFunc));
 
-    controller_->darkTheme.setValue(CUR::Theme::instance()->isDarkTheme());
+    controller_->darkTheme.setValue(APP::Theme::instance()->isDarkTheme());
 
     ui->btnLogin->setStyle(new FocusProxyStyle(ui->btnLogin));
     ui->btnCancel->setStyle(new FocusProxyStyle(ui->btnCancel));
@@ -111,11 +111,11 @@ EmailPage::~EmailPage()
 void EmailPage::updateTheme()
 {
     qCDebug(lcEmailPage) << controller_->darkTheme.value();
-    CUR::StyleHelper::invoke_setDarkTheme_recursive(this);
+    APP::StyleHelper::invoke_setDarkTheme_recursive(this);
 
     // QToolButton "icon" property does not supported in qss
     ui->btnSettings->setIcon(controller_->darkTheme.value() ? QIcon(settingsIcon.second) : QIcon(settingsIcon.first));
-    CUR::StyleHelper::setTheme(this, controller_->darkTheme.value());
+    APP::StyleHelper::setTheme(this, controller_->darkTheme.value());
 
     update();
 }

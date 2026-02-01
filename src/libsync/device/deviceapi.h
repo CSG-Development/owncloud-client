@@ -24,7 +24,7 @@ struct StatusCtx {
     int status = 0;
 };
 
-class CURATORSYNC_EXPORT DeviceApi: public QObject
+class APPLICATIONSYNC_EXPORT DeviceApi: public QObject
 {
     Q_OBJECT
 

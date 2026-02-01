@@ -106,7 +106,7 @@ void logHttp(const QByteArray &verb, const QString &url, const QByteArray &id, c
 }
 
 
-namespace CUR {
+namespace APP {
 
 void HttpLogger::logRequest(QNetworkReply *reply, QNetworkAccessManager::Operation operation, QIODevice *device)
 {

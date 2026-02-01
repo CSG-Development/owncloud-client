@@ -33,7 +33,7 @@
 #include "common/syncjournalfilerecord.h"
 #include "common/utility.h"
 
-namespace CUR {
+namespace APP {
 class SyncJournalFileRecord;
 
 /**
@@ -444,5 +444,5 @@ bool OCSYNC_EXPORT
 operator==(const SyncJournalDb::UploadInfo &lhs,
     const SyncJournalDb::UploadInfo &rhs);
 
-} // namespace CUR
+} // namespace APP
 #endif // SYNCJOURNALDB_H

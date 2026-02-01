@@ -19,7 +19,7 @@
 
 #include "account.h"
 
-namespace CUR {
+namespace APP {
 /**
  * @brief The ActivityLink class describes actions of an activity
  *

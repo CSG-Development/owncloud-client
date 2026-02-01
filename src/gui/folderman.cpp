@@ -47,7 +47,7 @@ int numberOfSyncJournals(const QString &path)
     return QDir(path).entryList({ QStringLiteral(".sync_*.db"), QStringLiteral("._sync_*.db") }, QDir::Hidden | QDir::Files).size();
 }
 
-QString makeLegacyDbName(const CUR::FolderDefinition &def, const CUR::AccountPtr &account)
+QString makeLegacyDbName(const APP::FolderDefinition &def, const APP::AccountPtr &account)
 {
     // ensure https://demo.owncloud.org/ matches https://demo.owncloud.org
     // the empty path was the legacy formating before 2.9
@@ -56,11 +56,11 @@ QString makeLegacyDbName(const CUR::FolderDefinition &def, const CUR::AccountPtr
         legacyUrl.setPath(QString());
     }
     const QString key = QStringLiteral("%1@%2:%3").arg(account->credentials()->user(), legacyUrl.toString(), def.targetPath());
-    return CUR::SyncJournalDb::makeDbName(def.localPath(), QString::fromUtf8(QCryptographicHash::hash(key.toUtf8(), QCryptographicHash::Md5).left(6).toHex()));
+    return APP::SyncJournalDb::makeDbName(def.localPath(), QString::fromUtf8(QCryptographicHash::hash(key.toUtf8(), QCryptographicHash::Md5).left(6).toHex()));
 }
 }
 
-namespace CUR {
+namespace APP {
 Q_LOGGING_CATEGORY(lcFolderMan, "gui.folder.manager", QtInfoMsg)
 
 void TrayOverallStatusResult::addResult(Folder *f)
@@ -958,4 +958,4 @@ std::unique_ptr<FolderMan> FolderMan::createInstance()
     return std::unique_ptr<FolderMan>(_instance);
 }
 
-} // namespace CUR
+} // namespace APP

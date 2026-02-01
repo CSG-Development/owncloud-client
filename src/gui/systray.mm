@@ -25,7 +25,7 @@
 
 @end
 
-namespace CUR {
+namespace APP {
 
 void *createOsXNotificationCenterDelegate()
 {
@@ -50,4 +50,4 @@ void sendOsXUserNotification(const QString &title, const QString &message)
     }
 }
 
-} // namespace CUR
+} // namespace APP

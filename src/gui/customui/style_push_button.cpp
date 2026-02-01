@@ -25,7 +25,7 @@ constexpr qreal focusFrameMargin = 5;
 constexpr int textPadding = 14;
 }
 
-namespace CUR {
+namespace APP {
 
 #ifdef Q_OS_MACOS
 QColor ProxyStylePushButton::buttonFrameFocused() const {return isDark ? QColor(0x64,0xB5,0xF6,0x80) : QColor(0x19,0x76,0xD2,0x80);}
@@ -143,4 +143,4 @@ QSize ProxyStylePushButton::sizeFromContents(ContentsType ct, const QStyleOption
     return sz;
 }
 
-} // namespace CUR
+} // namespace APP

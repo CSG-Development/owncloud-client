@@ -19,7 +19,7 @@
 
 using namespace std::chrono;
 
-namespace CUR {
+namespace APP {
 
 
 Capabilities::Capabilities(const QUrl &url, const QVariantMap &capabilities)
@@ -347,7 +347,7 @@ FilesSharing::FilesSharing(const QVariantMap &filesSharing)
 {
 }
 
-CUR::Migration::Migration(const QVariantMap &data)
+APP::Migration::Migration(const QVariantMap &data)
 {
     const auto spaces = data.value(QStringLiteral("space_migration")).toMap();
     space_migration.enabled = spaces.value(QStringLiteral("enabled")).toBool();
@@ -359,4 +359,4 @@ const Migration &Capabilities::migration() const
     return _migration;
 }
 
-} // namespace CUR
+} // namespace APP

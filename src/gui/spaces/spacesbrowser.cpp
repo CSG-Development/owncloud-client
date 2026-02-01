@@ -24,7 +24,7 @@
 #include <QMenu>
 #include <QSortFilterProxyModel>
 
-using namespace CUR::Spaces;
+using namespace APP::Spaces;
 
 SpacesBrowser::SpacesBrowser(QWidget *parent)
     : QWidget(parent)
@@ -49,7 +49,7 @@ SpacesBrowser::SpacesBrowser(QWidget *parent)
 
     ui->tableView->setItemDelegate(new SpacesDelegate);
     ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    auto *header = new CUR::ExpandingHeaderView(QStringLiteral("SpacesBrowserHeader2"), ui->tableView);
+    auto *header = new APP::ExpandingHeaderView(QStringLiteral("SpacesBrowserHeader2"), ui->tableView);
     ui->tableView->setHorizontalHeader(header);
     header->setResizeToContent(true);
     header->setSortIndicator(static_cast<int>(SpacesModel::Columns::Name), Qt::DescendingOrder);
@@ -74,7 +74,7 @@ SpacesBrowser::~SpacesBrowser()
     delete ui;
 }
 
-void SpacesBrowser::setAccount(CUR::AccountPtr acc)
+void SpacesBrowser::setAccount(APP::AccountPtr acc)
 {
     _acc = acc;
     if (acc) {

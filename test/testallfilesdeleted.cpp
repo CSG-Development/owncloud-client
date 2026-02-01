@@ -9,7 +9,7 @@
 #include "testutils/syncenginetestutils.h"
 #include <syncengine.h>
 
-using namespace CUR;
+using namespace APP;
 
 
 static void changeAllFileId(FileInfo &info) {

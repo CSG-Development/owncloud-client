@@ -20,7 +20,7 @@
 #include <QLocale>
 
 #include "progressdispatcher.h"
-#include "curatorgui.h"
+#include "applicationgui.h"
 #include "models/protocolitemmodel.h"
 
 #include "protocolitem.h"
@@ -30,7 +30,7 @@
 class QPushButton;
 class QSortFilterProxyModel;
 
-namespace CUR {
+namespace APP {
 class ExpandingHeaderView;
 
 namespace Ui {

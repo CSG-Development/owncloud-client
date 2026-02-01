@@ -16,7 +16,7 @@
 
 #include "abstractcorejob.h"
 
-namespace CUR::Wizard::Jobs {
+namespace APP::Wizard::Jobs {
 
 class CheckBasicAuthJobFactory : public AbstractCoreJobFactory
 {

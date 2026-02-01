@@ -26,7 +26,7 @@ auto dateTimeStr(const QDateTime &dt = QDateTime::currentDateTimeUtc())
 }
 
 }
-namespace CUR {
+namespace APP {
 
 SyncRunFileLog::SyncRunFileLog()
 {

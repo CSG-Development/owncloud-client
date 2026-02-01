@@ -25,7 +25,7 @@
 #include <chrono>
 #include <unordered_set>
 
-namespace CUR {
+namespace APP {
 
 /**
  * @brief Monitors files that are locked, signaling when they become unlocked
@@ -52,18 +52,18 @@ public:
      * If the file is not locked later on, the fileUnlocked signal will be
      * emitted once.
      */
-    void addFile(const QString &path, CUR::FileSystem::LockMode mode);
+    void addFile(const QString &path, APP::FileSystem::LockMode mode);
 
     /** Adjusts the default interval for checking whether the lock is still present */
     void setCheckInterval(std::chrono::milliseconds interval);
 
     /** Whether the path is being watched for lock-changes */
-    bool contains(const QString &path, CUR::FileSystem::LockMode mode) const;
+    bool contains(const QString &path, APP::FileSystem::LockMode mode) const;
 
 signals:
     /** Emitted when one of the watched files is no longer
      *  being locked. */
-    void fileUnlocked(const QString &path, CUR::FileSystem::LockMode mode);
+    void fileUnlocked(const QString &path, APP::FileSystem::LockMode mode);
 
 private slots:
     void checkFiles();

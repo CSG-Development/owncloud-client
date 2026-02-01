@@ -14,7 +14,7 @@
 
 #include "abstractstate.h"
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 AbstractState::AbstractState(SetupWizardContext *context)
     : _context(context)
@@ -26,4 +26,4 @@ AbstractPage *AbstractState::page() const
     return _page;
 }
 
-} // CUR::Wizard
+} // APP::Wizard

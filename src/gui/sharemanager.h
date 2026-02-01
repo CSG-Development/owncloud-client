@@ -29,7 +29,7 @@
 class QJsonDocument;
 class QJsonObject;
 
-namespace CUR {
+namespace APP {
 class JsonApiJob;
 
 class Share : public QObject

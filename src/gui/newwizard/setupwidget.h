@@ -14,9 +14,9 @@ class FinishedPage;
 class EmailPage;
 class ConnectErrorPage;
 
-namespace CUR {enum class RemoteRequest;}
+namespace APP {enum class RemoteRequest;}
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 class SetupContext;
 
@@ -64,7 +64,7 @@ Q_SIGNALS:
     // void startDeviceListManager(const QString& email);
     void loginEmailClicked(const QString& user);
     void finishPageBackClicked();
-    void finishPageDoneClicked(CUR::Wizard::SyncMode mode, const QString& targetDir);
+    void finishPageDoneClicked(APP::Wizard::SyncMode mode, const QString& targetDir);
     void connectErrorPageBackClicked();
     void connectErrorPageRetryClicked();
 

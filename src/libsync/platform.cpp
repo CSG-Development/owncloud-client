@@ -30,7 +30,7 @@
 
 #endif
 
-namespace CUR {
+namespace APP {
 
 void Platform::migrate()
 {
@@ -67,4 +67,4 @@ std::unique_ptr<Platform> Platform::create()
 #endif
 }
 
-} // CUR namespace
+} // APP namespace

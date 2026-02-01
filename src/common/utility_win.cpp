@@ -151,7 +151,7 @@ void AddRemoveLib(bool add, const QString& folderPath, bool createLib)
 
 }
 
-namespace CUR {
+namespace APP {
 
 void Utility::setupFavLink(const QString& localDir)
 {
@@ -256,4 +256,4 @@ void Utility::Handle::close()
 }
 
 
-} // namespace CUR
+} // namespace APP

@@ -19,10 +19,10 @@
 #include <QJsonParseError>
 #include <QUrlQuery>
 
-namespace CUR {
+namespace APP {
 
 
-class CURATORSYNC_EXPORT JsonJob : public SimpleNetworkJob
+class APPLICATIONSYNC_EXPORT JsonJob : public SimpleNetworkJob
 {
     Q_OBJECT
 public:
@@ -59,7 +59,7 @@ private:
  *
  * @ingroup libsync
  */
-class CURATORSYNC_EXPORT JsonApiJob : public JsonJob
+class APPLICATIONSYNC_EXPORT JsonApiJob : public JsonJob
 {
     Q_OBJECT
 public:

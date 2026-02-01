@@ -23,7 +23,7 @@ CRadioButton::CRadioButton(QWidget* parent)
     themeNotifier = darkTheme_.addNotifier([this] {
         update();
     });
-    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
 }
 
 CRadioButton::CRadioButton(const QString &text, QWidget *parent)

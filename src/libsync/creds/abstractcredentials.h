@@ -24,11 +24,11 @@
 
 class QNetworkAccessManager;
 class QNetworkReply;
-namespace CUR {
+namespace APP {
 
 class AbstractNetworkJob;
 
-class CURATORSYNC_EXPORT AbstractCredentials : public QObject
+class APPLICATIONSYNC_EXPORT AbstractCredentials : public QObject
 {
     Q_OBJECT
 
@@ -112,6 +112,6 @@ protected:
     bool _wasFetched;
 };
 
-} // namespace CUR
+} // namespace APP
 
 #endif

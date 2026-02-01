@@ -35,7 +35,7 @@
 #include <cstring>
 #include <memory>
 
-namespace CUR {
+namespace APP {
 
 void PropagateUploadFileV1::doStartUpload()
 {

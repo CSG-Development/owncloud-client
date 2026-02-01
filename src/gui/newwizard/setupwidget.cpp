@@ -3,7 +3,7 @@
 
 #include "gui/application.h"
 #include "gui/guiutility.h"
-#include "gui/curatorgui.h"
+#include "gui/applicationgui.h"
 #include "gui/settingsdialog.h"
 #include "gui/customui/stylehelper.h"
 #include "pages/emailpage.h"
@@ -29,7 +29,7 @@ QPair<QString,QString> widgetStyle = {
 };
 }
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 Q_LOGGING_CATEGORY(lcSetupWizardWidget, "gui.setupwizard.window")
 
@@ -71,7 +71,7 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     connect(connectErrorPage_, &ConnectErrorPage::retryClicked, this, &SetupWidget::connectErrorPageRetryClicked);
 
     connect(Theme::instance(), &Theme::themeChanged, this, &SetupWidget::onThemeChanged);
-    onThemeChanged(CUR::Theme::instance()->isDarkTheme());
+    onThemeChanged(APP::Theme::instance()->isDarkTheme());
 
     hideErrorMessage();
 
@@ -124,7 +124,7 @@ void SetupWidget::onCancelClicked()
     connect(messageBox, &QMessageBox::accepted, this, [this] {
         Q_EMIT rejected();
     });
-    CuratorGui::raise();
+    ApplicationGui::raise();
     messageBox->open();
 }
 

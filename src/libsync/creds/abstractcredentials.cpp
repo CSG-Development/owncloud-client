@@ -20,7 +20,7 @@
 #include "common/asserts.h"
 #include "creds/abstractcredentials.h"
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcCredentials, "sync.credentials", QtInfoMsg)
 
@@ -36,4 +36,4 @@ void AbstractCredentials::setAccount(Account *account)
     _account = account;
 }
 
-} // namespace CUR
+} // namespace APP

@@ -25,7 +25,7 @@ public:
     void updateTheme();
     void showErrorMessage(const QString& msg);
 
-    CUR::Wizard::SyncMode syncMode() const;
+    APP::Wizard::SyncMode syncMode() const;
     QString syncTargetDir() const;
 
     bool isDarkTheme() const { return darkTheme_.value(); }
@@ -35,7 +35,7 @@ public:
 
 Q_SIGNALS:
     void backClicked();
-    void doneClicked(CUR::Wizard::SyncMode syncMode, const QString& targetDir);
+    void doneClicked(APP::Wizard::SyncMode syncMode, const QString& targetDir);
 
 private:
     void advancedStateChanged(bool checked);

@@ -23,7 +23,7 @@ constexpr qreal focusFrameMargin = 5;
 #endif
 }
 
-namespace CUR {
+namespace APP {
 
 ArrowToolButton::ArrowToolButton(QWidget *parent)
     : QToolButton(parent)
@@ -171,4 +171,4 @@ QColor ArrowToolButton::buttonBackgroundHovered() const {return isDark ? QColor(
 QColor ArrowToolButton::buttonBackgroundDisabled() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x0B) : QColor(0xF6,0xF6,0xF6);}
 #endif
 
-} // namespace CUR
+} // namespace APP

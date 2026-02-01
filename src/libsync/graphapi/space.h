@@ -22,11 +22,11 @@
 
 #include <QIcon>
 
-namespace CUR {
+namespace APP {
 namespace GraphApi {
     class SpacesManager;
 
-    class CURATORSYNC_EXPORT Space : public QObject
+    class APPLICATIONSYNC_EXPORT Space : public QObject
     {
         Q_OBJECT
     public:
@@ -69,5 +69,5 @@ namespace GraphApi {
         friend class SpacesManager;
     };
 
-} // CUR
+} // APP
 } // GraphApi

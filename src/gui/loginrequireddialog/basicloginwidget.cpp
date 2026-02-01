@@ -22,7 +22,7 @@
 #include <QPushButton>
 #include <QString>
 
-namespace CUR {
+namespace APP {
 
 BasicLoginWidget::BasicLoginWidget(QWidget *parent)
     : AbstractLoginWidget(parent)
@@ -77,4 +77,4 @@ QString BasicLoginWidget::password()
     return _ui->passwordLineEdit->text();
 }
 
-} // CUR
+} // APP

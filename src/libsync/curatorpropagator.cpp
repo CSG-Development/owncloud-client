@@ -45,7 +45,7 @@
 
 using namespace std::chrono_literals;
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcPropagator, "sync.propagator", QtInfoMsg)
 Q_LOGGING_CATEGORY(lcDirectory, "sync.propagator.directory", QtInfoMsg)
@@ -815,7 +815,7 @@ bool CuratorPropagator::createConflict(const SyncFileItemPtr &item,
 
 QString CuratorPropagator::adjustRenamedPath(const QString &original) const
 {
-    return CUR::adjustRenamedPath(_renamedDirectories, original);
+    return APP::adjustRenamedPath(_renamedDirectories, original);
 }
 
 Result<Vfs::ConvertToPlaceholderResult, QString> CuratorPropagator::updatePlaceholder(const SyncFileItem &item, const QString &fileName, const QString &replacesFile)
@@ -1282,7 +1282,7 @@ PropagateUpdateMetaDataJob::PropagateUpdateMetaDataJob(CuratorPropagator *propag
 {
 }
 
-void CUR::PropagateUpdateMetaDataJob::start()
+void APP::PropagateUpdateMetaDataJob::start()
 {
     // Update the database:  New remote fileid or Etag or RemotePerm
     // Or for files that were detected as "resolved conflict".

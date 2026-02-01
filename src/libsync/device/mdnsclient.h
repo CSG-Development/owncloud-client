@@ -62,7 +62,7 @@ public:
     QList<DnsRecord> records;
 };
 
-class CURATORSYNC_EXPORT MdnsClient: public QObject
+class APPLICATIONSYNC_EXPORT MdnsClient: public QObject
 {
     Q_OBJECT
 

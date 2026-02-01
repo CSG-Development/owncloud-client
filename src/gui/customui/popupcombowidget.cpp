@@ -20,18 +20,18 @@ PopupComboWidget::PopupComboWidget(QWidget* parent)
     ui->setupUi(this);
     setObjectName(QStringLiteral("popupComboWidget"));
 
-    setStyleSheet(CUR::StyleHelper::loadFileToString(QStringLiteral(":/res/combowidget/popup_combo.qss")));
+    setStyleSheet(APP::StyleHelper::loadFileToString(QStringLiteral(":/res/combowidget/popup_combo.qss")));
     themeNotifier = darkTheme_.addNotifier([this] {
-        CUR::StyleHelper::setTheme(this, darkTheme_.value());
+        APP::StyleHelper::setTheme(this, darkTheme_.value());
     });
-    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
 
     setWindowFlags(Qt::Popup|Qt::FramelessWindowHint|Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
     setAutoFillBackground(false);
     setMouseTracking(true);
 
-    setDarkTheme(CUR::Theme::instance()->isDarkTheme());
+    setDarkTheme(APP::Theme::instance()->isDarkTheme());
 
     QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect(this);
     effect->setBlurRadius(blurRadius);

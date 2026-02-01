@@ -24,9 +24,9 @@
 #include <QStringList>
 #include <QVersionNumber>
 
-namespace CUR {
+namespace APP {
 
-struct CURATORSYNC_EXPORT Status
+struct APPLICATIONSYNC_EXPORT Status
 {
     /**
      <installed>1</installed>
@@ -55,7 +55,7 @@ struct CURATORSYNC_EXPORT Status
     QString versionString() const;
 };
 
-struct CURATORSYNC_EXPORT TusSupport
+struct APPLICATIONSYNC_EXPORT TusSupport
 {
     /**
     <tus_support>
@@ -76,7 +76,7 @@ struct CURATORSYNC_EXPORT TusSupport
     bool isValid() const;
 };
 
-struct CURATORSYNC_EXPORT SpaceSupport
+struct APPLICATIONSYNC_EXPORT SpaceSupport
 {
     /**
         "spaces": {
@@ -91,7 +91,7 @@ struct CURATORSYNC_EXPORT SpaceSupport
     bool isValid() const;
 };
 
-struct CURATORSYNC_EXPORT FilesSharing
+struct APPLICATIONSYNC_EXPORT FilesSharing
 {
     /**
      api_enabled": true,
@@ -110,7 +110,7 @@ struct CURATORSYNC_EXPORT FilesSharing
     bool sharing_roles = false;
 };
 
-struct CURATORSYNC_EXPORT Migration
+struct APPLICATIONSYNC_EXPORT Migration
 {
     struct SpacesMigration
     {
@@ -128,10 +128,10 @@ struct CURATORSYNC_EXPORT Migration
  * server
  * @ingroup libsync
  */
-class CURATORSYNC_EXPORT Capabilities
+class APPLICATIONSYNC_EXPORT Capabilities
 {
 public:
-    struct CURATORSYNC_EXPORT AppProviders
+    struct APPLICATIONSYNC_EXPORT AppProviders
     {
         /**
          "app_providers": [
@@ -222,7 +222,7 @@ public:
      * Default: []
      * Possible entries: "Adler32", "MD5", "SHA1"
      */
-    QList<CUR::CheckSums::Algorithm> supportedChecksumTypes() const;
+    QList<APP::CheckSums::Algorithm> supportedChecksumTypes() const;
 
     /**
      * The checksum algorithm that the server recommends for file uploads.
@@ -230,7 +230,7 @@ public:
      *
      * Path: checksums/preferredUploadType
      */
-    CUR::CheckSums::Algorithm preferredUploadChecksumType() const;
+    APP::CheckSums::Algorithm preferredUploadChecksumType() const;
 
     /**
      * Helper that returns the preferredUploadChecksumType() if set, or one

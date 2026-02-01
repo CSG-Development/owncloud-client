@@ -29,7 +29,7 @@
 // drop this whole file, because we cannot migrate.
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-namespace CUR {
+namespace APP {
 
 namespace Deprecated {
 
@@ -154,4 +154,4 @@ void migrateLaunchOnStartup()
     // And we're done.
 }
 
-} // CUR namespace
+} // APP namespace

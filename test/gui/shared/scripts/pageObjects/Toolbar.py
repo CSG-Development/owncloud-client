@@ -7,7 +7,7 @@ class Toolbar:
         "name": "toolBar",
         "type": "QToolBar",
         "visible": 1,
-        "window": names.settings_OCC_SettingsDialog,
+        "window": names.settings_APP_SettingsDialog,
     }
     QUIT_CONFIRMATION_DIALOG = {
         "type": "QMessageBox",

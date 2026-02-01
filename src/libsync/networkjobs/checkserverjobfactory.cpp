@@ -26,13 +26,13 @@
 namespace {
 
 // FIXME: this is not a permanent solution, eventually we want to replace the job factories with job classes so we can store such information there
-class CheckServerCoreJob : CUR::CoreJob
+class CheckServerCoreJob : APP::CoreJob
 {
     Q_OBJECT
-    friend CUR::CheckServerJobFactory;
+    friend APP::CheckServerJobFactory;
 
 public:
-    using CUR::CoreJob::CoreJob;
+    using APP::CoreJob::CoreJob;
 
 private:
     // doesn't concern users of the job factory
@@ -43,7 +43,7 @@ private:
 
 }
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcCheckServerJob, "sync.checkserverjob", QtInfoMsg)
 
@@ -159,6 +159,6 @@ CoreJob *CheckServerJobFactory::startJob(const QUrl &url, QObject *parent)
     return job;
 }
 
-} // CUR
+} // APP
 
 #include "checkserverjobfactory.moc"

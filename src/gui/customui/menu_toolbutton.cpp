@@ -13,7 +13,7 @@ constexpr qreal frameWidth = 1;
 QSize toolbarIconSize = {40,40};
 }
 
-namespace CUR {
+namespace APP {
 
 
 MenuToolButton::MenuToolButton(QWidget *parent)
@@ -105,4 +105,4 @@ QColor MenuToolButton::buttonBackgroundCheckedNormal() const {return isDark ? QC
 QColor MenuToolButton::buttonBackgroundCheckedPressed() const {return isDark ? QColor(0x90,0xCA,0xF9,0x1F) : QColor(0x1E,0x88,0xE5,0x1F);}
 QColor MenuToolButton::buttonBackgroundCheckedHovered() const {return isDark ? QColor(0x64,0xB5,0xF6,0x3D) : QColor(0x19,0x76,0xD2,0x33);}
 
-} // namespace CUR
+} // namespace APP

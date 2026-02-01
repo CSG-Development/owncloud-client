@@ -30,7 +30,7 @@
 
 #include <memory>
 
-namespace CUR {
+namespace APP {
 
 class Account;
 class SyncJournalDb;
@@ -125,7 +125,7 @@ public:
 
     static Optional<Mode> modeFromString(const QString &str);
 
-    static Result<void, QString> checkAvailability(const QString &path, CUR::Vfs::Mode mode);
+    static Result<void, QString> checkAvailability(const QString &path, APP::Vfs::Mode mode);
 
     enum class AvailabilityError
     {
@@ -308,4 +308,4 @@ private:
 template <>
 OCSYNC_EXPORT QString Utility::enumToString(Vfs::Mode mode);
 
-} // namespace CUR
+} // namespace APP

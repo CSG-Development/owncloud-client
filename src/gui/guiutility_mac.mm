@@ -22,7 +22,7 @@
 
 #import <Foundation/NSBundle.h>
 
-namespace CUR {
+namespace APP {
 
 void Utility::startShellIntegration()
 {
@@ -58,4 +58,4 @@ QString Utility::socketApiSocketPath()
     return QStringLiteral("%1%2.socketApi").arg(QStringLiteral(SOCKETAPI_TEAM_IDENTIFIER_PREFIX), Theme::instance()->orgDomainName());
 }
 
-} // namespace CUR
+} // namespace APP

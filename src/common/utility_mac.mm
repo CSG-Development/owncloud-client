@@ -32,7 +32,7 @@
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSUserDefaults.h>
 
-namespace CUR {
+namespace APP {
 
 void Utility::setupFavLink(const QString &folder)
 {
@@ -260,4 +260,4 @@ bool Utility::hasDarkSystray()
 }
 #endif
 
-} // namespace CUR
+} // namespace APP

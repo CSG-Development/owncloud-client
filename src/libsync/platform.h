@@ -22,13 +22,13 @@
 
 #include "curatorlib.h"
 
-namespace CUR {
+namespace APP {
 
 /**
  * @brief The Platform is the baseclass for all platform classes, which in turn implement platform
  *        specific functionality for the GUI.
  */
-class CURATORSYNC_EXPORT Platform : public QObject
+class APPLICATIONSYNC_EXPORT Platform : public QObject
 {
     Q_OBJECT
 public:
@@ -46,6 +46,6 @@ Q_SIGNALS:
     void requestAttention();
 };
 
-} // CUR namespace
+} // APP namespace
 
 #endif // PLATFORM_H

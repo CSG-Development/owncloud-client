@@ -19,7 +19,7 @@
 
 #include <QLoggingCategory>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcJobQUeue, "sync.networkjob.jobqueue", QtDebugMsg)
 

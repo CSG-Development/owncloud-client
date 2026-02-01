@@ -18,7 +18,7 @@
 #include <QSet>
 #include <QString>
 
-namespace CUR {
+namespace APP {
 
 namespace Translations {
 
@@ -44,6 +44,6 @@ namespace Translations {
 
 } // namespace Translations
 
-} // namespace CUR
+} // namespace APP
 
 #endif // TRANSLATIONSMANAGER_H

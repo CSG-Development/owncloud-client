@@ -17,7 +17,7 @@
 
 #include <QSharedPointer>
 
-namespace CUR {
+namespace APP {
 
 class Account;
 class AccountState;
@@ -26,6 +26,6 @@ using AccountPtr = QSharedPointer<Account>;
 using AccountStatePtr = QPointer<AccountState>;
 
 
-} // namespace CUR
+} // namespace APP
 
 #endif //SERVERFWD

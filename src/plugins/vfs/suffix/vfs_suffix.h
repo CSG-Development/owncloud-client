@@ -19,7 +19,7 @@
 #include "common/plugin.h"
 #include "common/vfs.h"
 
-namespace CUR {
+namespace APP {
 
 class VfsSuffix : public Vfs
 {
@@ -68,7 +68,7 @@ class SuffixVfsPluginFactory : public QObject, public DefaultPluginFactory<VfsSu
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "org.curator.PluginFactory" FILE "vfspluginmetadata.json")
-    Q_INTERFACES(CUR::PluginFactory)
+    Q_INTERFACES(APP::PluginFactory)
 };
 
-} // namespace CUR
+} // namespace APP

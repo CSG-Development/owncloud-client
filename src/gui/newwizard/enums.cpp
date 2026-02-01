@@ -18,10 +18,10 @@
 
 #include <QApplication>
 
-using namespace CUR::Wizard;
+using namespace APP::Wizard;
 
 template <>
-QString CUR::Utility::enumToDisplayName(SetupState state)
+QString APP::Utility::enumToDisplayName(SetupState state)
 {
     switch (state) {
     case SetupState::CredentialsState:

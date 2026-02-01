@@ -18,7 +18,7 @@
 #include "curatorpropagator.h"
 #include <QFile>
 
-namespace CUR {
+namespace APP {
 
 /**
  * Tags for checksum header.

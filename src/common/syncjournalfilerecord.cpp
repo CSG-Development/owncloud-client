@@ -19,7 +19,7 @@
 #include "common/syncjournalfilerecord.h"
 #include "common/utility.h"
 
-namespace CUR {
+namespace APP {
 
 
 bool SyncJournalErrorBlacklistRecord::isValid() const

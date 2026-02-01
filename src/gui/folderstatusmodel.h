@@ -25,7 +25,7 @@
 #include <QPointer>
 
 class QNetworkReply;
-namespace CUR {
+namespace APP {
 
 Q_DECLARE_LOGGING_CATEGORY(lcFolderStatus)
 
@@ -197,7 +197,7 @@ private slots:
     void slotShowFetchProgress();
 
 private:
-    QSet<QString> createBlackList(const CUR::FolderStatusModel::SubFolderInfo &root, const QSet<QString> &oldBlackList) const;
+    QSet<QString> createBlackList(const APP::FolderStatusModel::SubFolderInfo &root, const QSet<QString> &oldBlackList) const;
     void computeProgress(const ProgressInfo &progress, SubFolderInfo::Progress *pi);
     int indexOf(Folder *f) const;
 
@@ -223,6 +223,6 @@ signals:
     friend struct SubFolderInfo;
 };
 
-} // namespace CUR
+} // namespace APP
 
 #endif // FOLDERSTATUSMODEL_H

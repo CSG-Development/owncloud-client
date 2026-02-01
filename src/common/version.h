@@ -22,7 +22,7 @@
 #include <QString>
 #include <QVersionNumber>
 
-namespace CUR::Version {
+namespace APP::Version {
 OCSYNC_EXPORT const QVersionNumber &version();
 
 OCSYNC_EXPORT const QVersionNumber &versionWithBuildNumber();

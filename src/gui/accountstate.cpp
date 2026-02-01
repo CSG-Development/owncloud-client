@@ -56,7 +56,7 @@ auto supportsSpacesC()
 }
 } // anonymous namespace
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcAccountState, "gui.account.state", QtInfoMsg)
 
@@ -78,7 +78,7 @@ UpdateUrlDialog *AccountState::updateUrlDialog(const QUrl &newUrl)
         Q_EMIT urlUpdated();
     });
 
-    CuratorGui::raise();
+    ApplicationGui::raise();
     _updateUrlDialog->open();
 
     return _updateUrlDialog;
@@ -157,7 +157,7 @@ AccountState::AccountState(AccountPtr account)
     connect(account.data(), &Account::appProviderErrorOccured, this, [](const QString &error) {
         QMessageBox *msgBox = new QMessageBox(QMessageBox::Information, Theme::instance()->appNameGUI(), error, {}, ocApp()->gui()->settingsDialog());
         msgBox->setAttribute(Qt::WA_DeleteOnClose);
-        CuratorGui::raise();
+        ApplicationGui::raise();
         msgBox->open();
     });
 
@@ -387,7 +387,7 @@ void AccountState::checkConnectivity(bool blockJobs)
                     setState(SignedOut);
                 });
 
-                CuratorGui::raise();
+                ApplicationGui::raise();
                 _tlsDialog->open();
             }
         }
@@ -815,4 +815,4 @@ bool AccountState::readyForSync() const
     return !_fetchCapabilitiesJob && isConnected();
 }
 
-} // namespace CUR
+} // namespace APP

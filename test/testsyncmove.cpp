@@ -12,7 +12,7 @@
 #include <syncengine.h>
 #include <theme.h>
 
-using namespace CUR;
+using namespace APP;
 
 bool itemSuccessful(const ItemCompletedSpy &spy, const QString &path, const SyncInstructions instr)
 {

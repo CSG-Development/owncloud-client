@@ -37,7 +37,7 @@ void ProgressIndicator::setIndicatorVisible(bool visible)
 
 void ProgressIndicator::setDarkTheme()
 {
-    isDark = CUR::Theme::instance()->isDarkTheme();
+    isDark = APP::Theme::instance()->isDarkTheme();
     update();
 }
 

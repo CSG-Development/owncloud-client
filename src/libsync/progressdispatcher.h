@@ -25,13 +25,13 @@
 
 #include "syncfileitem.h"
 
-namespace CUR {
+namespace APP {
 class Folder;
 /**
  * @brief The ProgressInfo class
  * @ingroup libsync
  */
-class CURATORSYNC_EXPORT ProgressInfo : public QObject
+class APPLICATIONSYNC_EXPORT ProgressInfo : public QObject
 {
     Q_OBJECT
 public:
@@ -138,7 +138,7 @@ public:
      * Holds the current state of something making progress and maintains an
      * estimate of the current progress per second.
      */
-    struct CURATORSYNC_EXPORT Progress
+    struct APPLICATIONSYNC_EXPORT Progress
     {
         Progress()
             : _progressPerSec(0)
@@ -184,7 +184,7 @@ public:
 
     Status _status;
 
-    struct CURATORSYNC_EXPORT ProgressItem
+    struct APPLICATIONSYNC_EXPORT ProgressItem
     {
         SyncFileItem _item;
         Progress _progress;
@@ -255,16 +255,16 @@ private:
 
 namespace Progress {
 
-    CURATORSYNC_EXPORT QString asActionString(const SyncFileItem &item);
-    CURATORSYNC_EXPORT QString asResultString(const SyncFileItem &item);
+    APPLICATIONSYNC_EXPORT QString asActionString(const SyncFileItem &item);
+    APPLICATIONSYNC_EXPORT QString asResultString(const SyncFileItem &item);
 
-    CURATORSYNC_EXPORT bool isWarningKind(SyncFileItem::Status);
-    CURATORSYNC_EXPORT bool isIgnoredKind(SyncFileItem::Status);
+    APPLICATIONSYNC_EXPORT bool isWarningKind(SyncFileItem::Status);
+    APPLICATIONSYNC_EXPORT bool isIgnoredKind(SyncFileItem::Status);
 }
 
-// work around for only having one namespace CUR, and this enum not beeing in a QObject
+// work around for only having one namespace APP, and this enum not beeing in a QObject
 namespace ErrorCategoryPrivate {
-    CURATORSYNC_EXPORT Q_NAMESPACE;
+    APPLICATIONSYNC_EXPORT Q_NAMESPACE;
 
     /** Type of error
      *
@@ -289,7 +289,7 @@ using ErrorCategoryPrivate::ErrorCategory;
  * or the overall sync progress.
  *
  */
-class CURATORSYNC_EXPORT ProgressDispatcher : public QObject
+class APPLICATIONSYNC_EXPORT ProgressDispatcher : public QObject
 {
     Q_OBJECT
 public:

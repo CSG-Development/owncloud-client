@@ -23,7 +23,7 @@
 #include <QStringList>
 #include <QDir>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcMoveJob, "sync.networkjob.move", QtInfoMsg)
 Q_LOGGING_CATEGORY(lcPropagateRemoteMove, "sync.propagator.remotemove", QtInfoMsg)

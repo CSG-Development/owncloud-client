@@ -14,7 +14,7 @@ class SyncConnection:
     }
     MENU = {
         "type": "QMenu",
-        "window": names.settings_OCC_SettingsDialog,
+        "window": names.settings_APP_SettingsDialog,
         "visible": 1,
     }
     DISABLE_VFS_CONFIRMATION_BUTTON = {
