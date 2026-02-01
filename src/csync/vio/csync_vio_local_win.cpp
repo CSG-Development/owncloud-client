@@ -50,7 +50,7 @@ csync_vio_handle_t *csync_vio_local_opendir(const QString &name)
     std::unique_ptr<csync_vio_handle_t> handle(new csync_vio_handle_t{});
 
     // the file wildcard has to be attached
-    QString dirname = CUR::FileSystem::longWinPath(name + QLatin1String("/*"));
+    QString dirname = APP::FileSystem::longWinPath(name + QLatin1String("/*"));
 
     handle->hFind = FindFirstFile(reinterpret_cast<const wchar_t *>(dirname.utf16()), &(handle->ffd));
 
@@ -105,7 +105,7 @@ static time_t FileTimeToUnixTime(FILETIME *filetime, DWORD *remainder)
     }
 }
 
-std::unique_ptr<csync_file_stat_t> csync_vio_local_readdir(csync_vio_handle_t *handle, CUR::Vfs *vfs)
+std::unique_ptr<csync_file_stat_t> csync_vio_local_readdir(csync_vio_handle_t *handle, APP::Vfs *vfs)
 {
     std::unique_ptr<csync_file_stat_t> file_stat;
     DWORD rem;
@@ -185,19 +185,19 @@ int csync_vio_local_stat(const QString &uri, csync_file_stat_t *buf)
     BY_HANDLE_FILE_INFORMATION fileInfo;
     ULARGE_INTEGER FileIndex;
 
-    h = CreateFileW(reinterpret_cast<const wchar_t *>(CUR::FileSystem::longWinPath(uri).utf16()), 0, FILE_SHARE_WRITE | FILE_SHARE_READ | FILE_SHARE_DELETE,
+    h = CreateFileW(reinterpret_cast<const wchar_t *>(APP::FileSystem::longWinPath(uri).utf16()), 0, FILE_SHARE_WRITE | FILE_SHARE_READ | FILE_SHARE_DELETE,
         NULL, OPEN_EXISTING,
         FILE_ATTRIBUTE_NORMAL | FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT,
         NULL);
     if (h == INVALID_HANDLE_VALUE) {
         errno = GetLastError();
-        qCCritical(lcCSyncVIOLocal) << "CreateFileW failed on" << uri << CUR::Utility::formatWinError(errno);
+        qCCritical(lcCSyncVIOLocal) << "CreateFileW failed on" << uri << APP::Utility::formatWinError(errno);
         return -1;
     }
 
     if (!GetFileInformationByHandle(h, &fileInfo)) {
         errno = GetLastError();
-        qCCritical(lcCSyncVIOLocal) << "GetFileInformationByHandle failed on" << uri << CUR::Utility::formatWinError(errno);
+        qCCritical(lcCSyncVIOLocal) << "GetFileInformationByHandle failed on" << uri << APP::Utility::formatWinError(errno);
         CloseHandle(h);
         return -1;
     }

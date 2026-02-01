@@ -20,7 +20,7 @@
 #include <QStyledItemDelegate>
 
 #include "accountstate.h"
-#include "curatorgui.h"
+#include "applicationgui.h"
 #include "progressdispatcher.h"
 
 class QAction;
@@ -29,7 +29,7 @@ class QToolBar;
 class QStandardItemModel;
 class CodeDialog;
 
-namespace CUR {
+namespace APP {
 
 namespace Ui {
     class SettingsDialog;
@@ -37,7 +37,7 @@ namespace Ui {
 class AccountSettings;
 class Application;
 class FolderMan;
-class CuratorGui;
+class ApplicationGui;
 class ActivitySettings;
 class ProxyStyleToolWin;
 
@@ -61,7 +61,7 @@ class SettingsDialog : public QMainWindow
     Q_PROPERTY(QWidget* currentPage READ currentPage)
 
 public:
-    explicit SettingsDialog(CuratorGui *gui, QWidget *parent = nullptr);
+    explicit SettingsDialog(ApplicationGui *gui, QWidget *parent = nullptr);
     ~SettingsDialog() override;
 
     void addModalWidget(QWidget *w);
@@ -114,7 +114,7 @@ private:
     QAction *_activityAction = nullptr;
     QAction *_addAccountAction = nullptr;
     QList<QAction *> _accountActions;
-    CuratorGui *_gui = nullptr;
+    ApplicationGui *_gui = nullptr;
     QList<Account *> _modalStack;
     CodeDialog* _codeDialog = nullptr;
 };

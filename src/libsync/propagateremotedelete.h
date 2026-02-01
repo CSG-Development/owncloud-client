@@ -16,7 +16,7 @@
 #include "curatorpropagator.h"
 #include "networkjobs.h"
 
-namespace CUR {
+namespace APP {
 
 /**
  * @brief The DeleteJob class

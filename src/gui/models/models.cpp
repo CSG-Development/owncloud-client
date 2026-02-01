@@ -23,13 +23,13 @@
 
 #include <functional>
 
-void CUR::Models::SignalledQSortFilterProxyModel::setFilterFixedStringSignalled(const QString &pattern)
+void APP::Models::SignalledQSortFilterProxyModel::setFilterFixedStringSignalled(const QString &pattern)
 {
     setFilterFixedString(pattern);
     emit filterChanged();
 }
 
-QString CUR::Models::formatSelection(const QModelIndexList &items, int dataRole)
+QString APP::Models::formatSelection(const QModelIndexList &items, int dataRole)
 {
     if (items.isEmpty()) {
         return {};
@@ -84,9 +84,9 @@ QString CUR::Models::formatSelection(const QModelIndexList &items, int dataRole)
     return out;
 }
 
-std::function<void()> CUR::Models::addFilterMenuItems(QMenu *menu, const QStringList &candidates, SignalledQSortFilterProxyModel *model, int column, const QString &columnName, int role)
+std::function<void()> APP::Models::addFilterMenuItems(QMenu *menu, const QStringList &candidates, SignalledQSortFilterProxyModel *model, int column, const QString &columnName, int role)
 {
-    menu->addAction(QApplication::translate("CUR::Models", "%1 Filter:").arg(columnName))->setEnabled(false);
+    menu->addAction(QApplication::translate("APP::Models", "%1 Filter:").arg(columnName))->setEnabled(false);
 
     auto filterGroup = new QActionGroup(menu);
     filterGroup->setExclusive(true);
@@ -105,7 +105,7 @@ std::function<void()> CUR::Models::addFilterMenuItems(QMenu *menu, const QString
     };
 
 
-    auto noFilter = addAction(QApplication::translate("CUR::Models", "All"), QString());
+    auto noFilter = addAction(QApplication::translate("APP::Models", "All"), QString());
 
     for (const auto &c : candidates) {
         addAction(c, c);
@@ -118,12 +118,12 @@ std::function<void()> CUR::Models::addFilterMenuItems(QMenu *menu, const QString
     return resetFunction;
 }
 
-void CUR::Models::WeightedQSortFilterProxyModel::setWeightedColumn(int i)
+void APP::Models::WeightedQSortFilterProxyModel::setWeightedColumn(int i)
 {
     _weightedColumn = i;
 }
 
-bool CUR::Models::WeightedQSortFilterProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
+bool APP::Models::WeightedQSortFilterProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
     Q_ASSERT(_weightedColumn < source_left.model()->columnCount());
     const uint32_t w1 = source_left.siblingAtColumn(_weightedColumn).data().toInt();
@@ -135,7 +135,7 @@ bool CUR::Models::WeightedQSortFilterProxyModel::lessThan(const QModelIndex &sou
     return QSortFilterProxyModel::lessThan(source_left, source_right);
 }
 
-bool CUR::Models::FilteringProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+bool APP::Models::FilteringProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     // column doesn't matter, since we do not filter based on a specific column but on a specific item role
     const auto index = sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent);

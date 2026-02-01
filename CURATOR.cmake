@@ -11,7 +11,7 @@ set( APPLICATION_BUNDLE_NAME "Curator Files" )
 
 set( LINUX_PACKAGE_SHORTNAME "curator" )
 
-set( THEME_CLASS            "CuratorTheme" )
+set( THEME_CLASS            "ApplicationTheme" )
 set( APPLICATION_REV_DOMAIN "com.seagate.curator.stxfiles.macos" )
 set( WIN_SETUP_BITMAP_PATH  "${CMAKE_SOURCE_DIR}/admin/win/nsi" )
 

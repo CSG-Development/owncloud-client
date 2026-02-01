@@ -80,7 +80,7 @@ DevWidget::DevWidget(QWidget *parent)
         }
     });
     connect(ui->btnNetw, &QPushButton::clicked, this, [] {
-        CUR::NetworkMonitor::instance()->emit_network_changed();
+        APP::NetworkMonitor::instance()->emit_network_changed();
     });
     connect(ui->btnQueryAbout, &QPushButton::clicked, this, [this] {
         auto path = device_.getPathPtr(currentId_);
@@ -189,7 +189,7 @@ void DevModel::setDeviceData(const QList<DevicePath> &d)
     endResetModel();
 }
 
-void DevWidget::setAccout(CUR::Account *acc)
+void DevWidget::setAccout(APP::Account *acc)
 {
     acc_ = acc;
     setDevice(acc_->device());

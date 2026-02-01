@@ -11,7 +11,7 @@
 #include "common/syncjournaldb.h"
 #include "common/syncjournalfilerecord.h"
 
-using namespace CUR;
+using namespace APP;
 
 class TestSyncJournalDB : public QObject
 {

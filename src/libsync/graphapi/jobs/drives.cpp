@@ -22,7 +22,7 @@
 #include <OAIDrive.h>
 
 
-using namespace CUR;
+using namespace APP;
 using namespace GraphApi;
 
 namespace {

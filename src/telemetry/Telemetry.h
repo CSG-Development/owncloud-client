@@ -4,7 +4,7 @@
 
 #include <memory>
 
-namespace CUR {
+namespace APP {
 
 class Telemetry
 {
@@ -21,4 +21,4 @@ private:
     std::unique_ptr<ProviderBase> provider_;
 };
 
-} // namespace CUR
+} // namespace APP

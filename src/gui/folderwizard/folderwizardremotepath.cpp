@@ -32,7 +32,7 @@
 #include <QDir>
 #include <QInputDialog>
 
-using namespace CUR;
+using namespace APP;
 
 FolderWizardRemotePath::FolderWizardRemotePath(FolderWizardPrivate *parent)
     : FolderWizardPage(parent)

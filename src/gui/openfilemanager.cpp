@@ -24,7 +24,7 @@
 #include <QDesktopServices>
 #include <QApplication>
 
-namespace CUR {
+namespace APP {
 
 // according to the QStandardDir impl from Qt5
 static QStringList xdgDataDirs()

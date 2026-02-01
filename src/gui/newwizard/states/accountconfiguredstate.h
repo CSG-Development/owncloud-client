@@ -16,7 +16,7 @@
 
 #include "abstractstate.h"
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 class AccountConfiguredState : public AbstractState
 {
@@ -30,4 +30,4 @@ public:
     void evaluatePage() override;
 };
 
-} // CUR::Wizard
+} // APP::Wizard

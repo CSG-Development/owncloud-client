@@ -17,7 +17,7 @@
 #include "oauthcredentialssetupwizardstate.h"
 #include "theme.h"
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 OAuthCredentialsSetupWizardState::OAuthCredentialsSetupWizardState(SetupWizardContext *context)
     : AbstractSetupWizardState(context)
@@ -117,4 +117,4 @@ void OAuthCredentialsSetupWizardState::evaluatePage()
     Q_UNREACHABLE();
 }
 
-} // CUR::Wizard
+} // APP::Wizard

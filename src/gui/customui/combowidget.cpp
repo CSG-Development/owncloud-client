@@ -43,10 +43,10 @@ ComboWidget::ComboWidget(QWidget *parent)
 
     themeNotifier = darkTheme_.addNotifier([this] {
         qDebug() << "darkTheme_ Notifier" << darkTheme_.value();
-        CUR::StyleHelper::setTheme(this, darkTheme_.value());
+        APP::StyleHelper::setTheme(this, darkTheme_.value());
         updateStyles();
     });
-    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
 
     promptLabel = new QLabel(this);
     promptLabel->setObjectName(QStringLiteral("promptLabel"));
@@ -215,9 +215,9 @@ void ComboWidget::updatePromptPosition()
 void ComboWidget::updateStyles()
 {
     if (errorState)
-        setStyleSheet(CUR::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyleError.second : inputStyleError.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyleError.second : inputStyleError.first));
     else
-        setStyleSheet(CUR::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyle.second : inputStyle.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyle.second : inputStyle.first));
 
     updateButtonIcon();
 }

@@ -19,7 +19,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcSharing, "gui.sharing", QtInfoMsg)
 

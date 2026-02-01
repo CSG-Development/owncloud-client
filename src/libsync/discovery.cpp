@@ -31,7 +31,7 @@
 #include <QFileInfo>
 #include <QThreadPool>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcDisco, "sync.discovery", QtInfoMsg)
 
@@ -512,7 +512,7 @@ void ProcessDirectoryJob::processFileAnalyzeRemoteInfo(
     bool done = false;
     bool async = false;
     // This function will be executed for every candidate
-    auto renameCandidateProcessing = [&](const CUR::SyncJournalFileRecord &base) {
+    auto renameCandidateProcessing = [&](const APP::SyncJournalFileRecord &base) {
         if (done)
             return;
         if (!base.isValid())
@@ -873,7 +873,7 @@ void ProcessDirectoryJob::processFileAnalyzeLocalInfo(
     };
 
     // Check if it is a move
-    CUR::SyncJournalFileRecord base;
+    APP::SyncJournalFileRecord base;
     if (!_discoveryData->_statedb->getFileRecordByInode(localEntry.inode, &base)) {
         dbError();
         return;
@@ -1164,7 +1164,7 @@ void ProcessDirectoryJob::processFileFinalize(
     }
 }
 
-void ProcessDirectoryJob::processBlacklisted(const PathTuple &path, const CUR::LocalInfo &localEntry,
+void ProcessDirectoryJob::processBlacklisted(const PathTuple &path, const APP::LocalInfo &localEntry,
     const SyncJournalFileRecord &dbEntry)
 {
     if (!localEntry.isValid())
@@ -1196,7 +1196,7 @@ void ProcessDirectoryJob::processBlacklisted(const PathTuple &path, const CUR::L
     }
 }
 
-bool ProcessDirectoryJob::checkPermissions(const CUR::SyncFileItemPtr &item)
+bool ProcessDirectoryJob::checkPermissions(const APP::SyncFileItemPtr &item)
 {
     if (item->_direction != SyncFileItem::Up) {
         // Currently we only check server-side permissions

@@ -50,7 +50,7 @@ QPair<QString,QString> widgetStyle = {
 };
 }
 
-namespace CUR {
+namespace APP {
 
 GeneralSettings::GeneralSettings(QWidget *parent)
     : QWidget(parent)
@@ -65,7 +65,7 @@ GeneralSettings::GeneralSettings(QWidget *parent)
         onThemeChanged(isDark);
         update();
     });
-    onThemeChanged(CUR::Theme::instance()->isDarkTheme());
+    onThemeChanged(APP::Theme::instance()->isDarkTheme());
 
     connect(_ui->desktopNotificationsCheckBox, &QAbstractButton::toggled, this, &GeneralSettings::slotToggleOptionalDesktopNotifications);
 
@@ -306,7 +306,7 @@ void GeneralSettings::slotIgnoreFilesEditor()
     if (_ignoreEditor.isNull()) {
         _ignoreEditor = new IgnoreListEditor(ocApp()->gui()->settingsDialog());
         _ignoreEditor->setAttribute(Qt::WA_DeleteOnClose, true);
-        CuratorGui::raise();
+        ApplicationGui::raise();
         _ignoreEditor->open();
     }
 }
@@ -357,4 +357,4 @@ void GeneralSettings::loadLanguageNamesIntoDropdown()
     }
 }
 
-} // namespace CUR
+} // namespace APP

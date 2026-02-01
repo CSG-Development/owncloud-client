@@ -16,7 +16,7 @@
 #include "networkjobs.h"
 #include "account.h"
 
-namespace CUR {
+namespace APP {
 
 ThumbnailJob::ThumbnailJob(const QString &path, AccountPtr account, QObject *parent)
     : AbstractNetworkJob(account, account->url(), QStringLiteral("index.php/apps/files/api/v1/thumbnail/150/150") + path, parent)

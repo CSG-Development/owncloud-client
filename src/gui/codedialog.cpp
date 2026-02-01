@@ -57,8 +57,8 @@ CodeDialog::CodeDialog(QWidget *parent)
 {
     ui->setupUi(this);
 
-    setStyleSheet(CUR::StyleHelper::loadFileToString(QStringLiteral(":/res/login/code_dialog.qss")));
-    connect(CUR::Theme::instance(), &CUR::Theme::themeChanged, this, [this](bool isDark) {
+    setStyleSheet(APP::StyleHelper::loadFileToString(QStringLiteral(":/res/login/code_dialog.qss")));
+    connect(APP::Theme::instance(), &APP::Theme::themeChanged, this, [this](bool isDark) {
         controller_->darkTheme.setValue(isDark);
     });
 
@@ -89,7 +89,7 @@ CodeDialog::CodeDialog(QWidget *parent)
         ui->codeInputWidget->setErrorState(controller_->errorState.value());
     };
     auto updateThemeFunc = [this]() {
-        CUR::StyleHelper::setTheme(this, controller_->darkTheme.value());
+        APP::StyleHelper::setTheme(this, controller_->darkTheme.value());
         qCDebug(lcCodeDialog) << "isDark" << controller_->darkTheme.value();
     };
 
@@ -135,7 +135,7 @@ CodeDialog::CodeDialog(QWidget *parent)
 
     setDialogState(CodeDialogState::AllowAccess);
     syncUI();
-    controller_->darkTheme.setValue(CUR::Theme::instance()->isDarkTheme());
+    controller_->darkTheme.setValue(APP::Theme::instance()->isDarkTheme());
     updateThemeFunc();
 }
 

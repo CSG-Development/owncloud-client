@@ -34,7 +34,7 @@ QUrl concatUrlPath(const QUrl &url, const QString &concatPath, const QUrlQuery &
 
 }
 
-namespace CUR {
+namespace APP {
 
 SimpleResolveUrlJobFactory::SimpleResolveUrlJobFactory(QNetworkAccessManager *nam)
     : AbstractCoreJobFactory(nam)
@@ -85,4 +85,4 @@ CoreJob *SimpleResolveUrlJobFactory::startJob(const QUrl &url, QObject *parent)
     return job;
 }
 
-} // namespace CUR
+} // namespace APP

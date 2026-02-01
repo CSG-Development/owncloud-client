@@ -39,7 +39,7 @@ auto NOTIFICATIONS_IFACE_C()
 }
 #endif
 
-namespace CUR {
+namespace APP {
 
 #ifdef Q_OS_MACOS
 void *createOsXNotificationCenterDelegate();
@@ -93,4 +93,4 @@ void Systray::setToolTip(const QString &tip)
     QSystemTrayIcon::setToolTip(tr("%1: %2").arg(Theme::instance()->appNameGUI(), tip));
 }
 
-} // namespace CUR
+} // namespace APP

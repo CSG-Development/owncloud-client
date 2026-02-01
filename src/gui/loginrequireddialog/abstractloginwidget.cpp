@@ -14,11 +14,11 @@
 
 #include "abstractloginwidget.h"
 
-namespace CUR {
+namespace APP {
 
 AbstractLoginWidget::AbstractLoginWidget(QWidget *parent)
     : QWidget(parent)
 {
 }
 
-} // CUR
+} // APP

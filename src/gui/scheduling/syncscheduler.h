@@ -25,7 +25,7 @@
 
 class FolderPriorityQueue;
 
-namespace CUR {
+namespace APP {
 
 class FolderMan;
 

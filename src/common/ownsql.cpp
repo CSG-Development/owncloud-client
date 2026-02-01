@@ -50,7 +50,7 @@ constexpr int SQLITE_REPEAT_COUNT = 20;
         }                                                                           \
     }
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcSql, "sync.database.sql", QtInfoMsg)
 
@@ -531,4 +531,4 @@ void SqlQuery::reset_and_clear_bindings()
     }
 }
 
-} // namespace CUR
+} // namespace APP

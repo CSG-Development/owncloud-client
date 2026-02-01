@@ -9,11 +9,11 @@ WaitPage::WaitPage(QWidget *parent)
 {
     ui->setupUi(this);
 
-    setStyleSheet(CUR::StyleHelper::loadFileToString(QStringLiteral(":/res/login/wait_page.qss")));
+    setStyleSheet(APP::StyleHelper::loadFileToString(QStringLiteral(":/res/login/wait_page.qss")));
     themeNotifier = darkTheme_.addNotifier([this] {
-        CUR::StyleHelper::setTheme(this, darkTheme_.value());
+        APP::StyleHelper::setTheme(this, darkTheme_.value());
     });
-    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
 }
 
 WaitPage::~WaitPage()

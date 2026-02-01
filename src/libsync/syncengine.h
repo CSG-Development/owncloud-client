@@ -36,7 +36,7 @@
 
 class QProcess;
 
-namespace CUR {
+namespace APP {
 
 class SyncJournalFileRecord;
 class SyncJournalDb;
@@ -47,7 +47,7 @@ class ProcessDirectoryJob;
  * @brief The SyncEngine class
  * @ingroup libsync
  */
-class CURATORSYNC_EXPORT SyncEngine : public QObject
+class APPLICATIONSYNC_EXPORT SyncEngine : public QObject
 {
     Q_OBJECT
 public:

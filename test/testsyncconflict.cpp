@@ -12,7 +12,7 @@
 
 #include <QtTest>
 
-using namespace CUR;
+using namespace APP;
 
 namespace {
 auto uploadConflictFilesCapabilities(bool b)

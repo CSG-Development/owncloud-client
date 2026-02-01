@@ -12,8 +12,7 @@
  * for more details.
  */
 
-#ifndef CURATORGUI_H
-#define CURATORGUI_H
+#pragma once
 
 #include "account.h"
 #include "progressdispatcher.h"
@@ -26,7 +25,7 @@
 #include <QSize>
 #include <QTimer>
 
-namespace CUR {
+namespace APP {
 
 namespace Wizard {class SetupController;}
 
@@ -49,15 +48,15 @@ enum class ShareDialogStartPage {
 };
 
 /**
- * @brief The CuratorGui class
+ * @brief The ApplicationGui class
  * @ingroup gui
  */
-class CuratorGui : public QObject
+class ApplicationGui : public QObject
 {
     Q_OBJECT
 public:
-    explicit CuratorGui(Application *parent = nullptr);
-    ~CuratorGui() override;
+    explicit ApplicationGui(Application *parent = nullptr);
+    ~ApplicationGui() override;
 
     bool checkAccountExists(bool openSettings);
 
@@ -150,6 +149,4 @@ private:
     QPointer<AboutDialog> _aboutDialog;
 };
 
-} // namespace CUR
-
-#endif // CURATORGUI_H
+} // namespace APP

@@ -18,7 +18,7 @@
 class QTreeView;
 class QModelIndex;
 
-namespace CUR {
+namespace APP {
 
 /**
  * @brief Updates tooltips of items in a QTreeView when they change.
@@ -50,4 +50,4 @@ private:
     QPoint _toolTipPos;
 };
 
-} // namespace CUR
+} // namespace APP

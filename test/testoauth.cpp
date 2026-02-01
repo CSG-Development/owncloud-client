@@ -14,7 +14,7 @@
 #include "common/asserts.h"
 
 using namespace std::chrono_literals;
-using namespace CUR;
+using namespace APP;
 
 class DesktopServiceHook : public QObject
 {
@@ -117,7 +117,7 @@ public:
     QNetworkAccessManager realQNAM;
     QPointer<QNetworkReply> browserReply = nullptr;
     QString code = QString::fromUtf8(generateEtag());
-    CUR::AccountPtr account;
+    APP::AccountPtr account;
 
     std::unique_ptr<AccountBasedOAuth> oauth;
 
@@ -156,7 +156,7 @@ public:
         oauth = prepareOauth();
         oauth->startAuthentication();
 
-        QSignalSpy spy(oauth.get(), &CUR::OAuth::authorisationLinkChanged);
+        QSignalSpy spy(oauth.get(), &APP::OAuth::authorisationLinkChanged);
         if (spy.wait()) {
             oauth->openBrowser();
         }
@@ -699,7 +699,7 @@ private slots:
             {
                 oauth = prepareOauth();
                 oauth->saveDynamicRegistrationDataForAccount(account, {});
-                QSignalSpy spy(oauth.get(), &CUR::AccountBasedOAuth::refreshFinished);
+                QSignalSpy spy(oauth.get(), &APP::AccountBasedOAuth::refreshFinished);
                 oauth->refreshAuthentication(QStringLiteral("foo"));
 
                 QVERIFY(spy.wait());
@@ -760,7 +760,7 @@ private slots:
             {
                 oauth = prepareOauth();
                 oauth->saveDynamicRegistrationDataForAccount(account, {});
-                QSignalSpy spy(oauth.get(), &CUR::AccountBasedOAuth::refreshFinished);
+                QSignalSpy spy(oauth.get(), &APP::AccountBasedOAuth::refreshFinished);
                 oauth->refreshAuthentication(QStringLiteral("foo"));
 
                 QVERIFY(spy.wait());

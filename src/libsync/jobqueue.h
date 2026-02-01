@@ -18,12 +18,12 @@
 #include <QPointer>
 #include <vector>
 
-namespace CUR {
+namespace APP {
 
 class AbstractNetworkJob;
 class Account;
 
-class CURATORSYNC_EXPORT JobQueue
+class APPLICATIONSYNC_EXPORT JobQueue
 {
 public:
     JobQueue(Account *account);
@@ -62,7 +62,7 @@ private:
     friend class JobQueueGuard;
 };
 
-class CURATORSYNC_EXPORT JobQueueGuard
+class APPLICATIONSYNC_EXPORT JobQueueGuard
 {
 public:
     JobQueueGuard(JobQueue *queue);

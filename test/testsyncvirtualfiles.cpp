@@ -11,7 +11,7 @@
 #include "testutils/syncenginetestutils.h"
 #include <QtTest>
 
-using namespace CUR;
+using namespace APP;
 
 auto itemInstruction(const ItemCompletedSpy &spy, const QString &path)
 {

@@ -21,7 +21,7 @@
 #include <signal.h>
 #include <sys/resource.h>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcPlatform, "gui.platform")
 
@@ -52,4 +52,4 @@ void UnixPlatform::setLimitsForCoreDumps()
 }
 
 
-} // namespace CUR
+} // namespace APP

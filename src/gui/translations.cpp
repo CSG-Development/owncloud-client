@@ -23,7 +23,7 @@
 #include <QDirIterator>
 #include <QStandardPaths>
 
-namespace CUR {
+namespace APP {
 
 namespace Translations {
 
@@ -68,4 +68,4 @@ namespace Translations {
 
 } // namespace Translations
 
-} // namespace CUR
+} // namespace APP

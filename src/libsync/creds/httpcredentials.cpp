@@ -68,7 +68,7 @@ const QString userC()
 }
 }
 
-namespace CUR {
+namespace APP {
 
 class HttpCredentialsAccessManager : public AccessManager
 {
@@ -418,6 +418,6 @@ void HttpCredentials::persist()
     }
 }
 
-} // namespace CUR
+} // namespace APP
 
 #include "httpcredentials.moc"

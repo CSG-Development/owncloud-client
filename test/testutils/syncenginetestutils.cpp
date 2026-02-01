@@ -382,7 +382,7 @@ FakePropfindReply::FakePropfindReply(FileInfo &remoteRootFileInfo, QNetworkAcces
     xml.writeStartElement(davUri, QStringLiteral("multistatus"));
     auto writeFileResponse = [&](const FileInfo &fileInfo) {
         xml.writeStartElement(davUri, QStringLiteral("response"));
-        const auto href = CUR::Utility::concatUrlPath(prefix, QString::fromUtf8(QUrl::toPercentEncoding(fileInfo.absolutePath(), "/"))).path();
+        const auto href = APP::Utility::concatUrlPath(prefix, QString::fromUtf8(QUrl::toPercentEncoding(fileInfo.absolutePath(), "/"))).path();
         xml.writeTextElement(davUri, QStringLiteral("href"), href);
         xml.writeStartElement(davUri, QStringLiteral("propstat"));
         xml.writeStartElement(davUri, QStringLiteral("prop"));
@@ -395,7 +395,7 @@ FakePropfindReply::FakePropfindReply(FileInfo &remoteRootFileInfo, QNetworkAcces
             xml.writeEmptyElement(davUri, QStringLiteral("resourcetype"));
 
         auto gmtDate = fileInfo.lastModifiedInUtc();
-        xml.writeTextElement(davUri, QStringLiteral("getlastmodified"), CUR::Utility::formatRFC1123Date(gmtDate));
+        xml.writeTextElement(davUri, QStringLiteral("getlastmodified"), APP::Utility::formatRFC1123Date(gmtDate));
         xml.writeTextElement(davUri, QStringLiteral("getcontentlength"), QString::number(fileInfo.contentSize));
         xml.writeTextElement(davUri, QStringLiteral("getetag"), QStringLiteral("\"%1\"").arg(QString::fromUtf8(fileInfo.etag)));
         xml.writeTextElement(ocUri, QStringLiteral("permissions"), !fileInfo.permissions.isNull() ? QString(fileInfo.permissions.toString()) : fileInfo.isShared ? QStringLiteral("SRDNVCKW")
@@ -875,17 +875,17 @@ void FakeHangingReply::abort()
 }
 
 FakeAM::FakeAM(FileInfo initialRoot, QObject *parent)
-    : CUR::AccessManager(parent)
+    : APP::AccessManager(parent)
     , _remoteRootFileInfo{std::move(initialRoot)}
 {
-    setCookieJar(new CUR::CookieJar);
+    setCookieJar(new APP::CookieJar);
 }
 
 QNetworkReply *FakeAM::createRequest(QNetworkAccessManager::Operation op, const QNetworkRequest &request, QIODevice *outgoingData)
 {
     QNetworkReply *reply = nullptr;
     auto newRequest = request;
-    newRequest.setRawHeader("X-Request-ID", CUR::AccessManager::generateRequestId());
+    newRequest.setRawHeader("X-Request-ID", APP::AccessManager::generateRequestId());
     if (_override) {
         if (auto _reply = _override(op, newRequest, outgoingData)) {
             reply = _reply;
@@ -934,44 +934,44 @@ QNetworkReply *FakeAM::createRequest(QNetworkAccessManager::Operation op, const 
             reply->abort();
         });
     }
-    CUR::HttpLogger::logRequest(reply, op, outgoingData);
+    APP::HttpLogger::logRequest(reply, op, outgoingData);
     return reply;
 }
 
-FakeFolder::FakeFolder(const FileInfo &fileTemplate, CUR::Vfs::Mode vfsMode, bool filesAreDehydrated)
+FakeFolder::FakeFolder(const FileInfo &fileTemplate, APP::Vfs::Mode vfsMode, bool filesAreDehydrated)
     : _localModifier(_tempDir.path())
 {
     // Needs to be done once
-    CUR::SyncEngine::minimumFileAgeForUpload = 0s;
+    APP::SyncEngine::minimumFileAgeForUpload = 0s;
 
     QDir rootDir { _tempDir.path() };
     qDebug() << "FakeFolder operating on" << rootDir;
     toDisk(rootDir, filesAreDehydrated ? FileInfo() : fileTemplate);
 
     _fakeAm = new FakeAM(fileTemplate, this);
-    _accountState = std::move(CUR::TestUtils::createDummyAccount());
+    _accountState = std::move(APP::TestUtils::createDummyAccount());
     account()->setCredentials(new FakeCredentials{_fakeAm});
 
-    _journalDb.reset(new CUR::SyncJournalDb(localPath() + QStringLiteral(".sync_test.db")));
+    _journalDb.reset(new APP::SyncJournalDb(localPath() + QStringLiteral(".sync_test.db")));
     // TODO: davUrl
 
-    _syncEngine.reset(new CUR::SyncEngine(account(), account()->davUrl(), localPath(), QString(), _journalDb.get()));
-    _syncEngine->setSyncOptions(CUR::SyncOptions { QSharedPointer<CUR::Vfs>(CUR::VfsPluginManager::instance().createVfsFromPlugin(vfsMode).release()) });
+    _syncEngine.reset(new APP::SyncEngine(account(), account()->davUrl(), localPath(), QString(), _journalDb.get()));
+    _syncEngine->setSyncOptions(APP::SyncOptions { QSharedPointer<APP::Vfs>(APP::VfsPluginManager::instance().createVfsFromPlugin(vfsMode).release()) });
 
     // Ignore temporary files from the download. (This is in the default exclude list, but we don't load it)
     _syncEngine->addManualExclude(QStringLiteral("]*.~*"));
 
     auto vfs = _syncEngine->syncOptions()._vfs;
     if (vfsMode != vfs->mode()) {
-        vfs.reset(CUR::VfsPluginManager::instance().createVfsFromPlugin(vfsMode).release());
+        vfs.reset(APP::VfsPluginManager::instance().createVfsFromPlugin(vfsMode).release());
         Q_ASSERT(vfs);
     }
 
     // Ensure we have a valid Vfs instance "running"
     switchToVfs(vfs);
 
-    if (vfsMode != CUR::Vfs::Off) {
-        const auto pinState = filesAreDehydrated ? CUR::PinState::OnlineOnly : CUR::PinState::AlwaysLocal;
+    if (vfsMode != APP::Vfs::Off) {
+        const auto pinState = filesAreDehydrated ? APP::PinState::OnlineOnly : APP::PinState::AlwaysLocal;
         syncJournal().internalPinStates().setForPath("", pinState);
         OC_ENFORCE(vfs->setPinState("", pinState));
     }
@@ -984,7 +984,7 @@ FakeFolder::FakeFolder(const FileInfo &fileTemplate, CUR::Vfs::Mode vfsMode, boo
 
 FakeFolder::~FakeFolder() { }
 
-void FakeFolder::switchToVfs(QSharedPointer<CUR::Vfs> vfs)
+void FakeFolder::switchToVfs(QSharedPointer<APP::Vfs> vfs)
 {
     auto opts = _syncEngine->syncOptions();
 
@@ -994,7 +994,7 @@ void FakeFolder::switchToVfs(QSharedPointer<CUR::Vfs> vfs)
     opts._vfs = vfs;
     _syncEngine->setSyncOptions(opts);
 
-    CUR::VfsSetupParams vfsParams(account(), account()->davUrl(), false, &syncEngine());
+    APP::VfsSetupParams vfsParams(account(), account()->davUrl(), false, &syncEngine());
     vfsParams.filesystemPath = localPath();
     vfsParams.remotePath = QLatin1Char('/');
     vfsParams.journal = _journalDb.get();
@@ -1006,13 +1006,13 @@ void FakeFolder::switchToVfs(QSharedPointer<CUR::Vfs> vfs)
         vfs->stop();
         vfs->unregisterFolder();
     });
-    QObject::connect(&_syncEngine->syncFileStatusTracker(), &CUR::SyncFileStatusTracker::fileStatusChanged,
-        vfs.data(), &CUR::Vfs::fileStatusChanged);
+    QObject::connect(&_syncEngine->syncFileStatusTracker(), &APP::SyncFileStatusTracker::fileStatusChanged,
+        vfs.data(), &APP::Vfs::fileStatusChanged);
 
-    QObject::connect(vfs.get(), &CUR::Vfs::error, vfs.get(), [](const QString &error) {
+    QObject::connect(vfs.get(), &APP::Vfs::error, vfs.get(), [](const QString &error) {
         QFAIL(qUtf8Printable(error));
     });
-    QSignalSpy spy(vfs.get(), &CUR::Vfs::started);
+    QSignalSpy spy(vfs.get(), &APP::Vfs::started);
     vfs->start(vfsParams);
 
     // don't use QVERIFY outside of the test slot
@@ -1041,25 +1041,25 @@ QString FakeFolder::localPath() const
 void FakeFolder::scheduleSync()
 {
     // Have to be done async, else, an error before exec() does not terminate the event loop.
-    QMetaObject::invokeMethod(_syncEngine.get(), &CUR::SyncEngine::startSync, Qt::QueuedConnection);
+    QMetaObject::invokeMethod(_syncEngine.get(), &APP::SyncEngine::startSync, Qt::QueuedConnection);
 }
 
 void FakeFolder::execUntilBeforePropagation()
 {
-    QSignalSpy spy(_syncEngine.get(), &CUR::SyncEngine::aboutToPropagate);
+    QSignalSpy spy(_syncEngine.get(), &APP::SyncEngine::aboutToPropagate);
     QVERIFY(spy.wait());
 }
 
 void FakeFolder::execUntilItemCompleted(const QString &relativePath)
 {
-    QSignalSpy spy(_syncEngine.get(), &CUR::SyncEngine::itemCompleted);
+    QSignalSpy spy(_syncEngine.get(), &APP::SyncEngine::itemCompleted);
     QElapsedTimer t;
     t.start();
     while (t.elapsed() < 5000) {
         spy.clear();
         QVERIFY(spy.wait());
         for (const QList<QVariant> &args : spy) {
-            auto item = args[0].value<CUR::SyncFileItemPtr>();
+            auto item = args[0].value<APP::SyncFileItemPtr>();
             if (item->destination() == relativePath)
                 return;
         }
@@ -1072,7 +1072,7 @@ bool FakeFolder::isDehydratedPlaceholder(const QString &filePath)
     return vfs()->isDehydratedPlaceholder(filePath);
 }
 
-QSharedPointer<CUR::Vfs> FakeFolder::vfs() const
+QSharedPointer<APP::Vfs> FakeFolder::vfs() const
 {
     return _syncEngine->syncOptions()._vfs;
 }
@@ -1090,7 +1090,7 @@ void FakeFolder::toDisk(QDir &dir, const FileInfo &templateFi)
             file.open(QFile::WriteOnly);
             file.write(QByteArray {}.fill(child.contentChar, child.contentSize));
             file.close();
-            CUR::FileSystem::setModTime(file.fileName(), child.lastModifiedInSecondsUTC());
+            APP::FileSystem::setModTime(file.fileName(), child.lastModifiedInSecondsUTC());
         }
     }
 }
@@ -1154,7 +1154,7 @@ FileInfo &findOrCreateDirs(FileInfo &base, const PathComponents &components)
 FileInfo FakeFolder::dbState() const
 {
     FileInfo result;
-    _journalDb->getFilesBelowPath("", [&](const CUR::SyncJournalFileRecord &record) {
+    _journalDb->getFilesBelowPath("", [&](const APP::SyncJournalFileRecord &record) {
         auto components = PathComponents(QString::fromUtf8(record._path));
         auto &parentDir = findOrCreateDirs(result, components.parentDirComponents());
         auto name = components.fileName();
@@ -1175,7 +1175,7 @@ FileInfo FakeFolder::dbState() const
 
 bool FakeFolder::execUntilFinished()
 {
-    QSignalSpy spy(_syncEngine.get(), &CUR::SyncEngine::finished);
+    QSignalSpy spy(_syncEngine.get(), &APP::SyncEngine::finished);
     bool ok = spy.wait(3600000);
     Q_ASSERT(ok && "Sync timed out");
     return spy[0][0].toBool();
@@ -1184,12 +1184,12 @@ bool FakeFolder::execUntilFinished()
 bool FakeFolder::syncOnce()
 {
     QObject connectScope;
-    QList<QPair<QString, CUR::ErrorCategory>> errors;
-    connect(_syncEngine.get(), &CUR::SyncEngine::syncError, &connectScope,
-        [&errors](const QString &message, CUR::ErrorCategory category) { errors << qMakePair(message, category); });
-    CUR::SyncResult result;
+    QList<QPair<QString, APP::ErrorCategory>> errors;
+    connect(_syncEngine.get(), &APP::SyncEngine::syncError, &connectScope,
+        [&errors](const QString &message, APP::ErrorCategory category) { errors << qMakePair(message, category); });
+    APP::SyncResult result;
     connect(
-        _syncEngine.get(), &CUR::SyncEngine::itemCompleted, &connectScope, [&result](const CUR::SyncFileItemPtr &item) { result.processCompletedItem(item); });
+        _syncEngine.get(), &APP::SyncEngine::itemCompleted, &connectScope, [&result](const APP::SyncFileItemPtr &item) { result.processCompletedItem(item); });
     scheduleSync();
     const bool ok = execUntilFinished();
     if (!ok) {
@@ -1198,10 +1198,10 @@ bool FakeFolder::syncOnce()
     return ok;
 }
 
-CUR::SyncFileItemPtr ItemCompletedSpy::findItem(const QString &path) const
+APP::SyncFileItemPtr ItemCompletedSpy::findItem(const QString &path) const
 {
     for (const QList<QVariant> &args : *this) {
-        auto item = args[0].value<CUR::SyncFileItemPtr>();
+        auto item = args[0].value<APP::SyncFileItemPtr>();
         if (item->destination() == path)
             return item;
     }
@@ -1211,7 +1211,7 @@ CUR::SyncFileItemPtr ItemCompletedSpy::findItem(const QString &path) const
 FakeReply::FakeReply(QObject *parent)
     : QNetworkReply(parent)
 {
-    setRawHeader(QByteArrayLiteral("Date"), CUR::Utility::formatRFC1123Date(QDateTime::currentDateTimeUtc()).toUtf8());
+    setRawHeader(QByteArrayLiteral("Date"), APP::Utility::formatRFC1123Date(QDateTime::currentDateTimeUtc()).toUtf8());
 #if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
     // emulate the real world
     QTimer::singleShot(0, this, &QNetworkReply::requestSent);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CUR::AccountSettings</class>
- <widget class="QWidget" name="CUR::AccountSettings">
+ <class>APP::AccountSettings</class>
+ <widget class="QWidget" name="APP::AccountSettings">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -52,7 +52,7 @@
        </widget>
       </item>
       <item>
-       <widget class="CUR::ArrowToolButton" name="_accountToolbox">
+       <widget class="APP::ArrowToolButton" name="_accountToolbox">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -453,7 +453,7 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>CUR::ArrowToolButton</class>
+   <class>APP::ArrowToolButton</class>
    <extends>QToolButton</extends>
    <header>customui/arrow_toolbutton.h</header>
   </customwidget>

@@ -25,12 +25,12 @@
 #include <chrono>
 
 
-namespace CUR {
+namespace APP {
 
 /**
  * Value class containing the options given to the sync engine
  */
-class CURATORSYNC_EXPORT SyncOptions
+class APPLICATIONSYNC_EXPORT SyncOptions
 {
 public:
     explicit SyncOptions(QSharedPointer<Vfs> vfs);

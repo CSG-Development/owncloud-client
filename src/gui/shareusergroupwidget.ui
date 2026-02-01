@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CUR::ShareUserGroupWidget</class>
- <widget class="QWidget" name="CUR::ShareUserGroupWidget">
+ <class>APP::ShareUserGroupWidget</class>
+ <widget class="QWidget" name="APP::ShareUserGroupWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

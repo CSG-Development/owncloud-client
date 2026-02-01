@@ -3,7 +3,7 @@
 #include <any>
 #include <string>
 
-namespace CUR {
+namespace APP {
 
 class ProviderBase
 {
@@ -18,4 +18,4 @@ public:
 
 };
 
-} // namespace CUR
+} // namespace APP

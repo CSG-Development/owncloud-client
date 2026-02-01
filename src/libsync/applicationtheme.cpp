@@ -12,7 +12,7 @@
  * for more details.
  */
 
-#include "curatortheme.h"
+#include "applicationtheme.h"
 
 #include <QString>
 #include <QVariant>
@@ -22,29 +22,29 @@
 
 #include "common/utility.h"
 
-namespace CUR {
+namespace APP {
 
-CuratorTheme::CuratorTheme()
+ApplicationTheme::ApplicationTheme()
     : Theme()
 {
 }
 
-QColor CuratorTheme::wizardHeaderBackgroundColor() const
+QColor ApplicationTheme::wizardHeaderBackgroundColor() const
 {
     return QColor(4, 30, 66);
 }
 
-QColor CuratorTheme::wizardHeaderTitleColor() const
+QColor ApplicationTheme::wizardHeaderTitleColor() const
 {
     return Qt::white;
 }
 
-QIcon CuratorTheme::wizardHeaderLogo() const
+QIcon ApplicationTheme::wizardHeaderLogo() const
 {
     return themeUniversalIcon(QStringLiteral("wizard_logo"));
 }
 
-QIcon CuratorTheme::aboutIcon() const
+QIcon ApplicationTheme::aboutIcon() const
 {
     return themeUniversalIcon(QStringLiteral("oc-image-about"));
 }

@@ -184,7 +184,7 @@ QString DevHelpers::makeServerUrl(const QString &url, int port, bool add_folder,
 {
     QString result;
 
-    bool apiOnlyPort = CUR::ConfigFile::useLocalPortForApiOnly();
+    bool apiOnlyPort = APP::ConfigFile::useLocalPortForApiOnly();
 
     if (!url.startsWith(QStringLiteral("http://")) && !url.startsWith(QStringLiteral("https://"))) {
         result = QStringLiteral("https://");

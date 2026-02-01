@@ -20,7 +20,7 @@ class Activity:
         "visible": 1,
     }
     NOT_SYNCED_TABLE = {
-        "container": names.qt_tabwidget_stackedwidget_OCC_IssuesWidget_OCC_IssuesWidget,
+        "container": names.qt_tabwidget_stackedwidget_APP_IssuesWidget_APP_IssuesWidget,
         "name": "_tableView",
         "type": "QTableView",
         "visible": 1,

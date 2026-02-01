@@ -11,7 +11,7 @@ class DeviceApi;
 class MdnsClient;
 class DeviceAggregator;
 
-class CURATORSYNC_EXPORT DeviceController: public QObject
+class APPLICATIONSYNC_EXPORT DeviceController: public QObject
 {
     Q_OBJECT
 

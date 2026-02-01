@@ -15,11 +15,11 @@
 using namespace std::chrono_literals;
 
 namespace {
-class FolderWatcherForTests : public CUR::FolderWatcher
+class FolderWatcherForTests : public APP::FolderWatcher
 {
     Q_OBJECT
 public:
-    using CUR::FolderWatcher::FolderWatcher;
+    using APP::FolderWatcher::FolderWatcher;
 
     bool pathIsIgnored(const QString &) const override { return false; }
 };
@@ -27,7 +27,7 @@ public:
 void touch(const QString &file)
 {
 #ifdef Q_OS_WIN
-    CUR::TestUtils::writeRandomFile(file);
+    APP::TestUtils::writeRandomFile(file);
 #else
     QString cmd;
     cmd = QStringLiteral("touch %1").arg(file);
@@ -83,7 +83,7 @@ void mv(const QString &file1, const QString &file2)
 }
 }
 
-using namespace CUR;
+using namespace APP;
 
 class TestFolderWatcher : public QObject
 {

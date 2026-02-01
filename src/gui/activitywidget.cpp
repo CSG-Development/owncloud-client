@@ -97,7 +97,7 @@ QPair<QString,QString> issuesIconSelected = {
 } // namespace
 
 
-namespace CUR {
+namespace APP {
 
 ActivityWidget::ActivityWidget(QWidget *parent)
     : QWidget(parent)
@@ -625,7 +625,7 @@ void ActivitySettings::onCurrentTabChanged(int idx)
     Q_UNUSED(idx)
 
 #ifdef Q_OS_MACOS
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    bool isDark = APP::Theme::instance()->isDarkTheme();
     if (idx == _activityTabId) {
         _tab->setTabIcon(_activityTabId, QIcon(isDark ? activityIconSelected.second : activityIconSelected.first));
         _tab->setTabIcon(_protocolTabId, QIcon(isDark ? protocolIcon.second : protocolIcon.first));

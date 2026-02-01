@@ -31,7 +31,7 @@
 #include "accountfwd.h"
 #include "syncoptions.h"
 
-namespace CUR {
+namespace APP {
 
 Q_DECLARE_LOGGING_CATEGORY(lcPropagator)
 
@@ -262,7 +262,7 @@ private:
  * @brief Propagate a directory, and all its sub entries.
  * @ingroup libsync
  */
-class CURATORSYNC_EXPORT PropagateDirectory : public PropagateItemJob
+class APPLICATIONSYNC_EXPORT PropagateDirectory : public PropagateItemJob
 {
     Q_OBJECT
 public:
@@ -326,7 +326,7 @@ private slots:
  * Primary difference to PropagateDirectory is that it keeps track of directory
  * deletions that must happen at the very end.
  */
-class CURATORSYNC_EXPORT PropagateRootDirectory : public PropagateDirectory
+class APPLICATIONSYNC_EXPORT PropagateRootDirectory : public PropagateDirectory
 {
     Q_OBJECT
 public:
@@ -376,7 +376,7 @@ public:
     }
 };
 
-class CURATORSYNC_EXPORT CuratorPropagator : public QObject
+class APPLICATIONSYNC_EXPORT CuratorPropagator : public QObject
 {
     Q_OBJECT
 public:

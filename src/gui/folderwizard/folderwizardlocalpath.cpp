@@ -29,7 +29,7 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 
-using namespace CUR;
+using namespace APP;
 
 FolderWizardLocalPath::FolderWizardLocalPath(FolderWizardPrivate *parent)
     : FolderWizardPage(parent)

@@ -19,7 +19,7 @@
 #include <QThread>
 #include <qt_windows.h>
 
-namespace CUR {
+namespace APP {
 
 class FolderWatcher;
 class FolderWatcherPrivate;

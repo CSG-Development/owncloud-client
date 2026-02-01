@@ -32,7 +32,7 @@ class QDialog;
 class QMessageBox;
 class QSettings;
 
-namespace CUR {
+namespace APP {
 
 class AccountState;
 class Account;
@@ -232,7 +232,7 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(CUR::AccountState *)
-Q_DECLARE_METATYPE(CUR::AccountStatePtr)
+Q_DECLARE_METATYPE(APP::AccountState *)
+Q_DECLARE_METATYPE(APP::AccountStatePtr)
 
 #endif //ACCOUNTINFO_H

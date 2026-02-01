@@ -20,7 +20,7 @@ enum class DeviceOrigin {
     Static
 };
 
-class CURATORSYNC_EXPORT DeviceHardwareInfo
+class APPLICATIONSYNC_EXPORT DeviceHardwareInfo
 {
 public:
     qint64 memory = 0;
@@ -29,14 +29,14 @@ public:
     QString toString() const;
 };
 
-class CURATORSYNC_EXPORT DeviceIpv4Info {
+class APPLICATIONSYNC_EXPORT DeviceIpv4Info {
 public:
     QString gateway;
     QString ipv4;
     QString netmask;
 };
 
-class CURATORSYNC_EXPORT LocalDeviceInterface
+class APPLICATIONSYNC_EXPORT LocalDeviceInterface
 {
 public:
     DeviceIpv4Info ipv4_info;
@@ -46,7 +46,7 @@ public:
     QString type;
 };
 
-class CURATORSYNC_EXPORT DeviceInfoAbout
+class APPLICATIONSYNC_EXPORT DeviceInfoAbout
 {
 public:
     QString certificate_common_name;
@@ -68,7 +68,7 @@ public:
     QString toStringShort() const;
 };
 
-class CURATORSYNC_EXPORT DeviceInfoStatus
+class APPLICATIONSYNC_EXPORT DeviceInfoStatus
 {
 public:
     bool oobe_done = false;
@@ -80,7 +80,7 @@ public:
     QString toString() const;
 };
 
-class CURATORSYNC_EXPORT DevHelpers
+class APPLICATIONSYNC_EXPORT DevHelpers
 {
 public:
     static DeviceType strToDevType(const QString& str);

@@ -4,7 +4,7 @@
 #include <QLoggingCategory>
 
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcNetworkMonitor, "sync.networkmonitor", QtInfoMsg)
 
@@ -81,4 +81,4 @@ bool NetworkMonitor::isWifiEthAvailable()
     return false;
 }
 
-} // namespace CUR
+} // namespace APP

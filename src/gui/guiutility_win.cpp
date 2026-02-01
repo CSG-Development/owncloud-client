@@ -17,7 +17,7 @@
 
 #include <QCoreApplication>
 
-namespace CUR {
+namespace APP {
 
 void Utility::startShellIntegration()
 {
@@ -32,4 +32,4 @@ QString Utility::socketApiSocketPath()
     // + Theme::instance()->appName();
 }
 
-} // namespace CUR
+} // namespace APP

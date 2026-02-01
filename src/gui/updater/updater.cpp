@@ -29,7 +29,7 @@
 #include "configfile.h"
 #include "theme.h"
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcUpdater, "gui.updater", QtInfoMsg)
 
@@ -96,7 +96,7 @@ QUrlQuery Updater::getQueryParams()
 #endif
 
 
-    query.addQueryItem(QStringLiteral("versionsuffix"), CUR::Version::suffix());
+    query.addQueryItem(QStringLiteral("versionsuffix"), APP::Version::suffix());
 
     auto channel = ConfigFile().updateChannel();
     if (channel != QLatin1String("stable")) {
@@ -133,4 +133,4 @@ Updater *Updater::create()
 #endif
 }
 
-} // namespace CUR
+} // namespace APP

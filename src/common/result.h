@@ -16,7 +16,7 @@
 
 #include "asserts.h"
 
-namespace CUR {
+namespace APP {
 
 /**
  * A Result of type T, or an Error
@@ -164,4 +164,4 @@ public:
     }
 };
 
-} // namespace CUR
+} // namespace APP

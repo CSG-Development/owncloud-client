@@ -21,7 +21,7 @@
 class QSortFilterProxyModel;
 class QMenu;
 
-namespace CUR {
+namespace APP {
 
 namespace Models {
     Q_NAMESPACE
@@ -105,5 +105,5 @@ namespace Models {
     protected:
         bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     };
-} // CUR::Models namespace
-} // CUR namespace
+} // APP::Models namespace
+} // APP namespace

@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-namespace CUR {
+namespace APP {
 class Folder;
 /*
  * Migration for cern eos

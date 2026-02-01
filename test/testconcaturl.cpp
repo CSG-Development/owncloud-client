@@ -12,7 +12,7 @@
 
 #include "account.h"
 
-using namespace CUR;
+using namespace APP;
 
 typedef QList< QPair<QString,QString> > QueryItems;
 

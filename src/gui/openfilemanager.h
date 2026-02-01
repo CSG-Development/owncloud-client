@@ -15,7 +15,7 @@
 
 #include <QString>
 
-namespace CUR {
+namespace APP {
 /**
  * @brief Open the file manager with the specified file pre-selected
  * @ingroup gui

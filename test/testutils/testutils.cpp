@@ -8,11 +8,11 @@
 #include <QRandomGenerator>
 
 namespace {
-class HttpCredentialsTest : public CUR::HttpCredentials
+class HttpCredentialsTest : public APP::HttpCredentials
 {
 public:
     HttpCredentialsTest(const QString &user, const QString &password)
-        : HttpCredentials(CUR::DetermineAuthTypeJob::AuthType::Basic, user, password)
+        : HttpCredentials(APP::DetermineAuthTypeJob::AuthType::Basic, user, password)
     {
     }
 
@@ -22,7 +22,7 @@ public:
 };
 }
 
-namespace CUR {
+namespace APP {
 
 namespace TestUtils {
     TestUtilsPrivate::AccountStateRaii createDummyAccount()
@@ -35,14 +35,14 @@ namespace TestUtils {
         acc->setCredentials(cred);
         acc->setUrl(QUrl(QStringLiteral("http://localhost/owncloud")));
         acc->setDavDisplayName(QStringLiteral("fakename") + acc->uuid().toString(QUuid::WithoutBraces));
-        acc->setCapabilities({acc->url(), CUR::TestUtils::testCapabilities()});
-        return {CUR::AccountManager::instance()->addAccount(acc).get(), &TestUtilsPrivate::accountStateDeleter};
+        acc->setCapabilities({acc->url(), APP::TestUtils::testCapabilities()});
+        return {APP::AccountManager::instance()->addAccount(acc).get(), &TestUtilsPrivate::accountStateDeleter};
     }
 
     FolderDefinition createDummyFolderDefinition(const AccountPtr &account, const QString &path)
     {
         // TODO: legacy
-        auto d = CUR::FolderDefinition::createNewFolderDefinition(account->davUrl(), {});
+        auto d = APP::FolderDefinition::createNewFolderDefinition(account->davUrl(), {});
         d.setLocalPath(path);
         d.setTargetPath(path);
         return d;
@@ -108,10 +108,10 @@ namespace TestUtils {
             {"checksums", QVariantMap{{"preferredUploadType", Utility::enumToString(algo)}, {"supportedTypes", algorithmNames}}}};
     }
 
-    void TestUtilsPrivate::accountStateDeleter(CUR::AccountState *acc)
+    void TestUtilsPrivate::accountStateDeleter(APP::AccountState *acc)
     {
         if (acc) {
-            CUR::AccountManager::instance()->deleteAccount(acc);
+            APP::AccountManager::instance()->deleteAccount(acc);
         }
     }
 }

@@ -9,7 +9,7 @@
 #include "testutils/syncenginetestutils.h"
 #include <syncengine.h>
 
-using namespace CUR;
+using namespace APP;
 
 SyncJournalFileRecord journalRecord(FakeFolder &folder, const QByteArray &path)
 {

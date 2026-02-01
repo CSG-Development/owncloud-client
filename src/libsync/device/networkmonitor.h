@@ -6,9 +6,9 @@
 #include <QObject>
 #include <QTimer>
 
-namespace CUR {
+namespace APP {
 
-class CURATORSYNC_EXPORT NetworkMonitor: public QObject
+class APPLICATIONSYNC_EXPORT NetworkMonitor: public QObject
 {
     Q_OBJECT
 
@@ -36,4 +36,4 @@ private:
     bool _startup = true;
 };
 
-} // namespace CUR
+} // namespace APP

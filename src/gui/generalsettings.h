@@ -19,7 +19,7 @@
 #include <QWidget>
 #include <QPointer>
 
-namespace CUR {
+namespace APP {
 class IgnoreListEditor;
 class SyncLogDialog;
 
@@ -64,5 +64,5 @@ private:
 };
 
 
-} // namespace CUR
+} // namespace APP
 #endif // MIRALL_GENERALSETTINGS_H

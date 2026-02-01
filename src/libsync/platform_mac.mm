@@ -25,18 +25,18 @@
 
 
 // defined in platform_mac_deprecated.mm
-namespace CUR {
+namespace APP {
 
 void migrateLaunchOnStartup();
 
 Q_LOGGING_CATEGORY(lcPlatform, "sync.platform.macos")
-} // CUR namespace
+} // APP namespace
 
 @interface OwnAppDelegate : NSObject <NSApplicationDelegate>
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag;
 - (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app;
 
-@property (readwrite) CUR::MacPlatform *platform;
+@property (readwrite) APP::MacPlatform *platform;
 @end
 
 @implementation OwnAppDelegate {
@@ -68,11 +68,11 @@ public:
     {
         rootPowerDomain = IORegisterForSystemPower(this, &notifyPortRef, sleepWakeupCallBack, &notifierObj);
         if (rootPowerDomain == IO_OBJECT_NULL) {
-            qCWarning(CUR::lcPlatform) << "Failed to register for system power notifications!";
+            qCWarning(APP::lcPlatform) << "Failed to register for system power notifications!";
             return;
         }
 
-        qCDebug(CUR::lcPlatform) << "IORegisterForSystemPower OK! Root port:" << rootPowerDomain;
+        qCDebug(APP::lcPlatform) << "IORegisterForSystemPower OK! Root port:" << rootPowerDomain;
 
         // add the notification port to the application runloop
         CFRunLoopAddSource(CFRunLoopGetCurrent(), IONotificationPortGetRunLoopSource(notifyPortRef), kCFRunLoopCommonModes);
@@ -95,7 +95,7 @@ private:
              * the system will wait 30 seconds then go to sleep.
              */
 
-            qCInfo(CUR::lcPlatform) << "System power message: can system sleep?";
+            qCInfo(APP::lcPlatform) << "System power message: can system sleep?";
 
             // Uncomment to cancel idle sleep
             // IOCancelPowerChange(thiz->rootPowerDomain, reinterpret_cast<long>(messageArgument));
@@ -108,7 +108,7 @@ private:
             /* Announces that the system has retracted a previous attempt to sleep; it
              * follows `kIOMessageCanSystemSleep`.
              */
-            qCInfo(CUR::lcPlatform) << "System power message: system will NOT sleep.";
+            qCInfo(APP::lcPlatform) << "System power message: system will NOT sleep.";
             break;
 
         case kIOMessageSystemWillSleep:
@@ -120,7 +120,7 @@ private:
              * however the system WILL still go to sleep.
              */
 
-            qCInfo(CUR::lcPlatform) << "System power message: system WILL sleep.";
+            qCInfo(APP::lcPlatform) << "System power message: system WILL sleep.";
 
             IOAllowPowerChange(listener->rootPowerDomain, reinterpret_cast<long>(messageArgument));
             break;
@@ -142,11 +142,11 @@ private:
 
         case kIOMessageSystemHasPoweredOn:
             /* Announces that the system and its devices have woken up. */
-            qCInfo(CUR::lcPlatform) << "System power message: system has powered on.";
+            qCInfo(APP::lcPlatform) << "System power message: system has powered on.";
             break;
 
         default:
-            qCInfo(CUR::lcPlatform) << "System power message: other event: " << messageType;
+            qCInfo(APP::lcPlatform) << "System power message: other event: " << messageType;
             /* Not a system sleep and wake notification. */
             break;
         }
@@ -160,7 +160,7 @@ private:
 
 } // anonynous namespace
 
-namespace CUR {
+namespace APP {
 
 /*
  * We need to instantiate an autorelease pool here. Normally a
@@ -210,4 +210,4 @@ void MacPlatform::startServices()
     d->listener.registerForNotifications();
 }
 
-} // namespace CUR
+} // namespace APP

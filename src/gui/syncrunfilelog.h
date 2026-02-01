@@ -22,7 +22,7 @@
 
 #include "syncfileitem.h"
 
-namespace CUR {
+namespace APP {
 class SyncFileItem;
 
 /**

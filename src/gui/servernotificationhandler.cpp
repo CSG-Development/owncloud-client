@@ -20,7 +20,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcServerNotification, "gui.servernotification", QtInfoMsg)
 

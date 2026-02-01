@@ -5,10 +5,10 @@ add_library(curatorResources SHARED
     resources.cpp
 )
 
-generate_theme(curatorResources CURATOR_SIDEBAR_ICONS)
+generate_theme(curatorResources APPLICATION_SIDEBAR_ICONS)
 
 # make them available to the whole project
-set(CURATOR_SIDEBAR_ICONS ${CURATOR_SIDEBAR_ICONS} CACHE INTERNAL "Sidebar icons" FORCE)
+set(APPLICATION_SIDEBAR_ICONS ${APPLICATION_SIDEBAR_ICONS} CACHE INTERNAL "Sidebar icons" FORCE)
 
 target_link_libraries(curatorResources PUBLIC Qt::Core Qt::Gui)
 apply_common_target_settings(curatorResources)
@@ -23,9 +23,9 @@ set_target_properties(curatorResources PROPERTIES
 )
 
 generate_export_header(curatorResources
-        EXPORT_MACRO_NAME CURATORRESOURCES_EXPORT
+        EXPORT_MACRO_NAME APPLICATIONRESOURCES_EXPORT
         EXPORT_FILE_NAME curatorresources.h
-        STATIC_DEFINE CURATOR_BUILT_AS_STATIC
+        STATIC_DEFINE APPLICATION_BUILT_AS_STATIC
 )
 
 # Handle Translations, pick all client_* files from trans directory.

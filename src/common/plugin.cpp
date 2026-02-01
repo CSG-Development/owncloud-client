@@ -19,7 +19,7 @@
 #include "plugin.h"
 #include "config.h"
 
-namespace CUR {
+namespace APP {
 
 PluginFactory::~PluginFactory() = default;
 

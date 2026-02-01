@@ -75,7 +75,7 @@ QString queryPassword(const QString &user)
 }
 
 HttpCredentialsText::HttpCredentialsText(const QString &user, const QString &password)
-    : CUR::HttpCredentials(CUR::DetermineAuthTypeJob::AuthType::Basic, user, password)
+    : APP::HttpCredentials(APP::DetermineAuthTypeJob::AuthType::Basic, user, password)
 {
     if (user.isEmpty()) {
         qFatal("Invalid credentials: Username is empty");

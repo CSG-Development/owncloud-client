@@ -21,7 +21,7 @@
 
 namespace Ui {class AccountConfiguredPage;}
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 class AccountConfiguredPage : public AbstractPage
 {

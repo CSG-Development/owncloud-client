@@ -19,7 +19,7 @@
 #include "pages/accountconfiguredpage.h"
 #include "theme.h"
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 AccountConfiguredState::AccountConfiguredState(SetupWizardContext *context)
     : AbstractState(context)
@@ -98,4 +98,4 @@ void AccountConfiguredState::evaluatePage()
     Q_EMIT evaluationSuccessful();
 }
 
-} // CUR::Wizard
+} // APP::Wizard

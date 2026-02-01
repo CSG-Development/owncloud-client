@@ -20,7 +20,7 @@
 
 #include <QStyledItemDelegate>
 
-namespace CUR::Spaces {
+namespace APP::Spaces {
 
 
 class SpacesDelegate : public QStyledItemDelegate

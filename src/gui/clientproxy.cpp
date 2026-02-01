@@ -19,7 +19,7 @@
 #include <QUrl>
 #include <QThreadPool>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcClientProxy, "sync.clientproxy", QtInfoMsg)
 
@@ -50,7 +50,7 @@ QString ClientProxy::printQNetworkProxy(const QNetworkProxy &proxy)
 
 bool ClientProxy::isUsingSystemDefault()
 {
-    CUR::ConfigFile cfg;
+    APP::ConfigFile cfg;
 
     // if there is no config file, default to system proxy.
     if (cfg.exists()) {
@@ -62,7 +62,7 @@ bool ClientProxy::isUsingSystemDefault()
 
 void ClientProxy::setupQtProxyFromConfig(const QString &password)
 {
-    CUR::ConfigFile cfg;
+    APP::ConfigFile cfg;
     int proxyType = QNetworkProxy::DefaultProxy;
     QNetworkProxy proxy;
 

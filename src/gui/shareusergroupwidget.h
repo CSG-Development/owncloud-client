@@ -29,7 +29,7 @@ class QAction;
 class QCompleter;
 class QModelIndex;
 
-namespace CUR {
+namespace APP {
 
 namespace Ui {
     class ShareUserGroupWidget;

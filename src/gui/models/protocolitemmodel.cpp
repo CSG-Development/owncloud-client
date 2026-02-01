@@ -22,7 +22,7 @@
 
 #include <QIcon>
 
-using namespace CUR;
+using namespace APP;
 
 ProtocolItemModel::ProtocolItemModel(size_t size, bool issueMode, QObject *parent)
     : QAbstractTableModel(parent)

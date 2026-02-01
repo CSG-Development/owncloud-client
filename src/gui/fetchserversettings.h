@@ -18,7 +18,7 @@
 
 #include <QObject>
 
-namespace CUR {
+namespace APP {
 class Capabilities;
 
 class FetchServerSettingsJob : public QObject

@@ -22,7 +22,7 @@
 
 #include <QClipboard>
 
-namespace CUR {
+namespace APP {
 
 LoginRequiredDialog::LoginRequiredDialog(Mode mode, QWidget *parent)
     : QDialog(parent)
@@ -73,4 +73,4 @@ QWidget *LoginRequiredDialog::contentWidget() const
     return _ui->contentWidget->currentWidget();
 }
 
-} // CUR
+} // APP

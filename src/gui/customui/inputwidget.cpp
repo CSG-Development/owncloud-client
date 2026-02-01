@@ -30,7 +30,7 @@ InputWidget::InputWidget(QWidget *parent)
     themeNotifier = darkTheme_.addNotifier([this] {
         updateStyles();
     });
-    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
 
     promptLabel = new QLabel(this);
     promptLabel->setObjectName(QStringLiteral("promptLabel"));
@@ -170,9 +170,9 @@ void InputWidget::updatePromptPosition()
 void InputWidget::updateStyles()
 {
     if (errorState)
-        setStyleSheet(CUR::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyleError.second : inputStyleError.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyleError.second : inputStyleError.first));
     else
-        setStyleSheet(CUR::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyle.second : inputStyle.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyle.second : inputStyle.first));
 
     style()->unpolish(this);
     style()->polish(this);

@@ -91,7 +91,7 @@ bool writeToFile(std::string_view command, const QString &fileName, QIODevice::O
         nullptr);
 
     if (handle == INVALID_HANDLE_VALUE) {
-        const auto error = CUR::Utility::formatWinError(GetLastError());
+        const auto error = APP::Utility::formatWinError(GetLastError());
         cerr << "Error: cannot open file '" << qPrintable(fileName) << "' for " << command << " command: "
              << qPrintable(error) << endl;
         return false;
@@ -110,7 +110,7 @@ bool writeToFile(std::string_view command, const QString &fileName, QIODevice::O
     }
     DWORD bytesWritten;
     if (!WriteFile(handle, data.constData(), data.size(), &bytesWritten, nullptr) || bytesWritten != data.size()) {
-        const auto error = CUR::Utility::formatWinError(GetLastError());
+        const auto error = APP::Utility::formatWinError(GetLastError());
         cerr << "Error: wrote " << bytesWritten << " bytes to '" << qPrintable(fileName) << "' instead of requested " << data.size() << " bytes. Error: " << qPrintable(error) << endl;
         return false;
     }
@@ -160,7 +160,7 @@ public:
     {
         auto modTime = QDateTime::fromSecsSinceEpoch(_secs);
         cerr << name << ", file: " << qPrintable(_fileName) << ", secs: " << _secs << endl;
-        return CUR::FileSystem::setModTime(rootDir.filePath(_fileName), CUR::Utility::qDateTimeToTime_t(modTime));
+        return APP::FileSystem::setModTime(rootDir.filePath(_fileName), APP::Utility::qDateTimeToTime_t(modTime));
     }
 
     static Command *parse(QStringListIterator &it)

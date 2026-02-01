@@ -21,7 +21,7 @@
 #include "syncfileitem.h"
 #include "theme.h"
 
-namespace CUR {
+namespace APP {
 
 VfsSuffix::VfsSuffix(QObject *parent)
     : Vfs(parent)
@@ -151,4 +151,4 @@ QString VfsSuffix::underlyingFileName(const QString &fileName) const
     }
 }
 
-} // namespace CUR
+} // namespace APP

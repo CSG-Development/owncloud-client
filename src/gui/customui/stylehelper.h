@@ -7,7 +7,7 @@
 class QStyleOption;
 class QStyleOptionToolButton;
 
-namespace CUR {
+namespace APP {
 
 class StyleHelper: public QObject
 {
@@ -41,4 +41,4 @@ private:
     static QProxyStyle* pushButtonStyle_;
 };
 
-} // namespace CUR
+} // namespace APP

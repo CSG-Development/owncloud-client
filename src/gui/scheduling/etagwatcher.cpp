@@ -23,7 +23,7 @@
 
 using namespace std::chrono_literals;
 
-using namespace CUR;
+using namespace APP;
 
 namespace {
 constexpr auto pollTimeoutC = 30s;

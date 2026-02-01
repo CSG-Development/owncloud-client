@@ -21,7 +21,7 @@
 #include "application.h"
 #include "configfile.h"
 #include "generalsettings.h"
-#include "curatorgui.h"
+#include "applicationgui.h"
 #include "codedialog.h"
 #include "theme.h"
 
@@ -86,7 +86,7 @@ const float BUTTONSIZERATIO = 1.618f; // golden ratio
 
 /** display name with two lines that is displayed in the settings
  */
-QString shortDisplayNameForSettings(CUR::Account *account)
+QString shortDisplayNameForSettings(APP::Account *account)
 {
     QString user = account->davDisplayName();
     if (user.isEmpty()) {
@@ -108,7 +108,7 @@ QPair<QString,QString> widgetStyle = {
 }
 
 
-namespace CUR {
+namespace APP {
 
 class ToolButtonAction : public QWidgetAction
 {
@@ -177,7 +177,7 @@ public:
         // if (!_iconName.isEmpty()) {
         //     setIcon(Resources::getCoreIcon(_iconName));
         // }
-        setIcon(StyleHelper::getIcon(_iconName, CUR::Theme::instance()->isDarkTheme()));
+        setIcon(StyleHelper::getIcon(_iconName, APP::Theme::instance()->isDarkTheme()));
     }
 
     QWidget* buttonWidget() const {
@@ -189,7 +189,7 @@ private:
     QWidget* _widget = nullptr;
 };
 
-SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
+SettingsDialog::SettingsDialog(ApplicationGui *gui, QWidget *parent)
     : QMainWindow(parent)
     , _ui(new Ui::SettingsDialog)
     , _gui(gui)
@@ -266,7 +266,7 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
     _ui->toolBar->addAction(generalAction);
     GeneralSettings *generalSettings = new GeneralSettings;
     _ui->stack->addWidget(generalSettings);
-    QObject::connect(generalSettings, &GeneralSettings::showAbout, gui, &CuratorGui::slotAbout);
+    QObject::connect(generalSettings, &GeneralSettings::showAbout, gui, &ApplicationGui::slotAbout);
 
     QWidget *spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
@@ -313,12 +313,12 @@ SettingsDialog::SettingsDialog(CuratorGui *gui, QWidget *parent)
 
     QAction *showLogWindow = new QAction(this);
     showLogWindow->setShortcut(QKeySequence(QStringLiteral("F12")));
-    connect(showLogWindow, &QAction::triggered, gui, &CuratorGui::slotToggleLogBrowser);
+    connect(showLogWindow, &QAction::triggered, gui, &ApplicationGui::slotToggleLogBrowser);
     addAction(showLogWindow);
 
     QAction *showLogWindow2 = new QAction(this);
     showLogWindow2->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_L));
-    connect(showLogWindow2, &QAction::triggered, gui, &CuratorGui::slotToggleLogBrowser);
+    connect(showLogWindow2, &QAction::triggered, gui, &ApplicationGui::slotToggleLogBrowser);
     addAction(showLogWindow2);
 
     customizeStyle();
@@ -357,7 +357,7 @@ void SettingsDialog::updateToolbarTheme()
 
 void SettingsDialog::addModalWidget(QWidget *w)
 {
-    CuratorGui::raise();
+    ApplicationGui::raise();
     if (_ui->dialogStack->indexOf(w) == -1) {
         _ui->dialogStack->addWidget(w);
         _ui->dialogStack->setCurrentWidget(w);
@@ -373,7 +373,7 @@ void SettingsDialog::requestModality(Account *account)
         }
     }
     _modalStack.append(account);
-    CuratorGui::raise();
+    ApplicationGui::raise();
 }
 
 void SettingsDialog::ceaseModality(Account *account)
@@ -526,7 +526,7 @@ void SettingsDialog::accountAdded(AccountStatePtr accountStatePtr)
     _actionForAccount.insert(accountStatePtr->account().data(), accountAction);
     accountAction->trigger();
 
-    connect(accountSettings, &AccountSettings::folderChanged, _gui, &CuratorGui::slotFoldersChanged);
+    connect(accountSettings, &AccountSettings::folderChanged, _gui, &ApplicationGui::slotFoldersChanged);
     connect(accountSettings, &AccountSettings::showIssuesList, this, &SettingsDialog::showIssuesList);
     connect(accountStatePtr->account().data(), &Account::accountChangedAvatar, this, &SettingsDialog::slotAccountAvatarChanged);
     connect(accountStatePtr->account().data(), &Account::accountChangedDisplayName, this, &SettingsDialog::slotAccountDisplayNameChanged);
@@ -582,7 +582,7 @@ void SettingsDialog::showCodePage(CodeRequestDialog visible, SyncState syncState
             FolderMan::instance()->setSyncEnabled(false);
             _ui->dialogStack->setCurrentWidget(_codeDialog);
         }
-        CuratorGui::raise();
+        ApplicationGui::raise();
     }
     else {
         if (prevIndex != -1)
@@ -639,7 +639,7 @@ void SettingsDialog::accountRemoved(AccountStatePtr s)
 
 void SettingsDialog::onThemeChanged()
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    bool isDark = APP::Theme::instance()->isDarkTheme();
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 }
 
@@ -661,6 +661,6 @@ void SettingsDialog::customizeStyle()
 }
 
 
-} // namespace CUR
+} // namespace APP
 
 #include "settingsdialog.moc"

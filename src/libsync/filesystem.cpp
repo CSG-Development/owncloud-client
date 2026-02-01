@@ -30,7 +30,7 @@
 #include <winsock2.h>
 #endif
 
-namespace CUR {
+namespace APP {
 
 bool FileSystem::fileEquals(const QString &fn1, const QString &fn2)
 {
@@ -199,4 +199,4 @@ bool FileSystem::getInode(const QString &filename, quint64 *inode)
 }
 
 
-} // namespace CUR
+} // namespace APP

@@ -8,10 +8,10 @@ class SharingDialog:
         "name": "label_name",
         "type": "QLabel",
         "visible": 1,
-        "window": names.sharingDialog_OCC_ShareDialog,
+        "window": names.sharingDialog_APP_ShareDialog,
     }
     SHARE_WITH_COLLABORATOR_INPUT_FIELD = {
-        "container": names.qt_tabwidget_stackedwidget_SharingDialogUG_OCC_ShareUserGroupWidget,
+        "container": names.qt_tabwidget_stackedwidget_SharingDialogUG_APP_ShareUserGroupWidget,
         "name": "shareeLineEdit",
         "type": "QLineEdit",
         "visible": 1,
@@ -40,13 +40,13 @@ class SharingDialog:
         "type": "QPushButton",
         "unnamed": 1,
         "visible": 1,
-        "window": names.sharingDialog_OCC_ShareDialog,
+        "window": names.sharingDialog_APP_ShareDialog,
     }
     SHARING_DIALOG = {
         "type": "QLabel",
         "unnamed": 1,
         "visible": 1,
-        "window": names.sharingDialog_OCC_ShareDialog,
+        "window": names.sharingDialog_APP_ShareDialog,
     }
     SHARING_DIALOG_ERROR = {"name": "errorLabel", "type": "QLabel", "visible": 1}
     SHARING_DIALOG_CONTRIBUTOR_ROW = {

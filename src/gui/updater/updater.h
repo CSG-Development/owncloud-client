@@ -21,7 +21,7 @@
 class QUrl;
 class QUrlQuery;
 
-namespace CUR {
+namespace APP {
 
 Q_DECLARE_LOGGING_CATEGORY(lcUpdater)
 
@@ -48,6 +48,6 @@ private:
     static Updater *_instance;
 };
 
-} // namespace CUR
+} // namespace APP
 
 #endif // UPDATER_H

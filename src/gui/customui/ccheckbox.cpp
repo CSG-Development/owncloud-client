@@ -24,7 +24,7 @@ CCheckBox::CCheckBox(QWidget* parent)
     themeNotifier = darkTheme_.addNotifier([this] {
         update();
     });
-    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
 }
 
 CCheckBox::CCheckBox(const QString &text, QWidget *parent)
@@ -35,7 +35,7 @@ CCheckBox::CCheckBox(const QString &text, QWidget *parent)
     themeNotifier = darkTheme_.addNotifier([this] {
         update();
     });
-    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
 }
 
 QSize CCheckBox::minimumSizeHint() const

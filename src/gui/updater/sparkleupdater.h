@@ -19,7 +19,7 @@
 
 #include <QObject>
 
-namespace CUR {
+namespace APP {
 
 class SparkleUpdater : public Updater
 {
@@ -42,6 +42,6 @@ private:
     Private *d;
 };
 
-} // namespace CUR
+} // namespace APP
 
 #endif // SPARKLEUPDATER_H

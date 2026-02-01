@@ -14,7 +14,7 @@
 
 #include "abstractpage.h"
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 AbstractPage::~AbstractPage() = default;
 

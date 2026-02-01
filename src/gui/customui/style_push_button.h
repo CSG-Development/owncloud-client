@@ -2,7 +2,7 @@
 
 #include "stylebase.h"
 
-namespace CUR {
+namespace APP {
 
 class ProxyStylePushButton : public ProxyStyleBase
 {
@@ -31,4 +31,4 @@ protected:
 
 };
 
-} // namespace CUR
+} // namespace APP

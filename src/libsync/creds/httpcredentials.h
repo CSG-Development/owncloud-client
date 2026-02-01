@@ -28,7 +28,7 @@
 class QNetworkReply;
 class QAuthenticator;
 
-namespace CUR {
+namespace APP {
 class OAuth;
 
 /*
@@ -42,7 +42,7 @@ class OAuth;
    is in HttpCredentialsGui.
 
  */
-class CURATORSYNC_EXPORT HttpCredentials : public AbstractCredentials
+class APPLICATIONSYNC_EXPORT HttpCredentials : public AbstractCredentials
 {
     Q_OBJECT
     friend class HttpCredentialsAccessManager;
@@ -96,6 +96,6 @@ private:
 };
 
 
-} // namespace CUR
+} // namespace APP
 
 #endif

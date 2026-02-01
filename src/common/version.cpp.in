@@ -18,29 +18,29 @@
 
 #include "common/version.h"
 
-const QVersionNumber &CUR::Version::version()
+const QVersionNumber &APP::Version::version()
 {
     static const auto v = QVersionNumber({ @MIRALL_VERSION_MAJOR@, @MIRALL_VERSION_MINOR@, @MIRALL_VERSION_PATCH@ });
     return v;
 }
 
-const QVersionNumber &CUR::Version::versionWithBuildNumber()
+const QVersionNumber &APP::Version::versionWithBuildNumber()
 {
     static const auto v = QVersionNumber({ @MIRALL_VERSION_MAJOR@, @MIRALL_VERSION_MINOR@, @MIRALL_VERSION_PATCH@, @MIRALL_VERSION_BUILD@ });
     return v;
 }
 
-QString CUR::Version::gitSha()
+QString APP::Version::gitSha()
 {
     return QStringLiteral("@GIT_SHA1@");
 }
 
-QString CUR::Version::suffix()
+QString APP::Version::suffix()
 {
     return QStringLiteral("@MIRALL_VERSION_SUFFIX@");
 }
 
-QString CUR::Version::displayString()
+QString APP::Version::displayString()
 {
     // ensure a well-defined version string
     constexpr std::string_view versionString("@MIRALL_VERSION_STRING@");

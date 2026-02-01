@@ -9,7 +9,7 @@
 #include "updater/updater.h"
 #include "updater/ocupdater.h"
 
-namespace CUR {
+namespace APP {
 
 class TestUpdater : public QObject
 {
@@ -54,5 +54,5 @@ private slots:
 };
 }
 
-QTEST_MAIN(CUR::TestUpdater)
+QTEST_MAIN(APP::TestUpdater)
 #include "testupdater.moc"

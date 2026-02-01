@@ -23,7 +23,7 @@
 #include "common/utility_win.h"
 #endif
 
-using namespace CUR;
+using namespace APP;
 
 
 class TestFolderMan: public QObject

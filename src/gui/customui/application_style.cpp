@@ -1,4 +1,4 @@
-#include "curator_style.h"
+#include "application_style.h"
 #include "stylehelper.h"
 
 #include <QPainterPath>
@@ -15,27 +15,27 @@ constexpr qreal frameRound = 3;
 constexpr qreal frameWidth = 1;
 }
 
-namespace CUR {
+namespace APP {
 
-QColor CuratorProxyStyle::buttonFrameFocused() const {return isDark ? QColor(0xFF,0xFF,0xFF) : QColor(0x21,0x21,0x21);}
+QColor ApplicationProxyStyle::buttonFrameFocused() const {return isDark ? QColor(0xFF,0xFF,0xFF) : QColor(0x21,0x21,0x21);}
 
-QColor CuratorProxyStyle::buttonFrameNormal() const  {return isDark ? QColor() : QColor(0xCB,0xCD,0xD3);}
-QColor CuratorProxyStyle::buttonFramePressed() const {return isDark ? QColor() : QColor(0xCB,0xCD,0xD3);}
-QColor CuratorProxyStyle::buttonFrameHovered() const {return isDark ? QColor() : QColor(0xCB,0xCD,0xD3);}
-QColor CuratorProxyStyle::buttonFrameDisabled() const {return isDark ? QColor() : QColor(0xCB,0xCD,0xD3);}
+QColor ApplicationProxyStyle::buttonFrameNormal() const  {return isDark ? QColor() : QColor(0xCB,0xCD,0xD3);}
+QColor ApplicationProxyStyle::buttonFramePressed() const {return isDark ? QColor() : QColor(0xCB,0xCD,0xD3);}
+QColor ApplicationProxyStyle::buttonFrameHovered() const {return isDark ? QColor() : QColor(0xCB,0xCD,0xD3);}
+QColor ApplicationProxyStyle::buttonFrameDisabled() const {return isDark ? QColor() : QColor(0xCB,0xCD,0xD3);}
 
-QColor CuratorProxyStyle::buttonBackgroundNormal() const {return isDark ? QColor() : QColor(0xFF,0xFF,0xFF,0xB2);}
-QColor CuratorProxyStyle::buttonBackgroundPressed() const {return isDark ? QColor() : QColor(0x61,0x61,0x61,0x08);}
-QColor CuratorProxyStyle::buttonBackgroundHovered() const {return isDark ? QColor() : QColor(0x61,0x61,0x61,0x1F);}
-QColor CuratorProxyStyle::buttonBackgroundDisabled() const {return isDark ? QColor() : QColor(0xF6,0xF6,0xF6);}
+QColor ApplicationProxyStyle::buttonBackgroundNormal() const {return isDark ? QColor() : QColor(0xFF,0xFF,0xFF,0xB2);}
+QColor ApplicationProxyStyle::buttonBackgroundPressed() const {return isDark ? QColor() : QColor(0x61,0x61,0x61,0x08);}
+QColor ApplicationProxyStyle::buttonBackgroundHovered() const {return isDark ? QColor() : QColor(0x61,0x61,0x61,0x1F);}
+QColor ApplicationProxyStyle::buttonBackgroundDisabled() const {return isDark ? QColor() : QColor(0xF6,0xF6,0xF6);}
 
 
-CuratorProxyStyle::CuratorProxyStyle(QStyle* baseStyle)
+ApplicationProxyStyle::ApplicationProxyStyle(QStyle* baseStyle)
     : ProxyStyleBase(baseStyle)
 {
 }
 
-void CuratorProxyStyle::drawPrimitive(PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const
+void ApplicationProxyStyle::drawPrimitive(PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const
 {
     if (element == QStyle::PE_FrameFocusRect) {
         if (const QStyleOptionFocusRect *fropt = qstyleoption_cast<const QStyleOptionFocusRect *>(option)) {
@@ -56,7 +56,7 @@ void CuratorProxyStyle::drawPrimitive(PrimitiveElement element, const QStyleOpti
     QProxyStyle::drawPrimitive(element, option, painter, widget);
 }
 
-void CuratorProxyStyle::drawControl(ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget) const
+void ApplicationProxyStyle::drawControl(ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget) const
 {
     if (element == QStyle::CE_PushButtonBevel) {
         if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(option))  {
@@ -104,7 +104,7 @@ void CuratorProxyStyle::drawControl(ControlElement element, const QStyleOption *
     QProxyStyle::drawControl(element, option, painter, widget);
 }
 
-void CuratorProxyStyle::drawItemText(QPainter *painter, const QRect &rect, int flags, const QPalette &pal, bool enabled, const QString &text, QPalette::ColorRole textRole) const
+void ApplicationProxyStyle::drawItemText(QPainter *painter, const QRect &rect, int flags, const QPalette &pal, bool enabled, const QString &text, QPalette::ColorRole textRole) const
 {
     Q_UNUSED(enabled)
 
@@ -118,4 +118,4 @@ void CuratorProxyStyle::drawItemText(QPainter *painter, const QRect &rect, int f
     painter->setPen(savedPen);
 }
 
-} // namespace CUR
+} // namespace APP

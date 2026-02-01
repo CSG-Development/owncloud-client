@@ -23,13 +23,13 @@
 #include "curatorlib.h"
 #include "syncfileitem.h"
 
-namespace CUR {
+namespace APP {
 
 /**
  * @brief The SyncResult class
  * @ingroup libsync
  */
-class CURATORSYNC_EXPORT SyncResult
+class APPLICATIONSYNC_EXPORT SyncResult
 {
     Q_GADGET
 public:
@@ -120,7 +120,7 @@ private:
 };
 
 template <>
-CURATORSYNC_EXPORT QString Utility::enumToDisplayName(SyncResult::Status status);
+APPLICATIONSYNC_EXPORT QString Utility::enumToDisplayName(SyncResult::Status status);
 }
 
 #endif

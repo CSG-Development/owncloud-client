@@ -33,7 +33,7 @@
 
 using namespace std::chrono_literals;
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcConnectionValidator, "sync.connectionvalidator", QtInfoMsg)
 
@@ -289,4 +289,4 @@ void ConnectionValidator::reportResult(Status status)
     }
 }
 
-} // namespace CUR
+} // namespace APP

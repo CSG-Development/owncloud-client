@@ -12,24 +12,24 @@ from helpers.ConfigHelper import get_config
 class SyncConnectionWizard:
     ADD_FOLDER_SYNC_CONNECTION_WIZARD = {
         "name": "FolderWizardSourcePage",
-        "type": "OCC::FolderWizardLocalPath",
+        "type": "APP::FolderWizardLocalPath",
         "visible": 1,
-        "window": names.add_Folder_Sync_Connection_OCC_FolderWizard,
+        "window": names.add_Folder_Sync_Connection_APP_FolderWizard,
     }
     CHOOSE_LOCAL_SYNC_FOLDER = {
         "name": "localFolderLineEdit",
         "type": "QLineEdit",
         "visible": 1,
-        "window": names.add_Folder_Sync_Connection_OCC_FolderWizard,
+        "window": names.add_Folder_Sync_Connection_APP_FolderWizard,
     }
     BACK_BUTTON = {
-        "window": names.add_Folder_Sync_Connection_OCC_FolderWizard,
+        "window": names.add_Folder_Sync_Connection_APP_FolderWizard,
         "type": "QPushButton",
         "text": "< &Back",
         "visible": 1,
     }
     NEXT_BUTTON = {
-        "window": names.add_Folder_Sync_Connection_OCC_FolderWizard,
+        "window": names.add_Folder_Sync_Connection_APP_FolderWizard,
         "type": "QPushButton",
         "text": "&Next >",
         "visible": 1,
@@ -49,7 +49,7 @@ class SyncConnectionWizard:
         "name": "qt_wizard_finish",
         "type": "QPushButton",
         "visible": 1,
-        "window": names.add_Folder_Sync_Connection_OCC_FolderWizard,
+        "window": names.add_Folder_Sync_Connection_APP_FolderWizard,
     }
     REMOTE_FOLDER_TREE = {
         "container": names.add_Folder_Sync_Connection_groupBox_QGroupBox,
@@ -62,7 +62,7 @@ class SyncConnectionWizard:
         "type": "QCheckBox",
         "unnamed": 1,
         "visible": 1,
-        "window": names.add_Folder_Sync_Connection_OCC_FolderWizard,
+        "window": names.add_Folder_Sync_Connection_APP_FolderWizard,
     }
     SELECTIVE_SYNC_TREE_HEADER = {
         "container": names.add_Folder_Sync_Connection_Deselect_remote_folders_you_do_not_wish_to_synchronize_QTreeWidget,
@@ -72,7 +72,7 @@ class SyncConnectionWizard:
         "visible": 1,
     }
     CANCEL_FOLDER_SYNC_CONNECTION_WIZARD = {
-        "window": names.add_Folder_Sync_Connection_OCC_FolderWizard,
+        "window": names.add_Folder_Sync_Connection_APP_FolderWizard,
         "name": "qt_wizard_cancel",
         "type": "QPushButton",
         "visible": 1,
@@ -111,7 +111,7 @@ class SyncConnectionWizard:
         "name": "folderEntry",
         "type": "QLineEdit",
         "visible": 1,
-        "window": names.add_Folder_Sync_Connection_OCC_FolderWizard,
+        "window": names.add_Folder_Sync_Connection_APP_FolderWizard,
     }
 
     @staticmethod

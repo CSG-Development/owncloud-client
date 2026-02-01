@@ -18,7 +18,7 @@
 
 #include <QObject>
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 Q_NAMESPACE
 
 enum class SetupState {
@@ -40,7 +40,7 @@ Q_ENUM_NS(SyncMode)
 
 }
 
-namespace CUR {
+namespace APP {
 template <>
 QString Utility::enumToDisplayName(Wizard::SetupState state);
 }

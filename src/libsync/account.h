@@ -45,7 +45,7 @@ class QNetworkReply;
 class QUrl;
 class AccessManager;
 
-namespace CUR {
+namespace APP {
 
 class CredentialManager;
 class AbstractCredentials;
@@ -67,7 +67,7 @@ class ResourcesCache;
  * The Account has a name and url. It also has information about credentials,
  * SSL errors and certificates.
  */
-class CURATORSYNC_EXPORT Account : public QObject
+class APPLICATIONSYNC_EXPORT Account : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString id MEMBER _id)
@@ -292,9 +292,9 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(CUR::AccountPtr)
+Q_DECLARE_METATYPE(APP::AccountPtr)
 
 
-QDebug CURATORSYNC_EXPORT operator<<(QDebug debug, const CUR::Account *job);
+QDebug APPLICATIONSYNC_EXPORT operator<<(QDebug debug, const APP::Account *job);
 
 #endif //SERVERCONNECTION_H

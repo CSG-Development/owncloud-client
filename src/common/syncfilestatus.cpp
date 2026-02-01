@@ -16,7 +16,7 @@
 
 #include <QDebug>
 
-namespace CUR {
+namespace APP {
 SyncFileStatus::SyncFileStatus()
     : _tag(StatusNone)
     , _shared(false)
@@ -83,10 +83,10 @@ QString SyncFileStatus::toSocketAPIString() const
 }
 
 
-QDebug &operator<<(QDebug &debug, const CUR::SyncFileStatus &item)
+QDebug &operator<<(QDebug &debug, const APP::SyncFileStatus &item)
 {
     QDebugStateSaver saver(debug);
     debug.setAutoInsertSpaces(false);
-    debug << "CUR::SyncFileStatus(shared=" << item.shared() << ", tag=" << item.tag() << ")";
+    debug << "APP::SyncFileStatus(shared=" << item.shared() << ", tag=" << item.tag() << ")";
     return debug;
 }

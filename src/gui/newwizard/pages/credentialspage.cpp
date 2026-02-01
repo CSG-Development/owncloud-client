@@ -34,12 +34,12 @@ CredentialsPage::CredentialsPage(QWidget *parent)
 {
     ui->setupUi(this);
 
-    setStyleSheet(CUR::StyleHelper::loadFileToString(QStringLiteral(":/res/login/cred_page.qss")));
+    setStyleSheet(APP::StyleHelper::loadFileToString(QStringLiteral(":/res/login/cred_page.qss")));
 
     themeNotifier = darkTheme_.addNotifier([this] {
         updateTheme();
     });
-    darkTheme_.setValue(CUR::Theme::instance()->isDarkTheme());
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
 
     setObjectName("credentialsPage");
     setMouseTracking(true);
@@ -138,7 +138,7 @@ void CredentialsPage::updateTheme()
 {
     ui->btnRefresh->setIcon(darkTheme_.value() ? QIcon(refreshIcon.second) : QIcon(refreshIcon.first));
     ui->btnBack->setIcon(darkTheme_.value() ? QIcon(backIcon.second) : QIcon(backIcon.first));
-    CUR::StyleHelper::setTheme(this, darkTheme_.value());
+    APP::StyleHelper::setTheme(this, darkTheme_.value());
 
     update();
 }

@@ -48,7 +48,7 @@ void setTusVersionHeader(QNetworkRequest &req){
 }
 }
 
-namespace CUR {
+namespace APP {
 // be very verbose for now
 Q_LOGGING_CATEGORY(lcPropagateUploadTUS, "sync.propagator.upload.tus", QtDebugMsg)
 

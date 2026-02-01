@@ -12,7 +12,7 @@
 #include <QSignalSpy>
 #include <QTest>
 
-namespace CUR {
+namespace APP {
 
 class TestCredentialManager : public QObject
 {
@@ -139,5 +139,5 @@ private Q_SLOTS:
 };
 }
 
-QTEST_GUILESS_MAIN(CUR::TestCredentialManager)
+QTEST_GUILESS_MAIN(APP::TestCredentialManager)
 #include "testcredentialmanager.moc"

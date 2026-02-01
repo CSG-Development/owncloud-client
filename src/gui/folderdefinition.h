@@ -5,7 +5,7 @@
 #include <QUuid>
 #include <QUrl>
 
-namespace CUR {
+namespace APP {
 
 /**
  * @brief The FolderDefinition class
@@ -103,4 +103,4 @@ private:
 };
 
 
-} // namespace CUR
+} // namespace APP

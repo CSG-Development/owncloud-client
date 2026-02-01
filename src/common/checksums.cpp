@@ -108,7 +108,7 @@ QByteArray calcAdler32(QIODevice *device)
 }
 }
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcChecksums, "sync.checksums", QtInfoMsg)
 Q_LOGGING_CATEGORY(lcChecksumsHeader, "sync.checksums.header", QtInfoMsg)

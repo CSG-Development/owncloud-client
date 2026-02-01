@@ -16,7 +16,7 @@
 #include "jobs/checkbasicauthjobfactory.h"
 #include "networkjobs/fetchuserinfojobfactory.h"
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 CredentialsState::CredentialsState(SetupWizardContext *context)
     : AbstractState(context)
@@ -50,4 +50,4 @@ SetupWizardState CredentialsState::state() const
     return SetupWizardState::CredentialsState;
 }
 
-} // CUR::Wizard
+} // APP::Wizard

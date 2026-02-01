@@ -2,7 +2,7 @@
 
 #include <qglobal.h>
 
-using namespace CUR;
+using namespace APP;
 
 void static load_rc()
 {

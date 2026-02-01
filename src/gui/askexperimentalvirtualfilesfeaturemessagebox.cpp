@@ -1,7 +1,7 @@
 #include "askexperimentalvirtualfilesfeaturemessagebox.h"
 #include "customui/stylehelper.h"
 
-namespace CUR {
+namespace APP {
 
 AskExperimentalVirtualFilesFeatureMessageBox::AskExperimentalVirtualFilesFeatureMessageBox(QWidget *parent)
     : QMessageBox(QMessageBox::Warning,

@@ -24,7 +24,7 @@
 
 #include <QClipboard>
 
-namespace CUR {
+namespace APP {
 
 OAuthLoginWidget::OAuthLoginWidget(QWidget *parent)
     : AbstractLoginWidget(parent)

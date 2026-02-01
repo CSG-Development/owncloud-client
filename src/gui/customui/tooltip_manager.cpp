@@ -19,7 +19,7 @@ ToolTipManager::ToolTipManager(QObject *parent)
     connect(&delayTimer, &QTimer::timeout, this, &ToolTipManager::showTip);
     connect(&hideTimer, &QTimer::timeout, tipWidget, &QWidget::hide);
 
-    connect(CUR::Theme::instance(), &CUR::Theme::themeChanged, this, [this](bool isDark) {
+    connect(APP::Theme::instance(), &APP::Theme::themeChanged, this, [this](bool isDark) {
         onThemeChanged(isDark);
     });
 }

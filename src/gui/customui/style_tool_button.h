@@ -2,7 +2,7 @@
 
 #include "stylebase.h"
 
-namespace CUR {
+namespace APP {
 
 class ProxyStyleToolButton : public ProxyStyleBase
 {
@@ -32,4 +32,4 @@ protected:
 
 };
 
-} // namespace CUR
+} // namespace APP

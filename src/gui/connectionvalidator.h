@@ -26,7 +26,7 @@
 
 #include <chrono>
 
-namespace CUR {
+namespace APP {
 
 /**
  * This is a job-like class to check that the server is up and that we are connected.

@@ -38,7 +38,7 @@
 using namespace std::chrono;
 using namespace std::chrono_literals;
 
-using namespace CUR;
+using namespace APP;
 
 Q_LOGGING_CATEGORY(lcOauth, "sync.credentials.oauth", QtInfoMsg)
 
@@ -73,7 +73,7 @@ QString renderHttpTemplate(const QString &title, const QString &content)
 auto defaultTimeout()
 {
     // as the oauth process can be interactive we don't want 5min of inactivity
-    return qMin(30s, CUR::AbstractNetworkJob::httpTimeout);
+    return qMin(30s, APP::AbstractNetworkJob::httpTimeout);
 }
 
 auto defaultTimeoutMs()
@@ -157,7 +157,7 @@ Q_SIGNALS:
 private:
     void registerClientOnline()
     {
-        const QJsonObject json({ { QStringLiteral("client_name"), QStringLiteral("%1 %2").arg(Theme::instance()->appNameGUI(), CUR::Version::versionWithBuildNumber().toString()) },
+        const QJsonObject json({ { QStringLiteral("client_name"), QStringLiteral("%1 %2").arg(Theme::instance()->appNameGUI(), APP::Version::versionWithBuildNumber().toString()) },
             { QStringLiteral("redirect_uris"), QJsonArray { QStringLiteral("http://127.0.0.1") } },
             { QStringLiteral("application_type"), QStringLiteral("native") },
             { QStringLiteral("token_endpoint_auth_method"), QStringLiteral("client_secret_basic") } });
@@ -492,7 +492,7 @@ QUrl OAuth::authorisationLink() const
     return url;
 }
 
-void OAuth::saveDynamicRegistrationDataForAccount(const CUR::AccountPtr &accountPtr, const QVariantMap &dynamicRegistrationData)
+void OAuth::saveDynamicRegistrationDataForAccount(const APP::AccountPtr &accountPtr, const QVariantMap &dynamicRegistrationData)
 {
     accountPtr->credentialManager()->set(dynamicRegistrationDataC(), dynamicRegistrationData);
 }

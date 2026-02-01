@@ -1,5 +1,4 @@
-#ifndef CURATOR_ASSERTS_H
-#define CURATOR_ASSERTS_H
+#pragma once
 
 #include <qglobal.h>
 
@@ -51,5 +50,3 @@
 // asserts that are too expensive for release mode.
 //
 // Q_ASSERT
-
-#endif

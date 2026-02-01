@@ -27,10 +27,10 @@
 
 class QTimer;
 
-namespace CUR {
+namespace APP {
 namespace GraphApi {
 
-    class CURATORSYNC_EXPORT SpacesManager : public QObject
+    class APPLICATIONSYNC_EXPORT SpacesManager : public QObject
     {
         Q_OBJECT
 

@@ -42,7 +42,7 @@
 
 using namespace std::chrono_literals;
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcGetJob, "sync.networkjob.get", QtInfoMsg)
 Q_LOGGING_CATEGORY(lcPropagateDownload, "sync.propagator.download", QtInfoMsg)
@@ -129,7 +129,7 @@ namespace {
 // Always coming in with forward slashes.
 // In csync_excluded_no_ctx we ignore all files with longer than 254 chars
 // This function also adds a dot at the beginning of the filename to hide the file on OS X and Linux
-QString CURATORSYNC_EXPORT createDownloadTmpFileName(const QString &previous)
+QString APPLICATIONSYNC_EXPORT createDownloadTmpFileName(const QString &previous)
 {
     QString tmpFileName;
     QString tmpPath;

@@ -52,7 +52,7 @@ set(client_SRCS
     networksettings.cpp
     ocssharejob.cpp
     openfilemanager.cpp
-    curatorgui.cpp
+    applicationgui.cpp
     protocolwidget.cpp
     protocolitem.cpp
     issueswidget.cpp
@@ -185,9 +185,9 @@ target_link_libraries(curator
     telemetry
 )
 
-MESSAGE(STATUS "CURATOR_SIDEBAR_ICONS: ${APPLICATION_ICON_NAME}: ${CURATOR_SIDEBAR_ICONS}")
+MESSAGE(STATUS "APPLICATION_SIDEBAR_ICONS: ${APPLICATION_ICON_NAME}: ${APPLICATION_SIDEBAR_ICONS}")
 
-ecm_add_app_icon(appIcons ICONS "${CURATOR_ICONS}" SIDEBAR_ICONS "${CURATOR_SIDEBAR_ICONS}" OUTFILE_BASENAME "${APPLICATION_ICON_NAME}")
+ecm_add_app_icon(appIcons ICONS "${APPLICATION_ICONS}" SIDEBAR_ICONS "${APPLICATION_SIDEBAR_ICONS}" OUTFILE_BASENAME "${APPLICATION_ICON_NAME}")
 target_sources(curator PRIVATE ${appIcons})
 
 if(NOT APPLE)
@@ -204,10 +204,10 @@ if(NOT APPLE)
 
     # we may not add MACOSX_BUNDLE here, if not building one
 else()
-    target_sources(curator PRIVATE ${CURATOR_BUNDLED_RESOURCES})
+    target_sources(curator PRIVATE ${APPLICATION_BUNDLED_RESOURCES})
 
     set_source_files_properties(
-      ${CURATOR_BUNDLED_RESOURCES}
+      ${APPLICATION_BUNDLED_RESOURCES}
       PROPERTIES
       MACOSX_PACKAGE_LOCATION Resources
       )

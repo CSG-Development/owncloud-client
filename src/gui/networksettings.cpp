@@ -39,7 +39,7 @@ QPair<QString,QString> widgetStyle = {
     QStringLiteral(":/res/networksettings_dark.qss")
 };
 }
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcNetworkSettings, "gui.networksettings.gui", QtInfoMsg)
 
@@ -121,7 +121,7 @@ void NetworkSettings::loadProxySettings()
         return;
     }
     // load current proxy settings
-    CUR::ConfigFile cfgFile;
+    APP::ConfigFile cfgFile;
     int type = cfgFile.proxyType();
     switch (type) {
     case QNetworkProxy::NoProxy:
@@ -269,7 +269,7 @@ void NetworkSettings::showEvent(QShowEvent *event)
 
 void NetworkSettings::onThemeChanged()
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    bool isDark = APP::Theme::instance()->isDarkTheme();
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 }
 
@@ -291,4 +291,4 @@ void NetworkSettings::checkAccountLocalhost()
 }
 
 
-} // namespace CUR
+} // namespace APP

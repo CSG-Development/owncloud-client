@@ -23,7 +23,7 @@
 
 using namespace std::chrono_literals;
 
-namespace CUR {
+namespace APP {
 
 namespace {
     const auto defaultIntervalT = 30s;

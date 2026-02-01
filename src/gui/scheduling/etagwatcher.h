@@ -20,7 +20,7 @@
 
 #include <unordered_map>
 
-namespace CUR {
+namespace APP {
 
 class FolderMan;
 class Folder;

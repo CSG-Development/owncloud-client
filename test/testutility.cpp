@@ -12,9 +12,9 @@
 
 #include "libsync/theme.h"
 
-using namespace CUR::Utility;
+using namespace APP::Utility;
 
-namespace CUR {
+namespace APP {
 OCSYNC_EXPORT extern bool fsCasePreserving_override;
 }
 
@@ -133,10 +133,10 @@ private slots:
     void testFsCasePreserving()
     {
         QVERIFY(isMac() || isWindows() ? fsCasePreserving() : ! fsCasePreserving());
-        QScopedValueRollback<bool> scope(CUR::fsCasePreserving_override);
-        CUR::fsCasePreserving_override = 1;
+        QScopedValueRollback<bool> scope(APP::fsCasePreserving_override);
+        APP::fsCasePreserving_override = 1;
         QVERIFY(fsCasePreserving());
-        CUR::fsCasePreserving_override = 0;
+        APP::fsCasePreserving_override = 0;
         QVERIFY(! fsCasePreserving());
     }
 
@@ -160,7 +160,7 @@ private slots:
         QVERIFY(fileNamesEqual(a + QStringLiteral("/test"), b + QStringLiteral("/test"))); // both exist
         QVERIFY(fileNamesEqual(a + QStringLiteral("/test/TESTI"), b + QStringLiteral("/test/../test/TESTI"))); // both exist
 
-        QScopedValueRollback<bool> scope(CUR::fsCasePreserving_override, true);
+        QScopedValueRollback<bool> scope(APP::fsCasePreserving_override, true);
         QVERIFY(fileNamesEqual(a + QStringLiteral("/test"), b + QStringLiteral("/TEST"))); // both exist
 
         QVERIFY(!fileNamesEqual(a + QStringLiteral("/test"), b + QStringLiteral("/test/TESTI"))); // both are different
@@ -211,13 +211,13 @@ private slots:
 
     void testIsChildOf()
     {
-        const QScopedValueRollback<bool> rollback(CUR::fsCasePreserving_override);
+        const QScopedValueRollback<bool> rollback(APP::fsCasePreserving_override);
         QFETCH(QString, child);
         QFETCH(QString, parent);
         QFETCH(bool, output);
         QFETCH(bool, casePreserving);
-        CUR::fsCasePreserving_override = casePreserving;
-        QCOMPARE(CUR::FileSystem::isChildPathOf(child, parent), output);
+        APP::fsCasePreserving_override = casePreserving;
+        QCOMPARE(APP::FileSystem::isChildPathOf(child, parent), output);
     }
 
     void testSanitizeForFileName_data()
@@ -248,7 +248,7 @@ private slots:
         ;
 
 #define CHECK_NORMALIZE_ETAG(TEST, EXPECT) \
-    QCOMPARE(CUR::Utility::normalizeEtag(QStringLiteral(TEST)), QStringLiteral(EXPECT));
+    QCOMPARE(APP::Utility::normalizeEtag(QStringLiteral(TEST)), QStringLiteral(EXPECT));
 
         CHECK_NORMALIZE_ETAG("foo", "foo");
         CHECK_NORMALIZE_ETAG("\"foo\"", "foo");

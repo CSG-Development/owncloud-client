@@ -30,7 +30,7 @@
 
 class QFile;
 
-namespace CUR {
+namespace APP {
 
 /**
  * Tags for checksum headers values.

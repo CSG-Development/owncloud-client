@@ -42,7 +42,7 @@ void static unloadrc()
     Q_CLEANUP_RESOURCE(customui_res);
 }
 
-namespace CUR {
+namespace APP {
 
 QProxyStyle* StyleHelper::tbMenuStyle_ = nullptr;
 QProxyStyle* StyleHelper::pushButtonStyle_ = nullptr;
@@ -158,7 +158,7 @@ void StyleHelper::invoke_setDarkTheme_recursive(QWidget *w)
 {
     Q_ASSERT(w);
 
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    bool isDark = APP::Theme::instance()->isDarkTheme();
     const auto& childrenList = w->findChildren<QWidget*>();
     for (auto* widget: childrenList) {
         if (widget->metaObject()->indexOfProperty("darkTheme") != -1) {
@@ -193,4 +193,4 @@ QString StyleHelper::loadFileToString(const QString &fileName)
     return {};
 }
 
-} // namespace CUR
+} // namespace APP

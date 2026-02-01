@@ -8,7 +8,7 @@
 #include <QDateTime>
 #include <QUuid>
 
-class CURATORSYNC_EXPORT DevicePath
+class APPLICATIONSYNC_EXPORT DevicePath
 {
 public:
     DevicePath();
@@ -32,7 +32,7 @@ public:
     QString toStringShort() const;
 };
 
-class CURATORSYNC_EXPORT Device
+class APPLICATIONSYNC_EXPORT Device
 {
 public:
     QString seagateDeviceID;

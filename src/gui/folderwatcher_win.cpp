@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <tchar.h>
 
-namespace CUR {
+namespace APP {
 
 WatcherThread::WatchChanges WatcherThread::watchChanges(size_t fileNotifyBufferSize)
 {
@@ -236,4 +236,4 @@ FolderWatcherPrivate::~FolderWatcherPrivate()
     _thread->wait();
 }
 
-} // namespace CUR
+} // namespace APP
