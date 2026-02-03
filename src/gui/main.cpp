@@ -354,9 +354,9 @@ int main(int argc, char **argv)
     // initialisation that needs to be done before creating a QApplication
     const auto platform = Platform::create();
 
+    // Setup debug filter file location
     QString appDir = QFileInfo(QString::fromLocal8Bit(argv[0])).absolutePath();
-    QByteArray fileLocation = QDir::toNativeSeparators(
-                                  QStringLiteral("%1/qtlogging.ini").arg(appDir)).toUtf8();
+    QByteArray fileLocation = QDir::toNativeSeparators(QStringLiteral("%1/qtlogging.ini").arg(appDir)).toUtf8();
     qputenv("QT_LOGGING_CONF", fileLocation);
 
     // Create the (Q)Application instance:

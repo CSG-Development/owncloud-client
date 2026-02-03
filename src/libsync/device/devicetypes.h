@@ -40,7 +40,6 @@ public:
     QString friendlyName;
     QString hostname;
     bool isStatic = false;
-    DeviceOrigin origin = DeviceOrigin::Unknown;
     QList<DevicePath> paths;
 
     static Device MakeStatic(const QString& url, const QString& name);
@@ -59,6 +58,7 @@ public:
     std::optional<QUuid> getBestPathId();
     static std::optional<QUuid> getBestPathId(const Device& dev);
     std::optional<QUuid> getRemoteOnlyPath() const;
+    static std::optional<Device> findByCN(const QList<Device>& list, const QString& cn);
 
     QString toString() const;
     QString toStringShort() const;

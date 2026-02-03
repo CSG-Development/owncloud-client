@@ -79,7 +79,7 @@ class ConnectionValidator : public QObject
 {
     Q_OBJECT
 public:
-    explicit ConnectionValidator(AccountPtr account, QObject *parent = nullptr);
+    explicit ConnectionValidator(AccountPtr account, QObject *parent);
 
     enum class ValidationMode {
         ValidateServer,

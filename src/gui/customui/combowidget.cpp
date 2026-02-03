@@ -142,6 +142,11 @@ void ComboWidget::setItems(const QList<Device> &list)
             else
                 setText(dev->friendlyName);
         }
+        else {
+            // Selected device is not in list
+            selectedDevice = std::nullopt;
+            setText(QStringLiteral(""));
+        }
     }
 
     // Still no selected

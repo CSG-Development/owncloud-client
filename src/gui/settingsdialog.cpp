@@ -479,6 +479,11 @@ void SettingsDialog::showIssuesList()
 
 void SettingsDialog::accountAdded(AccountStatePtr accountStatePtr)
 {
+    if (!accountStatePtr) {
+        qWarning(lcSettingsDialog) << "Invalid accountStatePtr";
+        return;
+    }
+
     bool brandingSingleAccount = !Theme::instance()->multiAccount();
 
     if (brandingSingleAccount) {
@@ -597,15 +602,15 @@ void SettingsDialog::showCodePage(CodeRequestDialog visible, SyncState syncState
     }
 }
 
-void SettingsDialog::accountRemoved(AccountStatePtr s)
+void SettingsDialog::accountRemoved(AccountStatePtr accountStatePtr)
 {
-    if (!s) {
-        qWarning(lcSettingsDialog) << "Invalid account state ptr";
+    if (!accountStatePtr) {
+        qWarning(lcSettingsDialog) << "Invalid accountStatePtr";
         return;
     }
 
-    while (_modalStack.contains(s->account().data())) {
-        ceaseModality(s->account().get());
+    while (_modalStack.contains(accountStatePtr->account().data())) {
+        ceaseModality(accountStatePtr->account().get());
     }
     if (!Theme::instance()->multiAccount()) {
         _ui->toolBar->insertAction(_activityAction, _addAccountAction);
@@ -616,7 +621,7 @@ void SettingsDialog::accountRemoved(AccountStatePtr s)
         if (!as) {
             continue;
         }
-        if (as->accountsState() == s) {
+        if (as->accountsState() == accountStatePtr) {
             _ui->toolBar->removeAction(it.key());
             _accountActions.removeAll(it.key());
 
@@ -631,10 +636,10 @@ void SettingsDialog::accountRemoved(AccountStatePtr s)
         }
     }
 
-    if (_actionForAccount.contains(s->account().data())) {
-        _actionForAccount.remove(s->account().data());
+    if (_actionForAccount.contains(accountStatePtr->account().data())) {
+        _actionForAccount.remove(accountStatePtr->account().data());
     }
-    _activitySettings->slotRemoveAccount(s);
+    _activitySettings->slotRemoveAccount(accountStatePtr);
 }
 
 void SettingsDialog::onThemeChanged()

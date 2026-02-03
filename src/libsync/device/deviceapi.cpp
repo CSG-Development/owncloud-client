@@ -29,18 +29,23 @@ QFuture<AboutCtx> DeviceApi::query_about(const QString &url)
 {
     _factory.setBaseUrl(QUrl(url));
     auto reply = _rest.get(_factory.createRequest(api_dev_about));
-    return execRequest<AboutCtx>(std::move(reply), [](const std::optional<QJsonDocument>& doc, int status) {
+    qCDebug(lcDeviceApi) << "query_about request:" << reply->url();
+    return execRequest<AboutCtx>(std::move(reply), [url=reply->url()](const std::optional<QJsonDocument>& doc, int status) {
         AboutCtx ctx;
         ctx.status = status;
         if (doc && !doc->isNull()) {
+            qCDebug(lcDeviceApi) << url << "reply:" << doc;
             if (status == 200) {
                 ctx.deviceAbout = DeviceInfoAbout::fromJson(doc.value());
             }
             else {
                 //ctx.errorString = (*doc)[jkey_name].toString();
                 ctx.deviceAbout = {};
-                qCWarning(lcDeviceApi) << "about status code:" << status;
+                qCWarning(lcDeviceApi) << url << "about status code:" << status;
             }
+        }
+        else {
+            qCDebug(lcDeviceApi) << url << "No reply";
         }
         return ctx;
     });
@@ -48,21 +53,24 @@ QFuture<AboutCtx> DeviceApi::query_about(const QString &url)
 
 QFuture<StatusCtx> DeviceApi::query_status(const QString &url)
 {
-    qCDebug(lcDeviceApi) << "query_status";
     _factory.setBaseUrl(QUrl(url));
     auto reply = _rest.get(_factory.createRequest(api_dev_status));
-    return execRequest<StatusCtx>(std::move(reply), [](const std::optional<QJsonDocument>& doc, int status) {
-        qCDebug(lcDeviceApi) << "query_status code" << status;
+    qCDebug(lcDeviceApi) << "query_status request:" << reply->url();
+    return execRequest<StatusCtx>(std::move(reply), [url=reply->url()](const std::optional<QJsonDocument>& doc, int status) {
         StatusCtx ctx;
         ctx.status = status;
         if (doc && !doc->isNull()) {
+            qCDebug(lcDeviceApi) << url << "reply:" << doc;
             if (status == 200) {
                 ctx.deviceStatus = DeviceInfoStatus::fromJson(doc.value());
             }
             else {
                 //ctx.errorString = (*doc)[jkey_name].toString();
-                qCWarning(lcDeviceApi) << "status code:" << status;
+                qCWarning(lcDeviceApi) << url << "status code:" << status;
             }
+        }
+        else {
+            qCDebug(lcDeviceApi) << url << "No reply";
         }
         return ctx;
     });
@@ -82,7 +90,7 @@ QFuture<QList<DevicePath> > DeviceApi::query_status_all(QList<DevicePath> paths)
             auto ctx = finishedFutures[i].result();
             updatedPaths[i].status = ctx.deviceStatus;
             if (ctx.status != 200) {
-                qWarning() << "status API returned error status:" << ctx.status;
+                qCWarning(lcDeviceApi) << "status API returned error status:" << ctx.status;
             }
         }
         return updatedPaths;
@@ -116,7 +124,7 @@ QFuture<QList<DevicePath>> DeviceApi::query_about_all(QList<DevicePath> paths)
                 updatedPaths[i].about = ctx.deviceAbout;
             }
             else {
-                qWarning() << "API returned error status:" << ctx.status;
+                qCWarning(lcDeviceApi) << "API returned error status:" << ctx.status;
             }
         }
         return updatedPaths;
