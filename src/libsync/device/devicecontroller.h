@@ -34,7 +34,7 @@ public:
     // - accessCodeRequest
     // - accessCodeResult
     void account_update_device(const Device& dev);
-    void account_update_device_continue(const Device& dev);
+    void account_update_device_continue(std::optional<Device> dev);
 
     void evaluateDeviceStatus(Device* dev);
     bool isEvaluationRunning() const;
@@ -50,7 +50,6 @@ public:
     void loadRefreshToken();
 
     QList<Device> getDevices() const;
-    std::optional<Device> getDevice(const QString& deviceCN) const;
 
     QFuture<DevicePathListCtx> queryDeviceInfo(const QString& deviceId);
 
@@ -90,8 +89,12 @@ protected:
 
     mutable QReadWriteLock lock_;
 
-    bool mdns_finished = false;
-    bool ra_finished = false;
+    //bool mdns_finished = false;
+    //bool ra_finished = false;
+    // 0 = none, 1 = mDNS ready, 2 = RA ready, 3 = All ready
+    std::atomic<bool> mdns_finished{false};
+    std::atomic<bool> ra_finished{false};
+
     bool force_device_list_request = false;
     bool _isEvaluationRunning = false;
 

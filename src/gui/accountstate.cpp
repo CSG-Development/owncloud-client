@@ -357,10 +357,8 @@ void AccountState::checkConnectivity(bool blockJobs)
     if (blockJobs) {
         _queueGuard.block();
     }
-    _connectionValidator = new ConnectionValidator(account());
-    connect(_connectionValidator, &ConnectionValidator::connectionResult,
-        this, &AccountState::slotConnectionValidatorResult);
-
+    _connectionValidator = new ConnectionValidator(_account, this);
+    connect(_connectionValidator, &ConnectionValidator::connectionResult, this, &AccountState::slotConnectionValidatorResult);
     connect(_connectionValidator, &ConnectionValidator::sslErrors, this, [blockJobs, this](const QList<QSslError> &errors) {
         if (!_tlsDialog) {
             // ignore errors for already accepted certificates
@@ -460,8 +458,8 @@ void AccountState::checkAndSwitchDevicePath()
             currentDevice->paths = paths;
 
             // DEBUG
-            for (const auto& it: _account->devicePtr()->paths) {
-                qCDebug(lcAccountState) << it.address << it.status.oobe_done;
+            for (const auto& it: std::as_const(_account->devicePtr()->paths)) {
+                qCDebug(lcAccountState) << "address:" << it.address << "oobe_done:" << it.status.oobe_done;
             }
 
             if (!doDevicePathSwitch()) {
@@ -476,6 +474,7 @@ void AccountState::checkAndSwitchDevicePath()
 bool AccountState::doDevicePathSwitch()
 {
     qCDebug(lcAccountState) << "doDevicePathSwitch";
+    bool retVal = false;
     auto devPathId = _account->devicePtr()->getBestPathId();
     if (devPathId) {
 
@@ -494,18 +493,17 @@ bool AccountState::doDevicePathSwitch()
             emit urlChanged(_account->uuid());
             // Update UI
             stateChanged(_state);
-            return true;
+            retVal = true;
         }
         else {
             qCDebug(lcAccountState) << "Path is offline, requesting RA update...";
-            return false;
         }
     }
     else {
         qCWarning(lcAccountState) << "No best path found for device";
-        return false;
     }
     _updateDeviceInProgress = false;
+    return retVal;
 }
 
 void AccountState::enableCodeDialogProcessing(bool enable)
@@ -556,7 +554,7 @@ void AccountState::enableCodeDialogProcessing(bool enable)
             // Close code dialog
             ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Hide, SyncState::Disabled);
             _accessCodeDialog = false;
-            _deviceController->account_update_device_continue(*getDevice());
+            _deviceController->account_update_device_continue(accountDevice());
         }
         else {
             qCDebug(lcAccountState) << "Access code rejected" << errorString;
@@ -575,6 +573,12 @@ void AccountState::enableCodeDialogProcessing(bool enable)
 
 void AccountState::requestRAupdate()
 {
+    auto accDevice = accountDevice();
+    if (!accDevice) {
+        qCWarning(lcAccountState) << "[requestRAupdate] No device for account";
+        return;
+    }
+
     qCDebug(lcAccountState) << "Requesting device update from RA";
     // Turn on AccessCodeDialog processing
     enableCodeDialogProcessing(true);
@@ -593,23 +597,38 @@ void AccountState::requestRAupdate()
             qCDebug(lcAccountState) << "Code skipped, no path update";
             return;
         }
-        if (auto dev = getDevice()) {
-            dev->paths = paths;
+        auto aDev = accountDevice();
+        if (aDev) {
+
+            Device d = aDev.value();
+            d.paths = paths;
+            setAccountDevice(d);
+
             for (const auto& it: paths) {
                 qCDebug(lcAccountState) << "UPDATED" << it.address << it.status.oobe_done;
             }
+
             doDevicePathSwitch();
         }
     }, Qt::SingleShotConnection);
 
-    _deviceController->account_update_device(*getDevice());
+    _deviceController->account_update_device(accDevice.value());
 }
 
-Device *AccountState::getDevice()
+std::optional<Device> AccountState::accountDevice()
 {
     if (_account)
-        return _account->devicePtr();
-    return nullptr;
+        return _account->device();
+    return std::nullopt;
+}
+
+void AccountState::setAccountDevice(const Device &dev)
+{
+    if (!_account) {
+        qCWarning(lcAccountState) << "Can't set account device: no account";
+        return;
+    }
+    _account->setDevice(dev);
 }
 
 void AccountState::slotConnectionValidatorResult(ConnectionValidator::Status status, const QStringList &errors)

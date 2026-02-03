@@ -166,6 +166,9 @@ Qt::ItemFlags FolderStatusModel::flags(const QModelIndex &index) const
 
 QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
 {
+    if (_accountState == nullptr)
+        return {};
+
     if (!index.isValid())
         return QVariant();
 
@@ -1210,6 +1213,8 @@ void FolderStatusModel::slotFolderSyncStateChange(Folder *f)
 
 void FolderStatusModel::resetFolders()
 {
+    if (_accountState == nullptr)
+        return;
     setAccountState(_accountState);
 }
 

@@ -254,6 +254,7 @@ void SetupController::onHandleCredentialsEvaluation(SetupResult result, const QS
 
 void SetupController::onDevicesUpdated(bool raQueried)
 {
+    qCDebug(lcSetupWizardController) << "onDevicesUpdated, ra was queried" << raQueried;
     fullList = _deviceController->getDevices();
     window()->setDevicesList(fullList);
     window()->showCredPageProgress(false);

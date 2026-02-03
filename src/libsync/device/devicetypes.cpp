@@ -146,25 +146,25 @@ std::optional<QUuid> Device::getBestPathId(const Device &dev)
     if (dev.paths.size() == 1)
         return dev.paths.first().id;
 
-    QList<DevicePath> paths;
+    QList<DevicePath> dev_paths;
     for (const auto& p: dev.paths) {
         if (p.deviceType != DeviceType::Unknown && p.status.oobe_done) {
-            paths.append(p);
+            dev_paths.append(p);
         }
     }
 
     // No online paths found
-    if (paths.isEmpty())
+    if (dev_paths.isEmpty())
         return dev.paths.first().id;
 
-    if (paths.size() == 1)
-        return paths.first().id;
+    if (dev_paths.size() == 1)
+        return dev_paths.first().id;
 
-    std::stable_sort(paths.begin(), paths.end(), [&](const DevicePath& a, const DevicePath& b) {
+    std::stable_sort(dev_paths.begin(), dev_paths.end(), [&](const DevicePath& a, const DevicePath& b) {
         return DevicePath::pathPriority(a.deviceType) > DevicePath::pathPriority(b.deviceType);
     });
 
-    return paths.first().id;
+    return dev_paths.first().id;
 }
 
 std::optional<QUuid> Device::getRemoteOnlyPath() const
@@ -188,6 +188,17 @@ std::optional<QUuid> Device::getRemoteOnlyPath() const
     return plist.first().id;
 }
 
+std::optional<Device> Device::findByCN(const QList<Device> &list, const QString &cn)
+{
+    const auto it = std::find_if(list.cbegin(), list.cend(), [cn](const Device& d) {
+        return d.certificateCommonName == cn;
+    });
+    if (it != list.cend())
+        return *it;
+
+    return std::nullopt;
+}
+
 QString Device::toString() const
 {
     QStringList l;
@@ -196,7 +207,6 @@ QString Device::toString() const
     l << QStringLiteral("certificateCommonName:%1,").arg(certificateCommonName);
     l << QStringLiteral("friendlyName:%1,").arg(friendlyName);
     l << QStringLiteral("hostname:%1,").arg(hostname);
-    l << QStringLiteral("origin:%1,").arg(DevHelpers::originToStr(origin));
     l << QStringLiteral("isStatic:%1,").arg(isStatic);
     for (const auto& p: paths) {
         l << p.toString();
@@ -213,7 +223,6 @@ QString Device::toStringShort() const
     l << QStringLiteral("certCN:%1,").arg(certificateCommonName);
     l << QStringLiteral("friendlyName:%1,").arg(friendlyName);
     l << QStringLiteral("hostname:%1,").arg(hostname);
-    l << QStringLiteral("origin:%1,").arg(DevHelpers::originToStr(origin));
     l << QStringLiteral("static:%1,").arg(isStatic);
     for (const auto& p: paths) {
         l << p.toStringShort();
@@ -227,7 +236,6 @@ Device Device::MakeStatic(const QString &url, const QString &name)
     Device dev;
     dev.certificateCommonName = name;
     dev.isStatic = true;
-    dev.origin = DeviceOrigin::Static;
     DevicePath dp(url, DeviceType::Public, DeviceOrigin::Static, 0);
     dev.paths.append(dp);
     return dev;

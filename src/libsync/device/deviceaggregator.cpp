@@ -99,6 +99,81 @@ void DeviceAggregator::merge(Device &target, const QList<DevicePath> &path_sourc
     }
 }
 
+QList<Device> DeviceAggregator::mergeDevices(const QList<Device> &dev_1, const QList<Device> &dev_2)
+{
+    QHash<QString, Device> mergedMap;
+
+    auto addToMap = [&mergedMap](const Device &device) {
+        if (!mergedMap.contains(device.seagateDeviceID)) {
+            mergedMap.insert(device.seagateDeviceID, device);
+        } else {
+            Device &existingDevice = mergedMap[device.seagateDeviceID];
+
+            // update DeviceID if empty
+            if (existingDevice.seagateDeviceID.isEmpty() && !device.seagateDeviceID.isEmpty()) {
+                existingDevice.seagateDeviceID = device.seagateDeviceID;
+            }
+
+            // paths join
+            for (const auto &newPath : device.paths) {
+                bool foundMatch = false;
+
+                for (int i = 0; i < existingDevice.paths.size(); ++i) {
+                    DevicePath &existingPath = existingDevice.paths[i];
+
+                    if (existingPath.address == newPath.address && existingPath.port == newPath.port) {
+                        foundMatch = true;
+
+                        // Keep MDNS origin
+                        if (newPath.origin == DeviceOrigin::MDNS && existingPath.origin != DeviceOrigin::MDNS) {
+                            existingPath.origin = newPath.origin;
+                        }
+                        break;
+                    }
+                }
+
+                if (!foundMatch) {
+                    existingDevice.paths.append(newPath);
+                }
+            }
+        }
+    };
+
+    for (const auto &d : dev_1)
+        addToMap(d);
+    for (const auto &d : dev_2)
+        addToMap(d);
+
+    return mergedMap.values();
+}
+
+QList<DevicePath> DeviceAggregator::mergePaths(const QList<DevicePath> &path_1, const QList<DevicePath> &path_2)
+{
+    QMap<std::pair<QString, int>, DevicePath> uniqueMap;
+
+    auto insertOrUpdate = [&](const DevicePath &path) {
+        auto key = std::make_pair(path.address, path.port);
+
+        if (!uniqueMap.contains(key)) {
+            uniqueMap.insert(key, path);
+        } else {
+            if (path.origin == DeviceOrigin::MDNS && uniqueMap[key].origin != DeviceOrigin::MDNS) {
+                uniqueMap[key] = path;
+            }
+        }
+    };
+
+    for (const auto &path : path_1) {
+        insertOrUpdate(path);
+    }
+
+    for (const auto &path : path_2) {
+        insertOrUpdate(path);
+    }
+
+    return uniqueMap.values();
+}
+
 QList<Device> DeviceAggregator::build_devices(const QList<DevicePath> &records)
 {
     QHash<QString, Device> deviceMap;
@@ -148,5 +223,40 @@ QList<Device> DeviceAggregator::build_devices(const QList<DevicePath> &records)
     }
 
     return deviceMap.values();
+}
+
+void DeviceAggregator::add_paths(const QList<DevicePath> &devs)
+{
+    QHash<QString, DevicePath> existingPaths;
+    for (const auto& it: std::as_const(paths_)) {
+        const QString key = it.address + QStringLiteral(":") + QString::number(it.port);
+        existingPaths.insert(key, it);
+    }
+
+    for (const auto& it: std::as_const(devs)) {
+        const QString key = it.address + QStringLiteral(":") + QString::number(it.port);
+        if (existingPaths.contains(key)) {
+            qCDebug(lcDeviceAggregator) << "exist" << key;
+        }
+        else {
+            qCDebug(lcDeviceAggregator) << "added" << key;
+            existingPaths.insert(key, it);
+        }
+    }
+
+    {
+        QWriteLocker locker(&lock_);
+        paths_ = existingPaths.values();
+    }
+
+    // !! emit outside lock scope
+    emit listUpdated();
+
+}
+
+void DeviceAggregator::clear_paths()
+{
+    QWriteLocker locker(&lock_);
+    paths_.clear();
 }
 

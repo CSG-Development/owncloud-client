@@ -177,7 +177,8 @@ private:
     bool doDevicePathSwitch();
     void enableCodeDialogProcessing(bool enable);
     void requestRAupdate();
-    Device* getDevice();
+    std::optional<Device> accountDevice();
+    void setAccountDevice(const Device& dev);
 
 signals:
     void stateChanged(State state);
