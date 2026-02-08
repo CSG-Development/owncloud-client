@@ -86,7 +86,9 @@ SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason 
         _deviceController->initAccessCode();
     });
 
-    connect(oc.get(), &OverlayController::processSkipped, this, [this] {
+    connect(oc.get(), &OverlayController::processSkipped, this, [this,oc] {
+        if (oc)
+            oc->hideAll();
         window()->displayPage(SetupPage::PageCredentials);
         window()->showCredPageProgress(false);
     });

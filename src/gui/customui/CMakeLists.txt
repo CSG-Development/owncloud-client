@@ -55,8 +55,9 @@ add_library(${LIBRARY_NAME} STATIC
 )
 
 target_link_libraries(${LIBRARY_NAME} PUBLIC 
-	Qt::Widgets 
-	curatorResources
+    Qt::Widgets
+    # Qt::Svg
+    curatorResources
     libsync
 )
 

@@ -51,3 +51,9 @@
 #arrowButton {
     border: none;
 }
+
+#btnDeviceIcon {
+    background: transparent;
+    border: none;
+    image: url(:/res/combowidget/device_icon.svg);
+}

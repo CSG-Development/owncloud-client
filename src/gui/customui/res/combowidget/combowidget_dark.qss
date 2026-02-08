@@ -44,3 +44,9 @@
     border: 1px solid transparent;
     border-radius: 20px;
 }
+
+#btnDeviceIcon {
+    background: transparent;
+    border: none;
+    image: url(:/res/combowidget/device_icon.svg);
+}

@@ -58,7 +58,6 @@ ComboWidget::ComboWidget(QWidget *parent)
 
     ui->arrowButton->setCursor(Qt::PointingHandCursor);
 
-
     connect(popup, &PopupComboWidget::clickedOutside, this, [this] {
         popup->hide();
         updateButtonIcon();
@@ -117,6 +116,7 @@ void ComboWidget::setText(const QString &val)
     ui->lineEdit->setText(val);
     ui->lineEdit->setToolTip(val);
     ui->lineEdit->setSelection(0, 0);
+    ui->btnDeviceIcon->setVisible(!val.isEmpty());
 }
 
 void ComboWidget::setItems(const QList<Device> &list)
@@ -206,6 +206,7 @@ void ComboWidget::resizeEvent(QResizeEvent */*event*/)
 void ComboWidget::onTextChanged(const QString& str)
 {
     if (!promptLabel->text().isEmpty()) {
+        ui->btnDeviceIcon->setVisible(true);
         promptLabel->setVisible(!str.isEmpty());
     }
 
