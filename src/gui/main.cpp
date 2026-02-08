@@ -441,6 +441,8 @@ int main(int argc, char **argv)
     auto ocApp = Application::createInstance(platform.get(), options.debugMode);
     ocApp->createTelemetry();
 
+    AccountManager::instance()->applicationCreated();
+
     QObject::connect(platform.get(), &Platform::requestAttention, ocApp->gui(), &ApplicationGui::slotShowSettings);
 
     QObject::connect(&singleApplication, &KDSingleApplication::messageReceived, APP::ocApp(), [](const QByteArray &message) {

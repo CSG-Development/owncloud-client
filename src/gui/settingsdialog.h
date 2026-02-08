@@ -27,7 +27,7 @@ class QAction;
 class QActionGroup;
 class QToolBar;
 class QStandardItemModel;
-class CodeDialog;
+class OverlayController;
 
 namespace APP {
 
@@ -72,9 +72,7 @@ public:
     AccountSettings *accountSettings(Account *account);
 
     QWidget* currentPage();
-    CodeDialog* codeDlg() const {return _codeDialog;}
-    // connect (or disconnect) code dialog from this (to work locally in the new account wizard)
-    void attachCodeDialog(bool attach);
+    OverlayController *overlayController() const { return _overlayController; }
 
 public slots:
     void showFirstPage();
@@ -84,7 +82,7 @@ public slots:
     void slotAccountAvatarChanged();
     void slotAccountDisplayNameChanged();
 
-    void showCodePage(CodeRequestDialog visible, SyncState syncState);
+    bool isOverlayBusy() const;
 
 protected:
     void changeEvent(QEvent *) override;
@@ -116,7 +114,7 @@ private:
     QList<QAction *> _accountActions;
     ApplicationGui *_gui = nullptr;
     QList<Account *> _modalStack;
-    CodeDialog* _codeDialog = nullptr;
+    OverlayController *_overlayController = nullptr;
 };
 
 }

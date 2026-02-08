@@ -18,14 +18,21 @@ enum class CodeAction {
     Skip
 };
 
+enum class CodeErrorState {
+    None,
+    CodeInvalid,
+    CodeExpired
+};
+
 class QGraphicsDropShadowEffect;
+class DimWidget;
 
 class CodeDialogController : public QObject
 {
     Q_OBJECT
 
 public:
-    QProperty<bool> errorState {false};
+    QProperty<CodeErrorState> errorState {CodeErrorState::None};
     QProperty<bool> codeInputEnabled {false};
     QProperty<bool> btnAllowAccessVisible {false};
     QProperty<bool> btnAllowAccessEnabled {false};
@@ -55,7 +62,7 @@ public:
 
     void reset();
     void setDialogState(CodeDialogState state);
-    void setError(CodeDialogState state, const QString& errorStr, const QString& errorTooltip);
+    void setError(CodeErrorState errorState);
 
     QString getCode() const;
     void clearCode();
@@ -69,6 +76,7 @@ signals:
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
+    bool eventFilter(QObject* obj, QEvent* ev) override;
 
 private:
     static QString CodeDialogStateToStr(CodeDialogState state);

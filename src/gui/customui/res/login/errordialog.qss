@@ -1,9 +1,9 @@
 .helper_frame { border: none; }
 
+#frameContent { border: none; background: rgba(0, 0, 0, 128); }
 #frame { border-radius: 28px; }
 #lblHeader { font-size: 24px; }
 #lblText { font-size: 16px; }
-#lblError { font-size: 12px; }
 
 .text_button {
     font-size: 14px;
@@ -18,7 +18,6 @@
 /*** Light */
 
 [theme="light"] #frame { background: #FFFFFF; }
-[theme="light"] #lblError { color: rgba(244, 67, 54, 1); }
 [theme="light"] .text_label { color: rgba(0, 0, 0, 0.87); }
 [theme="light"] .text_button { color: #1976D2; }
 [theme="light"] .text_button:disabled { color: #9E9E9E; }
@@ -28,7 +27,6 @@
 /*** Dark */
 
 [theme="dark"] #frame { background: #262729; }
-[theme="dark"] #lblError { color: rgba(242, 143, 140, 1); }
 [theme="dark"] .text_label { color: rgba(255, 255, 255, 0.87); }
 [theme="dark"] .text_button { color: rgba(100, 181, 246, 1); }
 [theme="dark"] .text_button:disabled { color: rgba(158, 158, 158, 1); }

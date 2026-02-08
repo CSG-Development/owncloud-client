@@ -3,22 +3,21 @@
 
 #include "gui/customui/stylehelper.h"
 #include "gui/customui/focusproxy.h"
-
 #include "theme.h"
 
 #include <QKeyEvent>
 #include <QGraphicsDropShadowEffect>
 #include <QLoggingCategory>
 
+namespace {
+const auto widgetStyle = QStringLiteral(":/res/login/codedialog.qss");
+}
+
 Q_LOGGING_CATEGORY(lcCodeDialog, "gui.codedialog", QtInfoMsg)
 
 CodeDialogController::CodeDialogController(QObject *parent)
     : QObject(parent)
 {
-    errorState.setBinding([this]() {
-        return !errorString.value().isEmpty();
-    });
-
     codeInputEnabled.setBinding([this]() {
         return state.value() != CodeDialogState::Waiting;
     });
@@ -28,7 +27,7 @@ CodeDialogController::CodeDialogController(QObject *parent)
     });
 
     btnAllowAccessEnabled.setBinding([this]() {
-        return isCodeValid();
+        return isCodeValid() && errorState.value() == CodeErrorState::None;
     });
 
     btnResendCodeVisible.setBinding([this]() {
@@ -36,18 +35,30 @@ CodeDialogController::CodeDialogController(QObject *parent)
     });
 
     btnResendCodeEnabled.setBinding([this]() {
-        return state.value() == CodeDialogState::Resend && isCodeValid();
+        return isCodeValid() && errorState.value() == CodeErrorState::None;
     });
 
     spinnerVisible.setBinding([this]() {
         return state.value() == CodeDialogState::Waiting;
     });
+
+    errorString.setBinding([this]() {
+        switch (errorState.value())
+        {
+        case CodeErrorState::None:
+            return QStringLiteral("");
+        case CodeErrorState::CodeInvalid:
+            return tr("Incorrect code");
+        case CodeErrorState::CodeExpired:
+            return tr("Your code has expired");
+        }
+        return QStringLiteral("");
+    });
 }
 
 void CodeDialogController::clearError()
 {
-    errorString.setValue({});
-    errorTooltip.setValue({});
+    errorState.setValue(CodeErrorState::None);
 }
 
 CodeDialog::CodeDialog(QWidget *parent)
@@ -57,15 +68,16 @@ CodeDialog::CodeDialog(QWidget *parent)
 {
     ui->setupUi(this);
 
-    setStyleSheet(APP::StyleHelper::loadFileToString(QStringLiteral(":/res/login/code_dialog.qss")));
+    setStyleSheet(APP::StyleHelper::loadFileToString(widgetStyle));
     connect(APP::Theme::instance(), &APP::Theme::themeChanged, this, [this](bool isDark) {
         controller_->darkTheme.setValue(isDark);
     });
 
-    setWindowFlags(Qt::Tool|Qt::FramelessWindowHint|Qt::NoDropShadowWindowHint);
+    // setWindowFlags(Qt::Tool|Qt::FramelessWindowHint|Qt::NoDropShadowWindowHint);
+    setWindowFlags(Qt::FramelessWindowHint|Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
     setAutoFillBackground(false);
-    setWindowModality(Qt::WindowModal);
+    // setWindowModality(Qt::WindowModal);
 
     // MacOS hover enable
     ui->btnAllowAccess->setAttribute(Qt::WA_Hover, true);
@@ -83,10 +95,10 @@ CodeDialog::CodeDialog(QWidget *parent)
         ui->btnResendCode->setVisible(controller_->btnResendCodeVisible.value());
         ui->btnResendCode->setEnabled(controller_->btnResendCodeEnabled.value());
         ui->spinner->setVisible(controller_->spinnerVisible.value());
-        ui->lblError->setVisible(controller_->errorState.value());
+        ui->lblError->setVisible(controller_->errorState.value() != CodeErrorState::None);
         ui->lblError->setText(controller_->errorString.value());
         ui->lblError->setToolTip(controller_->errorTooltip.value());
-        ui->codeInputWidget->setErrorState(controller_->errorState.value());
+        ui->codeInputWidget->setErrorState(controller_->errorState.value() != CodeErrorState::None);
     };
     auto updateThemeFunc = [this]() {
         APP::StyleHelper::setTheme(this, controller_->darkTheme.value());
@@ -136,7 +148,11 @@ CodeDialog::CodeDialog(QWidget *parent)
     setDialogState(CodeDialogState::AllowAccess);
     syncUI();
     controller_->darkTheme.setValue(APP::Theme::instance()->isDarkTheme());
+    controller_->codeString.setValue(QStringLiteral(""));
     updateThemeFunc();
+
+    installEventFilter(this);
+    parent->installEventFilter(this);
 }
 
 CodeDialog::~CodeDialog()
@@ -157,15 +173,9 @@ void CodeDialog::setDialogState(CodeDialogState state)
     controller_->state.setValue(state);
 }
 
-void CodeDialog::setError(CodeDialogState state, const QString& errorStr, const QString& errorTooltip)
+void CodeDialog::setError(CodeErrorState errorState)
 {
-    setDialogState(state);
-    if (state == CodeDialogState::Resend)   // "Your code has expired"
-        clearCode();
-    controller_->errorString.setValue(errorStr);
-    controller_->errorTooltip.setValue(errorTooltip);
-    // "Incorrect code"
-    // "Server error. Try again"
+    controller_->errorState.setValue(errorState);
 }
 
 QString CodeDialog::getCode() const
@@ -185,6 +195,27 @@ void CodeDialog::keyPressEvent(QKeyEvent *event)
         QWidget::keyPressEvent(event);
     }
 }
+
+bool CodeDialog::eventFilter(QObject *obj, QEvent *ev)
+{
+    if (obj == parent()) {
+        if (ev->type() == QEvent::Resize) {
+            const auto parent_size = static_cast<QResizeEvent*>(ev)->size();
+            resize(parent_size);
+        }
+        else if (ev->type() == QEvent::ChildAdded) {
+            raise();
+        }
+    }
+    else if (obj == this) {
+        if (ev->type() == QEvent::Show && parent()) {
+            const auto parent_widget = qobject_cast<QWidget*>(parent());
+            resize(parent_widget->size());
+        }
+    }
+    return QWidget::eventFilter(obj, ev);
+}
+
 
 QString CodeDialog::CodeDialogStateToStr(CodeDialogState state)
 {

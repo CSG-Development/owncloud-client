@@ -25,6 +25,7 @@
 #include "folderwizard/folderwizard.h"
 #include "gui/accountsettings.h"
 #include "gui/commonstrings.h"
+#include "gui/remoteaccess/overlaycontroller.h"
 #include "guiutility.h"
 #include "libsync/theme.h"
 #include "logbrowser.h"
@@ -556,6 +557,8 @@ void ApplicationGui::setupContextMenu()
 
 void ApplicationGui::updateContextMenu()
 {
+    bool isGuiBusy = _settingsDialog && _settingsDialog->isOverlayBusy();
+
     // If it's visible, we can't update live, and it won't be updated lazily: reschedule
     if (contextMenuVisible() && !updateWhileVisible() && _workaroundNoAboutToShowUpdate) {
         if (!_delayedTrayUpdateTimer.isActive()) {
@@ -578,7 +581,8 @@ void ApplicationGui::updateContextMenu()
     }
 
     _contextMenu->clear();
-    slotRebuildRecentMenus();
+    if (!isGuiBusy)
+        slotRebuildRecentMenus();
 
     // We must call deleteLater because we might be called from the press in one of the actions.
     for (auto *menu : std::as_const(_accountMenus)) {
@@ -606,35 +610,36 @@ void ApplicationGui::updateContextMenu()
     _contextMenu->addAction(Theme::instance()->applicationIcon(), tr("Show %1").arg(Theme::instance()->appNameGUI()), this, &ApplicationGui::slotShowSettings);
     _contextMenu->addSeparator();
 
-    if (accountList.isEmpty()) {
-        _contextMenu->addAction(tr("Create a new account"), this, [this] {
-            runNewAccountWizard(RunAccountWizardReason::CreateAccoundCommand);
-        });
-    } else {
-        if (atLeastOnePaused) {
-            _contextMenu->addAction(
-                tr("Resume synchronization"), this, [this] { setPauseOnAllFoldersHelper(AccountManager::instance()->accounts().values(), false); });
+    if (!isGuiBusy) {
+        if (accountList.isEmpty()) {
+            _contextMenu->addAction(tr("Create a new account"), this, [this] {
+                runNewAccountWizard(RunAccountWizardReason::CreateAccoundCommand);
+            });
         } else {
-            _contextMenu->addAction(
-                tr("Stop synchronization"), this, [this] { setPauseOnAllFoldersHelper(AccountManager::instance()->accounts().values(), true); });
+            if (atLeastOnePaused) {
+                _contextMenu->addAction(
+                    tr("Resume synchronization"), this, [this] { setPauseOnAllFoldersHelper(AccountManager::instance()->accounts().values(), false); });
+            } else {
+                _contextMenu->addAction(
+                    tr("Stop synchronization"), this, [this] { setPauseOnAllFoldersHelper(AccountManager::instance()->accounts().values(), true); });
+            }
+            _contextMenu->addSeparator();
+
+            // submenus for accounts
+            for (const auto &account : accountList) {
+                QMenu *accountMenu = new QMenu(account->account()->displayName(), _contextMenu.data());
+                _accountMenus.append(accountMenu);
+                _contextMenu->addMenu(accountMenu);
+
+                addAccountContextMenu(account, accountMenu);
+            }
         }
         _contextMenu->addSeparator();
 
-        // submenus for accounts
-        for (const auto &account : accountList) {
-            QMenu *accountMenu = new QMenu(account->account()->displayName(), _contextMenu.data());
-            _accountMenus.append(accountMenu);
-            _contextMenu->addMenu(accountMenu);
-
-            addAccountContextMenu(account, accountMenu);
+        _contextMenu->addAction(_actionStatus);
+        if (isConfigured && atLeastOneConnected) {
+            _contextMenu->addMenu(_recentActionsMenu);
         }
-    }
-
-    _contextMenu->addSeparator();
-
-    _contextMenu->addAction(_actionStatus);
-    if (isConfigured && atLeastOneConnected) {
-        _contextMenu->addMenu(_recentActionsMenu);
     }
 
     _contextMenu->addSeparator();
@@ -652,8 +657,10 @@ void ApplicationGui::updateContextMenu()
         _contextMenu->addAction(tr("Help"), this, &ApplicationGui::slotHelp);
     }
 
-    if (! Theme::instance()->about().isEmpty()) {
-        _contextMenu->addAction(tr("About %1").arg(Theme::instance()->appNameGUI()), this, &ApplicationGui::slotAbout);
+    if (!isGuiBusy) {
+        if (! Theme::instance()->about().isEmpty()) {
+            _contextMenu->addAction(tr("About %1").arg(Theme::instance()->appNameGUI()), this, &ApplicationGui::slotAbout);
+        }
     }
 
     _contextMenu->addAction(tr("Quit %1").arg(Theme::instance()->appNameGUI()), _app, &QApplication::quit);
@@ -821,6 +828,7 @@ void ApplicationGui::slotUpdateProgress(Folder *folder, const ProgressInfo &prog
 void ApplicationGui::runNewAccountWizard(RunAccountWizardReason reason)
 {
     if (_wizardController.isNull()) {
+        accountWizardActive = true;
 
         // passing the settings dialog as parent makes sure the wizard will be shown above it
         // as the settingsDialog's lifetime spans across the entire application but the dialog will live much shorter,
@@ -933,6 +941,7 @@ void ApplicationGui::runNewAccountWizard(RunAccountWizardReason reason)
 
                 // make sure the wizard is cleaned up eventually
                 _wizardController->deleteLater();
+                accountWizardActive = false;
             });
 
         // all we have to do is show the dialog...

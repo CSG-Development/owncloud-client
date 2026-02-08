@@ -73,6 +73,7 @@ public:
     SettingsDialog *settingsDialog() const;
 
     void runNewAccountWizard(RunAccountWizardReason reason);
+    bool isAccountWizardActive() const {return accountWizardActive;}
 
 signals:
     void setupProxy();
@@ -147,6 +148,7 @@ private:
     // keeping a pointer on those dialogs allows us to make sure they will be shown only once
     QPointer<Wizard::SetupController> _wizardController;
     QPointer<AboutDialog> _aboutDialog;
+    bool accountWizardActive = false;
 };
 
 } // namespace APP

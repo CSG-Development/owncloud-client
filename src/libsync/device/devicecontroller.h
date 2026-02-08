@@ -16,9 +16,9 @@ class APPLICATIONSYNC_EXPORT DeviceController: public QObject
     Q_OBJECT
 
 public:
-    enum class AccessCodeResult {
-        Accepted,
-        Error
+    enum class AccessCodeContext {
+        Init,
+        Token
     };
 
     explicit DeviceController(QObject* parent = nullptr);
@@ -51,11 +51,11 @@ public:
 
     QList<Device> getDevices() const;
 
+    QFuture<DeviceListCtx> queryDeviceList();
     QFuture<DevicePathListCtx> queryDeviceInfo(const QString& deviceId);
 
     void initAccessCode();
-    void enterAccessCode(const QString& code);
-    void enterAccessCodeFromAccount(const QString& code);
+    void enterAccessCode(const QString& code, bool from_account);
 
     QFuture<QList<DevicePath>> query_status_all(const Device& dev);
 
@@ -69,7 +69,7 @@ signals:
     void evaluate_finished();
 
     void accessCodeRequest();
-    void accessCodeResult(DeviceController::AccessCodeResult result, const QString& errorString, const QString& errorStacktrace);
+    void accessCodeResult(DeviceController::AccessCodeContext context, int status_code, const QString& errorString, const QString& errorStacktrace);
 
     void account_update_device_finished(const QList<DevicePath>& paths);
 

@@ -1,0 +1,37 @@
+.helper_frame { border: none; }
+
+#frameContent { border: none; background: rgba(0, 0, 0, 128); }
+#frame { border-radius: 28px; }
+#lblHeader { font-size: 24px; }
+#lblText { font-size: 16px; }
+#lblError { font-size: 12px; }
+
+.text_button {
+    font-size: 14px;
+    min-height: 40px;
+    max-height: 40px;
+    outline: none;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    background: transparent;
+}
+
+/*** Light */
+
+[theme="light"] #frame { background: #FFFFFF; }
+[theme="light"] #lblError { color: rgba(244, 67, 54, 1); }
+[theme="light"] .text_label { color: rgba(0, 0, 0, 0.87); }
+[theme="light"] .text_button { color: #1976D2; }
+[theme="light"] .text_button:disabled { color: #9E9E9E; }
+[theme="light"] .text_button:hover { background: rgba(30, 136, 229, 0.12); }
+[theme="light"] .text_button::pressed { background: rgba(30, 136, 229, 0.3); }
+
+/*** Dark */
+
+[theme="dark"] #frame { background: #262729; }
+[theme="dark"] #lblError { color: rgba(242, 143, 140, 1); }
+[theme="dark"] .text_label { color: rgba(255, 255, 255, 0.87); }
+[theme="dark"] .text_button { color: rgba(100, 181, 246, 1); }
+[theme="dark"] .text_button:disabled { color: rgba(158, 158, 158, 1); }
+[theme="dark"] .text_button:hover { background: rgba(144, 202, 249, 0.12); }
+[theme="dark"] .text_button::pressed { background: rgba(144, 202, 249, 0.3); }
