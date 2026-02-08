@@ -150,6 +150,7 @@
         <file>res/combowidget/triangle_down_dark.svg</file>
         <file>res/combowidget/triangle_up_dark.svg</file>
         <file>res/combowidget/popup_combo.qss</file>
+        <file>res/combowidget/device_icon.svg</file>
         <file>res/tooltips/tooltip_dark.qss</file>
         <file>res/tooltips/tooltip_light.qss</file>
     </qresource>
