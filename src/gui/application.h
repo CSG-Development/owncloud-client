@@ -60,6 +60,8 @@ public:
     AccountStatePtr addNewAccount(AccountPtr newAccount);
     void createTelemetry();
 
+    static bool appCreated() {return _instance != nullptr;}
+
 public slots:
     void slotCrash();
     void slotCrashEnforce();

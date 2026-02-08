@@ -19,15 +19,16 @@
 #include "accountsettings.h"
 #include "activitywidget.h"
 #include "application.h"
+#include "applicationgui.h"
 #include "configfile.h"
 #include "generalsettings.h"
-#include "applicationgui.h"
-#include "codedialog.h"
+#include "overlaycontroller.h"
 #include "theme.h"
 
+#include "customui/dimwidget.h"
+#include "customui/menu_toolbutton.h"
 #include "customui/stylehelper.h"
 #include "resources/resources.h"
-#include "customui/menu_toolbutton.h"
 
 #include <QActionGroup>
 #include <QDesktopServices>
@@ -36,11 +37,11 @@
 #include <QLayout>
 #include <QMessageBox>
 #include <QPainter>
-#include <QPainterPath>
 #include <QPixmap>
 #include <QPushButton>
 #include <QScreen>
 #include <QSettings>
+#include <QShortcut>
 #include <QStackedWidget>
 #include <QStandardItemModel>
 #include <QToolBar>
@@ -193,12 +194,10 @@ SettingsDialog::SettingsDialog(ApplicationGui *gui, QWidget *parent)
     : QMainWindow(parent)
     , _ui(new Ui::SettingsDialog)
     , _gui(gui)
+    , _overlayController(new OverlayController(this))
 {
     ConfigFile cfg;
     _ui->setupUi(this);
-
-    _codeDialog = new CodeDialog(this);
-    attachCodeDialog(true);
 
     connect(Theme::instance(), &Theme::themeChanged, this, [this] {
         StyleHelper::setDarkMode(Theme::instance()->isDarkTheme());
@@ -401,17 +400,17 @@ QWidget* SettingsDialog::currentPage()
     return _ui->stack->currentWidget();
 }
 
-void SettingsDialog::attachCodeDialog(bool attach)
-{
-    disconnect(_codeDialog, &CodeDialog::codeAction, this, nullptr);
+// void SettingsDialog::attachCodeDialog(bool attach)
+// {
+//     disconnect(_codeDialog, &CodeDialog::codeAction, this, nullptr);
 
-    if (attach) {
-        connect(_codeDialog, &CodeDialog::codeAction, this, [this](CodeAction act, const QString& /*code*/) {
-            if (act == CodeAction::Skip)
-                showCodePage(CodeRequestDialog::Hide, SyncState::Enabled);
-        });
-    }
-}
+//     if (attach) {
+//         connect(_codeDialog, &CodeDialog::codeAction, this, [this](CodeAction act, const QString& /*code*/) {
+//             if (act == CodeAction::Skip)
+//                 showCodePage(CodeRequestDialog::Hide, SyncState::Enabled);
+//         });
+//     }
+// }
 
 void SettingsDialog::changeEvent(QEvent *e)
 {
@@ -569,37 +568,11 @@ void SettingsDialog::slotAccountDisplayNameChanged()
     }
 }
 
-void SettingsDialog::showCodePage(CodeRequestDialog visible, SyncState syncState)
+bool SettingsDialog::isOverlayBusy() const
 {
-    int codeDlgIndex = _ui->dialogStack->indexOf(_codeDialog);
-    int currentIndex = _ui->dialogStack->currentIndex();
-    static int prevIndex = -1;
-
-    if (visible == CodeRequestDialog::Show) {
-        if (codeDlgIndex == -1) {
-            codeDlgIndex = _ui->dialogStack->addWidget(_codeDialog);
-        }
-
-        if (codeDlgIndex != currentIndex) {
-            prevIndex = currentIndex;
-
-            // Disable sync
-            FolderMan::instance()->setSyncEnabled(false);
-            _ui->dialogStack->setCurrentWidget(_codeDialog);
-        }
-        ApplicationGui::raise();
-    }
-    else {
-        if (prevIndex != -1)
-            _ui->dialogStack->setCurrentIndex(prevIndex);
-
-        _ui->dialogStack->removeWidget(_codeDialog);
-
-        if (syncState == SyncState::Enabled) {
-            // Enable sync back
-            FolderMan::instance()->setSyncEnabled(true);
-        }
-    }
+    if (_overlayController)
+        return _overlayController->isBusy();
+    return false;
 }
 
 void SettingsDialog::accountRemoved(AccountStatePtr accountStatePtr)

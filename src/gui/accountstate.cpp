@@ -23,11 +23,11 @@
 #include "libsync/creds/httpcredentials.h"
 #include "libsync/device/networkmonitor.h"
 
+#include "gui/remoteaccess/overlaycontroller.h"
 #include "gui/quotainfo.h"
 #include "gui/settingsdialog.h"
 #include "gui/spacemigration.h"
 #include "gui/tlserrordialog.h"
-#include "gui/codedialog.h"
 
 #include "settingsdialog.h"
 #include "socketapi/socketapi.h"
@@ -166,6 +166,10 @@ AccountState::AccountState(AccountPtr account)
         // Find another URL
         updateDeviceAccessibility();
     }, Qt::QueuedConnection);
+
+    connect(AccountManager::instance(), &AccountManager::applicationHasCreated, this, [this]{
+        initializeRA();
+    });
 }
 
 AccountState::~AccountState() { }
@@ -414,16 +418,22 @@ void AccountState::checkConnectivity(bool blockJobs)
 
 void AccountState::updateDeviceAccessibility()
 {
+    if (_updateDeviceInProgress) {
+        qCDebug(lcAccountState) << "Device availability check already in progress";
+        return;
+    }
+
+    if (ocApp()->gui()->isAccountWizardActive()) {
+        qCDebug(lcAccountState) << "Skip device availability check, account wizard in progress";
+        return;
+    }
+
     if (isSignedOut() || _waitingForNewCredentials) {
         qCDebug(lcAccountState) << "Skip device availability check, signed out";
         return;
     }
     if (_tlsDialog) {
         qCDebug(lcAccountState) << "Skip device availability check, waiting for tls dialog";
-        return;
-    }
-    if (_updateDeviceInProgress) {
-        qCDebug(lcAccountState) << "Device availability check already in progress";
         return;
     }
 
@@ -435,7 +445,7 @@ void AccountState::updateDeviceAccessibility()
             checkAndSwitchDevicePath();
         }, Qt::SingleShotConnection);
 
-        _updateDeviceInProgress = true;
+        setUpdateDeviceProgress(true);
         _deviceController->evaluateDeviceStatus(_account->devicePtr());
     }
     else {
@@ -466,7 +476,7 @@ void AccountState::checkAndSwitchDevicePath()
                 requestRAupdate();
             }
             else {
-                _updateDeviceInProgress = false;
+                setUpdateDeviceProgress(false);
             }
         });
 }
@@ -502,73 +512,7 @@ bool AccountState::doDevicePathSwitch()
     else {
         qCWarning(lcAccountState) << "No best path found for device";
     }
-    _updateDeviceInProgress = false;
     return retVal;
-}
-
-void AccountState::enableCodeDialogProcessing(bool enable)
-{
-    if (!enable) {
-        qCDebug(lcAccountState) << "Disable access code processing";
-        disconnect(ocApp()->gui()->settingsDialog()->codeDlg(), &CodeDialog::codeAction, this, nullptr);
-        disconnect(_deviceController, &DeviceController::accessCodeRequest, this, nullptr);
-        disconnect(_deviceController, &DeviceController::accessCodeResult, this, nullptr);
-        ocApp()->gui()->settingsDialog()->codeDlg()->reset();
-        return;
-    }
-
-    connect(ocApp()->gui()->settingsDialog()->codeDlg(), &CodeDialog::codeAction, this, [this](CodeAction act, const QString& code) {
-        switch (act) {
-        case CodeAction::Entered:
-            qCDebug(lcAccountState) << "Code dialog: code entered";
-            ocApp()->gui()->settingsDialog()->codeDlg()->setDialogState(CodeDialogState::Waiting);
-            _deviceController->enterAccessCodeFromAccount(code);
-            break;
-
-        case CodeAction::Resend:
-            qCDebug(lcAccountState) << "Code dialog: code resend";
-            ocApp()->gui()->settingsDialog()->codeDlg()->setDialogState(CodeDialogState::Waiting);
-            _deviceController->initAccessCode();
-            break;
-
-        case CodeAction::Skip:
-            qCDebug(lcAccountState) << "Code dialog: code skipped";
-            // Close code dialog
-            ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Hide, SyncState::Disabled);
-            _accessCodeDialog = false;
-            emit pathUpdateFinished(true, {});
-            break;
-        }
-    });
-
-    // Requested acces code enter
-    connect(_deviceController, &DeviceController::accessCodeRequest, this, [this]{
-        qCDebug(lcAccountState) << "Wanted access code dialog";
-        _accessCodeDialog = true;
-        ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Show, SyncState::Disabled);
-    });
-
-    connect(_deviceController, &DeviceController::accessCodeResult, this, [this](DeviceController::AccessCodeResult result, const QString& errorString, const QString& errorStacktrace) {
-        if (result == DeviceController::AccessCodeResult::Accepted) {
-            qCDebug(lcAccountState) << "Access code accepted";
-            // Close code dialog
-            ocApp()->gui()->settingsDialog()->showCodePage(CodeRequestDialog::Hide, SyncState::Disabled);
-            _accessCodeDialog = false;
-            _deviceController->account_update_device_continue(accountDevice());
-        }
-        else {
-            qCDebug(lcAccountState) << "Access code rejected" << errorString;
-            if (ocApp()->gui()->settingsDialog()->codeDlg()->isVisible()) {
-                qCDebug(lcAccountState) << "Access code dialog active, show error";
-                ocApp()->gui()->settingsDialog()->codeDlg()->setError(CodeDialogState::Resend, errorString, errorStacktrace);
-            }
-            else {
-                qCDebug(lcAccountState) << "Access code dialog is not active. Finish device checks";
-                emit pathUpdateFinished(true, {});
-            }
-        }
-    });
-    qCDebug(lcAccountState) << "Access code processing enabled";
 }
 
 void AccountState::requestRAupdate()
@@ -581,7 +525,7 @@ void AccountState::requestRAupdate()
 
     qCDebug(lcAccountState) << "Requesting device update from RA";
     // Turn on AccessCodeDialog processing
-    enableCodeDialogProcessing(true);
+    // enableCodeDialogProcessing(true);
 
     connect(_deviceController, &DeviceController::account_update_device_finished, this, [this](const QList<DevicePath>& paths) {
         qCDebug(lcAccountState) << "DeviceController::account_update_device_finished";
@@ -590,8 +534,7 @@ void AccountState::requestRAupdate()
 
     connect(this, &AccountState::pathUpdateFinished, this, [this](bool skippedCode, const QList<DevicePath>& paths) {
         qCDebug(lcAccountState) << "pathUpdateFinished. Skip code" << skippedCode;
-        _updateDeviceInProgress = false;
-        enableCodeDialogProcessing(false);
+        setUpdateDeviceProgress(false);
 
         if (skippedCode) {
             qCDebug(lcAccountState) << "Code skipped, no path update";
@@ -629,6 +572,130 @@ void AccountState::setAccountDevice(const Device &dev)
         return;
     }
     _account->setDevice(dev);
+}
+
+void AccountState::initializeRA()
+{
+    if (_raInitialized) {
+        qCDebug(lcAccountState) << "initializeRA already initialized";
+        return;
+    }
+
+    qCDebug(lcAccountState) << "initializeRA";
+
+    QPointer<OverlayController> oc = ocApp()->gui()->settingsDialog()->overlayController();
+    if (!oc) {
+        qCDebug(lcAccountState) << "invalid overlay controller";
+        // TODO: Fatal?
+    }
+
+    connect(oc.get(), &OverlayController::codeEntered, this, [this](const QString &code, const QUuid& id) {
+        if (_account && _account->uuid() == id) {
+            qCDebug(lcAccountState) << "codeEntered";
+            _deviceController->enterAccessCode(code, false);
+        } else { qCDebug(lcAccountState) << "codeEntered id isn't match"; }
+    });
+
+    connect(oc.get(), &OverlayController::resendRequested, this, [this](const QUuid& id) {
+        if (_account && _account->uuid() == id) {
+            qCDebug(lcAccountState) << "resendRequested";
+            _deviceController->initAccessCode();
+        } else { qCDebug(lcAccountState) << "resendRequested id isn't match"; }
+    });
+
+    connect(oc.get(), &OverlayController::processSkipped, this, [this,oc](const QUuid& id) {
+        if (oc && _account && _account->uuid() == id) {
+            qCDebug(lcAccountState) << "processSkipped";
+            oc->hideAll();
+            emit pathUpdateFinished(true, {});
+        }
+        else { qCDebug(lcAccountState) << "processSkipped id isn't match" << _account->uuid() << id; }
+    });
+
+    connect(oc.get(), &OverlayController::errorRetry, this, [this,oc](ErrorDialogState /*state*/, const QUuid& id) {
+        if (oc && _account && _account->uuid() == id) {
+            qCDebug(lcAccountState) << "errorRetry";
+            oc->resendAccessCode(_account->uuid());
+        }
+        else { qCDebug(lcAccountState) << "errorRetry id isn't match"; }
+    });
+
+    connect(oc.get(), &OverlayController::errorCancel, this, [this](ErrorDialogState /*state*/, const QUuid& id) {
+        if (_account && _account->uuid() == id) {
+            qCDebug(lcAccountState) << "errorCancel";
+            emit pathUpdateFinished(true, {});
+        }
+        else { qCDebug(lcAccountState) << "errorCancel id isn't match"; }
+    });
+    connect(oc.get(), &OverlayController::errorOk, this, [this](ErrorDialogState state, const QUuid& id) {
+        if (_account && _account->uuid() == id) {
+            qCDebug(lcAccountState) << "errorOk";
+            emit pathUpdateFinished(true, {});
+        }
+        else { qCDebug(lcAccountState) << "errorOk id isn't match"; }
+    });
+
+    connect(_deviceController, &DeviceController::accessCodeRequest, this, [this,oc] {
+        qCDebug(lcAccountState) << "accessCodeRequest";
+        if (oc && _account) {
+            qCDebug(lcAccountState) << "accessCodeRequest";
+            oc->requestAccessCode(_account->uuid());
+        }
+        else { qCDebug(lcAccountState) << "overlay controller was destroyed or invalid account ptr"; }
+    });
+
+    connect(_deviceController, &DeviceController::accessCodeResult, this,
+            [this,oc](DeviceController::AccessCodeContext context, int status_code, const QString &errorString, const QString &errorStacktrace) {
+                if (status_code == 200) {
+                    qCDebug(lcAccountState) << "accessCodeResult Accepted";
+                    _deviceController->account_update_device_continue(accountDevice());
+                    oc->hideAll();
+                } else {
+                    qCDebug(lcAccountState) << "accessCodeResult Error"
+                                            << (context == DeviceController::AccessCodeContext::Init ? "Init" : "Token")
+                                            << status_code << errorString << errorStacktrace;
+                    if (oc && _account) {
+                        if (status_code == 401) {
+                            // from /init - then incorrect email
+                            // from /token - then invalid code
+                            if (context == DeviceController::AccessCodeContext::Init) {
+                                // oc->reportError(ErrorDialogState::EmailNotRegistered, _account->uuid());
+                                emit pathUpdateFinished(true, {});
+                            }
+                            else if (context == DeviceController::AccessCodeContext::Token) {
+                                if (errorString.contains(QStringLiteral("expired"))) {
+                                    oc->expiredAccessCode(_account->uuid());
+                                }
+                                else {
+                                    oc->invalidAccessCode(_account->uuid());
+                                }
+                            }
+                        }
+                        else if (status_code == 500) {
+                            // oc->reportError(ErrorDialogState::UnableToConnect, _account->uuid());
+                            emit pathUpdateFinished(true, {});
+                        }
+                        else if (status_code == 429) {
+                            if (context == DeviceController::AccessCodeContext::Init) {
+                                //oc->reportError(ErrorDialogState::TooManyAttempts, _account->uuid());
+                                oc->hideAll();
+                                emit pathUpdateFinished(true, {});
+                            }
+                            else if (context == DeviceController::AccessCodeContext::Token) {
+                                oc->resendAccessCode(_account->uuid());
+                            }
+                        }
+                    }
+                }
+            });
+
+    _raInitialized = true;
+}
+
+void AccountState::setUpdateDeviceProgress(bool inProgress)
+{
+    _updateDeviceInProgress = inProgress;
+    qCDebug(lcAccountState) << "inProgress" << inProgress;
 }
 
 void AccountState::slotConnectionValidatorResult(ConnectionValidator::Status status, const QStringList &errors)
@@ -827,6 +894,9 @@ void AccountState::createDeviceController()
 
     _deviceController = new DeviceController(this);
     _deviceController->setEmail(_account->credentials()->user());
+
+    if (Application::appCreated())
+        initializeRA();
 }
 
 bool AccountState::readyForSync() const

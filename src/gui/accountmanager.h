@@ -87,6 +87,8 @@ public:
      */
     QStringList accountNames() const;
 
+    void applicationCreated();
+
 private:
     // saving and loading Account to settings
     void saveAccountHelper(Account *account, QSettings &settings, bool saveCredentials = true);
@@ -107,6 +109,8 @@ public slots:
 Q_SIGNALS:
     void accountAdded(AccountStatePtr account);
     void accountRemoved(AccountStatePtr account);
+
+    void applicationHasCreated();
 
 private:
     AccountManager() {}

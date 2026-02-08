@@ -232,6 +232,11 @@ QStringList AccountManager::accountNames() const
     return accounts;
 }
 
+void AccountManager::applicationCreated()
+{
+    emit applicationHasCreated();
+}
+
 AccountPtr AccountManager::loadAccountHelper(QSettings &settings)
 {
     auto acc = createAccount(settings.value(userUUIDC, QVariant::fromValue(QUuid::createUuid())).toUuid());

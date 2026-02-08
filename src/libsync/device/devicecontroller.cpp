@@ -183,7 +183,7 @@ void DeviceController::prepareLogin(Device &dev)
     };
 
     if (dev.paths.isEmpty() && !currentDevice.seagateDeviceID.isEmpty()) {
-        _api->ra_device_info(currentDevice.seagateDeviceID)
+        queryDeviceInfo(currentDevice.seagateDeviceID)
             .then(this, [this,fillAbout](const DevicePathListCtx& ctx) {
                 qCDebug(lcDeviceController) << "prepareLogin, device info status code" << ctx.res.status << ctx.res.errorString;
                 if (ctx.res.status == 200) {
@@ -259,7 +259,7 @@ void DeviceController::account_update_device(const Device& dev)
     }, Qt::SingleShotConnection);
 
     qCDebug(lcDeviceController) << "Query device list";
-    _api->ra_device_list()
+    queryDeviceList()
         .then(this, [this, d=dev](const DeviceListCtx& ctx) {
             qCDebug(lcDeviceController) << "DeviceListCtx" << ctx.res.status;
 
@@ -282,7 +282,7 @@ void DeviceController::account_update_device(const Device& dev)
             }
 
             qCDebug(lcDeviceController) << "Query device info for" << dev_ra->seagateDeviceID;
-            _api->ra_device_info(dev_ra->seagateDeviceID)
+            queryDeviceInfo(dev_ra->seagateDeviceID)
                 .then(this, [this, finishTask, id=dev_ra->seagateDeviceID](const DevicePathListCtx& ctx) {
                     qCDebug(lcDeviceController) << "acc update ra_device_info code" << ctx.res.status << ctx.res.errorString;
 
@@ -323,7 +323,7 @@ void DeviceController::account_update_device_continue(std::optional<Device> dev)
         return;
     }
 
-    _api->ra_device_info(dev->seagateDeviceID)
+    queryDeviceInfo(dev->seagateDeviceID)
         .then(this, [this](const DevicePathListCtx& ctx) {
             qCDebug(lcDeviceController) << "acc update continue ra_device_info code" << ctx.res.status << ctx.res.errorString;
             if (ctx.res.status == 200) {
@@ -415,8 +415,15 @@ QList<Device> DeviceController::getDevices() const
     return _deviceList;
 }
 
+QFuture<DeviceListCtx> DeviceController::queryDeviceList()
+{
+    loadRefreshToken();
+    return _api->ra_device_list();
+}
+
 QFuture<DevicePathListCtx> DeviceController::queryDeviceInfo(const QString &deviceId)
 {
+    loadRefreshToken();
     return _api->ra_device_info(deviceId);
 }
 
@@ -431,44 +438,30 @@ void DeviceController::initAccessCode()
                 emit accessCodeRequest();
             }
             else {
-                emit accessCodeResult(AccessCodeResult::Error, ctx.res.errorString, ctx.res.errorStacktrace);
+                emit accessCodeResult(AccessCodeContext::Init, ctx.res.status, ctx.res.errorString, ctx.res.errorStacktrace);
             }
         });
 }
 
-void DeviceController::enterAccessCode(const QString &code)
+void DeviceController::enterAccessCode(const QString &code, bool from_account)
 {
-    qCDebug(lcDeviceController) << "enterAccessCode";
+    qCDebug(lcDeviceController) << "enterAccessCode, from account:" << from_account;
     _api->ra_token(code)
-        .then(this, [this](const TokenContext& ctx) {
+        .then(this, [this,from_account](const TokenContext& ctx) {
             qCDebug(lcDeviceController) << "enterAccessCode" << ctx.res.status << ctx.res.errorString;
             if (ctx.res.status == 200) {
                 saveRefreshToken();
-                emit accessCodeResult(AccessCodeResult::Accepted, {}, {});
-                if (force_device_list_request) {
-                    qCDebug(lcDeviceController) << "force RA mode, queued forceQueryDeviceList call";
-                    // drop call stack
-                    QMetaObject::invokeMethod(this, &DeviceController::forceQueryDeviceList, Qt::QueuedConnection);
+                emit accessCodeResult(AccessCodeContext::Token, ctx.res.status, {}, {});
+                if (!from_account) {
+                    if (force_device_list_request) {
+                        qCDebug(lcDeviceController) << "force RA mode, queued forceQueryDeviceList call";
+                        // drop call stack
+                        QMetaObject::invokeMethod(this, &DeviceController::forceQueryDeviceList, Qt::QueuedConnection);
+                    }
                 }
             }
             else {
-                emit accessCodeResult(AccessCodeResult::Error, ctx.res.errorString, ctx.res.errorStacktrace);
-            }
-        });
-}
-
-void DeviceController::enterAccessCodeFromAccount(const QString &code)
-{
-    qCDebug(lcDeviceController) << "enterAccessCode";
-    _api->ra_token(code)
-        .then(this, [this](const TokenContext& ctx) {
-            qCWarning(lcDeviceController) << "enterAccessCode" << ctx.res.status << ctx.res.errorString << ctx.res.errorStacktrace;
-            if (ctx.res.status == 200) {
-                saveRefreshToken();
-                emit accessCodeResult(AccessCodeResult::Accepted, {}, {});
-            }
-            else {
-                emit accessCodeResult(AccessCodeResult::Error, ctx.res.errorString, ctx.res.errorStacktrace);
+                emit accessCodeResult(AccessCodeContext::Token, ctx.res.status, ctx.res.errorString, ctx.res.errorStacktrace);
             }
         });
 }
@@ -481,7 +474,7 @@ QFuture<QList<DevicePath> > DeviceController::query_status_all(const Device &dev
 void DeviceController::processQueryDeviceList()
 {
     qCDebug(lcDeviceController) << "Query device list";
-    _api->ra_device_list()
+    queryDeviceList()
         .then(this, [this](const DeviceListCtx& ctx) {
             qCDebug(lcDeviceController) << "DeviceListCtx" << ctx.res.status;
             if (ctx.res.status == 200) {
@@ -502,8 +495,7 @@ void DeviceController::processQueryDeviceList()
 void DeviceController::forceQueryDeviceList()
 {
     qCDebug(lcDeviceController) << "forceQueryDeviceList";
-
-    _api->ra_device_list()
+    queryDeviceList()
         .then(this, [this](const DeviceListCtx& ctx) {
             qCDebug(lcDeviceController) << "DeviceListCtx" << ctx.res.status;
             if (ctx.res.status == 200) {

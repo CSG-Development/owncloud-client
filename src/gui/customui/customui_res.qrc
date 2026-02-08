@@ -105,7 +105,8 @@
         <file>res/login/setupwidget.qss</file>
         <file>res/login/wait_page.qss</file>
         <file>res/login/warning_light.svg</file>
-        <file>res/login/code_dialog.qss</file>
+        <file>res/login/codedialog.qss</file>
+        <file>res/login/errordialog.qss</file>
         <file>res/login/refresh_light.svg</file>
         <file>res/login/refresh_dark.svg</file>
         <file>res/login/arrow_back_btn_dark.svg</file>

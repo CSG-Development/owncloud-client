@@ -175,10 +175,11 @@ private:
 
     void checkAndSwitchDevicePath();
     bool doDevicePathSwitch();
-    void enableCodeDialogProcessing(bool enable);
     void requestRAupdate();
     std::optional<Device> accountDevice();
     void setAccountDevice(const Device& dev);
+    void initializeRA();
+    void setUpdateDeviceProgress(bool inProgress);
 
 signals:
     void stateChanged(State state);
@@ -210,8 +211,8 @@ private:
     bool _supportsSpaces = true;
     bool _settingUp = false;
     DeviceController* _deviceController = nullptr;
-    bool _accessCodeDialog = false;
-    bool _updateDeviceInProgress = false;
+    std::atomic_bool _updateDeviceInProgress {false};
+    bool _raInitialized = false;
 
     /**
      * Starts counting when the server starts being back up after 503 or

@@ -110,5 +110,6 @@ private:
     QList<Device> fullList;
     DeviceController* _deviceController = nullptr;
     RunAccountWizardReason reason_ = RunAccountWizardReason::ApplicationStartup;
+    QUuid id_;
 };
 }
