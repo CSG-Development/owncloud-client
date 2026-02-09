@@ -106,6 +106,7 @@ SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason 
     connect(oc.get(), &OverlayController::errorOk, this, [this](ErrorDialogState state) {
         if (state == ErrorDialogState::EmailNotRegistered) {
             window()->displayPage(SetupPage::PageEmail);
+            window()->setEmailIsNotAllowed(true);
         }
         else {
             window()->showCredPageProgress(false);
@@ -261,6 +262,7 @@ void SetupController::onCredentialsAction(CredentialsAction action, std::optiona
 
     case CredentialsAction::BackButtonClicked:
         window()->displayPage(SetupPage::PageEmail);
+        window()->setEmailIsNotAllowed(false);
         break;
 
     case CredentialsAction::CantFindDeviceClicked:

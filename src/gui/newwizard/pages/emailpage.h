@@ -9,6 +9,12 @@ namespace Ui {class EmailPage;}
 
 class FocusProxyStyle;
 
+enum class EmailErrorState {
+    NoError,
+    InvalidEmail,
+    NotAllowed
+};
+
 class EmailPageController : public QObject
 {
     Q_OBJECT
@@ -18,9 +24,11 @@ public:
 
     QProperty<QString> email;
     QProperty<QString> buttonTooltip;
+    QProperty<QString> errorMessage;
     QProperty<bool> isFocused{false};
     QProperty<bool> canLogin {false};
-    QProperty<bool> errorState {false};
+    QProperty<bool> notRegistered {false};
+    QProperty<EmailErrorState> errorState {EmailErrorState::NoError};
     QProperty<bool> darkTheme {false};
 
 private:
@@ -48,6 +56,8 @@ public:
 
     void setEmail(const QString& email);
     QString email() const;
+
+    void setEmailIsNotRegistered(bool val) {controller_->notRegistered.setValue(val);}
 
     bool isDarkTheme() const { return controller_->darkTheme.value(); }
     void setDarkTheme(bool v) { controller_->darkTheme.setValue(v); }
