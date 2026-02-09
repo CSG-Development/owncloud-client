@@ -90,10 +90,13 @@ CodeDialog::CodeDialog(QWidget *parent)
 
     auto syncUI = [this]() {
         ui->codeInputWidget->setEnabled(controller_->codeInputEnabled.value());
+
         ui->btnAllowAccess->setVisible(controller_->btnAllowAccessVisible.value());
         ui->btnAllowAccess->setEnabled(controller_->btnAllowAccessEnabled.value());
+
         ui->btnResendCode->setVisible(controller_->btnResendCodeVisible.value());
         ui->btnResendCode->setEnabled(controller_->btnResendCodeEnabled.value());
+
         ui->spinner->setVisible(controller_->spinnerVisible.value());
         ui->lblError->setVisible(controller_->errorState.value() != CodeErrorState::None);
         ui->lblError->setText(controller_->errorString.value());
@@ -146,13 +149,14 @@ CodeDialog::CodeDialog(QWidget *parent)
     });
 
     setDialogState(CodeDialogState::AllowAccess);
-    syncUI();
     controller_->darkTheme.setValue(APP::Theme::instance()->isDarkTheme());
     controller_->codeString.setValue(QStringLiteral(""));
     updateThemeFunc();
 
     installEventFilter(this);
     parent->installEventFilter(this);
+
+    syncUI();
 }
 
 CodeDialog::~CodeDialog()

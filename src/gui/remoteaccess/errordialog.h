@@ -7,7 +7,8 @@ namespace Ui { class ErrorDialog; }
 
 enum class ErrorDialogState {
     TooManyAttempts,
-    UnableToConnect,
+    UnableToConnectInit,
+    UnableToConnectToken,
     EmailNotRegistered
 };
 
@@ -23,7 +24,7 @@ class ErrorDialogController : public QObject
 
 public:
     QProperty<bool> darkTheme{false};
-    QProperty<ErrorDialogState> state {ErrorDialogState::UnableToConnect};
+    QProperty<ErrorDialogState> state {ErrorDialogState::UnableToConnectInit};
     QProperty<bool> okBtnVisible{false};
     QProperty<bool> retryBtnVisible{false};
     QProperty<bool> cancelBtnVisible{false};
@@ -66,7 +67,8 @@ inline QString ErrorDialogStateToStr(ErrorDialogState state) {
     QMap<ErrorDialogState, QString> map = {
         {ErrorDialogState::EmailNotRegistered, QStringLiteral("ErrorDialogState::EmailNotRegistered")},
         {ErrorDialogState::TooManyAttempts, QStringLiteral("ErrorDialogState::TooManyAttempts")},
-        {ErrorDialogState::UnableToConnect, QStringLiteral("ErrorDialogState::UnableToConnect")},
+        {ErrorDialogState::UnableToConnectInit, QStringLiteral("ErrorDialogState::UnableToConnectInit")},
+        {ErrorDialogState::UnableToConnectToken, QStringLiteral("ErrorDialogState::UnableToConnectToken")},
     };
     if (map.contains(state))
         return map[state];

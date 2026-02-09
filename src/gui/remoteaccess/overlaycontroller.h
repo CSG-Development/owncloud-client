@@ -13,10 +13,11 @@ class OverlayController : public QObject
 public:
     explicit OverlayController(QWidget *parent = nullptr);
 
-    bool requestAccessCode(const QUuid& id);
+    bool requestAccessCode(const QUuid& id, bool clear);
     void resendAccessCode(const QUuid& id);
     void invalidAccessCode(const QUuid& id);
     void expiredAccessCode(const QUuid& id);
+    void retryAccessCode(const QUuid& id);
 
     void setCodeError(CodeErrorState errorState);
 
