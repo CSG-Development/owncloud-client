@@ -90,6 +90,8 @@ ComboWidget::ComboWidget(QWidget *parent)
         ui->lineEdit->setSelection(0, 0);
     });
 
+    ui->btnDeviceIcon->setVisible(false);
+
     setErrorState(false);
     updatePromptPosition();
 }
