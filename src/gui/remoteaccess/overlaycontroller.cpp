@@ -11,12 +11,13 @@ OverlayController::OverlayController(QWidget *parent)
 
     connect(_codeDlg, &CodeDialog::codeAction, this, &OverlayController::onCodeAction);
     connect(_errorDlg, &ErrorDialog::errorAction, this, &OverlayController::onErrorAction);
+
 }
 
-bool OverlayController::requestAccessCode(const QUuid &id)
+bool OverlayController::requestAccessCode(const QUuid &id, bool clear)
 {
     id_ = id;
-    showCodeDialogInternal(CodeDialogState::AllowAccess, true);
+    showCodeDialogInternal(CodeDialogState::AllowAccess, clear);
     return true;
 }
 
@@ -39,6 +40,14 @@ void OverlayController::expiredAccessCode(const QUuid &id)
     id_ = id;
     showCodeDialogInternal(CodeDialogState::Resend, false);
     setCodeError(CodeErrorState::CodeExpired);
+}
+
+void OverlayController::retryAccessCode(const QUuid &id)
+{
+    id_ = id;
+    showCodeDialogInternal(CodeDialogState::AllowAccess, false);
+    _codeDlg->setDialogState(CodeDialogState::Waiting);
+    emit codeEntered(_codeDlg->getCode(), id_);
 }
 
 void OverlayController::setCodeError(CodeErrorState errorState)

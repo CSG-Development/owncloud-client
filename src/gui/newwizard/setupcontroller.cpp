@@ -93,14 +93,28 @@ SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason 
         window()->showCredPageProgress(false);
     });
 
-    connect(oc.get(), &OverlayController::errorRetry, this, [this,oc](ErrorDialogState /*state*/) {
-        if (oc)
-            oc->resendAccessCode(id_);
+    connect(oc.get(), &OverlayController::errorRetry, this, [this,oc](ErrorDialogState state) {
+        if (oc) {
+            if (state == ErrorDialogState::UnableToConnectInit) {
+                window()->displayPage(SetupPage::PageCredentials);
+                window()->showCredPageProgress(true);
+                _deviceController->initAccessCode();
+            }
+            else if (state == ErrorDialogState::UnableToConnectToken) {
+                oc->retryAccessCode(id_);
+            }
+        }
     });
 
-    connect(oc.get(), &OverlayController::errorCancel, this, [this](ErrorDialogState /*state*/) {
-        window()->showCredPageProgress(false);
-        window()->displayPage(SetupPage::PageCredentials);
+    connect(oc.get(), &OverlayController::errorCancel, this, [this,oc](ErrorDialogState state) {
+        if (state == ErrorDialogState::UnableToConnectInit) {
+            window()->showCredPageProgress(false);
+            window()->displayPage(SetupPage::PageCredentials);
+        }
+        else {
+            if (oc)
+                oc->requestAccessCode(id_, false);
+        }
     });
 
     connect(oc.get(), &OverlayController::errorOk, this, [this](ErrorDialogState state) {
@@ -117,7 +131,7 @@ SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason 
     connect(_deviceController, &DeviceController::accessCodeRequest, this, [this,oc] {
         qCDebug(lcSetupWizardController) << "accessCodeRequest";
         if (oc)
-            oc->requestAccessCode(id_);
+            oc->requestAccessCode(id_, true);
         else
             qCDebug(lcSetupWizardController) << "overlay controller was destroyed";
     });
@@ -153,7 +167,12 @@ SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason 
                         }
                     }
                     else if (status_code == 500) {
-                        oc->reportError(ErrorDialogState::UnableToConnect, id_);
+                        if (context == DeviceController::AccessCodeContext::Init) {
+                            oc->reportError(ErrorDialogState::UnableToConnectInit, id_);
+                        }
+                        else if (context == DeviceController::AccessCodeContext::Token) {
+                            oc->reportError(ErrorDialogState::UnableToConnectToken, id_);
+                        }
                     }
                     else if (status_code == 429) {
                         if (context == DeviceController::AccessCodeContext::Init) {

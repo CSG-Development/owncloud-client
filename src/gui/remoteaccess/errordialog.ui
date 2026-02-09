@@ -185,6 +185,9 @@ background: rgba(30, 136, 229, 0.12);
             <string notr="true">helper_frame</string>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout">
+            <property name="spacing">
+             <number>8</number>
+            </property>
             <property name="topMargin">
              <number>24</number>
             </property>
@@ -226,6 +229,9 @@ background: rgba(30, 136, 229, 0.12);
                 <pointsize>-1</pointsize>
                </font>
               </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
               <property name="text">
                <string>Cancel</string>
               </property>
@@ -253,6 +259,9 @@ background: rgba(30, 136, 229, 0.12);
                 <pointsize>-1</pointsize>
                </font>
               </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
               <property name="text">
                <string>Retry</string>
               </property>
@@ -279,6 +288,9 @@ background: rgba(30, 136, 229, 0.12);
                <font>
                 <pointsize>-1</pointsize>
                </font>
+              </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
               </property>
               <property name="text">
                <string>OK</string>

@@ -612,18 +612,26 @@ void AccountState::initializeRA()
         else { qCDebug(lcAccountState) << "processSkipped id isn't match" << _account->uuid() << id; }
     });
 
-    connect(oc.get(), &OverlayController::errorRetry, this, [this,oc](ErrorDialogState /*state*/, const QUuid& id) {
+    connect(oc.get(), &OverlayController::errorRetry, this, [this,oc](ErrorDialogState state, const QUuid& id) {
         if (oc && _account && _account->uuid() == id) {
             qCDebug(lcAccountState) << "errorRetry";
-            oc->resendAccessCode(_account->uuid());
+            if (state == ErrorDialogState::UnableToConnectToken) {
+                oc->retryAccessCode(_account->uuid());
+            }
         }
         else { qCDebug(lcAccountState) << "errorRetry id isn't match"; }
     });
 
-    connect(oc.get(), &OverlayController::errorCancel, this, [this](ErrorDialogState /*state*/, const QUuid& id) {
+    connect(oc.get(), &OverlayController::errorCancel, this, [this,oc](ErrorDialogState state, const QUuid& id) {
         if (_account && _account->uuid() == id) {
             qCDebug(lcAccountState) << "errorCancel";
-            emit pathUpdateFinished(true, {});
+            if (state == ErrorDialogState::UnableToConnectToken) {
+                if (oc)
+                    oc->requestAccessCode(_account->uuid(), false);
+            }
+            else {
+                emit pathUpdateFinished(true, {});
+            }
         }
         else { qCDebug(lcAccountState) << "errorCancel id isn't match"; }
     });
@@ -639,7 +647,7 @@ void AccountState::initializeRA()
         qCDebug(lcAccountState) << "accessCodeRequest";
         if (oc && _account) {
             qCDebug(lcAccountState) << "accessCodeRequest";
-            oc->requestAccessCode(_account->uuid());
+            oc->requestAccessCode(_account->uuid(), true);
         }
         else { qCDebug(lcAccountState) << "overlay controller was destroyed or invalid account ptr"; }
     });
@@ -659,7 +667,6 @@ void AccountState::initializeRA()
                             // from /init - then incorrect email
                             // from /token - then invalid code
                             if (context == DeviceController::AccessCodeContext::Init) {
-                                // oc->reportError(ErrorDialogState::EmailNotRegistered, _account->uuid());
                                 emit pathUpdateFinished(true, {});
                             }
                             else if (context == DeviceController::AccessCodeContext::Token) {
@@ -672,8 +679,12 @@ void AccountState::initializeRA()
                             }
                         }
                         else if (status_code == 500) {
-                            // oc->reportError(ErrorDialogState::UnableToConnect, _account->uuid());
-                            emit pathUpdateFinished(true, {});
+                            if (context == DeviceController::AccessCodeContext::Token) {
+                                oc->reportError(ErrorDialogState::UnableToConnectToken, _account->uuid());
+                            }
+                            else {
+                                emit pathUpdateFinished(true, {});
+                            }
                         }
                         else if (status_code == 429) {
                             if (context == DeviceController::AccessCodeContext::Init) {

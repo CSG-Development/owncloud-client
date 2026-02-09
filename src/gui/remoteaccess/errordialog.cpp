@@ -22,16 +22,19 @@ ErrorDialogController::ErrorDialogController(QObject *parent)
                state.value() == ErrorDialogState::EmailNotRegistered;
     });
     retryBtnVisible.setBinding([this]() {
-        return state.value() == ErrorDialogState::UnableToConnect;
+        return state.value() == ErrorDialogState::UnableToConnectInit ||
+               state.value() == ErrorDialogState::UnableToConnectToken;
     });
     cancelBtnVisible.setBinding([this]() {
-        return state.value() == ErrorDialogState::UnableToConnect;
+        return state.value() == ErrorDialogState::UnableToConnectInit ||
+               state.value() == ErrorDialogState::UnableToConnectToken;
     });
     headerText.setBinding([this]() {
         switch (state.value()) {
             case ErrorDialogState::TooManyAttempts:
                 return tr("Access to Personal Cloud");
-            case ErrorDialogState::UnableToConnect:
+            case ErrorDialogState::UnableToConnectInit:
+            case ErrorDialogState::UnableToConnectToken:
                 return tr("Unable to connect");
             case ErrorDialogState::EmailNotRegistered:
                 return tr("Email not registered");
@@ -42,7 +45,8 @@ ErrorDialogController::ErrorDialogController(QObject *parent)
         switch (state.value()) {
         case ErrorDialogState::TooManyAttempts:
             return tr("There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.");
-        case ErrorDialogState::UnableToConnect:
+        case ErrorDialogState::UnableToConnectInit:
+        case ErrorDialogState::UnableToConnectToken:
             return tr("Could not reach your Personal Cloud.");
         case ErrorDialogState::EmailNotRegistered:
             return tr("This email isn’t authorized to access this device. Please contact the owner.");
