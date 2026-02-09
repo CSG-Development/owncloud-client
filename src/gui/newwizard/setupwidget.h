@@ -41,12 +41,14 @@ public:
     void showErrorMessage(const QString &errorMessage);
     void hideErrorMessage();
 
+    void setEmailIsNotAllowed(bool val);
+
     void setDevicesList(const QList<Device> &list);
     void setEmail(const QString& email);
 
     void onCancelClicked();
     void onSetupFinishPageDefaults(const QString &defaultSyncTargetDir, const QString &userChosenSyncTargetDir,
-        bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental);
+                                   bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental);
 
     void setInvalidUrlError();
     void setInvalidCredentialsError();

@@ -25,15 +25,34 @@ EmailPageController::EmailPageController(QObject *parent)
     : QObject(parent)
 {
     canLogin.setBinding([this]() {
-        return isEmailValid(email.value());
+        return isEmailValid(email.value()) && !notRegistered.value();
     });
+
     buttonTooltip.setBinding([this]() {
         auto s = canLogin.value() ? QStringLiteral("") : loginBtnTooltip;
         return s;
     });
+
     errorState.setBinding([this]() {
         const auto& currentEmail = email.value();
-        return !canLogin.value() && !isFocused.value() && !currentEmail.trimmed().isEmpty();
+        if (notRegistered && !isFocused.value())
+            return EmailErrorState::NotAllowed;
+        if (!canLogin.value() && !isFocused.value() && !currentEmail.trimmed().isEmpty())
+            return EmailErrorState::InvalidEmail;
+        return EmailErrorState::NoError;
+    });
+
+    errorMessage.setBinding([this]() {
+        switch (errorState.value())
+        {
+        case EmailErrorState::NoError:
+            return QStringLiteral("");
+        case EmailErrorState::InvalidEmail:
+            return tr("Invalid email");
+        case EmailErrorState::NotAllowed:
+            return tr("Not allowed. Contact the device owner.");
+        }
+        return QStringLiteral("");
     });
 }
 
@@ -54,7 +73,9 @@ EmailPage::EmailPage(QWidget *parent)
     auto syncUI = [this]() {
         ui->btnLogin->setToolTip(controller_->buttonTooltip.value());
         ui->btnLogin->setEnabled(controller_->canLogin.value());
-        ui->edEmail->setErrorState(controller_->errorState.value(), controller_->errorState.value() ? tr("Invalid email") : QStringLiteral(""));
+        // ui->edEmail->setErrorState(controller_->errorState.value(), controller_->errorState.value() ? tr("Invalid email") : QStringLiteral(""));
+        ui->edEmail->setErrorState(controller_->errorState.value() != EmailErrorState::NoError,
+                                   controller_->errorMessage.value());
         if (ui->edEmail->text() != controller_->email.value()) {
             QSignalBlocker blocker(ui->edEmail);
             ui->edEmail->setText(controller_->email.value());
@@ -90,6 +111,9 @@ EmailPage::EmailPage(QWidget *parent)
 
     connect(ui->edEmail, &InputWidget::focusChanged, this, [this](bool focused) {
         controller_->isFocused.setValue(focused);
+        if (controller_->isFocused.value()) {
+            controller_->notRegistered.setValue(false);
+        }
     });
 
     // MacOS hover enable

@@ -101,6 +101,12 @@ void SetupWidget::hideErrorMessage()
     showErrorMessage({});
 }
 
+void SetupWidget::setEmailIsNotAllowed(bool val)
+{
+    if (emailPage_)
+        emailPage_->setEmailIsNotRegistered(val);
+}
+
 void SetupWidget::setDevicesList(const QList<Device> &list)
 {
     if (credPage_)
