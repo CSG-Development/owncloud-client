@@ -20,16 +20,16 @@
 #include <QStyledItemDelegate>
 
 #include "accountstate.h"
-#include "curatorgui.h"
+#include "applicationgui.h"
 #include "progressdispatcher.h"
 
 class QAction;
 class QActionGroup;
 class QToolBar;
 class QStandardItemModel;
-class CodeDialog;
+class OverlayController;
 
-namespace CUR {
+namespace APP {
 
 namespace Ui {
     class SettingsDialog;
@@ -37,9 +37,19 @@ namespace Ui {
 class AccountSettings;
 class Application;
 class FolderMan;
-class CuratorGui;
+class ApplicationGui;
 class ActivitySettings;
 class ProxyStyleToolWin;
+
+enum class CodeRequestDialog {
+    Show,
+    Hide
+};
+
+enum class SyncState {
+    Enabled,
+    Disabled
+};
 
 /**
  * @brief The SettingsDialog class
@@ -51,7 +61,7 @@ class SettingsDialog : public QMainWindow
     Q_PROPERTY(QWidget* currentPage READ currentPage)
 
 public:
-    explicit SettingsDialog(CuratorGui *gui, QWidget *parent = nullptr);
+    explicit SettingsDialog(ApplicationGui *gui, QWidget *parent = nullptr);
     ~SettingsDialog() override;
 
     void addModalWidget(QWidget *w);
@@ -62,9 +72,7 @@ public:
     AccountSettings *accountSettings(Account *account);
 
     QWidget* currentPage();
-    CodeDialog* codeDlg() const {return _codeDialog;}
-    // connect (or disconnect) code dialog from this (to work locally in the new account wizard)
-    void attachCodeDialog(bool attach);
+    OverlayController *overlayController() const { return _overlayController; }
 
 public slots:
     void showFirstPage();
@@ -74,7 +82,7 @@ public slots:
     void slotAccountAvatarChanged();
     void slotAccountDisplayNameChanged();
 
-    void showCodePage(bool show, bool startSync);
+    bool isOverlayBusy() const;
 
 protected:
     void changeEvent(QEvent *) override;
@@ -104,9 +112,9 @@ private:
     QAction *_activityAction = nullptr;
     QAction *_addAccountAction = nullptr;
     QList<QAction *> _accountActions;
-    CuratorGui *_gui = nullptr;
+    ApplicationGui *_gui = nullptr;
     QList<Account *> _modalStack;
-    CodeDialog* _codeDialog = nullptr;
+    OverlayController *_overlayController = nullptr;
 };
 
 }

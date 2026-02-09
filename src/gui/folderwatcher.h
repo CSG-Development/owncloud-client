@@ -27,7 +27,7 @@
 #include <QTimer>
 
 
-namespace CUR {
+namespace APP {
 
 Q_DECLARE_LOGGING_CATEGORY(lcFolderWatcher)
 

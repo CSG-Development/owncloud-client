@@ -24,7 +24,7 @@
 
 class CCheckBox;
 
-namespace CUR {
+namespace APP {
 
 class SelectiveSyncWidget;
 

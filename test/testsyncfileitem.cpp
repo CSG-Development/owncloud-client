@@ -8,7 +8,7 @@
 
 #include "syncfileitem.h"
 
-using namespace CUR;
+using namespace APP;
 
 class TestSyncFileItem : public QObject
 {

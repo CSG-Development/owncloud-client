@@ -2,14 +2,14 @@
 #include "gui/customui/stylehelper.h"
 #include "gui/folderman.h"
 #include "gui/application.h"
-#include "gui/curatorgui.h"
+#include "gui/applicationgui.h"
 #include "gui/settingsdialog.h"
 #include "determineauthtypejobfactory.h"
 #include "jobs/discoverwebfingerservicejobfactory.h"
 #include "jobs/resolveurljobfactory.h"
 
 #include "device/devicecontroller.h"
-#include "gui/codedialog.h"
+#include "gui/remoteaccess/overlaycontroller.h"
 
 #include "theme.h"
 #include "configfile.h"
@@ -20,19 +20,22 @@
 
 using namespace std::chrono_literals;
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 Q_LOGGING_CATEGORY(lcSetupWizardController, "gui.setupwizard.controller")
 
-SetupController::SetupController(SettingsDialog *parent)
+SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason reason)
     : QObject(parent)
     , _context(new SetupContext(parent, this))
     , _deviceController(new DeviceController(parent))
+    , reason_(reason)
 {
     connect(_context->window(), &SetupWidget::rejected, this, [this] {
         qCDebug(lcSetupWizardController) << "wizard window closed";
         Q_EMIT finished(nullptr, SyncMode::Invalid, {});
     });
+
+    id_ = QUuid::createUuid();
 
     connect(_context->window(), &SetupWidget::credentialsAction, this, &SetupController::onCredentialsAction);
     connect(_context->window(), &SetupWidget::loginEmailClicked, this, &SetupController::onLoginEmailClicked);
@@ -66,60 +69,134 @@ SetupController::SetupController(SettingsDialog *parent)
         else {
             qCWarning(lcSetupWizardController) << "No device path found";
             window()->displayPage(SetupPage::PageConnectError);
-            //window()->showErrorMessage(tr("Device has no URL defined"));
         }
     });
 
-    // Setup code dialog
-    ocApp()->gui()->settingsDialog()->attachCodeDialog(false);
+    QPointer<OverlayController> oc = ocApp()->gui()->settingsDialog()->overlayController();
+    if (!oc) {
+        qCDebug(lcSetupWizardController) << "invalid overlay controller";
+        // TODO: Fatal?
+    }
 
-    connect(ocApp()->gui()->settingsDialog()->codeDlg(), &CodeDialog::codeAction, this, [this](CodeAction act, const QString& code) {
-        qCDebug(lcSetupWizardController) << "code action:" << CodeActionToStr(act);
-        switch (act) {
-        case CodeAction::Entered:
-            ocApp()->gui()->settingsDialog()->codeDlg()->setDialogState(CodeDialogState::Waiting);
-            _deviceController->enterAccessCode(code);
-            break;
-
-        case CodeAction::Resend:
-            ocApp()->gui()->settingsDialog()->codeDlg()->setDialogState(CodeDialogState::Waiting);
-            _deviceController->initAccessCode();
-            break;
-
-        case CodeAction::Skip:
-            ocApp()->gui()->settingsDialog()->showCodePage(false, false);
-            remoteSkipped = true;
-            window()->displayPage(SetupPage::PageCredentials);
-            window()->showCredPageProgress(false);
-            break;
-        }
+    connect(oc.get(), &OverlayController::codeEntered, this, [this](const QString &code) {
+        _deviceController->enterAccessCode(code, false);
     });
 
-    connect(_deviceController, &DeviceController::accessCodeRequest, this, [] {
-        qCDebug(lcSetupWizardController) << "accessCodeRequest";
-        ocApp()->gui()->settingsDialog()->showCodePage(true, false);
+    connect(oc.get(), &OverlayController::resendRequested, this, [this] {
+        _deviceController->initAccessCode();
     });
 
-    connect(_deviceController, &DeviceController::accessCodeResult, this, [this](DeviceController::AccessCodeResult result, const QString& errorString, const QString& errorStacktrace) {
+    connect(oc.get(), &OverlayController::processSkipped, this, [this,oc] {
+        if (oc)
+            oc->hideAll();
         window()->displayPage(SetupPage::PageCredentials);
         window()->showCredPageProgress(false);
-        if (result == DeviceController::AccessCodeResult::Accepted) {
-            qCDebug(lcSetupWizardController) << "accessCodeResult Accepted";
-            ocApp()->gui()->settingsDialog()->showCodePage(false, false);
-            remoteSkipped = false;
-        }
-        else {
-            qCDebug(lcSetupWizardController) << "accessCodeResult Error" << errorString << errorStacktrace;
-            if (ocApp()->gui()->settingsDialog()->codeDlg()->isVisible()) {
-                ocApp()->gui()->settingsDialog()->codeDlg()->setError(CodeDialogState::Resend, errorString, errorStacktrace);
+    });
+
+    connect(oc.get(), &OverlayController::errorRetry, this, [this,oc](ErrorDialogState state) {
+        if (oc) {
+            if (state == ErrorDialogState::UnableToConnectInit) {
+                window()->displayPage(SetupPage::PageCredentials);
+                window()->showCredPageProgress(true);
+                _deviceController->initAccessCode();
             }
-            else {
-                window()->setCredErrorMessage(errorString, errorStacktrace);
+            else if (state == ErrorDialogState::UnableToConnectToken) {
+                oc->retryAccessCode(id_);
             }
         }
     });
 
+    connect(oc.get(), &OverlayController::errorCancel, this, [this,oc](ErrorDialogState state) {
+        if (state == ErrorDialogState::UnableToConnectInit) {
+            window()->showCredPageProgress(false);
+            window()->displayPage(SetupPage::PageCredentials);
+        }
+        else {
+            if (oc)
+                oc->requestAccessCode(id_, false);
+        }
+    });
+
+    connect(oc.get(), &OverlayController::errorOk, this, [this](ErrorDialogState state) {
+        if (state == ErrorDialogState::EmailNotRegistered) {
+            window()->displayPage(SetupPage::PageEmail);
+            window()->setEmailIsNotAllowed(true);
+        }
+        else {
+            window()->showCredPageProgress(false);
+            window()->displayPage(SetupPage::PageCredentials);
+        }
+    });
+
+    connect(_deviceController, &DeviceController::accessCodeRequest, this, [this,oc] {
+        qCDebug(lcSetupWizardController) << "accessCodeRequest";
+        if (oc)
+            oc->requestAccessCode(id_, true);
+        else
+            qCDebug(lcSetupWizardController) << "overlay controller was destroyed";
+    });
+
+    connect(_deviceController, &DeviceController::accessCodeResult, this,
+        [this,oc](DeviceController::AccessCodeContext context, int status_code, const QString &errorString, const QString &errorStacktrace) {
+            window()->displayPage(SetupPage::PageCredentials);
+            window()->showCredPageProgress(false);
+            if (status_code == 200) {
+                qCDebug(lcSetupWizardController) << "accessCodeResult Accepted";
+                ocApp()->gui()->settingsDialog()->overlayController()->hideAll();
+                window()->displayPage(SetupPage::PageCredentials);
+                window()->showCredPageProgress(true);
+                _deviceController->start_new_account();
+            } else {
+                qCDebug(lcSetupWizardController) << "accessCodeResult Error"
+                                                 << (context == DeviceController::AccessCodeContext::Init ? "Init" : "Token")
+                                                 << status_code << errorString << errorStacktrace;
+                if (oc) {
+                    if (status_code == 401) {
+                        // from /init - then incorrect email
+                        // from /token - then invalid code
+                        if (context == DeviceController::AccessCodeContext::Init) {
+                            oc->reportError(ErrorDialogState::EmailNotRegistered, id_);
+                        }
+                        else if (context == DeviceController::AccessCodeContext::Token) {
+                            if (errorString.contains(QStringLiteral("expired"))) {
+                                oc->expiredAccessCode(id_);
+                            }
+                            else {
+                                oc->invalidAccessCode(id_);
+                            }
+                        }
+                    }
+                    else if (status_code == 500) {
+                        if (context == DeviceController::AccessCodeContext::Init) {
+                            oc->reportError(ErrorDialogState::UnableToConnectInit, id_);
+                        }
+                        else if (context == DeviceController::AccessCodeContext::Token) {
+                            oc->reportError(ErrorDialogState::UnableToConnectToken, id_);
+                        }
+                    }
+                    else if (status_code == 429) {
+                        if (context == DeviceController::AccessCodeContext::Init) {
+                            oc->reportError(ErrorDialogState::TooManyAttempts, id_);
+                        }
+                        else if (context == DeviceController::AccessCodeContext::Token) {
+                            oc->resendAccessCode(id_);
+                        }
+                    }
+                }
+            }
+        });
+
     setupFinishPage();
+
+    if (reason_ == RunAccountWizardReason::RemovedAndNoMoreAccounts) {
+        qCDebug(lcSetupWizardController) << "start reason is RemovedAndNoMoreAccounts";
+        ConfigFile cf;
+        const auto email = cf.favoriteEmail();
+        if (!email.isEmpty()) {
+            qCDebug(lcSetupWizardController) << "moving to credentials with email" << email;
+            onLoginEmailClicked(email);
+        }
+    }
 }
 
 SetupWidget* SetupController::window()
@@ -204,7 +281,7 @@ void SetupController::onCredentialsAction(CredentialsAction action, std::optiona
 
     case CredentialsAction::BackButtonClicked:
         window()->displayPage(SetupPage::PageEmail);
-        remoteSkipped = false;
+        window()->setEmailIsNotAllowed(false);
         break;
 
     case CredentialsAction::CantFindDeviceClicked:
@@ -217,7 +294,6 @@ void SetupController::onLoginEmailClicked(const QString& email)
 {
     qCDebug(lcSetupWizardController) << "Login email clicked";
     email_ = email;
-    remoteSkipped = false;
 
     ConfigFile cf;
     cf.setFavoriteEmail(email_);
@@ -244,6 +320,7 @@ void SetupController::onHandleCredentialsEvaluation(SetupResult result, const QS
 
 void SetupController::onDevicesUpdated(bool raQueried)
 {
+    qCDebug(lcSetupWizardController) << "onDevicesUpdated, ra was queried" << raQueried;
     fullList = _deviceController->getDevices();
     window()->setDevicesList(fullList);
     window()->showCredPageProgress(false);
@@ -373,7 +450,7 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
     // first, we must resolve the actual server URL
     auto resolveJob = Jobs::ResolveUrlJobFactory(_context->accessManager()).startJob(serverUrl, this);
 
-    connect(resolveJob, &CoreJob::finished, resolveJob, [this, resolveJob, dev_id = id]() {
+    connect(resolveJob, &CoreJob::finished, resolveJob, [this, resolveJob]() {
         resolveJob->deleteLater();
 
         if (!resolveJob->success()) {
@@ -386,7 +463,7 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
         // next, we need to find out which kind of authentication page we have to present to the user
         auto authTypeJob = DetermineAuthTypeJobFactory(_context->accessManager()).startJob(resolvedUrl, this);
 
-        connect(authTypeJob, &CoreJob::finished, authTypeJob, [this, authTypeJob, resolvedUrl, dev_id]() {
+        connect(authTypeJob, &CoreJob::finished, authTypeJob, [this, authTypeJob, resolvedUrl]() {
             authTypeJob->deleteLater();
 
             if (authTypeJob->result().isNull()) {
@@ -396,7 +473,6 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
 
             _context->accountBuilder().setServerUrl(resolvedUrl, qvariant_cast<DetermineAuthTypeJob::AuthType>(authTypeJob->result()));
             _context->accountBuilder().setDevice(device_);
-            device_.setActicvePath(dev_id);
             Q_EMIT handleCredentialsEvaluation(SetupResult::Success);
         });
     });
@@ -474,4 +550,4 @@ SetupController::~SetupController() noexcept
 {
 }
 
-} // namespace CUR::Wizard
+} // namespace APP::Wizard

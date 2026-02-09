@@ -18,14 +18,14 @@
 #include <QNetworkReply>
 #include <QUrl>
 
-namespace CUR {
+namespace APP {
 namespace HttpLogger {
-    void CURATORSYNC_EXPORT logRequest(QNetworkReply *reply, QNetworkAccessManager::Operation operation, QIODevice *device);
+    void APPLICATIONSYNC_EXPORT logRequest(QNetworkReply *reply, QNetworkAccessManager::Operation operation, QIODevice *device);
 
     /**
     * Helper to construct the HTTP verb used in the request
     */
-    QByteArray CURATORSYNC_EXPORT requestVerb(QNetworkAccessManager::Operation operation, const QNetworkRequest &request);
+    QByteArray APPLICATIONSYNC_EXPORT requestVerb(QNetworkAccessManager::Operation operation, const QNetworkRequest &request);
     inline QByteArray requestVerb(const QNetworkReply &reply)
     {
         return requestVerb(reply.operation(), reply.request());

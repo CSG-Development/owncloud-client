@@ -35,7 +35,7 @@ using namespace std::chrono_literals;
 
 Q_DECLARE_METATYPE(QPersistentModelIndex)
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcFolderStatus, "gui.folder.model", QtInfoMsg)
 
@@ -166,6 +166,9 @@ Qt::ItemFlags FolderStatusModel::flags(const QModelIndex &index) const
 
 QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
 {
+    if (_accountState == nullptr)
+        return {};
+
     if (!index.isValid())
         return QVariant();
 
@@ -1210,6 +1213,8 @@ void FolderStatusModel::slotFolderSyncStateChange(Folder *f)
 
 void FolderStatusModel::resetFolders()
 {
+    if (_accountState == nullptr)
+        return;
     setAccountState(_accountState);
 }
 
@@ -1350,4 +1355,4 @@ void FolderStatusModel::SubFolderInfo::resetSubs(FolderStatusModel *model, const
 }
 
 
-} // namespace CUR
+} // namespace APP

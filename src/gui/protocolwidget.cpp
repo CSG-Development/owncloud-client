@@ -33,7 +33,7 @@
 
 #include "ui_protocolwidget.h"
 
-namespace CUR {
+namespace APP {
 
 ProtocolWidget::ProtocolWidget(QWidget *parent)
     : QWidget(parent)
@@ -201,4 +201,4 @@ void ProtocolWidget::filterDidChange()
     _ui->_filterButton->setText(CommonStrings::filterButtonText(_sortModel->filterRegularExpression().pattern().isEmpty() ? 0 : 1));
 }
 
-} // CUR namespace
+} // APP namespace

@@ -50,7 +50,7 @@ public:
     ~DevWidget();
 
     void setDevice(const Device& dev);
-    void setAccout(CUR::Account* acc);
+    void setAccout(APP::Account* acc);
 
     void onCurrentChanged(const QModelIndex &current, const QModelIndex &previous);
 
@@ -66,7 +66,7 @@ private:
 private:
     Ui::DevWidget *ui = nullptr;
     DevModel model_;
-    CUR::Account* acc_ = nullptr;
+    APP::Account* acc_ = nullptr;
     QUuid currentId_;
     Device device_;
     QString _htmlBuffer;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CUR::SettingsDialog</class>
- <widget class="QMainWindow" name="CUR::SettingsDialog">
+ <class>APP::SettingsDialog</class>
+ <widget class="QMainWindow" name="APP::SettingsDialog">
   <property name="geometry">
    <rect>
     <x>0</x>

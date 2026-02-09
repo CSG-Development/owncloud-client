@@ -20,7 +20,7 @@
 #include <QUrl>
 #include <QWidget>
 
-namespace CUR {
+namespace APP {
 
 /**
  * Compares two given URLs.

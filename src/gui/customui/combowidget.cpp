@@ -22,20 +22,31 @@ QPair<QString,QString> inputStyleError = {
     QStringLiteral(":/res/combowidget/combowidget_error_dark.qss")
 };
 QPair<QString,QString> arrowButtonLight = {
-    QStringLiteral(":/res/combowidget/triangle_down.svg"),
-    QStringLiteral(":/res/combowidget/triangle_up.svg")
+    QStringLiteral(":/res/combowidget/triangle_down_light.svg"),
+    QStringLiteral(":/res/combowidget/triangle_up_light.svg")
 };
 QPair<QString,QString> arrowButtonDark = {
-    QStringLiteral(":/res/combowidget/triangle_down.svg"),
-    QStringLiteral(":/res/combowidget/triangle_up.svg")
+    QStringLiteral(":/res/combowidget/triangle_down_dark.svg"),
+    QStringLiteral(":/res/combowidget/triangle_up_dark.svg")
 };
 }
 
 ComboWidget::ComboWidget(QWidget *parent)
     : QFrame(parent)
     , ui(new Ui::ComboWidget)
+    , popup(new PopupComboWidget(this))
 {
     ui->setupUi(this);
+
+    popup->setVisible(false);
+    popup->setAnchorWidget(ui->inputFrame);
+
+    themeNotifier = darkTheme_.addNotifier([this] {
+        qDebug() << "darkTheme_ Notifier" << darkTheme_.value();
+        APP::StyleHelper::setTheme(this, darkTheme_.value());
+        updateStyles();
+    });
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
 
     promptLabel = new QLabel(this);
     promptLabel->setObjectName(QStringLiteral("promptLabel"));
@@ -47,10 +58,6 @@ ComboWidget::ComboWidget(QWidget *parent)
 
     ui->arrowButton->setCursor(Qt::PointingHandCursor);
 
-    popup = new PopupComboWidget(this);
-    popup->setVisible(false);
-    popup->setAnchorWidget(ui->inputFrame);
-
     connect(popup, &PopupComboWidget::clickedOutside, this, [this] {
         popup->hide();
         updateButtonIcon();
@@ -60,10 +67,10 @@ ComboWidget::ComboWidget(QWidget *parent)
         auto selected = popup->selectedDevice();
         if (selected) {
             selectedDevice = selected;
-            if (selectedDevice->friendlyName().isEmpty())
+            if (selectedDevice->friendlyName.isEmpty())
                 setText(selectedDevice->certificateCommonName);
             else
-                setText(selectedDevice->friendlyName());
+                setText(selectedDevice->friendlyName);
         }
     });
 
@@ -83,9 +90,10 @@ ComboWidget::ComboWidget(QWidget *parent)
         ui->lineEdit->setSelection(0, 0);
     });
 
+    ui->btnDeviceIcon->setVisible(false);
+
     setErrorState(false);
     updatePromptPosition();
-    setDarkTheme();
 }
 
 ComboWidget::~ComboWidget()
@@ -110,6 +118,7 @@ void ComboWidget::setText(const QString &val)
     ui->lineEdit->setText(val);
     ui->lineEdit->setToolTip(val);
     ui->lineEdit->setSelection(0, 0);
+    ui->btnDeviceIcon->setVisible(!val.isEmpty());
 }
 
 void ComboWidget::setItems(const QList<Device> &list)
@@ -119,17 +128,36 @@ void ComboWidget::setItems(const QList<Device> &list)
 
     popup->setItems(deviceList);
 
-    // List is empty, but some device already selected - clear device selection
-    if (deviceList.isEmpty() && !text().isEmpty()) {
+    // List is empty
+    if (deviceList.isEmpty()) {
         selectedDevice = std::nullopt;
         setText(QStringLiteral(""));
+        return;
     }
-    else if (!deviceList.isEmpty() && text().isEmpty()) {
+
+    // Update text if already selected
+    if (selectedDevice) {
+        const auto& dev = findByCN(deviceList, selectedDevice->certificateCommonName);
+        if (dev) {
+            if (dev->friendlyName.isEmpty())
+                setText(dev->certificateCommonName);
+            else
+                setText(dev->friendlyName);
+        }
+        else {
+            // Selected device is not in list
+            selectedDevice = std::nullopt;
+            setText(QStringLiteral(""));
+        }
+    }
+
+    // Still no selected
+    if (text().isEmpty()) {
         selectedDevice = deviceList.first();
-        if (selectedDevice->friendlyName().isEmpty())
+        if (selectedDevice->friendlyName.isEmpty())
             setText(selectedDevice->certificateCommonName);
         else
-            setText(selectedDevice->friendlyName());
+            setText(selectedDevice->friendlyName);
     }
 }
 
@@ -140,13 +168,6 @@ void ComboWidget::setErrorState(bool enable, const QString& txt)
         ui->errorLabel->clear();
     else
         ui->errorLabel->setText(txt);
-    updateStyles();
-}
-
-void ComboWidget::setDarkTheme()
-{
-    isDark = CUR::Theme::instance()->isDarkTheme();
-    popup->setDarkTheme(isDark);
     updateStyles();
 }
 
@@ -179,11 +200,6 @@ void ComboWidget::setFontPixelSize(int val)
     ui->lineEdit->setFont(font);
 }
 
-void ComboWidget::paintEvent(QPaintEvent *event)
-{
-    QFrame::paintEvent(event);
-}
-
 void ComboWidget::resizeEvent(QResizeEvent */*event*/)
 {
     updatePromptPosition();
@@ -192,37 +208,47 @@ void ComboWidget::resizeEvent(QResizeEvent */*event*/)
 void ComboWidget::onTextChanged(const QString& str)
 {
     if (!promptLabel->text().isEmpty()) {
+        ui->btnDeviceIcon->setVisible(true);
         promptLabel->setVisible(!str.isEmpty());
     }
 
-    Q_EMIT textChanged(str);
+    emit textChanged(str);
 }
 
 void ComboWidget::updatePromptPosition()
 {
-    promptLabel->move(ui->lineEdit->pos().x() + 12, rect().top());
+    promptLabel->move(ui->lineEdit->pos().x() + 4, rect().top());
 }
 
 void ComboWidget::updateStyles()
 {
     if (errorState)
-        setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? inputStyleError.second : inputStyleError.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyleError.second : inputStyleError.first));
     else
-        setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? inputStyle.second : inputStyle.first));
-
-    style()->unpolish(this);
-    style()->polish(this);
+        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyle.second : inputStyle.first));
 
     updateButtonIcon();
 }
 
 void ComboWidget::updateButtonIcon()
 {
-    if (isDark) {
+    if (darkTheme_.value()) {
         ui->arrowButton->setIcon(popup->isVisible() ? QIcon(arrowButtonDark.second) : QIcon(arrowButtonDark.first));
     }
     else {
         ui->arrowButton->setIcon(popup->isVisible() ? QIcon(arrowButtonLight.second) : QIcon(arrowButtonLight.first));
     }
     update();
+}
+
+std::optional<Device> ComboWidget::findByCN(const QList<Device> &list, const QString& cn)
+{
+    const auto& it = std::find_if(list.cbegin(), list.cend(), [cn](const Device& dev) {
+        return dev.certificateCommonName == cn;
+    });
+
+    if (it != list.cbegin())
+        return *it;
+
+    return std::nullopt;
 }

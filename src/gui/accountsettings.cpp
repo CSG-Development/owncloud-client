@@ -70,7 +70,7 @@ constexpr auto modalWidgetStretchedMarginC = 4;
 
 }
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcAccountSettings, "gui.account.settings", QtInfoMsg)
 
@@ -236,7 +236,7 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     ui->stackedWidget->setCurrentWidget(ui->folderListPage);
 
     connect(Theme::instance(), &Theme::themeChanged, this, &AccountSettings::onThemeChanged);
-    onThemeChanged();
+    onThemeChanged(Theme::instance()->isDarkTheme());
 }
 
 
@@ -255,7 +255,7 @@ void AccountSettings::createAccountToolbox()
 
     _developerWindow = new QAction(tr("Show device info"), this);
 
-    if (CUR::ConfigFile::isDeviceEditorEnabled()) {
+    if (APP::ConfigFile::isDeviceEditorEnabled()) {
         connect(_developerWindow, &QAction::triggered, this, [this] {
             if (devWidget) {
                 devWidget->setAccout(_accountState->account().data());
@@ -393,7 +393,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
                 Utility::openBrowser(DevHelpers::makePhotosUrl(accUrl), nullptr);
             });
 
-            if (CUR::ConfigFile::shareFromUi()) {
+            if (APP::ConfigFile::shareFromUi()) {
                 menu->addAction(tr("Open share page"), [localpath = info->_folder->path(), path] {
                     FolderMan::instance()->socketApi()->emit_shareCommandReceived(path, localpath, ShareDialogStartPage::UsersAndGroups);
                 });
@@ -619,7 +619,7 @@ void AccountSettings::slotEnableVfsCurrentFolder()
     if (VfsPluginManager::instance().bestAvailableVfsMode() == Vfs::WindowsCfApi) {
         Q_EMIT messageBox->accepted();
     } else {
-        CuratorGui::raise();
+        ApplicationGui::raise();
         messageBox->show();
     }
 }
@@ -854,13 +854,13 @@ void AccountSettings::slotAccountStateChanged()
             connect(cred, &HttpCredentialsGui::oAuthErrorOccurred, _askForOAuthLoginDialog, [loginDialog = _askForOAuthLoginDialog, contentWidget, cred]() {
                 Q_ASSERT(!cred->ready());
 
-                CuratorGui::raise();
+                ApplicationGui::raise();
                 contentWidget->showRetryFrame();
             });
 
             showConnectionLabel(tr("Reauthorization required."));
 
-            CuratorGui::raise();
+            ApplicationGui::raise();
             _askForOAuthLoginDialog->open();
 
             QTimer::singleShot(0, [contentWidget]() {
@@ -964,9 +964,8 @@ void AccountSettings::slotLinkActivated(const QString &link)
     }
 }
 
-void AccountSettings::onThemeChanged()
+void AccountSettings::onThemeChanged(bool isDark)
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 }
 
@@ -1137,6 +1136,6 @@ bool AccountSettings::event(QEvent *e)
     return QWidget::event(e);
 }
 
-} // namespace CUR
+} // namespace APP
 
 #include "accountsettings.moc"

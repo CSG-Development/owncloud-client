@@ -19,5 +19,5 @@ int main(int argc, char* argv[])
 {
    QString dir="/tmp/linktest/";
    QDir().mkpath(dir);
-   CUR::Utility::setupFavLink(dir);
+   APP::Utility::setupFavLink(dir);
 }

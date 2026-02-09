@@ -16,7 +16,7 @@
 
 #include <QWidget>
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 class AbstractPage : public QWidget
 {

@@ -28,7 +28,7 @@
 #include <QPainter>
 #include <QUrl>
 
-using namespace CUR::Spaces;
+using namespace APP::Spaces;
 
 Q_LOGGING_CATEGORY(lcSpacesDelegate, "gui.spaces.delegate")
 

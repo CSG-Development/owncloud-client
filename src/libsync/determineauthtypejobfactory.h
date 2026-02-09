@@ -20,10 +20,10 @@
 #include "networkjobs.h"
 #include "curatorlib.h"
 
-namespace CUR {
+namespace APP {
 
 
-class CURATORSYNC_EXPORT DetermineAuthTypeJobFactory : public AbstractCoreJobFactory
+class APPLICATIONSYNC_EXPORT DetermineAuthTypeJobFactory : public AbstractCoreJobFactory
 {
 public:
     using AuthType = DetermineAuthTypeJob::AuthType;

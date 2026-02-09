@@ -22,6 +22,9 @@ const auto BtnStyle = QStringLiteral(
     "#btnRefresh:pressed, #btnNetw:pressed, #btnQueryAbout:pressed, #btnSave:pressed {"
     "    background-color: rgba(0, 0, 238, 0.20);"
     "}"
+    "#btnRefresh:disabled, #btnNetw:disabled, #btnQueryAbout:disabled, #btnSave:disabled {"
+    "    background-color: rgba(120, 120, 120, 0.90);"
+    "}"
     "#btnApply {"
     "    border: 1px solid rgba(200, 0, 0, 0.4);"
     "    background-color: rgba(200, 0, 0, 0.03);"
@@ -80,12 +83,15 @@ DevWidget::DevWidget(QWidget *parent)
         }
     });
     connect(ui->btnNetw, &QPushButton::clicked, this, [] {
-        CUR::NetworkMonitor::instance()->emit_network_changed();
+        APP::NetworkMonitor::instance()->emit_network_changed();
     });
     connect(ui->btnQueryAbout, &QPushButton::clicked, this, [this] {
         auto path = device_.getPathPtr(currentId_);
         if (!path)
             return;
+
+        ui->btnQueryAbout->setEnabled(false);
+        qApp->processEvents();
 
         auto dev_api = new DeviceApi(this);
 
@@ -95,6 +101,8 @@ DevWidget::DevWidget(QWidget *parent)
                 path->status = ctx.second.deviceStatus;
                 dev_api->deleteLater();
                 showPathInfoText();
+                ui->btnQueryAbout->setEnabled(true);
+                qApp->processEvents();
             });
 
     });
@@ -110,10 +118,9 @@ void DevWidget::setDevice(const Device &dev)
 {
     device_ = dev;
     ui->lblCommonName->setText(dev.certificateCommonName.isEmpty() ? QStringLiteral("---") : dev.certificateCommonName);
-    ui->lblFriendlyName->setText(dev.friendlyName().isEmpty() ? QStringLiteral("---") : dev.friendlyName());
+    ui->lblFriendlyName->setText(dev.friendlyName.isEmpty() ? QStringLiteral("---") : dev.friendlyName);
     ui->lblHostname->setText(dev.hostname.isEmpty() ? QStringLiteral("---") : dev.hostname);
     ui->lblDevId->setText(dev.seagateDeviceID.isEmpty() ? QStringLiteral("---") : dev.seagateDeviceID);
-    ui->lblOrigin->setText(DevHelpers::originToStr(dev.origin));
 
     model_.setDeviceData(dev.paths);
     showPathInfoText();
@@ -145,6 +152,7 @@ QVariant DevModel::data(const QModelIndex &idx, int role) const
     switch (role)
     {
     case Qt::DisplayRole:
+    case Qt::ToolTipRole:
         switch (col) {
             case clUrl: return data_[row].address;
             case clPort: return data_[row].port;
@@ -189,7 +197,7 @@ void DevModel::setDeviceData(const QList<DevicePath> &d)
     endResetModel();
 }
 
-void DevWidget::setAccout(CUR::Account *acc)
+void DevWidget::setAccout(APP::Account *acc)
 {
     acc_ = acc;
     setDevice(acc_->device());

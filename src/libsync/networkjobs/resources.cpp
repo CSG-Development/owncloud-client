@@ -5,7 +5,7 @@
 #include <QIcon>
 #include <QMimeDatabase>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcResources, "sync.networkjob.resource")
 

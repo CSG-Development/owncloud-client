@@ -59,7 +59,7 @@
 #include <QNetworkInformation>
 #endif
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcApplication, "gui.application", QtInfoMsg)
 
@@ -68,7 +68,7 @@ QString Application::displayLanguage() const
     return _displayLanguage;
 }
 
-CuratorGui *Application::gui() const
+ApplicationGui *Application::gui() const
 {
     return _gui;
 }
@@ -119,7 +119,7 @@ Application::Application(Platform *platform, bool debugMode)
 
     // Setting up the gui class will allow tray notifications for the
     // setup that follows, like folder setup
-    _gui = new CuratorGui(this);
+    _gui = new ApplicationGui(this);
 
     connect(AccountManager::instance(), &AccountManager::accountAdded, this, &Application::slotAccountStateAdded);
     connect(AccountManager::instance(), &AccountManager::accountRemoved, this, &Application::slotAccountStateRemoved);
@@ -127,7 +127,7 @@ Application::Application(Platform *platform, bool debugMode)
         slotAccountStateAdded(ai);
     }
 
-    connect(FolderMan::instance()->socketApi(), &SocketApi::shareCommandReceived, _gui.data(), &CuratorGui::slotShowShareDialog);
+    connect(FolderMan::instance()->socketApi(), &SocketApi::shareCommandReceived, _gui.data(), &ApplicationGui::slotShowShareDialog);
 
 #ifdef WITH_AUTO_UPDATER
     // Update checks
@@ -162,7 +162,7 @@ Application::~Application()
 void Application::slotAccountStateRemoved(AccountStatePtr accountState) const
 {
     if (_gui) {
-        disconnect(accountState.data(), &AccountState::stateChanged, _gui.data(), &CuratorGui::slotAccountStateChanged);
+        disconnect(accountState.data(), &AccountState::stateChanged, _gui.data(), &ApplicationGui::slotAccountStateChanged);
         disconnect(accountState->account().data(), &Account::serverVersionChanged, _gui.data(), nullptr);
     }
     disconnect(accountState.data(), &AccountState::isConnectedChanged, FolderMan::instance(), &FolderMan::slotIsConnectedChanged);
@@ -172,14 +172,14 @@ void Application::slotAccountStateRemoved(AccountStatePtr accountState) const
     if (_gui && AccountManager::instance()->accounts().isEmpty()) {
         // allow to add a new account if there is non any more. Always think
         // about single account theming!
-        gui()->runNewAccountWizard();
+        gui()->runNewAccountWizard(RunAccountWizardReason::RemovedAndNoMoreAccounts);
     }
 }
 
 void Application::slotAccountStateAdded(AccountStatePtr accountState) const
 {
     // Hook up the GUI slots to the account state's signals:
-    connect(accountState.data(), &AccountState::stateChanged, _gui.data(), &CuratorGui::slotAccountStateChanged);
+    connect(accountState.data(), &AccountState::stateChanged, _gui.data(), &ApplicationGui::slotAccountStateChanged);
     connect(accountState->account().data(), &Account::serverVersionChanged, _gui.data(), [account = accountState->account().data(), this] {
         _gui->slotTrayMessageIfServerUnsupported(account);
     });
@@ -430,4 +430,4 @@ std::unique_ptr<Application> Application::createInstance(Platform *platform, boo
     return std::unique_ptr<Application>(_instance);
 }
 
-} // namespace CUR
+} // namespace APP

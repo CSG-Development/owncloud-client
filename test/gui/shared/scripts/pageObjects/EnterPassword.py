@@ -17,7 +17,7 @@ class EnterPassword:
         "type": "QPushButton",
         "unnamed": 1,
         "visible": 1,
-        "window": names.loginRequiredDialog_OCC_LoginRequiredDialog,
+        "window": names.loginRequiredDialog_APP_LoginRequiredDialog,
     }
     COPY_URL_TO_CLIPBOARD_BUTTON = {
         "container": names.loginRequiredDialog_contentWidget_QStackedWidget,

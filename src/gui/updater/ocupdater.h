@@ -28,7 +28,7 @@
 class QNetworkAccessManager;
 class QNetworkReply;
 
-namespace CUR {
+namespace APP {
 
 /**
  * @brief Schedule update checks every couple of hours if the client runs.

@@ -38,7 +38,7 @@
 
 class QSettings;
 
-namespace CUR {
+namespace APP {
 
 class SyncJournal;
 
@@ -373,7 +373,7 @@ constexpr bool Utility::isBSD()
     return false;
 #endif
 }
-} // CUR namespace
+} // APP namespace
 
 #endif // UTILITY_H
 

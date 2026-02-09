@@ -15,7 +15,7 @@
 
 #include <QHeaderView>
 
-namespace CUR {
+namespace APP {
 
 class ExpandingHeaderView : public QHeaderView
 {

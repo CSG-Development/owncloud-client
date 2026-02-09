@@ -25,7 +25,7 @@ namespace Ui {
 class OAuthLoginWidget;
 }
 
-namespace CUR {
+namespace APP {
 
 /**
  * Used to log in to OAuth accounts, e.g., when the user logged out, or the authorization token timed out.

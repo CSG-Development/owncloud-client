@@ -5,7 +5,7 @@
 
 #include <any>
 
-namespace CUR {
+namespace APP {
 
 class ProviderCapcore: public ProviderBase
 {
@@ -22,4 +22,4 @@ public:
 };
 
 
-} // namespace CUR
+} // namespace APP

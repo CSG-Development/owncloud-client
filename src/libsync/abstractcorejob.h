@@ -21,7 +21,7 @@
 #include "abstractnetworkjob.h"
 #include "curatorlib.h"
 
-namespace CUR {
+namespace APP {
 
 /**
  * This class manages an (HTTP) network job's result. It holds a result on success and error details on failures.
@@ -30,7 +30,7 @@ namespace CUR {
  * In contrast to the traditional network jobs (e.g., SimpleNetworkJob), core jobs are not bound to an account. Therefore,
  * they can be used with ease in situations where an account object is not available (e.g., the new wizard).
  */
-class CURATORSYNC_EXPORT CoreJob : public QObject
+class APPLICATIONSYNC_EXPORT CoreJob : public QObject
 {
     Q_OBJECT
 
@@ -93,7 +93,7 @@ private:
  *
  * Jobs are built by the startJob factory method, which creates a job instance as well as a network request, wires the required signals up, then sends the request.
  */
-class CURATORSYNC_EXPORT AbstractCoreJobFactory
+class APPLICATIONSYNC_EXPORT AbstractCoreJobFactory
 {
 public:
     /**

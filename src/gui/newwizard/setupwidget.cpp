@@ -3,7 +3,7 @@
 
 #include "gui/application.h"
 #include "gui/guiutility.h"
-#include "gui/curatorgui.h"
+#include "gui/applicationgui.h"
 #include "gui/settingsdialog.h"
 #include "gui/customui/stylehelper.h"
 #include "pages/emailpage.h"
@@ -29,7 +29,7 @@ QPair<QString,QString> widgetStyle = {
 };
 }
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 Q_LOGGING_CATEGORY(lcSetupWizardWidget, "gui.setupwizard.window")
 
@@ -43,6 +43,8 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     setObjectName(QStringLiteral("SetupWidget"));
 
     _ui->setupUi(this);
+
+    setStyleSheet(StyleHelper::loadFileToString(QStringLiteral(":/res/login/setupwidget.qss")));
 
     emailPage_ = new EmailPage(this);
     _ui->contentWidget->addWidget(emailPage_);
@@ -69,10 +71,9 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     connect(connectErrorPage_, &ConnectErrorPage::retryClicked, this, &SetupWidget::connectErrorPageRetryClicked);
 
     connect(Theme::instance(), &Theme::themeChanged, this, &SetupWidget::onThemeChanged);
+    onThemeChanged(APP::Theme::instance()->isDarkTheme());
 
     hideErrorMessage();
-
-    onThemeChanged();
 
     ConfigFile cf;
     emailPage_->setEmail(cf.favoriteEmail());
@@ -100,6 +101,12 @@ void SetupWidget::hideErrorMessage()
     showErrorMessage({});
 }
 
+void SetupWidget::setEmailIsNotAllowed(bool val)
+{
+    if (emailPage_)
+        emailPage_->setEmailIsNotRegistered(val);
+}
+
 void SetupWidget::setDevicesList(const QList<Device> &list)
 {
     if (credPage_)
@@ -123,7 +130,7 @@ void SetupWidget::onCancelClicked()
     connect(messageBox, &QMessageBox::accepted, this, [this] {
         Q_EMIT rejected();
     });
-    CuratorGui::raise();
+    ApplicationGui::raise();
     messageBox->open();
 }
 
@@ -207,28 +214,16 @@ SetupWidget::~SetupWidget() noexcept
     delete _ui;
 }
 
-void SetupWidget::onThemeChanged()
+void SetupWidget::onThemeChanged(bool isDark)
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
-    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
-
-    safeUpdateTheme(emailPage_);
-    safeUpdateTheme(credPage_);
-    safeUpdateTheme(waitPage_);
-    safeUpdateTheme(finishPage_);
+    StyleHelper::setTheme(this, isDark);
+    qCDebug(lcSetupWizardWidget) << isDark;
 }
 
 void SetupWidget::setSafeCurrentWidget(QWidget *w)
 {
     if (w)
         _ui->contentWidget->setCurrentWidget(w);
-}
-
-template<typename T>
-void SetupWidget::safeUpdateTheme(T *w)
-{
-    if (w)
-        w->updateTheme();
 }
 
 }

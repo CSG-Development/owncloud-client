@@ -2,8 +2,8 @@
 
 #include "curatorresources.h"
 
-namespace CUR {
-class CURATORRESOURCES_EXPORT ResourcesLoader
+namespace APP {
+class APPLICATIONRESOURCES_EXPORT ResourcesLoader
 {
 public:
     ResourcesLoader();

@@ -19,7 +19,7 @@
 
 #include <QLoggingCategory>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcDeleteJob, "sync.networkjob.delete", QtInfoMsg)
 Q_LOGGING_CATEGORY(lcPropagateRemoteDelete, "sync.propagator.remotedelete", QtInfoMsg)

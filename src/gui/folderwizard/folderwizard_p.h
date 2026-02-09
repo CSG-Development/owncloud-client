@@ -25,7 +25,7 @@
 #include <QCoreApplication>
 #include <QStringList>
 
-namespace CUR {
+namespace APP {
 Q_DECLARE_LOGGING_CATEGORY(lcFolderWizard);
 
 class FolderWizardPrivate

@@ -20,7 +20,7 @@
 #include <QWidget>
 
 
-namespace CUR {
+namespace APP {
 
 namespace Ui {
     class NetworkSettings;
@@ -61,5 +61,5 @@ private:
 };
 
 
-} // namespace CUR
+} // namespace APP
 #endif // MIRALL_NETWORKSETTINGS_H

@@ -39,7 +39,7 @@
 
 #include "resources/resources.h"
 
-namespace CUR {
+namespace APP {
 
 // ==============================================================================
 
@@ -80,13 +80,13 @@ LogBrowser::LogBrowser(QWidget *parent)
     ConfigFile cfg;
     cfg.restoreGeometry(this);
 
-    connect(Theme::instance(), &Theme::themeChanged, this, [this] {
-        onThemeChanged();
+    connect(Theme::instance(), &Theme::themeChanged, this, [this](bool isDark) {
+        onThemeChanged(isDark);
         update();
     });
 
 
-    onThemeChanged();
+    onThemeChanged(APP::Theme::instance()->isDarkTheme());
 }
 
 LogBrowser::~LogBrowser()
@@ -110,7 +110,7 @@ void LogBrowser::setupLoggingFromConfig()
     }
 }
 
-void LogBrowser::onThemeChanged()
+void LogBrowser::onThemeChanged(bool /*isDark*/)
 {
     StyleHelper::invoke_setDarkTheme_recursive(this);
 }

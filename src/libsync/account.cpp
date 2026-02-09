@@ -39,7 +39,7 @@
 #include <QSslSocket>
 #include <QStandardPaths>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcAccount, "sync.account", QtInfoMsg)
 
@@ -248,7 +248,7 @@ bool Account::replaceUrlToRemote(QUrl &urlToReplace)
         if (dev) {
             QUrl remote(DevHelpers::makeServerUrl(dev->address, dev->port, false, true));
             urlToReplace.setHost(remote.host());
-            if (!CUR::ConfigFile::useLocalPortForApiOnly()) {
+            if (!APP::ConfigFile::useLocalPortForApiOnly()) {
                 urlToReplace.setPort(remote.port());
             }
             return true;
@@ -422,13 +422,13 @@ ResourcesCache *Account::resourcesCache() const
     return _resourcesCache;
 }
 
-} // namespace CUR
+} // namespace APP
 
 
-QDebug operator<<(QDebug debug, const CUR::Account *acc)
+QDebug operator<<(QDebug debug, const APP::Account *acc)
 {
     QDebugStateSaver saver(debug);
     debug.setAutoInsertSpaces(false);
-    debug << "CUR::Account(" << acc->displayName() << ")";
+    debug << "APP::Account(" << acc->displayName() << ")";
     return debug.maybeSpace();
 }

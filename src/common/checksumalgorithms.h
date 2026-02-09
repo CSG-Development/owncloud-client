@@ -25,7 +25,7 @@
 #include <QString>
 
 
-namespace CUR {
+namespace APP {
 namespace CheckSums {
     OCSYNC_EXPORT Q_NAMESPACE;
 
@@ -116,4 +116,4 @@ namespace CheckSums {
 template <>
 OCSYNC_EXPORT QString Utility::enumToString(CheckSums::Algorithm algo);
 
-} // namespace CUR
+} // namespace APP

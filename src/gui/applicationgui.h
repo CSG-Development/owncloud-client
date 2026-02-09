@@ -12,8 +12,7 @@
  * for more details.
  */
 
-#ifndef CURATORGUI_H
-#define CURATORGUI_H
+#pragma once
 
 #include "account.h"
 #include "progressdispatcher.h"
@@ -26,7 +25,7 @@
 #include <QSize>
 #include <QTimer>
 
-namespace CUR {
+namespace APP {
 
 namespace Wizard {class SetupController;}
 
@@ -37,21 +36,27 @@ class ShareDialog;
 class Application;
 class LogBrowser;
 
+enum class RunAccountWizardReason {
+    ApplicationStartup,
+    RemovedAndNoMoreAccounts,
+    CreateAccoundCommand
+};
+
 enum class ShareDialogStartPage {
     UsersAndGroups,
     PublicLinks,
 };
 
 /**
- * @brief The CuratorGui class
+ * @brief The ApplicationGui class
  * @ingroup gui
  */
-class CuratorGui : public QObject
+class ApplicationGui : public QObject
 {
     Q_OBJECT
 public:
-    explicit CuratorGui(Application *parent = nullptr);
-    ~CuratorGui() override;
+    explicit ApplicationGui(Application *parent = nullptr);
+    ~ApplicationGui() override;
 
     bool checkAccountExists(bool openSettings);
 
@@ -67,7 +72,8 @@ public:
 
     SettingsDialog *settingsDialog() const;
 
-    void runNewAccountWizard();
+    void runNewAccountWizard(RunAccountWizardReason reason);
+    bool isAccountWizardActive() const {return accountWizardActive;}
 
 signals:
     void setupProxy();
@@ -142,8 +148,7 @@ private:
     // keeping a pointer on those dialogs allows us to make sure they will be shown only once
     QPointer<Wizard::SetupController> _wizardController;
     QPointer<AboutDialog> _aboutDialog;
+    bool accountWizardActive = false;
 };
 
-} // namespace CUR
-
-#endif // CURATORGUI_H
+} // namespace APP

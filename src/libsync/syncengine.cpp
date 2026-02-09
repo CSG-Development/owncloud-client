@@ -44,14 +44,14 @@
 
 using namespace std::chrono_literals;
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcEngine, "sync.engine", QtInfoMsg)
 
 // doc in header
 std::chrono::seconds SyncEngine::minimumFileAgeForUpload(2s);
 
-SyncEngine::SyncEngine(AccountPtr account, const QUrl &baseUrl, const QString &localPath, const QString &remotePath, CUR::SyncJournalDb *journal)
+SyncEngine::SyncEngine(AccountPtr account, const QUrl &baseUrl, const QString &localPath, const QString &remotePath, APP::SyncJournalDb *journal)
     : _account(account)
     , _baseUrl(baseUrl)
     , _needsUpdate(false)
@@ -268,7 +268,7 @@ void SyncEngine::conflictRecordMaintenance()
 }
 
 
-void CUR::SyncEngine::slotItemDiscovered(const CUR::SyncFileItemPtr &item)
+void APP::SyncEngine::slotItemDiscovered(const APP::SyncFileItemPtr &item)
 {
     if (Utility::isConflictFile(item->_file))
         _seenConflictFiles.insert(item->_file);
@@ -955,4 +955,4 @@ void SyncEngine::addManualExclude(const QString &filePath)
     _excludedFiles->addManualExclude(filePath);
 }
 
-} // namespace CUR
+} // namespace APP

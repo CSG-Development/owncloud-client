@@ -19,7 +19,7 @@
     </widget>
    </item>
    <item>
-    <widget class="CUR::Spaces::SpacesBrowser" name="widget" native="true">
+    <widget class="APP::Spaces::SpacesBrowser" name="widget" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -32,7 +32,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CUR::Spaces::SpacesBrowser</class>
+   <class>APP::Spaces::SpacesBrowser</class>
    <extends>QWidget</extends>
    <header>gui/spaces/spacesbrowser.h</header>
    <container>1</container>

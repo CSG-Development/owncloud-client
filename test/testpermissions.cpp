@@ -10,7 +10,7 @@
 #include <syncengine.h>
 #include "common/ownsql.h"
 
-using namespace CUR;
+using namespace APP;
 
 static void applyPermissionsFromName(FileInfo &info) {
     static QRegularExpression rx(QStringLiteral("_PERM_([^_]*)_[^/]*$"));

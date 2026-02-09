@@ -21,7 +21,7 @@ set(libsync_SRCS
     abstractnetworkjob.cpp
     networkjobs.cpp
     curatorpropagator.cpp
-    curatortheme.cpp
+    applicationtheme.cpp
     platform.cpp
     progressdispatcher.cpp
     propagatorjobs.cpp
@@ -146,9 +146,9 @@ if(NO_MSG_HANDLER)
 endif()
 
 GENERATE_EXPORT_HEADER(libsync
-        EXPORT_MACRO_NAME CURATORSYNC_EXPORT
+        EXPORT_MACRO_NAME APPLICATIONSYNC_EXPORT
         EXPORT_FILE_NAME curatorlib.h
-        STATIC_DEFINE CURATOR_BUILT_AS_STATIC
+        STATIC_DEFINE APPLICATION_BUILT_AS_STATIC
 )
 
 set_target_properties(libsync PROPERTIES

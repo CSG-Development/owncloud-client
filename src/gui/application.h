@@ -21,7 +21,7 @@
 
 #include "clientproxy.h"
 #include "folderman.h"
-#include "curatorgui.h"
+#include "applicationgui.h"
 #include "platform.h"
 #include "telemetry/Telemetry.h"
 
@@ -33,7 +33,7 @@ namespace CrashReporter {
 class Handler;
 }
 
-namespace CUR {
+namespace APP {
 
 Q_DECLARE_LOGGING_CATEGORY(lcApplication)
 
@@ -53,12 +53,14 @@ public:
 
     bool debugMode();
 
-    CuratorGui *gui() const;
+    ApplicationGui *gui() const;
 
     QString displayLanguage() const;
 
     AccountStatePtr addNewAccount(AccountPtr newAccount);
     void createTelemetry();
+
+    static bool appCreated() {return _instance != nullptr;}
 
 public slots:
     void slotCrash();
@@ -87,7 +89,7 @@ protected slots:
 private:
     explicit Application(Platform *platform, bool debugMode);
 
-    QPointer<CuratorGui> _gui = {};
+    QPointer<ApplicationGui> _gui = {};
 
     const bool _debugMode = false;
     QString _userEnforcedLanguage;
@@ -105,6 +107,6 @@ inline Application *ocApp()
     return Application::_instance;
 }
 
-} // namespace CUR
+} // namespace APP
 
 #endif // APPLICATION_H

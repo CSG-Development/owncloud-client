@@ -22,7 +22,7 @@ QColor tbBackgroundDisabled(bool isDark) {return isDark ? QColor(0,0,0,0) : QCol
 
 constexpr int frameRound = 3;
 
-namespace CUR {
+namespace APP {
 
 void ToolButtonDots::drawButton(QStyleOptionToolButton *opt, QPainter *painter, bool isDark)
 {
@@ -65,4 +65,4 @@ void ToolButtonDots::drawButton(QStyleOptionToolButton *opt, QPainter *painter, 
     painter->restore();
 }
 
-} // namespace CUR
+} // namespace APP

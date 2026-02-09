@@ -15,7 +15,7 @@
 
 using namespace std::chrono_literals;
 
-using namespace CUR;
+using namespace APP;
 
 Q_LOGGING_CATEGORY(lcCredentialsManager, "sync.credentials.manager", QtDebugMsg)
 

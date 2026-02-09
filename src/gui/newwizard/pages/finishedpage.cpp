@@ -9,11 +9,7 @@
 
 namespace {
 constexpr int smallHeight = 232;
-constexpr int advHeight = 530;
-QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/login/finished_page_light.qss"),
-    QStringLiteral(":/res/login/finished_page_dark.qss")
-};
+constexpr int advHeight = 540;
 QPair<QString,QString> doneIcon = {
     QStringLiteral(":/res/login/done_light.svg"),
     QStringLiteral(":/res/login/done_dark.svg")
@@ -38,6 +34,13 @@ FinishedPage::FinishedPage(QWidget *parent)
 {
     ui->setupUi(this);
 
+    setStyleSheet(APP::StyleHelper::loadFileToString(QStringLiteral(":/res/login/finished_page.qss")));
+
+    themeNotifier = darkTheme_.addNotifier([this] {
+        updateTheme();
+    });
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
+
     connect(ui->chkAdvanced, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
         advancedStateChanged(state == Qt::Checked);
     });
@@ -56,9 +59,7 @@ FinishedPage::FinishedPage(QWidget *parent)
         ui->edDownloadDir->setText(QDir::toNativeSeparators(defaultTargetDir_));
     });
 
-
     ui->btnDone->setIconSidePosition(LoginPushButton::IconSidePosition::Right);
-    updateTheme();
     showErrorMessage({});
 }
 
@@ -81,12 +82,12 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
         ui->rbUseVfs->setIcon(QIcon(QStringLiteral(":/res/login/warning_light.svg")));
 
         // when a feature is experimental and experimental features are disabled globally, it should be hidden
-        if (!CUR::Theme::instance()->enableExperimentalFeatures()) {
+        if (!APP::Theme::instance()->enableExperimentalFeatures()) {
             ui->rbUseVfs->hide();
         }
     }
 
-    if (!CUR::Theme::instance()->showVirtualFilesOption()) {
+    if (!APP::Theme::instance()->showVirtualFilesOption()) {
         ui->rbUseVfs->setVisible(false);
         enableVfsByDefault = false;
     }
@@ -105,7 +106,7 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
     }
 
     // this should be handled on application startup, too
-    if (CUR::Theme::instance()->forceVirtualFilesOption()) {
+    if (APP::Theme::instance()->forceVirtualFilesOption()) {
         if (!vfsModeIsExperimental) {
             // note: this might fail when the VFS plugins have not been built (yet) as well
             Q_ASSERT(vfsIsAvailable);
@@ -113,7 +114,7 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
     }
 
     // vfsIsAvailable is false when experimental features are not enabled and the mode is experimental even if a plugin is found
-    if (vfsIsAvailable && CUR::Theme::instance()->forceVirtualFilesOption()) {
+    if (vfsIsAvailable && APP::Theme::instance()->forceVirtualFilesOption()) {
         // this has no visual effect, but is needed for syncMode()
         ui->rbUseVfs->setChecked(true);
 
@@ -145,7 +146,7 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
             messageBox->addButton(tr("Stay safe"), QMessageBox::RejectRole);
 
             messageBox->setAttribute(Qt::WA_DeleteOnClose);
-            CUR::StyleHelper::applyPushButtonStyle(messageBox);
+            APP::StyleHelper::applyPushButtonStyle(messageBox);
 
             connect(messageBox, &QMessageBox::rejected, this, [this]() {
                 // bring back to "safety"
@@ -162,12 +163,9 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
 
 void FinishedPage::updateTheme()
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
-    CUR::StyleHelper::invoke_setDarkTheme_recursive(this);
-
-    setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
-    ui->btnDone->setSideIcon(QIcon(isDark ? doneIcon.second : doneIcon.first));
-    ui->btnBack->setSideIcon(QIcon(isDark ? backIcon.second : backIcon.first));
+    ui->btnDone->setSideIcon(QIcon(darkTheme_.value() ? doneIcon.second : doneIcon.first));
+    ui->btnBack->setSideIcon(QIcon(darkTheme_.value() ? backIcon.second : backIcon.first));
+    APP::StyleHelper::setTheme(this, darkTheme_.value());
     update();
 }
 
@@ -177,18 +175,18 @@ void FinishedPage::showErrorMessage(const QString &msg)
     ui->lblErrorText->setText(msg);
 }
 
-CUR::Wizard::SyncMode FinishedPage::syncMode() const
+APP::Wizard::SyncMode FinishedPage::syncMode() const
 {
     if (ui->rbDownloadEverything->isChecked()) {
-        return CUR::Wizard::SyncMode::SyncEverything;
+        return APP::Wizard::SyncMode::SyncEverything;
     }
     if (ui->rbConfigManually->isChecked()) {
-        return CUR::Wizard::SyncMode::ConfigureUsingFolderWizard;
+        return APP::Wizard::SyncMode::ConfigureUsingFolderWizard;
     }
     if (ui->rbUseVfs->isChecked()) {
-        return CUR::Wizard::SyncMode::UseVfs;
+        return APP::Wizard::SyncMode::UseVfs;
     }
-    return CUR::Wizard::SyncMode::SyncEverything;
+    return APP::Wizard::SyncMode::SyncEverything;
 }
 
 QString FinishedPage::syncTargetDir() const

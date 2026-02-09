@@ -19,13 +19,13 @@
 
 #include "curatorlib.h"
 
-namespace CUR {
+namespace APP {
 
 /**
  * @brief The CookieJar class
  * @ingroup libsync
  */
-class CURATORSYNC_EXPORT CookieJar : public QNetworkCookieJar
+class APPLICATIONSYNC_EXPORT CookieJar : public QNetworkCookieJar
 {
     Q_OBJECT
 public:
@@ -36,6 +36,6 @@ public:
     using QNetworkCookieJar::allCookies;
 };
 
-} // namespace CUR
+} // namespace APP
 
 #endif // MIRALL_COOKIEJAR_H

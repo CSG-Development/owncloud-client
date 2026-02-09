@@ -34,7 +34,7 @@
 #include <QVBoxLayout>
 
 
-using namespace CUR;
+using namespace APP;
 
 FolderWizardSelectiveSync::FolderWizardSelectiveSync(FolderWizardPrivate *parent)
     : FolderWizardPage(parent)
@@ -105,7 +105,7 @@ void FolderWizardSelectiveSync::virtualFilesCheckboxClicked()
         if (VfsPluginManager::instance().bestAvailableVfsMode() == Vfs::WindowsCfApi) {
             Q_EMIT messageBox->accepted();
         } else {
-            CuratorGui::raise();
+            ApplicationGui::raise();
             messageBox->show();
         }
     }

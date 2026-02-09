@@ -11,7 +11,7 @@
 
 #include <sqlite3.h>
 
-using namespace CUR;
+using namespace APP;
 
 class TestOwnSql : public QObject
 {

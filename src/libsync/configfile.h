@@ -32,7 +32,7 @@ class QWidget;
 class QHeaderView;
 class ExcludedFiles;
 
-namespace CUR {
+namespace APP {
 
 class AbstractCredentials;
 
@@ -40,7 +40,7 @@ class AbstractCredentials;
  * @brief The ConfigFile class
  * @ingroup libsync
  */
-class CURATORSYNC_EXPORT ConfigFile
+class APPLICATIONSYNC_EXPORT ConfigFile
 {
 public:
     static QString configPath();

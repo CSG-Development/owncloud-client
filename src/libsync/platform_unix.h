@@ -18,7 +18,7 @@
 
 #include <csignal>
 
-namespace CUR {
+namespace APP {
 
 class UnixPlatform : public Platform
 {
@@ -31,4 +31,4 @@ private:
     void setLimitsForCoreDumps();
 };
 
-} // namespace CUR
+} // namespace APP

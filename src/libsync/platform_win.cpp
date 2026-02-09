@@ -41,17 +41,27 @@ struct
     HANDLE windowMessageWatcherEvent = CreateEventW(nullptr, true, false, nullptr);
     bool windowMessageWatcherRun = true;
     std::thread *watcherThread = nullptr;
+    QTimer* debounceTimer = nullptr;
 } watchWMCtx;
 
 } // anonymous namespace
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcPlatform, "sync.platform.windows")
 
 WinPlatform::WinPlatform()
 {
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+
+    debounceTimer = new QTimer(this);
+    debounceTimer->setSingleShot(true);
+    debounceTimer->setInterval(500);
+    connect(debounceTimer, &QTimer::timeout, Theme::instance(), [](){
+        qCDebug(lcPlatform) << "WM_SETTINGCHANGE -> stsyemThemeChanged";
+        QMetaObject::invokeMethod(Theme::instance(), "systemThemeChanged");
+    });
+    watchWMCtx.debounceTimer = debounceTimer;
 }
 
 WinPlatform::~WinPlatform()
@@ -77,7 +87,7 @@ void WinPlatform::setApplication(QCoreApplication *application)
     }
 }
 
-void CUR::WinPlatform::startServices()
+void APP::WinPlatform::startServices()
 {
     startShutdownWatcher();
 }
@@ -126,7 +136,9 @@ void WinPlatform::startShutdownWatcher()
                 watchWMCtx.windowMessageWatcherRun = false;
                 return 0;
             } else if (msg == WM_SETTINGCHANGE) {
-                QMetaObject::invokeMethod(Theme::instance(), "systemThemeChanged");
+                if (watchWMCtx.debounceTimer) {
+                    // QMetaObject::invokeMethod(watchWMCtx.debounceTimer, "start", Qt::QueuedConnection);
+                }
             }
 
             return DefWindowProc(hwnd, msg, wParam, lParam);
@@ -149,9 +161,9 @@ void WinPlatform::startShutdownWatcher()
     });
 
     qAddPostRoutine([] {
-        qCDebug(CUR::lcUtility) << "app closed";
+        qCDebug(APP::lcUtility) << "app closed";
         SetEvent(watchWMCtx.windowMessageWatcherEvent);
     });
 }
 
-} // namespace CUR
+} // namespace APP

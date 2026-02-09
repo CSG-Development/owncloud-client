@@ -23,7 +23,7 @@
 #include "common/utility.h"
 #include "csync.h"
 
-namespace CUR {
+namespace APP {
 
 class ConfigFile;
 

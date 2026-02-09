@@ -10,7 +10,7 @@
 #include "testutils/testutils.h"
 
 
-using namespace CUR;
+using namespace APP;
 
 class TestInotifyWatcher: public FolderWatcherPrivate
 {

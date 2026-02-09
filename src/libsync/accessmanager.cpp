@@ -29,7 +29,7 @@
 
 #include <algorithm>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcAccessManager, "sync.accessmanager", QtInfoMsg)
 
@@ -151,4 +151,4 @@ QList<QSslError> AccessManager::filterSslErrors(const QList<QSslError> &errors) 
     return filtered;
 }
 
-} // namespace CUR
+} // namespace APP

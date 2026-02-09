@@ -1,6 +1,6 @@
 #include "folderdefinition.h"
 
-namespace CUR {
+namespace APP {
 
 
 bool FolderDefinition::isDeployed() const
@@ -37,4 +37,4 @@ QString FolderDefinition::spaceId() const
     return _spaceId;
 }
 
-} // namespace CUR
+} // namespace APP

@@ -21,7 +21,7 @@
 
 #include <list>
 
-namespace CUR {
+namespace APP {
 
 class UploadDevice;
 class GETFileJob;

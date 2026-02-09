@@ -11,6 +11,23 @@ Q_LOGGING_CATEGORY(lcMdnsDevice, "mdns.device", QtDebugMsg)
 
 namespace {
 
+// The Source of Truth: Device Time To Live.
+// If a device is silent for this long, it is removed.
+constexpr int DEVICE_TTL_MS = 2000;
+
+// Scan Interval: Must be significantly shorter than TTL.
+// Rule of thumb: Scan at least twice within the TTL window to handle one lost UDP packet.
+// 2000 / 2 = 1000 ms.
+constexpr int SCAN_INTERVAL_MS = DEVICE_TTL_MS / 2;
+
+// Debounce: Wait a short time to aggregate multiple responses into one signal.
+// Typically half the scan interval is a good balance.
+constexpr int DEBOUNCE_MS = SCAN_INTERVAL_MS / 2;
+
+// Initial Wait: How long to wait on startup before declaring "No Devices Found".
+// Should be slightly larger than TTL to allow for a full lifecycle check.
+constexpr int INITIAL_WAIT_MS = DEVICE_TTL_MS + 500;
+
 const unsigned char request_data[] = {
     // Query ID
     0x00, 0x00,
@@ -255,11 +272,14 @@ MdnsClient::MdnsClient(QObject *parent)
     : QObject(parent)
 {
     setupSockets();
-    scanTimer_.setInterval(5000);
+
+    scanTimer_.setInterval(SCAN_INTERVAL_MS);
     connect(&scanTimer_, &QTimer::timeout, this, &MdnsClient::performScanCycle);
-    debounceTimer_.setInterval(2000);
+
+    debounceTimer_.setInterval(DEBOUNCE_MS);
     debounceTimer_.setSingleShot(true);
-    notFoundTimer_.setInterval(3000);
+
+    notFoundTimer_.setInterval(INITIAL_WAIT_MS);
     notFoundTimer_.setSingleShot(true);
 
     connect(&notFoundTimer_, &QTimer::timeout, this, [this] {
@@ -280,7 +300,7 @@ MdnsClient::MdnsClient(QObject *parent)
 MdnsClient::~MdnsClient()
 {
     stop();
-    for (auto socket: sockets) {
+    for (auto* socket: std::as_const(sockets)) {
         socket->abort();
     }
 }
@@ -360,11 +380,10 @@ void MdnsClient::performScanCycle()
     bool changed = false;
     auto now = QDateTime::currentDateTime();
 
-    // Check timeout and delete no answer more than 12 seconds
-    // 12 seconds ~> 2 query cycle (5+5)
+    // Check timeout and delete no answer more than DEVICE_TTL_MS
     auto it = lastSeen_.begin();
     while (it != lastSeen_.end()) {
-        if (it.value().secsTo(now) > 12) {
+        if (it.value().msecsTo(now) > DEVICE_TTL_MS) {
             discoveredRecords_.remove(it.key());
             it = lastSeen_.erase(it);
             changed = true;
@@ -396,8 +415,10 @@ void MdnsClient::setupSockets()
                 auto socket = new QUdpSocket(this);
                 if (socket->bind(entry.ip(), 0, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint)) {
                     connect(socket, &QUdpSocket::readyRead, this, &MdnsClient::onReadyRead);
+                    qDebug(lcMdnsDevice) << "Socket binded to" << entry.ip();
                     sockets.append(socket);
                 } else {
+                    qDebug(lcMdnsDevice) << "Failed bind socket to" << entry.ip();
                     socket->deleteLater();
                 }
             }

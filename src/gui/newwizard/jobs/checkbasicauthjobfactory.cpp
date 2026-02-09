@@ -20,7 +20,7 @@
 #include <QApplication>
 #include <QNetworkReply>
 
-namespace CUR::Wizard::Jobs {
+namespace APP::Wizard::Jobs {
 
 CoreJob *CheckBasicAuthJobFactory::startJob(const QUrl &url, QObject *parent)
 {

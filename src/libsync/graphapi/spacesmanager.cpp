@@ -25,7 +25,7 @@
 
 using namespace std::chrono_literals;
 
-using namespace CUR;
+using namespace APP;
 using namespace GraphApi;
 
 namespace {
@@ -97,7 +97,7 @@ Space *SpacesManager::space(const QString &id) const
 Space *SpacesManager::spaceByUrl(const QUrl &url) const
 {
     auto it = std::find_if(_spacesMap.cbegin(), _spacesMap.cend(),
-        [url](const auto *space) { return CUR::Utility::urlEqual(QUrl(space->drive().getRoot().getWebDavUrl()), url); });
+        [url](const auto *space) { return APP::Utility::urlEqual(QUrl(space->drive().getRoot().getWebDavUrl()), url); });
     if (it != _spacesMap.cend()) {
         return *it;
     }

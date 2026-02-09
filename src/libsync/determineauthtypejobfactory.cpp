@@ -24,7 +24,7 @@
 
 Q_LOGGING_CATEGORY(lcDetermineAuthTypeJob, "sync.networkjob.determineauthtype2", QtInfoMsg);
 
-using namespace CUR;
+using namespace APP;
 
 DetermineAuthTypeJobFactory::DetermineAuthTypeJobFactory(QNetworkAccessManager *nam)
     : AbstractCoreJobFactory(nam)

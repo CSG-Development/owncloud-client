@@ -12,22 +12,21 @@
  * for more details.
  */
 
-#ifndef CURATOR_THEME_H
-#define CURATOR_THEME_H
+#pragma once
 
 #include "theme.h"
 
-namespace CUR {
+namespace APP {
 
 /**
- * @brief The CuratorTheme class
+ * @brief The ApplicationTheme class
  * @ingroup libsync
  */
-class CuratorTheme : public Theme
+class ApplicationTheme : public Theme
 {
     Q_OBJECT
 public:
-    CuratorTheme();
+    ApplicationTheme();
     QColor wizardHeaderBackgroundColor() const override;
     QColor wizardHeaderTitleColor() const override;
     QIcon wizardHeaderLogo() const override;
@@ -40,4 +39,3 @@ public:
 private:
 };
 }
-#endif // CURATOR_MIRALL_THEME_H

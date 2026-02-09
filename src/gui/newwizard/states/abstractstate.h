@@ -18,7 +18,7 @@
 #include "pages/abstractpage.h"
 #include "setupcontext.h"
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 /**
  * To improve the code structure and increase the readability, we use the state pattern to organize the different wizard states.
@@ -69,4 +69,4 @@ protected:
     AbstractPage *_page = nullptr;
 };
 
-} // CUR::Wizard
+} // APP::Wizard

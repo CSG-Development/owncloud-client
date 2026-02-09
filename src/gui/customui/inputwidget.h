@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QFrame>
+#include <QProperty>
 
 class QLineEdit;
 class QLabel;
@@ -12,6 +13,7 @@ namespace Ui {class InputWidget;}
 class InputWidget: public QFrame
 {
     Q_OBJECT
+    Q_PROPERTY(bool darkTheme READ isDarkTheme WRITE setDarkTheme BINDABLE bindableDarkTheme)
 
 public:
     explicit InputWidget(QWidget* parent = nullptr);
@@ -36,8 +38,10 @@ public:
 
     bool eventFilter(QObject *watched, QEvent *event) override;
 
-public slots:
-    void setDarkTheme();
+    bool isDarkTheme() const { return darkTheme_.value(); }
+    void setDarkTheme(bool v) { darkTheme_.setValue(v); }
+
+    QBindable<bool> bindableDarkTheme() {return &darkTheme_;}
 
 Q_SIGNALS:
     void frameColorChanged();
@@ -62,9 +66,9 @@ protected:
 
 private:
     Ui::InputWidget* ui = nullptr;
-
     QLabel* promptLabel = nullptr;
 
-    bool isDark = false;
     bool errorState = false;
+    QPropertyNotifier themeNotifier;
+    QProperty<bool> darkTheme_ {false};
 };

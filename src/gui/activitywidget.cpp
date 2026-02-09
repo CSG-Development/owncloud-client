@@ -97,7 +97,7 @@ QPair<QString,QString> issuesIconSelected = {
 } // namespace
 
 
-namespace CUR {
+namespace APP {
 
 ActivityWidget::ActivityWidget(QWidget *parent)
     : QWidget(parent)
@@ -566,7 +566,7 @@ ActivitySettings::ActivitySettings(QWidget *parent)
         [this](const AccountStatePtr &accountStatePtr) { _timeSinceLastCheck.take(accountStatePtr); });
 
     connect(Theme::instance(), &Theme::themeChanged, this, &ActivitySettings::onThemeChanged);
-    onThemeChanged();
+    onThemeChanged(Theme::instance()->isDarkTheme());
 }
 
 void ActivitySettings::setNotificationRefreshInterval(std::chrono::milliseconds interval)
@@ -608,9 +608,8 @@ void ActivitySettings::slotShowActivityTab()
     }
 }
 
-void ActivitySettings::onThemeChanged()
+void ActivitySettings::onThemeChanged(bool isDark)
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 #ifdef Q_OS_MACOS
     onCurrentTabChanged(_tab->currentIndex());
@@ -626,7 +625,7 @@ void ActivitySettings::onCurrentTabChanged(int idx)
     Q_UNUSED(idx)
 
 #ifdef Q_OS_MACOS
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    bool isDark = APP::Theme::instance()->isDarkTheme();
     if (idx == _activityTabId) {
         _tab->setTabIcon(_activityTabId, QIcon(isDark ? activityIconSelected.second : activityIconSelected.first));
         _tab->setTabIcon(_protocolTabId, QIcon(isDark ? protocolIcon.second : protocolIcon.first));

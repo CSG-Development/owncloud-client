@@ -22,7 +22,7 @@
 #include <chrono>
 
 #include "progressdispatcher.h"
-#include "curatorgui.h"
+#include "applicationgui.h"
 #include "account.h"
 #include "activitydata.h"
 
@@ -33,7 +33,7 @@ class QProgressIndicator;
 class QTabWidget;
 class QVBoxLayout;
 
-namespace CUR {
+namespace APP {
 
 class Account;
 class AccountStatusPtr;
@@ -153,7 +153,7 @@ signals:
     void guiLog(const QString &, const QString &);
 
 private:
-    void onThemeChanged();
+    void onThemeChanged(bool isDark);
     bool event(QEvent *e) override;
 
     QTabWidget *_tab;

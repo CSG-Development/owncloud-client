@@ -15,7 +15,7 @@
 
 #include <QCoreApplication>
 
-using namespace CUR;
+using namespace APP;
 
 QString CommonStrings::fileBrowser()
 {

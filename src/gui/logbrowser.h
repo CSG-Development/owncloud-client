@@ -26,7 +26,7 @@
 #include <QPushButton>
 #include <QLabel>
 
-namespace CUR {
+namespace APP {
 
 namespace Ui {
     class LogBrowser;
@@ -50,7 +50,7 @@ public:
      */
     static void setupLoggingFromConfig();
 
-    void onThemeChanged();
+    void onThemeChanged(bool isDark);
 
 
 protected slots:

@@ -19,7 +19,7 @@
 #include <functional>
 #include <vector>
 
-namespace CUR {
+namespace APP {
 
 /**
  * A Fixed sized ring buffer optimized on continouous insertion

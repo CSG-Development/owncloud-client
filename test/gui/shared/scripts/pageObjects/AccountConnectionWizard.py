@@ -22,7 +22,7 @@ class AccountConnectionWizard:
         "name": "nextButton",
         "type": "QPushButton",
         "visible": 1,
-        "window": names.setupWizardWindow_OCC_Wizard_SetupWizardWindow,
+        "window": names.setupWizardWindow_APP_Wizard_SetupWizardWindow,
     }
     CONFIRM_INSECURE_CONNECTION_BUTTON = {
         "text": "Confirm",
@@ -66,25 +66,25 @@ class AccountConnectionWizard:
         "name": "errorMessageLabel",
         "type": "QLabel",
         "visible": 1,
-        "window": names.setupWizardWindow_OCC_Wizard_SetupWizardWindow,
+        "window": names.setupWizardWindow_APP_Wizard_SetupWizardWindow,
     }
     BASIC_CREDENTIAL_PAGE = {
         "container": names.setupWizardWindow_contentWidget_QStackedWidget,
         "name": "CredentialsSetupWizardPage",
-        "type": "OCC::Wizard::BasicCredentialsSetupWizardPage",
+        "type": "APP::Wizard::BasicCredentialsSetupWizardPage",
         "visible": 1,
     }
     OAUTH_CREDENTIAL_PAGE = {
         "container": names.setupWizardWindow_contentWidget_QStackedWidget,
         "name": "CredentialsSetupWizardPage",
-        "type": "OCC::Wizard::OAuthCredentialsSetupWizardPage",
+        "type": "APP::Wizard::OAuthCredentialsSetupWizardPage",
         "visible": 1,
     }
     ACCEPT_CERTIFICATE_YES = {
         "text": "Yes",
         "type": "QPushButton",
         "visible": 1,
-        "window": names.oCC_TlsErrorDialog_OCC_TlsErrorDialog,
+        "window": names.oCC_TlsErrorDialog_APP_TlsErrorDialog,
     }
     COPY_URL_TO_CLIPBOARD_BUTTON = {
         "container": names.contentWidget_contentWidget_QStackedWidget,

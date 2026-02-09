@@ -16,7 +16,9 @@
 
 #include "platform.h"
 
-namespace CUR {
+class QTimer;
+
+namespace APP {
 
 class WinPlatform : public Platform
 {
@@ -32,6 +34,8 @@ public:
 private:
     /// Utility thread that takes care of proper Windows logout handling.
     void startShutdownWatcher();
+
+    QTimer* debounceTimer = nullptr;
 };
 
-} // namespace CUR
+} // namespace APP

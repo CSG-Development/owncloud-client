@@ -30,7 +30,7 @@
 #ifdef Q_OS_WIN
 #include <qt_windows.h>
 #endif
-using namespace CUR;
+using namespace APP;
 
 Q_LOGGING_CATEGORY(lcVfs, "sync.vfs", QtInfoMsg)
 
@@ -180,9 +180,9 @@ void Vfs::wipeDehydratedVirtualFiles()
 
 Q_LOGGING_CATEGORY(lcPlugin, "sync.plugins", QtInfoMsg)
 
-CUR::VfsPluginManager *CUR::VfsPluginManager::_instance = nullptr;
+APP::VfsPluginManager *APP::VfsPluginManager::_instance = nullptr;
 
-bool CUR::VfsPluginManager::isVfsPluginAvailable(Vfs::Mode mode) const
+bool APP::VfsPluginManager::isVfsPluginAvailable(Vfs::Mode mode) const
 {
     {
         auto result = _pluginCache.constFind(mode);
@@ -213,7 +213,7 @@ bool CUR::VfsPluginManager::isVfsPluginAvailable(Vfs::Mode mode) const
             qCWarning(lcPlugin) << "Plugin has wrong type" << loader.fileName() << metadata[QStringLiteral("type")];
             return false;
         }
-        if (metadata[QStringLiteral("version")].toString() != CUR::Version::version().toString()) {
+        if (metadata[QStringLiteral("version")].toString() != APP::Version::version().toString()) {
             qCWarning(lcPlugin) << "Plugin has wrong version" << loader.fileName() << metadata[QStringLiteral("version")];
             return false;
         }
@@ -231,7 +231,7 @@ bool CUR::VfsPluginManager::isVfsPluginAvailable(Vfs::Mode mode) const
     return out;
 }
 
-Vfs::Mode CUR::VfsPluginManager::bestAvailableVfsMode() const
+Vfs::Mode APP::VfsPluginManager::bestAvailableVfsMode() const
 {
     if (isVfsPluginAvailable(Vfs::WindowsCfApi)) {
         return Vfs::WindowsCfApi;
@@ -243,7 +243,7 @@ Vfs::Mode CUR::VfsPluginManager::bestAvailableVfsMode() const
     Q_UNREACHABLE();
 }
 
-std::unique_ptr<Vfs> CUR::VfsPluginManager::createVfsFromPlugin(Vfs::Mode mode) const
+std::unique_ptr<Vfs> APP::VfsPluginManager::createVfsFromPlugin(Vfs::Mode mode) const
 {
     auto name = modeToPluginName(mode);
     if (name.isEmpty())

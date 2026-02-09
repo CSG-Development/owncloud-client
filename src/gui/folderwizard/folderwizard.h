@@ -26,7 +26,7 @@ class QTreeWidgetItem;
 
 class Ui_FolderWizardTargetPage;
 
-namespace CUR {
+namespace APP {
 
 class FolderWizardPrivate;
 
@@ -97,4 +97,4 @@ private:
     QScopedPointer<FolderWizardPrivate> d_ptr;
 };
 
-} // namespace CUR
+} // namespace APP

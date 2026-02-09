@@ -3,17 +3,17 @@
 #include "gui/customui/stylehelper.h"
 #include "theme.h"
 
-namespace {
-QPair<QString,QString> widgetStyle = {QStringLiteral(":/res/login/wait_page_light.qss"),QStringLiteral(":/res/login/wait_page_dark.qss")};
-}
-
 WaitPage::WaitPage(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::WaitPage)
 {
     ui->setupUi(this);
 
-    updateTheme();
+    setStyleSheet(APP::StyleHelper::loadFileToString(QStringLiteral(":/res/login/wait_page.qss")));
+    themeNotifier = darkTheme_.addNotifier([this] {
+        APP::StyleHelper::setTheme(this, darkTheme_.value());
+    });
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
 }
 
 WaitPage::~WaitPage()
@@ -21,11 +21,3 @@ WaitPage::~WaitPage()
     delete ui;
 }
 
-void WaitPage::updateTheme()
-{
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
-    CUR::StyleHelper::invoke_setDarkTheme_recursive(this);
-    setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
-
-    update();
-}

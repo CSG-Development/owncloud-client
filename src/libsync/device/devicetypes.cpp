@@ -77,10 +77,22 @@ QString DevicePath::toString() const
     l << QStringLiteral("port:%1,").arg(port);
     l << QStringLiteral("deviceType:%1,").arg(DevHelpers::devTypeToStr(deviceType));
     l << QStringLiteral("origin:%1,").arg(DevHelpers::originToStr(origin));
-    l << QStringLiteral("online:%1,").arg(isOnline);
-    l << QStringLiteral("active:%1,").arg(isActive);
     l << QStringLiteral("id:%1,").arg(id.toString());
     l << QStringLiteral("%1,").arg(about.toString());
+    l << status.toString();
+    l << QStringLiteral("}");
+    return l.join(QStringLiteral(""));
+}
+
+QString DevicePath::toStringShort() const
+{
+    QStringList l;
+    l << QStringLiteral("path{");
+    l << QStringLiteral("addr:%1:%2,").arg(address).arg(port);
+    l << QStringLiteral("type:%1,").arg(DevHelpers::devTypeToStr(deviceType));
+    l << QStringLiteral("origin:%1,").arg(DevHelpers::originToStr(origin));
+    l << QStringLiteral("id:%1,").arg(id.toString());
+    l << QStringLiteral("%1,").arg(about.toStringShort());
     l << status.toString();
     l << QStringLiteral("}");
     return l.join(QStringLiteral(""));
@@ -134,25 +146,25 @@ std::optional<QUuid> Device::getBestPathId(const Device &dev)
     if (dev.paths.size() == 1)
         return dev.paths.first().id;
 
-    QList<DevicePath> paths;
+    QList<DevicePath> dev_paths;
     for (const auto& p: dev.paths) {
         if (p.deviceType != DeviceType::Unknown && p.status.oobe_done) {
-            paths.append(p);
+            dev_paths.append(p);
         }
     }
 
     // No online paths found
-    if (paths.isEmpty())
+    if (dev_paths.isEmpty())
         return dev.paths.first().id;
 
-    if (paths.size() == 1)
-        return paths.first().id;
+    if (dev_paths.size() == 1)
+        return dev_paths.first().id;
 
-    std::stable_sort(paths.begin(), paths.end(), [&](const DevicePath& a, const DevicePath& b) {
+    std::stable_sort(dev_paths.begin(), dev_paths.end(), [&](const DevicePath& a, const DevicePath& b) {
         return DevicePath::pathPriority(a.deviceType) > DevicePath::pathPriority(b.deviceType);
     });
 
-    return paths.first().id;
+    return dev_paths.first().id;
 }
 
 std::optional<QUuid> Device::getRemoteOnlyPath() const
@@ -176,15 +188,25 @@ std::optional<QUuid> Device::getRemoteOnlyPath() const
     return plist.first().id;
 }
 
+std::optional<Device> Device::findByCN(const QList<Device> &list, const QString &cn)
+{
+    const auto it = std::find_if(list.cbegin(), list.cend(), [cn](const Device& d) {
+        return d.certificateCommonName == cn;
+    });
+    if (it != list.cend())
+        return *it;
+
+    return std::nullopt;
+}
+
 QString Device::toString() const
 {
     QStringList l;
     l << QStringLiteral("Device{");
     l << QStringLiteral("seagateDeviceID:%1,").arg(seagateDeviceID);
     l << QStringLiteral("certificateCommonName:%1,").arg(certificateCommonName);
-    l << QStringLiteral("friendlyName:%1,").arg(friendlyName());
+    l << QStringLiteral("friendlyName:%1,").arg(friendlyName);
     l << QStringLiteral("hostname:%1,").arg(hostname);
-    l << QStringLiteral("origin:%1,").arg(DevHelpers::originToStr(origin));
     l << QStringLiteral("isStatic:%1,").arg(isStatic);
     for (const auto& p: paths) {
         l << p.toString();
@@ -193,9 +215,20 @@ QString Device::toString() const
     return l.join(QStringLiteral(""));
 }
 
-void Device::setFriendlyName(const QString &name)
+QString Device::toStringShort() const
 {
-    _friendlyName = name;
+    QStringList l;
+    l << QStringLiteral("Device{");
+    l << QStringLiteral("id:%1,").arg(seagateDeviceID);
+    l << QStringLiteral("certCN:%1,").arg(certificateCommonName);
+    l << QStringLiteral("friendlyName:%1,").arg(friendlyName);
+    l << QStringLiteral("hostname:%1,").arg(hostname);
+    l << QStringLiteral("static:%1,").arg(isStatic);
+    for (const auto& p: paths) {
+        l << p.toStringShort();
+    }
+    l << QStringLiteral("}");
+    return l.join(QStringLiteral(""));
 }
 
 Device Device::MakeStatic(const QString &url, const QString &name)
@@ -203,7 +236,6 @@ Device Device::MakeStatic(const QString &url, const QString &name)
     Device dev;
     dev.certificateCommonName = name;
     dev.isStatic = true;
-    dev.origin = DeviceOrigin::Static;
     DevicePath dp(url, DeviceType::Public, DeviceOrigin::Static, 0);
     dev.paths.append(dp);
     return dev;
@@ -215,7 +247,7 @@ QJsonDocument Device::toJson(const Device& dev)
     QJsonObject obj;
     obj[device_id_C] = dev.seagateDeviceID;
     obj[cert_common_name_C] = dev.certificateCommonName;
-    obj[friendly_name_C] = dev.friendlyName();
+    obj[friendly_name_C] = dev.friendlyName;
     obj[hostname_C] = dev.hostname;
     QJsonArray arr;
     for (const auto& dev_path: std::as_const(dev.paths)) {
@@ -241,7 +273,7 @@ Device Device::fromJson(const QJsonDocument &doc)
     QJsonObject obj = doc.object();
     d.seagateDeviceID = obj[device_id_C].toString();
     d.certificateCommonName = obj[cert_common_name_C].toString();
-    d.setFriendlyName(obj[friendly_name_C].toString());
+    d.friendlyName = obj[friendly_name_C].toString();
     d.hostname = obj[hostname_C].toString();
     d.paths = Device::jsonToPaths(obj[paths_C].toArray());
 
@@ -276,29 +308,6 @@ QList<DevicePath> Device::jsonToPaths(const QJsonArray& val)
     }
 
     return ret;
-}
-
-void Device::setActicvePath(const QUuid &id)
-{
-    for (auto& p: paths) {
-        p.isActive = (p.id == id);
-    }
-}
-
-void Device::setOnlinePath(const QUuid& id)
-{
-    for (auto& p: paths) {
-        if (p.id == id) {
-            p.isOnline = true;
-            break;
-        }
-    }
-}
-
-void Device::clearOnlinePaths()
-{
-    for (auto& p: paths)
-        p.isOnline = false;
 }
 
 QString DeviceHardwareInfo::toString() const

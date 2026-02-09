@@ -2,40 +2,38 @@ include(ECMAddAppIcon)
 
 find_package(KDSingleApplication-qt6 1.0.0 REQUIRED)
 
-set(client_UI_SRCS
-    aboutdialog.ui
-    accountsettings.ui
-    generalsettings.ui
-    ignorelisteditor.ui
-    networksettings.ui
-    protocolwidget.ui
-    issueswidget.ui
-    activitywidget.ui
-    settingsdialog.ui
-    sharedialog.ui
-    sharelinkwidget.ui
-    shareusergroupwidget.ui
-    shareuserline.ui
-    tlserrordialog.ui
-    notificationwidget.ui
-    logbrowser.ui
-    codedialog.ui
-)
-
 set(client_SRCS
     aboutdialog.cpp
+    aboutdialog.h
+    aboutdialog.ui
     accountmanager.cpp
     accountmanager.h
     accountsettings.cpp
     accountsettings.h
+    accountsettings.ui
+    activitydata.cpp
+    activitydata.h
+    activitywidget.cpp
+    activitywidget.h
+    activitywidget.ui
+    accountstate.cpp
+    accountstate.h
     application.cpp
+    application.h
+    applicationgui.cpp
+    applicationgui.h
     askexperimentalvirtualfilesfeaturemessagebox.cpp
-    fetchserversettings.cpp
+    askexperimentalvirtualfilesfeaturemessagebox.h
     clientproxy.cpp
-    codedialog.cpp
-    codedialog.h
+    clientproxy.h
     commonstrings.cpp
+    commonstrings.h
     connectionvalidator.cpp
+    connectionvalidator.h
+    elidedlabel.cpp
+    elidedlabel.h
+    fetchserversettings.cpp
+    fetchserversettings.h
     folder.cpp
     folder.h
     folderdefinition.cpp
@@ -43,57 +41,97 @@ set(client_SRCS
     folderman.cpp
     folderman.h
     folderstatusmodel.cpp
+    folderstatusmodel.h
     folderstatusdelegate.cpp
+    folderstatusdelegate.h
     folderwatcher.cpp
+    folderwatcher.h
     generalsettings.cpp
+    generalsettings.h
+    generalsettings.ui
+    guiutility.cpp
+    guiutility.h
     ignorelisteditor.cpp
+    ignorelisteditor.h
+    ignorelisteditor.ui
+    issueswidget.cpp
+    issueswidget.h
+    issueswidget.ui
     lockwatcher.cpp
     logbrowser.cpp
+    lockwatcher.h
+    logbrowser.ui
     networksettings.cpp
-    ocssharejob.cpp
-    openfilemanager.cpp
-    curatorgui.cpp
-    protocolwidget.cpp
-    protocolitem.cpp
-    issueswidget.cpp
-    activitydata.cpp
-    activitywidget.cpp
-    selectivesyncwidget.cpp
-    settingsdialog.cpp
-    sharedialog.cpp
-    sharelinkwidget.cpp
-    sharemanager.cpp
-    shareusergroupwidget.cpp
-    sharee.cpp
-    tlserrordialog.cpp
-    syncrunfilelog.cpp
-    systray.cpp
-    thumbnailjob.cpp
-    quotainfo.cpp
-    accountstate.cpp
-    tooltipupdater.cpp
+    networksettings.h
+    networksettings.ui
     notificationwidget.cpp
+    notificationwidget.h
+    notificationwidget.ui
     notificationconfirmjob.cpp
+    notificationconfirmjob.h
+    ocssharejob.cpp
+    ocssharejob.h
+    openfilemanager.cpp
+    openfilemanager.h
+    protocolwidget.cpp
+    protocolwidget.h
+    protocolwidget.ui
+    protocolitem.cpp
+    protocolitem.h
+    quotainfo.cpp
+    quotainfo.h
+    selectivesyncwidget.cpp
+    selectivesyncwidget.h
+    settingsdialog.cpp
+    settingsdialog.h
+    settingsdialog.ui
     servernotificationhandler.cpp
-    guiutility.cpp
-    elidedlabel.cpp
-    translations.cpp
-    creds/httpcredentialsgui.cpp
-    updateurldialog.cpp
-
-    models/activitylistmodel.cpp
-    models/expandingheaderview.cpp
-    models/models.cpp
-    models/protocolitemmodel.cpp
-
+    sharedialog.cpp
+    sharedialog.h
+    sharedialog.ui
+    sharelinkwidget.cpp
+    sharelinkwidget.h
+    sharelinkwidget.ui
+    sharemanager.cpp
+    sharemanager.h
+    shareusergroupwidget.cpp
+    shareusergroupwidget.h
+    shareusergroupwidget.ui
+    shareuserline.ui
+    sharee.cpp
+    sharee.h
     spacemigration.cpp
+    spacemigration.h
+    syncrunfilelog.cpp
+    syncrunfilelog.h
+    systray.cpp
+    systray.h
+    thumbnailjob.cpp
+    thumbnailjob.h
+    tlserrordialog.cpp
+    tlserrordialog.h
+    tlserrordialog.ui
+    tooltipupdater.cpp
+    tooltipupdater.h
+    translations.cpp
+    translations.h
+    updateurldialog.cpp
+    updateurldialog.h
 
+    creds/httpcredentialsgui.cpp
+    creds/httpcredentialsgui.h
+    models/activitylistmodel.cpp
+    models/activitylistmodel.h
+    models/expandingheaderview.cpp
+    models/expandingheaderview.h
+    models/models.cpp
+    models/models.h
+    models/protocolitemmodel.cpp
+    models/protocolitemmodel.h
     scheduling/syncscheduler.cpp
+    scheduling/syncscheduler.h
     scheduling/etagwatcher.cpp
-
-    devwidget.cpp
-    devwidget.h
-    devwidget.ui
+    scheduling/etagwatcher.h
 )
 
 set(3rdparty_SRC
@@ -103,7 +141,6 @@ set(3rdparty_SRC
 set( final_src
     ${MIRALL_RC_SRC}
     ${client_SRCS}
-    ${client_UI_SRCS}
     ${3rdparty_SRC}
 )
 
@@ -111,17 +148,24 @@ add_subdirectory(newwizard)
 add_subdirectory(folderwizard)
 add_subdirectory(loginrequireddialog)
 add_subdirectory(customui)
+add_subdirectory(remoteaccess)
 
 add_library(curatorCore STATIC ${final_src})
 set_target_properties(curatorCore PROPERTIES AUTOUIC ON AUTORCC ON)
-target_link_libraries(curatorCore
-    PUBLIC
-        Qt::Widgets Qt::Network Qt::Xml Qt::Concurrent
-        newwizard folderwizard spaces loginrequireddialog
-        customui
-        libsync
-#        telemetry
-        Qt6Keychain::Qt6Keychain
+target_link_libraries(curatorCore PUBLIC
+    Qt::Widgets 
+    Qt::Network 
+    Qt::Xml 
+    Qt::Concurrent
+    newwizard
+    folderwizard 
+    spaces 
+    loginrequireddialog
+    customui
+    remoteaccess
+    libsync
+#   telemetry
+    Qt6Keychain::Qt6Keychain
 )
 
 if(APPLE)
@@ -131,10 +175,7 @@ endif()
 
 apply_common_target_settings(curatorCore)
 
-
 add_subdirectory(spaces)
-
-
 add_subdirectory(socketapi)
 
 target_include_directories(curatorCore PUBLIC
@@ -146,15 +187,15 @@ target_include_directories(curatorCore PUBLIC
 
 IF( APPLE )
     target_sources(curatorCore PRIVATE
-            systray.mm
-            settingsdialog_mac.mm
-            guiutility_mac.mm
-            folderwatcher_mac.cpp)
+        systray.mm
+        settingsdialog_mac.mm
+        guiutility_mac.mm
+        folderwatcher_mac.cpp)
     set_source_files_properties(guiutility_mac.mm PROPERTIES COMPILE_DEFINITIONS SOCKETAPI_TEAM_IDENTIFIER_PREFIX="${SOCKETAPI_TEAM_IDENTIFIER_PREFIX}")
 elseif( WIN32 )
     target_sources(curatorCore PRIVATE
-            guiutility_win.cpp
-            folderwatcher_win.cpp)
+        guiutility_win.cpp
+        folderwatcher_win.cpp)
 elseif(UNIX AND NOT APPLE)
     ## handle DBUS for Fdo notifications
     if (TARGET Qt::DBus)
@@ -162,8 +203,8 @@ elseif(UNIX AND NOT APPLE)
         target_compile_definitions(curatorCore PUBLIC "USE_FDO_NOTIFICATIONS")
     endif()
     target_sources(curatorCore PRIVATE
-            folderwatcher_linux.cpp
-            guiutility_unix.cpp)
+        folderwatcher_linux.cpp
+        guiutility_unix.cpp)
 endif()
 
 if(WITH_AUTO_UPDATER)
@@ -185,9 +226,9 @@ target_link_libraries(curator
     telemetry
 )
 
-MESSAGE(STATUS "CURATOR_SIDEBAR_ICONS: ${APPLICATION_ICON_NAME}: ${CURATOR_SIDEBAR_ICONS}")
+MESSAGE(STATUS "APPLICATION_SIDEBAR_ICONS: ${APPLICATION_ICON_NAME}: ${APPLICATION_SIDEBAR_ICONS}")
 
-ecm_add_app_icon(appIcons ICONS "${CURATOR_ICONS}" SIDEBAR_ICONS "${CURATOR_SIDEBAR_ICONS}" OUTFILE_BASENAME "${APPLICATION_ICON_NAME}")
+ecm_add_app_icon(appIcons ICONS "${APPLICATION_ICONS}" SIDEBAR_ICONS "${APPLICATION_SIDEBAR_ICONS}" OUTFILE_BASENAME "${APPLICATION_ICON_NAME}")
 target_sources(curator PRIVATE ${appIcons})
 
 if(NOT APPLE)
@@ -204,10 +245,10 @@ if(NOT APPLE)
 
     # we may not add MACOSX_BUNDLE here, if not building one
 else()
-    target_sources(curator PRIVATE ${CURATOR_BUNDLED_RESOURCES})
+    target_sources(curator PRIVATE ${APPLICATION_BUNDLED_RESOURCES})
 
     set_source_files_properties(
-      ${CURATOR_BUNDLED_RESOURCES}
+      ${APPLICATION_BUNDLED_RESOURCES}
       PROPERTIES
       MACOSX_PACKAGE_LOCATION Resources
       )

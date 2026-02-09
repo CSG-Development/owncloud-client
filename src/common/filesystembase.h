@@ -32,7 +32,7 @@
 
 class QFile;
 
-namespace CUR {
+namespace APP {
 
 OCSYNC_EXPORT Q_DECLARE_LOGGING_CATEGORY(lcFileSystem)
 

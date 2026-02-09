@@ -22,7 +22,7 @@
 
 Q_LOGGING_CATEGORY(lcJsonApiJob, "sync.networkjob.jsonapi", QtInfoMsg)
 
-using namespace CUR;
+using namespace APP;
 
 JsonJob::~JsonJob()
 {

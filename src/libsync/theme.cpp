@@ -28,7 +28,7 @@
 #include <QApplication>
 #include <QSslSocket>
 
-#include "curatortheme.h"
+#include "applicationtheme.h"
 
 #ifdef THEME_INCLUDE
 #include THEME_INCLUDE
@@ -70,7 +70,7 @@ constexpr bool isVanilla()
     return std::string_view(APPLICATION_SHORTNAME) == "Curator";
 }
 }
-namespace CUR {
+namespace APP {
 
 Theme *Theme::_instance = nullptr;
 
@@ -369,7 +369,7 @@ QString Theme::aboutVersions(Theme::VersionFormat format) const
     QString gitUrl;
     if (!Version::gitSha().isEmpty()) {
         if (format != Theme::VersionFormat::Url) {
-            _version = QCoreApplication::translate("CuratorTheme::versionWithSha", "%1 %2").arg(_version, gitSHA1(format));
+            _version = QCoreApplication::translate("ApplicationTheme::versionWithSha", "%1 %2").arg(_version, gitSHA1(format));
         } else {
             gitUrl = gitSHA1(format) + br;
         }
@@ -380,7 +380,7 @@ QString Theme::aboutVersions(Theme::VersionFormat format) const
         sysInfo << QStringLiteral("QPA: %1").arg(guiApp->platformName());
     }
 
-    return QCoreApplication::translate("CuratorTheme::aboutVersions()",
+    return QCoreApplication::translate("ApplicationTheme::aboutVersions()",
         "%1 %2%7"
         "%8"
         "Libraries Qt %3, %4%7"
@@ -642,7 +642,7 @@ bool Theme::withCrashReporter() const
 
 void Theme::systemThemeChanged()
 {
-    Q_EMIT themeChanged();
+    Q_EMIT themeChanged(isDarkTheme());
 }
 
 bool Theme::isDarkTheme() const
@@ -658,7 +658,7 @@ bool Theme::isDarkTheme() const
 }
 
 template <>
-CURATORSYNC_EXPORT QString Utility::enumToDisplayName(Theme::UserIDType userIdType)
+APPLICATIONSYNC_EXPORT QString Utility::enumToDisplayName(Theme::UserIDType userIdType)
 {
     switch (userIdType) {
     case Theme::UserIDUserName:

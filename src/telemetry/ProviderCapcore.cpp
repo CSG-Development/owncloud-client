@@ -1,7 +1,7 @@
 #include "ProviderCapcore.h"
 #include <QLoggingCategory>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcCapcoreTelemetry, "telemetry.capcore")
 
@@ -41,4 +41,4 @@ void ProviderCapcore::sendEvent(const string &requestType, std::any& event)
     }
 }
 
-} // namespace CUR
+} // namespace APP

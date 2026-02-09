@@ -83,7 +83,7 @@ QString DeviceInfoAbout::toString() const
 {
     QStringList l;
     l << QStringLiteral("DeviceInfoAbout{");
-    l << QStringLiteral("cert_common_name:%1,").arg(certificate_common_name);
+    l << QStringLiteral("cert_cn:%1,").arg(certificate_common_name);
     l << QStringLiteral("date:%1,").arg(date.toString(QStringLiteral("yyyy-MM-dd hh:mm")));
     l << QStringLiteral("default_mac_addr:%1,").arg(default_mac_addr);
     l << QStringLiteral("hostname:%1,").arg(hostname);
@@ -94,6 +94,17 @@ QString DeviceInfoAbout::toString() const
     l << QStringLiteral("product_id:%1,").arg(product_id);
     l << QStringLiteral("serial_number:%1,").arg(serial_number);
     l << QStringLiteral("version:%1").arg(version);
+    l << QStringLiteral("}");
+    return l.join(QStringLiteral(""));
+}
+
+QString DeviceInfoAbout::toStringShort() const
+{
+    QStringList l;
+    l << QStringLiteral("about{");
+    l << QStringLiteral("cert_cn:%1,").arg(certificate_common_name);
+    l << QStringLiteral("hostname:%1,").arg(hostname);
+    l << QStringLiteral("os_state:%1,").arg(os_state);
     l << QStringLiteral("}");
     return l.join(QStringLiteral(""));
 }
@@ -114,7 +125,7 @@ DeviceInfoStatus DeviceInfoStatus::fromJson(const QJsonDocument &doc)
 
 QString DeviceInfoStatus::toString() const
 {
-    return QStringLiteral("DeviceInfoStatus{oobe:%1,state:%2}").arg(oobe_done).arg(state);
+    return QStringLiteral("status{oobe:%1,state:%2}").arg(oobe_done).arg(state);
 }
 
 DeviceType DevHelpers::strToDevType(const QString &str)
@@ -173,7 +184,7 @@ QString DevHelpers::makeServerUrl(const QString &url, int port, bool add_folder,
 {
     QString result;
 
-    bool apiOnlyPort = CUR::ConfigFile::useLocalPortForApiOnly();
+    bool apiOnlyPort = APP::ConfigFile::useLocalPortForApiOnly();
 
     if (!url.startsWith(QStringLiteral("http://")) && !url.startsWith(QStringLiteral("https://"))) {
         result = QStringLiteral("https://");

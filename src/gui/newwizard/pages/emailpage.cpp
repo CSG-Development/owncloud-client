@@ -4,16 +4,13 @@
 #include "gui/customui/stylehelper.h"
 #include "gui/customui/focusproxy.h"
 #include "theme.h"
+#include "configfile.h"
 
 #include <QLineEdit>
-#include <configfile.h>
+#include <QLoggingCategory>
 
 namespace {
 constexpr int fontSize = 16;
-QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/login/cred_page_light.qss"),
-    QStringLiteral(":/res/login/cred_page_dark.qss")
-};
 QPair<QString,QString> settingsIcon = {
     QStringLiteral(":/res/login/gear_light.svg"),
     QStringLiteral(":/res/login/gear_dark.svg")
@@ -21,19 +18,41 @@ QPair<QString,QString> settingsIcon = {
 const QString loginBtnTooltip = QObject::tr("Enter a valid email address");
 }
 
+Q_LOGGING_CATEGORY(lcEmailPage, "gui.emailpage")
+
+
 EmailPageController::EmailPageController(QObject *parent)
     : QObject(parent)
 {
     canLogin.setBinding([this]() {
-        return isEmailValid(email.value());
+        return isEmailValid(email.value()) && !notRegistered.value();
     });
+
     buttonTooltip.setBinding([this]() {
         auto s = canLogin.value() ? QStringLiteral("") : loginBtnTooltip;
         return s;
     });
+
     errorState.setBinding([this]() {
         const auto& currentEmail = email.value();
-        return !canLogin.value() && !isFocused.value() && !currentEmail.trimmed().isEmpty();
+        if (notRegistered && !isFocused.value())
+            return EmailErrorState::NotAllowed;
+        if (!canLogin.value() && !isFocused.value() && !currentEmail.trimmed().isEmpty())
+            return EmailErrorState::InvalidEmail;
+        return EmailErrorState::NoError;
+    });
+
+    errorMessage.setBinding([this]() {
+        switch (errorState.value())
+        {
+        case EmailErrorState::NoError:
+            return QStringLiteral("");
+        case EmailErrorState::InvalidEmail:
+            return tr("Invalid email");
+        case EmailErrorState::NotAllowed:
+            return tr("Not allowed. Contact the device owner.");
+        }
+        return QStringLiteral("");
     });
 }
 
@@ -46,22 +65,32 @@ EmailPage::EmailPage(QWidget *parent)
     ui->setupUi(this);
     ui->frameErrorMessage->setVisible(false);
 
+    setStyleSheet(APP::StyleHelper::loadFileToString(QStringLiteral(":/res/login/cred_page.qss")));
+
     setObjectName("emailPage");
     setMouseTracking(true);
 
     auto syncUI = [this]() {
         ui->btnLogin->setToolTip(controller_->buttonTooltip.value());
         ui->btnLogin->setEnabled(controller_->canLogin.value());
-        ui->edEmail->setErrorState(controller_->errorState.value(), controller_->errorState.value() ? tr("Invalid email") : QStringLiteral(""));
+        // ui->edEmail->setErrorState(controller_->errorState.value(), controller_->errorState.value() ? tr("Invalid email") : QStringLiteral(""));
+        ui->edEmail->setErrorState(controller_->errorState.value() != EmailErrorState::NoError,
+                                   controller_->errorMessage.value());
         if (ui->edEmail->text() != controller_->email.value()) {
             QSignalBlocker blocker(ui->edEmail);
             ui->edEmail->setText(controller_->email.value());
         }
     };
+    auto updateThemeFunc = [this]() {
+        updateTheme();
+    };
 
     notifiers_.emplace_back(controller_->buttonTooltip.addNotifier(syncUI));
     notifiers_.emplace_back(controller_->canLogin.addNotifier(syncUI));
     notifiers_.emplace_back(controller_->errorState.addNotifier(syncUI));
+    notifiers_.emplace_back(controller_->darkTheme.addNotifier(updateThemeFunc));
+
+    controller_->darkTheme.setValue(APP::Theme::instance()->isDarkTheme());
 
     ui->btnLogin->setStyle(new FocusProxyStyle(ui->btnLogin));
     ui->btnCancel->setStyle(new FocusProxyStyle(ui->btnCancel));
@@ -70,7 +99,6 @@ EmailPage::EmailPage(QWidget *parent)
     setAttribute(Qt::WA_TranslucentBackground, true);
 
     connect(ui->btnLogin, &QPushButton::clicked, this, [this] { emit loginClicked(email()); });
-
     connect(ui->btnCancel, &QPushButton::clicked, this, &EmailPage::cancelClicked);
     connect(ui->btnSettings, &QPushButton::clicked, this, &EmailPage::settingsClicked);
 
@@ -83,6 +111,9 @@ EmailPage::EmailPage(QWidget *parent)
 
     connect(ui->edEmail, &InputWidget::focusChanged, this, [this](bool focused) {
         controller_->isFocused.setValue(focused);
+        if (controller_->isFocused.value()) {
+            controller_->notRegistered.setValue(false);
+        }
     });
 
     // MacOS hover enable
@@ -90,7 +121,7 @@ EmailPage::EmailPage(QWidget *parent)
     ui->btnCancel->setAttribute(Qt::WA_Hover, true);
     ui->btnSettings->setAttribute(Qt::WA_Hover, true);
 
-    updateTheme();
+    updateThemeFunc();
     syncUI();
     ui->btnSettings->setVisible(false);
 }
@@ -103,13 +134,12 @@ EmailPage::~EmailPage()
 
 void EmailPage::updateTheme()
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
-
-    CUR::StyleHelper::invoke_setDarkTheme_recursive(this);
+    qCDebug(lcEmailPage) << controller_->darkTheme.value();
+    APP::StyleHelper::invoke_setDarkTheme_recursive(this);
 
     // QToolButton "icon" property does not supported in qss
-    ui->btnSettings->setIcon(isDark ? QIcon(settingsIcon.second) : QIcon(settingsIcon.first));
-    setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    ui->btnSettings->setIcon(controller_->darkTheme.value() ? QIcon(settingsIcon.second) : QIcon(settingsIcon.first));
+    APP::StyleHelper::setTheme(this, controller_->darkTheme.value());
 
     update();
 }

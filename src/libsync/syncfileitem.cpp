@@ -23,7 +23,7 @@
 
 #include <bitset>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcFileItem, "sync.fileitem", QtInfoMsg)
 
@@ -96,45 +96,45 @@ QString Utility::enumToDisplayName(SyncFileItem::Status s)
     switch (s) {
     case SyncFileItem::NoStatus:
         return QCoreApplication::translate("SyncFileItem::Status", "Undefined");
-    case CUR::SyncFileItem::FatalError:
+    case APP::SyncFileItem::FatalError:
         return QCoreApplication::translate("SyncFileItem::Status", "Fatal Error");
-    case CUR::SyncFileItem::NormalError:
+    case APP::SyncFileItem::NormalError:
         return QCoreApplication::translate("SyncFileItem::Status", "Error");
-    case CUR::SyncFileItem::SoftError:
+    case APP::SyncFileItem::SoftError:
         return QCoreApplication::translate("SyncFileItem::Status", "Info");
-    case CUR::SyncFileItem::Success:
+    case APP::SyncFileItem::Success:
         return QCoreApplication::translate("SyncFileItem::Status", "Success");
-    case CUR::SyncFileItem::Conflict:
+    case APP::SyncFileItem::Conflict:
         return QCoreApplication::translate("SyncFileItem::Status", "Conflict");
-    case CUR::SyncFileItem::FileIgnored:
+    case APP::SyncFileItem::FileIgnored:
         return QCoreApplication::translate("SyncFileItem::Status", "File Ignored");
-    case CUR::SyncFileItem::Restoration:
+    case APP::SyncFileItem::Restoration:
         return QCoreApplication::translate("SyncFileItem::Status", "Restored");
-    case CUR::SyncFileItem::DetailError:
+    case APP::SyncFileItem::DetailError:
         return QCoreApplication::translate("SyncFileItem::Status", "Error");
-    case CUR::SyncFileItem::BlacklistedError:
+    case APP::SyncFileItem::BlacklistedError:
         return QCoreApplication::translate("SyncFileItem::Status", "Blacklisted");
-    case CUR::SyncFileItem::Excluded:
+    case APP::SyncFileItem::Excluded:
         return QCoreApplication::translate("SyncFileItem::Status", "Excluded");
-    case CUR::SyncFileItem::Message:
+    case APP::SyncFileItem::Message:
         return QCoreApplication::translate("SyncFileItem::Status", "Message");
-    case CUR::SyncFileItem::FilenameReserved:
+    case APP::SyncFileItem::FilenameReserved:
         return QCoreApplication::translate("SyncFileItem::Status", "Filename Reserved");
-    case CUR::SyncFileItem::StatusCount:
+    case APP::SyncFileItem::StatusCount:
         Q_UNREACHABLE();
     }
     Q_UNREACHABLE();
 }
 }
 
-QDebug operator<<(QDebug debug, const CUR::SyncFileItem *item)
+QDebug operator<<(QDebug debug, const APP::SyncFileItem *item)
 {
     if (!item) {
-        debug << "CUR::SyncFileItem(0x0)";
+        debug << "APP::SyncFileItem(0x0)";
     } else {
         QDebugStateSaver saver(debug);
         debug.setAutoInsertSpaces(false);
-        debug << "CUR::SyncFileItem(file=" << item->_file;
+        debug << "APP::SyncFileItem(file=" << item->_file;
         if (!item->_renameTarget.isEmpty()) {
             debug << ", destination=" << item->destination();
         }

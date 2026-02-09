@@ -86,8 +86,7 @@
         <file>res/login/back_arrow_light.svg</file>
         <file>res/login/browse_dark.svg</file>
         <file>res/login/browse_light.svg</file>
-        <file>res/login/cred_page_dark.qss</file>
-        <file>res/login/cred_page_light.qss</file>
+        <file>res/login/cred_page.qss</file>
         <file>res/login/done_dark.svg</file>
         <file>res/login/done_light.svg</file>
         <file>res/login/error_dark.svg</file>
@@ -96,21 +95,18 @@
         <file>res/login/eye_open_light.svg</file>
         <file>res/login/eye_closed_dark.svg</file>
         <file>res/login/eye_closed_light.svg</file>
-        <file>res/login/finished_page_dark.qss</file>
-        <file>res/login/finished_page_light.qss</file>
+        <file>res/login/finished_page.qss</file>
         <file>res/login/connect_error_page_dark.qss</file>
         <file>res/login/connect_error_page_light.qss</file>
         <file>res/login/gear_dark.svg</file>
         <file>res/login/gear_light.svg</file>
         <file>res/login/reset_dark.svg</file>
         <file>res/login/reset_light.svg</file>
-        <file>res/login/setupwidget_dark.qss</file>
-        <file>res/login/setupwidget_light.qss</file>
-        <file>res/login/wait_page_dark.qss</file>
-        <file>res/login/wait_page_light.qss</file>
+        <file>res/login/setupwidget.qss</file>
+        <file>res/login/wait_page.qss</file>
         <file>res/login/warning_light.svg</file>
-        <file>res/login/code_dialog_dark.qss</file>
-        <file>res/login/code_dialog_light.qss</file>
+        <file>res/login/codedialog.qss</file>
+        <file>res/login/errordialog.qss</file>
         <file>res/login/refresh_light.svg</file>
         <file>res/login/refresh_dark.svg</file>
         <file>res/login/arrow_back_btn_dark.svg</file>
@@ -149,10 +145,12 @@
         <file>res/combowidget/combowidget_error_dark.qss</file>
         <file>res/combowidget/combowidget_error_light.qss</file>
         <file>res/combowidget/combowidget_light.qss</file>
-        <file>res/combowidget/triangle_down.svg</file>
-        <file>res/combowidget/triangle_up.svg</file>
-        <file>res/combowidget/popup_combo_dark.qss</file>
-        <file>res/combowidget/popup_combo_light.qss</file>
+        <file>res/combowidget/triangle_down_light.svg</file>
+        <file>res/combowidget/triangle_up_light.svg</file>
+        <file>res/combowidget/triangle_down_dark.svg</file>
+        <file>res/combowidget/triangle_up_dark.svg</file>
+        <file>res/combowidget/popup_combo.qss</file>
+        <file>res/combowidget/device_icon.svg</file>
         <file>res/tooltips/tooltip_dark.qss</file>
         <file>res/tooltips/tooltip_light.qss</file>
     </qresource>

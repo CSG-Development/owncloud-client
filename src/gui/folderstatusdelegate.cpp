@@ -29,7 +29,7 @@ namespace {
 const int barHeightC = 7;
 }
 
-namespace CUR {
+namespace APP {
 
 FolderStatusDelegate::FolderStatusDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -389,4 +389,4 @@ void FolderStatusDelegate::updateFont(const QFont &font)
 }
 
 
-} // namespace CUR
+} // namespace APP

@@ -22,7 +22,7 @@
 
 class ExcludedFiles;
 
-namespace CUR {
+namespace APP {
 class SyncJournalDb;
 
 /**

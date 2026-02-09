@@ -19,7 +19,7 @@
 #include <QAbstractButton>
 #include <QPushButton>
 
-namespace CUR {
+namespace APP {
 TlsErrorDialog::TlsErrorDialog(const QList<QSslError> &sslErrors, const QString &host, QWidget *parent)
     : QDialog(parent)
     , _ui(new Ui::TlsErrorDialog)
@@ -112,4 +112,4 @@ QString TlsErrorDialog::describeCertificateHtml(const QSslCertificate &certifica
     return msg;
 }
 
-} // CUR
+} // APP

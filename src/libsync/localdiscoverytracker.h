@@ -21,7 +21,7 @@
 #include <QByteArray>
 #include <QSharedPointer>
 
-namespace CUR {
+namespace APP {
 
 class SyncFileItem;
 typedef QSharedPointer<SyncFileItem> SyncFileItemPtr;
@@ -46,7 +46,7 @@ typedef QSharedPointer<SyncFileItem> SyncFileItemPtr;
  *
  * @ingroup libsync
  */
-class CURATORSYNC_EXPORT LocalDiscoveryTracker : public QObject
+class APPLICATIONSYNC_EXPORT LocalDiscoveryTracker : public QObject
 {
     Q_OBJECT
 public:
@@ -98,6 +98,6 @@ private:
     std::set<QString> _previousLocalDiscoveryPaths;
 };
 
-} // namespace CUR
+} // namespace APP
 
 #endif

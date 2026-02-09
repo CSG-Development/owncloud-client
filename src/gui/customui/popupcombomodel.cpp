@@ -22,10 +22,10 @@ QVariant PopupComboModel::data(const QModelIndex &idx, int role) const
     {
     case Qt::DisplayRole:
         if (col == clName) {
-            if (data_[row].friendlyName().isEmpty())
+            if (data_[row].friendlyName.isEmpty())
                 return data_[row].certificateCommonName;
             else
-                return data_[row].friendlyName();
+                return data_[row].friendlyName;
         }
         break;
 

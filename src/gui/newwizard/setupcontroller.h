@@ -32,12 +32,12 @@ Q_ENUM_NS(ChangeReason)
 
 class DeviceController;
 
-namespace CUR {
+namespace APP {
 class DeviceListManager;
 class EvaluatePath;
 }
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 enum class SetupResult {
     Success,
@@ -54,7 +54,7 @@ class SetupController : public QObject
     Q_OBJECT
 
 public:
-    explicit SetupController(SettingsDialog *parent);
+    explicit SetupController(SettingsDialog *parent, RunAccountWizardReason reason);
     ~SetupController() noexcept override;
 
     SetupWidget *window();
@@ -63,13 +63,13 @@ public:
 
 Q_SIGNALS:
     void setupFinishPageDefaults(const QString &defaultSyncTargetDir, const QString &userChosenSyncTargetDir, bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental);
-    void finished(CUR::AccountPtr newAccount, CUR::Wizard::SyncMode syncMode, const QVariantMap &dynamicRegistrationData);
+    void finished(APP::AccountPtr newAccount, APP::Wizard::SyncMode syncMode, const QVariantMap &dynamicRegistrationData);
     void invalidServerUrl();
 
     // private, internal use
-    void handleCredentialsEvaluation(CUR::Wizard::SetupResult result, const QString& msg = QString());
-    void handleLoginResult(CUR::Wizard::SetupResult result, const QString& msg = QString());
-    void handleFinishResult(CUR::Wizard::SetupResult result, const QString &msg = QString(), CUR::Wizard::SyncMode mode = SyncMode::Invalid);
+    void handleCredentialsEvaluation(APP::Wizard::SetupResult result, const QString& msg = QString());
+    void handleLoginResult(APP::Wizard::SetupResult result, const QString& msg = QString());
+    void handleFinishResult(APP::Wizard::SetupResult result, const QString &msg = QString(), APP::Wizard::SyncMode mode = SyncMode::Invalid);
 
     void cantFindDevice(QPrivateSignal);
     void evaluateCredentialsError(const QString& errStr, QPrivateSignal);
@@ -81,7 +81,7 @@ private:
     void onDevicesUpdated(bool raQueried);
 
     void onFinishPageBackClicked();
-    void onFinishPageDoneClicked(CUR::Wizard::SyncMode mode, const QString& targetDir);
+    void onFinishPageDoneClicked(APP::Wizard::SyncMode mode, const QString& targetDir);
 
     void onConnectErrorPageBackClicked();
     void onConnectErrorPageRetryClicked();
@@ -98,7 +98,7 @@ private:
     void onEvaluateCredError(const QString& errStr);
 
     void performLogin();
-    void evaluateFinishPage(CUR::Wizard::SyncMode mode, const QString& targetDir);
+    void evaluateFinishPage(APP::Wizard::SyncMode mode, const QString& targetDir);
 
     SetupContext* _context = nullptr;
     // keeping a pointer on the current page allows us to check whether the controller has been initialized yet
@@ -107,8 +107,9 @@ private:
     QString email_;
     QString password_;
     Device device_;
-    bool remoteSkipped = false;
     QList<Device> fullList;
     DeviceController* _deviceController = nullptr;
+    RunAccountWizardReason reason_ = RunAccountWizardReason::ApplicationStartup;
+    QUuid id_;
 };
 }

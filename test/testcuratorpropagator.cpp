@@ -11,9 +11,9 @@
 #include "propagatedownload.h"
 #include "qchar.h"
 
-using namespace CUR;
-namespace CUR {
-QString CURATORSYNC_EXPORT createDownloadTmpFileName(const QString &previous);
+using namespace APP;
+namespace APP {
+QString APPLICATIONSYNC_EXPORT createDownloadTmpFileName(const QString &previous);
 }
 
 class TestCuratorPropagator : public QObject

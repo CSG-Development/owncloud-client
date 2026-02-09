@@ -11,14 +11,14 @@ class DeviceApi;
 class MdnsClient;
 class DeviceAggregator;
 
-class CURATORSYNC_EXPORT DeviceController: public QObject
+class APPLICATIONSYNC_EXPORT DeviceController: public QObject
 {
     Q_OBJECT
 
 public:
-    enum class AccessCodeResult {
-        Accepted,
-        Error
+    enum class AccessCodeContext {
+        Init,
+        Token
     };
 
     explicit DeviceController(QObject* parent = nullptr);
@@ -34,7 +34,7 @@ public:
     // - accessCodeRequest
     // - accessCodeResult
     void account_update_device(const Device& dev);
-    void account_update_device_continue(const Device& dev);
+    void account_update_device_continue(std::optional<Device> dev);
 
     void evaluateDeviceStatus(Device* dev);
     bool isEvaluationRunning() const;
@@ -50,13 +50,12 @@ public:
     void loadRefreshToken();
 
     QList<Device> getDevices() const;
-    std::optional<Device> getDevice(const QString& deviceCN) const;
 
+    QFuture<DeviceListCtx> queryDeviceList();
     QFuture<DevicePathListCtx> queryDeviceInfo(const QString& deviceId);
 
     void initAccessCode();
-    void enterAccessCode(const QString& code);
-    void enterAccessCodeFromAccount(const QString& code);
+    void enterAccessCode(const QString& code, bool from_account);
 
     QFuture<QList<DevicePath>> query_status_all(const Device& dev);
 
@@ -70,7 +69,7 @@ signals:
     void evaluate_finished();
 
     void accessCodeRequest();
-    void accessCodeResult(DeviceController::AccessCodeResult result, const QString& errorString, const QString& errorStacktrace);
+    void accessCodeResult(DeviceController::AccessCodeContext context, int status_code, const QString& errorString, const QString& errorStacktrace);
 
     void account_update_device_finished(const QList<DevicePath>& paths);
 
@@ -90,8 +89,12 @@ protected:
 
     mutable QReadWriteLock lock_;
 
-    bool mdns_finished = false;
-    bool ra_finished = false;
+    //bool mdns_finished = false;
+    //bool ra_finished = false;
+    // 0 = none, 1 = mDNS ready, 2 = RA ready, 3 = All ready
+    std::atomic<bool> mdns_finished{false};
+    std::atomic<bool> ra_finished{false};
+
     bool force_device_list_request = false;
     bool _isEvaluationRunning = false;
 

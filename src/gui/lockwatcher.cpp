@@ -22,7 +22,7 @@
 
 using namespace std::chrono_literals;
 
-using namespace CUR;
+using namespace APP;
 
 Q_LOGGING_CATEGORY(lcLockWatcher, "gui.lockwatcher", QtInfoMsg)
 
@@ -49,7 +49,7 @@ void LockWatcher::setCheckInterval(std::chrono::milliseconds interval)
     _timer.start(interval.count());
 }
 
-bool LockWatcher::contains(const QString &path, CUR::FileSystem::LockMode mode) const
+bool LockWatcher::contains(const QString &path, APP::FileSystem::LockMode mode) const
 {
     return _watchedPaths.find({ path, mode }) != _watchedPaths.cend();
 }

@@ -27,7 +27,7 @@
 #include <QString>
 #include <QTextStream>
 
-namespace CUR {
+namespace APP {
 
 void Utility::setupFavLink(const QString &folder)
 {
@@ -137,4 +137,4 @@ bool Utility::hasDarkSystray()
     return true;
 }
 
-} // namespace CUR
+} // namespace APP

@@ -105,8 +105,10 @@ QFuture<TokenContext> ApiClient::ra_token(const QString &code)
 QFuture<DeviceListCtx> ApiClient::ra_device_list()
 {
     qCDebug(lcDeviceApiClient) << "[ra_device_list]";
+
     return ensureAuthenticated().then(this, [this](const TokenContext& authCtx) {
-        qCDebug(lcDeviceApiClient) << "[ra_device_list] .then, status" << authCtx.res.status;
+
+        qCDebug(lcDeviceApiClient) << "[ra_device_list] ensureAuthenticated().then, status" << authCtx.res.status;
         if (authCtx.res.status != 200) {
             DeviceListCtx errCtx;
             errCtx.res.status = authCtx.res.status;
@@ -131,9 +133,8 @@ QFuture<DeviceListCtx> ApiClient::ra_device_list()
                         Device d;
                         d.seagateDeviceID = item[jkey_seagateDeviceID].toString();
                         d.certificateCommonName = item[jkey_certificateCommonName].toString();
-                        d.setFriendlyName(item[jkey_friendlyName].toString());
+                        d.friendlyName = item[jkey_friendlyName].toString();
                         d.hostname = item[jkey_hostname].toString();
-                        d.origin = DeviceOrigin::Remote;
                         ctx.deviceList.append(d);
                     }
                 }
@@ -143,6 +144,7 @@ QFuture<DeviceListCtx> ApiClient::ra_device_list()
             }
             return ctx;
         });
+
     }).unwrap();
 }
 
@@ -157,27 +159,41 @@ QFuture<DevicePathListCtx> ApiClient::ra_device_info(const QString& deviceId)
 {
     qCDebug(lcDeviceApiClient) << "[ra_device_info]";
     _factory.clearQueryParameters();
-    auto req = _factory.createRequest(QStringLiteral("%1%2").arg(api_ra_device_info).arg(deviceId));
-    req.setRawHeader("authorization", QStringLiteral("Bearer %1").arg(_tokenCtx.accessToken).toUtf8());
-    auto reply = _rest.get(req);
-    return execRequest<DevicePathListCtx>(std::move(reply), [](const std::optional<QJsonDocument>& doc, int status) {
-        DevicePathListCtx ctx;
-        ctx.res.status = status;
-        if (doc && !doc->isNull()) {
-            if (status == 200) {
-                QString devId = (*doc)[jkey_seagateDeviceID].toString();
-                const auto& paths = (*doc)[jkey_paths].toArray();
-                for (const auto p: paths) {
-                    DevicePath dpath(p[jkey_address].toString(), DevHelpers::strToDevType(p[jkey_type].toString()), DeviceOrigin::Remote, p[jkey_port].toInt());
-                    ctx.devicePathList.append(dpath);
+
+    return ensureAuthenticated().then(this, [this,deviceId](const TokenContext& authCtx) {
+
+        qCDebug(lcDeviceApiClient) << "[ra_device_info] ensureAuthenticated().then, status" << authCtx.res.status;
+        if (authCtx.res.status != 200) {
+            DevicePathListCtx errCtx;
+            errCtx.res.status = authCtx.res.status;
+            errCtx.res.errorString = authCtx.res.errorString;
+            return QtFuture::makeReadyValueFuture(errCtx);
+        }
+
+        auto req = _factory.createRequest(QStringLiteral("%1%2").arg(api_ra_device_info).arg(deviceId));
+        req.setRawHeader("authorization", QStringLiteral("Bearer %1").arg(_tokenCtx.accessToken).toUtf8());
+        auto reply = _rest.get(req);
+
+        return execRequest<DevicePathListCtx>(std::move(reply), [](const std::optional<QJsonDocument>& doc, int status) {
+            DevicePathListCtx ctx;
+            ctx.res.status = status;
+            if (doc && !doc->isNull()) {
+                if (status == 200) {
+                    QString devId = (*doc)[jkey_seagateDeviceID].toString();
+                    const auto& paths = (*doc)[jkey_paths].toArray();
+                    for (const auto p: paths) {
+                        DevicePath dpath(p[jkey_address].toString(), DevHelpers::strToDevType(p[jkey_type].toString()), DeviceOrigin::Remote, p[jkey_port].toInt());
+                        ctx.devicePathList.append(dpath);
+                    }
+                }
+                else {
+                    ctx.res.errorString = (*doc)[jkey_name].toString();
                 }
             }
-            else {
-                ctx.res.errorString = (*doc)[jkey_name].toString();
-            }
-        }
-        return ctx;
-    });
+            return ctx;
+        });
+
+    }).unwrap();
 }
 
 /**

@@ -42,7 +42,7 @@
 #include <random>
 
 
-using namespace CUR;
+using namespace APP;
 
 namespace {
 
@@ -84,7 +84,7 @@ struct SyncCTX
 /* If the selective sync list is different from before, we need to disable the read from db
   (The normal client does it in SelectiveSyncDialog::accept*)
  */
-void selectiveSyncFixup(CUR::SyncJournalDb *journal, const QSet<QString> &newListSet)
+void selectiveSyncFixup(APP::SyncJournalDb *journal, const QSet<QString> &newListSet)
 {
     SqlDatabase db;
     if (!db.openOrCreateReadWrite(journal->databaseFilePath())) {
@@ -164,7 +164,7 @@ void sync(const SyncCTX &ctx)
         }
     });
     QObject::connect(
-        engine, &SyncEngine::aboutToRemoveAllFiles, engine, [ctx = ctx](CUR::SyncFileItem::Direction dir) mutable {
+        engine, &SyncEngine::aboutToRemoveAllFiles, engine, [ctx = ctx](APP::SyncFileItem::Direction dir) mutable {
             if (dir == SyncFileItem::Down) {
                 qInfo() << "All files in the sync folder '" << ctx.options.remoteFolder << "' folder were deleted on the server.";
                 qInfo() << "These deletes will be synchronized to your local sync folder, making such files "
@@ -303,7 +303,7 @@ CmdOptions parseOptions(const QStringList &app_args)
 {
     CmdOptions options;
     QCommandLineParser parser;
-    parser.setApplicationDescription(QStringLiteral("%1 version %2 - command line client tool").arg(QCoreApplication::instance()->applicationName(), CUR::Version::displayString()));
+    parser.setApplicationDescription(QStringLiteral("%1 version %2 - command line client tool").arg(QCoreApplication::instance()->applicationName(), APP::Version::displayString()));
 
     // this little snippet saves a few lines below
     auto addOption = [&parser](QCommandLineOption &&option, std::optional<QCommandLineOption::Flag> &&flags = {}) {
@@ -422,7 +422,7 @@ CmdOptions parseOptions(const QStringList &app_args)
 
 int main(int argc, char **argv)
 {
-    auto platform = CUR::Platform::create();
+    auto platform = APP::Platform::create();
 
     QCoreApplication app(argc, argv);
 
@@ -509,7 +509,7 @@ int main(int argc, char **argv)
                         if (ctx.options.server_url == ctx.options.target_url) {
                             // guess dav path
                             if (!ctx.options.target_url.path().contains(ctx.account->davPath())) {
-                                ctx.options.target_url = CUR::Utility::concatUrlPath(ctx.options.target_url, ctx.account->davPath());
+                                ctx.options.target_url = APP::Utility::concatUrlPath(ctx.options.target_url, ctx.account->davPath());
                             }
                         }
 

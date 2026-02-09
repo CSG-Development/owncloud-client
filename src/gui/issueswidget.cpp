@@ -33,15 +33,15 @@
 #include "ui_issueswidget.h"
 
 namespace {
-bool persistsUntilLocalDiscovery(const CUR::ProtocolItem &data)
+bool persistsUntilLocalDiscovery(const APP::ProtocolItem &data)
 {
-    return data.status() == CUR::SyncFileItem::Conflict
-        || (data.status() == CUR::SyncFileItem::FileIgnored && data.direction() == CUR::SyncFileItem::Up)
-        || data.status() == CUR::SyncFileItem::Excluded;
+    return data.status() == APP::SyncFileItem::Conflict
+        || (data.status() == APP::SyncFileItem::FileIgnored && data.direction() == APP::SyncFileItem::Up)
+        || data.status() == APP::SyncFileItem::Excluded;
 }
 
 }
-namespace CUR {
+namespace APP {
 
 class SyncFileItemStatusSetSortFilterProxyModel : public Models::SignalledQSortFilterProxyModel
 {
@@ -292,7 +292,7 @@ QMenu *IssuesWidget::showFilterMenu(QWidget *parent)
 
 void IssuesWidget::addResetFiltersAction(QMenu *menu, const QList<std::function<void()>> &resetFunctions)
 {
-    menu->addAction(QCoreApplication::translate("CUR::Models", "Reset Filters"), [resetFunctions]() {
+    menu->addAction(QCoreApplication::translate("APP::Models", "Reset Filters"), [resetFunctions]() {
         for (const auto &reset : resetFunctions) {
             reset();
         }
@@ -392,7 +392,7 @@ bool IssuesWidget::eventFilter(QObject *obj, QEvent *event)
 
 std::function<void(void)> IssuesWidget::addStatusFilter(QMenu *menu)
 {
-    menu->addAction(QCoreApplication::translate("CUR::Models", "Status Filter:"))->setEnabled(false);
+    menu->addAction(QCoreApplication::translate("APP::Models", "Status Filter:"))->setEnabled(false);
 
     // Use a QActionGroup to contain all status filter items, so we can find them back easily to reset.
     auto statusFilterGroup = new QActionGroup(menu);

@@ -17,7 +17,7 @@
 #include "activitydata.h"
 
 
-namespace CUR {
+namespace APP {
 
 Activity::Activity(Activity::Type type, const QString &id, AccountPtr acc, const QString &subject, const QString &message, const QString &file,
     const QUrl &link, const QDateTime &dateTime, const QVector<ActivityLink> &&links)

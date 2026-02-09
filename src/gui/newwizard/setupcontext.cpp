@@ -15,7 +15,7 @@
 #include "setupcontext.h"
 #include "setupwidget.h"
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 SetupContext::SetupContext(SettingsDialog *windowParent, QObject *parent)
     : QObject(parent)
@@ -76,4 +76,4 @@ CoreJob *SetupContext::startFetchUserInfoJob(QObject *parent) const
     return _accountBuilder.authenticationStrategy()->makeFetchUserInfoJobFactory(_accessManager).startJob(serverUrl, parent);
 }
 
-} // CUR::Wizard
+} // APP::Wizard

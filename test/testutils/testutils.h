@@ -11,11 +11,11 @@
 
 #include <memory>
 
-namespace CUR {
+namespace APP {
 
 namespace TestUtils {
     namespace TestUtilsPrivate {
-        void accountStateDeleter(CUR::AccountState *acc);
+        void accountStateDeleter(APP::AccountState *acc);
 
         using AccountStateRaii = std::unique_ptr<AccountState, decltype(&TestUtilsPrivate::accountStateDeleter)>;
     }

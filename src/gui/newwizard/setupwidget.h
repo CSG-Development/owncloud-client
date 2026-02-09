@@ -14,9 +14,9 @@ class FinishedPage;
 class EmailPage;
 class ConnectErrorPage;
 
-namespace CUR {enum class RemoteRequest;}
+namespace APP {enum class RemoteRequest;}
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 class SetupContext;
 
@@ -41,12 +41,14 @@ public:
     void showErrorMessage(const QString &errorMessage);
     void hideErrorMessage();
 
+    void setEmailIsNotAllowed(bool val);
+
     void setDevicesList(const QList<Device> &list);
     void setEmail(const QString& email);
 
     void onCancelClicked();
     void onSetupFinishPageDefaults(const QString &defaultSyncTargetDir, const QString &userChosenSyncTargetDir,
-        bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental);
+                                   bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental);
 
     void setInvalidUrlError();
     void setInvalidCredentialsError();
@@ -64,7 +66,7 @@ Q_SIGNALS:
     // void startDeviceListManager(const QString& email);
     void loginEmailClicked(const QString& user);
     void finishPageBackClicked();
-    void finishPageDoneClicked(CUR::Wizard::SyncMode mode, const QString& targetDir);
+    void finishPageDoneClicked(APP::Wizard::SyncMode mode, const QString& targetDir);
     void connectErrorPageBackClicked();
     void connectErrorPageRetryClicked();
 
@@ -74,10 +76,8 @@ private:
     void transitionTo(SetupPage newPage);
     void processPageChange();
 
-    void onThemeChanged();
+    void onThemeChanged(bool isDark);
     void setSafeCurrentWidget(QWidget* w);
-    template<typename T>
-    void safeUpdateTheme(T* w);
 
     ::Ui::SetupWidget *_ui = nullptr;
 

@@ -27,11 +27,11 @@
 #include <QUrl>
 #include <QVariantMap>
 
-namespace CUR {
-class CURATORSYNC_EXPORT AppProvider
+namespace APP {
+class APPLICATIONSYNC_EXPORT AppProvider
 {
 public:
-    struct CURATORSYNC_EXPORT Provider
+    struct APPLICATIONSYNC_EXPORT Provider
     {
         // the server might provide multiple apps but no default
         // for now we only support default apps

@@ -3,7 +3,7 @@
 #include <QToolButton>
 #include <QColor>
 
-namespace CUR {
+namespace APP {
 
 class ArrowToolButton: public QToolButton
 {
@@ -37,4 +37,4 @@ private:
     bool isDark = false;
 };
 
-} // namespace CUR
+} // namespace APP

@@ -13,7 +13,7 @@
 
 #include <QtTest>
 
-using namespace CUR;
+using namespace APP;
 
 class TestLocalDiscovery : public QObject
 {

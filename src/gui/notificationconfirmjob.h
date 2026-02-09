@@ -24,7 +24,7 @@
 #include <QPair>
 #include <QUrl>
 
-namespace CUR {
+namespace APP {
 
 class NotificationWidget;
 

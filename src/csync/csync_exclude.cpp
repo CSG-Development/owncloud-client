@@ -201,10 +201,10 @@ static CSYNC_EXCLUDE_TYPE _csync_excluded_common(QStringView path, bool excludeC
             return CSYNC_FILE_EXCLUDE_INVALID_CHAR;
         }
         if (std::find_if(
-                CUR::FileSystem::IllegalFilenameCharsWindows.begin(), CUR::FileSystem::IllegalFilenameCharsWindows.end(), [c](const auto illegal) {
+                APP::FileSystem::IllegalFilenameCharsWindows.begin(), APP::FileSystem::IllegalFilenameCharsWindows.end(), [c](const auto illegal) {
                     return c == illegal;
                 })
-            != CUR::FileSystem::IllegalFilenameCharsWindows.end()) {
+            != APP::FileSystem::IllegalFilenameCharsWindows.end()) {
             return CSYNC_FILE_EXCLUDE_INVALID_CHAR;
         }
     }
@@ -217,18 +217,18 @@ static CSYNC_EXCLUDE_TYPE _csync_excluded_common(QStringView path, bool excludeC
     }
 
 
-    if (excludeConflictFiles && CUR::Utility::isConflictFile(path)) {
+    if (excludeConflictFiles && APP::Utility::isConflictFile(path)) {
         return CSYNC_FILE_EXCLUDE_CONFLICT;
     }
     return CSYNC_NOT_EXCLUDED;
 }
 
 
-using namespace CUR;
+using namespace APP;
 
 ExcludedFiles::ExcludedFiles()
     : QObject(nullptr)
-    , _clientVersion(CUR::Version::version())
+    , _clientVersion(APP::Version::version())
 {
     // Windows used to use PathMatchSpec which allows *foo to match abc/deffoo.
     _wildcardsMatchSlash = Utility::isWindows();
@@ -743,7 +743,7 @@ void ExcludedFiles::prepare()
             .arg(fullFileDirKeep, fullDirKeep, bnameFileDirKeep, bnameDirKeep, fullFileDirRemove, fullDirRemove, bnameFileDirRemove, bnameDirRemove));
 
     QRegularExpression::PatternOptions patternOptions = QRegularExpression::NoPatternOption;
-    if (CUR::Utility::fsCasePreserving())
+    if (APP::Utility::fsCasePreserving())
         patternOptions |= QRegularExpression::CaseInsensitiveOption;
     _bnameTraversalRegexFile.setPatternOptions(patternOptions);
     _bnameTraversalRegexFile.optimize();

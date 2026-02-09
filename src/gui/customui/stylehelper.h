@@ -7,7 +7,7 @@
 class QStyleOption;
 class QStyleOptionToolButton;
 
-namespace CUR {
+namespace APP {
 
 class StyleHelper: public QObject
 {
@@ -18,6 +18,7 @@ public:
     ~StyleHelper();
 
     static void applyPushButtonStyle(QWidget* root);
+    static void setTheme(QWidget *target, bool isDark);
     
     static QIcon getIcon(const QString& name, bool isDark);
 
@@ -40,4 +41,4 @@ private:
     static QProxyStyle* pushButtonStyle_;
 };
 
-} // namespace CUR
+} // namespace APP

@@ -17,7 +17,7 @@
 #include <QDialog>
 #include <QNetworkReply>
 
-namespace CUR {
+namespace APP {
 
 namespace Ui {
     class TlsErrorDialog;

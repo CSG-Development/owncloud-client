@@ -17,7 +17,7 @@
 #include "abstractstate.h"
 #include "pages/credentialspage.h"
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 class CredentialsState : public AbstractState
 {
@@ -31,4 +31,4 @@ public:
     void evaluatePage() override;
 };
 
-} // CUR::Wizard
+} // APP::Wizard

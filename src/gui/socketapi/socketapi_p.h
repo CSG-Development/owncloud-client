@@ -27,7 +27,7 @@
 #include <memory>
 #include <QTimer>
 
-namespace CUR {
+namespace APP {
 
 class BloomFilter
 {
@@ -160,6 +160,6 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(CUR::SocketListener *)
+Q_DECLARE_METATYPE(APP::SocketListener *)
 
 #endif // SOCKETAPI_P_H

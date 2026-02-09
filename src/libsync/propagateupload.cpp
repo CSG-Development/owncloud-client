@@ -40,7 +40,7 @@
 
 using namespace std::chrono_literals;
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcPutJob, "sync.networkjob.put", QtInfoMsg)
 Q_LOGGING_CATEGORY(lcPropagateUpload, "sync.propagator.upload", QtInfoMsg)

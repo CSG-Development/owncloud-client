@@ -36,13 +36,13 @@ ConnectErrorPage::~ConnectErrorPage()
 
 void ConnectErrorPage::updateTheme()
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
+    bool isDark = APP::Theme::instance()->isDarkTheme();
 
-    CUR::StyleHelper::invoke_setDarkTheme_recursive(this);
+    APP::StyleHelper::invoke_setDarkTheme_recursive(this);
 
     // QToolButton "icon" property does not supported in qss
     ui->btnBack->setIcon(isDark ? QIcon(backIcon.second) : QIcon(backIcon.first));
-    setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    setStyleSheet(APP::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
 
     update();
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>521</width>
-    <height>556</height>
+    <width>519</width>
+    <height>676</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,6 +31,9 @@
    </property>
    <item>
     <widget class="QFrame" name="frame">
+     <property name="class" stdset="0">
+      <string notr="true">helper_frame</string>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <property name="spacing">
        <number>0</number>
@@ -67,6 +70,9 @@
         </property>
         <property name="frameShadow">
          <enum>QFrame::Shadow::Plain</enum>
+        </property>
+        <property name="class" stdset="0">
+         <string notr="true">helper_frame</string>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <property name="spacing">
@@ -120,6 +126,9 @@
            <property name="frameShape">
             <enum>QFrame::Shape::Box</enum>
            </property>
+           <property name="class" stdset="0">
+            <string notr="true">helper_frame</string>
+           </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
             <property name="spacing">
              <number>0</number>
@@ -143,6 +152,9 @@
               </property>
               <property name="frameShadow">
                <enum>QFrame::Shadow::Plain</enum>
+              </property>
+              <property name="class" stdset="0">
+               <string notr="true">helper_frame</string>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_3">
                <property name="leftMargin">
@@ -210,6 +222,9 @@
               <property name="frameShadow">
                <enum>QFrame::Shadow::Plain</enum>
               </property>
+              <property name="class" stdset="0">
+               <string notr="true">helper_frame</string>
+              </property>
               <layout class="QVBoxLayout" name="verticalLayout_6">
                <property name="leftMargin">
                 <number>0</number>
@@ -242,6 +257,9 @@
                  </property>
                  <property name="frameShadow">
                   <enum>QFrame::Shadow::Plain</enum>
+                 </property>
+                 <property name="class" stdset="0">
+                  <string notr="true">helper_frame</string>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_5">
                   <property name="leftMargin">
@@ -283,6 +301,9 @@
                     <property name="checked">
                      <bool>true</bool>
                     </property>
+                    <property name="class" stdset="0">
+                     <string notr="true">button_radio</string>
+                    </property>
                    </widget>
                   </item>
                   <item>
@@ -301,6 +322,9 @@
                     </property>
                     <property name="text">
                      <string>Configure synchronization manually</string>
+                    </property>
+                    <property name="class" stdset="0">
+                     <string notr="true">button_radio</string>
                     </property>
                    </widget>
                   </item>
@@ -321,6 +345,9 @@
                     <property name="text">
                      <string>Use &amp;virtual files instead of downloading content immediately</string>
                     </property>
+                    <property name="class" stdset="0">
+                     <string notr="true">button_radio</string>
+                    </property>
                    </widget>
                   </item>
                  </layout>
@@ -331,13 +358,13 @@
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
-                   <height>92</height>
+                   <height>100</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
                    <width>16777215</width>
-                   <height>92</height>
+                   <height>100</height>
                   </size>
                  </property>
                  <property name="frameShape">
@@ -345,6 +372,9 @@
                  </property>
                  <property name="frameShadow">
                   <enum>QFrame::Shadow::Plain</enum>
+                 </property>
+                 <property name="class" stdset="0">
+                  <string notr="true">helper_frame</string>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_4">
                   <property name="leftMargin">
@@ -371,13 +401,13 @@
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
-                      <height>62</height>
+                      <height>68</height>
                      </size>
                     </property>
                     <property name="maximumSize">
                      <size>
                       <width>16777215</width>
-                      <height>62</height>
+                      <height>68</height>
                      </size>
                     </property>
                     <property name="frameShape">
@@ -386,7 +416,13 @@
                     <property name="frameShadow">
                      <enum>QFrame::Shadow::Plain</enum>
                     </property>
+                    <property name="class" stdset="0">
+                     <string notr="true">helper_frame</string>
+                    </property>
                     <layout class="QHBoxLayout" name="horizontalLayout_4">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
                      <property name="leftMargin">
                       <number>0</number>
                      </property>
@@ -397,7 +433,7 @@
                       <number>0</number>
                      </property>
                      <property name="bottomMargin">
-                      <number>0</number>
+                      <number>4</number>
                      </property>
                      <item>
                       <widget class="InputWidget" name="edDownloadDir" native="true"/>
@@ -406,8 +442,14 @@
                       <widget class="QToolButton" name="btnBrowse">
                        <property name="minimumSize">
                         <size>
-                         <width>24</width>
-                         <height>24</height>
+                         <width>40</width>
+                         <height>40</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>40</width>
+                         <height>40</height>
                         </size>
                        </property>
                        <property name="cursor">
@@ -418,9 +460,12 @@
                        </property>
                        <property name="iconSize">
                         <size>
-                         <width>24</width>
-                         <height>24</height>
+                         <width>20</width>
+                         <height>20</height>
                         </size>
+                       </property>
+                       <property name="class" stdset="0">
+                        <string notr="true">button_icon_tool</string>
                        </property>
                       </widget>
                      </item>
@@ -428,8 +473,14 @@
                       <widget class="QToolButton" name="btnReset">
                        <property name="minimumSize">
                         <size>
-                         <width>24</width>
-                         <height>24</height>
+                         <width>40</width>
+                         <height>40</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>40</width>
+                         <height>40</height>
                         </size>
                        </property>
                        <property name="cursor">
@@ -440,9 +491,12 @@
                        </property>
                        <property name="iconSize">
                         <size>
-                         <width>24</width>
-                         <height>24</height>
+                         <width>20</width>
+                         <height>20</height>
                         </size>
+                       </property>
+                       <property name="class" stdset="0">
+                        <string notr="true">button_icon_tool</string>
                        </property>
                       </widget>
                      </item>
@@ -459,6 +513,9 @@
              <spacer name="verticalSpacer_5">
               <property name="orientation">
                <enum>Qt::Orientation::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Policy::Fixed</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -481,6 +538,9 @@
               </property>
               <property name="frameShadow">
                <enum>QFrame::Shadow::Plain</enum>
+              </property>
+              <property name="class" stdset="0">
+               <string notr="true">helper_frame</string>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <property name="spacing">
@@ -529,6 +589,9 @@
               <property name="orientation">
                <enum>Qt::Orientation::Vertical</enum>
               </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Policy::Fixed</enum>
+              </property>
               <property name="sizeHint" stdset="0">
                <size>
                 <width>20</width>
@@ -556,6 +619,9 @@
               </property>
               <property name="frameShadow">
                <enum>QFrame::Shadow::Plain</enum>
+              </property>
+              <property name="class" stdset="0">
+               <string notr="true">helper_frame</string>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_2">
                <property name="leftMargin">
@@ -586,6 +652,9 @@
                  </property>
                  <property name="text">
                   <string>Back</string>
+                 </property>
+                 <property name="class" stdset="0">
+                  <string notr="true">button_normal</string>
                  </property>
                 </widget>
                </item>
@@ -618,6 +687,9 @@
                  </property>
                  <property name="text">
                   <string>Done</string>
+                 </property>
+                 <property name="class" stdset="0">
+                  <string notr="true">button_accent</string>
                  </property>
                 </widget>
                </item>

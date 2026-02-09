@@ -29,7 +29,7 @@
 
 #include <chrono>
 
-using namespace CUR::FileSystem::SizeLiterals;
+using namespace APP::FileSystem::SizeLiterals;
 /*
  * TODO: In theory we should use QVERIFY instead of Q_ASSERT for testing, but this
  * only works when directly called from a QTest :-(
@@ -141,7 +141,7 @@ public:
 static inline qint64 defaultLastModified()
 {
     auto precise = QDateTime::currentDateTimeUtc().addDays(-7);
-    time_t timeInSeconds = CUR::Utility::qDateTimeToTime_t(precise);
+    time_t timeInSeconds = APP::Utility::qDateTimeToTime_t(precise);
     return timeInSeconds;
 }
 
@@ -257,7 +257,7 @@ public:
     QString name;
     bool isDir = true;
     bool isShared = false;
-    CUR::RemotePermissions permissions; // When uset, defaults to everything
+    APP::RemotePermissions permissions; // When uset, defaults to everything
     qint64 _lastModifiedInSecondsUTC = defaultLastModified();
     QByteArray etag = generateEtag();
     QByteArray fileId = generateFileId();
@@ -511,7 +511,7 @@ public:
     }
 };
 
-class FakeAM : public CUR::AccessManager
+class FakeAM : public APP::AccessManager
 {
 public:
     using Override = std::function<QNetworkReply *(Operation, const QNetworkRequest &, QIODevice *)>;
@@ -538,17 +538,17 @@ protected:
         QIODevice *outgoingData = nullptr) override;
 };
 
-class FakeCredentials : public CUR::AbstractCredentials
+class FakeCredentials : public APP::AbstractCredentials
 {
 public:
-    FakeCredentials(CUR::AccessManager *am)
+    FakeCredentials(APP::AccessManager *am)
         : _am { am }
     {
     }
 
     QString authType() const override { return QStringLiteral("test"); }
     QString user() const override { return QStringLiteral("admin"); }
-    CUR::AccessManager *createAM() const override { return _am; }
+    APP::AccessManager *createAM() const override { return _am; }
     bool ready() const override { return true; }
     void fetchFromKeychain() override { }
     void askFromUser() override { }
@@ -558,29 +558,29 @@ public:
     void forgetSensitiveData() override { }
 
 private:
-    CUR::AccessManager *_am;
+    APP::AccessManager *_am;
 };
 
 class FakeFolder : public QObject
 {
     Q_OBJECT
-    const QTemporaryDir _tempDir = CUR::TestUtils::createTempDir();
+    const QTemporaryDir _tempDir = APP::TestUtils::createTempDir();
     DiskFileModifier _localModifier;
     FakeAM *_fakeAm;
-    CUR::TestUtils::TestUtilsPrivate::AccountStateRaii _accountState =
-        CUR::TestUtils::TestUtilsPrivate::AccountStateRaii{nullptr, &CUR::TestUtils::TestUtilsPrivate::accountStateDeleter};
-    std::unique_ptr<CUR::SyncJournalDb> _journalDb;
-    std::unique_ptr<CUR::SyncEngine> _syncEngine;
+    APP::TestUtils::TestUtilsPrivate::AccountStateRaii _accountState =
+        APP::TestUtils::TestUtilsPrivate::AccountStateRaii{nullptr, &APP::TestUtils::TestUtilsPrivate::accountStateDeleter};
+    std::unique_ptr<APP::SyncJournalDb> _journalDb;
+    std::unique_ptr<APP::SyncEngine> _syncEngine;
 
 public:
-    FakeFolder(const FileInfo &fileTemplate, CUR::Vfs::Mode vfsMode = CUR::Vfs::Off, bool filesAreDehydrated = false);
+    FakeFolder(const FileInfo &fileTemplate, APP::Vfs::Mode vfsMode = APP::Vfs::Off, bool filesAreDehydrated = false);
     ~FakeFolder();
 
-    void switchToVfs(QSharedPointer<CUR::Vfs> vfs);
+    void switchToVfs(QSharedPointer<APP::Vfs> vfs);
 
-    CUR::AccountPtr account() const { return _accountState->account(); }
-    CUR::SyncEngine &syncEngine() const { return *_syncEngine; }
-    CUR::SyncJournalDb &syncJournal() const { return *_journalDb; }
+    APP::AccountPtr account() const { return _accountState->account(); }
+    APP::SyncEngine &syncEngine() const { return *_syncEngine; }
+    APP::SyncJournalDb &syncJournal() const { return *_journalDb; }
 
     FileModifier &localModifier() { return _localModifier; }
     FileInfo &remoteModifier() { return _fakeAm->currentRemoteState(); }
@@ -628,7 +628,7 @@ public:
     }
 
     bool isDehydratedPlaceholder(const QString &filePath);
-    QSharedPointer<CUR::Vfs> vfs() const;
+    QSharedPointer<APP::Vfs> vfs() const;
 
 private:
     static void toDisk(QDir &dir, const FileInfo &templateFi);
@@ -656,15 +656,15 @@ inline const FileInfo *findConflict(FileInfo &dir, const QString &filename)
 struct ItemCompletedSpy : QSignalSpy
 {
     explicit ItemCompletedSpy(FakeFolder &folder)
-        : QSignalSpy(&folder.syncEngine(), &CUR::SyncEngine::itemCompleted)
+        : QSignalSpy(&folder.syncEngine(), &APP::SyncEngine::itemCompleted)
     {
     }
 
-    CUR::SyncFileItemPtr findItem(const QString &path) const;
+    APP::SyncFileItemPtr findItem(const QString &path) const;
 };
 
 // QTest::toString overloads
-namespace CUR {
+namespace APP {
 inline char *toString(const SyncFileStatus &s)
 {
     return QTest::toString(QStringLiteral("SyncFileStatus(%1)").arg(s.toSocketAPIString()));

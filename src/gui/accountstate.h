@@ -32,7 +32,7 @@ class QDialog;
 class QMessageBox;
 class QSettings;
 
-namespace CUR {
+namespace APP {
 
 class AccountState;
 class Account;
@@ -175,9 +175,11 @@ private:
 
     void checkAndSwitchDevicePath();
     bool doDevicePathSwitch();
-    void enableCodeDialogProcessing(bool enable);
     void requestRAupdate();
-    Device* getDevice();
+    std::optional<Device> accountDevice();
+    void setAccountDevice(const Device& dev);
+    void initializeRA();
+    void setUpdateDeviceProgress(bool inProgress);
 
 signals:
     void stateChanged(State state);
@@ -209,8 +211,8 @@ private:
     bool _supportsSpaces = true;
     bool _settingUp = false;
     DeviceController* _deviceController = nullptr;
-    bool _accessCodeDialog = false;
-    bool _updateDeviceInProgress = false;
+    std::atomic_bool _updateDeviceInProgress {false};
+    bool _raInitialized = false;
 
     /**
      * Starts counting when the server starts being back up after 503 or
@@ -232,7 +234,7 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(CUR::AccountState *)
-Q_DECLARE_METATYPE(CUR::AccountStatePtr)
+Q_DECLARE_METATYPE(APP::AccountState *)
+Q_DECLARE_METATYPE(APP::AccountStatePtr)
 
 #endif //ACCOUNTINFO_H

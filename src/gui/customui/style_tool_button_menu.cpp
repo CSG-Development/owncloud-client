@@ -13,7 +13,7 @@ constexpr qreal frameRound = 3.5;
 QSize iconSize = {40, 40};
 }
 
-namespace CUR {
+namespace APP {
 
 QColor ProxyStyleToolButtonMenu::buttonFrameFocused() const {return isDark ? QColor(0x19,0x76,0xD2,0x80) : QColor(0x19,0x76,0xD2,0x80);}
 
@@ -137,4 +137,4 @@ void ProxyStyleToolButtonMenu::drawItemText(QPainter *painter, const QRect &rect
     painter->setPen(savedPen);
 }
 
-} // namespace CUR
+} // namespace APP

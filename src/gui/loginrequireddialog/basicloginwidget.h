@@ -26,7 +26,7 @@ namespace Ui {
 class BasicLoginWidget;
 }
 
-namespace CUR {
+namespace APP {
 
 /**
  * Form-style widget used to log in to accounts using HTTP Basic auth.
@@ -54,4 +54,4 @@ private:
     ::Ui::BasicLoginWidget *_ui;
 };
 
-} // CUR
+} // APP

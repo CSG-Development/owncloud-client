@@ -43,3 +43,13 @@
     border: 1px solid transparent;
     border-radius: 20px;
 }
+
+#lblDeviceIcon {
+    background-image: url(:/res/combowidget/device_icon.svg);
+}
+
+#btnDeviceIcon {
+    background: transparent;
+    border: none;
+    image: url(:/res/combowidget/device_icon.svg);
+}

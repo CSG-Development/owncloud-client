@@ -14,7 +14,7 @@
 
 #pragma once
 
-namespace CUR {
+namespace APP {
 static const QString updateAvailableC = QStringLiteral("Updater/updateAvailable");
 static const QString updateTargetVersionC = QStringLiteral("Updater/updateTargetVersion");
 static const QString updateTargetVersionStringC = QStringLiteral("Updater/updateTargetVersionString");

@@ -50,7 +50,7 @@ QPair<QString,QString> widgetStyle = {
 };
 }
 
-namespace CUR {
+namespace APP {
 
 GeneralSettings::GeneralSettings(QWidget *parent)
     : QWidget(parent)
@@ -61,10 +61,11 @@ GeneralSettings::GeneralSettings(QWidget *parent)
 
     setObjectName(QStringLiteral("CUR_GeneralSettings"));
     StyleHelper::applyPushButtonStyle(this);
-    connect(Theme::instance(), &Theme::themeChanged, this, [this] {
-        onThemeChanged();
+    connect(Theme::instance(), &Theme::themeChanged, this, [this](bool isDark) {
+        onThemeChanged(isDark);
         update();
     });
+    onThemeChanged(APP::Theme::instance()->isDarkTheme());
 
     connect(_ui->desktopNotificationsCheckBox, &QAbstractButton::toggled, this, &GeneralSettings::slotToggleOptionalDesktopNotifications);
 
@@ -170,8 +171,6 @@ GeneralSettings::GeneralSettings(QWidget *parent)
     if (Theme::instance()->forceVirtualFilesOption() && VfsPluginManager::instance().bestAvailableVfsMode() == Vfs::WindowsCfApi) {
         _ui->groupBox_non_vfs->hide();
     }
-
-    onThemeChanged();
 }
 
 GeneralSettings::~GeneralSettings()
@@ -205,9 +204,8 @@ void GeneralSettings::showEvent(QShowEvent *)
     reloadConfig();
 }
 
-void GeneralSettings::onThemeChanged()
+void GeneralSettings::onThemeChanged(bool isDark)
 {
-    bool isDark = CUR::Theme::instance()->isDarkTheme();
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
     const auto& btns = findChildren<QPushButton*>();
     for (auto* t: btns) {
@@ -308,7 +306,7 @@ void GeneralSettings::slotIgnoreFilesEditor()
     if (_ignoreEditor.isNull()) {
         _ignoreEditor = new IgnoreListEditor(ocApp()->gui()->settingsDialog());
         _ignoreEditor->setAttribute(Qt::WA_DeleteOnClose, true);
-        CuratorGui::raise();
+        ApplicationGui::raise();
         _ignoreEditor->open();
     }
 }
@@ -359,4 +357,4 @@ void GeneralSettings::loadLanguageNamesIntoDropdown()
     }
 }
 
-} // namespace CUR
+} // namespace APP

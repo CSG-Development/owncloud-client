@@ -18,11 +18,11 @@
 #include "curatorlib.h"
 #include <OAIDrive.h>
 
-namespace CUR {
+namespace APP {
 namespace GraphApi {
 
 
-    class CURATORSYNC_EXPORT Drives : public JsonJob
+    class APPLICATIONSYNC_EXPORT Drives : public JsonJob
     {
         Q_OBJECT
     public:

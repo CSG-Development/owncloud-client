@@ -24,7 +24,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 
-namespace CUR {
+namespace APP {
 
 namespace Ui {
     class IgnoreListEditor;
@@ -95,7 +95,7 @@ public:
     explicit IgnoreListEditor(QWidget *parent = nullptr);
     ~IgnoreListEditor() override;
 
-    void updateTheme();
+    void updateTheme(bool isDark);
 
 private slots:
     void slotItemSelectionChanged();
@@ -111,6 +111,6 @@ private:
     Ui::IgnoreListEditor *ui;
 };
 
-} // namespace CUR
+} // namespace APP
 
 #endif // IGNORELISTEDITOR_H

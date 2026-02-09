@@ -12,7 +12,7 @@
  * for more details.
  */
 
-#include "curatorgui.h"
+#include "applicationgui.h"
 #include "aboutdialog.h"
 #include "account.h"
 #include "accountmanager.h"
@@ -25,6 +25,7 @@
 #include "folderwizard/folderwizard.h"
 #include "gui/accountsettings.h"
 #include "gui/commonstrings.h"
+#include "gui/remoteaccess/overlaycontroller.h"
 #include "guiutility.h"
 #include "libsync/theme.h"
 #include "logbrowser.h"
@@ -56,7 +57,7 @@ using namespace std::chrono_literals;
 
 namespace {
 
-using namespace CUR;
+using namespace APP;
 
 void setUpInitialSyncFolder(AccountStatePtr accountStatePtr, bool useVfs)
 {
@@ -110,9 +111,9 @@ void setUpInitialSyncFolder(AccountStatePtr accountStatePtr, bool useVfs)
 }
 }
 
-namespace CUR {
+namespace APP {
 
-CuratorGui::CuratorGui(Application *parent)
+ApplicationGui::ApplicationGui(Application *parent)
     : QObject(parent)
     , _tray(new Systray(this))
     , _settingsDialog(new SettingsDialog(this))
@@ -122,7 +123,7 @@ CuratorGui::CuratorGui(Application *parent)
     // for the beginning, set the offline icon until the account was verified
     _tray->setIcon(Theme::instance()->syncStateIcon(SyncResult::Status::Offline, true, false));
 
-    connect(_tray, &QSystemTrayIcon::activated, this, &CuratorGui::slotTrayClicked);
+    connect(_tray, &QSystemTrayIcon::activated, this, &ApplicationGui::slotTrayClicked);
 
     setupActions();
     setupContextMenu();
@@ -130,22 +131,22 @@ CuratorGui::CuratorGui(Application *parent)
     _tray->show();
 
     ProgressDispatcher *pd = ProgressDispatcher::instance();
-    connect(pd, &ProgressDispatcher::progressInfo, this, &CuratorGui::slotUpdateProgress);
+    connect(pd, &ProgressDispatcher::progressInfo, this, &ApplicationGui::slotUpdateProgress);
 
     FolderMan *folderMan = FolderMan::instance();
-    connect(folderMan, &FolderMan::folderSyncStateChange, this, &CuratorGui::slotSyncStateChange);
+    connect(folderMan, &FolderMan::folderSyncStateChange, this, &ApplicationGui::slotSyncStateChange);
 
-    connect(AccountManager::instance(), &AccountManager::accountAdded, this, &CuratorGui::updateContextMenuNeeded);
-    connect(AccountManager::instance(), &AccountManager::accountRemoved, this, &CuratorGui::updateContextMenuNeeded);
+    connect(AccountManager::instance(), &AccountManager::accountAdded, this, &ApplicationGui::updateContextMenuNeeded);
+    connect(AccountManager::instance(), &AccountManager::accountRemoved, this, &ApplicationGui::updateContextMenuNeeded);
 }
 
-CuratorGui::~CuratorGui()
+ApplicationGui::~ApplicationGui()
 {
     delete _settingsDialog;
 }
 
 // This should rather be in application.... or rather in ConfigFile?
-void CuratorGui::slotOpenSettingsDialog()
+void ApplicationGui::slotOpenSettingsDialog()
 {
     // if account is set up, start the configuration wizard.
     if (!AccountManager::instance()->accounts().isEmpty()) {
@@ -156,11 +157,11 @@ void CuratorGui::slotOpenSettingsDialog()
         }
     } else {
         qCInfo(lcApplication) << "No configured folders yet, starting setup wizard";
-        runNewAccountWizard();
+        runNewAccountWizard(RunAccountWizardReason::CreateAccoundCommand);
     }
 }
 
-void CuratorGui::slotTrayClicked(QSystemTrayIcon::ActivationReason reason)
+void ApplicationGui::slotTrayClicked(QSystemTrayIcon::ActivationReason reason)
 {
     if (_workaroundFakeDoubleClick) {
         static QElapsedTimer last_click;
@@ -187,7 +188,7 @@ void CuratorGui::slotTrayClicked(QSystemTrayIcon::ActivationReason reason)
     // or SSL error dialog also comes to front.
 }
 
-void CuratorGui::slotSyncStateChange(Folder *folder)
+void ApplicationGui::slotSyncStateChange(Folder *folder)
 {
     slotComputeOverallSyncStatus();
     updateContextMenuNeeded();
@@ -201,24 +202,24 @@ void CuratorGui::slotSyncStateChange(Folder *folder)
     qCInfo(lcApplication) << "Sync state changed for folder " << folder->remoteUrl().toString() << ": " << Utility::enumToDisplayName(result.status());
 }
 
-void CuratorGui::slotFoldersChanged()
+void ApplicationGui::slotFoldersChanged()
 {
     slotComputeOverallSyncStatus();
     updateContextMenuNeeded();
 }
 
-void CuratorGui::slotOpenPath(const QString &path)
+void ApplicationGui::slotOpenPath(const QString &path)
 {
     showInFileManager(path);
 }
 
-void CuratorGui::slotAccountStateChanged()
+void ApplicationGui::slotAccountStateChanged()
 {
     updateContextMenuNeeded();
     slotComputeOverallSyncStatus();
 }
 
-void CuratorGui::slotTrayMessageIfServerUnsupported(Account *account)
+void ApplicationGui::slotTrayMessageIfServerUnsupported(Account *account)
 {
     if (account->serverSupportLevel() != Account::ServerSupportLevel::Supported) {
         slotShowTrayMessage(
@@ -230,7 +231,7 @@ void CuratorGui::slotTrayMessageIfServerUnsupported(Account *account)
     }
 }
 
-void CuratorGui::slotComputeOverallSyncStatus()
+void ApplicationGui::slotComputeOverallSyncStatus()
 {
     bool allSignedOut = true;
     bool allPaused = true;
@@ -355,7 +356,7 @@ void CuratorGui::slotComputeOverallSyncStatus()
     }
 }
 
-void CuratorGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *menu)
+void ApplicationGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *menu)
 {
     menu->addAction(CommonStrings::showFilesInWebBrowser(), this, [accountState] { QDesktopServices::openUrl(accountState->account()->url()); });
     menu->addAction(CommonStrings::showPhotosInWebBrowser(), this, [accountState] {
@@ -391,12 +392,12 @@ void CuratorGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *menu
     }
 }
 
-SettingsDialog *CuratorGui::settingsDialog() const
+SettingsDialog *ApplicationGui::settingsDialog() const
 {
     return _settingsDialog;
 }
 
-void CuratorGui::slotContextMenuAboutToShow()
+void ApplicationGui::slotContextMenuAboutToShow()
 {
     _contextMenuVisibleManual = true;
 
@@ -408,7 +409,7 @@ void CuratorGui::slotContextMenuAboutToShow()
     }
 }
 
-void CuratorGui::slotContextMenuAboutToHide()
+void ApplicationGui::slotContextMenuAboutToHide()
 {
     _contextMenuVisibleManual = false;
 
@@ -416,7 +417,7 @@ void CuratorGui::slotContextMenuAboutToHide()
     slotComputeOverallSyncStatus();
 }
 
-bool CuratorGui::contextMenuVisible() const
+bool ApplicationGui::contextMenuVisible() const
 {
     // On some platforms isVisible doesn't work and always returns false,
     // elsewhere aboutToHide is unreliable.
@@ -425,7 +426,7 @@ bool CuratorGui::contextMenuVisible() const
     return _contextMenu->isVisible();
 }
 
-void CuratorGui::hideAndShowTray()
+void ApplicationGui::hideAndShowTray()
 {
     _tray->hide();
     _tray->show();
@@ -475,7 +476,7 @@ static QByteArray envForceWorkaroundManualVisibility()
     return var;
 }
 
-void CuratorGui::setupContextMenu()
+void ApplicationGui::setupContextMenu()
 {
     if (_contextMenu) {
         return;
@@ -542,20 +543,22 @@ void CuratorGui::setupContextMenu()
                           << "manualvisibility:" << _workaroundManualVisibility;
 
 
-    connect(&_delayedTrayUpdateTimer, &QTimer::timeout, this, &CuratorGui::updateContextMenu);
+    connect(&_delayedTrayUpdateTimer, &QTimer::timeout, this, &ApplicationGui::updateContextMenu);
     _delayedTrayUpdateTimer.setInterval(2s);
     _delayedTrayUpdateTimer.setSingleShot(true);
 
-    connect(_contextMenu.data(), &QMenu::aboutToShow, this, &CuratorGui::slotContextMenuAboutToShow);
+    connect(_contextMenu.data(), &QMenu::aboutToShow, this, &ApplicationGui::slotContextMenuAboutToShow);
     // unfortunately aboutToHide is unreliable, it seems to work on OSX though
-    connect(_contextMenu.data(), &QMenu::aboutToHide, this, &CuratorGui::slotContextMenuAboutToHide);
+    connect(_contextMenu.data(), &QMenu::aboutToHide, this, &ApplicationGui::slotContextMenuAboutToHide);
 
     // Populate the context menu now.
     updateContextMenu();
 }
 
-void CuratorGui::updateContextMenu()
+void ApplicationGui::updateContextMenu()
 {
+    bool isGuiBusy = _settingsDialog && _settingsDialog->isOverlayBusy();
+
     // If it's visible, we can't update live, and it won't be updated lazily: reschedule
     if (contextMenuVisible() && !updateWhileVisible() && _workaroundNoAboutToShowUpdate) {
         if (!_delayedTrayUpdateTimer.isActive()) {
@@ -578,7 +581,8 @@ void CuratorGui::updateContextMenu()
     }
 
     _contextMenu->clear();
-    slotRebuildRecentMenus();
+    if (!isGuiBusy)
+        slotRebuildRecentMenus();
 
     // We must call deleteLater because we might be called from the press in one of the actions.
     for (auto *menu : std::as_const(_accountMenus)) {
@@ -603,36 +607,39 @@ void CuratorGui::updateContextMenu()
         }
     }
 
-    _contextMenu->addAction(Theme::instance()->applicationIcon(), tr("Show %1").arg(Theme::instance()->appNameGUI()), this, &CuratorGui::slotShowSettings);
+    _contextMenu->addAction(Theme::instance()->applicationIcon(), tr("Show %1").arg(Theme::instance()->appNameGUI()), this, &ApplicationGui::slotShowSettings);
     _contextMenu->addSeparator();
 
-    if (accountList.isEmpty()) {
-        _contextMenu->addAction(tr("Create a new account"), this, &CuratorGui::runNewAccountWizard);
-    } else {
-        if (atLeastOnePaused) {
-            _contextMenu->addAction(
-                tr("Resume synchronization"), this, [this] { setPauseOnAllFoldersHelper(AccountManager::instance()->accounts().values(), false); });
+    if (!isGuiBusy) {
+        if (accountList.isEmpty()) {
+            _contextMenu->addAction(tr("Create a new account"), this, [this] {
+                runNewAccountWizard(RunAccountWizardReason::CreateAccoundCommand);
+            });
         } else {
-            _contextMenu->addAction(
-                tr("Stop synchronization"), this, [this] { setPauseOnAllFoldersHelper(AccountManager::instance()->accounts().values(), true); });
+            if (atLeastOnePaused) {
+                _contextMenu->addAction(
+                    tr("Resume synchronization"), this, [this] { setPauseOnAllFoldersHelper(AccountManager::instance()->accounts().values(), false); });
+            } else {
+                _contextMenu->addAction(
+                    tr("Stop synchronization"), this, [this] { setPauseOnAllFoldersHelper(AccountManager::instance()->accounts().values(), true); });
+            }
+            _contextMenu->addSeparator();
+
+            // submenus for accounts
+            for (const auto &account : accountList) {
+                QMenu *accountMenu = new QMenu(account->account()->displayName(), _contextMenu.data());
+                _accountMenus.append(accountMenu);
+                _contextMenu->addMenu(accountMenu);
+
+                addAccountContextMenu(account, accountMenu);
+            }
         }
         _contextMenu->addSeparator();
 
-        // submenus for accounts
-        for (const auto &account : accountList) {
-            QMenu *accountMenu = new QMenu(account->account()->displayName(), _contextMenu.data());
-            _accountMenus.append(accountMenu);
-            _contextMenu->addMenu(accountMenu);
-
-            addAccountContextMenu(account, accountMenu);
+        _contextMenu->addAction(_actionStatus);
+        if (isConfigured && atLeastOneConnected) {
+            _contextMenu->addMenu(_recentActionsMenu);
         }
-    }
-
-    _contextMenu->addSeparator();
-
-    _contextMenu->addAction(_actionStatus);
-    if (isConfigured && atLeastOneConnected) {
-        _contextMenu->addMenu(_recentActionsMenu);
     }
 
     _contextMenu->addSeparator();
@@ -647,11 +654,13 @@ void CuratorGui::updateContextMenu()
     _contextMenu->addSeparator();
 
     if (!Theme::instance()->helpUrl().isEmpty()) {
-        _contextMenu->addAction(tr("Help"), this, &CuratorGui::slotHelp);
+        _contextMenu->addAction(tr("Help"), this, &ApplicationGui::slotHelp);
     }
 
-    if (! Theme::instance()->about().isEmpty()) {
-        _contextMenu->addAction(tr("About %1").arg(Theme::instance()->appNameGUI()), this, &CuratorGui::slotAbout);
+    if (!isGuiBusy) {
+        if (! Theme::instance()->about().isEmpty()) {
+            _contextMenu->addAction(tr("About %1").arg(Theme::instance()->appNameGUI()), this, &ApplicationGui::slotAbout);
+        }
     }
 
     _contextMenu->addAction(tr("Quit %1").arg(Theme::instance()->appNameGUI()), _app, &QApplication::quit);
@@ -661,7 +670,7 @@ void CuratorGui::updateContextMenu()
     }
 }
 
-void CuratorGui::updateContextMenuNeeded()
+void ApplicationGui::updateContextMenuNeeded()
 {
     // if it's visible and we can update live: update now
     if (contextMenuVisible() && updateWhileVisible()) {
@@ -682,13 +691,13 @@ void CuratorGui::updateContextMenuNeeded()
     }
 }
 
-void CuratorGui::slotShowTrayMessage(const QString &title, const QString &msg, const QIcon &icon)
+void ApplicationGui::slotShowTrayMessage(const QString &title, const QString &msg, const QIcon &icon)
 {
     // SyncResult::Problem is returns the info icon
     _tray->showMessage(title, msg, icon.isNull() ? Theme::instance()->syncStateIcon(SyncResult::Problem) : icon);
 }
 
-void CuratorGui::slotShowOptionalTrayMessage(const QString &title, const QString &msg, const QIcon &icon)
+void ApplicationGui::slotShowOptionalTrayMessage(const QString &title, const QString &msg, const QIcon &icon)
 {
     ConfigFile cfg;
     if (cfg.optionalDesktopNotifications()) {
@@ -700,7 +709,7 @@ void CuratorGui::slotShowOptionalTrayMessage(const QString &title, const QString
 /*
  * open the folder with the given Alias
  */
-void CuratorGui::slotFolderOpenAction(Folder *f)
+void ApplicationGui::slotFolderOpenAction(Folder *f)
 {
     if (f) {
         qCInfo(lcApplication) << "opening local url " << f->path();
@@ -719,13 +728,13 @@ void CuratorGui::slotFolderOpenAction(Folder *f)
     }
 }
 
-void CuratorGui::setupActions()
+void ApplicationGui::setupActions()
 {
     _actionStatus = new QAction(tr("Unknown status"), this);
     _actionStatus->setEnabled(false);
 }
 
-void CuratorGui::slotRebuildRecentMenus()
+void ApplicationGui::slotRebuildRecentMenus()
 {
     _recentActionsMenu->clear();
     if (!_recentItemsActions.isEmpty()) {
@@ -737,7 +746,7 @@ void CuratorGui::slotRebuildRecentMenus()
         _recentActionsMenu->addAction(tr("No items synced recently"))->setEnabled(false);
     }
     // add a more... entry.
-    _recentActionsMenu->addAction(tr("Details..."), this, &CuratorGui::slotShowSyncProtocol);
+    _recentActionsMenu->addAction(tr("Details..."), this, &ApplicationGui::slotShowSyncProtocol);
 }
 
 /// Returns true if the completion of a given item should show up in the
@@ -747,7 +756,7 @@ static bool shouldShowInRecentsMenu(const SyncFileItem &item)
     return !Progress::isIgnoredKind(item._status) && item.instruction() != CSYNC_INSTRUCTION_NONE;
 }
 
-void CuratorGui::slotUpdateProgress(Folder *folder, const ProgressInfo &progress)
+void ApplicationGui::slotUpdateProgress(Folder *folder, const ProgressInfo &progress)
 {
     if (progress.status() == ProgressInfo::Discovery) {
         if (!progress._currentDiscoveredRemoteFolder.isEmpty()) {
@@ -758,7 +767,7 @@ void CuratorGui::slotUpdateProgress(Folder *folder, const ProgressInfo &progress
                                        .arg(progress._currentDiscoveredLocalFolder));
         }
     } else if (progress.status() == ProgressInfo::Done) {
-        QTimer::singleShot(2s, this, &CuratorGui::slotComputeOverallSyncStatus);
+        QTimer::singleShot(2s, this, &ApplicationGui::slotComputeOverallSyncStatus);
     }
     if (progress.status() != ProgressInfo::Propagation) {
         return;
@@ -816,14 +825,15 @@ void CuratorGui::slotUpdateProgress(Folder *folder, const ProgressInfo &progress
     }
 }
 
-void CuratorGui::runNewAccountWizard()
+void ApplicationGui::runNewAccountWizard(RunAccountWizardReason reason)
 {
     if (_wizardController.isNull()) {
+        accountWizardActive = true;
 
         // passing the settings dialog as parent makes sure the wizard will be shown above it
         // as the settingsDialog's lifetime spans across the entire application but the dialog will live much shorter,
         // we have to clean it up manually when finished() is emitted
-        _wizardController = new Wizard::SetupController(settingsDialog());
+        _wizardController = new Wizard::SetupController(settingsDialog(), reason);
 
         // while the wizard is shown, new syncs are disabled
         FolderMan::instance()->setSyncEnabled(false);
@@ -913,7 +923,7 @@ void CuratorGui::runNewAccountWizard()
                                         ->addModalWidget(folderWizard, AccountSettings::ModalWidgetSizePolicy::Expanding);
                                     break;
                                 }
-                                case CUR::Wizard::SyncMode::Invalid:
+                                case APP::Wizard::SyncMode::Invalid:
                                     Q_UNREACHABLE();
                                 }
                             }
@@ -931,6 +941,7 @@ void CuratorGui::runNewAccountWizard()
 
                 // make sure the wizard is cleaned up eventually
                 _wizardController->deleteLater();
+                accountWizardActive = false;
             });
 
         // all we have to do is show the dialog...
@@ -939,7 +950,7 @@ void CuratorGui::runNewAccountWizard()
 
 }
 
-void CuratorGui::setPauseOnAllFoldersHelper(const QList<AccountStatePtr> &accounts, bool pause)
+void ApplicationGui::setPauseOnAllFoldersHelper(const QList<AccountStatePtr> &accounts, bool pause)
 {
     for (auto *f : FolderMan::instance()->folders()) {
         if (accounts.contains(f->accountState())) {
@@ -951,19 +962,19 @@ void CuratorGui::setPauseOnAllFoldersHelper(const QList<AccountStatePtr> &accoun
     }
 }
 
-void CuratorGui::slotShowSettings()
+void ApplicationGui::slotShowSettings()
 {
     raise();
 }
 
-void CuratorGui::slotShowSyncProtocol()
+void ApplicationGui::slotShowSyncProtocol()
 {
     slotShowSettings();
     _settingsDialog->showActivityPage();
 }
 
 
-void CuratorGui::slotShutdown()
+void ApplicationGui::slotShutdown()
 {
     // explicitly close windows. This is somewhat of a hack to ensure
     // that saving the geometries happens ASAP during a OS shutdown
@@ -972,20 +983,20 @@ void CuratorGui::slotShutdown()
     _settingsDialog->close();
 }
 
-void CuratorGui::slotToggleLogBrowser()
+void ApplicationGui::slotToggleLogBrowser()
 {
     auto logBrowser = new LogBrowser(settingsDialog());
     logBrowser->setAttribute(Qt::WA_DeleteOnClose);
-    CuratorGui::raise();
+    ApplicationGui::raise();
     logBrowser->open();
 }
 
-void CuratorGui::slotHelp()
+void ApplicationGui::slotHelp()
 {
     QDesktopServices::openUrl(QUrl(Theme::instance()->helpUrl()));
 }
 
-void CuratorGui::raise()
+void ApplicationGui::raise()
 {
     auto window = ocApp()->gui()->settingsDialog();
     window->show();
@@ -1011,7 +1022,7 @@ void CuratorGui::raise()
 }
 
 
-void CuratorGui::slotShowShareDialog(const QString &sharePath, const QString &localPath, ShareDialogStartPage startPage)
+void ApplicationGui::slotShowShareDialog(const QString &sharePath, const QString &localPath, ShareDialogStartPage startPage)
 {
     QString file;
     const auto folder = FolderMan::instance()->folderForPath(localPath, &file);
@@ -1067,13 +1078,13 @@ void CuratorGui::slotShowShareDialog(const QString &sharePath, const QString &lo
             w->setAttribute(Qt::WA_DeleteOnClose, true);
 
             _shareDialogs[localPath] = w;
-            connect(w, &QObject::destroyed, this, &CuratorGui::slotRemoveDestroyedShareDialogs);
+            connect(w, &QObject::destroyed, this, &ApplicationGui::slotRemoveDestroyedShareDialogs);
         }
         ocApp()->gui()->settingsDialog()->accountSettings(accountState->account().get())->addModalWidget(w, AccountSettings::ModalWidgetSizePolicy::Expanding);
     }
 }
 
-void CuratorGui::slotRemoveDestroyedShareDialogs()
+void ApplicationGui::slotRemoveDestroyedShareDialogs()
 {
     QMutableMapIterator<QString, QPointer<ShareDialog>> it(_shareDialogs);
     while (it.hasNext()) {
@@ -1084,7 +1095,7 @@ void CuratorGui::slotRemoveDestroyedShareDialogs()
     }
 }
 
-void CuratorGui::slotAbout()
+void ApplicationGui::slotAbout()
 {
     if(!_aboutDialog) {
         _aboutDialog = new AboutDialog(_settingsDialog);

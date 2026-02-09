@@ -17,7 +17,7 @@
 #include <QDialog>
 
 
-namespace CUR {
+namespace APP {
 
 namespace Ui {
     class AboutDialog;

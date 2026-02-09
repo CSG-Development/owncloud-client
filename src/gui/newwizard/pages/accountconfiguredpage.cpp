@@ -15,7 +15,7 @@
 //#include <QCheckBox>
 
 
-namespace CUR::Wizard {
+namespace APP::Wizard {
 
 AccountConfiguredPage::AccountConfiguredPage(
     const QString &defaultSyncTargetDir, const QString &userChosenSyncTargetDir, bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental)

@@ -1,6 +1,6 @@
 #include "Telemetry.h"
 
-namespace CUR {
+namespace APP {
 
 Telemetry::Telemetry(std::unique_ptr<ProviderBase> provider)
     : provider_(std::move(provider))
@@ -28,4 +28,4 @@ void Telemetry::sendEvent(const std::string &requestType, std::any &event)
 }
 
 
-} // namespace CUR
+} // namespace APP

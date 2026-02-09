@@ -23,7 +23,7 @@
 #include <QStringList>
 #include <QVarLengthArray>
 
-namespace CUR {
+namespace APP {
 
 FolderWatcherPrivate::FolderWatcherPrivate(FolderWatcher *p, const QString &path)
     : QObject()

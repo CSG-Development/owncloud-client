@@ -7,18 +7,15 @@
 #include <QWidget>
 #include <QTimer>
 #include <QDateTime>
+#include <QProperty>
 
 namespace Ui {class CredentialsPage;}
-namespace CUR {enum class RemoteRequest;}
-
-class DimWidget;
-class CodeDialog;
 
 class CredentialsPage : public QWidget
 {
     Q_OBJECT
-
     Q_PROPERTY(bool progressVisible READ progressVisible WRITE setProgressVisible NOTIFY progressVisibleChanged FINAL)
+    Q_PROPERTY(bool darkTheme READ isDarkTheme WRITE setDarkTheme BINDABLE bindableDarkTheme)
 
 public:
     explicit CredentialsPage(QWidget *parent = nullptr);
@@ -46,6 +43,11 @@ public:
     void setProgressVisible(bool visible);
     bool progressVisible() const {return progressVisible_;}
 
+    bool isDarkTheme() const { return darkTheme_.value(); }
+    void setDarkTheme(bool v) { darkTheme_.setValue(v); }
+
+    QBindable<bool> bindableDarkTheme() {return &darkTheme_;}
+
 Q_SIGNALS:
     void actionTriggered(CredentialsAction action, std::optional<CredentialsContext> ctx = std::nullopt);
     void progressVisibleChanged();
@@ -61,4 +63,6 @@ private:
 
     QList<Device> dev_list;
     bool progressVisible_ = false;
+    QPropertyNotifier themeNotifier;
+    QProperty<bool> darkTheme_ {false};
 };

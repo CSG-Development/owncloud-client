@@ -13,7 +13,7 @@ class AccountSetting:
         "type": "QMenu",
         "unnamed": 1,
         "visible": 1,
-        "window": names.settings_OCC_SettingsDialog,
+        "window": names.settings_APP_SettingsDialog,
     }
     REMOVE_CONNECTION_BUTTON = {
         "container": names.settings_stack_QStackedWidget,
@@ -36,8 +36,8 @@ class AccountSetting:
         "visible": 1,
     }
     LOG_BROWSER_WINDOW = {
-        "name": "OCC__LogBrowser",
-        "type": "OCC::LogBrowser",
+        "name": "APP__LogBrowser",
+        "type": "APP::LogBrowser",
         "visible": 1,
     }
     LOGIN_DIALOG_LOGOUT_BUTTON = {
@@ -45,10 +45,10 @@ class AccountSetting:
         "type": "QPushButton",
         "unnamed": 1,
         "visible": 1,
-        "window": names.loginRequiredDialog_OCC_LoginRequiredDialog,
+        "window": names.loginRequiredDialog_APP_LoginRequiredDialog,
     }
     ACCOUNT_LOADING = {
-        "window": names.settings_OCC_SettingsDialog,
+        "window": names.settings_APP_SettingsDialog,
         "name": "loadingPage",
         "type": "QWidget",
         "visible": 0,
@@ -57,7 +57,7 @@ class AccountSetting:
         "name": "dialogStack",
         "type": "QStackedWidget",
         "visible": 1,
-        "window": names.settings_OCC_SettingsDialog,
+        "window": names.settings_APP_SettingsDialog,
     }
     CONFIRMATION_YES_BUTTON = {"text": "Yes", "type": "QPushButton", "visible": 1}
 

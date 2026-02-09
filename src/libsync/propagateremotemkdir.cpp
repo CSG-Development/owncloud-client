@@ -28,7 +28,7 @@ using namespace std::chrono_literals;
 namespace {
 constexpr auto UpdateMetaDataRetyTimeOut = 30s;
 }
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcPropagateRemoteMkdir, "sync.propagator.remotemkdir", QtInfoMsg)
 

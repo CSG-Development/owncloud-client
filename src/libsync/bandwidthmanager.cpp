@@ -22,7 +22,7 @@
 #include <QTimer>
 #include <QObject>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcBandwidthManager, "sync.bandwidthmanager", QtInfoMsg)
 

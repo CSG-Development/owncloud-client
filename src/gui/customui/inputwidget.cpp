@@ -27,6 +27,11 @@ InputWidget::InputWidget(QWidget *parent)
     setMouseTracking(true);
     setAttribute(Qt::WA_Hover, true);
 
+    themeNotifier = darkTheme_.addNotifier([this] {
+        updateStyles();
+    });
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
+
     promptLabel = new QLabel(this);
     promptLabel->setObjectName(QStringLiteral("promptLabel"));
     promptLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
@@ -49,7 +54,6 @@ InputWidget::InputWidget(QWidget *parent)
 
     setErrorState(false);
     updatePromptPosition();
-    setDarkTheme();
 }
 
 InputWidget::~InputWidget()
@@ -133,12 +137,6 @@ bool InputWidget::eventFilter(QObject *watched, QEvent *event)
     return QFrame::eventFilter(watched, event);
 }
 
-void InputWidget::setDarkTheme()
-{
-    isDark = CUR::Theme::instance()->isDarkTheme();
-    updateStyles();
-}
-
 void InputWidget::setFontPixelSize(int val)
 {
     auto font = ui->inputLineEdit->font();
@@ -172,9 +170,9 @@ void InputWidget::updatePromptPosition()
 void InputWidget::updateStyles()
 {
     if (errorState)
-        setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? inputStyleError.second : inputStyleError.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyleError.second : inputStyleError.first));
     else
-        setStyleSheet(CUR::StyleHelper::loadFileToString(isDark ? inputStyle.second : inputStyle.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyle.second : inputStyle.first));
 
     style()->unpolish(this);
     style()->polish(this);

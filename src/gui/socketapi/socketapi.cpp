@@ -106,7 +106,7 @@ static QString buildMessage(const QString &verb, const QString &path, const QStr
 }
 }
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcSocketApi, "gui.socketapi", QtInfoMsg)
 Q_LOGGING_CATEGORY(lcPublicLink, "gui.socketapi.publiclink", QtInfoMsg)
@@ -391,15 +391,15 @@ void SocketApi::slotUpdateFolderView(Folder *f)
         }
         case SyncResult::SetupError:
             [[fallthrough]];
-        case CUR::SyncResult::Undefined:
+        case APP::SyncResult::Undefined:
             Q_FALLTHROUGH();
-        case CUR::SyncResult::NotYetStarted:
+        case APP::SyncResult::NotYetStarted:
             Q_FALLTHROUGH();
-        case CUR::SyncResult::SyncRunning:
+        case APP::SyncResult::SyncRunning:
             Q_FALLTHROUGH();
-        case CUR::SyncResult::SyncAbortRequested:
+        case APP::SyncResult::SyncAbortRequested:
             [[fallthrough]];
-        case CUR::SyncResult::Offline:
+        case APP::SyncResult::Offline:
             qCDebug(lcSocketApi) << "Not sending UPDATE_VIEW for" << f->path() << "because status() is" << f->syncResult().status();
         }
     }
@@ -502,7 +502,7 @@ void SocketApi::command_MANAGE_PUBLIC_LINKS(const QString &localFile, SocketList
 
 void SocketApi::command_VERSION(const QString &, SocketListener *listener)
 {
-    listener->sendMessage(QStringLiteral("VERSION:%1:%2").arg(CUR::Version::versionWithBuildNumber().toString(), QStringLiteral(MIRALL_SOCKET_API_VERSION)));
+    listener->sendMessage(QStringLiteral("VERSION:%1:%2").arg(APP::Version::versionWithBuildNumber().toString(), QStringLiteral(MIRALL_SOCKET_API_VERSION)));
 }
 
 void SocketApi::command_SHARE_MENU_TITLE(const QString &, SocketListener *listener)
@@ -806,7 +806,7 @@ void SocketApi::command_MOVE_ITEM(const QString &localFile, SocketListener *)
     }
 }
 
-Q_INVOKABLE void CUR::SocketApi::command_OPEN_APP_LINK(const QString &localFile, [[maybe_unused]] SocketListener *listener)
+Q_INVOKABLE void APP::SocketApi::command_OPEN_APP_LINK(const QString &localFile, [[maybe_unused]] SocketListener *listener)
 {
     const auto data = FileData::get(localFile);
     if (!data.folder) {
@@ -883,7 +883,7 @@ void SocketApi::emailPrivateLink(const QUrl &link)
         nullptr);
 }
 
-void CUR::SocketApi::openPrivateLink(const QUrl &link)
+void APP::SocketApi::openPrivateLink(const QUrl &link)
 {
     Utility::openBrowser(link, nullptr);
 }
@@ -979,7 +979,7 @@ QString SocketApi::FileData::folderRelativePathNoVfsSuffix() const
     return folderRelativePath;
 }
 
-bool CUR::SocketApi::FileData::isSyncFolder() const
+bool APP::SocketApi::FileData::isSyncFolder() const
 {
     return folderRelativePath.isEmpty();
 }
@@ -1010,7 +1010,7 @@ bool SocketApi::FileData::isValid() const
     return folder;
 }
 
-void SocketApi::command_GET_MENU_ITEMS(const QString &argument, CUR::SocketListener *listener)
+void SocketApi::command_GET_MENU_ITEMS(const QString &argument, APP::SocketListener *listener)
 {
     listener->sendMessage(QStringLiteral("GET_MENU_ITEMS:BEGIN"));
     const QStringList files = split(argument);
@@ -1243,6 +1243,6 @@ void SocketApiJobV2::setWarning(const QString &warning)
     _warning = warning;
 }
 
-} // namespace CUR
+} // namespace APP
 
 #include "socketapi.moc"

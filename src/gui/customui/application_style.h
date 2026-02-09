@@ -2,12 +2,12 @@
 
 #include "stylebase.h"
 
-namespace CUR {
+namespace APP {
 
-class CuratorProxyStyle : public ProxyStyleBase
+class ApplicationProxyStyle : public ProxyStyleBase
 {
 public:
-    explicit CuratorProxyStyle(QStyle* baseStyle = nullptr);
+    explicit ApplicationProxyStyle(QStyle* baseStyle = nullptr);
 
     void drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget = nullptr) const override;
     void drawControl(QStyle::ControlElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget = nullptr) const override;
@@ -28,4 +28,4 @@ protected:
 
 };
 
-} // namespace CUR
+} // namespace APP

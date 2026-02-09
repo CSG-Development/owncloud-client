@@ -9,11 +9,11 @@
 
 #include <memory>
 
-namespace CUR {
+namespace APP {
 class Account;
 class CredentialJob;
 
-class CURATORSYNC_EXPORT CredentialManager : public QObject
+class APPLICATIONSYNC_EXPORT CredentialManager : public QObject
 {
     Q_OBJECT
 public:
@@ -45,7 +45,7 @@ private:
     friend class TestCredentialManager;
 };
 
-class CURATORSYNC_EXPORT CredentialJob : public QObject
+class APPLICATIONSYNC_EXPORT CredentialJob : public QObject
 {
     Q_OBJECT
 public:

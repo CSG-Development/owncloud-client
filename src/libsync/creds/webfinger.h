@@ -21,9 +21,9 @@
 #include <QJsonParseError>
 
 
-namespace CUR {
+namespace APP {
 
-class CURATORSYNC_EXPORT WebFinger : public QObject
+class APPLICATIONSYNC_EXPORT WebFinger : public QObject
 {
     Q_OBJECT
 public:

@@ -25,7 +25,7 @@
 
 #include <QPushButton>
 
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcNotifications, "gui.notifications", QtInfoMsg)
 

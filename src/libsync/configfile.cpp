@@ -41,7 +41,7 @@
 #include <chrono>
 using namespace std::chrono_literals;
 
-namespace CUR {
+namespace APP {
 
 namespace chrono = std::chrono;
 
@@ -473,7 +473,7 @@ chrono::milliseconds ConfigFile::forceSyncInterval(std::chrono::seconds remoteFr
     return interval;
 }
 
-chrono::milliseconds CUR::ConfigFile::fullLocalDiscoveryInterval() const
+chrono::milliseconds APP::ConfigFile::fullLocalDiscoveryInterval() const
 {
     auto settings = makeQSettings();
     settings.beginGroup(defaultConnection());
@@ -545,7 +545,7 @@ void ConfigFile::setSkipUpdateCheck(bool skip, const QString &connection)
 QString ConfigFile::updateChannel() const
 {
     QString defaultUpdateChannel = QStringLiteral("stable");
-    const QString suffix = CUR::Version::suffix();
+    const QString suffix = APP::Version::suffix();
     if (suffix.startsWith(QLatin1String("daily"))
         || suffix.startsWith(QLatin1String("nightly"))
         || suffix.startsWith(QLatin1String("alpha"))

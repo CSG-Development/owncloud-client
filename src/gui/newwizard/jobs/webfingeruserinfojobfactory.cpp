@@ -24,7 +24,7 @@
 
 Q_LOGGING_CATEGORY(lcWebFingerUserInfoJob, "sync.networkjob.webfingeruserinfojob", QtInfoMsg);
 
-namespace CUR::Wizard::Jobs {
+namespace APP::Wizard::Jobs {
 
 WebFingerInstanceLookupJobFactory::WebFingerInstanceLookupJobFactory(QNetworkAccessManager *nam, const QString &bearerToken)
     : AbstractCoreJobFactory(nam)
@@ -97,4 +97,4 @@ CoreJob *WebFingerInstanceLookupJobFactory::startJob(const QUrl &url, QObject *p
     return job;
 }
 
-} // CUR
+} // APP

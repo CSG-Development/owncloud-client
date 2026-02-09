@@ -22,7 +22,7 @@ namespace Ui {
 class AppImageUpdateAvailableDialogUi;
 }
 
-namespace CUR {
+namespace APP {
 
 /**
  * @brief Dialog shown when updates for the running AppImage are available

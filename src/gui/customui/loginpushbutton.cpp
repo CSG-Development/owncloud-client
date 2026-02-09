@@ -10,23 +10,20 @@ constexpr int iconSize = 18;
 constexpr int radius = 24;
 constexpr int iconPadding = 8;
 
-QPair<QColor,QColor> backNormalColor   = {QColor("#1976D2"), QColor("#64B5F6")};
-QPair<QColor,QColor> backDisabledColor = {QColor("#EEEEEE"), QColor("#616161")};
-QPair<QColor,QColor> textNormalColor   = {QColor("#FFFFFF"), QColor("#212121")};
-QPair<QColor,QColor> textDisabledColor = {QColor("#9E9E9E"), QColor("#9E9E9E")};
+std::pair<QColor,QColor> backNormalColor   = {QColor("#1976D2"), QColor("#64B5F6")};
+std::pair<QColor,QColor> backDisabledColor = {QColor("#EEEEEE"), QColor("#616161")};
+std::pair<QColor,QColor> textNormalColor   = {QColor("#FFFFFF"), QColor("#212121")};
+std::pair<QColor,QColor> textDisabledColor = {QColor("#9E9E9E"), QColor("#9E9E9E")};
 
 }
-
 
 LoginPushButton::LoginPushButton(QWidget *parent)
     : QPushButton(parent)
 {
-}
-
-void LoginPushButton::setDarkTheme()
-{
-    isDark = CUR::Theme::instance()->isDarkTheme();
-    update();
+    themeNotifier = darkTheme_.addNotifier([this] {
+        update();
+    });
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
 }
 
 void LoginPushButton::paintEvent(QPaintEvent* /*event*/)
@@ -42,9 +39,8 @@ void LoginPushButton::paintEvent(QPaintEvent* /*event*/)
 
     bool isEnabled = option.state.testFlag(QStyle::State_Enabled);
 
-    painter.fillPath(pp, isEnabled ? (isDark ? backNormalColor.second : backNormalColor.first) :
-                                     (isDark ? backDisabledColor.second : backDisabledColor.first));
-
+    painter.fillPath(pp, isEnabled ? (darkTheme_.value() ? backNormalColor.second : backNormalColor.first) :
+                                     (darkTheme_.value() ? backDisabledColor.second : backDisabledColor.first));
 
     if (!icon_.isNull()) {
         QRect iconRect;
@@ -74,8 +70,8 @@ void LoginPushButton::paintEvent(QPaintEvent* /*event*/)
         alignment |= Qt::TextShowMnemonic;
     }
 
-    QColor textColor = isEnabled ? (isDark ? textNormalColor.second : textNormalColor.first) :
-                                   (isDark ? textDisabledColor.second : textDisabledColor.first);
+    QColor textColor = isEnabled ? (darkTheme_.value() ? textNormalColor.second : textNormalColor.first) :
+                                   (darkTheme_.value() ? textDisabledColor.second : textDisabledColor.first);
     painter.setPen(textColor);
     painter.drawText(textRect, alignment, text());
 }

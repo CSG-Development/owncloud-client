@@ -29,7 +29,7 @@ class QPixmap;
 class QColor;
 class QPaintDevice;
 
-namespace CUR {
+namespace APP {
 
 class SyncResult;
 
@@ -37,7 +37,7 @@ class SyncResult;
  * @brief The Theme class
  * @ingroup libsync
  */
-class CURATORSYNC_EXPORT Theme : public QObject
+class APPLICATIONSYNC_EXPORT Theme : public QObject
 {
     Q_OBJECT
 public:
@@ -456,7 +456,7 @@ public:
 
     Q_INVOKABLE void systemThemeChanged();
     bool isDarkTheme() const;
-    Q_INVOKABLE void emit_theme_change() {emit themeChanged();}
+    Q_INVOKABLE void emit_theme_change() {emit themeChanged(isDarkTheme());}
 
 protected:
     QIcon themeTrayIcon(const QString &name, bool sysTrayMenuVisible = false, IconType iconType = IconType::BrandedIconWithFallbackToVanillaIcon) const;
@@ -465,7 +465,7 @@ protected:
 
 signals:
     void systrayUseMonoIconsChanged(bool);
-    void themeChanged();
+    void themeChanged(bool isDark);
 
 private:
     Theme(Theme const &);
@@ -486,6 +486,6 @@ private:
 };
 
 template <>
-QString CUR::Utility::enumToDisplayName(Theme::UserIDType userIdType);
+QString APP::Utility::enumToDisplayName(Theme::UserIDType userIdType);
 }
 #endif // _THEME_H

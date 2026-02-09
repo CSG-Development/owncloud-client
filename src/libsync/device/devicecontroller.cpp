@@ -60,7 +60,7 @@ DeviceController::DeviceController(QObject *parent)
         if (records.isEmpty()) {
             qCDebug(lcDeviceController) << "mDNS records not found, finish";
             // No mDNS records found, emit empty list
-            mdns_finished = true;
+            mdns_finished.store(true);
             check_finished();
             return;
         }
@@ -70,16 +70,25 @@ DeviceController::DeviceController(QObject *parent)
 
                 QList<DevicePath> devPaths(paths);
                 cleanupEmptyCN(devPaths);
+                for (auto& it: devPaths) {
+                    it.deviceType = DeviceType::Local;
+                    it.origin = DeviceOrigin::MDNS;
+                }
 
                 if (!devPaths.isEmpty()) {
-                    _aggregator->updateSource(DeviceOrigin::MDNS, devPaths);
+                    // _aggregator->updateSource(DeviceOrigin::MDNS, devPaths);
+                    for (auto& it: devPaths) {
+                        it.origin = DeviceOrigin::MDNS;
+                        it.deviceType = DeviceType::Local;
+                    }
+                    _aggregator->add_paths(devPaths);
                 }
 
                 allAccountPaths.append(devPaths);
 
                 qCDebug(lcDeviceController) << "mDNS paths" << devPaths;
 
-                mdns_finished = true;
+                mdns_finished.store(true);
                 check_finished();
             });
     });
@@ -88,7 +97,9 @@ DeviceController::DeviceController(QObject *parent)
         qCDebug(lcDeviceController) << "Aggregator path list updated";
         if (_aggregator) {
             QWriteLocker locker(&lock_);
-            _deviceList = DeviceAggregator::build_devices(_aggregator->getDevicePaths());
+            // _deviceList = DeviceAggregator::build_devices(_aggregator->getDevicePaths());
+            // _deviceList = DeviceAggregator::build_devices(_aggregator->paths());
+            _deviceList = DeviceAggregator::mergeDevices(_deviceList, DeviceAggregator::build_devices(_aggregator->paths()));
         }
     });
 }
@@ -97,7 +108,7 @@ void DeviceController::setEmail(const QString &email)
 {
     qCDebug(lcDeviceController) << "set email" << email;
     _email = email;
-    CUR::ConfigFile cf;
+    APP::ConfigFile cf;
     _api->setClientId(cf.clientId());
     _api->setRefreshToken(cf.refreshTokenForEmail(_email));
 }
@@ -109,10 +120,11 @@ void DeviceController::start_new_account()
         return;
     }
 
-    mdns_finished = false;
-    ra_finished = false;
+    mdns_finished.store(false);
+    ra_finished.store(false);
     _deviceList.clear();
     _aggregator->clearAll();
+    _aggregator->clear_paths();
 
     // Delete old MDNS devices
     // cleanupMDNS(_deviceList);
@@ -125,22 +137,16 @@ void DeviceController::start_new_account()
     else {
         qCDebug(lcDeviceController) << "No refresh token available, using mDNS only...";
         // Can't receive RA records, emit empty list
-        ra_finished = true;
+        ra_finished.store(true);
         check_finished();
     }
 }
 
 void DeviceController::prepareLogin(Device &dev)
 {
-    qCDebug(lcDeviceController) << "Prepare login started, device" << dev.toString();
+    qCDebug(lcDeviceController) << "Prepare login started, device" << dev.toStringShort();
 
     currentDevice = dev;
-
-    // if (dev.paths.isEmpty()) {
-    //     qCWarning(lcDeviceController) << "No path in device";
-    //     emit prepareLoginFinished(currentDevice);
-    //     return;
-    // }
 
     auto fillAbout = [this] {
         qCDebug(lcDeviceController) << "fillAbout paths:";
@@ -176,13 +182,16 @@ void DeviceController::prepareLogin(Device &dev)
             });
     };
 
-    if (dev.paths.isEmpty()) {
-        _api->ra_device_info(currentDevice.seagateDeviceID)
+    if (dev.paths.isEmpty() && !currentDevice.seagateDeviceID.isEmpty()) {
+        queryDeviceInfo(currentDevice.seagateDeviceID)
             .then(this, [this,fillAbout](const DevicePathListCtx& ctx) {
                 qCDebug(lcDeviceController) << "prepareLogin, device info status code" << ctx.res.status << ctx.res.errorString;
                 if (ctx.res.status == 200) {
                     currentDevice.paths = ctx.devicePathList;
                     fillAbout();
+                }
+                else {
+                    emit prepareLoginFinished(currentDevice);
                 }
             });
     }
@@ -194,12 +203,14 @@ void DeviceController::prepareLogin(Device &dev)
 
 // Plan:
 // - start mDNS search
-// - query RA for device info
+// - query RA for device list
 //   - ask access code if no token, emits accessCodeRequest()
 //   - then GUI have to handle code access dialog and call enterAccessCodeFromAccount
 //     to continue device update.
 //     enterAccessCodeFromAccount emits accessCodeResult
 //     then call account_update_device_continue
+// - merge paths for account device + in RA list (by CN)
+// - query RA for device info if deviceID is not empty
 // - query /about for each address found
 // - wait RA and mDNS completed
 // - build new device path from the list selecting by deviceCN
@@ -207,10 +218,11 @@ void DeviceController::prepareLogin(Device &dev)
 // - emit account_update_device_finished when complete
 void DeviceController::account_update_device(const Device& dev)
 {
+    qCDebug(lcDeviceController) << dev;
     loadRefreshToken();
-    mdns_finished = false;
-    ra_finished = false;
-    allAccountPaths.clear();
+    mdns_finished.store(false);
+    ra_finished.store(false);
+    // allAccountPaths.clear();
     _mdns->start();
 
     // all ok, RA and mDNS lists are ready
@@ -246,39 +258,72 @@ void DeviceController::account_update_device(const Device& dev)
 
     }, Qt::SingleShotConnection);
 
-    _api->ra_device_info(dev.seagateDeviceID)
-        .then(this, [this,dev](const DevicePathListCtx& ctx) {
-            qCDebug(lcDeviceController) << "acc update ra_device_info code" << ctx.res.status << ctx.res.errorString;
+    qCDebug(lcDeviceController) << "Query device list";
+    queryDeviceList()
+        .then(this, [this, d=dev](const DeviceListCtx& ctx) {
+            qCDebug(lcDeviceController) << "DeviceListCtx" << ctx.res.status;
 
-            if (ctx.res.status == 200) {
-
-                _devApi->query_about_all(ctx.devicePathList)
-                    .then(this, [this](const QList<DevicePath>& paths) {
-
-                        qCDebug(lcDeviceController) << "About updated:";
-                        qCDebug(lcDeviceController) << paths;
-
-                        allAccountPaths.append(paths);
-                        ra_finished = true;
-                        check_finished();
-                    });
-
-            }
-            else if (ctx.res.status == 404) {
-                // Device not found
-                qCDebug(lcDeviceController) << "Device not found" << dev.seagateDeviceID;
-                ra_finished = true;
-                check_finished();
-            }
-            else {
+            if (ctx.res.status != 200) {
                 initAccessCode();
+                return;
             }
-        });
+
+            auto finishTask = [this]() {
+                ra_finished.store(true);
+                check_finished();
+            };
+
+            const auto dev_ra = Device::findByCN(ctx.deviceList, d.certificateCommonName);
+
+            if (!dev_ra || dev_ra->seagateDeviceID.isEmpty()) {
+                qCDebug(lcDeviceController) << "Device not found or ID empty (CN lookup)";
+                finishTask();
+                return;
+            }
+
+            qCDebug(lcDeviceController) << "Query device info for" << dev_ra->seagateDeviceID;
+            queryDeviceInfo(dev_ra->seagateDeviceID)
+                .then(this, [this, finishTask, id=dev_ra->seagateDeviceID](const DevicePathListCtx& ctx) {
+                    qCDebug(lcDeviceController) << "acc update ra_device_info code" << ctx.res.status << ctx.res.errorString;
+
+                    if (ctx.res.status == 200) {
+                        _devApi->query_about_all(ctx.devicePathList).then(this, [this,finishTask](const QList<DevicePath>& paths) {
+                            qCDebug(lcDeviceController) << "About updated:" << paths;
+
+                            allAccountPaths.append(paths);
+                            finishTask();
+                        });
+                    }
+                    else if (ctx.res.status == 404) {
+                        // Device not found
+                        qCDebug(lcDeviceController) << "Device not found" << id;
+                        finishTask();
+                    }
+                    else {
+                        initAccessCode();
+                    }
+                });
+    });
+
 }
 
-void DeviceController::account_update_device_continue(const Device &dev)
+void DeviceController::account_update_device_continue(std::optional<Device> dev)
 {
-    _api->ra_device_info(dev.seagateDeviceID)
+    if (!dev) {
+        qCDebug(lcDeviceController) << "acc update continue: no account device";
+        ra_finished.store(true);
+        check_finished();
+        return;
+    }
+
+    if (dev->seagateDeviceID.isEmpty()) {
+        qCDebug(lcDeviceController) << "acc update continue: device has no ID";
+        ra_finished.store(true);
+        check_finished();
+        return;
+    }
+
+    queryDeviceInfo(dev->seagateDeviceID)
         .then(this, [this](const DevicePathListCtx& ctx) {
             qCDebug(lcDeviceController) << "acc update continue ra_device_info code" << ctx.res.status << ctx.res.errorString;
             if (ctx.res.status == 200) {
@@ -288,14 +333,14 @@ void DeviceController::account_update_device_continue(const Device &dev)
                         qCDebug(lcDeviceController) << "Paths added:";
                         qCDebug(lcDeviceController) << paths;
                         allAccountPaths.append(paths);
-                        ra_finished = true;
+                        ra_finished.store(true);
                         check_finished();
                     });
 
             }
             else {
                 qCDebug(lcDeviceController) << "acc update continue ra_device_info fail";
-                ra_finished = true;
+                ra_finished.store(true);
                 check_finished();
             }
         });
@@ -329,8 +374,8 @@ bool DeviceController::isEvaluationRunning() const
 
 void DeviceController::force_ra_account()
 {
-    mdns_finished = false;
-    ra_finished = false;
+    mdns_finished.store(false);
+    ra_finished.store(false);
 
     _mdns->start();
     _deviceList.clear();
@@ -351,14 +396,14 @@ bool DeviceController::hasRefreshToken() const
 
 void DeviceController::saveRefreshToken()
 {
-    CUR::ConfigFile cf;
+    APP::ConfigFile cf;
     cf.setRefreshTokenForEmail(_api->tokenCtx().refreshToken, _email);
     qCDebug(lcDeviceController) << "Refresh token save, token exist" << !_api->tokenCtx().refreshToken.isEmpty();
 }
 
 void DeviceController::loadRefreshToken()
 {
-    CUR::ConfigFile cf;
+    APP::ConfigFile cf;
     const auto& token = cf.refreshTokenForEmail(_email);
     _api->setRefreshToken(token);
     qCDebug(lcDeviceController) << "Refresh token load, token exist" << !token.isEmpty();
@@ -370,20 +415,15 @@ QList<Device> DeviceController::getDevices() const
     return _deviceList;
 }
 
-std::optional<Device> DeviceController::getDevice(const QString &deviceCN) const
+QFuture<DeviceListCtx> DeviceController::queryDeviceList()
 {
-    const auto& it = std::find_if(_deviceList.cbegin(), _deviceList.cend(), [deviceCN](const Device& d) {
-        return d.certificateCommonName == deviceCN;
-    });
-
-    if (it != _deviceList.cend())
-        return *it;
-
-    return std::nullopt;
+    loadRefreshToken();
+    return _api->ra_device_list();
 }
 
 QFuture<DevicePathListCtx> DeviceController::queryDeviceInfo(const QString &deviceId)
 {
+    loadRefreshToken();
     return _api->ra_device_info(deviceId);
 }
 
@@ -398,45 +438,30 @@ void DeviceController::initAccessCode()
                 emit accessCodeRequest();
             }
             else {
-                emit accessCodeResult(AccessCodeResult::Error, ctx.res.errorString, ctx.res.errorStacktrace);
+                emit accessCodeResult(AccessCodeContext::Init, ctx.res.status, ctx.res.errorString, ctx.res.errorStacktrace);
             }
         });
 }
 
-void DeviceController::enterAccessCode(const QString &code)
+void DeviceController::enterAccessCode(const QString &code, bool from_account)
 {
-    qCDebug(lcDeviceController) << "enterAccessCode";
+    qCDebug(lcDeviceController) << "enterAccessCode, from account:" << from_account;
     _api->ra_token(code)
-        .then(this, [this](const TokenContext& ctx) {
+        .then(this, [this,from_account](const TokenContext& ctx) {
             qCDebug(lcDeviceController) << "enterAccessCode" << ctx.res.status << ctx.res.errorString;
             if (ctx.res.status == 200) {
                 saveRefreshToken();
-                emit accessCodeResult(AccessCodeResult::Accepted, {}, {});
-                if (force_device_list_request) {
-                    qCDebug(lcDeviceController) << "force RA mode, queued forceQueryDeviceList call";
-                    QTimer::singleShot(1, this, [this] {
-                        forceQueryDeviceList();
-                    });
+                emit accessCodeResult(AccessCodeContext::Token, ctx.res.status, {}, {});
+                if (!from_account) {
+                    if (force_device_list_request) {
+                        qCDebug(lcDeviceController) << "force RA mode, queued forceQueryDeviceList call";
+                        // drop call stack
+                        QMetaObject::invokeMethod(this, &DeviceController::forceQueryDeviceList, Qt::QueuedConnection);
+                    }
                 }
             }
             else {
-                emit accessCodeResult(AccessCodeResult::Error, ctx.res.errorString, ctx.res.errorStacktrace);
-            }
-        });
-}
-
-void DeviceController::enterAccessCodeFromAccount(const QString &code)
-{
-    qCDebug(lcDeviceController) << "enterAccessCode";
-    _api->ra_token(code)
-        .then(this, [this](const TokenContext& ctx) {
-            qCWarning(lcDeviceController) << "enterAccessCode" << ctx.res.status << ctx.res.errorString << ctx.res.errorStacktrace;
-            if (ctx.res.status == 200) {
-                saveRefreshToken();
-                emit accessCodeResult(AccessCodeResult::Accepted, {}, {});
-            }
-            else {
-                emit accessCodeResult(AccessCodeResult::Error, ctx.res.errorString, ctx.res.errorStacktrace);
+                emit accessCodeResult(AccessCodeContext::Token, ctx.res.status, ctx.res.errorString, ctx.res.errorStacktrace);
             }
         });
 }
@@ -449,19 +474,20 @@ QFuture<QList<DevicePath> > DeviceController::query_status_all(const Device &dev
 void DeviceController::processQueryDeviceList()
 {
     qCDebug(lcDeviceController) << "Query device list";
-    _api->ra_device_list()
+    queryDeviceList()
         .then(this, [this](const DeviceListCtx& ctx) {
             qCDebug(lcDeviceController) << "DeviceListCtx" << ctx.res.status;
             if (ctx.res.status == 200) {
                 {
                     QWriteLocker locker(&lock_);
-                    _deviceList = ctx.deviceList;
+                    _deviceList = DeviceAggregator::mergeDevices(_deviceList, ctx.deviceList);
+                    // _deviceList = ctx.deviceList;
                 }
                 qCDebug(lcDeviceController) << "Device list:";
                 qCDebug(lcDeviceController) << ctx.deviceList;
                 saveRefreshToken();
             }
-            ra_finished = true;
+            ra_finished.store(true);
             check_finished();
         });
 }
@@ -469,21 +495,20 @@ void DeviceController::processQueryDeviceList()
 void DeviceController::forceQueryDeviceList()
 {
     qCDebug(lcDeviceController) << "forceQueryDeviceList";
-
-    _api->ra_device_list()
+    queryDeviceList()
         .then(this, [this](const DeviceListCtx& ctx) {
             qCDebug(lcDeviceController) << "DeviceListCtx" << ctx.res.status;
             if (ctx.res.status == 200) {
                 {
                     QWriteLocker locker(&lock_);
-                    _deviceList = ctx.deviceList;
+                    _deviceList = DeviceAggregator::mergeDevices(_deviceList, ctx.deviceList);
+                    // _deviceList = ctx.deviceList;
                 }
 
                 qCDebug(lcDeviceController) << "Device list:";
                 qCDebug(lcDeviceController) << ctx.deviceList;
                 saveRefreshToken();
-                ra_finished = true;
-                // mdns_finished = true; // ignore mDNS here
+                ra_finished.store(true);
                 check_finished();
             }
             else {
@@ -494,9 +519,14 @@ void DeviceController::forceQueryDeviceList()
 
 void DeviceController::check_finished()
 {
-    qCDebug(lcDeviceController) << "mdns ready" << mdns_finished << "ra ready" << ra_finished;
-    if (mdns_finished && ra_finished) {
+    bool m = mdns_finished.load();
+    bool r = ra_finished.load();
+
+    qCDebug(lcDeviceController) << "mdns finished" << m << "ra finished" << r;
+    if (m && r) {
         emit devices_updated(hasRefreshToken());
         force_device_list_request = false;
+        mdns_finished.store(false);
+        ra_finished.store(false);
     }
 }

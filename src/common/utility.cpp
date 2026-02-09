@@ -60,7 +60,7 @@ auto RFC1123PatternC()
     return QStringLiteral("ddd, dd MMM yyyy HH:mm:ss 'GMT'");
 }
 }
-namespace CUR {
+namespace APP {
 
 Q_LOGGING_CATEGORY(lcUtility, "sync.utility")
 
@@ -154,7 +154,7 @@ QByteArray Utility::userAgentString()
         .arg(platform(),
             // TODO: Temporarily change the version number to ensure connection to the server.
             // Should be fixed as soon as the server version changes.
-            //CUR::Version::displayString(),
+            //APP::Version::displayString(),
             QStringLiteral("5.3.4"),
             // accessing the theme to fetch the string is rather difficult
             // since this is only needed server-side to identify clients, the app name (as of 2.9, the short name) is good enough
@@ -659,7 +659,7 @@ QString Utility::formatRFC1123Date(const QDateTime &date)
     return date.toUTC().toString(RFC1123PatternC());
 }
 
-} // namespace CUR
+} // namespace APP
 
 QDebug operator<<(QDebug debug, nanoseconds in)
 {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QWidget>
+#include <QProperty>
 
 namespace Ui { class CodeInputWidget; }
 
@@ -9,6 +10,7 @@ class QLineEdit;
 class CodeInputWidget : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(bool darkTheme READ isDarkTheme WRITE setDarkTheme BINDABLE bindableDarkTheme)
 
 public:
     explicit CodeInputWidget(QWidget *parent = nullptr);
@@ -19,12 +21,14 @@ public:
 
     void setErrorState(bool enable);
 
+    bool isDarkTheme() const { return darkTheme_.value(); }
+    void setDarkTheme(bool v) { darkTheme_.setValue(v); }
+
+    QBindable<bool> bindableDarkTheme() {return &darkTheme_;}
+
 signals:
     void codeChanged();
     void focusGained();
-
-public slots:
-    void setDarkTheme();
 
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;
@@ -44,7 +48,9 @@ private:
     Ui::CodeInputWidget* ui = nullptr;
     QList<QLineEdit*> edPtrs;
     QAction* pasteCodeAction = nullptr;
-    bool isDark = false;
     bool errorState = false;
     QString code_;
+
+    QProperty<bool> darkTheme_ {false};
+    QPropertyNotifier themeNotifier;
 };

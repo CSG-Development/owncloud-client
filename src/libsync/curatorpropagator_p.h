@@ -21,7 +21,7 @@
 #include <QLoggingCategory>
 #include <QNetworkReply>
 
-namespace CUR {
+namespace APP {
 
 inline QString getEtagFromReply(QNetworkReply *reply)
 {

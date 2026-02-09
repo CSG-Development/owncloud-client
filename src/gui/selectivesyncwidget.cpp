@@ -28,7 +28,7 @@
 #include <QTreeWidget>
 #include <QVBoxLayout>
 
-namespace CUR {
+namespace APP {
 
 
 class SelectiveSyncTreeViewItem : public QTreeWidgetItem
