@@ -57,7 +57,7 @@ public:
     void setEmail(const QString& email);
     QString email() const;
 
-    void setEmailIsNotRegistered(bool val) {controller_->notRegistered.setValue(val);}
+    void setEmailIsNotRegistered(bool val);
 
     bool isDarkTheme() const { return controller_->darkTheme.value(); }
     void setDarkTheme(bool v) { controller_->darkTheme.setValue(v); }
