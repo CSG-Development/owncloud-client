@@ -322,6 +322,14 @@ void SetupController::onDevicesUpdated(bool raQueried)
 {
     qCDebug(lcSetupWizardController) << "onDevicesUpdated, ra was queried" << raQueried;
     fullList = _deviceController->getDevices();
+
+    APP::ConfigFile cf;
+    auto st_device = cf.staticDevice();
+    if (!st_device.first.isEmpty() && !st_device.second.isEmpty()) {
+        const auto device = Device::MakeStatic(st_device.second, st_device.first);
+        fullList.append(device);
+    }
+
     window()->setDevicesList(fullList);
     window()->showCredPageProgress(false);
 
@@ -421,14 +429,14 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
         return;
     }
 
-    if (dev_path->about.os_state != QStringLiteral("normal")) {
+    if (!device_.isStatic && dev_path->about.os_state != QStringLiteral("normal")) {
         QString stateStr = tr("OS state: %1").arg(dev_path->about.os_state.isEmpty() ? tr("<empty>") : dev_path->about.os_state);
         qCDebug(lcSetupWizardController) << stateStr;
         Q_EMIT evaluateCredentialsError(stateStr, QPrivateSignal());
         return;
     }
 
-    if (!dev_path->status.oobe_done) {
+    if (!device_.isStatic && !dev_path->status.oobe_done) {
         qCDebug(lcSetupWizardController) << "OOBE done" << dev_path->status.oobe_done;
         Q_EMIT evaluateCredentialsError(tr("OOBE is not done"), QPrivateSignal());
         return;
@@ -509,6 +517,10 @@ void SetupController::performLogin()
             auto result = fetchUserInfoJob->result().value<FetchUserInfoResult>();
             _context->accountBuilder().setDisplayName(result.displayName());
             _context->accountBuilder().authenticationStrategy()->setDavUser(result.userName());
+
+            ConfigFile cf;
+            cf.setFavoriteDeviceCN(device_.certificateCommonName, email_);
+
             Q_EMIT handleLoginResult(SetupResult::Success);
         }
         else if (fetchUserInfoJob->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 401) {

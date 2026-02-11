@@ -38,6 +38,8 @@ public:
     void setDarkTheme(bool v) { darkTheme_ = v; }
     QBindable<bool> bindableDarkTheme() {return &darkTheme_;}
 
+    void setFavoriteDevice(const QString& deviceCN) {favoriteDeviceCN = deviceCN;}
+
 Q_SIGNALS:
     void textChanged(const QString &);
     void textEdited(const QString &);
@@ -67,6 +69,7 @@ private:
     QList<Device> deviceList;
     QTimer blockMouseTimer;
     std::optional<Device> selectedDevice;
+    QString favoriteDeviceCN;
 
     QProperty<bool> darkTheme_ {false};
     QPropertyNotifier themeNotifier;

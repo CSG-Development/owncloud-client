@@ -879,7 +879,7 @@ void ConfigFile::setupDefaultExcludeFilePaths(ExcludedFiles &excludedFiles)
     }
 }
 
-QPair<QString, QString> ConfigFile::staticDevice()
+std::pair<QString, QString> ConfigFile::staticDevice()
 {
     auto settings = makeQSettings();
     settings.beginGroup(developmentGroupC);
@@ -889,7 +889,7 @@ QPair<QString, QString> ConfigFile::staticDevice()
         return {};
     if (name.isEmpty())
         name = url;
-    return qMakePair(name, url);
+    return std::make_pair(name, url);
 }
 
 QString ConfigFile::clientId() const
@@ -920,18 +920,18 @@ void ConfigFile::setFavoriteEmail(const QString &email)
     settings.sync();
 }
 
-QString ConfigFile::favoriteDeviceCN() const
+QString ConfigFile::favoriteDeviceCN(const QString& email) const
 {
     auto settings = makeQSettings();
     settings.beginGroup(favoriteGroupC);
-    return settings.value(deviceCN_C).toString();
+    return settings.value(QStringLiteral("%1/%2").arg(email.toLower(), deviceCN_C)).toString();
 }
 
-void ConfigFile::setFavoriteDeviceCN(const QString &devCN)
+void ConfigFile::setFavoriteDeviceCN(const QString &devCN, const QString& email)
 {
     auto settings = makeQSettings();
     settings.beginGroup(favoriteGroupC);
-    settings.setValue(deviceCN_C, devCN);
+    settings.setValue(QStringLiteral("%1/%2").arg(email.toLower(), deviceCN_C), devCN);
     settings.sync();
 }
 

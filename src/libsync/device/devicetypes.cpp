@@ -235,6 +235,7 @@ Device Device::MakeStatic(const QString &url, const QString &name)
 {
     Device dev;
     dev.certificateCommonName = name;
+    dev.friendlyName = name;
     dev.isStatic = true;
     DevicePath dp(url, DeviceType::Public, DeviceOrigin::Static, 0);
     dev.paths.append(dp);

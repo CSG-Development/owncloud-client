@@ -196,7 +196,7 @@ public:
     /// Add the system and user exclude file path to the ExcludedFiles instance.
     static void setupDefaultExcludeFilePaths(ExcludedFiles &excludedFiles);
 
-    QPair<QString,QString> staticDevice();
+    std::pair<QString,QString> staticDevice();
 
     QString clientId() const;
     void setClientId(const QString& id);
@@ -204,8 +204,8 @@ public:
     QString favoriteEmail() const;
     void setFavoriteEmail(const QString& email);
 
-    QString favoriteDeviceCN() const;
-    void setFavoriteDeviceCN(const QString& devCN);
+    QString favoriteDeviceCN(const QString& email) const;
+    void setFavoriteDeviceCN(const QString& devCN, const QString& email);
 
     // ! For Testing only
     // Use mDNS port only for API requests

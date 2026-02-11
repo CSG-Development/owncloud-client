@@ -423,6 +423,12 @@ void AccountState::updateDeviceAccessibility()
         return;
     }
 
+    const auto device = accountDevice();
+    if (device && device->isStatic) {
+        qCDebug(lcAccountState) << "Static device, availability check disabled";
+        return;
+    }
+
     if (ocApp()->gui()->isAccountWizardActive()) {
         qCDebug(lcAccountState) << "Skip device availability check, account wizard in progress";
         return;
