@@ -156,7 +156,7 @@ void ComboWidget::setItems(const QList<Device> &list)
         }
     }
 
-    if (!favoriteDeviceCN.isEmpty() && text().isEmpty()) {
+    if (!selectedDevice && !favoriteDeviceCN.isEmpty() && text().isEmpty()) {
         qCDebug(lcDeviceComboWidget) << "Favorite device" << favoriteDeviceCN;
         const auto& dev = findByCN(deviceList, favoriteDeviceCN);
         if (dev) {
@@ -164,6 +164,7 @@ void ComboWidget::setItems(const QList<Device> &list)
                 setText(dev->certificateCommonName);
             else
                 setText(dev->friendlyName);
+            selectedDevice = dev;
         }
         else {
             setText(QStringLiteral(""));

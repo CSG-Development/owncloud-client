@@ -265,6 +265,8 @@ void SetupController::onCredentialsAction(CredentialsAction action, std::optiona
                     device_ = ctx->device.value();
                     _deviceController->prepareLogin(device_);
                 }
+            } else {
+                qCDebug(lcSetupWizardController) << "FATAL: no context when login clicked";
             }
         }
         break;
