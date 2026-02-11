@@ -131,6 +131,7 @@ void DeviceController::prepareLogin(Device &dev)
     currentDevice = dev;
 
     if (currentDevice.isStatic) {
+        qCDebug(lcDeviceController) << "Static device, prepare login skipped";
         emit prepareLoginFinished(currentDevice);
         return;
     }
