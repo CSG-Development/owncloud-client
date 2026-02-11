@@ -57,6 +57,7 @@ private:
 
     void validateFormData();
     bool isAllFieldNotEmpty();
+    void loadFavDevice();
 
 private:
     Ui::CredentialsPage* ui = nullptr;

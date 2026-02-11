@@ -5,6 +5,7 @@
 #include "gui/customui/focusproxy.h"
 #include "gui/customui/dimwidget.h"
 #include "theme.h"
+#include "configfile.h"
 
 #include <QLineEdit>
 #include <QComboBox>
@@ -73,6 +74,7 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     });
 
     connect(ui->btnRefresh, &QToolButton::clicked, this, [this] {
+        loadFavDevice();
         showErrorMessage({});
         showProgressIndicator(true);
         emit actionTriggered(CredentialsAction::RefreshDevicesClicked);
@@ -149,7 +151,10 @@ void CredentialsPage::setDevicesList(const QList<Device> &list)
     // DEBUG
     // for (const auto& d: dev_list)
     //     qCDebug(lcCredPage) << d.toString();
-    ui->edUrl->setItems(list);
+    std::stable_sort(dev_list.begin(), dev_list.end(), [](const Device& a, const Device& b) {
+        return a.isStatic > b.isStatic;
+    });
+    ui->edUrl->setItems(dev_list);
 }
 
 std::optional<Device> CredentialsPage::currentDevice() const
@@ -165,6 +170,7 @@ QString CredentialsPage::email() const
 void CredentialsPage::setEmail(const QString &user)
 {
     ui->lblEmail->setText(user);
+    loadFavDevice();
 }
 
 QString CredentialsPage::password() const
@@ -262,4 +268,11 @@ bool CredentialsPage::isAllFieldNotEmpty()
 {
     return !ui->edUrl->text().trimmed().isEmpty() &&
            !ui->edPassword->text().trimmed().isEmpty();
+}
+
+void CredentialsPage::loadFavDevice()
+{
+    APP::ConfigFile cf;
+    const auto dev_cn = cf.favoriteDeviceCN(email());
+    ui->edUrl->setFavoriteDevice(dev_cn);
 }

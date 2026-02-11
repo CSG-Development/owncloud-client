@@ -10,24 +10,6 @@ Q_LOGGING_CATEGORY(lcDeviceController, "device.controller", QtDebugMsg)
 
 namespace {
 
-// void cleanupMDNS(QList<Device>& deviceList)
-// {
-//     auto it = std::remove_if(deviceList.begin(), deviceList.end(), [](Device& dev) {
-//         if (dev.origin == DeviceOrigin::MDNS) {
-//             return true;
-//         }
-
-//         auto pathIt = std::remove_if(dev.paths.begin(), dev.paths.end(), [](const DevicePath& p) {
-//             return p.origin == DeviceOrigin::MDNS;
-//         });
-//         dev.paths.erase(pathIt, dev.paths.end());
-
-//         return false;
-//     });
-
-//     deviceList.erase(it, deviceList.end());
-// }
-
 void cleanupEmptyCN(QList<DevicePath>& paths)
 {
     auto it = std::remove_if(paths.begin(), paths.end(), [](DevicePath& devPath) {
@@ -147,6 +129,11 @@ void DeviceController::prepareLogin(Device &dev)
     qCDebug(lcDeviceController) << "Prepare login started, device" << dev.toStringShort();
 
     currentDevice = dev;
+
+    if (currentDevice.isStatic) {
+        emit prepareLoginFinished(currentDevice);
+        return;
+    }
 
     auto fillAbout = [this] {
         qCDebug(lcDeviceController) << "fillAbout paths:";

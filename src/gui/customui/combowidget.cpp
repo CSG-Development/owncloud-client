@@ -12,6 +12,8 @@
 #include <QAbstractItemView>
 #include <QMouseEvent>
 
+Q_LOGGING_CATEGORY(lcDeviceComboWidget, "device.combowidget", QtDebugMsg)
+
 namespace {
 QPair<QString,QString> inputStyle = {
     QStringLiteral(":/res/combowidget/combowidget_light.qss"),
@@ -42,7 +44,7 @@ ComboWidget::ComboWidget(QWidget *parent)
     popup->setAnchorWidget(ui->inputFrame);
 
     themeNotifier = darkTheme_.addNotifier([this] {
-        qDebug() << "darkTheme_ Notifier" << darkTheme_.value();
+        qCDebug(lcDeviceComboWidget) << "darkTheme_ Notifier" << darkTheme_.value();
         APP::StyleHelper::setTheme(this, darkTheme_.value());
         updateStyles();
     });
@@ -130,6 +132,7 @@ void ComboWidget::setItems(const QList<Device> &list)
 
     // List is empty
     if (deviceList.isEmpty()) {
+        qCDebug(lcDeviceComboWidget) << "No devices in list";
         selectedDevice = std::nullopt;
         setText(QStringLiteral(""));
         return;
@@ -137,6 +140,7 @@ void ComboWidget::setItems(const QList<Device> &list)
 
     // Update text if already selected
     if (selectedDevice) {
+        qCDebug(lcDeviceComboWidget) << "Previous selected device" << selectedDevice->toString();
         const auto& dev = findByCN(deviceList, selectedDevice->certificateCommonName);
         if (dev) {
             if (dev->friendlyName.isEmpty())
@@ -145,14 +149,30 @@ void ComboWidget::setItems(const QList<Device> &list)
                 setText(dev->friendlyName);
         }
         else {
+            qCDebug(lcDeviceComboWidget) << "Previous selected device not found in current list";
             // Selected device is not in list
             selectedDevice = std::nullopt;
             setText(QStringLiteral(""));
         }
     }
 
+    if (!favoriteDeviceCN.isEmpty() && text().isEmpty()) {
+        qCDebug(lcDeviceComboWidget) << "Favorite device" << favoriteDeviceCN;
+        const auto& dev = findByCN(deviceList, favoriteDeviceCN);
+        if (dev) {
+            if (dev->friendlyName.isEmpty())
+                setText(dev->certificateCommonName);
+            else
+                setText(dev->friendlyName);
+        }
+        else {
+            setText(QStringLiteral(""));
+        }
+    }
+
     // Still no selected
     if (text().isEmpty()) {
+        qCDebug(lcDeviceComboWidget) << "Selected first device in list";
         selectedDevice = deviceList.first();
         if (selectedDevice->friendlyName.isEmpty())
             setText(selectedDevice->certificateCommonName);
