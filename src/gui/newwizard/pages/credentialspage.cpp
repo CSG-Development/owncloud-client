@@ -145,15 +145,10 @@ void CredentialsPage::updateTheme()
     update();
 }
 
-void CredentialsPage::setDevicesList(const QList<Device> &list)
+void CredentialsPage::setDevicesList(const DeviceList& list)
 {
     dev_list = list;
-    // DEBUG
-    // for (const auto& d: dev_list)
-    //     qCDebug(lcCredPage) << d.toString();
-    std::stable_sort(dev_list.begin(), dev_list.end(), [](const Device& a, const Device& b) {
-        return a.isStatic > b.isStatic;
-    });
+    dev_list.sort_by_static();
     ui->edUrl->setItems(dev_list);
 }
 
@@ -215,7 +210,7 @@ void CredentialsPage::showProgressIndicator(bool show)
 void CredentialsPage::showDevicesInfo(bool show)
 {
     QString s;
-    for (const auto& d: std::as_const(dev_list)) {
+    for (const auto& d: std::as_const(dev_list.devices())) {
         s += QStringLiteral("<b>%1</b><br>").arg(d.certificateCommonName);
         s += QStringLiteral("  Friendly: %1<br>").arg(d.friendlyName);
         s += QStringLiteral("  CN: %1<br>").arg(d.certificateCommonName);

@@ -188,17 +188,6 @@ std::optional<QUuid> Device::getRemoteOnlyPath() const
     return plist.first().id;
 }
 
-std::optional<Device> Device::findByCN(const QList<Device> &list, const QString &cn)
-{
-    const auto it = std::find_if(list.cbegin(), list.cend(), [cn](const Device& d) {
-        return d.certificateCommonName == cn;
-    });
-    if (it != list.cend())
-        return *it;
-
-    return std::nullopt;
-}
-
 QString Device::toString() const
 {
     QStringList l;
@@ -322,3 +311,77 @@ QString DeviceHardwareInfo::toString() const
     return l.join(QStringLiteral(""));
 }
 
+
+void DeviceList::addDevice(const Device &d)
+{
+    auto it = std::find_if(dev_list.begin(), dev_list.end(), [&d](const Device& item) {
+        return item.certificateCommonName == d.certificateCommonName;
+    });
+
+    if (it != dev_list.end()) {
+        (*it).paths = mergePaths((*it).paths, d.paths);
+    }
+    else {
+        dev_list.append(d);
+    }
+}
+
+void DeviceList::setDevices(const QList<Device> &devList)
+{
+    QMap<QString,Device> map;
+    for (auto it = devList.cbegin(); it != devList.cend(); ++it) {
+        map[it->seagateDeviceID] = *it;
+    }
+
+    QList<Device> tmp(map.values());
+    qSwap(tmp, dev_list);
+}
+
+void DeviceList::clear()
+{
+    dev_list.clear();
+}
+
+void DeviceList::sort_by_static()
+{
+    std::stable_sort(dev_list.begin(), dev_list.end(), [](const Device& a, const Device& b) {
+        return a.isStatic > b.isStatic;
+    });
+}
+
+std::optional<Device> DeviceList::find_by_cn(const QString &cn) const
+{
+    const auto it = std::find_if(dev_list.cbegin(), dev_list.cend(), [cn](const Device& d) {
+        return d.certificateCommonName == cn;
+    });
+    if (it != dev_list.cend())
+        return *it;
+    return std::nullopt;
+}
+
+QList<DevicePath> DeviceList::mergePaths(const QList<DevicePath> &path_1, const QList<DevicePath> &path_2)
+{
+    QMap<std::pair<QString, int>, DevicePath> uniqueMap;
+
+    auto insertOrUpdate = [&](const DevicePath &path) {
+        auto key = std::make_pair(path.address, path.port);
+
+        if (!uniqueMap.contains(key)) {
+            uniqueMap.insert(key, path);
+        } else {
+            if (path.origin == DeviceOrigin::MDNS && uniqueMap[key].origin != DeviceOrigin::MDNS) {
+                uniqueMap[key] = path;
+            }
+        }
+    };
+
+    for (const auto &path : path_1) {
+        insertOrUpdate(path);
+    }
+
+    for (const auto &path : path_2) {
+        insertOrUpdate(path);
+    }
+
+    return uniqueMap.values();
+}

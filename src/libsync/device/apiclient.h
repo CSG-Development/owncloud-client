@@ -34,7 +34,7 @@ struct TokenContext {
 };
 
 struct DeviceListCtx {
-    QList<Device> deviceList;
+    DeviceList deviceList;
     ResultContext res;
 };
 
