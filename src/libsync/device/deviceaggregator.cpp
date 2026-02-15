@@ -21,55 +21,12 @@ DeviceAggregator::DeviceAggregator(QObject *parent)
 {
 }
 
-QList<DevicePath> DeviceAggregator::getDevicePaths() const
-{
-    QReadLocker locker(&lock_);
-    return mergedList_;
-}
-
-void DeviceAggregator::updateSource(DeviceOrigin origin, const QList<DevicePath> &newDevices)
-{
-    {
-        QWriteLocker locker(&lock_);
-        sourceStorage_[origin] = newDevices;
-        rebuildInternal();
-    }
-
-    // !! emit outside lock scope
-    emit listUpdated();
-}
-
 void DeviceAggregator::clearAll()
 {
     {
         QWriteLocker locker(&lock_);
-        sourceStorage_.clear();
         mergedList_.clear();
     }
-}
-
-void DeviceAggregator::rebuildInternal()
-{
-    QMap<QString, DevicePath> uniqueMap;
-
-    for (auto it = sourceStorage_.begin(); it != sourceStorage_.end(); ++it) {
-
-        const DeviceOrigin currentOrigin = it.key();
-        const QList<DevicePath>& devices = it.value();
-
-        qCDebug(lcDeviceAggregator) << "srcStorage" << DevHelpers::originToStr(currentOrigin) << devices;
-
-        for (const auto& newDev : devices) {
-            QString key = QStringLiteral("%1:%2").arg(newDev.address).arg(newDev.port);
-
-            if (!uniqueMap.contains(key) ||
-                getPriority(currentOrigin) > getPriority(uniqueMap[key].origin)) {
-                uniqueMap.insert(key, newDev);
-            }
-        }
-    }
-
-    mergedList_ = uniqueMap.values();
 }
 
 void DeviceAggregator::merge(Device &target, const QList<DevicePath> &path_sources)
@@ -99,7 +56,7 @@ void DeviceAggregator::merge(Device &target, const QList<DevicePath> &path_sourc
     }
 }
 
-QList<Device> DeviceAggregator::mergeDevices(const QList<Device> &dev_1, const QList<Device> &dev_2)
+DeviceList DeviceAggregator::mergeDevices(const DeviceList& dev_1, const DeviceList& dev_2)
 {
     QHash<QString, Device> mergedMap;
 
@@ -139,42 +96,18 @@ QList<Device> DeviceAggregator::mergeDevices(const QList<Device> &dev_1, const Q
         }
     };
 
-    for (const auto &d : dev_1)
+    for (const auto &d : dev_1.devices())
         addToMap(d);
-    for (const auto &d : dev_2)
+    for (const auto &d : dev_2.devices())
         addToMap(d);
 
-    return mergedMap.values();
+    DeviceList dl;
+    dl.setDevices(mergedMap.values());
+
+    return dl;
 }
 
-QList<DevicePath> DeviceAggregator::mergePaths(const QList<DevicePath> &path_1, const QList<DevicePath> &path_2)
-{
-    QMap<std::pair<QString, int>, DevicePath> uniqueMap;
-
-    auto insertOrUpdate = [&](const DevicePath &path) {
-        auto key = std::make_pair(path.address, path.port);
-
-        if (!uniqueMap.contains(key)) {
-            uniqueMap.insert(key, path);
-        } else {
-            if (path.origin == DeviceOrigin::MDNS && uniqueMap[key].origin != DeviceOrigin::MDNS) {
-                uniqueMap[key] = path;
-            }
-        }
-    };
-
-    for (const auto &path : path_1) {
-        insertOrUpdate(path);
-    }
-
-    for (const auto &path : path_2) {
-        insertOrUpdate(path);
-    }
-
-    return uniqueMap.values();
-}
-
-QList<Device> DeviceAggregator::build_devices(const QList<DevicePath> &records)
+DeviceList DeviceAggregator::build_devices(const QList<DevicePath> &records)
 {
     QHash<QString, Device> deviceMap;
 
@@ -222,7 +155,9 @@ QList<Device> DeviceAggregator::build_devices(const QList<DevicePath> &records)
         }
     }
 
-    return deviceMap.values();
+    DeviceList dl;
+    dl.setDevices(deviceMap.values());
+    return dl;
 }
 
 void DeviceAggregator::add_paths(const QList<DevicePath> &devs)

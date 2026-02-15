@@ -329,7 +329,7 @@ void SetupController::onDevicesUpdated(bool raQueried)
     auto st_device = cf.staticDevice();
     if (!st_device.first.isEmpty() && !st_device.second.isEmpty()) {
         const auto device = Device::MakeStatic(st_device.second, st_device.first);
-        fullList.append(device);
+        fullList.addDevice(device);
     }
 
     window()->setDevicesList(fullList);

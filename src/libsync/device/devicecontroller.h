@@ -49,7 +49,7 @@ public:
     void saveRefreshToken();
     void loadRefreshToken();
 
-    QList<Device> getDevices() const;
+    DeviceList getDevices() const;
 
     QFuture<DeviceListCtx> queryDeviceList();
     QFuture<DevicePathListCtx> queryDeviceInfo(const QString& deviceId);
@@ -84,7 +84,7 @@ protected:
     MdnsClient* _mdns = nullptr;
     DeviceAggregator* _aggregator = nullptr;
     QString _email;
-    QList<Device> _deviceList;
+    DeviceList _deviceList;
     Device currentDevice;
 
     mutable QReadWriteLock lock_;

@@ -107,7 +107,7 @@ private:
     QString email_;
     QString password_;
     Device device_;
-    QList<Device> fullList;
+    DeviceList fullList;
     DeviceController* _deviceController = nullptr;
     RunAccountWizardReason reason_ = RunAccountWizardReason::ApplicationStartup;
     QUuid id_;

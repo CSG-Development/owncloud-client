@@ -135,7 +135,7 @@ QFuture<DeviceListCtx> ApiClient::ra_device_list()
                         d.certificateCommonName = item[jkey_certificateCommonName].toString();
                         d.friendlyName = item[jkey_friendlyName].toString();
                         d.hostname = item[jkey_hostname].toString();
-                        ctx.deviceList.append(d);
+                        ctx.deviceList.addDevice(d);
                     }
                 }
                 else {

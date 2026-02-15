@@ -29,7 +29,7 @@ public:
     QString text() const;
     void setText(const QString& val);
 
-    void setItems(const QList<Device> &list);
+    void setItems(const DeviceList& list);
     std::optional<Device> currentDevice() const {return selectedDevice;}
 
     void setErrorState(bool enable, const QString& txt = QString());
@@ -57,8 +57,6 @@ protected:
     void updateStyles();
     void updateButtonIcon();
 
-    std::optional<Device> findByCN(const QList<Device> &list, const QString& cn);
-
 private:
     Ui::ComboWidget* ui = nullptr;
 
@@ -66,7 +64,7 @@ private:
     PopupComboWidget* popup = nullptr;
 
     bool errorState = false;
-    QList<Device> deviceList;
+    DeviceList deviceList;
     QTimer blockMouseTimer;
     std::optional<Device> selectedDevice;
     QString favoriteDeviceCN;

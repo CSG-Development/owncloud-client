@@ -123,9 +123,9 @@ void ComboWidget::setText(const QString &val)
     ui->btnDeviceIcon->setVisible(!val.isEmpty());
 }
 
-void ComboWidget::setItems(const QList<Device> &list)
+void ComboWidget::setItems(const DeviceList& list)
 {
-    QList<Device> tmpitems(list);
+    DeviceList tmpitems(list);
     qSwap(tmpitems, deviceList);
 
     popup->setItems(deviceList);
@@ -141,7 +141,7 @@ void ComboWidget::setItems(const QList<Device> &list)
     // Update text if already selected
     if (selectedDevice) {
         qCDebug(lcDeviceComboWidget) << "Previous selected device" << selectedDevice->toString();
-        const auto& dev = findByCN(deviceList, selectedDevice->certificateCommonName);
+        const auto& dev = deviceList.find_by_cn(selectedDevice->certificateCommonName);
         if (dev) {
             if (dev->friendlyName.isEmpty())
                 setText(dev->certificateCommonName);
@@ -158,7 +158,7 @@ void ComboWidget::setItems(const QList<Device> &list)
 
     if (!selectedDevice && !favoriteDeviceCN.isEmpty() && text().isEmpty()) {
         qCDebug(lcDeviceComboWidget) << "Favorite device" << favoriteDeviceCN;
-        const auto& dev = findByCN(deviceList, favoriteDeviceCN);
+        const auto& dev = deviceList.find_by_cn(favoriteDeviceCN);
         if (dev) {
             if (dev->friendlyName.isEmpty())
                 setText(dev->certificateCommonName);
@@ -174,7 +174,7 @@ void ComboWidget::setItems(const QList<Device> &list)
     // Still no selected
     if (text().isEmpty()) {
         qCDebug(lcDeviceComboWidget) << "Selected first device in list";
-        selectedDevice = deviceList.first();
+        selectedDevice = deviceList.devices().first();
         if (selectedDevice->friendlyName.isEmpty())
             setText(selectedDevice->certificateCommonName);
         else
@@ -260,16 +260,4 @@ void ComboWidget::updateButtonIcon()
         ui->arrowButton->setIcon(popup->isVisible() ? QIcon(arrowButtonLight.second) : QIcon(arrowButtonLight.first));
     }
     update();
-}
-
-std::optional<Device> ComboWidget::findByCN(const QList<Device> &list, const QString& cn)
-{
-    const auto& it = std::find_if(list.cbegin(), list.cend(), [cn](const Device& dev) {
-        return dev.certificateCommonName == cn;
-    });
-
-    if (it != list.cbegin())
-        return *it;
-
-    return std::nullopt;
 }

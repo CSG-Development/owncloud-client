@@ -261,7 +261,7 @@ void DeviceController::account_update_device(const Device& dev)
                 check_finished();
             };
 
-            const auto dev_ra = Device::findByCN(ctx.deviceList, d.certificateCommonName);
+            const auto dev_ra = ctx.deviceList.find_by_cn(d.certificateCommonName);
 
             if (!dev_ra || dev_ra->seagateDeviceID.isEmpty()) {
                 qCDebug(lcDeviceController) << "Device not found or ID empty (CN lookup)";
@@ -397,7 +397,7 @@ void DeviceController::loadRefreshToken()
     qCDebug(lcDeviceController) << "Refresh token load, token exist" << !token.isEmpty();
 }
 
-QList<Device> DeviceController::getDevices() const
+DeviceList DeviceController::getDevices() const
 {
     QReadLocker locker(&lock_);
     return _deviceList;
@@ -469,7 +469,6 @@ void DeviceController::processQueryDeviceList()
                 {
                     QWriteLocker locker(&lock_);
                     _deviceList = DeviceAggregator::mergeDevices(_deviceList, ctx.deviceList);
-                    // _deviceList = ctx.deviceList;
                 }
                 qCDebug(lcDeviceController) << "Device list:";
                 qCDebug(lcDeviceController) << ctx.deviceList;
