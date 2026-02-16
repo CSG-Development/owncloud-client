@@ -84,7 +84,8 @@ protected:
     MdnsClient* _mdns = nullptr;
     DeviceAggregator* _aggregator = nullptr;
     QString _email;
-    DeviceList _deviceList;
+    DeviceList _raDeviceList;
+    DeviceList _mdnsDeviceList;
     Device currentDevice;
 
     mutable QReadWriteLock lock_;

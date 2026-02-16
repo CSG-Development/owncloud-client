@@ -14,14 +14,13 @@ public:
 
     void clearAll();
 
-    static void merge(Device &target, const QList<DevicePath> &path_sources);
     static DeviceList mergeDevices(const DeviceList& dev_1, const DeviceList& dev_2);
     static DeviceList build_devices(const QList<DevicePath>& records);
 
 
     void add_paths(const QList<DevicePath>& devs);
     void clear_paths();
-    const QList<DevicePath>& paths() {return paths_;}
+    const QList<DevicePath>& paths() {return mergedPath_;}
 
 signals:
     // something changed, call getDevices()
@@ -29,6 +28,5 @@ signals:
 
 private:
     mutable QReadWriteLock lock_;
-    QList<DevicePath> mergedList_;
-    QList<DevicePath> paths_;
+    QList<DevicePath> mergedPath_;
 };

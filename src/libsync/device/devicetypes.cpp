@@ -22,7 +22,7 @@ const auto friendly_name_C = QStringLiteral("friendly_name");
 const auto paths_C = QStringLiteral("paths");
 }
 
-Q_LOGGING_CATEGORY(lcDevice, "device", QtInfoMsg)
+Q_LOGGING_CATEGORY(lcDevice, "device", QtDebugMsg)
 
 DevicePath::DevicePath()
 {
@@ -194,7 +194,7 @@ QString Device::toString() const
     l << QStringLiteral("Device{");
     l << QStringLiteral("seagateDeviceID:%1,").arg(seagateDeviceID);
     l << QStringLiteral("certificateCommonName:%1,").arg(certificateCommonName);
-    l << QStringLiteral("friendlyName:%1,").arg(friendlyName);
+    l << QStringLiteral("friendlyName:%1,").arg(friendlyName());
     l << QStringLiteral("hostname:%1,").arg(hostname);
     l << QStringLiteral("isStatic:%1,").arg(isStatic);
     for (const auto& p: paths) {
@@ -210,7 +210,7 @@ QString Device::toStringShort() const
     l << QStringLiteral("Device{");
     l << QStringLiteral("id:%1,").arg(seagateDeviceID);
     l << QStringLiteral("certCN:%1,").arg(certificateCommonName);
-    l << QStringLiteral("friendlyName:%1,").arg(friendlyName);
+    l << QStringLiteral("friendlyName:%1,").arg(friendlyName());
     l << QStringLiteral("hostname:%1,").arg(hostname);
     l << QStringLiteral("static:%1,").arg(isStatic);
     for (const auto& p: paths) {
@@ -224,7 +224,7 @@ Device Device::MakeStatic(const QString &url, const QString &name)
 {
     Device dev;
     dev.certificateCommonName = name;
-    dev.friendlyName = name;
+    dev.setFriendlyName(name);
     dev.isStatic = true;
     DevicePath dp(url, DeviceType::Public, DeviceOrigin::Static, 0);
     dev.paths.append(dp);
@@ -237,7 +237,7 @@ QJsonDocument Device::toJson(const Device& dev)
     QJsonObject obj;
     obj[device_id_C] = dev.seagateDeviceID;
     obj[cert_common_name_C] = dev.certificateCommonName;
-    obj[friendly_name_C] = dev.friendlyName;
+    obj[friendly_name_C] = dev.friendlyName();
     obj[hostname_C] = dev.hostname;
     QJsonArray arr;
     for (const auto& dev_path: std::as_const(dev.paths)) {
@@ -263,7 +263,7 @@ Device Device::fromJson(const QJsonDocument &doc)
     QJsonObject obj = doc.object();
     d.seagateDeviceID = obj[device_id_C].toString();
     d.certificateCommonName = obj[cert_common_name_C].toString();
-    d.friendlyName = obj[friendly_name_C].toString();
+    d.setFriendlyName(obj[friendly_name_C].toString());
     d.hostname = obj[hostname_C].toString();
     d.paths = Device::jsonToPaths(obj[paths_C].toArray());
 
@@ -328,12 +328,13 @@ void DeviceList::addDevice(const Device &d)
 
 void DeviceList::setDevices(const QList<Device> &devList)
 {
-    QMap<QString,Device> map;
-    for (auto it = devList.cbegin(); it != devList.cend(); ++it) {
-        map[it->seagateDeviceID] = *it;
-    }
+    // QMap<QString,Device> map;
+    // for (auto it = devList.cbegin(); it != devList.cend(); ++it) {
+    //     map[it->seagateDeviceID] = *it;
+    // }
 
-    QList<Device> tmp(map.values());
+    // QList<Device> tmp(map.values());
+    QList<Device> tmp(devList);
     qSwap(tmp, dev_list);
 }
 
@@ -384,4 +385,9 @@ QList<DevicePath> DeviceList::mergePaths(const QList<DevicePath> &path_1, const 
     }
 
     return uniqueMap.values();
+}
+
+void Device::setFriendlyName(const QString &fn)
+{
+    _friendlyName = fn;
 }
