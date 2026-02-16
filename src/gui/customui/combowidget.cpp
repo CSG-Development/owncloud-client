@@ -69,10 +69,10 @@ ComboWidget::ComboWidget(QWidget *parent)
         auto selected = popup->selectedDevice();
         if (selected) {
             selectedDevice = selected;
-            if (selectedDevice->friendlyName.isEmpty())
+            if (selectedDevice->friendlyName().isEmpty())
                 setText(selectedDevice->certificateCommonName);
             else
-                setText(selectedDevice->friendlyName);
+                setText(selectedDevice->friendlyName());
         }
     });
 
@@ -128,6 +128,14 @@ void ComboWidget::setItems(const DeviceList& list)
     DeviceList tmpitems(list);
     qSwap(tmpitems, deviceList);
 
+    for (const auto& it : deviceList.devices()) {
+        if (it.paths.isEmpty())
+            qCDebug(lcDeviceComboWidget) << "dev:" << it.certificateCommonName  << it.friendlyName() << "paths empty";
+        for (const auto& path : it.paths) {
+            qCDebug(lcDeviceComboWidget) << "dev:" << it.certificateCommonName  << it.friendlyName() << "path:" << path.address << path.port;
+        }
+    }
+
     popup->setItems(deviceList);
 
     // List is empty
@@ -140,13 +148,13 @@ void ComboWidget::setItems(const DeviceList& list)
 
     // Update text if already selected
     if (selectedDevice) {
-        qCDebug(lcDeviceComboWidget) << "Previous selected device" << selectedDevice->toString();
+        qCDebug(lcDeviceComboWidget) << "Previous selected device" << selectedDevice->toStringShort();
         const auto& dev = deviceList.find_by_cn(selectedDevice->certificateCommonName);
         if (dev) {
-            if (dev->friendlyName.isEmpty())
+            if (dev->friendlyName().isEmpty())
                 setText(dev->certificateCommonName);
             else
-                setText(dev->friendlyName);
+                setText(dev->friendlyName());
         }
         else {
             qCDebug(lcDeviceComboWidget) << "Previous selected device not found in current list";
@@ -160,10 +168,10 @@ void ComboWidget::setItems(const DeviceList& list)
         qCDebug(lcDeviceComboWidget) << "Favorite device" << favoriteDeviceCN;
         const auto& dev = deviceList.find_by_cn(favoriteDeviceCN);
         if (dev) {
-            if (dev->friendlyName.isEmpty())
+            if (dev->friendlyName().isEmpty())
                 setText(dev->certificateCommonName);
             else
-                setText(dev->friendlyName);
+                setText(dev->friendlyName());
             selectedDevice = dev;
         }
         else {
@@ -175,10 +183,10 @@ void ComboWidget::setItems(const DeviceList& list)
     if (text().isEmpty()) {
         qCDebug(lcDeviceComboWidget) << "Selected first device in list";
         selectedDevice = deviceList.devices().first();
-        if (selectedDevice->friendlyName.isEmpty())
+        if (selectedDevice->friendlyName().isEmpty())
             setText(selectedDevice->certificateCommonName);
         else
-            setText(selectedDevice->friendlyName);
+            setText(selectedDevice->friendlyName());
     }
 }
 

@@ -133,7 +133,7 @@ QFuture<DeviceListCtx> ApiClient::ra_device_list()
                         Device d;
                         d.seagateDeviceID = item[jkey_seagateDeviceID].toString();
                         d.certificateCommonName = item[jkey_certificateCommonName].toString();
-                        d.friendlyName = item[jkey_friendlyName].toString();
+                        d.setFriendlyName(item[jkey_friendlyName].toString());
                         d.hostname = item[jkey_hostname].toString();
                         ctx.deviceList.addDevice(d);
                     }
@@ -141,6 +141,7 @@ QFuture<DeviceListCtx> ApiClient::ra_device_list()
                 else {
                     ctx.res.errorString = (*doc)[jkey_name].toString();
                 }
+                qCDebug(lcDeviceApiClient) << doc;
             }
             return ctx;
         });

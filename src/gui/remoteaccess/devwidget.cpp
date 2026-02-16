@@ -118,7 +118,7 @@ void DevWidget::setDevice(const Device &dev)
 {
     device_ = dev;
     ui->lblCommonName->setText(dev.certificateCommonName.isEmpty() ? QStringLiteral("---") : dev.certificateCommonName);
-    ui->lblFriendlyName->setText(dev.friendlyName.isEmpty() ? QStringLiteral("---") : dev.friendlyName);
+    ui->lblFriendlyName->setText(dev.friendlyName().isEmpty() ? QStringLiteral("---") : dev.friendlyName());
     ui->lblHostname->setText(dev.hostname.isEmpty() ? QStringLiteral("---") : dev.hostname);
     ui->lblDevId->setText(dev.seagateDeviceID.isEmpty() ? QStringLiteral("---") : dev.seagateDeviceID);
 

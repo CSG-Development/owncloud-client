@@ -36,13 +36,16 @@ class DeviceList;
 
 class APPLICATIONSYNC_EXPORT Device
 {
+    QString _friendlyName;
 public:
     QString seagateDeviceID;
     QString certificateCommonName;
-    QString friendlyName;
     QString hostname;
     bool isStatic = false;
     QList<DevicePath> paths;
+
+    QString friendlyName() const {return _friendlyName;}
+    void setFriendlyName(const QString& fn);
 
     static Device MakeStatic(const QString& url, const QString& name);
 
@@ -64,6 +67,7 @@ public:
     QString toString() const;
     QString toStringShort() const;
 };
+
 
 class APPLICATIONSYNC_EXPORT DeviceList
 {

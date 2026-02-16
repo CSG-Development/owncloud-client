@@ -23,48 +23,25 @@ DeviceAggregator::DeviceAggregator(QObject *parent)
 
 void DeviceAggregator::clearAll()
 {
-    {
-        QWriteLocker locker(&lock_);
-        mergedList_.clear();
-    }
-}
-
-void DeviceAggregator::merge(Device &target, const QList<DevicePath> &path_sources)
-{
-    QHash<QString, int> existingPathIndices;
-    for (int i = 0; i < target.paths.size(); ++i) {
-        QString key = target.paths[i].address + QStringLiteral(":") + QString::number(target.paths[i].port);
-        existingPathIndices[key] = i;
-    }
-
-    for (const auto &newPath : path_sources) {
-        if (target.certificateCommonName != newPath.about.certificate_common_name) {
-            continue;
-        }
-
-        QString key = newPath.address + QStringLiteral(":") + QString::number(newPath.port);
-
-        if (existingPathIndices.contains(key)) {
-            int index = existingPathIndices[key];
-            if (getPriority(newPath.origin) > getPriority(target.paths[index].origin)) {
-                target.paths[index] = newPath;
-            }
-        } else {
-            target.paths.append(newPath);
-            existingPathIndices[key] = target.paths.size() - 1;
-        }
-    }
+    QWriteLocker locker(&lock_);
+    mergedPath_.clear();
 }
 
 DeviceList DeviceAggregator::mergeDevices(const DeviceList& dev_1, const DeviceList& dev_2)
 {
-    QHash<QString, Device> mergedMap;
+    QMap<QString, Device> mergedMap;
+
+    qCDebug(lcDeviceAggregator) << "mergeDevices" << dev_1.devices() << dev_2.devices();
 
     auto addToMap = [&mergedMap](const Device &device) {
-        if (!mergedMap.contains(device.seagateDeviceID)) {
-            mergedMap.insert(device.seagateDeviceID, device);
+        if (!mergedMap.contains(device.certificateCommonName)) {
+            qCDebug(lcDeviceAggregator) << "Insert" << device.certificateCommonName << device.friendlyName();
+            mergedMap.insert(device.certificateCommonName, device);
         } else {
-            Device &existingDevice = mergedMap[device.seagateDeviceID];
+            Device &existingDevice = mergedMap[device.certificateCommonName];
+
+            qCDebug(lcDeviceAggregator) << "Exist" << device.certificateCommonName;
+            qCDebug(lcDeviceAggregator) << "existing" << existingDevice.friendlyName() << "new" << device.friendlyName();
 
             // update DeviceID if empty
             if (existingDevice.seagateDeviceID.isEmpty() && !device.seagateDeviceID.isEmpty()) {
@@ -91,6 +68,10 @@ DeviceList DeviceAggregator::mergeDevices(const DeviceList& dev_1, const DeviceL
 
                 if (!foundMatch) {
                     existingDevice.paths.append(newPath);
+                    qCDebug(lcDeviceAggregator) << "path append" << newPath.toStringShort();
+                }
+                else {
+                    qCDebug(lcDeviceAggregator) << "path exist" << newPath.toStringShort();
                 }
             }
         }
@@ -120,10 +101,13 @@ DeviceList DeviceAggregator::build_devices(const QList<DevicePath> &records)
             Device newDevice;
             newDevice.certificateCommonName = cn;
             if (!record.friendlyName.isEmpty()) {
-                newDevice.friendlyName = record.friendlyName;
+                newDevice.setFriendlyName(record.friendlyName);
             }
-            if (newDevice.friendlyName.isEmpty() && !record.about.hostname.isEmpty()) {
-                newDevice.friendlyName = record.about.hostname;
+            else if (!record.about.hostname.isEmpty()) {
+                newDevice.setFriendlyName(record.about.hostname);
+            }
+            else {
+                qCDebug(lcDeviceAggregator) << "failed to get friendlyName";
             }
 
             deviceMap.insert(cn, newDevice);
@@ -141,9 +125,9 @@ DeviceList DeviceAggregator::build_devices(const QList<DevicePath> &records)
                     device.paths[i] = record;
                     qCDebug(lcDeviceAggregator) << "updated by priority" << record;
                 }
-                if (device.friendlyName.isEmpty() && record.friendlyName.isEmpty()) {
-                    device.friendlyName = record.friendlyName;
-                    qCDebug(lcDeviceAggregator) << "updated empty friendlyName to" << device.friendlyName;
+                if (device.friendlyName().isEmpty() && !record.friendlyName.isEmpty()) {
+                    device.setFriendlyName(record.friendlyName);
+                    qCDebug(lcDeviceAggregator) << "updated empty friendlyName to" << device.friendlyName();
                 }
 
                 break;
@@ -163,7 +147,7 @@ DeviceList DeviceAggregator::build_devices(const QList<DevicePath> &records)
 void DeviceAggregator::add_paths(const QList<DevicePath> &devs)
 {
     QHash<QString, DevicePath> existingPaths;
-    for (const auto& it: std::as_const(paths_)) {
+    for (const auto& it: std::as_const(mergedPath_)) {
         const QString key = it.address + QStringLiteral(":") + QString::number(it.port);
         existingPaths.insert(key, it);
     }
@@ -181,7 +165,7 @@ void DeviceAggregator::add_paths(const QList<DevicePath> &devs)
 
     {
         QWriteLocker locker(&lock_);
-        paths_ = existingPaths.values();
+        mergedPath_ = existingPaths.values();
     }
 
     // !! emit outside lock scope
@@ -192,6 +176,6 @@ void DeviceAggregator::add_paths(const QList<DevicePath> &devs)
 void DeviceAggregator::clear_paths()
 {
     QWriteLocker locker(&lock_);
-    paths_.clear();
+    mergedPath_.clear();
 }
 
