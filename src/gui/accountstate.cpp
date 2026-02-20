@@ -16,6 +16,7 @@
 #include "account.h"
 #include "accountmanager.h"
 #include "application.h"
+#include "certificates/certificatevalidator.h"
 #include "configfile.h"
 #include "fetchserversettings.h"
 
@@ -367,30 +368,45 @@ void AccountState::checkConnectivity(bool blockJobs)
         if (!_tlsDialog) {
             // ignore errors for already accepted certificates
             auto filteredErrors = _account->accessManager()->filterSslErrors(errors);
+
             if (!filteredErrors.isEmpty()) {
-                _tlsDialog = new TlsErrorDialog(filteredErrors, _account->url().host(), ocApp()->gui()->settingsDialog());
-                _tlsDialog->setAttribute(Qt::WA_DeleteOnClose);
+                CertificateValidator validator(this);
+                const auto cert = filteredErrors.first().certificate();
+                bool pinned_valid = validator.validatePinnedCertificate({cert});
+
                 QSet<QSslCertificate> certs;
                 certs.reserve(filteredErrors.size());
                 for (const auto &error : std::as_const(filteredErrors)) {
                     certs << error.certificate();
                 }
-                connect(_tlsDialog, &TlsErrorDialog::accepted, _tlsDialog, [certs, blockJobs, this]() {
-                    _account->addApprovedCerts(certs);
-                    _tlsDialog.clear();
-                    // force a new _connectionValidator
-                    if (_connectionValidator) {
-                        _connectionValidator->deleteLater();
-                        _connectionValidator.clear();
-                    }
-                    checkConnectivity(blockJobs);
-                });
-                connect(_tlsDialog, &TlsErrorDialog::rejected, this, [certs, this]() {
-                    setState(SignedOut);
-                });
 
-                ApplicationGui::raise();
-                _tlsDialog->open();
+                if (pinned_valid) {
+                    qCDebug(lcAccountState) << "Pinned cert match";
+                    _account->addApprovedCerts(certs);
+                }
+                else {
+                    qCDebug(lcAccountState) << "Certificate is not found in pinned list, show TLS dialog";
+
+                    _tlsDialog = new TlsErrorDialog(filteredErrors, _account->url().host(), ocApp()->gui()->settingsDialog());
+                    _tlsDialog->setAttribute(Qt::WA_DeleteOnClose);
+                    connect(_tlsDialog, &TlsErrorDialog::accepted, _tlsDialog, [certs, blockJobs, this]() {
+                        _account->addApprovedCerts(certs);
+                        _tlsDialog.clear();
+                        // force a new _connectionValidator
+                        if (_connectionValidator) {
+                            _connectionValidator->deleteLater();
+                            _connectionValidator.clear();
+                        }
+                        checkConnectivity(blockJobs);
+                    });
+                    connect(_tlsDialog, &TlsErrorDialog::rejected, this, [certs, this]() {
+                        setState(SignedOut);
+                    });
+
+                    ApplicationGui::raise();
+                    _tlsDialog->open();
+
+                }
             }
         }
     });

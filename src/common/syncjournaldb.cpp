@@ -2328,6 +2328,9 @@ const QVector<SyncJournalFileRecord> SyncJournalDb::getFileRecordsWithDirtyPlace
 {
     QMutexLocker locker(&_mutex);
 
+    if (!isOpen())
+        return {};
+
     if (OC_ENSURE(isOpen())) {
         const auto query = _queryManager.get(PreparedSqlQueryManager::GetFileReocrdsWithDirtyPlaceholdersQuery, getFileRecordQueryC + QByteArrayLiteral("WHERE hasDirtyPlaceholder=TRUE"), const_cast<SyncJournalDb *>(this)->_db);
         if (!OC_ENSURE(query)) {

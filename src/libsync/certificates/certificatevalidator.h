@@ -1,0 +1,33 @@
+#pragma once
+
+#include "curatorlib.h"
+
+#include <QObject>
+#include <QtNetwork/QSslCertificate>
+
+#include <openssl/pem.h>
+#include <openssl/sha.h>
+#include <openssl/x509_vfy.h>
+
+class APPLICATIONSYNC_EXPORT CertificateValidator: public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit CertificateValidator(QObject* parent = nullptr);
+
+    bool validatePinnedCertificate(const QList<QSslCertificate> &serverChain);
+
+private:
+    void loadPinnedCertificates();
+
+    bool localPinnedTrustPasses(const QList<QSslCertificate> &chain, const QList<QSslCertificate> &pinnedAnchors);
+
+    bool validateCertificateChain(QList<QSslCertificate> chain, const QSslCertificate &anchor);
+
+    QString getFingerprint(const QSslCertificate &cert);
+    bool verifySignature(const QSslCertificate &child, const QSslCertificate &issuer);
+    bool verifySelfSigned(const QSslCertificate &cert);
+
+    QList<QSslCertificate> _pinned;
+};

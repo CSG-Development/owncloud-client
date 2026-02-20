@@ -14,6 +14,7 @@
 
 #include "resolveurljobfactory.h"
 
+#include "certificates/certificatevalidator.h"
 #include "common/utility.h"
 #include "gui/application.h"
 #include "gui/applicationgui.h"
@@ -97,6 +98,27 @@ CoreJob *ResolveUrlJobFactory::startJob(const QUrl &url, QObject *parent)
     QObject::connect(job->reply(), &QNetworkReply::finished, job, makeFinishedHandler(job->reply()));
 
     QObject::connect(job->reply(), &QNetworkReply::sslErrors, job, [req, job, makeFinishedHandler, nam = nam()](const QList<QSslError> &errors) mutable {
+
+        if (!errors.isEmpty()) {
+            CertificateValidator validator;
+            QSet<QSslCertificate> cert_list;
+            for (const auto &error : errors) {
+                cert_list << error.certificate();
+            }
+            bool pinned_valid = validator.validatePinnedCertificate(cert_list.values());
+            if (pinned_valid) {
+                qCDebug(lcResolveUrl) << "Pinned cert match";
+                for (const auto &error : errors) {
+                    Q_EMIT job->caCertificateAccepted(error.certificate());
+                }
+                job->reply()->ignoreSslErrors();
+                return;
+            }
+            else {
+                qCDebug(lcResolveUrl) << "Certificate is not found in pinned list";
+            }
+        }
+
         auto *tlsErrorDialog = new TlsErrorDialog(errors, job->reply()->url().host(), ocApp()->gui()->settingsDialog());
 
         job->reply()->setProperty(abortedBySslErrorHandlerC, true);

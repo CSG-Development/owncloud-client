@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>certificates/_.noveogroup.com.pem</file>
+        <file>certificates/_.remote.lasea.fr.pem</file>
+        <file>certificates/ca.crt</file>
+        <file>certificates/fake-device-noveo.cer</file>
+        <file>certificates/tdci.pem</file>
+    </qresource>
+</RCC>
