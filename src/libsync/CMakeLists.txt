@@ -99,9 +99,6 @@ if(APPLE)
     add_compile_options(-fexceptions)
 endif()
 
-#set(${SOURCES} ${SOURCES} creds/httpcredentials.cpp)
-#list(APPEND ${SOURCES} creds/httpcredentials.cpp)
-
 # These headers are installed for libcuratorsync to be used by 3rd party apps
 INSTALL(
     FILES
@@ -113,7 +110,6 @@ INSTALL(
 
 add_library(${TARGET} SHARED ${SOURCES})
 set_target_properties(${TARGET} PROPERTIES EXPORT_NAME SyncCore)
-target_include_directories(${TARGET} PUBLIC "${OPENSSL_INCLUDE_DIR}")
 
 target_link_libraries(${TARGET}
     PUBLIC
@@ -121,7 +117,8 @@ target_link_libraries(${TARGET}
         Qt::Core
         Qt::Network
         Qt::Widgets
-        ${OPENSSL_LIBRARIES}
+        OpenSSL::SSL
+        OpenSSL::Crypto
     PRIVATE
         curatorResources
         Qt::Concurrent
