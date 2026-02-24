@@ -20,14 +20,9 @@ public:
 
 private:
     void loadPinnedCertificates();
-
-    bool localPinnedTrustPasses(const QList<QSslCertificate> &chain, const QList<QSslCertificate> &pinnedAnchors);
-
-    bool validateCertificateChain(QList<QSslCertificate> chain, const QSslCertificate &anchor);
-
+    bool localPinnedTrustPasses(const QList<QSslCertificate> &serverChain);
     QString getFingerprint(const QSslCertificate &cert);
     bool verifySignature(const QSslCertificate &child, const QSslCertificate &issuer);
-    bool verifySelfSigned(const QSslCertificate &cert);
 
     QList<QSslCertificate> _pinned;
 };

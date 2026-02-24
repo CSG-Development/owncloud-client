@@ -6,6 +6,7 @@
 #include <QSslError>
 #include <QSslSocket>
 
+#include <openssl/crypto.h>
 #include <openssl/err.h>
 
 namespace {
@@ -39,6 +40,10 @@ QByteArray loadCertFromResource(const QString& res) {
 
 Q_LOGGING_CATEGORY(lcCertValidation, "certvalidator", QtDebugMsg)
 
+using X509_ptr = std::unique_ptr<X509, decltype(&X509_free)>;
+using EVP_PKEY_ptr = std::unique_ptr<EVP_PKEY, decltype(&EVP_PKEY_free)>;
+using BIO_ptr = std::unique_ptr<BIO, decltype(&BIO_free)>;
+
 CertificateValidator::CertificateValidator(QObject *parent)
     : QObject(parent)
 {
@@ -50,7 +55,7 @@ bool CertificateValidator::validatePinnedCertificate(const QList<QSslCertificate
     if (serverChain.isEmpty())
         return false;
 
-    return localPinnedTrustPasses(serverChain, _pinned);
+    return localPinnedTrustPasses(serverChain);
 }
 
 QString CertificateValidator::getFingerprint(const QSslCertificate &cert)
@@ -67,52 +72,25 @@ bool CertificateValidator::verifySignature(const QSslCertificate &child, const Q
     const unsigned char *pChild = reinterpret_cast<const unsigned char*>(childDer.data());
     const unsigned char *pIssuer = reinterpret_cast<const unsigned char*>(issuerDer.data());
 
-    X509 *x509Child = d2i_X509(nullptr, &pChild, childDer.size());
-    X509 *x509Issuer = d2i_X509(nullptr, &pIssuer, issuerDer.size());
+    X509_ptr x509Child(d2i_X509(nullptr, &pChild, childDer.size()), X509_free);
+    X509_ptr x509Issuer(d2i_X509(nullptr, &pIssuer, issuerDer.size()), X509_free);
 
     if (!x509Child || !x509Issuer) {
-        if (x509Child) X509_free(x509Child);
-        if (x509Issuer) X509_free(x509Issuer);
+        qCDebug(lcCertValidation) << "Failed to parse certificates using OpenSSL";
         return false;
     }
 
-    EVP_PKEY *issuerPubKey = X509_get_pubkey(x509Issuer);
+    EVP_PKEY_ptr issuerPubKey(X509_get_pubkey(x509Issuer.get()), EVP_PKEY_free);
+    if (!issuerPubKey) {
+        qCDebug(lcCertValidation) << "Failed to extract public key";
+        return false;
+    }
 
-    int result = X509_verify(x509Child, issuerPubKey);
+    int result = X509_verify(x509Child.get(), issuerPubKey.get());
 
-    EVP_PKEY_free(issuerPubKey);
-    X509_free(x509Child);
-    X509_free(x509Issuer);
-
-    qCDebug(lcCertValidation) << "Cert verify result" << result;
     return (result == 1);
 }
 
-bool CertificateValidator::verifySelfSigned(const QSslCertificate &cert)
-{
-    QDateTime now = QDateTime::currentDateTime();
-
-    if (now < cert.effectiveDate() || now > cert.expiryDate()) {
-        qCDebug(lcCertValidation) << "Cert expired";
-        return false;
-    }
-
-    QString certHash = getFingerprint(cert);
-    bool isTrusted = false;
-    for (const auto &trusted : std::as_const(_pinned)) {
-        if (getFingerprint(trusted) == certHash) {
-            isTrusted = true;
-            break;
-        }
-    }
-
-    if (!isTrusted) {
-        qCDebug(lcCertValidation) << "Cert fingerprint not found in pinned list";
-        return false;
-    }
-
-    return verifySignature(cert, cert);
-}
 
 void CertificateValidator::loadPinnedCertificates()
 {
@@ -121,87 +99,70 @@ void CertificateValidator::loadPinnedCertificates()
     for (const auto& s: certs) {
 
         const auto data = loadCertFromResource(s);
+        if (data.isEmpty())
+            continue;
 
         QByteArray derData = data;
+
         if (data.startsWith("-----BEGIN CERTIFICATE-----")) {
             // PEM -> DER
-            auto* bio = BIO_new_mem_buf(data.constData(), data.size());
-            if (bio) {
-                auto* x509 = PEM_read_bio_X509(bio, nullptr, nullptr, nullptr);
-                if (x509) {
-                    unsigned char* derBuf = nullptr;
-                    int derLen = i2d_X509(x509, &derBuf);
-                    if (derLen > 0 && derBuf) {
-                        derData = QByteArray(reinterpret_cast<char*>(derBuf), derLen);
-                        OPENSSL_free(derBuf);
-                    }
-                    X509_free(x509);
-                }
-                BIO_free(bio);
+            BIO_ptr bio(BIO_new_mem_buf(data.constData(), data.size()), BIO_free);
+            if (!bio)
+                continue;
+
+            X509_ptr x509(PEM_read_bio_X509(bio.get(), nullptr, nullptr, nullptr), X509_free);
+            if (!x509)
+                continue;
+
+            unsigned char* derBuf = nullptr;
+            int derLen = i2d_X509(x509.get(), &derBuf);
+
+            if (derLen > 0 && derBuf) {
+                derData = QByteArray(reinterpret_cast<const char*>(derBuf), derLen);
+                OPENSSL_free(derBuf);
             }
         }
 
         QList<QSslCertificate> cert = QSslCertificate::fromData(derData, QSsl::Der);
         _pinned.append(cert);
     }
+
 }
 
-bool CertificateValidator::localPinnedTrustPasses(const QList<QSslCertificate> &chain, const QList<QSslCertificate> &pinnedAnchors)
+bool CertificateValidator::localPinnedTrustPasses(const QList<QSslCertificate> &serverChain)
 {
-    if (pinnedAnchors.isEmpty() || chain.isEmpty())
+    if (_pinned.isEmpty() || serverChain.isEmpty())
         return false;
-
-    for (const auto &anchor : pinnedAnchors) {
-        if (validateCertificateChain(chain, anchor)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-
-bool CertificateValidator::validateCertificateChain(QList<QSslCertificate> chain, const QSslCertificate &anchor)
-{
-    if (chain.isEmpty())
-        return false;
-
-    if (chain.last().subjectDisplayName() != anchor.subjectDisplayName()) {
-        chain.append(anchor);
-    }
-
-    // maybe self signed
-    if (chain.size() == 1) {
-        return verifySelfSigned(chain.first());
-    }
 
     QDateTime now = QDateTime::currentDateTime();
 
-    for (int i = 0; i < chain.size() - 1; ++i) {
-        const auto &child = chain.at(i);
-        const auto &issuer = chain.at(i + 1);
+    for (const auto &serverCert : serverChain) {
 
-        //if (child.issuerDisplayName() != issuer.subjectDisplayName()) {
-        //    return false;
-        //}
-
-        if (now < child.effectiveDate() || now > child.expiryDate()) {
-            qCDebug(lcCertValidation) << "Cert expired";
-            return false;
+        if (now < serverCert.effectiveDate() || now > serverCert.expiryDate()) {
+            qCDebug(lcCertValidation) << "Server cert expired:" << serverCert.subjectDisplayName();
+            continue;
         }
 
-        if (!verifySignature(child, issuer)) {
-            qCDebug(lcCertValidation) << "Cert signature verification failed";
-            return false;
-        }
+        QString serverFingerprint = getFingerprint(serverCert);
 
-        QString anchorHash = getFingerprint(anchor);
-        if (getFingerprint(child) == anchorHash || getFingerprint(issuer) == anchorHash) {
-            qCDebug(lcCertValidation) << "Cert fingerprint is not match";
-            return true;
+        for (const auto &pinnedCert : std::as_const(_pinned)) {
+
+            if (serverFingerprint == getFingerprint(pinnedCert)) {
+                qCDebug(lcCertValidation) << "Match by fingerprint:" << serverCert.subjectDisplayName();
+                return true;
+            }
+
+            if (verifySignature(serverCert, pinnedCert)) {
+                qCDebug(lcCertValidation) << "Signature verified:"
+                                          << serverCert.subjectDisplayName()
+                                          << "is signed by"
+                                          << pinnedCert.subjectDisplayName();
+                return true;
+            }
         }
     }
-    qCDebug(lcCertValidation) << "Cert accepted";
 
-    return true;
+    qCDebug(lcCertValidation) << "No matches found in pinned certificates";
+    return false;
 }
 
