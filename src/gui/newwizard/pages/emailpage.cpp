@@ -35,7 +35,7 @@ EmailPageController::EmailPageController(QObject *parent)
 
     errorState.setBinding([this]() {
         const auto& currentEmail = email.value();
-        if (notRegistered && !isFocused.value())
+        if (notRegistered.value() && !isFocused.value())
             return EmailErrorState::NotAllowed;
         if (!canLogin.value() && !isFocused.value() && !currentEmail.trimmed().isEmpty())
             return EmailErrorState::InvalidEmail;
@@ -73,7 +73,6 @@ EmailPage::EmailPage(QWidget *parent)
     auto syncUI = [this]() {
         ui->btnLogin->setToolTip(controller_->buttonTooltip.value());
         ui->btnLogin->setEnabled(controller_->canLogin.value());
-        // ui->edEmail->setErrorState(controller_->errorState.value(), controller_->errorState.value() ? tr("Invalid email") : QStringLiteral(""));
         ui->edEmail->setErrorState(controller_->errorState.value() != EmailErrorState::NoError,
                                    controller_->errorMessage.value());
         if (ui->edEmail->text() != controller_->email.value()) {
@@ -88,6 +87,7 @@ EmailPage::EmailPage(QWidget *parent)
     notifiers_.emplace_back(controller_->buttonTooltip.addNotifier(syncUI));
     notifiers_.emplace_back(controller_->canLogin.addNotifier(syncUI));
     notifiers_.emplace_back(controller_->errorState.addNotifier(syncUI));
+    notifiers_.emplace_back(controller_->notRegistered.addNotifier(syncUI));
     notifiers_.emplace_back(controller_->darkTheme.addNotifier(updateThemeFunc));
 
     controller_->darkTheme.setValue(APP::Theme::instance()->isDarkTheme());
@@ -153,4 +153,10 @@ void EmailPage::setEmail(const QString &email)
 QString EmailPage::email() const
 {
     return controller_->email.value();
+}
+
+void EmailPage::setEmailIsNotRegistered(bool val)
+{
+    ui->btnCancel->setFocus();
+    controller_->notRegistered.setValue(val);
 }

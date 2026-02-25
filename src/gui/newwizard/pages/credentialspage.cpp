@@ -5,6 +5,7 @@
 #include "gui/customui/focusproxy.h"
 #include "gui/customui/dimwidget.h"
 #include "theme.h"
+#include "configfile.h"
 
 #include <QLineEdit>
 #include <QComboBox>
@@ -73,6 +74,7 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     });
 
     connect(ui->btnRefresh, &QToolButton::clicked, this, [this] {
+        loadFavDevice();
         showErrorMessage({});
         showProgressIndicator(true);
         emit actionTriggered(CredentialsAction::RefreshDevicesClicked);
@@ -143,13 +145,11 @@ void CredentialsPage::updateTheme()
     update();
 }
 
-void CredentialsPage::setDevicesList(const QList<Device> &list)
+void CredentialsPage::setDevicesList(const DeviceList& list)
 {
     dev_list = list;
-    // DEBUG
-    // for (const auto& d: dev_list)
-    //     qCDebug(lcCredPage) << d.toString();
-    ui->edUrl->setItems(list);
+    dev_list.sort_by_static();
+    ui->edUrl->setItems(dev_list);
 }
 
 std::optional<Device> CredentialsPage::currentDevice() const
@@ -165,6 +165,7 @@ QString CredentialsPage::email() const
 void CredentialsPage::setEmail(const QString &user)
 {
     ui->lblEmail->setText(user);
+    loadFavDevice();
 }
 
 QString CredentialsPage::password() const
@@ -209,9 +210,9 @@ void CredentialsPage::showProgressIndicator(bool show)
 void CredentialsPage::showDevicesInfo(bool show)
 {
     QString s;
-    for (const auto& d: std::as_const(dev_list)) {
+    for (const auto& d: std::as_const(dev_list.devices())) {
         s += QStringLiteral("<b>%1</b><br>").arg(d.certificateCommonName);
-        s += QStringLiteral("  Friendly: %1<br>").arg(d.friendlyName);
+        s += QStringLiteral("  Friendly: %1<br>").arg(d.friendlyName());
         s += QStringLiteral("  CN: %1<br>").arg(d.certificateCommonName);
         if (d.paths.isEmpty()) {
             s += QStringLiteral("  no paths defined<br>");
@@ -262,4 +263,11 @@ bool CredentialsPage::isAllFieldNotEmpty()
 {
     return !ui->edUrl->text().trimmed().isEmpty() &&
            !ui->edPassword->text().trimmed().isEmpty();
+}
+
+void CredentialsPage::loadFavDevice()
+{
+    APP::ConfigFile cf;
+    const auto dev_cn = cf.favoriteDeviceCN(email());
+    ui->edUrl->setFavoriteDevice(dev_cn);
 }

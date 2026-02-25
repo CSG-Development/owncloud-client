@@ -30,7 +30,6 @@
 
 namespace {
 const auto urlC = QStringLiteral("url");
-const auto staticDeviceC = QStringLiteral("static_device");
 const auto deviceC = QStringLiteral("device");
 const auto userC = QStringLiteral("user");
 const auto httpUserC = QStringLiteral("http_user");
@@ -168,8 +167,6 @@ void AccountManager::saveAccount(Account *account, bool saveCredentials)
     settings->beginGroup(account->uuid().toString());
 
     settings->setValue(versionC, ConfigFile::UnusedLegacySettingsVersionNumber);
-    //settings->setValue(urlC, account->_url.toString());
-    //settings->setValue(staticDeviceC, account->isStaticDevice());
     settings->setValue(deviceC, Device::toJsonStr(account->device()));
     qCDebug(lcAccountManager) << "Saving device" << account->device().toStringShort();
 

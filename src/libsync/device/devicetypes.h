@@ -32,15 +32,20 @@ public:
     QString toStringShort() const;
 };
 
+class DeviceList;
+
 class APPLICATIONSYNC_EXPORT Device
 {
+    QString _friendlyName;
 public:
     QString seagateDeviceID;
     QString certificateCommonName;
-    QString friendlyName;
     QString hostname;
     bool isStatic = false;
     QList<DevicePath> paths;
+
+    QString friendlyName() const {return _friendlyName;}
+    void setFriendlyName(const QString& fn);
 
     static Device MakeStatic(const QString& url, const QString& name);
 
@@ -58,10 +63,29 @@ public:
     std::optional<QUuid> getBestPathId();
     static std::optional<QUuid> getBestPathId(const Device& dev);
     std::optional<QUuid> getRemoteOnlyPath() const;
-    static std::optional<Device> findByCN(const QList<Device>& list, const QString& cn);
 
     QString toString() const;
     QString toStringShort() const;
+};
+
+
+class APPLICATIONSYNC_EXPORT DeviceList
+{
+public:
+    void addDevice(const Device& d);
+
+    void setDevices(const QList<Device>& devList);
+    const QList<Device>& devices() const {return dev_list;}
+    bool isEmpty() const {return dev_list.isEmpty();}
+    void clear();
+
+    void sort_by_static();
+    std::optional<Device> find_by_cn(const QString& cn) const;
+
+    static QList<DevicePath> mergePaths(const QList<DevicePath> &path_1, const QList<DevicePath> &path_2);
+
+private:
+    QList<Device> dev_list;
 };
 
 inline QDebug operator<< (QDebug d, const DevicePath& info) {
@@ -86,6 +110,18 @@ inline QDebug operator<< (QDebug d, const QList<Device>& devList) {
     return d;
 }
 
+inline QDebug operator<< (QDebug d, const DeviceList& devList) {
+    if (devList.isEmpty()) {
+        d << QStringLiteral("No devices in list");
+    }
+    else {
+        for (const auto& it: std::as_const(devList.devices())) {
+            d << it;
+        }
+    }
+    return d;
+}
+
 inline QDebug operator<< (QDebug d, const QList<DevicePath>& pathList) {
     if (pathList.isEmpty()) {
         d << QStringLiteral("No path in list");
@@ -100,3 +136,4 @@ inline QDebug operator<< (QDebug d, const QList<DevicePath>& pathList) {
 
 Q_DECLARE_METATYPE(DevicePath);
 Q_DECLARE_METATYPE(Device);
+Q_DECLARE_METATYPE(DeviceList);

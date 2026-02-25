@@ -7,7 +7,7 @@ PopupComboModel::PopupComboModel(QObject *parent)
 
 int PopupComboModel::rowCount(const QModelIndex &/*parent*/) const
 {
-    return data_.size();
+    return data_.devices().size();
 }
 
 QVariant PopupComboModel::data(const QModelIndex &idx, int role) const
@@ -22,10 +22,10 @@ QVariant PopupComboModel::data(const QModelIndex &idx, int role) const
     {
     case Qt::DisplayRole:
         if (col == clName) {
-            if (data_[row].friendlyName.isEmpty())
-                return data_[row].certificateCommonName;
+            if (data_.devices()[row].friendlyName().isEmpty())
+                return data_.devices()[row].certificateCommonName;
             else
-                return data_[row].friendlyName;
+                return data_.devices()[row].friendlyName();
         }
         break;
 
@@ -36,15 +36,15 @@ QVariant PopupComboModel::data(const QModelIndex &idx, int role) const
     //     break;
 
     case DeviceInfoRole:
-        return QVariant::fromValue(data_[row]);
+        return QVariant::fromValue(data_.devices()[row]);
     }
 
     return {};
 }
 
-void PopupComboModel::setDeviceInfoList(const QList<Device> &list)
+void PopupComboModel::setDeviceInfoList(const DeviceList& list)
 {
-    QList<Device> tmp(list);
+    DeviceList tmp(list);
     beginResetModel();
     qSwap(data_, tmp);
     endResetModel();

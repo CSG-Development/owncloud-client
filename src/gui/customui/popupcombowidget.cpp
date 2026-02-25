@@ -76,7 +76,7 @@ void PopupComboWidget::updateAndShow()
     show();
 }
 
-void PopupComboWidget::setItems(const QList<Device> &list)
+void PopupComboWidget::setItems(const DeviceList& list)
 {
     model_.setDeviceInfoList(list);
 }

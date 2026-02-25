@@ -25,7 +25,7 @@ public:
 
     void updateTheme();
 
-    void setDevicesList(const QList<Device>& list);
+    void setDevicesList(const DeviceList& list);
     std::optional<Device> currentDevice() const;
 
     QString email() const;
@@ -57,11 +57,12 @@ private:
 
     void validateFormData();
     bool isAllFieldNotEmpty();
+    void loadFavDevice();
 
 private:
     Ui::CredentialsPage* ui = nullptr;
 
-    QList<Device> dev_list;
+    DeviceList dev_list;
     bool progressVisible_ = false;
     QPropertyNotifier themeNotifier;
     QProperty<bool> darkTheme_ {false};

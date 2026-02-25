@@ -1,11 +1,15 @@
 find_package(LibreGraphAPI 1.0.4 REQUIRED)
+find_package(OpenSSL REQUIRED)
+
+set(TARGET libsync)
+
 set_package_properties(LibreGraphAPI PROPERTIES
         URL https://github.com/owncloud/libre-graph-api-cpp-qt-client.git
         DESCRIPTION "Libre Graph is a free API for cloud collaboration inspired by the MS Graph API."
         TYPE OPTIONAL
 )
 
-set(libsync_SRCS
+set(SOURCES
     account.cpp
     bandwidthmanager.cpp
     capabilities.cpp
@@ -44,6 +48,7 @@ set(libsync_SRCS
     creds/abstractcredentials.cpp
     creds/oauth.cpp
     creds/webfinger.cpp
+    creds/httpcredentials.cpp
 
     networkjobs/fetchuserinfojobfactory.cpp
     networkjobs/checkserverjobfactory.cpp
@@ -73,15 +78,19 @@ set(libsync_SRCS
     determineauthtypejobfactory.cpp
 
     appprovider.cpp
+
+    certificates/certificatevalidator.cpp
+    certificates/certificatevalidator.h
+    certs.qrc
 )
 
 if(WIN32)
-    list(APPEND libsync_SRCS platform_win.cpp)
+    list(APPEND SOURCES platform_win.cpp)
 elseif(UNIX)
     if (APPLE)
-        list(APPEND libsync_SRCS platform_mac.mm platform_mac_deprecated.mm)
+        list(APPEND SOURCES platform_mac.mm platform_mac_deprecated.mm)
     else()
-        list(APPEND libsync_SRCS platform_unix.cpp)
+        list(APPEND SOURCES platform_unix.cpp)
     endif()
 endif()
 
@@ -89,8 +98,6 @@ if(APPLE)
     string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     add_compile_options(-fexceptions)
 endif()
-
-set(libsync_SRCS ${libsync_SRCS} creds/httpcredentials.cpp)
 
 # These headers are installed for libcuratorsync to be used by 3rd party apps
 INSTALL(
@@ -101,15 +108,17 @@ INSTALL(
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/${APPLICATION_SHORTNAME}/libsync
 )
 
-add_library(libsync SHARED ${libsync_SRCS})
-set_target_properties(libsync PROPERTIES EXPORT_NAME SyncCore)
+add_library(${TARGET} SHARED ${SOURCES})
+set_target_properties(${TARGET} PROPERTIES EXPORT_NAME SyncCore)
 
-target_link_libraries(libsync
+target_link_libraries(${TARGET}
     PUBLIC
         csync
         Qt::Core
         Qt::Network
         Qt::Widgets
+        OpenSSL::SSL
+        OpenSSL::Crypto
     PRIVATE
         curatorResources
         Qt::Concurrent
@@ -117,18 +126,18 @@ target_link_libraries(libsync
         Qt6Keychain::Qt6Keychain
 )
 
-apply_common_target_settings(libsync)
+apply_common_target_settings(${TARGET})
 
 set_source_files_properties(configfile.cpp
     PROPERTIES
         COMPILE_DEFINITIONS EXCLUDE_FILE_NAME="${EXCLUDE_FILE_NAME}"
 )
 
-target_link_libraries(libsync PUBLIC $<BUILD_INTERFACE:OpenAPI::LibreGraphAPI>)
+target_link_libraries(${TARGET} PUBLIC $<BUILD_INTERFACE:OpenAPI::LibreGraphAPI>)
 add_subdirectory(graphapi)
 
 if ( APPLE )
-    target_link_libraries(libsync PUBLIC
+    target_link_libraries(${TARGET} PUBLIC
          /System/Library/Frameworks/CoreServices.framework
          /System/Library/Frameworks/Foundation.framework
          /System/Library/Frameworks/AppKit.framework
@@ -137,21 +146,21 @@ if ( APPLE )
 endif()
 
 if(Inotify_FOUND)
-    target_include_directories(libsync PRIVATE ${Inotify_INCLUDE_DIRS})
-    target_link_libraries(libsync PUBLIC ${Inotify_LIBRARIES})
+    target_include_directories(${TARGET} PRIVATE ${Inotify_INCLUDE_DIRS})
+    target_link_libraries(${TARGET} PUBLIC ${Inotify_LIBRARIES})
 endif()
 
 if(NO_MSG_HANDLER)
-    target_compile_definitions(libsync PRIVATE -DNO_MSG_HANDLER=1)
+    target_compile_definitions(${TARGET} PRIVATE -DNO_MSG_HANDLER=1)
 endif()
 
-GENERATE_EXPORT_HEADER(libsync
+GENERATE_EXPORT_HEADER(${TARGET}
         EXPORT_MACRO_NAME APPLICATIONSYNC_EXPORT
         EXPORT_FILE_NAME curatorlib.h
         STATIC_DEFINE APPLICATION_BUILT_AS_STATIC
 )
 
-set_target_properties(libsync PROPERTIES
+set_target_properties(${TARGET} PROPERTIES
         OUTPUT_NAME "${synclib_NAME}"
         VERSION ${MIRALL_VERSION}
         SOVERSION ${MIRALL_SOVERSION}
@@ -159,13 +168,13 @@ set_target_properties(libsync PROPERTIES
 
 if(WITH_CRASHREPORTER)
     set_source_files_properties(platform.cpp PROPERTIES COMPILE_DEFINITIONS CRASHREPORTER_EXECUTABLE="${CRASHREPORTER_EXECUTABLE}")
-    target_link_libraries(libsync PRIVATE CrashReporterQt::Handler)
+    target_link_libraries(${TARGET} PRIVATE CrashReporterQt::Handler)
 
     if(UNIX AND NOT MAC)
         find_package(Threads REQUIRED)
-        target_link_libraries(libsync PUBLIC Threads::Threads)
+        target_link_libraries(${TARGET} PUBLIC Threads::Threads)
     endif()
 endif()
 
 
-install(TARGETS libsync EXPORT ${APPLICATION_SHORTNAME}Config ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS ${TARGET} EXPORT ${APPLICATION_SHORTNAME}Config ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

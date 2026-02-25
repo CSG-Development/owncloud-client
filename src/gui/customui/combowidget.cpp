@@ -12,6 +12,8 @@
 #include <QAbstractItemView>
 #include <QMouseEvent>
 
+Q_LOGGING_CATEGORY(lcDeviceComboWidget, "device.combowidget", QtDebugMsg)
+
 namespace {
 QPair<QString,QString> inputStyle = {
     QStringLiteral(":/res/combowidget/combowidget_light.qss"),
@@ -42,7 +44,7 @@ ComboWidget::ComboWidget(QWidget *parent)
     popup->setAnchorWidget(ui->inputFrame);
 
     themeNotifier = darkTheme_.addNotifier([this] {
-        qDebug() << "darkTheme_ Notifier" << darkTheme_.value();
+        qCDebug(lcDeviceComboWidget) << "darkTheme_ Notifier" << darkTheme_.value();
         APP::StyleHelper::setTheme(this, darkTheme_.value());
         updateStyles();
     });
@@ -67,10 +69,10 @@ ComboWidget::ComboWidget(QWidget *parent)
         auto selected = popup->selectedDevice();
         if (selected) {
             selectedDevice = selected;
-            if (selectedDevice->friendlyName.isEmpty())
+            if (selectedDevice->friendlyName().isEmpty())
                 setText(selectedDevice->certificateCommonName);
             else
-                setText(selectedDevice->friendlyName);
+                setText(selectedDevice->friendlyName());
         }
     });
 
@@ -121,15 +123,24 @@ void ComboWidget::setText(const QString &val)
     ui->btnDeviceIcon->setVisible(!val.isEmpty());
 }
 
-void ComboWidget::setItems(const QList<Device> &list)
+void ComboWidget::setItems(const DeviceList& list)
 {
-    QList<Device> tmpitems(list);
+    DeviceList tmpitems(list);
     qSwap(tmpitems, deviceList);
+
+    for (const auto& it : deviceList.devices()) {
+        if (it.paths.isEmpty())
+            qCDebug(lcDeviceComboWidget) << "dev:" << it.certificateCommonName  << it.friendlyName() << "paths empty";
+        for (const auto& path : it.paths) {
+            qCDebug(lcDeviceComboWidget) << "dev:" << it.certificateCommonName  << it.friendlyName() << "path:" << path.address << path.port;
+        }
+    }
 
     popup->setItems(deviceList);
 
     // List is empty
     if (deviceList.isEmpty()) {
+        qCDebug(lcDeviceComboWidget) << "No devices in list";
         selectedDevice = std::nullopt;
         setText(QStringLiteral(""));
         return;
@@ -137,27 +148,45 @@ void ComboWidget::setItems(const QList<Device> &list)
 
     // Update text if already selected
     if (selectedDevice) {
-        const auto& dev = findByCN(deviceList, selectedDevice->certificateCommonName);
+        qCDebug(lcDeviceComboWidget) << "Previous selected device" << selectedDevice->toStringShort();
+        const auto& dev = deviceList.find_by_cn(selectedDevice->certificateCommonName);
         if (dev) {
-            if (dev->friendlyName.isEmpty())
+            if (dev->friendlyName().isEmpty())
                 setText(dev->certificateCommonName);
             else
-                setText(dev->friendlyName);
+                setText(dev->friendlyName());
         }
         else {
+            qCDebug(lcDeviceComboWidget) << "Previous selected device not found in current list";
             // Selected device is not in list
             selectedDevice = std::nullopt;
             setText(QStringLiteral(""));
         }
     }
 
+    if (!selectedDevice && !favoriteDeviceCN.isEmpty() && text().isEmpty()) {
+        qCDebug(lcDeviceComboWidget) << "Favorite device" << favoriteDeviceCN;
+        const auto& dev = deviceList.find_by_cn(favoriteDeviceCN);
+        if (dev) {
+            if (dev->friendlyName().isEmpty())
+                setText(dev->certificateCommonName);
+            else
+                setText(dev->friendlyName());
+            selectedDevice = dev;
+        }
+        else {
+            setText(QStringLiteral(""));
+        }
+    }
+
     // Still no selected
     if (text().isEmpty()) {
-        selectedDevice = deviceList.first();
-        if (selectedDevice->friendlyName.isEmpty())
+        qCDebug(lcDeviceComboWidget) << "Selected first device in list";
+        selectedDevice = deviceList.devices().first();
+        if (selectedDevice->friendlyName().isEmpty())
             setText(selectedDevice->certificateCommonName);
         else
-            setText(selectedDevice->friendlyName);
+            setText(selectedDevice->friendlyName());
     }
 }
 
@@ -239,16 +268,4 @@ void ComboWidget::updateButtonIcon()
         ui->arrowButton->setIcon(popup->isVisible() ? QIcon(arrowButtonLight.second) : QIcon(arrowButtonLight.first));
     }
     update();
-}
-
-std::optional<Device> ComboWidget::findByCN(const QList<Device> &list, const QString& cn)
-{
-    const auto& it = std::find_if(list.cbegin(), list.cend(), [cn](const Device& dev) {
-        return dev.certificateCommonName == cn;
-    });
-
-    if (it != list.cbegin())
-        return *it;
-
-    return std::nullopt;
 }

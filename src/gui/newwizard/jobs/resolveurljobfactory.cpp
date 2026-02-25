@@ -14,6 +14,7 @@
 
 #include "resolveurljobfactory.h"
 
+#include "certificates/certificatevalidator.h"
 #include "common/utility.h"
 #include "gui/application.h"
 #include "gui/applicationgui.h"
@@ -97,19 +98,46 @@ CoreJob *ResolveUrlJobFactory::startJob(const QUrl &url, QObject *parent)
     QObject::connect(job->reply(), &QNetworkReply::finished, job, makeFinishedHandler(job->reply()));
 
     QObject::connect(job->reply(), &QNetworkReply::sslErrors, job, [req, job, makeFinishedHandler, nam = nam()](const QList<QSslError> &errors) mutable {
-        auto *tlsErrorDialog = new TlsErrorDialog(errors, job->reply()->url().host(), ocApp()->gui()->settingsDialog());
 
-        job->reply()->setProperty(abortedBySslErrorHandlerC, true);
-        job->reply()->abort();
+        if (errors.isEmpty())
+            return;
 
-        QObject::connect(tlsErrorDialog, &TlsErrorDialog::accepted, job, [job, req, errors, nam, makeFinishedHandler]() mutable {
+        auto acceptAndRestart = [job, req, errors, nam, makeFinishedHandler]() {
             for (const auto &error : errors) {
                 Q_EMIT job->caCertificateAccepted(error.certificate());
             }
             auto *reply = nam->get(req);
+            // access manager can return the same reply, set these errors as ignroed
+            reply->ignoreSslErrors(errors);
             QObject::connect(reply, &QNetworkReply::finished, job, makeFinishedHandler(reply));
-        });
+        };
 
+        auto abortCurrent = [&]() {
+            job->reply()->setProperty(abortedBySslErrorHandlerC, true);
+            job->reply()->abort();
+        };
+
+        CertificateValidator validator;
+        QSet<QSslCertificate> cert_list;
+        for (const auto &error : errors) {
+            cert_list << error.certificate();
+        }
+
+        if (validator.validatePinnedCertificate(cert_list.values())) {
+            qCDebug(lcResolveUrl) << "Pinned cert match";
+            abortCurrent();
+            acceptAndRestart();
+            return;
+        }
+        else {
+            qCDebug(lcResolveUrl) << "Certificate is not found in pinned list";
+        }
+
+        auto *tlsErrorDialog = new TlsErrorDialog(errors, job->reply()->url().host(), ocApp()->gui()->settingsDialog());
+
+        abortCurrent();
+
+        QObject::connect(tlsErrorDialog, &TlsErrorDialog::accepted, job, acceptAndRestart);
         QObject::connect(tlsErrorDialog, &TlsErrorDialog::rejected, job, [job]() {
             setJobError(job, QApplication::translate("ResolveUrlJobFactory", "User rejected invalid SSL certificate"));
         });

@@ -43,7 +43,7 @@ public:
 
     void setEmailIsNotAllowed(bool val);
 
-    void setDevicesList(const QList<Device> &list);
+    void setDevicesList(const DeviceList& list);
     void setEmail(const QString& email);
 
     void onCancelClicked();

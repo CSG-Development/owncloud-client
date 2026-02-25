@@ -10,24 +10,6 @@ Q_LOGGING_CATEGORY(lcDeviceController, "device.controller", QtDebugMsg)
 
 namespace {
 
-// void cleanupMDNS(QList<Device>& deviceList)
-// {
-//     auto it = std::remove_if(deviceList.begin(), deviceList.end(), [](Device& dev) {
-//         if (dev.origin == DeviceOrigin::MDNS) {
-//             return true;
-//         }
-
-//         auto pathIt = std::remove_if(dev.paths.begin(), dev.paths.end(), [](const DevicePath& p) {
-//             return p.origin == DeviceOrigin::MDNS;
-//         });
-//         dev.paths.erase(pathIt, dev.paths.end());
-
-//         return false;
-//     });
-
-//     deviceList.erase(it, deviceList.end());
-// }
-
 void cleanupEmptyCN(QList<DevicePath>& paths)
 {
     auto it = std::remove_if(paths.begin(), paths.end(), [](DevicePath& devPath) {
@@ -97,9 +79,7 @@ DeviceController::DeviceController(QObject *parent)
         qCDebug(lcDeviceController) << "Aggregator path list updated";
         if (_aggregator) {
             QWriteLocker locker(&lock_);
-            // _deviceList = DeviceAggregator::build_devices(_aggregator->getDevicePaths());
-            // _deviceList = DeviceAggregator::build_devices(_aggregator->paths());
-            _deviceList = DeviceAggregator::mergeDevices(_deviceList, DeviceAggregator::build_devices(_aggregator->paths()));
+            _mdnsDeviceList = DeviceAggregator::mergeDevices(_mdnsDeviceList, DeviceAggregator::build_devices(_aggregator->paths()));
         }
     });
 }
@@ -122,9 +102,9 @@ void DeviceController::start_new_account()
 
     mdns_finished.store(false);
     ra_finished.store(false);
-    _deviceList.clear();
+    _mdnsDeviceList.clear();
+    _raDeviceList.clear();
     _aggregator->clearAll();
-    _aggregator->clear_paths();
 
     // Delete old MDNS devices
     // cleanupMDNS(_deviceList);
@@ -147,6 +127,12 @@ void DeviceController::prepareLogin(Device &dev)
     qCDebug(lcDeviceController) << "Prepare login started, device" << dev.toStringShort();
 
     currentDevice = dev;
+
+    if (currentDevice.isStatic) {
+        qCDebug(lcDeviceController) << "Static device, prepare login skipped";
+        emit prepareLoginFinished(currentDevice);
+        return;
+    }
 
     auto fillAbout = [this] {
         qCDebug(lcDeviceController) << "fillAbout paths:";
@@ -273,7 +259,7 @@ void DeviceController::account_update_device(const Device& dev)
                 check_finished();
             };
 
-            const auto dev_ra = Device::findByCN(ctx.deviceList, d.certificateCommonName);
+            const auto dev_ra = ctx.deviceList.find_by_cn(d.certificateCommonName);
 
             if (!dev_ra || dev_ra->seagateDeviceID.isEmpty()) {
                 qCDebug(lcDeviceController) << "Device not found or ID empty (CN lookup)";
@@ -378,7 +364,8 @@ void DeviceController::force_ra_account()
     ra_finished.store(false);
 
     _mdns->start();
-    _deviceList.clear();
+    _mdnsDeviceList.clear();
+    _raDeviceList.clear();
     _aggregator->clearAll();
     force_device_list_request = true;
     forceQueryDeviceList();
@@ -409,10 +396,11 @@ void DeviceController::loadRefreshToken()
     qCDebug(lcDeviceController) << "Refresh token load, token exist" << !token.isEmpty();
 }
 
-QList<Device> DeviceController::getDevices() const
+DeviceList DeviceController::getDevices() const
 {
     QReadLocker locker(&lock_);
-    return _deviceList;
+
+    return DeviceAggregator::mergeDevices(_mdnsDeviceList, _raDeviceList);
 }
 
 QFuture<DeviceListCtx> DeviceController::queryDeviceList()
@@ -480,8 +468,7 @@ void DeviceController::processQueryDeviceList()
             if (ctx.res.status == 200) {
                 {
                     QWriteLocker locker(&lock_);
-                    _deviceList = DeviceAggregator::mergeDevices(_deviceList, ctx.deviceList);
-                    // _deviceList = ctx.deviceList;
+                    _raDeviceList = DeviceAggregator::mergeDevices(_raDeviceList, ctx.deviceList);
                 }
                 qCDebug(lcDeviceController) << "Device list:";
                 qCDebug(lcDeviceController) << ctx.deviceList;
@@ -501,7 +488,7 @@ void DeviceController::forceQueryDeviceList()
             if (ctx.res.status == 200) {
                 {
                     QWriteLocker locker(&lock_);
-                    _deviceList = DeviceAggregator::mergeDevices(_deviceList, ctx.deviceList);
+                    _raDeviceList = DeviceAggregator::mergeDevices(_raDeviceList, ctx.deviceList);
                     // _deviceList = ctx.deviceList;
                 }
 

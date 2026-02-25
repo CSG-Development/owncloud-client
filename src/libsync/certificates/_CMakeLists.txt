@@ -1,0 +1,19 @@
+set(LIBRARY_NAME certificates)
+
+find_package(OpenSSL REQUIRED)
+
+add_library(${LIBRARY_NAME} STATIC
+    certificatevalidator.cpp
+    certificatevalidator.h
+)
+
+target_link_libraries(${LIBRARY_NAME} PUBLIC 
+    Qt::Widgets
+    Qt::Network
+    ${OPENSSL_LIBRARIES}
+)
+
+set_target_properties(${LIBRARY_NAME} PROPERTIES AUTOUIC ON AUTORCC ON)
+target_include_directories(${LIBRARY_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}" ${OPENSSL_INCLUDE_DIR})
+
+apply_common_target_settings(${LIBRARY_NAME})

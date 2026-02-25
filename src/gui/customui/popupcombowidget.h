@@ -24,7 +24,7 @@ public:
     void setAnchorWidget(QWidget* w);
     void updateAndShow();
     
-    void setItems(const QList<Device> &list);
+    void setItems(const DeviceList& list);
     std::optional<Device> selectedDevice() const {return currentItem;}
 
     bool eventFilter(QObject *watched, QEvent *event) override;

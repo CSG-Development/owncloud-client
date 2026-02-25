@@ -107,7 +107,7 @@ void SetupWidget::setEmailIsNotAllowed(bool val)
         emailPage_->setEmailIsNotRegistered(val);
 }
 
-void SetupWidget::setDevicesList(const QList<Device> &list)
+void SetupWidget::setDevicesList(const DeviceList& list)
 {
     if (credPage_)
         credPage_->setDevicesList(list);

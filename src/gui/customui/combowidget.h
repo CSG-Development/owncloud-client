@@ -29,7 +29,7 @@ public:
     QString text() const;
     void setText(const QString& val);
 
-    void setItems(const QList<Device> &list);
+    void setItems(const DeviceList& list);
     std::optional<Device> currentDevice() const {return selectedDevice;}
 
     void setErrorState(bool enable, const QString& txt = QString());
@@ -37,6 +37,8 @@ public:
     bool isDarkTheme() const { return darkTheme_; }
     void setDarkTheme(bool v) { darkTheme_ = v; }
     QBindable<bool> bindableDarkTheme() {return &darkTheme_;}
+
+    void setFavoriteDevice(const QString& deviceCN) {favoriteDeviceCN = deviceCN;}
 
 Q_SIGNALS:
     void textChanged(const QString &);
@@ -55,8 +57,6 @@ protected:
     void updateStyles();
     void updateButtonIcon();
 
-    std::optional<Device> findByCN(const QList<Device> &list, const QString& cn);
-
 private:
     Ui::ComboWidget* ui = nullptr;
 
@@ -64,9 +64,10 @@ private:
     PopupComboWidget* popup = nullptr;
 
     bool errorState = false;
-    QList<Device> deviceList;
+    DeviceList deviceList;
     QTimer blockMouseTimer;
     std::optional<Device> selectedDevice;
+    QString favoriteDeviceCN;
 
     QProperty<bool> darkTheme_ {false};
     QPropertyNotifier themeNotifier;
