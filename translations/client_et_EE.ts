@@ -1,289 +1,13 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="et_EE">
 <context>
-    <name>AccountConfiguredWizardPage</name>
-    <message>
-        <source>✓ You&apos;re all set!</source>
-        <translation>✓ Kõik on valmis!</translation>
-    </message>
-    <message>
-        <source>Advanced configuration</source>
-        <translation>Täpsem seadistamine</translation>
-    </message>
-    <message>
-        <source>Configure files download:</source>
-        <translation>Failide üleslaadimise seadistamine:</translation>
-    </message>
-    <message>
-        <source>Download everything</source>
-        <translation>Lae kõik alla</translation>
-    </message>
-    <message>
-        <source>After completing this wizard, you can set up folder synchronization manually.</source>
-        <translation>Pärast viisardi lõpetamist saate kaustade sünkroniseermise käsitsi seadistada.</translation>
-    </message>
-    <message>
-        <source>Configure synchronization manually</source>
-        <translation>Seadistage sünkroniseerimine käsitsi</translation>
-    </message>
-    <message>
-        <source>Choose local download directory:</source>
-        <translation>Valige lokaalne allalaadimiskataloog:</translation>
-    </message>
-    <message>
-        <source>Restore default value</source>
-        <translation>Taasta vaikeväärtus</translation>
-    </message>
-</context>
-<context>
-    <name>AppImageUpdateAvailableDialogUi</name>
-    <message>
-        <source>Update available</source>
-        <translation>Uuendus saadaval</translation>
-    </message>
-    <message>
-        <source>Skip this version</source>
-        <translation>Jäta see versioon vahele</translation>
-    </message>
-</context>
-<context>
-    <name>AppProvider</name>
-    <message>
-        <source>Failed to open %1 in web. Error: %2.</source>
-        <translation>%1 avamine veebis nurjus. Viga: %2.</translation>
-    </message>
-</context>
-<context>
-    <name>BasicLoginWidget</name>
-    <message>
-        <source>Username</source>
-        <translation>Kasutajanimi</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Parool</translation>
-    </message>
-</context>
-<context>
-    <name>CheckBasicAuthJobFactory</name>
-    <message>
-        <source>Invalid reply received from server</source>
-        <translation>Serverilt saabus vigane vastus</translation>
-    </message>
-</context>
-<context>
-    <name>ChecksumHeader</name>
-    <message>
-        <source>The checksum header is malformed: %1</source>
-        <translation>Kontrollsumma päis on valesti vormistatud: %1</translation>
-    </message>
-    <message>
-        <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
-        <translation>Kontrollsumma päis sisaldas tundmatut kontrollsumma tüüpi &apos;%1&apos;</translation>
-    </message>
-</context>
-<context>
-    <name>CommandLine</name>
-    <message>
-        <source>For more information, see %1</source>
-        <translation>Lisateabe saamiseks vt %1</translation>
-    </message>
-</context>
-<context>
-    <name>CommonStrings</name>
-    <message>
-        <source>file manager</source>
-        <translation>failihaldur</translation>
-    </message>
-    <message>
-        <source>Show in %1</source>
-        <translation>Näita %1</translation>
-    </message>
-    <message>
-        <source>Show in web browser</source>
-        <translation>Näita veebibrauseris</translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation>Kopeeri</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n Filter(s)</source>
-        <translation><numerusform>%n Filter(-rit)</numerusform><numerusform>%n Filter(-rit)</numerusform></translation>
-    </message>
-</context>
-<context>
-    <name>CredentialsSetupWizardPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Vorm</translation>
-    </message>
-</context>
-<context>
-    <name>DetermineAuthTypeJobFactory</name>
-    <message>
-        <source>Server did not ask for authorization</source>
-        <translation>Server ei küsinud autoriseerimist</translation>
-    </message>
-    <message>
-        <source>Failed to determine auth type: %1</source>
-        <translation>Autoriseerimistüübi määramine ebaõnnestus: %1</translation>
-    </message>
-</context>
-<context>
-    <name>DiscoverWebFingerServiceJobFactory</name>
-    <message>
-        <source>Invalid reply received from server</source>
-        <translation>Serverilt saabus vigane vastus</translation>
-    </message>
-</context>
-<context>
-    <name>FetchUserInfoJobFactory</name>
-    <message>
-        <source>Failed to retrieve user info</source>
-        <translation>Kasutaja info kättesaamine ebaõnnestus</translation>
-    </message>
-</context>
-<context>
-    <name>FileSystem</name>
-    <message>
-        <source>Can&apos;t rename %1, the file is currently in use</source>
-        <translation>Ei saa ümber nimetada %1, fail on kasutuses</translation>
-    </message>
-    <message>
-        <source>Could not make directories in trash</source>
-        <translation>Ei suutnud luua katalooge prügikasti</translation>
-    </message>
-    <message>
-        <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation>Ei suutnud liigutada &apos;%1&apos; kataloogi &apos;%2&apos;</translation>
-    </message>
-    <message>
-        <source>Moving to the trash is not implemented on this platform</source>
-        <translation>Prügikasti liigutamine ei ole sellel platvormil juurutatud</translation>
-    </message>
-    <message>
-        <source>Could not remove folder</source>
-        <translation>Kausta ei saanud eemaldada</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizard</name>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Veateade:&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Hoiatus:&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;Veateade:&lt;/b&gt; &lt;ul&gt;%1&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;Hoiatus:&lt;/b&gt; &lt;ul&gt;%1&lt;/ul&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizardSourcePage</name>
-    <message>
-        <source>Form</source>
-        <translation>Vorm</translation>
-    </message>
-    <message>
-        <source>Pick a local folder on your computer to sync</source>
-        <translation>Vali oma arvutist sünkroniseeritav kataloog</translation>
-    </message>
-    <message>
-        <source>&amp;Choose...</source>
-        <translation>&amp;Vali...</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizardTargetPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Vorm</translation>
-    </message>
-    <message>
-        <source>Select a remote destination folder</source>
-        <translation>Vali eemalolev sihtkaust</translation>
-    </message>
-    <message>
-        <source>Create Folder</source>
-        <translation>Loo kaust</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation>Värskenda</translation>
-    </message>
-    <message>
-        <source>Folders</source>
-        <translation>Kaustad</translation>
-    </message>
-</context>
-<context>
-    <name>LegacyWebFingerSetupWizardPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Vorm</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation>Kasutajanimi</translation>
-    </message>
-</context>
-<context>
-    <name>LoginRequiredDialog</name>
-    <message>
-        <source>Login required</source>
-        <translation>Sisselogimine nõutav</translation>
-    </message>
-</context>
-<context>
-    <name>NotificationWidget</name>
-    <message>
-        <source>Form</source>
-        <translation>Vorm</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet</source>
-        <translation>Lorem ipsum dolor sit amet</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
-        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </translation>
-    </message>
-</context>
-<context>
-    <name>OAuthLoginWidget</name>
-    <message>
-        <source>Open Browser</source>
-        <translation>Ava brauser</translation>
-    </message>
-    <message>
-        <source>Copy URL to clipboard</source>
-        <translation>Kopeeri URL lõikelauale</translation>
-    </message>
-    <message>
-        <source>Retry</source>
-        <translation>Proovi uuesti</translation>
-    </message>
-</context>
-<context>
     <name>APP::AboutDialog</name>
-    <message>
-        <source>About</source>
-        <translation>Info</translation>
-    </message>
-    <message>
-        <source>Versions</source>
-        <translation>Versioonid</translation>
-    </message>
     <message>
         <source>About %1</source>
         <translation>Rakendusest %1</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -403,7 +127,7 @@
         <translation>Lülita virtuaalse faili tugi välja?</translation>
     </message>
     <message>
-        <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as 'available online only' will be downloaded.
+        <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as &apos;available online only&apos; will be downloaded.
 
 The only advantage of disabling virtual file support is that the selective sync feature will become available again.
 
@@ -437,6 +161,14 @@ See tegevus katkestab kõik käimasolevad sünkroniseerimised.</translation>
     <message>
         <source>Connected to %1.</source>
         <translation>Ühendatud %1</translation>
+    </message>
+    <message>
+        <source>Show device info</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open share page</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Server %1 is temporarily unavailable.</source>
@@ -655,6 +387,161 @@ Uuendus toimub taustal ja kirjutab praeguse AppImage&apos;i faili üle. Uuendami
     </message>
 </context>
 <context>
+    <name>APP::ApplicationGui</name>
+    <message>
+        <source>Please sign in</source>
+        <translation>Palun logi sisse</translation>
+    </message>
+    <message>
+        <source>Folder %1: %2</source>
+        <translation>Kaust %1: %2</translation>
+    </message>
+    <message>
+        <source>Unresolved %1 conflicts</source>
+        <translation>Lahendamata %1 konfliktid</translation>
+    </message>
+    <message>
+        <source>Ignored errors %1</source>
+        <translation>Ignoreeritud vigu %1</translation>
+    </message>
+    <message>
+        <source>There are no sync folders configured.</source>
+        <translation>Sünkroniseeritavaid kaustasid pole seadistatud.</translation>
+    </message>
+    <message>
+        <source>Log in...</source>
+        <translation>Logi sisse...</translation>
+    </message>
+    <message>
+        <source>Log out</source>
+        <translation>Logi välja</translation>
+    </message>
+    <message>
+        <source>Recent Changes</source>
+        <translation>Hiljutised muudatused</translation>
+    </message>
+    <message>
+        <source>Open folder &apos;%1&apos;</source>
+        <translation>Ava kaust &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
+        <translation>Konto %1 server on kasutab mittetoetatud versiooni %2. Selle kliendi kasutamine koos toetamata serveriversioonidega on testimata ja potentsiaalselt ohtlik. Tegutsege omal vastutusel.</translation>
+    </message>
+    <message>
+        <source>Account %1</source>
+        <translation>Konto %1</translation>
+    </message>
+    <message>
+        <source>Stop synchronization</source>
+        <translation>Peata sünkroniseerimine</translation>
+    </message>
+    <message>
+        <source>Create a new account</source>
+        <translation>Loo uus konto</translation>
+    </message>
+    <message>
+        <source>Unknown status</source>
+        <translation>Tundmatu staatus</translation>
+    </message>
+    <message>
+        <source>Details...</source>
+        <translation>Üksikasjad...</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation>Abiinfo</translation>
+    </message>
+    <message>
+        <source>Resume synchronization</source>
+        <translation>Jätka sünkroniseerimist</translation>
+    </message>
+    <message>
+        <source>Quit %1</source>
+        <translation>Lõpeta %1</translation>
+    </message>
+    <message>
+        <source>Disconnected from %1</source>
+        <translation>Ühendus %1 katkestatud</translation>
+    </message>
+    <message>
+        <source>Unsupported Server Version</source>
+        <translation>Toetamata serveri versioon</translation>
+    </message>
+    <message>
+        <source>Disconnected</source>
+        <translation>Lahti ühendatud</translation>
+    </message>
+    <message>
+        <source>Disconnected from some accounts</source>
+        <translation>Ühendus mõne kontoga katkestatud</translation>
+    </message>
+    <message>
+        <source>Disconnected from accounts:</source>
+        <translation>Kontodest lahtiühendatud</translation>
+    </message>
+    <message>
+        <source>Signed out</source>
+        <translation>Välja logitud</translation>
+    </message>
+    <message>
+        <source>Account synchronization is disabled</source>
+        <translation>Konto sünkroniseermine ei ole lubatud</translation>
+    </message>
+    <message>
+        <source>Synchronization is paused</source>
+        <translation>Sünkroniseerimine on peatatud</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>Ajakohane (%1)</translation>
+    </message>
+    <message>
+        <source>No sync folders configured</source>
+        <translation>Sünkroniseerimiskaustu ei ole konfigureeritud</translation>
+    </message>
+    <message>
+        <source>Show %1</source>
+        <translation>Näita %1</translation>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation>Rakendusest %1</translation>
+    </message>
+    <message>
+        <source>No items synced recently</source>
+        <translation>Ühtegi üksust pole hiljuti sünkroniseeritud</translation>
+    </message>
+    <message>
+        <source>Checking for changes in remote &apos;%1&apos;</source>
+        <translation>Kaugühenduse &apos;%1&apos; muutuste kontroll</translation>
+    </message>
+    <message>
+        <source>Checking for changes in local &apos;%1&apos;</source>
+        <translation>Kohaliku &apos;%1&apos; muutuste kontroll</translation>
+    </message>
+    <message>
+        <source>Syncing %1 of %2  (%3 left)</source>
+        <translation>Sünkroniseerin %1 %2-st (%3 veel)</translation>
+    </message>
+    <message>
+        <source>Syncing %1 of %2</source>
+        <translation>Sünkroniseerimine %1 %2-st</translation>
+    </message>
+    <message>
+        <source>Syncing %1 (%2 left)</source>
+        <translation>Sünkroniseerin %1 (%2 veel)</translation>
+    </message>
+    <message>
+        <source>Syncing %1</source>
+        <translation>Sünkroniseerin %1</translation>
+    </message>
+    <message>
+        <source>%1 (%2, %3)</source>
+        <translation>%1 (%2, %3)</translation>
+    </message>
+</context>
+<context>
     <name>APP::AskExperimentalVirtualFilesFeatureMessageBox</name>
     <message>
         <source>Enable experimental feature?</source>
@@ -717,6 +604,13 @@ See on uus, eksperimentaalne režiim. Kui otsustate seda kasutada, palun teatage
     <message>
         <source>Failed to parse credentials %1</source>
         <translation>Kasutajaandmete parsimine ebaõnnestus %1</translation>
+    </message>
+</context>
+<context>
+    <name>APP::CuratorPropagator</name>
+    <message>
+        <source>File %1 is currently in use</source>
+        <translation>Fail %1 on hetkel kasutuses</translation>
     </message>
 </context>
 <context>
@@ -882,7 +776,7 @@ See tähendab, et sünkroniseerimisklient ei pruugi kohalikke muudatusi kohe ül
 % 1</translation>
     </message>
     <message>
-        <source>All files in the sync folder '%1' folder were deleted on the server.
+        <source>All files in the sync folder &apos;%1&apos; folder were deleted on the server.
 These deletes will be synchronized to your local sync folder, making such files unavailable unless you have a right to restore. 
 If you decide to keep the files, they will be re-synced with the server if you have rights to do so.
 If you decide to delete the files, they will be unavailable to you, unless you are the owner.</source>
@@ -892,7 +786,7 @@ Kui te otsustate failid säilitada, sünkroniseeritakse need uuesti serveriga, k
 Kui te otsustate failid kustutada, on need teile kättesaamatud, välja arvatud juhul, kui te olete omanik.</translation>
     </message>
     <message>
-        <source>All the files in your local sync folder '%1' were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
+        <source>All the files in your local sync folder &apos;%1&apos; were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
 Are you sure you want to sync those actions with the server?
 If this was an accident and you decide to keep your files, they will be re-synced from the server.</source>
         <translation>Kõik failid teie kohalikust sünkroniseerimiskaustast &quot;%1&quot; kustutati. Need kustutatud failid sünkroniseeritakse teie serveriga, mistõttu need failid ei ole kättesaadavad, kui neid ei taastata.
@@ -981,10 +875,6 @@ Please consider removing this folder from the account and adding it again.</sour
         <translation>Mitu kontot jagavad kausta %1.
 See konfiguratsioon põhjustab teadaolevalt andmekaotust ja seda enam ei toetata.
 Palun kaaluge selle kausta eemaldamist kontolt ja selle uuesti lisamist.</translation>
-    </message>
-    <message>
-        <source>%1 - %2@%3</source>
-        <translation>%1 - %2@%3</translation>
     </message>
 </context>
 <context>
@@ -1414,6 +1304,13 @@ Items where deletion is allowed will be deleted if they prevent a directory from
         <translation>Ei saa kirjutada muudatusi &apos;%1&apos;-le.</translation>
     </message>
     <message>
+        <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
+        <translation>Selle kirje on pakkunud süsteem &apos;%1&apos; ning seda ei saa antud vaates muuta.</translation>
+    </message>
+</context>
+<context>
+    <name>APP::InpDlg</name>
+    <message>
         <source>Add Ignore Pattern</source>
         <translation>Lisa ignoreerimise muster</translation>
     </message>
@@ -1422,8 +1319,12 @@ Items where deletion is allowed will be deleted if they prevent a directory from
         <translation>Lisa uus ignoreerimise muster:</translation>
     </message>
     <message>
-        <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
-        <translation>Selle kirje on pakkunud süsteem &apos;%1&apos; ning seda ei saa antud vaates muuta.</translation>
+        <source>OK</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Loobu</translation>
     </message>
 </context>
 <context>
@@ -1794,13 +1695,6 @@ for additional privileges during the process.</source>
     <message>
         <source>Update Check</source>
         <translation>Uuenduste kontrollimine</translation>
-    </message>
-</context>
-<context>
-    <name>APP::CuratorPropagator</name>
-    <message>
-        <source>File %1 is currently in use</source>
-        <translation>Fail %1 on hetkel kasutuses</translation>
     </message>
 </context>
 <context>
@@ -2315,16 +2209,16 @@ for additional privileges during the process.</source>
         <translation>Kas olete kindel, et soovite %1-st väljuda?</translation>
     </message>
     <message>
+        <source>%1 - %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Account</source>
         <translation>Konto</translation>
     </message>
     <message>
         <source>MainWindow</source>
         <translation>MainWindow</translation>
-    </message>
-    <message>
-        <source>Hide</source>
-        <translation>Peida</translation>
     </message>
 </context>
 <context>
@@ -2340,6 +2234,10 @@ for additional privileges during the process.</source>
     <message>
         <source>Curator Path:</source>
         <translation>Curatori asukoht:</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>%1 Sharing</source>
@@ -2750,6 +2648,10 @@ for additional privileges during the process.</source>
         <translation>Kohaliku sünkroniseerimisandmebaasi avamine või loomine ei ole võimalik. Veenduge, et teil oleks sünkroniseerimiskaustas kirjutamisõigus.</translation>
     </message>
     <message>
+        <source>Synchronization aborted due to IP address change</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Disk space is low: Downloads that would reduce free space below %1 were skipped.</source>
         <translation>Kettaruumi on vähe: Allalaadimised, mis vähendaksid vaba ruumi alla %1, jäeti vahele.</translation>
     </message>
@@ -2875,14 +2777,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::AccountConfiguredSetupWizardState</name>
-    <message>
-        <source>Invalid local download directory: %1</source>
-        <translation>Vigane kohalik allalaadimiskataloog: %1</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::AccountConfiguredWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredPage</name>
     <message>
         <source>Use &amp;virtual files instead of downloading content immediately</source>
         <translation>Kasutage sisu kohese allalaadimise asemel &amp;virtuaalseid faile</translation>
@@ -2915,13 +2810,7 @@ The virtual files mode is mutually exclusive with selective sync. Currently unse
 Switching to this mode will abort any currently running synchronization.
 
 This is a new, experimental mode. If you decide to use it, please report any issues that come up.</source>
-        <translation>Kui režiim &quot;virtuaalsed failid&quot; on sisse lülitatud, ei laadita esialgu ühtegi faili alla. Selle asemel luuakse iga serveris olemasoleva faili jaoks väike fail. Sisu saab alla laadida neid faile käivitades või kasutades nende kontekstmenüüd.
-
-Virtuaalsete failide režiim on vastastikku välistatud koos valikulise sünkroniseerimisega. Hetkel valimata kaustad tõlgitakse ainult võrguühendusega saadaval olevateks kaustadeks ja teie valikulise sünkroniseerimise seaded lähtestatakse.
-
-Selle režiimile lülitumine katkestab kõik hetkel käimasolevad sünkroniseerimised. 
-
-See on uus, eksperimentaalne režiim. Kui otsustate seda kasutada, palun teatage kõikidest tekkivatest probleemidest.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Enable experimental placeholder mode</source>
@@ -2933,62 +2822,756 @@ See on uus, eksperimentaalne režiim. Kui otsustate seda kasutada, palun teatage
     </message>
 </context>
 <context>
-    <name>APP::Wizard::BasicCredentialsSetupWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredState</name>
     <message>
-        <source>Please enter your credentials to log in to your account.</source>
-        <translation>Palun sisestage oma kontole sisselogimiseks oma kasutajaandmed.</translation>
-    </message>
-    <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Ühendumine &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
+        <source>Invalid local download directory: %1</source>
+        <translation>Vigane kohalik allalaadimiskataloog: %1</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::BasicCredentialsSetupWizardState</name>
+    <name>APP::Wizard::CredentialsState</name>
     <message>
         <source>Invalid credentials</source>
         <translation>Valed kasutajaandmed</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::LegacyWebFingerSetupWizardPage</name>
+    <name>APP::Wizard::SetupController</name>
     <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Ühendumine &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
+        <source>OS state: %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Please enter your %1:</source>
-        <translation>Palun sisesta oma %1:</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::LegacyWebFingerSetupWizardState</name>
-    <message>
-        <source>Failed to parse WebFinger response: %1</source>
-        <translation>WebFingeri vastuse parsimine ebaõnnestus: %1</translation>
+        <source>&lt;empty&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>WebFinger endpoint did not send href attribute</source>
-        <translation>WebFingeri lõpp-punkt ei saatnud href atribuuti</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::OAuthCredentialsSetupWizardPage</name>
-    <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Ühendumine &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
+        <source>OOBE is not done</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Reopen Browser</source>
-        <translation>Avage brauser uuesti</translation>
+        <source>Invalid credentials</source>
+        <translation>Valed kasutajaandmed</translation>
     </message>
     <message>
-        <source>Please use your browser to log in to %1.</source>
-        <translation>Palun kasutage oma brauserit, et logida sisse %1.</translation>
+        <source>Failed to retrieve user information from server</source>
+        <translation>Kasutaja info kättesaamine serverist ebaõnnestus</translation>
+    </message>
+    <message>
+        <source>Invalid local download directory: %1</source>
+        <translation>Vigane kohalik allalaadimiskataloog: %1</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::OAuthCredentialsSetupWizardState</name>
+    <name>APP::Wizard::SetupWidget</name>
+    <message>
+        <source>Cancel Setup</source>
+        <translation>Tühista seadistamine</translation>
+    </message>
+    <message>
+        <source>Do you really want to cancel the account setup?</source>
+        <translation>Kas te tõesti soovite konto seadistamise tühistada?</translation>
+    </message>
+</context>
+<context>
+    <name>AccountConfiguredPage</name>
+    <message>
+        <source>✓ You&apos;re all set!</source>
+        <translation>✓ Kõik on valmis!</translation>
+    </message>
+    <message>
+        <source>Advanced configuration</source>
+        <translation>Täpsem seadistamine</translation>
+    </message>
+    <message>
+        <source>Configure files download:</source>
+        <translation>Failide üleslaadimise seadistamine:</translation>
+    </message>
+    <message>
+        <source>Download everything</source>
+        <translation>Lae kõik alla</translation>
+    </message>
+    <message>
+        <source>After completing this wizard, you can set up folder synchronization manually.</source>
+        <translation>Pärast viisardi lõpetamist saate kaustade sünkroniseermise käsitsi seadistada.</translation>
+    </message>
+    <message>
+        <source>Configure synchronization manually</source>
+        <translation>Seadistage sünkroniseerimine käsitsi</translation>
+    </message>
+    <message>
+        <source>Choose local download directory:</source>
+        <translation>Valige lokaalne allalaadimiskataloog:</translation>
+    </message>
+    <message>
+        <source>Restore default value</source>
+        <translation>Taasta vaikeväärtus</translation>
+    </message>
+</context>
+<context>
+    <name>AppImageUpdateAvailableDialogUi</name>
+    <message>
+        <source>Update available</source>
+        <translation>Uuendus saadaval</translation>
+    </message>
+    <message>
+        <source>Skip this version</source>
+        <translation>Jäta see versioon vahele</translation>
+    </message>
+</context>
+<context>
+    <name>AppProvider</name>
+    <message>
+        <source>Failed to open %1 in web. Error: %2.</source>
+        <translation>%1 avamine veebis nurjus. Viga: %2.</translation>
+    </message>
+</context>
+<context>
+    <name>ApplicationTheme::aboutVersions()</name>
+    <message>
+        <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
+        <translation>%1 %2%7%8Qt teegid %3, %4%7Kasutatakse virtuaalsete failide pluginat: %5%7%6</translation>
+    </message>
+</context>
+<context>
+    <name>ApplicationTheme::versionWithSha</name>
+    <message>
+        <source>%1 %2</source>
+        <translation>%1 %2</translation>
+    </message>
+</context>
+<context>
+    <name>BasicLoginWidget</name>
+    <message>
+        <source>Username</source>
+        <translation>Kasutajanimi</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Parool</translation>
+    </message>
+</context>
+<context>
+    <name>CheckBasicAuthJobFactory</name>
+    <message>
+        <source>Invalid reply received from server</source>
+        <translation>Serverilt saabus vigane vastus</translation>
+    </message>
+</context>
+<context>
+    <name>ChecksumHeader</name>
+    <message>
+        <source>The checksum header is malformed: %1</source>
+        <translation>Kontrollsumma päis on valesti vormistatud: %1</translation>
+    </message>
+    <message>
+        <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
+        <translation>Kontrollsumma päis sisaldas tundmatut kontrollsumma tüüpi &apos;%1&apos;</translation>
+    </message>
+</context>
+<context>
+    <name>CodeDialog</name>
+    <message>
+        <source>Allow remote access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>We have sent a one-time code to authorize this device to access your Personal Cloud. Check your email for the code and enter it here. If you do not see it in your inbox, please check your spam folder.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Allow access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Resend code</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CodeDialogController</name>
+    <message>
+        <source>Incorrect code</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your code has expired</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CodeInputWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Vorm</translation>
+    </message>
+    <message>
+        <source>Paste code</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ComboWidget</name>
+    <message>
+        <source>button_icon_tool</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Error text</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CommandLine</name>
+    <message>
+        <source>For more information, see %1</source>
+        <translation>Lisateabe saamiseks vt %1</translation>
+    </message>
+</context>
+<context>
+    <name>CommonStrings</name>
+    <message>
+        <source>file manager</source>
+        <translation>failihaldur</translation>
+    </message>
+    <message>
+        <source>Show in %1</source>
+        <translation>Näita %1</translation>
+    </message>
+    <message>
+        <source>Show Files in web browser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show Photos in web browser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopeeri</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n Filter(s)</source>
+        <translation><numerusform>%n Filter(-rit)</numerusform><numerusform>%n Filter(-rit)</numerusform></translation>
+    </message>
+</context>
+<context>
+    <name>ConnectErrorPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Vorm</translation>
+    </message>
+    <message>
+        <source>Unable to connect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol&gt;&lt;li&gt;Verify that the device is properly connected to the network and that the internet connection is stable&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;2&quot;&gt;&lt;li&gt;Make sure the device is powered on and functioning correctly&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;3&quot;&gt;&lt;li&gt;Check firewall settings to confirm they are not blocking the connection&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;4&quot;&gt;&lt;li&gt;If using a wireless connection, confirm the device is within range of the router&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;5&quot;&gt;&lt;li&gt;Your device and mobile phone must be on the same network&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>If you continue to experience issues, please contact our &lt;a href=&quot;https://seagare.com&quot;&gt;Support team&lt;/a&gt; for further assistance.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Proovi uuesti</translation>
+    </message>
+</context>
+<context>
+    <name>CredentialsPage</name>
+    <message>
+        <source>helper_frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Can’t find your device?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Password</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Loobu</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>Logi sisse</translation>
+    </message>
+    <message>
+        <source>button_accent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting to</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Parool</translation>
+    </message>
+    <message>
+        <source>Enter a valid email address and password</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Invalid URL</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DetermineAuthTypeJobFactory</name>
+    <message>
+        <source>Server did not ask for authorization</source>
+        <translation>Server ei küsinud autoriseerimist</translation>
+    </message>
+    <message>
+        <source>Failed to determine auth type: %1</source>
+        <translation>Autoriseerimistüübi määramine ebaõnnestus: %1</translation>
+    </message>
+</context>
+<context>
+    <name>DevModel</name>
+    <message>
+        <source>true</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>false</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Url</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OOBE Done</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DevWidget</name>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>---</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friendlyName</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>hostname</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>deviceID</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>certificateCN</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>:</source>
+        <translation>:</translation>
+    </message>
+    <message>
+        <source>origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>deviceType</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Query about and status</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Apply to account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fetch from account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Simulate network change</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>Tundmatu</translation>
+    </message>
+    <message>
+        <source>Local</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Public</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remote</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mDNS</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Static</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DiscoverWebFingerServiceJobFactory</name>
+    <message>
+        <source>Invalid reply received from server</source>
+        <translation>Serverilt saabus vigane vastus</translation>
+    </message>
+</context>
+<context>
+    <name>EmailPage</name>
+    <message>
+        <source>helper_frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Loobu</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>Logi sisse</translation>
+    </message>
+    <message>
+        <source>Email</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>EmailPageController</name>
+    <message>
+        <source>Invalid email</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Not allowed. Contact the device owner.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ErrorDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>Vorm</translation>
+    </message>
+    <message>
+        <source>Access to Personal Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Loobu</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Proovi uuesti</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ErrorDialogController</name>
+    <message>
+        <source>Access to Personal Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unable to connect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Email not registered</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Could not reach your Personal Cloud.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>This email isn’t authorized to access this device. Please contact the owner.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>FetchUserInfoJobFactory</name>
+    <message>
+        <source>Failed to retrieve user info</source>
+        <translation>Kasutaja info kättesaamine ebaõnnestus</translation>
+    </message>
+</context>
+<context>
+    <name>FileSystem</name>
+    <message>
+        <source>Can&apos;t rename %1, the file is currently in use</source>
+        <translation>Ei saa ümber nimetada %1, fail on kasutuses</translation>
+    </message>
+    <message>
+        <source>Could not make directories in trash</source>
+        <translation>Ei suutnud luua katalooge prügikasti</translation>
+    </message>
+    <message>
+        <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>Ei suutnud liigutada &apos;%1&apos; kataloogi &apos;%2&apos;</translation>
+    </message>
+    <message>
+        <source>Moving to the trash is not implemented on this platform</source>
+        <translation>Prügikasti liigutamine ei ole sellel platvormil juurutatud</translation>
+    </message>
+    <message>
+        <source>Could not remove folder</source>
+        <translation>Kausta ei saanud eemaldada</translation>
+    </message>
+</context>
+<context>
+    <name>FinishedPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Vorm</translation>
+    </message>
+    <message>
+        <source>You&apos;re all set!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advanced configuration</source>
+        <translation>Täpsem seadistamine</translation>
+    </message>
+    <message>
+        <source>Configure files download:</source>
+        <translation>Failide üleslaadimise seadistamine:</translation>
+    </message>
+    <message>
+        <source>Download everything (recommended)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Configure synchronization manually</source>
+        <translation>Seadistage sünkroniseerimine käsitsi</translation>
+    </message>
+    <message>
+        <source>Use &amp;virtual files instead of downloading content immediately</source>
+        <translation>Kasutage sisu kohese allalaadimise asemel &amp;virtuaalseid faile</translation>
+    </message>
+    <message>
+        <source>Choose local download directory:</source>
+        <translation>Valige lokaalne allalaadimiskataloog:</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The virtual filesystem feature is not available for this installation.</source>
+        <translation>Virtuaalse failisüsteemi funktsioon ei ole selle paigalduse puhul saadaval.</translation>
+    </message>
+    <message>
+        <source>The virtual filesystem feature is not stable yet. Use with caution.</source>
+        <translation>Virtuaalse failisüsteemi funktsioon ei ole veel stabiilne. Kasutage ettevaatlikult.</translation>
+    </message>
+    <message>
+        <source>Enable experimental feature?</source>
+        <translation>Lülitada sisse eksperimentaalne funktsioon?</translation>
+    </message>
+    <message>
+        <source>When the &quot;virtual files&quot; mode is enabled no files will be downloaded initially. Instead, a tiny file will be created for each file that exists on the server. The contents can be downloaded by running these files or by using their context menu.
+
+The virtual files mode is mutually exclusive with selective sync. Currently unselected folders will be translated to online-only folders and your selective sync settings will be reset.
+
+Switching to this mode will abort any currently running synchronization.
+
+This is a new, experimental mode. If you decide to use it, please report any issues that come up.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable experimental placeholder mode</source>
+        <translation>Eksperimentaalse paigutusrežiimi sisselülitamine</translation>
+    </message>
+    <message>
+        <source>Stay safe</source>
+        <translation>Ole ettevaatlik</translation>
+    </message>
+    <message>
+        <source>Select the local folder</source>
+        <translation>Valige kohalik kaust</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizard</name>
+    <message>
+        <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;Veateade:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;Hoiatus:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
+        <translation>&lt;b&gt;Veateade:&lt;/b&gt; &lt;ul&gt;%1&lt;/ul&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
+        <translation>&lt;b&gt;Hoiatus:&lt;/b&gt; &lt;ul&gt;%1&lt;/ul&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizardSourcePage</name>
+    <message>
+        <source>Form</source>
+        <translation>Vorm</translation>
+    </message>
+    <message>
+        <source>Pick a local folder on your computer to sync</source>
+        <translation>Vali oma arvutist sünkroniseeritav kataloog</translation>
+    </message>
+    <message>
+        <source>&amp;Choose...</source>
+        <translation>&amp;Vali...</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizardTargetPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Vorm</translation>
+    </message>
+    <message>
+        <source>Select a remote destination folder</source>
+        <translation>Vali eemalolev sihtkaust</translation>
+    </message>
+    <message>
+        <source>Create Folder</source>
+        <translation>Loo kaust</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation>Värskenda</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>Kaustad</translation>
+    </message>
+</context>
+<context>
+    <name>InputWidget</name>
+    <message>
+        <source>Error text</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>LoginRequiredDialog</name>
+    <message>
+        <source>Login required</source>
+        <translation>Sisselogimine nõutav</translation>
+    </message>
+</context>
+<context>
+    <name>NotificationWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Vorm</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet</source>
+        <translation>Lorem ipsum dolor sit amet</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
+        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </translation>
+    </message>
+</context>
+<context>
+    <name>OAuthCredentialsSetupWizardState</name>
     <message>
         <source>Error while trying to log in to OAuth2-enabled server.</source>
         <translation>Viga OAuth2-toega serverisse sisselogimisel.</translation>
@@ -3003,220 +3586,25 @@ See on uus, eksperimentaalne režiim. Kui otsustate seda kasutada, palun teatage
     </message>
 </context>
 <context>
-    <name>APP::Wizard::ServerUrlSetupWizardPage</name>
+    <name>OAuthLoginWidget</name>
     <message>
-        <source>Welcome to %1</source>
-        <translation>Tere tulemast %1&apos;i</translation>
+        <source>Open Browser</source>
+        <translation>Ava brauser</translation>
+    </message>
+    <message>
+        <source>Copy URL to clipboard</source>
+        <translation>Kopeeri URL lõikelauale</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Proovi uuesti</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::ServerUrlSetupWizardState</name>
+    <name>PopupComboWidget</name>
     <message>
-        <source>Invalid server URL</source>
-        <translation>Vigane serveri URL</translation>
-    </message>
-    <message>
-        <source>Insecure connection</source>
-        <translation>Ebaturvaline ühendus</translation>
-    </message>
-    <message>
-        <source>The connection to %1 is insecure.
-Are you sure you want to proceed?</source>
-        <translation>Ühendus %1 on ebaturvaline. 
-Kas olete kindel, et soovite jätkata?</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Kinnita</translation>
-    </message>
-    <message>
-        <source>Insecure server rejected by user</source>
-        <translation>Ebaturvaline server on kasutaja poolt tagasi lükatud</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::SetupWizardController</name>
-    <message>
-        <source>Invalid credentials</source>
-        <translation>Valed kasutajaandmed</translation>
-    </message>
-    <message>
-        <source>Failed to retrieve user information from server</source>
-        <translation>Kasutaja info kättesaamine serverist ebaõnnestus</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::SetupWizardWindow</name>
-    <message>
-        <source>Finish</source>
-        <translation>Lõpeta</translation>
-    </message>
-    <message>
-        <source>Next &gt;</source>
-        <translation>Järgmine &gt;</translation>
-    </message>
-    <message>
-        <source>Cancel Setup</source>
-        <translation>Tühista seadistamine</translation>
-    </message>
-    <message>
-        <source>Do you really want to cancel the account setup?</source>
-        <translation>Kas te tõesti soovite konto seadistamise tühistada?</translation>
-    </message>
-</context>
-<context>
-    <name>APP::ApplicationGui</name>
-    <message>
-        <source>Please sign in</source>
-        <translation>Palun logi sisse</translation>
-    </message>
-    <message>
-        <source>Folder %1: %2</source>
-        <translation>Kaust %1: %2</translation>
-    </message>
-    <message>
-        <source>Unresolved %1 conflicts</source>
-        <translation>Lahendamata %1 konfliktid</translation>
-    </message>
-    <message>
-        <source>Ignored errors %1</source>
-        <translation>Ignoreeritud vigu %1</translation>
-    </message>
-    <message>
-        <source>There are no sync folders configured.</source>
-        <translation>Sünkroniseeritavaid kaustasid pole seadistatud.</translation>
-    </message>
-    <message>
-        <source>Log in...</source>
-        <translation>Logi sisse...</translation>
-    </message>
-    <message>
-        <source>Log out</source>
-        <translation>Logi välja</translation>
-    </message>
-    <message>
-        <source>Recent Changes</source>
-        <translation>Hiljutised muudatused</translation>
-    </message>
-    <message>
-        <source>Open folder &apos;%1&apos;</source>
-        <translation>Ava kaust &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
-        <translation>Konto %1 server on kasutab mittetoetatud versiooni %2. Selle kliendi kasutamine koos toetamata serveriversioonidega on testimata ja potentsiaalselt ohtlik. Tegutsege omal vastutusel.</translation>
-    </message>
-    <message>
-        <source>Account %1</source>
-        <translation>Konto %1</translation>
-    </message>
-    <message>
-        <source>Stop synchronization</source>
-        <translation>Peata sünkroniseerimine</translation>
-    </message>
-    <message>
-        <source>Create a new account</source>
-        <translation>Loo uus konto</translation>
-    </message>
-    <message>
-        <source>Unknown status</source>
-        <translation>Tundmatu staatus</translation>
-    </message>
-    <message>
-        <source>Details...</source>
-        <translation>Üksikasjad...</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation>Abiinfo</translation>
-    </message>
-    <message>
-        <source>Resume synchronization</source>
-        <translation>Jätka sünkroniseerimist</translation>
-    </message>
-    <message>
-        <source>Quit %1</source>
-        <translation>Lõpeta %1</translation>
-    </message>
-    <message>
-        <source>Disconnected from %1</source>
-        <translation>Ühendus %1 katkestatud</translation>
-    </message>
-    <message>
-        <source>Unsupported Server Version</source>
-        <translation>Toetamata serveri versioon</translation>
-    </message>
-    <message>
-        <source>Disconnected</source>
-        <translation>Lahti ühendatud</translation>
-    </message>
-    <message>
-        <source>Disconnected from some accounts</source>
-        <translation>Ühendus mõne kontoga katkestatud</translation>
-    </message>
-    <message>
-        <source>Disconnected from accounts:</source>
-        <translation>Kontodest lahtiühendatud</translation>
-    </message>
-    <message>
-        <source>Signed out</source>
-        <translation>Välja logitud</translation>
-    </message>
-    <message>
-        <source>Account synchronization is disabled</source>
-        <translation>Konto sünkroniseermine ei ole lubatud</translation>
-    </message>
-    <message>
-        <source>Synchronization is paused</source>
-        <translation>Sünkroniseerimine on peatatud</translation>
-    </message>
-    <message>
-        <source>Up to date (%1)</source>
-        <translation>Ajakohane (%1)</translation>
-    </message>
-    <message>
-        <source>No sync folders configured</source>
-        <translation>Sünkroniseerimiskaustu ei ole konfigureeritud</translation>
-    </message>
-    <message>
-        <source>Show %1</source>
-        <translation>Näita %1</translation>
-    </message>
-    <message>
-        <source>About %1</source>
-        <translation>Rakendusest %1</translation>
-    </message>
-    <message>
-        <source>No items synced recently</source>
-        <translation>Ühtegi üksust pole hiljuti sünkroniseeritud</translation>
-    </message>
-    <message>
-        <source>Checking for changes in remote &apos;%1&apos;</source>
-        <translation>Kaugühenduse &apos;%1&apos; muutuste kontroll</translation>
-    </message>
-    <message>
-        <source>Checking for changes in local &apos;%1&apos;</source>
-        <translation>Kohaliku &apos;%1&apos; muutuste kontroll</translation>
-    </message>
-    <message>
-        <source>Syncing %1 of %2  (%3 left)</source>
-        <translation>Sünkroniseerin %1 %2-st (%3 veel)</translation>
-    </message>
-    <message>
-        <source>Syncing %1 of %2</source>
-        <translation>Sünkroniseerimine %1 %2-st</translation>
-    </message>
-    <message>
-        <source>Syncing %1 (%2 left)</source>
-        <translation>Sünkroniseerin %1 (%2 veel)</translation>
-    </message>
-    <message>
-        <source>Syncing %1</source>
-        <translation>Sünkroniseerin %1</translation>
-    </message>
-    <message>
-        <source>%1 (%2, %3)</source>
-        <translation>%1 (%2, %3)</translation>
+        <source>Form</source>
+        <translation>Vorm</translation>
     </message>
 </context>
 <context>
@@ -3253,6 +3641,10 @@ Kas olete kindel, et soovite jätkata?</translation>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
+    <message>
+        <source>Enter a valid email address</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ResolveUrlJobFactory</name>
@@ -3270,29 +3662,17 @@ Kas olete kindel, et soovite jätkata?</translation>
     </message>
 </context>
 <context>
-    <name>ServerUrlSetupWizardPage</name>
+    <name>SetupWidget</name>
     <message>
-        <source>Form</source>
-        <translation>Vorm</translation>
-    </message>
-    <message>
-        <source>What is your server&apos;s address?</source>
-        <translation>Milline on teie serveri aadress?</translation>
+        <source>Add New Account</source>
+        <translation>Lisa Uus Konto</translation>
     </message>
 </context>
 <context>
     <name>SetupWizardState</name>
     <message>
-        <source>Server URL</source>
-        <translation>Serveri URL</translation>
-    </message>
-    <message>
         <source>Welcome</source>
         <translation>Tere tulemast</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation>Kasutajanimi</translation>
     </message>
     <message>
         <source>Login</source>
@@ -3304,22 +3684,10 @@ Kas olete kindel, et soovite jätkata?</translation>
     </message>
 </context>
 <context>
-    <name>SetupWizardWindow</name>
+    <name>SimpleResolveUrlJobFactory</name>
     <message>
-        <source>Add New Account</source>
-        <translation>Lisa Uus Konto</translation>
-    </message>
-    <message>
-        <source>Dismiss</source>
-        <translation>Jäta vahele</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Loobu</translation>
-    </message>
-    <message>
-        <source>&lt; Back</source>
-        <translation>&lt; Tagasi</translation>
+        <source>Could not detect compatible server at %1</source>
+        <translation>Ühilduvat serverit asukohas %1 ei õnnestunud tuvastada</translation>
     </message>
 </context>
 <context>
@@ -3450,6 +3818,25 @@ Kas olete kindel, et soovite jätkata?</translation>
     </message>
 </context>
 <context>
+    <name>WaitPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Vorm</translation>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Logging in to your account</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>WebFingerUserInfoJobFactory</name>
     <message>
         <source>Failed to retrieve user info</source>
@@ -3468,24 +3855,10 @@ Kas olete kindel, et soovite jätkata?</translation>
     </message>
 </context>
 <context>
-    <name>ApplicationTheme::aboutVersions()</name>
-    <message>
-        <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
-        <translation>%1 %2%7%8Qt teegid %3, %4%7Kasutatakse virtuaalsete failide pluginat: %5%7%6</translation>
-    </message>
-</context>
-<context>
-    <name>ApplicationTheme::qtVer</name>
+    <name>ownCloudTheme::qtVer</name>
     <message>
         <source>%1 (Built against Qt %2)</source>
         <translation>%1 (Ehitatud vastavalt Qt %2)</translation>
-    </message>
-</context>
-<context>
-    <name>ApplicationTheme::versionWithSha</name>
-    <message>
-        <source>%1 %2</source>
-        <translation>%1 %2</translation>
     </message>
 </context>
 <context>

@@ -1,289 +1,13 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_TW">
 <context>
-    <name>AccountConfiguredWizardPage</name>
-    <message>
-        <source>✓ You&apos;re all set!</source>
-        <translation>您都準備好了！</translation>
-    </message>
-    <message>
-        <source>Advanced configuration</source>
-        <translation>高級配置</translation>
-    </message>
-    <message>
-        <source>Configure files download:</source>
-        <translation>配置檔案下載</translation>
-    </message>
-    <message>
-        <source>Download everything</source>
-        <translation>下載所有</translation>
-    </message>
-    <message>
-        <source>After completing this wizard, you can set up folder synchronization manually.</source>
-        <translation>完成此精靈後，您可以手動設定目錄同步。</translation>
-    </message>
-    <message>
-        <source>Configure synchronization manually</source>
-        <translation>配置手動同步</translation>
-    </message>
-    <message>
-        <source>Choose local download directory:</source>
-        <translation>選擇本地端下載資料夾</translation>
-    </message>
-    <message>
-        <source>Restore default value</source>
-        <translation>恢復預設值</translation>
-    </message>
-</context>
-<context>
-    <name>AppImageUpdateAvailableDialogUi</name>
-    <message>
-        <source>Update available</source>
-        <translation>更新可用的</translation>
-    </message>
-    <message>
-        <source>Skip this version</source>
-        <translation>跳過這個版本</translation>
-    </message>
-</context>
-<context>
-    <name>AppProvider</name>
-    <message>
-        <source>Failed to open %1 in web. Error: %2.</source>
-        <translation>無法在網頁中開啟%1，錯誤訊息：%2</translation>
-    </message>
-</context>
-<context>
-    <name>BasicLoginWidget</name>
-    <message>
-        <source>Username</source>
-        <translation>使用者名稱</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>密碼</translation>
-    </message>
-</context>
-<context>
-    <name>CheckBasicAuthJobFactory</name>
-    <message>
-        <source>Invalid reply received from server</source>
-        <translation>從伺服器收到了無效的回覆</translation>
-    </message>
-</context>
-<context>
-    <name>ChecksumHeader</name>
-    <message>
-        <source>The checksum header is malformed: %1</source>
-        <translation>校驗碼和標頭格式錯誤: %1</translation>
-    </message>
-    <message>
-        <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
-        <translation>校正資料含有未知的型態 &apos;%1&apos;</translation>
-    </message>
-</context>
-<context>
-    <name>CommandLine</name>
-    <message>
-        <source>For more information, see %1</source>
-        <translation>有關更多詳細信息，請參閱%1</translation>
-    </message>
-</context>
-<context>
-    <name>CommonStrings</name>
-    <message>
-        <source>file manager</source>
-        <translation>檔案管理器</translation>
-    </message>
-    <message>
-        <source>Show in %1</source>
-        <translation>顯示在 %1</translation>
-    </message>
-    <message>
-        <source>Show in web browser</source>
-        <translation>顯示在網頁瀏覽器</translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation>複製</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n Filter(s)</source>
-        <translation><numerusform>%n 篩選器(s)</numerusform></translation>
-    </message>
-</context>
-<context>
-    <name>CredentialsSetupWizardPage</name>
-    <message>
-        <source>Form</source>
-        <translation>表單</translation>
-    </message>
-</context>
-<context>
-    <name>DetermineAuthTypeJobFactory</name>
-    <message>
-        <source>Server did not ask for authorization</source>
-        <translation>伺服器沒有要求授權</translation>
-    </message>
-    <message>
-        <source>Failed to determine auth type: %1</source>
-        <translation>無法確定身份驗證類型：%1</translation>
-    </message>
-</context>
-<context>
-    <name>DiscoverWebFingerServiceJobFactory</name>
-    <message>
-        <source>Invalid reply received from server</source>
-        <translation>無效的回覆從伺服器收到了無效的應答</translation>
-    </message>
-</context>
-<context>
-    <name>FetchUserInfoJobFactory</name>
-    <message>
-        <source>Failed to retrieve user info</source>
-        <translation>檢索使用者資訊失敗</translation>
-    </message>
-</context>
-<context>
-    <name>FileSystem</name>
-    <message>
-        <source>Can&apos;t rename %1, the file is currently in use</source>
-        <translation>無法重新命名 %1，該檔案目前正在使用中</translation>
-    </message>
-    <message>
-        <source>Could not make directories in trash</source>
-        <translation>無法將資料夾放入垃圾箱</translation>
-    </message>
-    <message>
-        <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation>無法將&apos;％1&apos;移動&apos;％2&apos;</translation>
-    </message>
-    <message>
-        <source>Moving to the trash is not implemented on this platform</source>
-        <translation>此平台上未實現移至回收站</translation>
-    </message>
-    <message>
-        <source>Could not remove folder</source>
-        <translation>無法移除目錄</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizard</name>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;錯誤:&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;警告:&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;錯誤:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;警告:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizardSourcePage</name>
-    <message>
-        <source>Form</source>
-        <translation>表單</translation>
-    </message>
-    <message>
-        <source>Pick a local folder on your computer to sync</source>
-        <translation>在您的電腦中選擇一個本地資料夾用來同步</translation>
-    </message>
-    <message>
-        <source>&amp;Choose...</source>
-        <translation>選擇 (&amp;C)...</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizardTargetPage</name>
-    <message>
-        <source>Form</source>
-        <translation>表單</translation>
-    </message>
-    <message>
-        <source>Select a remote destination folder</source>
-        <translation>選擇一個遠端的目標資料夾</translation>
-    </message>
-    <message>
-        <source>Create Folder</source>
-        <translation>建立資料夾</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation>重新整理</translation>
-    </message>
-    <message>
-        <source>Folders</source>
-        <translation>資料夾</translation>
-    </message>
-</context>
-<context>
-    <name>LegacyWebFingerSetupWizardPage</name>
-    <message>
-        <source>Form</source>
-        <translation>表單</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation>使用者名稱</translation>
-    </message>
-</context>
-<context>
-    <name>LoginRequiredDialog</name>
-    <message>
-        <source>Login required</source>
-        <translation>登入必要的</translation>
-    </message>
-</context>
-<context>
-    <name>NotificationWidget</name>
-    <message>
-        <source>Form</source>
-        <translation>表單</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet</source>
-        <translation>Lorem ipsum dolor sit amet</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
-        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm</translation>
-    </message>
-</context>
-<context>
-    <name>OAuthLoginWidget</name>
-    <message>
-        <source>Open Browser</source>
-        <translation>開啟瀏覽器</translation>
-    </message>
-    <message>
-        <source>Copy URL to clipboard</source>
-        <translation>複製超連結到剪貼簿</translation>
-    </message>
-    <message>
-        <source>Retry</source>
-        <translation>重試</translation>
-    </message>
-</context>
-<context>
     <name>APP::AboutDialog</name>
-    <message>
-        <source>About</source>
-        <translation>關於</translation>
-    </message>
-    <message>
-        <source>Versions</source>
-        <translation>版本</translation>
-    </message>
     <message>
         <source>About %1</source>
         <translation>關於 %1</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -403,7 +127,7 @@
         <translation>停用虛擬檔案支持？</translation>
     </message>
     <message>
-        <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as 'available online only' will be downloaded.
+        <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as &apos;available online only&apos; will be downloaded.
 
 The only advantage of disabling virtual file support is that the selective sync feature will become available again.
 
@@ -437,6 +161,14 @@ This action will abort any currently running synchronization.</source>
     <message>
         <source>Connected to %1.</source>
         <translation>已連線到 %1</translation>
+    </message>
+    <message>
+        <source>Show device info</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open share page</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Server %1 is temporarily unavailable.</source>
@@ -655,6 +387,161 @@ The update will be performed in the background, and overwrite the current AppIma
     </message>
 </context>
 <context>
+    <name>APP::ApplicationGui</name>
+    <message>
+        <source>Please sign in</source>
+        <translation>請登入</translation>
+    </message>
+    <message>
+        <source>Folder %1: %2</source>
+        <translation>資料夾 %1: %2</translation>
+    </message>
+    <message>
+        <source>Unresolved %1 conflicts</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ignored errors %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There are no sync folders configured.</source>
+        <translation>尚未設置同步資料夾。</translation>
+    </message>
+    <message>
+        <source>Log in...</source>
+        <translation>登入...</translation>
+    </message>
+    <message>
+        <source>Log out</source>
+        <translation>登出</translation>
+    </message>
+    <message>
+        <source>Recent Changes</source>
+        <translation>最近的更動</translation>
+    </message>
+    <message>
+        <source>Open folder &apos;%1&apos;</source>
+        <translation>開啟 %1 資料夾</translation>
+    </message>
+    <message>
+        <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
+        <translation>帳號％1上的伺服器運行不受支持的版本％2。 將此客戶端與不受支持的伺服器版本一起使用是未經測試的，並且可能有危險。 繼續需要您自擔風險。</translation>
+    </message>
+    <message>
+        <source>Account %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Stop synchronization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Create a new account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unknown status</source>
+        <translation>未知狀態</translation>
+    </message>
+    <message>
+        <source>Details...</source>
+        <translation>細節…</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation>說明</translation>
+    </message>
+    <message>
+        <source>Resume synchronization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Quit %1</source>
+        <translation>離開 %1</translation>
+    </message>
+    <message>
+        <source>Disconnected from %1</source>
+        <translation>從 %1 斷線</translation>
+    </message>
+    <message>
+        <source>Unsupported Server Version</source>
+        <translation>不支持的伺服器版本</translation>
+    </message>
+    <message>
+        <source>Disconnected</source>
+        <translation>已經離線</translation>
+    </message>
+    <message>
+        <source>Disconnected from some accounts</source>
+        <translation>與某些帳戶斷開連接</translation>
+    </message>
+    <message>
+        <source>Disconnected from accounts:</source>
+        <translation>已從帳號離線:</translation>
+    </message>
+    <message>
+        <source>Signed out</source>
+        <translation>已登出</translation>
+    </message>
+    <message>
+        <source>Account synchronization is disabled</source>
+        <translation>帳號同步已停用</translation>
+    </message>
+    <message>
+        <source>Synchronization is paused</source>
+        <translation>同步已暫停</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>No sync folders configured</source>
+        <translation>未配置同步目錄</translation>
+    </message>
+    <message>
+        <source>Show %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation>關於 %1</translation>
+    </message>
+    <message>
+        <source>No items synced recently</source>
+        <translation>最近沒有項目被同步</translation>
+    </message>
+    <message>
+        <source>Checking for changes in remote &apos;%1&apos;</source>
+        <translation>檢查遠端&apos;％1&apos;中的更改</translation>
+    </message>
+    <message>
+        <source>Checking for changes in local &apos;%1&apos;</source>
+        <translation>檢查本地端&apos;％1&apos;中的更改</translation>
+    </message>
+    <message>
+        <source>Syncing %1 of %2  (%3 left)</source>
+        <translation>同步中 %1 的 %2 (剩餘 %3)</translation>
+    </message>
+    <message>
+        <source>Syncing %1 of %2</source>
+        <translation>正在同步％2的％1</translation>
+    </message>
+    <message>
+        <source>Syncing %1 (%2 left)</source>
+        <translation>同步中 %1 (剩餘 %2)</translation>
+    </message>
+    <message>
+        <source>Syncing %1</source>
+        <translation>同步 %1</translation>
+    </message>
+    <message>
+        <source>%1 (%2, %3)</source>
+        <translation>%1 (%2, %3)</translation>
+    </message>
+</context>
+<context>
     <name>APP::AskExperimentalVirtualFilesFeatureMessageBox</name>
     <message>
         <source>Enable experimental feature?</source>
@@ -717,6 +604,13 @@ This is a new, experimental mode. If you decide to use it, please report any iss
     <message>
         <source>Failed to parse credentials %1</source>
         <translation>無法解析憑證 %1</translation>
+    </message>
+</context>
+<context>
+    <name>APP::CuratorPropagator</name>
+    <message>
+        <source>File %1 is currently in use</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -883,7 +777,7 @@ This means that the synchronization client might not upload local changes immedi
 ％1</translation>
     </message>
     <message>
-        <source>All files in the sync folder '%1' folder were deleted on the server.
+        <source>All files in the sync folder &apos;%1&apos; folder were deleted on the server.
 These deletes will be synchronized to your local sync folder, making such files unavailable unless you have a right to restore. 
 If you decide to keep the files, they will be re-synced with the server if you have rights to do so.
 If you decide to delete the files, they will be unavailable to you, unless you are the owner.</source>
@@ -893,7 +787,7 @@ If you decide to delete the files, they will be unavailable to you, unless you a
 如果您決定刪除文件，除非您是所有者，否則您將無法使用它們。</translation>
     </message>
     <message>
-        <source>All the files in your local sync folder '%1' were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
+        <source>All the files in your local sync folder &apos;%1&apos; were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
 Are you sure you want to sync those actions with the server?
 If this was an accident and you decide to keep your files, they will be re-synced from the server.</source>
         <translation>本地端同步目錄&apos;％1&apos;中的所有文件都已刪除。 這些刪除將與您的伺服器同步，除非恢復，否則此類文件將不可用。
@@ -980,10 +874,6 @@ If this was an accident and you decide to keep your files, they will be re-synce
 This configuration is know to lead to dataloss and is no longer supported.
 Please consider removing this folder from the account and adding it again.</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>%1 - %2@%3</source>
-        <translation>%1 - %2@%3</translation>
     </message>
 </context>
 <context>
@@ -1413,6 +1303,13 @@ Items where deletion is allowed will be deleted if they prevent a directory from
         <translation>%1 無法寫入變更。</translation>
     </message>
     <message>
+        <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
+        <translation>這個項目是由系統提供在 &apos;%1&apos; 且不能在這個頁面被修改</translation>
+    </message>
+</context>
+<context>
+    <name>APP::InpDlg</name>
+    <message>
         <source>Add Ignore Pattern</source>
         <translation>增加忽略格式</translation>
     </message>
@@ -1421,8 +1318,12 @@ Items where deletion is allowed will be deleted if they prevent a directory from
         <translation>增加一個新的忽略格式:</translation>
     </message>
     <message>
-        <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
-        <translation>這個項目是由系統提供在 &apos;%1&apos; 且不能在這個頁面被修改</translation>
+        <source>OK</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
@@ -1793,13 +1694,6 @@ for additional privileges during the process.</source>
     <message>
         <source>Update Check</source>
         <translation>更新檢查</translation>
-    </message>
-</context>
-<context>
-    <name>APP::CuratorPropagator</name>
-    <message>
-        <source>File %1 is currently in use</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2314,16 +2208,16 @@ for additional privileges during the process.</source>
         <translation>您確定您要退出嗎 %1?</translation>
     </message>
     <message>
+        <source>%1 - %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Account</source>
         <translation>帳號</translation>
     </message>
     <message>
         <source>MainWindow</source>
         <translation>主窗口</translation>
-    </message>
-    <message>
-        <source>Hide</source>
-        <translation>隱藏</translation>
     </message>
 </context>
 <context>
@@ -2339,6 +2233,10 @@ for additional privileges during the process.</source>
     <message>
         <source>Curator Path:</source>
         <translation>Curator 路徑:</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>%1 Sharing</source>
@@ -2749,6 +2647,10 @@ for additional privileges during the process.</source>
         <translation>無法開啟或建立本地端同步資料庫。 確保您在同步目錄中具有寫訪問權限。</translation>
     </message>
     <message>
+        <source>Synchronization aborted due to IP address change</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Disk space is low: Downloads that would reduce free space below %1 were skipped.</source>
         <translation>磁盤空間不足：下載將減少以下可用空間 %1 被跳過了。</translation>
     </message>
@@ -2874,14 +2776,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::AccountConfiguredSetupWizardState</name>
-    <message>
-        <source>Invalid local download directory: %1</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::AccountConfiguredWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredPage</name>
     <message>
         <source>Use &amp;virtual files instead of downloading content immediately</source>
         <translation>使用＆虛擬文件，而不是立即下載內容</translation>
@@ -2914,13 +2809,7 @@ The virtual files mode is mutually exclusive with selective sync. Currently unse
 Switching to this mode will abort any currently running synchronization.
 
 This is a new, experimental mode. If you decide to use it, please report any issues that come up.</source>
-        <translation>啟用「虛擬檔案」模式後，最初不會下載任何檔案。 相反，將為伺服器上存在的每個檔案建立一個小檔案。 可以透過執行這些文件或使用其上下文選單來下載內容。
-
-虛擬檔案模式與選擇性同步是互斥的。 目前未選擇的資料夾將轉換為僅限線上的資料夾，並且您的選擇性同步設定將被重設。
-
-切換到此模式將中止任何目前正在運行的同步。
-
-這是一種新的實驗模式。 如果您決定使用它，請報告出現的任何問題。</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Enable experimental placeholder mode</source>
@@ -2932,62 +2821,756 @@ This is a new, experimental mode. If you decide to use it, please report any iss
     </message>
 </context>
 <context>
-    <name>APP::Wizard::BasicCredentialsSetupWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredState</name>
     <message>
-        <source>Please enter your credentials to log in to your account.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
+        <source>Invalid local download directory: %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::BasicCredentialsSetupWizardState</name>
+    <name>APP::Wizard::CredentialsState</name>
     <message>
         <source>Invalid credentials</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::LegacyWebFingerSetupWizardPage</name>
+    <name>APP::Wizard::SetupController</name>
     <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
+        <source>OS state: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Please enter your %1:</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::LegacyWebFingerSetupWizardState</name>
-    <message>
-        <source>Failed to parse WebFinger response: %1</source>
+        <source>&lt;empty&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>WebFinger endpoint did not send href attribute</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::OAuthCredentialsSetupWizardPage</name>
-    <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
+        <source>OOBE is not done</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Reopen Browser</source>
+        <source>Invalid credentials</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Please use your browser to log in to %1.</source>
+        <source>Failed to retrieve user information from server</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Invalid local download directory: %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::OAuthCredentialsSetupWizardState</name>
+    <name>APP::Wizard::SetupWidget</name>
+    <message>
+        <source>Cancel Setup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you really want to cancel the account setup?</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AccountConfiguredPage</name>
+    <message>
+        <source>✓ You&apos;re all set!</source>
+        <translation>您都準備好了！</translation>
+    </message>
+    <message>
+        <source>Advanced configuration</source>
+        <translation>高級配置</translation>
+    </message>
+    <message>
+        <source>Configure files download:</source>
+        <translation>配置檔案下載</translation>
+    </message>
+    <message>
+        <source>Download everything</source>
+        <translation>下載所有</translation>
+    </message>
+    <message>
+        <source>After completing this wizard, you can set up folder synchronization manually.</source>
+        <translation>完成此精靈後，您可以手動設定目錄同步。</translation>
+    </message>
+    <message>
+        <source>Configure synchronization manually</source>
+        <translation>配置手動同步</translation>
+    </message>
+    <message>
+        <source>Choose local download directory:</source>
+        <translation>選擇本地端下載資料夾</translation>
+    </message>
+    <message>
+        <source>Restore default value</source>
+        <translation>恢復預設值</translation>
+    </message>
+</context>
+<context>
+    <name>AppImageUpdateAvailableDialogUi</name>
+    <message>
+        <source>Update available</source>
+        <translation>更新可用的</translation>
+    </message>
+    <message>
+        <source>Skip this version</source>
+        <translation>跳過這個版本</translation>
+    </message>
+</context>
+<context>
+    <name>AppProvider</name>
+    <message>
+        <source>Failed to open %1 in web. Error: %2.</source>
+        <translation>無法在網頁中開啟%1，錯誤訊息：%2</translation>
+    </message>
+</context>
+<context>
+    <name>ApplicationTheme::aboutVersions()</name>
+    <message>
+        <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ApplicationTheme::versionWithSha</name>
+    <message>
+        <source>%1 %2</source>
+        <translation>%1 %2</translation>
+    </message>
+</context>
+<context>
+    <name>BasicLoginWidget</name>
+    <message>
+        <source>Username</source>
+        <translation>使用者名稱</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>密碼</translation>
+    </message>
+</context>
+<context>
+    <name>CheckBasicAuthJobFactory</name>
+    <message>
+        <source>Invalid reply received from server</source>
+        <translation>從伺服器收到了無效的回覆</translation>
+    </message>
+</context>
+<context>
+    <name>ChecksumHeader</name>
+    <message>
+        <source>The checksum header is malformed: %1</source>
+        <translation>校驗碼和標頭格式錯誤: %1</translation>
+    </message>
+    <message>
+        <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
+        <translation>校正資料含有未知的型態 &apos;%1&apos;</translation>
+    </message>
+</context>
+<context>
+    <name>CodeDialog</name>
+    <message>
+        <source>Allow remote access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>We have sent a one-time code to authorize this device to access your Personal Cloud. Check your email for the code and enter it here. If you do not see it in your inbox, please check your spam folder.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Allow access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Resend code</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CodeDialogController</name>
+    <message>
+        <source>Incorrect code</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your code has expired</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CodeInputWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>表單</translation>
+    </message>
+    <message>
+        <source>Paste code</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ComboWidget</name>
+    <message>
+        <source>button_icon_tool</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Error text</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CommandLine</name>
+    <message>
+        <source>For more information, see %1</source>
+        <translation>有關更多詳細信息，請參閱%1</translation>
+    </message>
+</context>
+<context>
+    <name>CommonStrings</name>
+    <message>
+        <source>file manager</source>
+        <translation>檔案管理器</translation>
+    </message>
+    <message>
+        <source>Show in %1</source>
+        <translation>顯示在 %1</translation>
+    </message>
+    <message>
+        <source>Show Files in web browser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show Photos in web browser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>複製</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n Filter(s)</source>
+        <translation><numerusform>%n 篩選器(s)</numerusform></translation>
+    </message>
+</context>
+<context>
+    <name>ConnectErrorPage</name>
+    <message>
+        <source>Form</source>
+        <translation>表單</translation>
+    </message>
+    <message>
+        <source>Unable to connect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol&gt;&lt;li&gt;Verify that the device is properly connected to the network and that the internet connection is stable&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;2&quot;&gt;&lt;li&gt;Make sure the device is powered on and functioning correctly&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;3&quot;&gt;&lt;li&gt;Check firewall settings to confirm they are not blocking the connection&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;4&quot;&gt;&lt;li&gt;If using a wireless connection, confirm the device is within range of the router&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;5&quot;&gt;&lt;li&gt;Your device and mobile phone must be on the same network&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>If you continue to experience issues, please contact our &lt;a href=&quot;https://seagare.com&quot;&gt;Support team&lt;/a&gt; for further assistance.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>重試</translation>
+    </message>
+</context>
+<context>
+    <name>CredentialsPage</name>
+    <message>
+        <source>helper_frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Can’t find your device?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Password</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>登入</translation>
+    </message>
+    <message>
+        <source>button_accent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting to</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>密碼</translation>
+    </message>
+    <message>
+        <source>Enter a valid email address and password</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Invalid URL</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DetermineAuthTypeJobFactory</name>
+    <message>
+        <source>Server did not ask for authorization</source>
+        <translation>伺服器沒有要求授權</translation>
+    </message>
+    <message>
+        <source>Failed to determine auth type: %1</source>
+        <translation>無法確定身份驗證類型：%1</translation>
+    </message>
+</context>
+<context>
+    <name>DevModel</name>
+    <message>
+        <source>true</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>false</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Url</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OOBE Done</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DevWidget</name>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>---</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friendlyName</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>hostname</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>deviceID</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>certificateCN</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>:</source>
+        <translation>:</translation>
+    </message>
+    <message>
+        <source>origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>deviceType</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Query about and status</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Apply to account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fetch from account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Simulate network change</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>未知</translation>
+    </message>
+    <message>
+        <source>Local</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Public</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remote</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mDNS</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Static</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DiscoverWebFingerServiceJobFactory</name>
+    <message>
+        <source>Invalid reply received from server</source>
+        <translation>無效的回覆從伺服器收到了無效的應答</translation>
+    </message>
+</context>
+<context>
+    <name>EmailPage</name>
+    <message>
+        <source>helper_frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>登入</translation>
+    </message>
+    <message>
+        <source>Email</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>EmailPageController</name>
+    <message>
+        <source>Invalid email</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Not allowed. Contact the device owner.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ErrorDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>表單</translation>
+    </message>
+    <message>
+        <source>Access to Personal Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>重試</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ErrorDialogController</name>
+    <message>
+        <source>Access to Personal Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unable to connect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Email not registered</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Could not reach your Personal Cloud.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>This email isn’t authorized to access this device. Please contact the owner.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>FetchUserInfoJobFactory</name>
+    <message>
+        <source>Failed to retrieve user info</source>
+        <translation>檢索使用者資訊失敗</translation>
+    </message>
+</context>
+<context>
+    <name>FileSystem</name>
+    <message>
+        <source>Can&apos;t rename %1, the file is currently in use</source>
+        <translation>無法重新命名 %1，該檔案目前正在使用中</translation>
+    </message>
+    <message>
+        <source>Could not make directories in trash</source>
+        <translation>無法將資料夾放入垃圾箱</translation>
+    </message>
+    <message>
+        <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>無法將&apos;％1&apos;移動&apos;％2&apos;</translation>
+    </message>
+    <message>
+        <source>Moving to the trash is not implemented on this platform</source>
+        <translation>此平台上未實現移至回收站</translation>
+    </message>
+    <message>
+        <source>Could not remove folder</source>
+        <translation>無法移除目錄</translation>
+    </message>
+</context>
+<context>
+    <name>FinishedPage</name>
+    <message>
+        <source>Form</source>
+        <translation>表單</translation>
+    </message>
+    <message>
+        <source>You&apos;re all set!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advanced configuration</source>
+        <translation>高級配置</translation>
+    </message>
+    <message>
+        <source>Configure files download:</source>
+        <translation>配置檔案下載</translation>
+    </message>
+    <message>
+        <source>Download everything (recommended)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Configure synchronization manually</source>
+        <translation>配置手動同步</translation>
+    </message>
+    <message>
+        <source>Use &amp;virtual files instead of downloading content immediately</source>
+        <translation>使用＆虛擬文件，而不是立即下載內容</translation>
+    </message>
+    <message>
+        <source>Choose local download directory:</source>
+        <translation>選擇本地端下載資料夾</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The virtual filesystem feature is not available for this installation.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The virtual filesystem feature is not stable yet. Use with caution.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable experimental feature?</source>
+        <translation>啟用實驗功能？</translation>
+    </message>
+    <message>
+        <source>When the &quot;virtual files&quot; mode is enabled no files will be downloaded initially. Instead, a tiny file will be created for each file that exists on the server. The contents can be downloaded by running these files or by using their context menu.
+
+The virtual files mode is mutually exclusive with selective sync. Currently unselected folders will be translated to online-only folders and your selective sync settings will be reset.
+
+Switching to this mode will abort any currently running synchronization.
+
+This is a new, experimental mode. If you decide to use it, please report any issues that come up.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable experimental placeholder mode</source>
+        <translation>啟用實驗佔位符模式</translation>
+    </message>
+    <message>
+        <source>Stay safe</source>
+        <translation>注意安全</translation>
+    </message>
+    <message>
+        <source>Select the local folder</source>
+        <translation>選擇本地端目錄</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizard</name>
+    <message>
+        <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;錯誤:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;警告:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
+        <translation>&lt;b&gt;錯誤:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
+        <translation>&lt;b&gt;警告:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizardSourcePage</name>
+    <message>
+        <source>Form</source>
+        <translation>表單</translation>
+    </message>
+    <message>
+        <source>Pick a local folder on your computer to sync</source>
+        <translation>在您的電腦中選擇一個本地資料夾用來同步</translation>
+    </message>
+    <message>
+        <source>&amp;Choose...</source>
+        <translation>選擇 (&amp;C)...</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizardTargetPage</name>
+    <message>
+        <source>Form</source>
+        <translation>表單</translation>
+    </message>
+    <message>
+        <source>Select a remote destination folder</source>
+        <translation>選擇一個遠端的目標資料夾</translation>
+    </message>
+    <message>
+        <source>Create Folder</source>
+        <translation>建立資料夾</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation>重新整理</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>資料夾</translation>
+    </message>
+</context>
+<context>
+    <name>InputWidget</name>
+    <message>
+        <source>Error text</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>LoginRequiredDialog</name>
+    <message>
+        <source>Login required</source>
+        <translation>登入必要的</translation>
+    </message>
+</context>
+<context>
+    <name>NotificationWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>表單</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet</source>
+        <translation>Lorem ipsum dolor sit amet</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
+        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm</translation>
+    </message>
+</context>
+<context>
+    <name>OAuthCredentialsSetupWizardState</name>
     <message>
         <source>Error while trying to log in to OAuth2-enabled server.</source>
         <translation type="unfinished"/>
@@ -3002,219 +3585,25 @@ This is a new, experimental mode. If you decide to use it, please report any iss
     </message>
 </context>
 <context>
-    <name>APP::Wizard::ServerUrlSetupWizardPage</name>
+    <name>OAuthLoginWidget</name>
     <message>
-        <source>Welcome to %1</source>
-        <translation>歡迎%1!</translation>
+        <source>Open Browser</source>
+        <translation>開啟瀏覽器</translation>
+    </message>
+    <message>
+        <source>Copy URL to clipboard</source>
+        <translation>複製超連結到剪貼簿</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>重試</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::ServerUrlSetupWizardState</name>
+    <name>PopupComboWidget</name>
     <message>
-        <source>Invalid server URL</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Insecure connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>The connection to %1 is insecure.
-Are you sure you want to proceed?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>確認</translation>
-    </message>
-    <message>
-        <source>Insecure server rejected by user</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::SetupWizardController</name>
-    <message>
-        <source>Invalid credentials</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Failed to retrieve user information from server</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::SetupWizardWindow</name>
-    <message>
-        <source>Finish</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next &gt;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cancel Setup</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Do you really want to cancel the account setup?</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>APP::ApplicationGui</name>
-    <message>
-        <source>Please sign in</source>
-        <translation>請登入</translation>
-    </message>
-    <message>
-        <source>Folder %1: %2</source>
-        <translation>資料夾 %1: %2</translation>
-    </message>
-    <message>
-        <source>Unresolved %1 conflicts</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Ignored errors %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>There are no sync folders configured.</source>
-        <translation>尚未設置同步資料夾。</translation>
-    </message>
-    <message>
-        <source>Log in...</source>
-        <translation>登入...</translation>
-    </message>
-    <message>
-        <source>Log out</source>
-        <translation>登出</translation>
-    </message>
-    <message>
-        <source>Recent Changes</source>
-        <translation>最近的更動</translation>
-    </message>
-    <message>
-        <source>Open folder &apos;%1&apos;</source>
-        <translation>開啟 %1 資料夾</translation>
-    </message>
-    <message>
-        <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
-        <translation>帳號％1上的伺服器運行不受支持的版本％2。 將此客戶端與不受支持的伺服器版本一起使用是未經測試的，並且可能有危險。 繼續需要您自擔風險。</translation>
-    </message>
-    <message>
-        <source>Account %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Stop synchronization</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Create a new account</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Unknown status</source>
-        <translation>未知狀態</translation>
-    </message>
-    <message>
-        <source>Details...</source>
-        <translation>細節…</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation>說明</translation>
-    </message>
-    <message>
-        <source>Resume synchronization</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quit %1</source>
-        <translation>離開 %1</translation>
-    </message>
-    <message>
-        <source>Disconnected from %1</source>
-        <translation>從 %1 斷線</translation>
-    </message>
-    <message>
-        <source>Unsupported Server Version</source>
-        <translation>不支持的伺服器版本</translation>
-    </message>
-    <message>
-        <source>Disconnected</source>
-        <translation>已經離線</translation>
-    </message>
-    <message>
-        <source>Disconnected from some accounts</source>
-        <translation>與某些帳戶斷開連接</translation>
-    </message>
-    <message>
-        <source>Disconnected from accounts:</source>
-        <translation>已從帳號離線:</translation>
-    </message>
-    <message>
-        <source>Signed out</source>
-        <translation>已登出</translation>
-    </message>
-    <message>
-        <source>Account synchronization is disabled</source>
-        <translation>帳號同步已停用</translation>
-    </message>
-    <message>
-        <source>Synchronization is paused</source>
-        <translation>同步已暫停</translation>
-    </message>
-    <message>
-        <source>Up to date (%1)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>No sync folders configured</source>
-        <translation>未配置同步目錄</translation>
-    </message>
-    <message>
-        <source>Show %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>About %1</source>
-        <translation>關於 %1</translation>
-    </message>
-    <message>
-        <source>No items synced recently</source>
-        <translation>最近沒有項目被同步</translation>
-    </message>
-    <message>
-        <source>Checking for changes in remote &apos;%1&apos;</source>
-        <translation>檢查遠端&apos;％1&apos;中的更改</translation>
-    </message>
-    <message>
-        <source>Checking for changes in local &apos;%1&apos;</source>
-        <translation>檢查本地端&apos;％1&apos;中的更改</translation>
-    </message>
-    <message>
-        <source>Syncing %1 of %2  (%3 left)</source>
-        <translation>同步中 %1 的 %2 (剩餘 %3)</translation>
-    </message>
-    <message>
-        <source>Syncing %1 of %2</source>
-        <translation>正在同步％2的％1</translation>
-    </message>
-    <message>
-        <source>Syncing %1 (%2 left)</source>
-        <translation>同步中 %1 (剩餘 %2)</translation>
-    </message>
-    <message>
-        <source>Syncing %1</source>
-        <translation>同步 %1</translation>
-    </message>
-    <message>
-        <source>%1 (%2, %3)</source>
-        <translation>%1 (%2, %3)</translation>
+        <source>Form</source>
+        <translation>表單</translation>
     </message>
 </context>
 <context>
@@ -3251,6 +3640,10 @@ Are you sure you want to proceed?</source>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
+    <message>
+        <source>Enter a valid email address</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ResolveUrlJobFactory</name>
@@ -3268,29 +3661,17 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
-    <name>ServerUrlSetupWizardPage</name>
+    <name>SetupWidget</name>
     <message>
-        <source>Form</source>
-        <translation>表單</translation>
-    </message>
-    <message>
-        <source>What is your server&apos;s address?</source>
+        <source>Add New Account</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SetupWizardState</name>
     <message>
-        <source>Server URL</source>
-        <translation>伺服器網址</translation>
-    </message>
-    <message>
         <source>Welcome</source>
         <translation>歡迎</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation>使用者名稱</translation>
     </message>
     <message>
         <source>Login</source>
@@ -3302,21 +3683,9 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
-    <name>SetupWizardWindow</name>
+    <name>SimpleResolveUrlJobFactory</name>
     <message>
-        <source>Add New Account</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dismiss</source>
-        <translation>忽略</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>取消</translation>
-    </message>
-    <message>
-        <source>&lt; Back</source>
+        <source>Could not detect compatible server at %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3448,6 +3817,25 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
+    <name>WaitPage</name>
+    <message>
+        <source>Form</source>
+        <translation>表單</translation>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Logging in to your account</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>WebFingerUserInfoJobFactory</name>
     <message>
         <source>Failed to retrieve user info</source>
@@ -3466,24 +3854,10 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
-    <name>ApplicationTheme::aboutVersions()</name>
-    <message>
-        <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ApplicationTheme::qtVer</name>
+    <name>ownCloudTheme::qtVer</name>
     <message>
         <source>%1 (Built against Qt %2)</source>
         <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ApplicationTheme::versionWithSha</name>
-    <message>
-        <source>%1 %2</source>
-        <translation>%1 %2</translation>
     </message>
 </context>
 <context>

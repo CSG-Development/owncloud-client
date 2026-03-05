@@ -1,296 +1,20 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="de_DE">
 <context>
-    <name>AccountConfiguredWizardPage</name>
-    <message>
-        <source>✓ You&apos;re all set!</source>
-        <translation>✓ Fertiggestellt</translation>
-    </message>
-    <message>
-        <source>Advanced configuration</source>
-        <translation>Erweiterte Einstellungen</translation>
-    </message>
-    <message>
-        <source>Configure files download:</source>
-        <translation>Datein-Download konfigurieren:</translation>
-    </message>
-    <message>
-        <source>Download everything</source>
-        <translation>Alles herunterladen</translation>
-    </message>
-    <message>
-        <source>After completing this wizard, you can set up folder synchronization manually.</source>
-        <translation>Nachdem Sie den Installationsassistenten beendet haben, können Sie die Ordnersynchronistation manuell einstellen.</translation>
-    </message>
-    <message>
-        <source>Configure synchronization manually</source>
-        <translation>Synchronisation manuell konfigurieren</translation>
-    </message>
-    <message>
-        <source>Choose local download directory:</source>
-        <translation>Lokales Download-Verzeichnis wählen:</translation>
-    </message>
-    <message>
-        <source>Restore default value</source>
-        <translation>Standardeinstellung wiederherstellen</translation>
-    </message>
-</context>
-<context>
-    <name>AppImageUpdateAvailableDialogUi</name>
-    <message>
-        <source>Update available</source>
-        <translation>Update verfügbar</translation>
-    </message>
-    <message>
-        <source>Skip this version</source>
-        <translation>Diese Version überspringen</translation>
-    </message>
-</context>
-<context>
-    <name>AppProvider</name>
-    <message>
-        <source>Failed to open %1 in web. Error: %2.</source>
-        <translation>%1 konnte in Web nicht geöffnet werden. Fehler: %2.</translation>
-    </message>
-</context>
-<context>
-    <name>BasicLoginWidget</name>
-    <message>
-        <source>Username</source>
-        <translation>Benutzername</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Passwort</translation>
-    </message>
-</context>
-<context>
-    <name>CheckBasicAuthJobFactory</name>
-    <message>
-        <source>Invalid reply received from server</source>
-        <translation>Ungültige Antwort vom Server erhalten</translation>
-    </message>
-</context>
-<context>
-    <name>ChecksumHeader</name>
-    <message>
-        <source>The checksum header is malformed: %1</source>
-        <translation>Der Prüfsummen-Kopfzeile hat ein fehlerhaftes Format.</translation>
-    </message>
-    <message>
-        <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
-        <translation>Die Prüfsummen-Kopfzeile enthielt den unbekannten Prüfsummentypen &apos;%1&apos;.</translation>
-    </message>
-</context>
-<context>
-    <name>CommandLine</name>
-    <message>
-        <source>For more information, see %1</source>
-        <translation>Mehr Informationen unter %1</translation>
-    </message>
-</context>
-<context>
-    <name>CommonStrings</name>
-    <message>
-        <source>file manager</source>
-        <translation>Dateimanager</translation>
-    </message>
-    <message>
-        <source>Show in %1</source>
-        <translation>In %1 anzeigen</translation>
-    </message>
-    <message>
-        <source>Show in web browser</source>
-        <translation>Im Webrowser anzeigen</translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation>Kopieren</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n Filter(s)</source>
-        <translation><numerusform>%n Filter</numerusform><numerusform>%n Filter</numerusform></translation>
-    </message>
-</context>
-<context>
-    <name>CredentialsSetupWizardPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-</context>
-<context>
-    <name>DetermineAuthTypeJobFactory</name>
-    <message>
-        <source>Server did not ask for authorization</source>
-        <translation>Der Server hat nicht nach Authentifizierung gefragt.</translation>
-    </message>
-    <message>
-        <source>Failed to determine auth type: %1</source>
-        <translation>Der Authentifizierungstyp konnte nicht bestimmt werden: %1</translation>
-    </message>
-</context>
-<context>
-    <name>DiscoverWebFingerServiceJobFactory</name>
-    <message>
-        <source>Invalid reply received from server</source>
-        <translation>Ungültige Antwort vom Server erhalten</translation>
-    </message>
-</context>
-<context>
-    <name>FetchUserInfoJobFactory</name>
-    <message>
-        <source>Failed to retrieve user info</source>
-        <translation>Die Benutzerinformationen konnten nicht abgerufen werden.</translation>
-    </message>
-</context>
-<context>
-    <name>FileSystem</name>
-    <message>
-        <source>Can&apos;t rename %1, the file is currently in use</source>
-        <translation>Kann %1 nicht umbenennen, die Datei wird gerade benutzt.</translation>
-    </message>
-    <message>
-        <source>Could not make directories in trash</source>
-        <translation>Ordner können nicht im Papierkorb erstellt werden.</translation>
-    </message>
-    <message>
-        <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation>Konnte &apos;%1&apos; nicht nach &apos;%2&apos; verschieben.</translation>
-    </message>
-    <message>
-        <source>Moving to the trash is not implemented on this platform</source>
-        <translation>Das Verschieben in den Papierkorb wird auf dieser Plattform nicht unterstützt.</translation>
-    </message>
-    <message>
-        <source>Could not remove folder</source>
-        <translation>Der Ordner konnte nicht entfernt werden.</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizard</name>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Fehler:&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Warnung:&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;Fehler:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;Warnung:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizardSourcePage</name>
-    <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-    <message>
-        <source>Pick a local folder on your computer to sync</source>
-        <translation>Wählen Sie einen lokalen Ordner zum Synchronisieren aus.</translation>
-    </message>
-    <message>
-        <source>&amp;Choose...</source>
-        <translation>&amp;Auswählen…</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizardTargetPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-    <message>
-        <source>Select a remote destination folder</source>
-        <translation>Einen entfernten Zielordner auswählen</translation>
-    </message>
-    <message>
-        <source>Create Folder</source>
-        <translation>Ordner erstellen</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation>Aktualisieren</translation>
-    </message>
-    <message>
-        <source>Folders</source>
-        <translation>Ordner</translation>
-    </message>
-</context>
-<context>
-    <name>LegacyWebFingerSetupWizardPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation>Benutzername</translation>
-    </message>
-</context>
-<context>
-    <name>LoginRequiredDialog</name>
-    <message>
-        <source>Login required</source>
-        <translation>Anmeldung erforderlich</translation>
-    </message>
-</context>
-<context>
-    <name>NotificationWidget</name>
-    <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet</source>
-        <translation>Lorem ipsum dolor sit amet</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
-        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </translation>
-    </message>
-</context>
-<context>
-    <name>OAuthLoginWidget</name>
-    <message>
-        <source>Open Browser</source>
-        <translation>Browser öffnen</translation>
-    </message>
-    <message>
-        <source>Copy URL to clipboard</source>
-        <translation>URL in die Zwischenablage kopieren</translation>
-    </message>
-    <message>
-        <source>Retry</source>
-        <translation>Wiederholen</translation>
-    </message>
-</context>
-<context>
     <name>APP::AboutDialog</name>
-    <message>
-        <source>About</source>
-        <translation>Über</translation>
-    </message>
-    <message>
-        <source>Versions</source>
-        <translation>Versionen</translation>
-    </message>
     <message>
         <source>About %1</source>
         <translation>Über %1</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>APP::AbstractNetworkJob</name>
     <message>
         <source>Connection timed out</source>
-        <translation>Zeitüberschreitung bei der Verbindung</translation>
+        <translation>Zeitüberschreitung beim Verbindungsaufbau</translation>
     </message>
     <message>
         <source>Unknown error: network reply was deleted</source>
@@ -320,11 +44,11 @@
     </message>
     <message>
         <source>Preparing the account</source>
-        <translation>Konto vorbereiten</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Unchecked folders will be &lt;b&gt;removed&lt;/b&gt; from your local file system and will not be synchronized to this computer anymore</source>
-        <translation>Nicht markierte Ordner werden von Ihrem lokalen Dateisystem &lt;b&gt;entfernt&lt;/b&gt; und werden auch nicht mehr auf diesem Rechner synchronisiert</translation>
+        <translation>Nicht markierte Ordner werden von Deinem lokalen Dateisystem &lt;b&gt;entfernt&lt;/b&gt; und künftig nicht mehr synchronisiert</translation>
     </message>
     <message>
         <source>Synchronize all</source>
@@ -356,7 +80,7 @@
     </message>
     <message>
         <source>Account</source>
-        <translation>Benutzerkonto</translation>
+        <translation>Konto</translation>
     </message>
     <message>
         <source>Choose what to sync</source>
@@ -364,19 +88,19 @@
     </message>
     <message>
         <source>Force sync now</source>
-        <translation>Synchronisation jetzt erzwingen </translation>
+        <translation>Synchronisation jetzt erzwingen</translation>
     </message>
     <message>
         <source>Restart sync</source>
-        <translation>Synchronisation neustarten</translation>
+        <translation>Synchronisation neu starten</translation>
     </message>
     <message>
         <source>Remove folder sync connection</source>
-        <translation>Ordner-Synchronisation entfernen</translation>
+        <translation>Synchronisations Verzeichnis löschen</translation>
     </message>
     <message>
         <source>Add Space</source>
-        <translation>Space hinzufügen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Add Folder</source>
@@ -392,27 +116,25 @@
     </message>
     <message>
         <source>Confirm Folder Sync Connection Removal</source>
-        <translation>Bestätigen Sie die Löschung der Ordner-Synchronisation</translation>
+        <translation>Löschen der Ordner Sychronisation bestätigen</translation>
     </message>
     <message>
         <source>Remove Folder Sync Connection</source>
-        <translation>Ordner-Synchronisation entfernen</translation>
+        <translation>Synchronisations Verzeichnis löschen</translation>
     </message>
     <message>
         <source>Disable virtual file support?</source>
-        <translation>Unterstützung für virtuelle Dateien deaktivieren?</translation>
+        <translation>Deaktiviere Unterstützung für virtuelle Dateien?</translation>
     </message>
     <message>
-        <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as 'available online only' will be downloaded.
+        <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as &apos;available online only&apos; will be downloaded.
 
 The only advantage of disabling virtual file support is that the selective sync feature will become available again.
 
 This action will abort any currently running synchronization.</source>
         <translation>Diese Aktion wird die Unterstützung für virtuelle Dateien abschalten. Als Konsequenz werden Inhalte aus Ordnern heruntergeladen, die aktuell als &apos;nur online verfügbar&apos; markiert sind.
 
-Der einzige Vorteil durch das Abschalten der Unterstützung für virtuelle Dateien ist, dass das Feature selective sync wieder verfügbar wird.
-
-Diese Aktion wird gerade laufende Synchronisationen abbrechen.</translation>
+Das Feature &quot;selective sync&quot; wird wieder verfügbar. Diese Aktion bricht die aktuell laufende Synchronisation ab.</translation>
     </message>
     <message>
         <source>Disable support</source>
@@ -424,23 +146,31 @@ Diese Aktion wird gerade laufende Synchronisationen abbrechen.</translation>
     </message>
     <message>
         <source>The sync operation is running.&lt;br/&gt;Do you want to stop it?</source>
-        <translation>Die Synchronisation läuft gerade.&lt;br/&gt;Trotzdem beenden?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Connecting to: %1.</source>
-        <translation>Verbinde mit %1...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Disconnected from: %1.</source>
-        <translation>Getrennt von %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Connected to %1.</source>
         <translation>Verbunden mit %1.</translation>
     </message>
     <message>
+        <source>Show device info</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open share page</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Server %1 is temporarily unavailable.</source>
-        <translation>Server %1 ist derzeit nicht verfügbar.</translation>
+        <translation>Der Server %1 ist temporär nicht erreichbar.</translation>
     </message>
     <message>
         <source>Server %1 is currently in maintenance mode.</source>
@@ -448,7 +178,7 @@ Diese Aktion wird gerade laufende Synchronisationen abbrechen.</translation>
     </message>
     <message>
         <source>Signed out from %1.</source>
-        <translation>Abgemeldet von %1.</translation>
+        <translation>Von %1 ausgeloggt.</translation>
     </message>
     <message>
         <source>The account %1 is currently logged out.
@@ -460,7 +190,7 @@ Bitte über den Browser authentifizieren.</translation>
     </message>
     <message>
         <source>Reauthorization required.</source>
-        <translation>Eine erneute Authentifizierung ist erforderlich.</translation>
+        <translation>Eine erneute Authentifizierung ist erforderlich</translation>
     </message>
     <message>
         <source>Connecting to %1...</source>
@@ -476,31 +206,31 @@ Bitte über den Browser authentifizieren.</translation>
     </message>
     <message>
         <source>Click this button to add a Space.</source>
-        <translation>Diese Schaltfläche drücken, um einen Space hinzuzufügen.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Click this button to add a folder to synchronize.</source>
-        <translation>Diesen Knopf drücken, um einen Ordner zur Synchronisation hinzuzufügen.</translation>
+        <translation>Diesen Knopf drücken um einen Ordner zur Synchronisation hinzuzufügen.</translation>
     </message>
     <message>
         <source>You need to be connected to add a Space.</source>
-        <translation>Sie müssen verbunden sein, um einen Space hinzuzufügen.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>You need to be connected to add a folder.</source>
-        <translation>Verbindung notwendig, um einen Ordner hinzuzufügen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>There are folders that were not synchronized because they are too big: </source>
-        <translation>Einige Verzeichnisse konnten nicht synchronisiert werden, da sie zu groß sind:</translation>
+        <translation>Einige Verzeichnisse konnten nicht synchronisiert werden, da sie zu gross sind:</translation>
     </message>
     <message>
         <source>There are folders that were not synchronized because they are external storages: </source>
-        <translation>Es gibt Verzeichnisse, die nicht synchronisiert werden konnten, da diese externe Speicher sind:</translation>
+        <translation>Es gibt Verzeichnisse, die nicht synchronisiert werden konnten, da sie externer Speicher sind:</translation>
     </message>
     <message>
         <source>There are folders that were not synchronized because they are too big or external storages: </source>
-        <translation>Es gibt Verzeichnisse, die nicht synchronisiert werden konnten, da diese zu groß oder externe Speicher sind:</translation>
+        <translation>Es gibt Verzeichnisse, die nicht synchronisiert werden konnten, da sie  zu gross oder externer Speicher sind:</translation>
     </message>
     <message>
         <source>Confirm Account Removal</source>
@@ -508,11 +238,11 @@ Bitte über den Browser authentifizieren.</translation>
     </message>
     <message>
         <source>&lt;p&gt;Do you really want to remove the connection to the account &lt;i&gt;%1&lt;/i&gt;?&lt;/p&gt;&lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; This will &lt;b&gt;not&lt;/b&gt; delete any files.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Möchten Sie den Zugang zum Benutzerkonto &lt;i&gt;%1&lt;/i&gt; wirklich entfernen?&lt;/p&gt;&lt;p&gt;&lt;b&gt;Hinweis:&lt;/b&gt; Bei diesem Vorgang werden &lt;b&gt;keine&lt;/b&gt; lokalen Daten gelöscht.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Möchten Sie den Zugang zum Benutzerkonto &lt;i&gt;%1&lt;/i&gt; wirklich entfernen?&lt;/p&gt;&lt;p&gt;&lt;b&gt;Hinweis:&lt;/b&gt;Es werden &lt;b&gt;keine&lt;/b&gt; lokalen Daten gelöscht.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Remove connection</source>
-        <translation>Verbindung entfernen</translation>
+        <translation>Zugang löschen</translation>
     </message>
     <message>
         <source>Log out</source>
@@ -528,7 +258,7 @@ Bitte über den Browser authentifizieren.</translation>
     </message>
     <message>
         <source>Enable virtual file support%1...</source>
-        <translation>Unterstützung für virtuelle Dateien einschalten %1...</translation>
+        <translation>Unterstützung für virtuelle Dateien aktivieren%1...</translation>
     </message>
     <message>
         <source> (experimental)</source>
@@ -555,7 +285,7 @@ Bitte über den Browser authentifizieren.</translation>
     </message>
     <message>
         <source>Account</source>
-        <translation>Benutzerkonto</translation>
+        <translation>Nutzerkonto</translation>
     </message>
     <message>
         <source>Time</source>
@@ -570,7 +300,7 @@ Bitte über den Browser authentifizieren.</translation>
     <name>APP::ActivitySettings</name>
     <message>
         <source>Server Activity</source>
-        <translation>Serveraktivität</translation>
+        <translation>Server aktivität</translation>
     </message>
     <message>
         <source>Sync Protocol</source>
@@ -578,7 +308,7 @@ Bitte über den Browser authentifizieren.</translation>
     </message>
     <message>
         <source>Not Synced</source>
-        <translation>nicht synchronisiert</translation>
+        <translation>Nicht synchronisiert</translation>
     </message>
     <message>
         <source>Not Synced (%1)</source>
@@ -597,7 +327,7 @@ Bitte über den Browser authentifizieren.</translation>
     </message>
     <message>
         <source>Account</source>
-        <translation>Benutzerkonto</translation>
+        <translation>Nutzerkonto</translation>
     </message>
     <message>
         <source>Server Activities</source>
@@ -609,7 +339,7 @@ Bitte über den Browser authentifizieren.</translation>
     </message>
     <message>
         <source>&lt;br/&gt;%1 does not provide activities.</source>
-        <translation>&lt;br/&gt;%1 stellt keine Aktivitäten bereit.</translation>
+        <translation type="unfinished"/>
     </message>
     <message numerus="yes">
         <source>%n notifications(s) for %1.</source>
@@ -617,7 +347,7 @@ Bitte über den Browser authentifizieren.</translation>
     </message>
     <message numerus="yes">
         <source>%n notifications(s) for %1 and %2.</source>
-        <translation><numerusform>%n Benachrichtigung für %1 und %2.</numerusform><numerusform>%n Benachrichtigungen für %1 und %2.</numerusform></translation>
+        <translation><numerusform>%1 Benachrichtigung für %1 und %2.</numerusform><numerusform>%n Benachrichtigungen für %1 und %2.</numerusform></translation>
     </message>
     <message>
         <source>New notifications for %1, %2 and other accounts.</source>
@@ -625,7 +355,7 @@ Bitte über den Browser authentifizieren.</translation>
     </message>
     <message>
         <source>Open the activity view for details.</source>
-        <translation>Öffne die Aktivitätsansicht, um Details zu sehen.</translation>
+        <translation>Öffne die Aktivitäts-Ansicht für Details.</translation>
     </message>
 </context>
 <context>
@@ -642,9 +372,9 @@ Bitte über den Browser authentifizieren.</translation>
         <source>An update is available for this AppImage of %1. Do you want to install this update?
 
 The update will be performed in the background, and overwrite the current AppImage file. You need to restart the app to complete the update.</source>
-        <translation>Eine Aktualisierung ist für dieses AppImage von %1 verfügbar. Möchten Sie die Aktualisierung installieren?
+        <translation>Eine Aktualisierung ist für dieses AppImage verfügbar von %1. Möchtest du die Aktualisierung installieren?
 
-Die Aktualisierung wird im Hintergrund durchgeführt und überschreibt die aktuelle AppImage-Datei. Sie müssen die App neu starten, um die Aktualisierung abzuschließen.</translation>
+Die Aktualisierung wird im Hintergrund durchgeführt und überschreibt die aktuelle AppImage-Datei. Du musst die App neu starten, um die Aktualisierung abzuschließen.</translation>
     </message>
 </context>
 <context>
@@ -652,6 +382,161 @@ Die Aktualisierung wird im Hintergrund durchgeführt und überschreibt die aktue
     <message>
         <source>Quit</source>
         <translation>Beenden</translation>
+    </message>
+</context>
+<context>
+    <name>APP::ApplicationGui</name>
+    <message>
+        <source>Please sign in</source>
+        <translation>Bitte melden Sie sich an</translation>
+    </message>
+    <message>
+        <source>Folder %1: %2</source>
+        <translation>Ordner %1: %2</translation>
+    </message>
+    <message>
+        <source>Unresolved %1 conflicts</source>
+        <translation>Ungelöste %1 Konflikte</translation>
+    </message>
+    <message>
+        <source>Ignored errors %1</source>
+        <translation>Ignorierte Fehler %1 </translation>
+    </message>
+    <message>
+        <source>There are no sync folders configured.</source>
+        <translation>Es wurden keine Synchonisationsordner konfiguriert.</translation>
+    </message>
+    <message>
+        <source>Log in...</source>
+        <translation>Anmelden...</translation>
+    </message>
+    <message>
+        <source>Log out</source>
+        <translation>Abmelden</translation>
+    </message>
+    <message>
+        <source>Recent Changes</source>
+        <translation>Letzte Änderungen</translation>
+    </message>
+    <message>
+        <source>Open folder &apos;%1&apos;</source>
+        <translation>Ordner &apos;%1&apos; öffnen</translation>
+    </message>
+    <message>
+        <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
+        <translation>Der Server für Konto %1 benutzt eine nicht unterstützte Version %2. Die Client Software funktioniert möglicherweise mit nicht unterstützten Versionen, dies ist jedoch nicht getestet. Weiter auf eigenes Risiko.</translation>
+    </message>
+    <message>
+        <source>Account %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Stop synchronization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Create a new account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unknown status</source>
+        <translation>Unbekannter Status</translation>
+    </message>
+    <message>
+        <source>Details...</source>
+        <translation>Details …</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation>Hilfe</translation>
+    </message>
+    <message>
+        <source>Resume synchronization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Quit %1</source>
+        <translation>%1 beenden</translation>
+    </message>
+    <message>
+        <source>Disconnected from %1</source>
+        <translation>Getrennt von %1</translation>
+    </message>
+    <message>
+        <source>Unsupported Server Version</source>
+        <translation>Nicht unterstützte Server Version</translation>
+    </message>
+    <message>
+        <source>Disconnected</source>
+        <translation>Getrennt</translation>
+    </message>
+    <message>
+        <source>Disconnected from some accounts</source>
+        <translation>Die Verbindungen zu einigen Konnten wurde getrennt</translation>
+    </message>
+    <message>
+        <source>Disconnected from accounts:</source>
+        <translation>Die Verbindungen zu Konnten wurde getrennt:</translation>
+    </message>
+    <message>
+        <source>Signed out</source>
+        <translation>Ausgeloggt</translation>
+    </message>
+    <message>
+        <source>Account synchronization is disabled</source>
+        <translation>Synchronisieren der Konten ist deaktiviert</translation>
+    </message>
+    <message>
+        <source>Synchronization is paused</source>
+        <translation>Synchronisation pausiert</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>Aktuell (%1) </translation>
+    </message>
+    <message>
+        <source>No sync folders configured</source>
+        <translation>Keine Ordner für die Synchronisation konfiguriert</translation>
+    </message>
+    <message>
+        <source>Show %1</source>
+        <translation>Zeige %1</translation>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation>Über %1</translation>
+    </message>
+    <message>
+        <source>No items synced recently</source>
+        <translation>Keine kürzlich synchronisierten Elemente</translation>
+    </message>
+    <message>
+        <source>Checking for changes in remote &apos;%1&apos;</source>
+        <translation>Prüfe Änderungen der entfernten &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Checking for changes in local &apos;%1&apos;</source>
+        <translation>Prüfe Änderungen der lokalen &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Syncing %1 of %2  (%3 left)</source>
+        <translation>Synchronisiere %1 von %2  (%3 übrig)</translation>
+    </message>
+    <message>
+        <source>Syncing %1 of %2</source>
+        <translation>Synchronisiere %1 von %2</translation>
+    </message>
+    <message>
+        <source>Syncing %1 (%2 left)</source>
+        <translation>Synchronisiere %1 (%2 übrig)</translation>
+    </message>
+    <message>
+        <source>Syncing %1</source>
+        <translation>Synchronisiere %1</translation>
+    </message>
+    <message>
+        <source>%1 (%2, %3)</source>
+        <translation>%1 (%2, %3)</translation>
     </message>
 </context>
 <context>
@@ -670,13 +555,13 @@ Switching to this mode will abort any currently running synchronization.
 This is a new, experimental mode. If you decide to use it, please report any issues that come up.</source>
         <translation>Wenn der Modus &quot;Virtuelle Dateien&quot; aktiviert ist, werden die Dateien nicht sofort heruntergeladen. Stattdessen wird für jede Datei des Servers eine winzige &quot;%1&quot; Datei erstellt. Der Inhalt der Dateien kann durch Ausführen der Datei oder über das Kontext-Menü heruntergeladen werden.
 
-Der Modus &quot;virtuelle Dateien&quot; schließt sich mit dem Modus &quot;Selective Sync&quot; gegenseitig aus. Aktuell abgewählte Ordner werden in &quot;nur online verfügbare Ordner&quot; umgewandelt. Die Einstellungen vom &quot;Selective Sync&quot; Modus werden verworfen.
+Der Modus &quot;virtuelle Dateien&quot; schließt sich mit dem Modus &quot;Selective Sync&quot; gegenseitig aus. Aktuell abgewählte Ordner werden zu &quot;nur online verfügbaren Ordnern&quot; umgewamdelt. Die Einstellungen im &quot;Selective Sync&quot; Modus werden verworfen.
 
-Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, berichten Sie bitte alle Probleme, die auftreten.</translation>
+Dies ist ein neuer, experimenteller Modus. Wenn sie sich dafür entscheiden, berichten sie bitte alle Probleme, die auftreten.</translation>
     </message>
     <message>
         <source>Enable experimental placeholder mode</source>
-        <translation>Experimentellen Platzhalter-Modus freischalten</translation>
+        <translation>Experimentellen Platzhalter Modus freischalten</translation>
     </message>
     <message>
         <source>Stay safe</source>
@@ -703,7 +588,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, ber
     </message>
     <message>
         <source>The provided credentials are not correct</source>
-        <translation>Die zur Verfügung gestellten Anmeldeinformationen sind nicht korrekt.</translation>
+        <translation>Die zur Verfügung gestellten Anmeldeinformationen sind nicht korrekt</translation>
     </message>
     <message>
         <source>The configured server for this client is too old.</source>
@@ -718,6 +603,13 @@ Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
+    <name>APP::CuratorPropagator</name>
+    <message>
+        <source>File %1 is currently in use</source>
+        <translation>Datei %1 wird gerade benutzt</translation>
+    </message>
+</context>
+<context>
     <name>APP::DiscoverySingleDirectoryJob</name>
     <message>
         <source>Server error: PROPFIND reply is not XML formatted!</source>
@@ -725,7 +617,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, ber
     </message>
     <message>
         <source>Connection timed out</source>
-        <translation>Zeitüberschreitung bei der Verbindung</translation>
+        <translation>Zeitüberschreitung beim Verbindungsaufbau</translation>
     </message>
 </context>
 <context>
@@ -736,7 +628,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, ber
     </message>
     <message>
         <source>Directory not accessible on client, permission denied</source>
-        <translation>Der Ordner ist auf dem Client nicht erreichbar, Zugriff verweigert.</translation>
+        <translation>Der Ordner ist auf dem Client nicht erreichbar, Zugriff verweigert</translation>
     </message>
     <message>
         <source>Directory not found: %1</source>
@@ -758,11 +650,11 @@ Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, ber
     <name>APP::Folder</name>
     <message>
         <source>Local folder %1 does not exist.</source>
-        <translation>Das Lokale Verzeichnis %1 existiert nicht.</translation>
+        <translation>Das Lokale Verzeichnis %1 existiert nicht</translation>
     </message>
     <message>
         <source>%1 should be a folder but is not.</source>
-        <translation>%1 sollte ein Ordner sein, ist es aber nicht.</translation>
+        <translation>%1 sollte ein Verzeichnis sein, ist es aber nicht.</translation>
     </message>
     <message>
         <source>%1 is not readable.</source>
@@ -790,7 +682,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, ber
     </message>
     <message>
         <source>The path &apos;%1&apos; is too long. Please enable long paths in the Windows settings or choose a different folder.</source>
-        <translation>Der Pfad &apos;%1&apos; ist zu lang. Entweder die Unterstützung für lange Pfadnamen in den Windows Einstellungen einschalten oder ein anderes Verzeichnis auswählen.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>%1 failed to open the database.</source>
@@ -802,7 +694,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, ber
     </message>
     <message numerus="yes">
         <source>%1 and %n other file(s) have been added.</source>
-        <translation><numerusform>%1 und %n andere Datei(en) wurden hinzugefügt.</numerusform><numerusform>%1 und %n andere Datei(en) wurden hinzugefügt.</numerusform></translation>
+        <translation><numerusform>%1 und %n andere Dateien wurden hinzugefügt.</numerusform><numerusform>%1 und %n andere Datei(en) wurden hinzugefügt.</numerusform></translation>
     </message>
     <message>
         <source>%1 has been added.</source>
@@ -826,11 +718,11 @@ Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, ber
     </message>
     <message>
         <source>%1 has a sync conflict. Please check the conflict file!</source>
-        <translation>Es gab einen Konflikt bei der Synchronisierung von %1. Bitte prüfen Sie die Konfliktdatei!</translation>
+        <translation>Es gab einen Konflikt bei der Synchronisierung von %1. Bitte prüfe die Konfliktdatei!</translation>
     </message>
     <message numerus="yes">
         <source>%1 and %n other file(s) could not be synced due to errors. See the log for details.</source>
-        <translation><numerusform>%1 und %n weitere Datei konnten aufgrund von Fehlern nicht synchronisiert werden. Schauen Sie in das Protokoll für Details.</numerusform><numerusform>%1 und %n weitere Dateien konnten aufgrund von Fehlern nicht synchronisiert werden. Lesen Sie das Protokoll für weitere Details.</numerusform></translation>
+        <translation><numerusform>%1 und %n weitere Datei konnten aufgrund von Fehlern nicht synchronisiert werden. Schaue in das Protokoll für Details.</numerusform><numerusform>%1 und %n weitere Dateien konnten aufgrund von Fehlern nicht synchronisiert werden. Lesen Sie das Protokoll für weitere Details.</numerusform></translation>
     </message>
     <message>
         <source>%1 could not be synced due to an error. See the log for details.</source>
@@ -842,12 +734,12 @@ Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, ber
     </message>
     <message>
         <source>Could not read system exclude file</source>
-        <translation>Die systemeigene Ausschlussdatei kann nicht gelesen werden.</translation>
+        <translation>Die systemeigene Ausschlussdatei kann nicht gelesen werden</translation>
     </message>
     <message>
         <source>A new folder larger than %1 MB has been added: %2.
 </source>
-        <translation>Ein neues Verzeichnis größer als %1 MB wurde hinzugefügt: %2.
+        <translation>Ein neues Verzeichnis, welcher grösser als %1 MB ist, wurde hinzugefügt: %2.
 </translation>
     </message>
     <message>
@@ -858,15 +750,15 @@ Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, ber
     </message>
     <message>
         <source>Please go in the settings to select it if you wish to download it.</source>
-        <translation>Bitte wechseln Sie zu den Einstellungen, falls Sie das Verzeichnis herunterladen möchten.</translation>
+        <translation>Bitte wechsele zu den Einstellungen, falls du das Verzeichnis herunterladen möchtest.</translation>
     </message>
     <message>
         <source>The folder %1 was created but was excluded from synchronization previously. Data inside it will not be synchronized.</source>
-        <translation>Der Ordner %1 wurde erzeugt, aber von der Synchronisation ausgeschlossen. Daten im Ordner werden nicht synchronisiert.</translation>
+        <translation>Ordner %1 wurde angelegt, aber früher von der Synchronisation ausgeschlossen. Daten im Ordner werden nicht synchronisiert.</translation>
     </message>
     <message>
         <source>The file %1 was created but was excluded from synchronization previously. It will not be synchronized.</source>
-        <translation>Die Datei %1 wurde erzeugt, aber von der Synchronisation ausgeschlossen. Sie wird nicht synchronisiert.</translation>
+        <translation>Datei %1 wurde angelegt, aber früher von der Synchronisation ausgeschlossen, sie wird nicht synchronisiert.</translation>
     </message>
     <message>
         <source>Changes in synchronized folders could not be tracked reliably.
@@ -881,22 +773,22 @@ Dies bedeutet, dass der Synchronisationsclient lokale Änderungen möglicherweis
 %1</translation>
     </message>
     <message>
-        <source>All files in the sync folder '%1' folder were deleted on the server.
+        <source>All files in the sync folder &apos;%1&apos; folder were deleted on the server.
 These deletes will be synchronized to your local sync folder, making such files unavailable unless you have a right to restore. 
 If you decide to keep the files, they will be re-synced with the server if you have rights to do so.
 If you decide to delete the files, they will be unavailable to you, unless you are the owner.</source>
         <translation>Alle Dateien im Synchronisationsordner &apos;%1&apos; wurden auf dem Server gelöscht.
-Diese Löschung wird in Ihren lokalen Synchronisationsordner übernommen. Dadurch sind die Dateien nicht mehr verfügbar, falls Sie keine Möglichkeit zur Wiederherstellung haben.
-Wenn Sie sich dazu entscheiden, diese Dateien zu behalten, werden diese wieder zum Server synchronisiert. Dies geschieht jedoch nur, wenn Sie die Rechte dazu haben.
+Diese Löschung wird in Ihr lokales Synchronisationsverzeichnis synchronisiert. Dadurch sind die Dateien nicht mehr verfügbar, falls Sie keine Möglichkeit zur Wiederherstellung haben.
+Wenn Sie sich entscheiden diese Dateien zu behalten, werden diese wieder zum Server synchronisiert. Dies geschieht nur, wenn Sie die Rechte dazu haben.
 Wenn Sie sich zum Löschen der Dateien entscheiden, sind diese nicht mehr verfügbar, außer Sie sind der Eigentümer.</translation>
     </message>
     <message>
-        <source>All the files in your local sync folder '%1' were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
+        <source>All the files in your local sync folder &apos;%1&apos; were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
 Are you sure you want to sync those actions with the server?
 If this was an accident and you decide to keep your files, they will be re-synced from the server.</source>
-        <translation>Alle Dateien im lokalen Synchronisationsordner &apos;%1&apos; wurden gelöscht. Diese Löschung wird mit Ihrem Server synchronisiert, wodurch die Dateien nicht mehr verfügbar sind, es sei denn, sie werden wiederhergestellt.
-Sind Sie sich sicher, dass Sie diese Aktion mit Ihrem Server synchronisieren möchten?
-Falls dies ein Missgeschick war und Sie sich zum Behalten der Dateien entscheiden, werden diese wieder vom Server synchronisiert.</translation>
+        <translation>Alle Dateien im Synchronisationsordner &apos;%1&apos; werden auf dem Server gelöscht. Diese Löschung wird mit dem Server synchronisiert, wodurch die Dateien nicht mehr verfügbar sind, außer diese werden wiederhergestellt.
+Sind Sie sicher, dass Sie diese Aktion mit dem Server synchronisieren möchten?
+Falls dies ein Missgeschick war und Sie sich zum Behalten der Datei entscheiden, werden diese wieder vom Server synchronisiert.</translation>
     </message>
     <message>
         <source>Remove All Files?</source>
@@ -904,7 +796,7 @@ Falls dies ein Missgeschick war und Sie sich zum Behalten der Dateien entscheide
     </message>
     <message>
         <source>Remove all files</source>
-        <translation>Lösche alle Dateien</translation>
+        <translation>Alle Dateien löschen</translation>
     </message>
     <message>
         <source>Keep files</source>
@@ -915,7 +807,7 @@ Falls dies ein Missgeschick war und Sie sich zum Behalten der Dateien entscheide
     <name>APP::FolderMan</name>
     <message>
         <source>Could not reset folder state</source>
-        <translation>Der Ordnerzustand konnte nicht zurückgesetzt werden.</translation>
+        <translation>Der Ordnerzustand konnte nicht zurückgesetzt werden</translation>
     </message>
     <message>
         <source>An old sync journal &apos;%1&apos; was found, but could not be removed. Please make sure that no application is currently using it.</source>
@@ -923,11 +815,11 @@ Falls dies ein Missgeschick war und Sie sich zum Behalten der Dateien entscheide
     </message>
     <message>
         <source> (backup)</source>
-        <translation>(Sicherung)</translation>
+        <translation>(Backup)</translation>
     </message>
     <message>
         <source> (backup %1)</source>
-        <translation>(Sicherung %1)</translation>
+        <translation>(Backup %1)</translation>
     </message>
     <message>
         <source>Sync was successful, unresolved conflicts.</source>
@@ -939,7 +831,7 @@ Falls dies ein Missgeschick war und Sie sich zum Behalten der Dateien entscheide
     </message>
     <message>
         <source>No valid folder selected!</source>
-        <translation>Kein gültiger Ordner gewählt!</translation>
+        <translation>Keinen gültigen Ordner ausgewählt!</translation>
     </message>
     <message>
         <source>The folder %1 is used in a folder sync connection!</source>
@@ -947,31 +839,31 @@ Falls dies ein Missgeschick war und Sie sich zum Behalten der Dateien entscheide
     </message>
     <message>
         <source>The selected path does not exist!</source>
-        <translation>Der gewählte Pfad existiert nicht.</translation>
+        <translation>Der gewählte Pfad existiert nicht!</translation>
     </message>
     <message>
         <source>The selected path is not a folder!</source>
-        <translation>Der gewählte Pfad ist kein Ordner.</translation>
+        <translation>Der gewählte Pfad ist kein Verzeichnis!</translation>
     </message>
     <message>
         <source>You have no permission to write to the selected folder!</source>
-        <translation>Sie haben keine Schreibberechtigung für den ausgewählten Ordner.</translation>
+        <translation>Sie sind nicht berechtigt, in diesen Ordner zu schreiben!</translation>
     </message>
     <message>
         <source>There is already a sync from the server to this local folder. Please pick another local folder!</source>
-        <translation>Es existiert bereits eine Synchronisation vom Server zu diesem lokalen Ordner. Bitte einen anderen lokalen Ordner wählen.</translation>
+        <translation>Es existiert bereits eine Synchronisation vom Server zu diesem lokalen Ordner. Bitte einen anderen lokalen Ordner wählen!</translation>
     </message>
     <message>
         <source>The local folder %1 already contains a folder used in a folder sync connection. Please pick another one!</source>
-        <translation>Das lokale Verzeichnis %1 enthält schon einen Ordner, der mit einer anderen Verbindung synchronisiert wird. Bitte einen anderen lokalen Ordner wählen.</translation>
+        <translation>Das lokale Verzeichnis %1 enthält schon einen Ordner der mit einer anderen Verbindung synchronisiert wird. Bitte einen anderen lokalen Ordner wählen!</translation>
     </message>
     <message>
         <source>The local folder %1 is already contained in a folder used in a folder sync connection. Please pick another one!</source>
-        <translation>Der lokale Ordner %1 liegt innerhalb eines Verzeichnisses, das schon synchronisiert wird. Bitte einen anderen lokalen Ordner wählen.</translation>
+        <translation>Der lokale Ordner %1 liegt innerhalb eines Verzeichnisses, das schon synchronisiert wird. Bitte einen anderen lokalen Ordner wählen!</translation>
     </message>
     <message>
         <source>%1 Please pick another one!</source>
-        <translation>%1 Bitte einen anderen wählen.</translation>
+        <translation>%1 Bitte einen anderen wählen!</translation>
     </message>
     <message>
         <source>Multiple accounts are sharing the folder %1.
@@ -979,18 +871,14 @@ This configuration is know to lead to dataloss and is no longer supported.
 Please consider removing this folder from the account and adding it again.</source>
         <translation>Mehrere Konten teilen sich den Ordner %1.
 So eine Konfiguration führt bekanntermaßen zu Datenverlust und wird nicht mehr unterstützt.
-Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen.</translation>
-    </message>
-    <message>
-        <source>%1 - %2@%3</source>
-        <translation>%1 - %2@%3</translation>
+Erwägung Sie diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen.</translation>
     </message>
 </context>
 <context>
     <name>APP::FolderStatusDelegate</name>
     <message>
         <source>%1 of %2 in use</source>
-        <translation>%1 von %2 verwendet</translation>
+        <translation>%1 von %2 belegt</translation>
     </message>
 </context>
 <context>
@@ -1005,7 +893,7 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>Fetching folder list from server...</source>
-        <translation>Empfange Orderliste vom Server...</translation>
+        <translation>Abrufen der Ordnerlisten vom Server...</translation>
     </message>
     <message>
         <source>There are unresolved conflicts. Click for details.</source>
@@ -1025,11 +913,11 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>Checking for changes in remote &apos;%1&apos;</source>
-        <translation>Änderungen der entfernten Ressource &apos;%1&apos; werden geprüft.</translation>
+        <translation>Prüfe Änderungen der entfernten &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Checking for changes in local &apos;%1&apos;</source>
-        <translation>Änderungen der lokalen Ressource &apos;%1&apos; werden geprüft.</translation>
+        <translation>Prüfe Änderungen der lokalen &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Reconciling changes</source>
@@ -1061,7 +949,7 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>Queued</source>
-        <translation>In Warteschlange gestellt</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>upload %1/s</source>
@@ -1089,7 +977,7 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>%1 of %2, file %3 of %4</source>
-        <translation>%1 of %2, Datei %3 von %4</translation>
+        <translation>%1 von %2, Datei %3 von %4</translation>
     </message>
     <message>
         <source>file %1 of %2</source>
@@ -1114,15 +1002,15 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     <name>APP::FolderWizard</name>
     <message>
         <source>Virtual files are not available for the selected folder</source>
-        <translation>Virtuelle Dateien sind für den ausgewählten Ordner nicht verfügbar.</translation>
+        <translation>Virtuelle Dateien sind für den gewählten Ordner nicht verügbar</translation>
     </message>
     <message>
         <source>Add Folder Sync Connection</source>
-        <translation>Ordner-Synchronisation hinzufügen</translation>
+        <translation>Synchronisiertes Verzeichnis hinzufügen</translation>
     </message>
     <message>
         <source>Add Sync Connection</source>
-        <translation>Synchronisation hinzufügen</translation>
+        <translation>Füge eine Verzeichnis Sychronisation hinzu</translation>
     </message>
 </context>
 <context>
@@ -1137,7 +1025,7 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>Select the local folder</source>
-        <translation>Einen lokalen Ordner auswählen</translation>
+        <translation>Einen Lokalen Ordner auswählen</translation>
     </message>
 </context>
 <context>
@@ -1148,7 +1036,7 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>Enter the name of the new folder to be created below &apos;%1&apos;:</source>
-        <translation>Geben Sie den Namen des neuen, unter &apos;%1&apos; zu erstellenden Ordners ein: </translation>
+        <translation>Gib den Namen des neuen, unter &apos;%1&apos; zu erstellenden Ordners ein:</translation>
     </message>
     <message>
         <source>Folder was successfully created on %1.</source>
@@ -1156,7 +1044,7 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>Authentication failed accessing %1</source>
-        <translation>Die Authentifizierung ist beim Zugriff auf %1 fehlgeschlagen.</translation>
+        <translation>Beim Zugriff auf %1 ist die Authentifizierung fehlgeschlagen</translation>
     </message>
     <message>
         <source>Failed to create the folder on %1. Please check manually.</source>
@@ -1164,11 +1052,11 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>Failed to list a folder. Error: %1</source>
-        <translation>Konnte Ordner nicht listen. Fehler: %1</translation>
+        <translation>Fehler beim Auflisten des Verzeichnisses. Fehler: %1</translation>
     </message>
     <message>
         <source>Choose this to sync the entire account</source>
-        <translation>Wählen Sie dies, um das gesamte Konto zu synchronisieren</translation>
+        <translation>Wähle dies, um das gesamte Benutzerkonto zu synchronisieren</translation>
     </message>
     <message>
         <source>This folder is already being synced.</source>
@@ -1180,7 +1068,7 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>You are already syncing &lt;i&gt;%1&lt;/i&gt;, which is a parent folder of &lt;i&gt;%2&lt;/i&gt;.</source>
-        <translation>&lt;i&gt;%1&lt;/i&gt; wird bereits synchronisierst. Dies ist ein übergeordneten Ordner von &lt;i&gt;%2&lt;/i&gt;.</translation>
+        <translation>&lt;i&gt;%1&lt;/i&gt; wird bereits synchronisierst, dies ist ein übergeordneter Ordner von &lt;i&gt;%2&lt;/i&gt;.</translation>
     </message>
     <message>
         <source>You are already syncing &lt;i&gt;%1&lt;/i&gt;, which is a subfolder of &lt;i&gt;%2&lt;/i&gt;.</source>
@@ -1191,11 +1079,11 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     <name>APP::FolderWizardSelectiveSync</name>
     <message>
         <source>Use virtual files instead of downloading content immediately%1</source>
-        <translation>Verwendung virtueller Dateien statt die Dateien herunter zu laden%1</translation>
+        <translation>Virtuelle Dateien verwenden anstatt die Dateien gleich herunter zu laden%1</translation>
     </message>
     <message>
         <source> (experimental)</source>
-        <translation>(Experimentell)</translation>
+        <translation>(experimentell)</translation>
     </message>
 </context>
 <context>
@@ -1206,19 +1094,19 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>No E-Tag received from server, check Proxy/Gateway</source>
-        <translation>Kein E-Tag vom Server empfangen, bitte Proxy / Gateway überprüfen.</translation>
+        <translation>Kein E-Tag vom Server empfangen, bitte Proxy / Gateway überprüfen</translation>
     </message>
     <message>
         <source>We received a different E-Tag for resuming. Retrying next time.</source>
-        <translation>Es wurde ein unterschiedlicher E-Tag zum Fortfahren empfangen. Bitte beim nächsten Mal erneut versuchen.</translation>
+        <translation>Beim Fortfahren wurde ein abweichender E-Tag empfangen. Bitte noch mal versuchen.</translation>
     </message>
     <message>
         <source>We received an unexpected download Content-Length.</source>
-        <translation>Unerwartete Datenlänge beim Herunterladen empfangen.</translation>
+        <translation>Unerwartete Daten-Länge beim Herunterladen empfangen.</translation>
     </message>
     <message>
         <source>Server returned wrong content-range</source>
-        <translation>Der Server hat einen falschen Bereich für den Inhalt zurück gegeben.</translation>
+        <translation>Der Server hat einen falschen Bereich für den Inhalt zurück gegeben</translation>
     </message>
 </context>
 <context>
@@ -1245,11 +1133,11 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>Log Settings</source>
-        <translation>Einstellungen für Logging</translation>
+        <translation>Log-Einstellungen</translation>
     </message>
     <message>
         <source>Advanced - Approval of folder sync (Non virtual file mode only)</source>
-        <translation>Erweitert - Synchronisierung von Ordner genehmigen (ausschließlich im nicht-virtuellen Dateien-Modus)</translation>
+        <translation>Erweitert - Synchronisierung von Ordnern genehmigen (Ausschliesslich im nicht-virtuellen Dateien Modus)</translation>
     </message>
     <message>
         <source>Network</source>
@@ -1273,7 +1161,7 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>Advanced</source>
-        <translation>Erweitert</translation>
+        <translation>Fortgeschritten</translation>
     </message>
     <message>
         <source>Use &amp;Monochrome Icons in the system tray</source>
@@ -1289,7 +1177,7 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>Ask for confirmation before synchronizing external storages</source>
-        <translation>Bestätigung einholen, bevor externe Speicher synchronisiert werden.</translation>
+        <translation>Bestätigung einholen bevor externe Speicher synchronisiert werden.</translation>
     </message>
     <message>
         <source>Show &amp;Desktop Notifications</source>
@@ -1301,15 +1189,15 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>Edit &amp;Ignored Files</source>
-        <translation>I&amp;gnorierte Dateien bearbeiten</translation>
+        <translation>&amp;Ignorierte Dateien bearbeiten</translation>
     </message>
     <message>
         <source>S&amp;how crash reporter</source>
-        <translation>Crash-Reporter &amp;anzeigen</translation>
+        <translation>Logfile &amp;anzeigen</translation>
     </message>
     <message>
         <source>&amp;Restart &amp;&amp; Update</source>
-        <translation>&amp;Neustarten &amp;&amp; aktualisieren</translation>
+        <translation>&amp;Neustarten &amp;&amp; Aktualisieren</translation>
     </message>
     <message>
         <source>You cannot disable autostart because system-wide autostart is enabled.</source>
@@ -1325,14 +1213,14 @@ Erwägung Sie, diesen Ordner aus dem Konto zu entfernen und erneut hinzuzufügen
     </message>
     <message>
         <source>Language changes require a restart of this application to take effect.</source>
-        <translation>Änderungen der Sprache werden erst nach Neustart des Clients wirksam.</translation>
+        <translation>Änderungen der Sprachänderungen werden erst nach Neustart des Clients wirksam.</translation>
     </message>
     <message>
         <source>The update channel determines which client updates will be offered for installation. The &quot;stable&quot; channel contains only upgrades that are considered reliable, while the versions in the &quot;beta&quot; channel may contain newer features and bugfixes, but have not yet been tested thoroughly.
 
 Note that this selects only what pool upgrades are taken from, and that there are no downgrades: So going back from the beta channel to the stable channel usually cannot be done immediately and means waiting for a stable version that is newer than the currently installed beta version.</source>
-        <translation>Der Aktualisierungs-Kanal legt fest, welche Programm-Aktualisierungen zur Installation angeboten werden. Der &quot;Stabil&quot;-Kanal enthält nur Aktualisierungen die als verlässlich betrachtet werden, während Versionen im &quot;Beta&quot;-Kanal neue Funktionen und Fehlerbehebungen enthalten können, die bisher noch nicht komplett bzw. ausführlich genug getestet werden konnten.
-Beachten Sie, dass dies nur bestimmt von welchem Bereich Sie Aktualisierungen erhalten und dass es keine Downgrade-Möglichkeiten gibt: Ein &quot;Schritt zurück&quot; vom Beta-Kanal zum Stabilen-Kanal kann normalerweise nicht unverzüglich erfolgen und bedeutet Wartezeiten auf eine stabile Version, die dann neuer ist als die aktuell installierte Beta-Version.</translation>
+        <translation>Der Aktualisierungs-Kanal legt fest, welche Programm-Aktualisierungen zur Installation angeboten werden. Der &quot;Stabil&quot;-Kanal enthält nur Aktualisierungen die als verlässlich betrachtet werden, während Versionen im &quot;Beta&quot;-Kanal neuer Funktionen und Fehlerbehebungen enthalten können, die bisher noch nicht komplett bzw. ausführlich genug getestet werden konnten.
+Beachten Sie, das dies nur bestimmt von welchem Bereich Sie Aktualisierungen erhalten und das es keine Downgrade-Möglichkeiten gibt: Einen &quot;Schritt zurück&quot; vom Beta-Kanal zum Stabilen-Kanal kann normalerweise nicht unverzüglich erfolgen und bedeutet Wartezeiten auf eine Stabile-Version, die dann neuer ist als die jeweils aktuell installierte Beta-Version.</translation>
     </message>
     <message>
         <source>Change update channel</source>
@@ -1366,7 +1254,7 @@ Beachten Sie, dass dies nur bestimmt von welchem Bereich Sie Aktualisierungen er
     <name>APP::HttpCredentialsGui</name>
     <message>
         <source>Please enter your password to log in to the account %1.</source>
-        <translation>Zum Einlogen in Konto %1 Passwort eingeben.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1377,7 +1265,7 @@ Beachten Sie, dass dies nur bestimmt von welchem Bereich Sie Aktualisierungen er
     </message>
     <message>
         <source>Files Ignored by Patterns</source>
-        <translation>Nach Muster ignorierte Dateien</translation>
+        <translation>Dateien, welche durch Mustererkennung ignoriert werden</translation>
     </message>
     <message>
         <source>Add</source>
@@ -1389,7 +1277,7 @@ Beachten Sie, dass dies nur bestimmt von welchem Bereich Sie Aktualisierungen er
     </message>
     <message>
         <source>Allow Deletion</source>
-        <translation>Löschen erlauben</translation>
+        <translation>Erlaube Löschung</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -1401,16 +1289,23 @@ Beachten Sie, dass dies nur bestimmt von welchem Bereich Sie Aktualisierungen er
 Items where deletion is allowed will be deleted if they prevent a directory from being removed. This is useful for meta data.</source>
         <translation>Dateien oder Ordner, die einem definierten Muster entsprechen, werden nicht synchronisiert. Änderungen werden bei der nächsten Synchronisation übernommen.
 
-Objekte, bei denen das Löschen erlaubt ist, werden gelöscht, falls sie die Löschung eines Ordners verhindern würden. Das trifft besonders auf Metadaten zu.</translation>
+Objekte bei denen das Löschen erlaubt ist werden gelöscht, wenn sie die Löschung eines Ordners verhindern würden. Das ist hilfreich für Metadaten.</translation>
     </message>
     <message>
         <source>Could not open file</source>
-        <translation>Die Datei konnte nicht geöffnet werden.</translation>
+        <translation>Die Datei konnte nicht geöffnet werden</translation>
     </message>
     <message>
         <source>Cannot write changes to &apos;%1&apos;.</source>
         <translation>Änderungen konnten nicht nach &apos;%1&apos; geschrieben werden.</translation>
     </message>
+    <message>
+        <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
+        <translation>Dieser Eintrag wird vom System auf &apos;%1&apos; bereitgestellt und kann in dieser Ansicht nicht geändert werden.</translation>
+    </message>
+</context>
+<context>
+    <name>APP::InpDlg</name>
     <message>
         <source>Add Ignore Pattern</source>
         <translation>Ignoriermuster hinzufügen</translation>
@@ -1420,8 +1315,12 @@ Objekte, bei denen das Löschen erlaubt ist, werden gelöscht, falls sie die Lö
         <translation>Neues Ignoriermuster hinzufügen:</translation>
     </message>
     <message>
-        <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
-        <translation>Dieser Eintrag wird vom System auf &apos;%1&apos; bereitgestellt und kann in dieser Ansicht nicht geändert werden.</translation>
+        <source>OK</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Abbrechen</translation>
     </message>
 </context>
 <context>
@@ -1432,7 +1331,7 @@ Objekte, bei denen das Löschen erlaubt ist, werden gelöscht, falls sie die Lö
     </message>
     <message>
         <source>List of issues</source>
-        <translation>Liste der Problemstellungen</translation>
+        <translation>Liste der Fehler</translation>
     </message>
     <message>
         <source>Filter</source>
@@ -1440,15 +1339,15 @@ Objekte, bei denen das Löschen erlaubt ist, werden gelöscht, falls sie die Lö
     </message>
     <message>
         <source>There were too many issues. Not all will be visible here.</source>
-        <translation>Es gab zu viele Probleme. Nicht alle können hier dargestellt werden.</translation>
+        <translation>Es gab zu viele Fehler. Nicht alle werden hier angezeigt.</translation>
     </message>
     <message>
         <source>There were conflicts. Check the documentation on how to resolve them.</source>
-        <translation>Es bestehen Konflikte. Prüfen Sie die Dokumentation, wie diese zu lösen sind.</translation>
+        <translation>Es bestehen Konflikte. Prüfe die Dokumentation, wie diese zu lösen sind.</translation>
     </message>
     <message>
         <source>The file %1 was ignored as its name is reserved by %2</source>
-        <translation>Die Datei %1 wurde ignoriert, da ihr Name von %2 reserviert ist.</translation>
+        <translation>Die Datei %1 wurde ignoriert, da ihr Name von %2 reserviert ist</translation>
     </message>
     <message>
         <source>Reset column sizes</source>
@@ -1456,7 +1355,7 @@ Objekte, bei denen das Löschen erlaubt ist, werden gelöscht, falls sie die Lö
     </message>
     <message>
         <source>There were conflicts. &lt;a href=&quot;%1&quot;&gt;Check the documentation on how to resolve them.&lt;/a&gt;</source>
-        <translation>Es bestehen Konflikte. &lt;a href=&quot;%1&quot;&gt;Prüfen Sie die Dokumentation, wie diese zu lösen sind.&lt;/a&gt;</translation>
+        <translation>Es bestehen Konflikte. &lt;a href=&quot;%1&quot;&gt;Prüfe die Dokumentation, wie diese zu lösen sind.&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Account</source>
@@ -1485,7 +1384,7 @@ Da diese Protokolldateien sehr groß werden können, erstellt der Client für je
     </message>
     <message>
         <source>If enabled, logs will be written to:</source>
-        <translation>Logs werden - wenn eingeschaltet - geschrieben nach:</translation>
+        <translation>Wenn eingeschaltet, werden Logs hier erstellt:</translation>
     </message>
     <message>
         <source>C:/log</source>
@@ -1493,7 +1392,7 @@ Da diese Protokolldateien sehr groß werden können, erstellt der Client für je
     </message>
     <message>
         <source>Log Http traffic </source>
-        <translation>HTTP Datenverkehr loggen</translation>
+        <translation>HTTP-Kommunikation aufzeichnen</translation>
     </message>
     <message>
         <source>Log files to keep:</source>
@@ -1615,7 +1514,7 @@ Beachten Sie, dass Kommandozeilenoptionen zum Logging diese Einstellungen übers
     </message>
     <message>
         <source>Proxy server requires authentication</source>
-        <translation>Proxyserver erfordert eine Authentifizierung</translation>
+        <translation>Proxyserver erfordert Authentifizierung</translation>
     </message>
     <message>
         <source>Note: proxy settings have no effects for accounts on localhost</source>
@@ -1639,7 +1538,7 @@ Beachten Sie, dass Kommandozeilenoptionen zum Logging diese Einstellungen übers
     </message>
     <message>
         <source>Limit to 3/4 of estimated bandwidth</source>
-        <translation>Auf 3/4 der geschätzten Bandbreite begrenzen</translation>
+        <translation>Limitierung auf 3/4 der geschätzten Bandbreite</translation>
     </message>
     <message>
         <source>Upload Bandwidth</source>
@@ -1678,7 +1577,7 @@ Beachten Sie, dass Kommandozeilenoptionen zum Logging diese Einstellungen übers
     </message>
     <message>
         <source>Closing in a few seconds...</source>
-        <translation>Schließe in wenigen Sekunden...</translation>
+        <translation>Schliesse in wenigen Sekunden...</translation>
     </message>
     <message>
         <source>%1 request failed at %2</source>
@@ -1705,21 +1604,20 @@ Beachten Sie, dass Kommandozeilenoptionen zum Logging diese Einstellungen übers
     </message>
     <message>
         <source>Unsupported token type: %1</source>
-        <translation>Nicht unterstützter Tokentyp: %1</translation>
+        <translation>Nicht unterstützter Token-Typ: %1</translation>
     </message>
     <message>
         <source>The reply from the server did not contain all expected fields
 :%1</source>
-        <translation>Die Antwort des Servers hat nicht alle erwarteten Felder beinhaltet
-:%1</translation>
+        <translation>Die Server-Antwort hat nicht alle erwarteten Felder enthalten: %1</translation>
     </message>
     <message>
         <source>Unknown Error</source>
-        <translation>Unbekannter Fehler</translation>
+        <translation>Ein unbekannter Fehler ist aufgetreten.</translation>
     </message>
     <message>
         <source>Login Error</source>
-        <translation>Anmeldefehler</translation>
+        <translation>Log-In Fehler</translation>
     </message>
     <message>
         <source>&lt;h1&gt;Wrong user&lt;/h1&gt;&lt;p&gt;You logged-in with user &lt;em&gt;%1&lt;/em&gt;, but must login with user &lt;em&gt;%2&lt;/em&gt;.&lt;br&gt;Please return to the %3 client and restart the authentication.&lt;/p&gt;</source>
@@ -1739,7 +1637,7 @@ Beachten Sie, dass Kommandozeilenoptionen zum Logging diese Einstellungen übers
     </message>
     <message>
         <source>&lt;h1&gt;Login Error&lt;/h1&gt;&lt;p&gt;%1&lt;/p&gt;</source>
-        <translation>&lt;h1&gt;Anmeldefehler &lt;/h1&gt;&lt;p&gt;%1&lt;/p&gt;</translation>
+        <translation>&lt;h1&gt;Anmeldefehler&lt;/h1&gt;&lt;p&gt;%1&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -1751,11 +1649,11 @@ Beachten Sie, dass Kommandozeilenoptionen zum Logging diese Einstellungen übers
     <message>
         <source>A new update for %1 is about to be installed. The updater may ask
 for additional privileges during the process.</source>
-        <translation>Ein neues Update für %1 wird installiert. Während des Updatevorganges werden Sie eventuell gebeten, zusätzliche Rechte im Rahmen des Updatevorganges zu gewähren.</translation>
+        <translation>Ein neues Update für %1 wird installiert. Während des Updatevorganges werden Sie eventuell gefragt zusätzliche Rechte im Rahmen des Updatevorganges zu gewähren.</translation>
     </message>
     <message>
         <source>Could not download update. Please click &lt;a href=&apos;%1&apos;&gt;here&lt;/a&gt; to download the update manually.</source>
-        <translation>Aktualisierung kann nicht heruntergeladen werden. Bitte klicken Sie &lt;a href=&apos;%1&apos;&gt;hier&lt;/a&gt;, um die Aktualisierung manuell herunterzuladen.</translation>
+        <translation>Aktualisierung kann nicht herunter geladen werden. Bitte klicke &lt;a href=&apos;%1&apos;&gt;hier&lt;/a&gt; um die Aktualisierung manuell herunter zu laden.</translation>
     </message>
     <message>
         <source>Could not check for new updates.</source>
@@ -1771,7 +1669,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>New %1 available. Please click &lt;a href=&apos;%2&apos;&gt;here&lt;/a&gt; to download the new AppImage manually.</source>
-        <translation>Neue %1 verfügbar. Bitte clicken Sie &lt;a href=&apos;%2&apos;&gt;hier&lt;/a&gt;, um das neue AppImage manuell herunterzuladen.</translation>
+        <translation>Neue %1 verfügbar. Bitte clicken Sie &lt;a href=&apos;%2&apos;&gt;hier&lt;/a&gt; um das neue AppImage manuell downzuloaden.</translation>
     </message>
     <message>
         <source>New %1 available. Please use the system&apos;s update tool to install it.</source>
@@ -1779,7 +1677,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Checking update server...</source>
-        <translation>Aktualisierungsserver wird überprüft …</translation>
+        <translation>Aktualisierungs-Server wird überprüft…</translation>
     </message>
     <message>
         <source>Update status is unknown: Did not check for new updates.</source>
@@ -1791,14 +1689,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Update Check</source>
-        <translation>Aktualitätsprüfung</translation>
-    </message>
-</context>
-<context>
-    <name>APP::CuratorPropagator</name>
-    <message>
-        <source>File %1 is currently in use</source>
-        <translation>Datei %1 wird gerade benutzt</translation>
+        <translation>Aktualisierungsüberprüfung</translation>
     </message>
 </context>
 <context>
@@ -1809,19 +1700,19 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>File is listed on the ignore list.</source>
-        <translation>Die Datei ist in der Ignorierliste aufgeführt.</translation>
+        <translation>Die Datei ist in der Ignorierliste geführt.</translation>
     </message>
     <message>
         <source>File names ending with a period are not supported on this file system.</source>
-        <translation>Dateinamen enden mit einem Punkt. Das wird in diesem Dateisystem nicht unterstützt.</translation>
+        <translation>Dateinamen enden mit einem Punkt. Dies wird in diesem Dateisystem nicht unterstützt.</translation>
     </message>
     <message>
         <source>File names containing the character &apos;%1&apos; are not supported on this file system.</source>
-        <translation>Dateinamen beinhalten das Zeichen &apos;%1&apos;. Das wird in diesem Dateisystems nicht unterstützt.</translation>
+        <translation>Dateinamen beinhalten das Zeichen &apos;%1&apos;. Diese werden in diesem Dateisystems nicht unterstützt.</translation>
     </message>
     <message>
         <source>File name contains at least one invalid character</source>
-        <translation>Der Dateiname enthält mindestens ein ungültiges Zeichen.</translation>
+        <translation>Der Dateiname enthält mindestens ein ungültiges Zeichen</translation>
     </message>
     <message>
         <source>The file name is a reserved name on this file system.</source>
@@ -1829,7 +1720,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Filename contains trailing spaces.</source>
-        <translation>Der Dateiname endet mit Leerzeichen.</translation>
+        <translation>Dateiname endet mit Leerzeichen.</translation>
     </message>
     <message>
         <source>Filename is too long.</source>
@@ -1849,7 +1740,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>The filename cannot be encoded on your file system.</source>
-        <translation>Der Dateiname kann auf Ihrem Dateisystem nicht kodiert werden.</translation>
+        <translation>Der Dateiname kann auf deinem Dateisystem nicht kodiert werden.</translation>
     </message>
     <message>
         <source>The filename is blacklisted on the server.</source>
@@ -1857,7 +1748,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>size</source>
-        <translation>Größe</translation>
+        <translation>Grösse</translation>
     </message>
     <message>
         <source>permissions</source>
@@ -1877,7 +1768,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>SelectiveSync: Ignored because its path is deselected</source>
-        <translation>SelectiveSync: Selektive Synchronisierung wurde ignoriert, da der Pfad dafür abgewählt ist.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Moved to invalid target, restoring</source>
@@ -1889,15 +1780,15 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Not allowed because you don&apos;t have permission to add subfolders to that folder</source>
-        <translation>Nicht erlaubt, da Sie keine Rechte zur Erstellung von Unterordnern haben</translation>
+        <translation>Nicht erlaubt, weil keine Rechte bestehen, diesem Verzeichnis Unterverzeichnisse hinzuzufügen.</translation>
     </message>
     <message>
         <source>Error while doing a rename, unhandled status code: %1</source>
-        <translation>Fehler während des Umbenennes, nicht behandelter Status Code: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Not allowed because you don&apos;t have permission to add files in that folder</source>
-        <translation>Nicht erlaubt, da Sie keine Rechte zum Hinzufügen von Dateien in diesen Ordner haben</translation>
+        <translation>Nicht erlaubt, weil die nötigen Rechte fehlen, Dateien zu dem Verzeichnis hinzuzufügen</translation>
     </message>
     <message>
         <source>Not allowed to upload this file because it is read-only on the server, restoring</source>
@@ -1909,7 +1800,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>This Space is currently unavailable</source>
-        <translation>Dieser Space ist aktuell nicht erreichbar.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Server replied with an error while reading directory &apos;%1&apos; : %2</source>
@@ -1931,27 +1822,27 @@ for additional privileges during the process.</source>
     <name>APP::PropagateDownloadFile</name>
     <message>
         <source>Failed to free up space, the file %1 is currently in use</source>
-        <translation>Speicherplatz konnte nicht freigegeben werden, die Datei %1 wird derzeit verwendet.</translation>
+        <translation>Speicherplatz konnte nicht freigegeben werden, die Datei %1 wird derzeit verwendet</translation>
     </message>
     <message>
         <source>File %1 can not be downloaded because of a local file name clash with %2!</source>
-        <translation>Datei %1 kann nicht heruntergeladen werden, da der lokale Dateiname mit %2 kollidiert.</translation>
+        <translation>Datei %1 kann nicht heruntergeladen werden, da der lokale Dateiname mit %2 kollidiert!</translation>
     </message>
     <message>
         <source>The download would reduce free local disk space below the limit</source>
-        <translation>Das Herunterladen würde den lokalen freien Speicherplatz unter das Limit reduzieren.</translation>
+        <translation>Das Herunterladen würde den lokalen freien Speicherplatz unter das Limit reduzieren</translation>
     </message>
     <message>
         <source>Free space on disk is less than %1</source>
-        <translation>Der freie Speicher auf der Festplatte ist weniger als %1</translation>
+        <translation>Der freie Speicherplatz beträgt weniger als %1</translation>
     </message>
     <message>
         <source>File was deleted from server</source>
-        <translation>Die Datei wurde vom Server gelöscht.</translation>
+        <translation>Datei wurde vom Server gelöscht</translation>
     </message>
     <message>
         <source>Broken webserver returned empty content length for non-empty file on resume</source>
-        <translation>Der Webserver hat eine leere Länge bezüglich des Inhalts für eine nicht leere Datei in der Wiederaufnahme zurückgegeben (defekt).</translation>
+        <translation>Der Webserver hat eine leere Länge bezüglich des Inhalts für eine nicht leere Datei in der Wiederaufnahme zurückgegeben (Defekt)</translation>
     </message>
     <message>
         <source>The file could not be downloaded completely.</source>
@@ -1959,11 +1850,11 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>The downloaded file is empty despite the server announced it should have been %1.</source>
-        <translation>Die heruntergeladene Datei ist leer, obwohl der Server %1  als Größe übermittelt hat.</translation>
+        <translation>Die heruntergeladene Datei ist leer, obwohl der Server %1  als Grösse übermittelt hat.</translation>
     </message>
     <message>
         <source>File %1 cannot be saved because of a local file name clash with %2!</source>
-        <translation>Datei %1 kann nicht gespeichert werden, da der lokale Dateiname mit %2 kollidiert.</translation>
+        <translation>Datei %1 kann nicht gespeichert werden, da der lokale Dateiname mit %2 kollidiert!</translation>
     </message>
     <message>
         <source>Error updating metadata: %1</source>
@@ -1971,11 +1862,11 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>The file %1 is currently in use</source>
-        <translation>Die Datei %1 wird gerade benutzt.</translation>
+        <translation>Die Datei %1 wird gerade benutzt</translation>
     </message>
     <message>
         <source>File has changed since discovery</source>
-        <translation>Datei ist seit der Entdeckung geändert worden.</translation>
+        <translation>Die Datei hat sich seit der Erkennung geändert</translation>
     </message>
 </context>
 <context>
@@ -1989,11 +1880,11 @@ for additional privileges during the process.</source>
     <name>APP::PropagateLocalMkdir</name>
     <message>
         <source>could not delete file %1, error: %2</source>
-        <translation>Konnte Datei %1 nicht löschen. Fehler: %2</translation>
+        <translation>Die Datei %1 konnte nicht gelöscht werden, Fehler: %2</translation>
     </message>
     <message>
         <source>Can not create local folder %1 because of a local file name clash with %2</source>
-        <translation>Der lokale Ordner %1 konnte aufgrund eines Namenskonflikts mit %2 nicht erstellt werden.</translation>
+        <translation>Der lokale Ordner %1 konnte aufgrund eines Namenkonfliktes mit %2 nicht erstellt werden</translation>
     </message>
     <message>
         <source>Error updating metadata: %1</source>
@@ -2001,11 +1892,11 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>The file %1 is currently in use</source>
-        <translation>Die Datei %1 wird gerade benutzt.</translation>
+        <translation>Die Datei %1 wird gerade benutzt</translation>
     </message>
     <message>
         <source>could not create folder %1</source>
-        <translation>Ordner %1 konnte nicht angelegt werden.</translation>
+        <translation>Ordner %1 konnte nicht erstellt werden </translation>
     </message>
 </context>
 <context>
@@ -2016,22 +1907,22 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Could not remove %1 because of a local file name clash with %2!</source>
-        <translation>%1 kann aufgrund eines Konflikts mit dem lokalen Dateinamen von %2 nicht gelöscht werden.</translation>
+        <translation>%1 kann aufgrund eines Konfliktes mit dem lokalen Dateinamen von %2 nicht gelöscht werden!</translation>
     </message>
     <message>
         <source>%1 the file is currently in use</source>
-        <translation>Datei %1 wird gerade benutzt.</translation>
+        <translation>Datei %1 wird gerade benutzt</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateLocalRename</name>
     <message>
         <source>File %1 can not be renamed to %2 because of a local file name clash</source>
-        <translation>%1 kann aufgrund eines Konflikts mit dem lokalen Dateinamen nicht zu %2 umbenannt werden.</translation>
+        <translation>%1 kann aufgrund eines Konfliktes mit dem lokalen Dateinamen nicht zu %2 umbenannt werden</translation>
     </message>
     <message>
         <source>Could not rename %1 to %2, the file is currently in use</source>
-        <translation>Konnte %1 nicht in %2 umbenennen, die Datei wird gerade benutzt.</translation>
+        <translation>Konnte %1 nicht in %2 umbenennen, die Datei wird gerade benutzt</translation>
     </message>
     <message>
         <source>Error updating metadata: %1</source>
@@ -2039,7 +1930,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>The file %1 is currently in use</source>
-        <translation>Die Datei %1 wird gerade benutzt.</translation>
+        <translation>Die Datei %1 wird gerade benutzt</translation>
     </message>
     <message>
         <source>Failed to rename file</source>
@@ -2069,7 +1960,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Setting file status failed due to file lock</source>
-        <translation>Das Festlegen des Dateistatus ist aufgrund einer Dateisperre fehlgeschlagen.</translation>
+        <translation>Das Festlegen des Dateistatus ist aufgrund einer Dateisperre fehlgeschlagen</translation>
     </message>
 </context>
 <context>
@@ -2088,7 +1979,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>The file %1 is currently in use</source>
-        <translation>Die Datei %1 wird gerade benutzt.</translation>
+        <translation>Die Datei %1 wird gerade benutzt</translation>
     </message>
     <message>
         <source>Error writing metadata to the database</source>
@@ -2107,22 +1998,22 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>The file %1 is currently in use</source>
-        <translation>Die Datei %1 wird gerade benutzt.</translation>
+        <translation>Die Datei %1 wird gerade benutzt</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateUploadFileCommon</name>
     <message>
         <source>File %1 cannot be uploaded because another file with the same name, differing only in case, exists</source>
-        <translation>Die Datei %1 kann nicht hochgeladen werden, da eine andere Datei mit dem gleichen Namen, nur unterschiedlicher Großschreibung, existiert.</translation>
+        <translation>Die Datei %1 kann nicht hochgeladen werden, da eine andere Datei mit dem selben Namen, nur unterschiedlicher Grossschreibung, existiert</translation>
     </message>
     <message>
         <source>%1 the file is currently in use</source>
-        <translation>Datei %1 wird gerade benutzt.</translation>
+        <translation>Datei %1 wird gerade benutzt</translation>
     </message>
     <message>
         <source>File Removed</source>
-        <translation>Datei gelöscht</translation>
+        <translation>Datei entfernt</translation>
     </message>
     <message>
         <source>Local file changed during sync. It will be resumed.</source>
@@ -2134,14 +2025,14 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Upload of %1 exceeds the quota for the folder</source>
-        <translation>Das Hochladen von %1 überschreitet das Speicherkontingent des Ordners.</translation>
+        <translation>Das Hochladen von %1 überschreitet das Speicherkontingent des Ordners </translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateUploadFileNG</name>
     <message>
         <source>%1 the file is currently in use</source>
-        <translation>Datei %1 wird gerade benutzt.</translation>
+        <translation>Datei %1 wird gerade benutzt</translation>
     </message>
     <message>
         <source>The local file was removed during sync.</source>
@@ -2149,11 +2040,11 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>The server did ask for a removed legacy feature(polling)</source>
-        <translation>Der Server hat nach einer nicht mehr benutzen Funktion gefragt (Polling).</translation>
+        <translation>Der Server hat nach einer nicht mehr benutzen Funktion angefragt (Polling)</translation>
     </message>
     <message>
         <source>Unexpected return code from server (%1)</source>
-        <translation>Server antwortet mit unerwartetem Rückgabe-Code (%1).</translation>
+        <translation>Unerwarteter Rückgabe-Code Antwort vom Server (%1)</translation>
     </message>
     <message>
         <source>Missing File ID from server</source>
@@ -2168,11 +2059,11 @@ for additional privileges during the process.</source>
     <name>APP::PropagateUploadFileTUS</name>
     <message>
         <source>%1 the file is currently in use</source>
-        <translation>Datei %1 wird gerade benutzt.</translation>
+        <translation>Datei %1 wird gerade benutzt</translation>
     </message>
     <message>
         <source>Checksum computation failed</source>
-        <translation>Die Generierung der Checksumme ist fehlgeschlagen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>The local file was removed during sync.</source>
@@ -2183,11 +2074,11 @@ for additional privileges during the process.</source>
     <name>APP::PropagateUploadFileV1</name>
     <message>
         <source>%1 the file is currently in use</source>
-        <translation>Datei %1 wird gerade benutzt.</translation>
+        <translation>Datei %1 wird gerade benutzt</translation>
     </message>
     <message>
         <source>The server did ask for a removed legacy feature(polling)</source>
-        <translation>Der Server hat eine nicht mehr benutze Funktion angefragt (Polling).</translation>
+        <translation>Der Server hat nach einer nicht mehr benutzen Funktion angefragt (Polling)</translation>
     </message>
     <message>
         <source>The local file was removed during sync.</source>
@@ -2195,7 +2086,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>The server did not acknowledge the last chunk. (No e-tag was present)</source>
-        <translation>Der Server hat den letzten Block nicht bestätigt. (Der ETag war nicht vorhanden.)</translation>
+        <translation>Der Server hat den letzten Block nicht bestätigt. (Der ETag war nicht vorhanden)</translation>
     </message>
 </context>
 <context>
@@ -2222,7 +2113,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Size</source>
-        <translation>Größe</translation>
+        <translation>Grösse</translation>
     </message>
     <message>
         <source>Account</source>
@@ -2260,11 +2151,11 @@ for additional privileges during the process.</source>
     <name>APP::SelectiveSyncWidget</name>
     <message>
         <source>Loading ...</source>
-        <translation>Laden…</translation>
+        <translation>Ladevorgang …</translation>
     </message>
     <message>
         <source>Deselect remote folders you do not wish to synchronize.</source>
-        <translation>Entfernte Ordner abwählen, die nicht synchronisiert werden sollen.</translation>
+        <translation>Entfernte Ordner abwählen die nicht synchronisiert werden sollen.</translation>
     </message>
     <message>
         <source>Name</source>
@@ -2272,7 +2163,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Size</source>
-        <translation>Größe</translation>
+        <translation>Grösse</translation>
     </message>
     <message>
         <source>No subfolders currently on the server.</source>
@@ -2280,7 +2171,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>An error occurred while loading the list of sub folders.</source>
-        <translation>Ein Fehler ist aufgetreten, während die Liste der Unterordner geladen wurde.</translation>
+        <translation>Ein Fehler ist während die Liste der Unterordner geladen wurde aufgetreten.</translation>
     </message>
 </context>
 <context>
@@ -2302,7 +2193,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Add account</source>
-        <translation>Konto hinzufügen</translation>
+        <translation>Benutzerkonto hinzufügen</translation>
     </message>
     <message>
         <source>Quit %1</source>
@@ -2310,7 +2201,11 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Are you sure you want to quit %1?</source>
-        <translation>Sind Sie sicher, dass Sie %1 beenden möchten?</translation>
+        <translation>Sind Sie sicher, dass sie %1 beenden möchten?</translation>
+    </message>
+    <message>
+        <source>%1 - %2</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Account</source>
@@ -2320,16 +2215,12 @@ for additional privileges during the process.</source>
         <source>MainWindow</source>
         <translation>Hauptfenster</translation>
     </message>
-    <message>
-        <source>Hide</source>
-        <translation>Ausblenden</translation>
-    </message>
 </context>
 <context>
     <name>APP::ShareDialog</name>
     <message>
         <source>share label</source>
-        <translation>Freigabe-Bezeichnung</translation>
+        <translation>Freigabe-Label</translation>
     </message>
     <message>
         <source>Dialog</source>
@@ -2338,6 +2229,10 @@ for additional privileges during the process.</source>
     <message>
         <source>Curator Path:</source>
         <translation>Curator-Pfad:</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>%1 Sharing</source>
@@ -2353,7 +2248,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>The server does not allow sharing</source>
-        <translation>Der Server erlaubt das teilen nicht.</translation>
+        <translation>Dieser Server erlaubt das Teilen nicht</translation>
     </message>
     <message>
         <source>Retrieving maximum possible sharing permissions from server...</source>
@@ -2361,11 +2256,11 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>The file can not be shared because it was shared without sharing permission.</source>
-        <translation>Die Datei kann nicht weiter geteilt werden, weil sie ohne Feigabe-Berechtigung für die Empfangenden erstellt wurde.</translation>
+        <translation>Die Datei kann nicht weiter geteilt werden, weil sie ohne erneute Teilungs-Berechtigung erstellt wurde.</translation>
     </message>
     <message>
         <source>Users and Groups</source>
-        <translation>Nutzer und Gruppen</translation>
+        <translation>Benutzer und Gruppen</translation>
     </message>
     <message>
         <source>Public Links</source>
@@ -2376,7 +2271,7 @@ for additional privileges during the process.</source>
     <name>APP::ShareLinkWidget</name>
     <message>
         <source>Share NewDocument.odt</source>
-        <translation>Teile NewDocument.odt</translation>
+        <translation>NeuesDokument.odt teilen</translation>
     </message>
     <message>
         <source>Upload only (File Drop)</source>
@@ -2400,7 +2295,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>&amp;Create</source>
-        <translation>Erstellen</translation>
+        <translation>&amp;Erstellen</translation>
     </message>
     <message>
         <source>Set &amp;password </source>
@@ -2420,7 +2315,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Download / View</source>
-        <translation>Herunterladen/Ansehen</translation>
+        <translation>Herunterladen / Ansehen</translation>
     </message>
     <message>
         <source>Recipients can view, download, edit, delete and upload contents.</source>
@@ -2428,7 +2323,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Anyone with the link has access to the file/folder</source>
-        <translation>Alle mit dem Link haben Zugriff auf die Datei oder den Ordner.</translation>
+        <translation>Jeder mit dem Link hat Zugriff auf die Datei/Ordner</translation>
     </message>
     <message>
         <source>P&amp;assword protect</source>
@@ -2436,11 +2331,11 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>The file can not be shared because it was shared without sharing permission.</source>
-        <translation>Die Datei kann nicht geteilt werden, weil Sie keine Freigabe-Berechtigung erhalten haben, als sie mit Ihnen geteilt wurde.</translation>
+        <translation>Die Datei kann nicht geteilt werden, weil sie ohne erneute Teilungs-Berechtigung für Sie geteilt wurde.</translation>
     </message>
     <message>
         <source>Link shares have been disabled</source>
-        <translation>Das Teilen von Links wurde deaktiviert.</translation>
+        <translation>Das Teilen von Links wurde deaktiviert</translation>
     </message>
     <message>
         <source>Create public link share</source>
@@ -2456,11 +2351,11 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Copy link to clipboard</source>
-        <translation>Link in Zwischenablage kopieren</translation>
+        <translation>Link in die Zwischenablage kopieren</translation>
     </message>
     <message>
         <source>Copy link to clipboard (direct download)</source>
-        <translation>Link in die Zwischenablage kopieren (direktes Herunterladen)</translation>
+        <translation>Link in die Zwischenablage kopieren (Sofortiges herunterladen)</translation>
     </message>
     <message>
         <source>Send link by email</source>
@@ -2468,7 +2363,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Send link by email (direct download)</source>
-        <translation>Link per Email senden (direktes Herunterladen)</translation>
+        <translation>Link über E-Mail senden (Sofortiges herunterladen)</translation>
     </message>
     <message>
         <source>Create new...</source>
@@ -2500,26 +2395,26 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Please Set Password</source>
-        <translation>Bitte wählen Sie ein Passwort:</translation>
+        <translation>Bitte wähle ein Passwort:</translation>
     </message>
 </context>
 <context>
     <name>APP::ShareUserGroupWidget</name>
     <message>
         <source>Share NewDocument.odt</source>
-        <translation>Teile NewDocument.odt</translation>
+        <translation>NeuesDokument.odt teilen</translation>
     </message>
     <message>
         <source>Share with users or groups ...</source>
-        <translation>Mit Benutzern oder Gruppen teilen…</translation>
+        <translation>Mit Benutzern oder Gruppen teilen ...</translation>
     </message>
     <message>
         <source>You can direct people to this shared file or folder %1 by giving them a private link</source>
-        <translation>Sie können Personen zu dieser freigegebenen Datei oder diesem freigegebenen Ordner %1 leiten, indem Sie ihnen einen privaten Link geben.</translation>
+        <translation>Sie kannst Personen zu dieser freigegebenen Datei oder diesem freigegebenen Ordner %1 leiten, indem Sie ihnen einen privaten Link geben</translation>
     </message>
     <message>
         <source>The item is not shared with any users or groups</source>
-        <translation>Das Element wird mit keinem Benutzer und keiner Gruppe geteilt.</translation>
+        <translation>Das Element wird mit keinem Benutzer oder Gruppe geteilt</translation>
     </message>
     <message>
         <source>Open link in browser</source>
@@ -2527,7 +2422,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Copy link to clipboard</source>
-        <translation>Link in Zwischenablage kopieren</translation>
+        <translation>Link in die Zwischenablage kopieren</translation>
     </message>
     <message>
         <source>Send link by email</source>
@@ -2535,11 +2430,11 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>No results for &apos;%1&apos;</source>
-        <translation>Keine Ergebnisse für &apos;%1&apos;</translation>
+        <translation>keine Ergebnisse für &apos;%1&apos;</translation>
     </message>
     <message>
         <source>I shared something with you</source>
-        <translation>Ich habe etwas mit Ihnen geteilt.</translation>
+        <translation>Ich habe etwas mit Ihnen geteilt</translation>
     </message>
 </context>
 <context>
@@ -2584,7 +2479,7 @@ for additional privileges during the process.</source>
     <name>APP::SocketApi</name>
     <message>
         <source>Share with %1</source>
-        <translation>Via %1 teilen</translation>
+        <translation>Mit %1 teilen</translation>
     </message>
     <message>
         <source>Context menu share</source>
@@ -2596,11 +2491,11 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Confirm deletion</source>
-        <translation>Löschung bestätigen</translation>
+        <translation>Löschen bestätigen</translation>
     </message>
     <message>
         <source>Do you want to delete the directory &lt;i&gt;%1&lt;/i&gt; and all its contents permanently?</source>
-        <translation>Soll der Ordner &lt;i&gt;%1&lt;/i&gt; mit gesamtem Inhalt dauerhaft gelöscht werden?</translation>
+        <translation>Soll der Ordner &lt;i&gt;%1&lt;/i&gt; und alle seine Inhalte dauerhaft gelöscht werden?</translation>
     </message>
     <message>
         <source>Do you want to delete the file &lt;i&gt;%1&lt;/i&gt; permanently?</source>
@@ -2624,7 +2519,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>I shared something with you</source>
-        <translation>Ich habe etwas mit Ihnen geteilt.</translation>
+        <translation>Ich habe etwas mit dir geteilt</translation>
     </message>
     <message>
         <source>Share...</source>
@@ -2636,15 +2531,15 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Send private link by email...</source>
-        <translation>Sende privaten Link per E-Mail...</translation>
+        <translation>Privaten Link über E-Mail senden...</translation>
     </message>
     <message>
         <source>Resharing this file is not allowed</source>
-        <translation>Weiteres Teilen dieser Datei ist nicht erlaubt.</translation>
+        <translation>Weiteres Teilen ist nicht erlaubt.</translation>
     </message>
     <message>
         <source>Resharing this folder is not allowed</source>
-        <translation>Weiteres Teilen des Ordners ist nicht erlaubt.</translation>
+        <translation>Weiterteilen des Ordners ist nicht erlaubt</translation>
     </message>
     <message>
         <source>Create and copy public link to clipboard</source>
@@ -2660,7 +2555,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Show file versions in web browser</source>
-        <translation>Dateiversion im Webbrowser anzeigen.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Rename...</source>
@@ -2741,19 +2636,23 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Only %1 are available, need at least %2 to start</source>
-        <translation>Es stehen nur %1 zur Verfügung; es müssen mindestens %2 sein, um zu starten.</translation>
+        <translation>Es stehen nur %1 zur Verfügung, es müssen mindestens %2 sein um zu starten</translation>
     </message>
     <message>
         <source>Unable to open or create the local sync database. Make sure you have write access in the sync folder.</source>
-        <translation>Das Öffnen oder Erstellen der Synchronisations-Datenbank ist nicht möglich. Bitte stellen Sie sicher, dass Schreibrechte für den zu synchronisierenden Ordner existieren.</translation>
+        <translation>Das Öffnen oder erstellen der Synchronisations-Datenbank ist nicht möglich. Bitte stellen Sie sicher, dass Schreibrechte für den zu synchronisierenden Ordner existieren.</translation>
+    </message>
+    <message>
+        <source>Synchronization aborted due to IP address change</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Disk space is low: Downloads that would reduce free space below %1 were skipped.</source>
-        <translation>Der freie Speicherplatz wird knapp: Downloads, die den freien Speicher unter %1 senken würden, wurden ausgelassen.</translation>
+        <translation>Der freie Speicherplatz wird knapp: Downloads, die den freien Speicher unter %1 senken, wurden ausgelassen.</translation>
     </message>
     <message>
         <source>There is insufficient space available on the server for some uploads.</source>
-        <translation>Auf dem Server ist nicht genug Platz, um alle Dateien hochzuladen.</translation>
+        <translation>Auf dem Server ist zum Hochladen für einige Dateien nicht genug Platz.</translation>
     </message>
     <message>
         <source>Unresolved conflict.</source>
@@ -2761,11 +2660,11 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Using virtual files with suffix, but suffix is not set</source>
-        <translation>Virtuelle Dateien mit Dateiendung werden verwendet, aber die Dateiendung ist nicht definiert.</translation>
+        <translation>Virtuelle Dateien mit Dateiendung werden genutzt, aber die Dateiendung ist nicht definiert</translation>
     </message>
     <message>
         <source>Unable to read the blacklist from the local database</source>
-        <translation>Fehler beim Einlesen der schwarzen Liste aus der lokalen Datenbank</translation>
+        <translation>Fehler beim Einlesen der Blacklist aus der lokalen Datenbank</translation>
     </message>
     <message>
         <source>Unable to read from the sync journal.</source>
@@ -2798,18 +2697,18 @@ for additional privileges during the process.</source>
     <name>APP::Theme</name>
     <message>
         <source>&lt;p&gt;Version %1. For more information visit &lt;a href=&quot;%2&quot;&gt;https://%3&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For known issues and help, please visit: &lt;a href=&quot;https://central.owncloud.com/c/desktop-client&quot;&gt;https://central.owncloud.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;small&gt;By Klaas Freitag, Daniel Molkentin, Olivier Goffart, Markus Götz,  Jan-Christoph Borchardt, Thomas Müller,&lt;br&gt;Dominik Schmidt, Michael Stingl, Hannah von Reth, Fabian Müller and others.&lt;/small&gt;&lt;/p&gt;&lt;p&gt;Copyright Seagate Technologies LLC&lt;/p&gt;&lt;p&gt;Distributed by %4 and licensed under the GNU General Public License (GPL) Version 2.0.&lt;br/&gt;%5 and the %5 logo are registered trademarks of %4 in the United States, other countries, or both.&lt;/p&gt;&lt;p&gt;&lt;small&gt;%6&lt;/small&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Version %1. Für weitere Informationen &lt;a href=&quot;%2&quot;&gt;https://%3&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Für bekannte Probleme und Hilfe: &lt;a href=&quot;https://central.owncloud.org/c/desktop-client&quot;&gt;https://central.owncloud.org&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;small&gt;Von Klaas Freitag, Daniel Molkentin, Olivier Goffart, Markus Götz, Jan-Christoph Borchardt, Thomas Müller, Dominik Schmidt, Michael Stingl, Hannah von Reth, Fabian Müller und Weitere.&lt;/small&gt;&lt;/p&gt;&lt;p&gt;Urheberrecht Seagate Technologies LLC&lt;/p&gt;&lt;p&gt;Verteilt von %4 und lizenziert unter der GNU General Public License (GPL) Version 2.0.&lt;br/&gt;%5 und das %5 Logo sind eingetragene Marken von %4 in den Vereinigten Staaten, weiteren Ländern oder beides.&lt;/p&gt;&lt;p&gt;&lt;small&gt;%6&lt;/small&gt;&lt;/p&gt;</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>APP::TlsErrorDialog</name>
     <message>
         <source>TLS Certificate Error</source>
-        <translation>TLS-Zertifikatfehler</translation>
+        <translation>TLS Zertifikat Fehler</translation>
     </message>
     <message>
         <source>Do you want to trust this certificate anyway?</source>
-        <translation>Möchten Sie diesem Zertifikat trotzdem vertrauen?</translation>
+        <translation>Möchtest Du diesem Zertifikat trotzdem vertrauen?</translation>
     </message>
     <message>
         <source>Cannot connect securely to %1</source>
@@ -2817,7 +2716,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>&amp;lt;not specified&amp;gt;</source>
-        <translation>&amp;lt;nicht angegeben&amp;gt;</translation>
+        <translation>&amp;lt;Nicht angegeben&amp;gt;</translation>
     </message>
     <message>
         <source>&lt;div id=&quot;cert&quot;&gt;&lt;h3&gt;with Certificate %1&lt;/h3&gt;&lt;div id=&quot;ccert&quot;&gt;&lt;p&gt;Organization: %2&lt;br/&gt;Unit: %3&lt;br/&gt;Country: %4&lt;/p&gt;&lt;p&gt;Fingerprint (MD5): &lt;tt&gt;%5&lt;/tt&gt;&lt;br/&gt;Fingerprint (SHA1): &lt;tt&gt;%6&lt;/tt&gt;&lt;br/&gt;Fingerprint (SHA256): &lt;tt&gt;%7&lt;/tt&gt;&lt;br/&gt;&lt;br/&gt;Effective Date: %8Expiration Date: %9&lt;/div&gt;&lt;h3&gt;Issuer: %10&lt;/h3&gt;&lt;div id=&quot;issuer&quot;&gt;&lt;p&gt;Organization: %11&lt;br/&gt;Unit: %12&lt;br/&gt;Country: %13&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;</source>
@@ -2828,7 +2727,7 @@ for additional privileges during the process.</source>
     <name>APP::UpdateUrlDialog</name>
     <message>
         <source>Change url permanently to %1</source>
-        <translation>URL wurde permanent geändert in %1.</translation>
+        <translation>URL wurde permanent geändert zu %1</translation>
     </message>
     <message>
         <source>Reject</source>
@@ -2836,54 +2735,47 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Url update requested for %1</source>
-        <translation>URL-Aktualisierung angefordert für %1</translation>
+        <translation>URL Aktualisierung angefordert für %1</translation>
     </message>
     <message>
         <source>The url for %1 changed from %2 to %3, do you want to accept the changed url?</source>
-        <translation>Die URL für %1 wurde von %2 in %3 geändert. Möchten Sie die geänderte URL übernehmen?</translation>
+        <translation>Die URL für %1 wurde von %2 zu %3 geändert, möchten Sie die geänderte URL übernehmen?</translation>
     </message>
 </context>
 <context>
     <name>APP::ValidateChecksumHeader</name>
     <message>
         <source>The downloaded file does not match the checksum, it will be resumed. &apos;%1&apos; != &apos;%2&apos;</source>
-        <translation>Die heruntergeladene Datei entspricht nicht der Prüfsumme. Das Herunterladen wird wiederaufgenommen. &apos;%1&apos; != &apos;%2&apos;</translation>
+        <translation>Die heruntergeladene Datei entspricht nicht der Prüfsumme, das Herunterladen wird wiederaufgenommen. &apos;%1&apos; != &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
     <name>APP::Vfs</name>
     <message>
         <source>The Virtual filesystem feature does not support a drive as sync root</source>
-        <translation>Virtuelle Dateien funktionieren nicht mit einem Laufwerk als Synchronisationspunkt.</translation>
+        <translation>Das virtuelle Dateisystem Feature unterstützt kein Laufwerk als Synchronisationsordner</translation>
     </message>
     <message>
         <source>The Virtual filesystem feature requires a NTFS file system, %1 is using %2</source>
-        <translation>Virtuelle Dateien benötigt ein NTFS Dateisystem. %1 benutzt %2.</translation>
+        <translation>Das Feature Virtuelle Dateien benötigt ein NTFS Dateisystem, %1 benutzt %2</translation>
     </message>
     <message>
         <source>The Virtual filesystem feature is not supported on network drives</source>
-        <translation>Virtuelle Dateien funktionieren nicht mit Netzwerk-Laufwerken.</translation>
+        <translation>Das Feature Virtuelle Dateien unterstützt keine Netzwerk-Laufwerke</translation>
     </message>
 </context>
 <context>
     <name>APP::VfsSuffix</name>
     <message>
         <source>Cannot create a placeholder because a file with the placeholder name already exist</source>
-        <translation>Ein Platzhalter kann nicht erstellt werden, da bereits eine Datei mit dem gleichen Platzhalternamen vorhanden ist.</translation>
+        <translation>Ein Platzhalter kann nicht erstellt werden, da bereits eine Datei mit dem gleichen Platzhalternamen vorhanden ist</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::AccountConfiguredSetupWizardState</name>
-    <message>
-        <source>Invalid local download directory: %1</source>
-        <translation>Falsches lokales Download Verzeichnis: %1</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::AccountConfiguredWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredPage</name>
     <message>
         <source>Use &amp;virtual files instead of downloading content immediately</source>
-        <translation>&amp;Virtuelle Dateien verwenden statt die Dateien gleich herunterzuladen</translation>
+        <translation>&amp;Virtuelle Dateien verwenden anstatt die Dateien gleich herunter zu laden</translation>
     </message>
     <message>
         <source>%1 (recommended)</source>
@@ -2891,15 +2783,15 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>The virtual filesystem feature is not available for this installation.</source>
-        <translation>Virtuelle Dateien werden auf dieser Installation nicht unterstützt.</translation>
+        <translation>Die virtuellen Dateisystems Funktion ist für diese Installation nicht verfügbar.</translation>
     </message>
     <message>
         <source>The virtual filesystem feature is not stable yet. Use with caution.</source>
-        <translation>Virtuelle Dateien funktionieren derzeit noch nicht stabil. Bitte benutzen Sie diese mit Vorsicht.</translation>
+        <translation>Das virtuelle Filesystem Feature ist derzeit noch nicht stabil. Bitte mit Vorsicht zu benutzen.</translation>
     </message>
     <message>
         <source>Select the local folder</source>
-        <translation>Lokalen Ordner auswählen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Enable experimental feature?</source>
@@ -2913,15 +2805,11 @@ The virtual files mode is mutually exclusive with selective sync. Currently unse
 Switching to this mode will abort any currently running synchronization.
 
 This is a new, experimental mode. If you decide to use it, please report any issues that come up.</source>
-        <translation>Wenn der Modus &quot;Virtuelle Dateien&quot; aktiviert ist, werden die Dateien nicht sofort heruntergeladen. Stattdessen wird für jede Datei des Servers eine winzige &quot;%1&quot; Datei erstellt. Der Inhalt der Dateien kann durch Ausführen der Datei oder über das Kontext-Menü heruntergeladen werden.
-
-Der Modus &quot;virtuelle Dateien&quot; und der Modus &quot;Selective Sync&quot; schließen sich gegenseitig aus. Aktuell abgewählte Ordner werden zu &quot;nur online verfügbaren Ordnern&quot; umgewandelt. Die Einstellungen im &quot;Selective Sync&quot; Modus werden verworfen.
-
-Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, berichten Sie bitte alle Probleme, die auftreten.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Enable experimental placeholder mode</source>
-        <translation>Experimentellen Platzhalter-Modus freischalten</translation>
+        <translation>Experimentellen Platzhalter Modus freischalten</translation>
     </message>
     <message>
         <source>Stay safe</source>
@@ -2929,128 +2817,48 @@ Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>APP::Wizard::BasicCredentialsSetupWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredState</name>
     <message>
-        <source>Please enter your credentials to log in to your account.</source>
-        <translation>Bitte geben Sie Ihre Zugangsdaten ein, um sich in Ihrem Benutzerkonto anzumelden.</translation>
-    </message>
-    <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Verbinde zu &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
+        <source>Invalid local download directory: %1</source>
+        <translation>Falsches lokales Download Verzeichnis: %1</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::BasicCredentialsSetupWizardState</name>
+    <name>APP::Wizard::CredentialsState</name>
     <message>
         <source>Invalid credentials</source>
         <translation>Ungültige Zugangsdaten</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::LegacyWebFingerSetupWizardPage</name>
+    <name>APP::Wizard::SetupController</name>
     <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Verbinde zu &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
+        <source>OS state: %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Please enter your %1:</source>
-        <translation>Bitte geben Sie Ihr %1 ein:</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::LegacyWebFingerSetupWizardState</name>
-    <message>
-        <source>Failed to parse WebFinger response: %1</source>
-        <translation>WebFinger-Antwort konnte nicht analysiert werden: %1</translation>
+        <source>&lt;empty&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>WebFinger endpoint did not send href attribute</source>
-        <translation>Der WebFinger-Endpoint hat das &quot;href&quot; Attribut nicht gesendet.</translation>
+        <source>OOBE is not done</source>
+        <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>APP::Wizard::OAuthCredentialsSetupWizardPage</name>
-    <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Verbinde zu &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
-    </message>
-    <message>
-        <source>Reopen Browser</source>
-        <translation>Browser erneut öffnen</translation>
-    </message>
-    <message>
-        <source>Please use your browser to log in to %1.</source>
-        <translation>Bitte verwende deinen Browser, um dich in %1 einzuloggen.</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::OAuthCredentialsSetupWizardState</name>
-    <message>
-        <source>Error while trying to log in to OAuth2-enabled server.</source>
-        <translation>Fehler bei der Anmeldung an einem OAuth2-fähigen Server.</translation>
-    </message>
-    <message>
-        <source>Server reports that OAuth2 is not supported.</source>
-        <translation>Der Server meldet, dass OAuth2 nicht unterstützt wird.</translation>
-    </message>
-    <message>
-        <source>Oauth2 authentication requires a secured connection.</source>
-        <translation>Die OAuth2-Anmeldung benötigt eine gesicherte Verbindung.</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::ServerUrlSetupWizardPage</name>
-    <message>
-        <source>Welcome to %1</source>
-        <translation>Willkommen bei %1</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::ServerUrlSetupWizardState</name>
-    <message>
-        <source>Invalid server URL</source>
-        <translation>Ungültige Server-URL</translation>
-    </message>
-    <message>
-        <source>Insecure connection</source>
-        <translation>Unsichere Verbindung</translation>
-    </message>
-    <message>
-        <source>The connection to %1 is insecure.
-Are you sure you want to proceed?</source>
-        <translation>Die Verbindung zu %1 ist unsicher.
-Möchten Sie fortfahren?</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Bestätigen</translation>
-    </message>
-    <message>
-        <source>Insecure server rejected by user</source>
-        <translation>Der unsichere Server wurde vom Benutzer abgelehnt.</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::SetupWizardController</name>
     <message>
         <source>Invalid credentials</source>
         <translation>Ungültige Zugangsdaten</translation>
     </message>
     <message>
         <source>Failed to retrieve user information from server</source>
-        <translation>Die Benutzerinformationen konnten nicht vom Server geladen werden</translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Invalid local download directory: %1</source>
+        <translation>Falsches lokales Download Verzeichnis: %1</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::SetupWizardWindow</name>
-    <message>
-        <source>Finish</source>
-        <translation>Abgeschlossen</translation>
-    </message>
-    <message>
-        <source>Next &gt;</source>
-        <translation>Weiter &gt;</translation>
-    </message>
+    <name>APP::Wizard::SetupWidget</name>
     <message>
         <source>Cancel Setup</source>
         <translation>Einrichtung abbrechen</translation>
@@ -3061,158 +2869,737 @@ Möchten Sie fortfahren?</translation>
     </message>
 </context>
 <context>
-    <name>APP::ApplicationGui</name>
+    <name>AccountConfiguredPage</name>
     <message>
-        <source>Please sign in</source>
-        <translation>Bitte melden Sie sich an.</translation>
+        <source>✓ You&apos;re all set!</source>
+        <translation>✓ Fertiggestellt!</translation>
     </message>
     <message>
-        <source>Folder %1: %2</source>
-        <translation>Ordner %1: %2</translation>
+        <source>Advanced configuration</source>
+        <translation>Erweiterte Einstellungen</translation>
     </message>
     <message>
-        <source>Unresolved %1 conflicts</source>
-        <translation>Ungelöste %1 Konflikte</translation>
+        <source>Configure files download:</source>
+        <translation>File Download konfigurieren:</translation>
     </message>
     <message>
-        <source>Ignored errors %1</source>
-        <translation>Ignorierte Fehler %1 </translation>
+        <source>Download everything</source>
+        <translation>Alles herunterladen</translation>
     </message>
     <message>
-        <source>There are no sync folders configured.</source>
-        <translation>Es wurden keine Synchonisationsordner konfiguriert.</translation>
+        <source>After completing this wizard, you can set up folder synchronization manually.</source>
+        <translation>Nach Fertigstellung des Installationsassistenten, kannst du die Ordnersynchronistation manuell einstellen.</translation>
     </message>
     <message>
-        <source>Log in...</source>
-        <translation>Einloggen...</translation>
+        <source>Configure synchronization manually</source>
+        <translation>Synchronisation manuell konfigurieren</translation>
     </message>
     <message>
-        <source>Log out</source>
-        <translation>Abmelden</translation>
+        <source>Choose local download directory:</source>
+        <translation>Lokales Download Verzeichnis wählen:</translation>
     </message>
     <message>
-        <source>Recent Changes</source>
-        <translation>Letzte Änderungen</translation>
+        <source>Restore default value</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AppImageUpdateAvailableDialogUi</name>
+    <message>
+        <source>Update available</source>
+        <translation>Aktualisierung verfügbar</translation>
     </message>
     <message>
-        <source>Open folder &apos;%1&apos;</source>
-        <translation>Ordner »%1« öffnen</translation>
+        <source>Skip this version</source>
+        <translation>Diese Version auslassen</translation>
+    </message>
+</context>
+<context>
+    <name>AppProvider</name>
+    <message>
+        <source>Failed to open %1 in web. Error: %2.</source>
+        <translation>%1 konnte in Web nicht geöffnet werden. Fehler: %2.</translation>
+    </message>
+</context>
+<context>
+    <name>ApplicationTheme::aboutVersions()</name>
+    <message>
+        <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
+        <translation>%1 %2%7%8Qt Bibliotheken %3, %4%7verwenden das Virtual Files plugin: %5%7%6</translation>
+    </message>
+</context>
+<context>
+    <name>ApplicationTheme::versionWithSha</name>
+    <message>
+        <source>%1 %2</source>
+        <translation>%1 %2</translation>
+    </message>
+</context>
+<context>
+    <name>BasicLoginWidget</name>
+    <message>
+        <source>Username</source>
+        <translation>Benutzer</translation>
     </message>
     <message>
-        <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
-        <translation>Der Server für Konto %1 benutzt eine nicht unterstützte Version %2. Die Client-Software funktioniert möglicherweise mit nicht unterstützten Versionen, dies ist jedoch nicht getestet. Sie fahren auf eigenes Risiko fort.</translation>
+        <source>Password</source>
+        <translation>Passwort</translation>
+    </message>
+</context>
+<context>
+    <name>CheckBasicAuthJobFactory</name>
+    <message>
+        <source>Invalid reply received from server</source>
+        <translation>Ungültige Antwort vom Server erhalten</translation>
+    </message>
+</context>
+<context>
+    <name>ChecksumHeader</name>
+    <message>
+        <source>The checksum header is malformed: %1</source>
+        <translation>Der Prüfsummen-Header hat ein fehlerhaftes Format: %1</translation>
     </message>
     <message>
-        <source>Account %1</source>
-        <translation>Konto %1</translation>
+        <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
+        <translation>Der Prüfsummenkopf beinhaltet eine unbekannte Prüfsumme vom Typ &apos;%1&apos;</translation>
+    </message>
+</context>
+<context>
+    <name>CodeDialog</name>
+    <message>
+        <source>Allow remote access</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Stop synchronization</source>
-        <translation>Synchronisation stoppen</translation>
+        <source>We have sent a one-time code to authorize this device to access your Personal Cloud. Check your email for the code and enter it here. If you do not see it in your inbox, please check your spam folder.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Create a new account</source>
-        <translation>Neues Konto erstellen</translation>
+        <source>Skip</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Unknown status</source>
-        <translation>Unbekannter Status</translation>
+        <source>Allow access</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Details...</source>
-        <translation>Details …</translation>
+        <source>Resend code</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CodeDialogController</name>
+    <message>
+        <source>Incorrect code</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Help</source>
-        <translation>Hilfe</translation>
+        <source>Your code has expired</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CodeInputWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
     </message>
     <message>
-        <source>Resume synchronization</source>
-        <translation>Synchronisation fortsetzen</translation>
+        <source>Paste code</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ComboWidget</name>
+    <message>
+        <source>button_icon_tool</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Quit %1</source>
-        <translation>%1 beenden</translation>
+        <source>Error text</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CommandLine</name>
+    <message>
+        <source>For more information, see %1</source>
+        <translation>Siehe %1 für mehr Informationen</translation>
+    </message>
+</context>
+<context>
+    <name>CommonStrings</name>
+    <message>
+        <source>file manager</source>
+        <translation>Dateimanager</translation>
     </message>
     <message>
-        <source>Disconnected from %1</source>
-        <translation>Von %1 getrennt</translation>
+        <source>Show in %1</source>
+        <translation>In %1 anzeigen</translation>
     </message>
     <message>
-        <source>Unsupported Server Version</source>
-        <translation>nicht unterstützte Server Version</translation>
+        <source>Show Files in web browser</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Disconnected</source>
-        <translation>Getrennt</translation>
+        <source>Show Photos in web browser</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Disconnected from some accounts</source>
-        <translation>Die Verbindungen zu einigen Konten wurden getrennt.</translation>
+        <source>Copy</source>
+        <translation>Kopieren</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n Filter(s)</source>
+        <translation><numerusform>%n Filter</numerusform><numerusform>%n Filter</numerusform></translation>
+    </message>
+</context>
+<context>
+    <name>ConnectErrorPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
     </message>
     <message>
-        <source>Disconnected from accounts:</source>
-        <translation>Die Verbindungen zu Konten wurde getrennt:</translation>
+        <source>Unable to connect</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Signed out</source>
-        <translation>Abgemeldet</translation>
+        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Account synchronization is disabled</source>
-        <translation>Konto-Synchronisation ist deaktiviert.</translation>
+        <source>&lt;ol&gt;&lt;li&gt;Verify that the device is properly connected to the network and that the internet connection is stable&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Synchronization is paused</source>
-        <translation>Synchronisation pausiert</translation>
+        <source>&lt;ol start=&quot;2&quot;&gt;&lt;li&gt;Make sure the device is powered on and functioning correctly&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Up to date (%1)</source>
-        <translation>Aktuell (%1) </translation>
+        <source>&lt;ol start=&quot;3&quot;&gt;&lt;li&gt;Check firewall settings to confirm they are not blocking the connection&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>No sync folders configured</source>
-        <translation>Keine Ordner für die Synchronisation konfiguriert</translation>
+        <source>&lt;ol start=&quot;4&quot;&gt;&lt;li&gt;If using a wireless connection, confirm the device is within range of the router&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Show %1</source>
-        <translation>Zeige %1</translation>
+        <source>&lt;ol start=&quot;5&quot;&gt;&lt;li&gt;Your device and mobile phone must be on the same network&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>About %1</source>
-        <translation>Über %1</translation>
+        <source>If you continue to experience issues, please contact our &lt;a href=&quot;https://seagare.com&quot;&gt;Support team&lt;/a&gt; for further assistance.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>No items synced recently</source>
-        <translation>Keine kürzlich synchronisierten Elemente</translation>
+        <source>Retry</source>
+        <translation>Wiederholen</translation>
+    </message>
+</context>
+<context>
+    <name>CredentialsPage</name>
+    <message>
+        <source>helper_frame</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Checking for changes in remote &apos;%1&apos;</source>
-        <translation>Änderungen der entfernten Ressource &apos;%1&apos; werden geprüft.</translation>
+        <source>Curator</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Checking for changes in local &apos;%1&apos;</source>
-        <translation>Änderungen der lokalen Ressource &apos;%1&apos; werden geprüft.</translation>
+        <source>Files</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Syncing %1 of %2  (%3 left)</source>
-        <translation>Synchronisiere %1 von %2  (%3 übrig)</translation>
+        <source>Can’t find your device?</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Syncing %1 of %2</source>
-        <translation>Synchronisiere %1 von %2</translation>
+        <source>Reset Password</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Syncing %1 (%2 left)</source>
-        <translation>Synchronisiere %1 (%2 übrig)</translation>
+        <source>Cancel</source>
+        <translation>Abbrechen</translation>
     </message>
     <message>
-        <source>Syncing %1</source>
-        <translation>Synchronisiere %1</translation>
+        <source>Login</source>
+        <translation>Anmelden</translation>
     </message>
     <message>
-        <source>%1 (%2, %3)</source>
-        <translation>%1 (%2, %3)</translation>
+        <source>button_accent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting to</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Passwort</translation>
+    </message>
+    <message>
+        <source>Enter a valid email address and password</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Invalid URL</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DetermineAuthTypeJobFactory</name>
+    <message>
+        <source>Server did not ask for authorization</source>
+        <translation>Der Server hat nicht nach Autorisierung gefragt</translation>
+    </message>
+    <message>
+        <source>Failed to determine auth type: %1</source>
+        <translation>Der Authentifizierungstyp konnte nicht bestimmt werden: %1</translation>
+    </message>
+</context>
+<context>
+    <name>DevModel</name>
+    <message>
+        <source>true</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>false</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Url</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OOBE Done</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DevWidget</name>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>---</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friendlyName</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>hostname</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>deviceID</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>certificateCN</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>:</source>
+        <translation>:</translation>
+    </message>
+    <message>
+        <source>origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>deviceType</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Query about and status</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Apply to account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fetch from account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Simulate network change</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>Unbekannt</translation>
+    </message>
+    <message>
+        <source>Local</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Public</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remote</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mDNS</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Static</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DiscoverWebFingerServiceJobFactory</name>
+    <message>
+        <source>Invalid reply received from server</source>
+        <translation>Ungültige Antwort vom Server erhalten</translation>
+    </message>
+</context>
+<context>
+    <name>EmailPage</name>
+    <message>
+        <source>helper_frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Abbrechen</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>Anmelden</translation>
+    </message>
+    <message>
+        <source>Email</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>EmailPageController</name>
+    <message>
+        <source>Invalid email</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Not allowed. Contact the device owner.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ErrorDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>Access to Personal Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Abbrechen</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Wiederholen</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ErrorDialogController</name>
+    <message>
+        <source>Access to Personal Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unable to connect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Email not registered</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Could not reach your Personal Cloud.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>This email isn’t authorized to access this device. Please contact the owner.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>FetchUserInfoJobFactory</name>
+    <message>
+        <source>Failed to retrieve user info</source>
+        <translation>Die Benutzerinformationen konnten nicht abgerufen werden</translation>
+    </message>
+</context>
+<context>
+    <name>FileSystem</name>
+    <message>
+        <source>Can&apos;t rename %1, the file is currently in use</source>
+        <translation>Kann %1 nicht umbenennen, die Datei wird gerade benutzt</translation>
+    </message>
+    <message>
+        <source>Could not make directories in trash</source>
+        <translation>Im Papierkorb können keine Ordner erstellt werden</translation>
+    </message>
+    <message>
+        <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>Konnte &apos;%1&apos; nicht nach &apos;%2&apos; verschieben</translation>
+    </message>
+    <message>
+        <source>Moving to the trash is not implemented on this platform</source>
+        <translation>Das Verschieben in den Papierkorb wird auf dieser Plattform nicht unterstützt</translation>
+    </message>
+    <message>
+        <source>Could not remove folder</source>
+        <translation>Der Ordner konnte nicht entfernt werden</translation>
+    </message>
+</context>
+<context>
+    <name>FinishedPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>You&apos;re all set!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advanced configuration</source>
+        <translation>Erweiterte Einstellungen</translation>
+    </message>
+    <message>
+        <source>Configure files download:</source>
+        <translation>File Download konfigurieren:</translation>
+    </message>
+    <message>
+        <source>Download everything (recommended)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Configure synchronization manually</source>
+        <translation>Synchronisation manuell konfigurieren</translation>
+    </message>
+    <message>
+        <source>Use &amp;virtual files instead of downloading content immediately</source>
+        <translation>&amp;Virtuelle Dateien verwenden anstatt die Dateien gleich herunter zu laden</translation>
+    </message>
+    <message>
+        <source>Choose local download directory:</source>
+        <translation>Lokales Download Verzeichnis wählen:</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The virtual filesystem feature is not available for this installation.</source>
+        <translation>Die virtuellen Dateisystems Funktion ist für diese Installation nicht verfügbar.</translation>
+    </message>
+    <message>
+        <source>The virtual filesystem feature is not stable yet. Use with caution.</source>
+        <translation>Das virtuelle Filesystem Feature ist derzeit noch nicht stabil. Bitte mit Vorsicht zu benutzen.</translation>
+    </message>
+    <message>
+        <source>Enable experimental feature?</source>
+        <translation>Experimentelle Funktion aktivieren?</translation>
+    </message>
+    <message>
+        <source>When the &quot;virtual files&quot; mode is enabled no files will be downloaded initially. Instead, a tiny file will be created for each file that exists on the server. The contents can be downloaded by running these files or by using their context menu.
+
+The virtual files mode is mutually exclusive with selective sync. Currently unselected folders will be translated to online-only folders and your selective sync settings will be reset.
+
+Switching to this mode will abort any currently running synchronization.
+
+This is a new, experimental mode. If you decide to use it, please report any issues that come up.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable experimental placeholder mode</source>
+        <translation>Experimentellen Platzhalter Modus freischalten</translation>
+    </message>
+    <message>
+        <source>Stay safe</source>
+        <translation>Sicher bleiben</translation>
+    </message>
+    <message>
+        <source>Select the local folder</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>FolderWizard</name>
+    <message>
+        <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;Fehler:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;Warnung:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
+        <translation>&lt;b&gt;Fehler:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
+        <translation>&lt;b&gt;Warnung:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizardSourcePage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>Pick a local folder on your computer to sync</source>
+        <translation>Lokales Verzeichnis zum Synchronisieren auswählen</translation>
+    </message>
+    <message>
+        <source>&amp;Choose...</source>
+        <translation>&amp;Auswählen…</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizardTargetPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>Select a remote destination folder</source>
+        <translation>Entfernten Zielordner auswählen</translation>
+    </message>
+    <message>
+        <source>Create Folder</source>
+        <translation>Ordner erstellen</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation>Aktualisieren</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>Ordner</translation>
+    </message>
+</context>
+<context>
+    <name>InputWidget</name>
+    <message>
+        <source>Error text</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>LoginRequiredDialog</name>
+    <message>
+        <source>Login required</source>
+        <translation>Anmeldung erforderlich</translation>
+    </message>
+</context>
+<context>
+    <name>NotificationWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet</source>
+        <translation>Lorem ipsum dolor sit amet</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
+        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </translation>
+    </message>
+</context>
+<context>
+    <name>OAuthCredentialsSetupWizardState</name>
+    <message>
+        <source>Error while trying to log in to OAuth2-enabled server.</source>
+        <translation>Fehler beim Versuch sich bei einem OAuth2-fähigen Server anzumelden.</translation>
+    </message>
+    <message>
+        <source>Server reports that OAuth2 is not supported.</source>
+        <translation>Der Server meldet, dass OAuth2 nicht unterstützt wird.</translation>
+    </message>
+    <message>
+        <source>Oauth2 authentication requires a secured connection.</source>
+        <translation>Die OAuth2 Anmeldung benötigt eine gesicherte Verbindung.</translation>
+    </message>
+</context>
+<context>
+    <name>OAuthLoginWidget</name>
+    <message>
+        <source>Open Browser</source>
+        <translation>Im Browser öffnen</translation>
+    </message>
+    <message>
+        <source>Copy URL to clipboard</source>
+        <translation>URL in die Zwischenablage kopieren</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Wiederholen</translation>
+    </message>
+</context>
+<context>
+    <name>PopupComboWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
     </message>
 </context>
 <context>
@@ -3223,11 +3610,11 @@ Möchten Sie fortfahren?</translation>
     </message>
     <message numerus="yes">
         <source>%n day(s) ago</source>
-        <translation><numerusform>vor %n Tage(n)</numerusform><numerusform>vor %n Tage(n)</numerusform></translation>
+        <translation><numerusform>vor %n Tag(en)</numerusform><numerusform>Vor %n Tage(n)</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n hour(s) ago</source>
-        <translation><numerusform>vor %n Stunde(n)</numerusform><numerusform>vor %n Stunde(n)</numerusform></translation>
+        <translation><numerusform>Vor %n Stunde(n)</numerusform><numerusform>Vor %n Stunde(n)</numerusform></translation>
     </message>
     <message>
         <source>now</source>
@@ -3235,60 +3622,52 @@ Möchten Sie fortfahren?</translation>
     </message>
     <message>
         <source>Less than a minute ago</source>
-        <translation>Vor weniger als einer Minute</translation>
+        <translation>vor weniger als einer Minute</translation>
     </message>
     <message numerus="yes">
         <source>%n minute(s) ago</source>
-        <translation><numerusform>vor %n Minute(n)</numerusform><numerusform>Vor %n Minute(n)</numerusform></translation>
+        <translation><numerusform>vor %n Minute(n)</numerusform><numerusform>vor %n Minute(n)</numerusform></translation>
     </message>
     <message>
         <source>Some time ago</source>
-        <translation>Vor einiger Zeit</translation>
+        <translation>vor einiger Zeit</translation>
     </message>
     <message>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
+    </message>
+    <message>
+        <source>Enter a valid email address</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>ResolveUrlJobFactory</name>
     <message>
         <source>Could not detect compatible server at %1</source>
-        <translation>Ein kompatibler Server konnte unter %1 nicht gefunden werden.</translation>
+        <translation>Ein kompatibler Server konnte unter %1 nicht gefunden werden</translation>
     </message>
     <message>
         <source>User rejected redirect from %1 to %2</source>
-        <translation>Der Benutzer hat die Weiterleitung von %1 zu %2 abgelehnt.</translation>
+        <translation>Der Benutzer hat die Weiterleitung von %1 zu %2 abgelehnt</translation>
     </message>
     <message>
         <source>User rejected invalid SSL certificate</source>
-        <translation>Der Benutzer hat ein ungültiges SSL-Zertifikat abgelehnt.</translation>
+        <translation>Der Benutzer hat ein ungültiges SSL-Zertifikat abgelehnt</translation>
     </message>
 </context>
 <context>
-    <name>ServerUrlSetupWizardPage</name>
+    <name>SetupWidget</name>
     <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-    <message>
-        <source>What is your server&apos;s address?</source>
-        <translation>Wie lautet die Serveradresse?</translation>
+        <source>Add New Account</source>
+        <translation>Neuen Account hinzufügen</translation>
     </message>
 </context>
 <context>
     <name>SetupWizardState</name>
     <message>
-        <source>Server URL</source>
-        <translation>Serveradresse</translation>
-    </message>
-    <message>
         <source>Welcome</source>
         <translation>Willkommen</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation>Benutzername</translation>
     </message>
     <message>
         <source>Login</source>
@@ -3296,26 +3675,14 @@ Möchten Sie fortfahren?</translation>
     </message>
     <message>
         <source>Sync Options</source>
-        <translation>Synchronisationsoptionen</translation>
+        <translation>Synchronisations Optionen</translation>
     </message>
 </context>
 <context>
-    <name>SetupWizardWindow</name>
+    <name>SimpleResolveUrlJobFactory</name>
     <message>
-        <source>Add New Account</source>
-        <translation>Neues Konto hinzufügen</translation>
-    </message>
-    <message>
-        <source>Dismiss</source>
-        <translation>Ausblenden</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Abbrechen</translation>
-    </message>
-    <message>
-        <source>&lt; Back</source>
-        <translation>&lt; Zurück</translation>
+        <source>Could not detect compatible server at %1</source>
+        <translation>Ein kompatibler Server konnte unter %1 nicht gefunden werden</translation>
     </message>
 </context>
 <context>
@@ -3329,7 +3696,7 @@ Möchten Sie fortfahren?</translation>
     <name>SpacesPage</name>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Add a Space&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Select a Space to sync it to your computer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Einen Space hinzufügen&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Einen Space auswählen, um ihn mit Ihrem Computer zu synchronisieren.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Einen Space hinzufügen&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Einen Space auswählen um ihn mit ihrem Computer zu synchroisieren.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -3368,7 +3735,7 @@ Möchten Sie fortfahren?</translation>
     </message>
     <message>
         <source>Blacklisted</source>
-        <translation>Zur schwarzen Liste hinzugefügt</translation>
+        <translation>Zur Blacklist hinzugefügt</translation>
     </message>
     <message>
         <source>Excluded</source>
@@ -3380,18 +3747,18 @@ Möchten Sie fortfahren?</translation>
     </message>
     <message>
         <source>Filename Reserved</source>
-        <translation>Dateiname reserviert</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Type of user ID</name>
     <message>
         <source>Username</source>
-        <translation>Benutzername</translation>
+        <translation>Benutzer</translation>
     </message>
     <message>
         <source>E-mail address</source>
-        <translation>E-Mail Adresse</translation>
+        <translation>E-mail Adresse</translation>
     </message>
 </context>
 <context>
@@ -3414,27 +3781,27 @@ Möchten Sie fortfahren?</translation>
     </message>
     <message numerus="yes">
         <source>%n year(s)</source>
-        <translation><numerusform>%n Jahr</numerusform><numerusform>%n Jahr(e)</numerusform></translation>
+        <translation><numerusform>%n Jahr</numerusform><numerusform>%n Jahre</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n month(s)</source>
-        <translation><numerusform>%n Monat</numerusform><numerusform>%n Monat(e)</numerusform></translation>
+        <translation><numerusform>%n Monat</numerusform><numerusform>%n Monate</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n day(s)</source>
-        <translation><numerusform>%n Tag</numerusform><numerusform>%n Tag(e)</numerusform></translation>
+        <translation><numerusform>%n Tag</numerusform><numerusform>%n Tage</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n hour(s)</source>
-        <translation><numerusform>%n Stunde</numerusform><numerusform>%n Stunde(n)</numerusform></translation>
+        <translation><numerusform>%n Stunde</numerusform><numerusform>%n Stunden</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n minute(s)</source>
-        <translation><numerusform>%n Minute</numerusform><numerusform>%n Minute(n)</numerusform></translation>
+        <translation><numerusform>%n Minute</numerusform><numerusform>%n Minuten</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n second(s)</source>
-        <translation><numerusform>%n Sekunde</numerusform><numerusform>%n Sekunde(n)</numerusform></translation>
+        <translation><numerusform>%n Sekunde</numerusform><numerusform>%n Sekunden</numerusform></translation>
     </message>
     <message>
         <source>%1 %2</source>
@@ -3446,10 +3813,29 @@ Möchten Sie fortfahren?</translation>
     </message>
 </context>
 <context>
+    <name>WaitPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Logging in to your account</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>WebFingerUserInfoJobFactory</name>
     <message>
         <source>Failed to retrieve user info</source>
-        <translation>Die Benutzerinformationen konnten nicht abgerufen werden.</translation>
+        <translation>Die Benutzerinformationen konnten nicht abgerufen werden</translation>
     </message>
 </context>
 <context>
@@ -3464,24 +3850,10 @@ Möchten Sie fortfahren?</translation>
     </message>
 </context>
 <context>
-    <name>ApplicationTheme::aboutVersions()</name>
-    <message>
-        <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
-        <translation>%1 %2%7%8Qt Bibliotheken %3, %4%7Verwendete Erweiterung für virtuelle Dateien: %5%7%6</translation>
-    </message>
-</context>
-<context>
-    <name>ApplicationTheme::qtVer</name>
+    <name>ownCloudTheme::qtVer</name>
     <message>
         <source>%1 (Built against Qt %2)</source>
         <translation>%1 (Gebaut mit Qt %2)</translation>
-    </message>
-</context>
-<context>
-    <name>ApplicationTheme::versionWithSha</name>
-    <message>
-        <source>%1 %2</source>
-        <translation>%1 %2</translation>
     </message>
 </context>
 <context>
@@ -3496,7 +3868,7 @@ Möchten Sie fortfahren?</translation>
     </message>
     <message>
         <source>Some available online only</source>
-        <translation>Einige nur online verfügbar</translation>
+        <translation>Nur einige Online verfügbar</translation>
     </message>
     <message>
         <source>Available online only</source>
@@ -3507,7 +3879,7 @@ Möchten Sie fortfahren?</translation>
     <name>progress</name>
     <message>
         <source>Virtual file created</source>
-        <translation>Virtuelle Datei erstellt</translation>
+        <translation>Virtuelle Datei wurde erstellt</translation>
     </message>
     <message>
         <source>Replaced by virtual file</source>
@@ -3523,7 +3895,7 @@ Möchten Sie fortfahren?</translation>
     </message>
     <message>
         <source>Deleted</source>
-        <translation>Gelöscht</translation>
+        <translation>gelöscht</translation>
     </message>
     <message>
         <source>%1 moved to %2</source>
@@ -3535,7 +3907,7 @@ Möchten Sie fortfahren?</translation>
     </message>
     <message>
         <source>Server version downloaded, local copy was backed up as conflict file</source>
-        <translation>Serverversion heruntergeladen, lokale Kopie wurde als Konfliktdatei gesichert.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Error</source>
@@ -3543,7 +3915,7 @@ Möchten Sie fortfahren?</translation>
     </message>
     <message>
         <source>Updated local metadata</source>
-        <translation>Lokale Metadaten aktualisiert</translation>
+        <translation>Lokale Metadaten wurden aktualisiert</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -3551,7 +3923,7 @@ Möchten Sie fortfahren?</translation>
     </message>
     <message>
         <source>downloading</source>
-        <translation>Herunterladen</translation>
+        <translation>Lade herunter</translation>
     </message>
     <message>
         <source>uploading</source>
@@ -3582,7 +3954,7 @@ Möchten Sie fortfahren?</translation>
     <name>utility</name>
     <message>
         <source>Could not open browser</source>
-        <translation>Konnte Browser nicht öffnen</translation>
+        <translation>Browser konnte nicht geöffnet werden</translation>
     </message>
     <message>
         <source>There was an error when launching the browser to go to URL %1. Maybe no default browser is configured?</source>
@@ -3590,11 +3962,11 @@ Möchten Sie fortfahren?</translation>
     </message>
     <message>
         <source>Could not open email client</source>
-        <translation>Die E-Mail-Anwendung konnte nicht geöffnet werden.</translation>
+        <translation>Die E-Mail Anwendung konnte nicht geöffnet werden</translation>
     </message>
     <message>
         <source>There was an error when launching the email client to create a new message. Maybe no default email client is configured?</source>
-        <translation>Beim Öffnen einer E-Mail-Anwendung zum Erstellen einer neuen Nachricht ist ein Fehler aufgetreten. Vielleicht ist keine E-Mail-Anwendung konfiguriert?</translation>
+        <translation>Es ist ein Fehler beim Öffnen einer E-Mail Anwendung zum Erstellen einer neuen Nachricht aufgetreten. Vielleicht ist keine E-Mail Anwendung konfiguriert?</translation>
     </message>
     <message>
         <source>Make always available locally</source>
@@ -3609,7 +3981,7 @@ Möchten Sie fortfahren?</translation>
     <name>version check</name>
     <message>
         <source>Some settings were configured in newer versions of this client and use features that are not available in this version</source>
-        <translation>Manche Einstellungen wurden in neueren Versionen dieses Clients konfiguriert und benutzen Features, die in dieser Version nicht verfügbar sind.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

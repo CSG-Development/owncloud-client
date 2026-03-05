@@ -1,289 +1,13 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="bg_BG">
 <context>
-    <name>AccountConfiguredWizardPage</name>
-    <message>
-        <source>✓ You&apos;re all set!</source>
-        <translation>✓ Всичко е готово!</translation>
-    </message>
-    <message>
-        <source>Advanced configuration</source>
-        <translation>Разширена настройка</translation>
-    </message>
-    <message>
-        <source>Configure files download:</source>
-        <translation>Настройка на изтеглянето на файлове:</translation>
-    </message>
-    <message>
-        <source>Download everything</source>
-        <translation>Изтегляне на всичко</translation>
-    </message>
-    <message>
-        <source>After completing this wizard, you can set up folder synchronization manually.</source>
-        <translation>След като завършите този съветник, можете ръчно да настроите синхронизацията на папки.</translation>
-    </message>
-    <message>
-        <source>Configure synchronization manually</source>
-        <translation>Ръчна настройка на синхронизацията</translation>
-    </message>
-    <message>
-        <source>Choose local download directory:</source>
-        <translation>Избор на локална директория за изтегляне:</translation>
-    </message>
-    <message>
-        <source>Restore default value</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>AppImageUpdateAvailableDialogUi</name>
-    <message>
-        <source>Update available</source>
-        <translation>Налична е актуализация</translation>
-    </message>
-    <message>
-        <source>Skip this version</source>
-        <translation>Пропускане на тази версия</translation>
-    </message>
-</context>
-<context>
-    <name>AppProvider</name>
-    <message>
-        <source>Failed to open %1 in web. Error: %2.</source>
-        <translation>Неуспешно отваряне на %1 в мрежата. Грешка: %2.</translation>
-    </message>
-</context>
-<context>
-    <name>BasicLoginWidget</name>
-    <message>
-        <source>Username</source>
-        <translation>Потребителско име</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Парола</translation>
-    </message>
-</context>
-<context>
-    <name>CheckBasicAuthJobFactory</name>
-    <message>
-        <source>Invalid reply received from server</source>
-        <translation>От сървъра е получен невалиден отговор</translation>
-    </message>
-</context>
-<context>
-    <name>ChecksumHeader</name>
-    <message>
-        <source>The checksum header is malformed: %1</source>
-        <translation>Заглавната част на контролната сума е нарушена: %1</translation>
-    </message>
-    <message>
-        <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
-        <translation>Заглавната част на контролната сума съдържа неизвестен тип контролна сума &apos;%1&apos;</translation>
-    </message>
-</context>
-<context>
-    <name>CommandLine</name>
-    <message>
-        <source>For more information, see %1</source>
-        <translation>За повече информация, вижте %1</translation>
-    </message>
-</context>
-<context>
-    <name>CommonStrings</name>
-    <message>
-        <source>file manager</source>
-        <translation>файлов мениджър</translation>
-    </message>
-    <message>
-        <source>Show in %1</source>
-        <translation>Показване в %1</translation>
-    </message>
-    <message>
-        <source>Show in web browser</source>
-        <translation>Показване в интернет браузър</translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation>Копиране</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n Filter(s)</source>
-        <translation><numerusform>%n Филтър(и)</numerusform><numerusform>%n Филтър(и)</numerusform></translation>
-    </message>
-</context>
-<context>
-    <name>CredentialsSetupWizardPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Формуляр</translation>
-    </message>
-</context>
-<context>
-    <name>DetermineAuthTypeJobFactory</name>
-    <message>
-        <source>Server did not ask for authorization</source>
-        <translation>Сървърът не е поискал удостоверяване</translation>
-    </message>
-    <message>
-        <source>Failed to determine auth type: %1</source>
-        <translation>Неуспешно определяне на тип удостоверяване: %1</translation>
-    </message>
-</context>
-<context>
-    <name>DiscoverWebFingerServiceJobFactory</name>
-    <message>
-        <source>Invalid reply received from server</source>
-        <translation>От сървъра е получен невалиден отговор</translation>
-    </message>
-</context>
-<context>
-    <name>FetchUserInfoJobFactory</name>
-    <message>
-        <source>Failed to retrieve user info</source>
-        <translation>Неуспешно извличане на информация за потребителя</translation>
-    </message>
-</context>
-<context>
-    <name>FileSystem</name>
-    <message>
-        <source>Can&apos;t rename %1, the file is currently in use</source>
-        <translation>Не може да се преименува %1, файлът се използва в момента</translation>
-    </message>
-    <message>
-        <source>Could not make directories in trash</source>
-        <translation>Директориите в кошчето не можаха да бъдат създадени</translation>
-    </message>
-    <message>
-        <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation>Неуспешно преместване на &apos;%1&apos; в &apos;%2&apos;</translation>
-    </message>
-    <message>
-        <source>Moving to the trash is not implemented on this platform</source>
-        <translation>Преместването в кошчето не е осъществено на тази платформа</translation>
-    </message>
-    <message>
-        <source>Could not remove folder</source>
-        <translation>Неуспешно премахване на папка</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizard</name>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Грешка:&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Внимание:&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;Грешка:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;Внимание:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizardSourcePage</name>
-    <message>
-        <source>Form</source>
-        <translation>Формуляр</translation>
-    </message>
-    <message>
-        <source>Pick a local folder on your computer to sync</source>
-        <translation>Изберете локална папка в компютъра, която да синхронизирате</translation>
-    </message>
-    <message>
-        <source>&amp;Choose...</source>
-        <translation>&amp;Избиране...</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizardTargetPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Формуляр</translation>
-    </message>
-    <message>
-        <source>Select a remote destination folder</source>
-        <translation>Избор на отдалечена целева папка</translation>
-    </message>
-    <message>
-        <source>Create Folder</source>
-        <translation>Създаване на папка</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation>Опресняване</translation>
-    </message>
-    <message>
-        <source>Folders</source>
-        <translation>Папки</translation>
-    </message>
-</context>
-<context>
-    <name>LegacyWebFingerSetupWizardPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Формуляр</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation>Потребителско име</translation>
-    </message>
-</context>
-<context>
-    <name>LoginRequiredDialog</name>
-    <message>
-        <source>Login required</source>
-        <translation>Изисква се влизане</translation>
-    </message>
-</context>
-<context>
-    <name>NotificationWidget</name>
-    <message>
-        <source>Form</source>
-        <translation>Формуляр</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet</source>
-        <translation>Lorem ipsum dolor sit amet</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
-        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </translation>
-    </message>
-</context>
-<context>
-    <name>OAuthLoginWidget</name>
-    <message>
-        <source>Open Browser</source>
-        <translation>Отваряне в браузър</translation>
-    </message>
-    <message>
-        <source>Copy URL to clipboard</source>
-        <translation>Копиране на URL адреса в клипборда</translation>
-    </message>
-    <message>
-        <source>Retry</source>
-        <translation>Повторен опит</translation>
-    </message>
-</context>
-<context>
     <name>APP::AboutDialog</name>
-    <message>
-        <source>About</source>
-        <translation>Относно</translation>
-    </message>
-    <message>
-        <source>Versions</source>
-        <translation>Версии</translation>
-    </message>
     <message>
         <source>About %1</source>
         <translation>Относно %1</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -403,7 +127,7 @@
         <translation>Да се деактивира ли поддръжката на виртуални файлове?</translation>
     </message>
     <message>
-        <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as 'available online only' will be downloaded.
+        <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as &apos;available online only&apos; will be downloaded.
 
 The only advantage of disabling virtual file support is that the selective sync feature will become available again.
 
@@ -437,6 +161,14 @@ This action will abort any currently running synchronization.</source>
     <message>
         <source>Connected to %1.</source>
         <translation>Свързан към %1.</translation>
+    </message>
+    <message>
+        <source>Show device info</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open share page</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Server %1 is temporarily unavailable.</source>
@@ -655,6 +387,161 @@ The update will be performed in the background, and overwrite the current AppIma
     </message>
 </context>
 <context>
+    <name>APP::ApplicationGui</name>
+    <message>
+        <source>Please sign in</source>
+        <translation>Моля, влезте в профила си</translation>
+    </message>
+    <message>
+        <source>Folder %1: %2</source>
+        <translation>Папка на %1: %2</translation>
+    </message>
+    <message>
+        <source>Unresolved %1 conflicts</source>
+        <translation>Неразрешени %1 конфликти</translation>
+    </message>
+    <message>
+        <source>Ignored errors %1</source>
+        <translation>Пренебрегнати грешки %1</translation>
+    </message>
+    <message>
+        <source>There are no sync folders configured.</source>
+        <translation>Няма конфигурирани папки за синхронизиране.</translation>
+    </message>
+    <message>
+        <source>Log in...</source>
+        <translation>Влезте...</translation>
+    </message>
+    <message>
+        <source>Log out</source>
+        <translation>Излизане</translation>
+    </message>
+    <message>
+        <source>Recent Changes</source>
+        <translation>Последни промени</translation>
+    </message>
+    <message>
+        <source>Open folder &apos;%1&apos;</source>
+        <translation>Отваряне на папка &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
+        <translation>Сървърът на профила %1 работи с неподдържана версия %2. Използването на този клиент с неподдържани версии на сървъра не е тествано и е потенциално опасно. Продължете на свой риск.</translation>
+    </message>
+    <message>
+        <source>Account %1</source>
+        <translation>Профил %1</translation>
+    </message>
+    <message>
+        <source>Stop synchronization</source>
+        <translation>Спиране на синхронизацията</translation>
+    </message>
+    <message>
+        <source>Create a new account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unknown status</source>
+        <translation>Неизвестен статус</translation>
+    </message>
+    <message>
+        <source>Details...</source>
+        <translation>Подробности...</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation>Помощ</translation>
+    </message>
+    <message>
+        <source>Resume synchronization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Quit %1</source>
+        <translation>Излизане от %1</translation>
+    </message>
+    <message>
+        <source>Disconnected from %1</source>
+        <translation>Прекъсната връзка с %1</translation>
+    </message>
+    <message>
+        <source>Unsupported Server Version</source>
+        <translation>Неподдържана версия на сървъра</translation>
+    </message>
+    <message>
+        <source>Disconnected</source>
+        <translation>Прекъсната връзка</translation>
+    </message>
+    <message>
+        <source>Disconnected from some accounts</source>
+        <translation>Прекъсната връзка с някои профили</translation>
+    </message>
+    <message>
+        <source>Disconnected from accounts:</source>
+        <translation>Прекъсната е връзката с някои от профилите:</translation>
+    </message>
+    <message>
+        <source>Signed out</source>
+        <translation>Излизане</translation>
+    </message>
+    <message>
+        <source>Account synchronization is disabled</source>
+        <translation>Синхронизирането на профила е деактивирано</translation>
+    </message>
+    <message>
+        <source>Synchronization is paused</source>
+        <translation>Синхронизирането е на пауза</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>Към днешна дата (%1)</translation>
+    </message>
+    <message>
+        <source>No sync folders configured</source>
+        <translation>Няма конфигурирани папки за синхронизация</translation>
+    </message>
+    <message>
+        <source>Show %1</source>
+        <translation>Показване на %1</translation>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation>Относно %1</translation>
+    </message>
+    <message>
+        <source>No items synced recently</source>
+        <translation>Няма наскоро синхронизирани елементи</translation>
+    </message>
+    <message>
+        <source>Checking for changes in remote &apos;%1&apos;</source>
+        <translation>Проверка за промени в отдалечената &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Checking for changes in local &apos;%1&apos;</source>
+        <translation>Проверка за промени в локалната &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Syncing %1 of %2  (%3 left)</source>
+        <translation>Синхронизиране на %1 от %2 (остават %3)</translation>
+    </message>
+    <message>
+        <source>Syncing %1 of %2</source>
+        <translation>Синхронизиране на %1 от %2</translation>
+    </message>
+    <message>
+        <source>Syncing %1 (%2 left)</source>
+        <translation>Синхронизиране на %1 (остават %2)</translation>
+    </message>
+    <message>
+        <source>Syncing %1</source>
+        <translation>Синхронизиране на %1</translation>
+    </message>
+    <message>
+        <source>%1 (%2, %3)</source>
+        <translation>%1 (%2, %3)</translation>
+    </message>
+</context>
+<context>
     <name>APP::AskExperimentalVirtualFilesFeatureMessageBox</name>
     <message>
         <source>Enable experimental feature?</source>
@@ -717,6 +604,13 @@ This is a new, experimental mode. If you decide to use it, please report any iss
     <message>
         <source>Failed to parse credentials %1</source>
         <translation>Неуспешно анализиране на идентификационни данни %1</translation>
+    </message>
+</context>
+<context>
+    <name>APP::CuratorPropagator</name>
+    <message>
+        <source>File %1 is currently in use</source>
+        <translation>Файлът %1 се използва в момента</translation>
     </message>
 </context>
 <context>
@@ -883,7 +777,7 @@ This means that the synchronization client might not upload local changes immedi
 %1</translation>
     </message>
     <message>
-        <source>All files in the sync folder '%1' folder were deleted on the server.
+        <source>All files in the sync folder &apos;%1&apos; folder were deleted on the server.
 These deletes will be synchronized to your local sync folder, making such files unavailable unless you have a right to restore. 
 If you decide to keep the files, they will be re-synced with the server if you have rights to do so.
 If you decide to delete the files, they will be unavailable to you, unless you are the owner.</source>
@@ -893,7 +787,7 @@ If you decide to delete the files, they will be unavailable to you, unless you a
 Но ако решите да изтриете файловете, то те няма да са достъпни за вас, освен ако не сте собственик.</translation>
     </message>
     <message>
-        <source>All the files in your local sync folder '%1' were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
+        <source>All the files in your local sync folder &apos;%1&apos; were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
 Are you sure you want to sync those actions with the server?
 If this was an accident and you decide to keep your files, they will be re-synced from the server.</source>
         <translation>Всички файлове в локалната ви папка за синхронизиране &apos;%1&apos; бяха изтрити. Изтритите файлове ще бъдат недостъпни, освен ако не ги възстановите.
@@ -982,10 +876,6 @@ Please consider removing this folder from the account and adding it again.</sour
         <translation>Няколко профила споделят папката %1.
 Известно е, че тази конфигурация води до загуба на данни и вече не се поддържа.
 Моля, помислете дали да не премахнете тази папка от профила и да я добавите отново.</translation>
-    </message>
-    <message>
-        <source>%1 - %2@%3</source>
-        <translation>%1 - %2@%3</translation>
     </message>
 </context>
 <context>
@@ -1414,6 +1304,13 @@ Items where deletion is allowed will be deleted if they prevent a directory from
         <translation>Неуспешно записване на промените в &apos;%1&apos;.</translation>
     </message>
     <message>
+        <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
+        <translation>Този запис е заданен от системата на &apos;%1&apos; и не може да бъде променен в този изглед.</translation>
+    </message>
+</context>
+<context>
+    <name>APP::InpDlg</name>
+    <message>
         <source>Add Ignore Pattern</source>
         <translation>Добавяне на шаблон за игнориране</translation>
     </message>
@@ -1422,8 +1319,12 @@ Items where deletion is allowed will be deleted if they prevent a directory from
         <translation>Добавяне на нов шаблон за игнориране:</translation>
     </message>
     <message>
-        <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
-        <translation>Този запис е заданен от системата на &apos;%1&apos; и не може да бъде променен в този изглед.</translation>
+        <source>OK</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Отказ</translation>
     </message>
 </context>
 <context>
@@ -1795,13 +1696,6 @@ for additional privileges during the process.</source>
     <message>
         <source>Update Check</source>
         <translation>Проверка за актуализации</translation>
-    </message>
-</context>
-<context>
-    <name>APP::CuratorPropagator</name>
-    <message>
-        <source>File %1 is currently in use</source>
-        <translation>Файлът %1 се използва в момента</translation>
     </message>
 </context>
 <context>
@@ -2316,16 +2210,16 @@ for additional privileges during the process.</source>
         <translation>Наистина ли искате да излезете от %1?</translation>
     </message>
     <message>
+        <source>%1 - %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Account</source>
         <translation>Профил</translation>
     </message>
     <message>
         <source>MainWindow</source>
         <translation>Основен прозорец</translation>
-    </message>
-    <message>
-        <source>Hide</source>
-        <translation>Скриване</translation>
     </message>
 </context>
 <context>
@@ -2341,6 +2235,10 @@ for additional privileges during the process.</source>
     <message>
         <source>Curator Path:</source>
         <translation>OwnCloud път:</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>%1 Sharing</source>
@@ -2751,6 +2649,10 @@ for additional privileges during the process.</source>
         <translation>Не може да се отвори или създаде локална база данни за синхронизация. Проверете дали имате достъп за запис в папката за синхронизиране.</translation>
     </message>
     <message>
+        <source>Synchronization aborted due to IP address change</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Disk space is low: Downloads that would reduce free space below %1 were skipped.</source>
         <translation>Дисковото пространство е малко: Ограничени са изтеглянията, които биха намалили свободното пространство под %1.</translation>
     </message>
@@ -2876,14 +2778,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::AccountConfiguredSetupWizardState</name>
-    <message>
-        <source>Invalid local download directory: %1</source>
-        <translation>Невалидна локална директория за изтегляне: %1</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::AccountConfiguredWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredPage</name>
     <message>
         <source>Use &amp;virtual files instead of downloading content immediately</source>
         <translation>Използване на &amp;виртуални файлове вместо незабавно да се изтегля съдържанието</translation>
@@ -2902,7 +2797,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Select the local folder</source>
-        <translation>Избор на локална папка.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Enable experimental feature?</source>
@@ -2934,62 +2829,762 @@ This is a new, experimental mode. If you decide to use it, please report any iss
     </message>
 </context>
 <context>
-    <name>APP::Wizard::BasicCredentialsSetupWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredState</name>
     <message>
-        <source>Please enter your credentials to log in to your account.</source>
-        <translation>Моля, въведете идентификационните си данни за да влезете във вашия профил.</translation>
-    </message>
-    <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Свързване с &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
+        <source>Invalid local download directory: %1</source>
+        <translation>Невалидна локална директория за изтегляне: %1</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::BasicCredentialsSetupWizardState</name>
+    <name>APP::Wizard::CredentialsState</name>
     <message>
         <source>Invalid credentials</source>
         <translation>Невалидни идентификационни данни</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::LegacyWebFingerSetupWizardPage</name>
+    <name>APP::Wizard::SetupController</name>
     <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Свързване с &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
+        <source>OS state: %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Please enter your %1:</source>
-        <translation>Моля, въведете %1:</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::LegacyWebFingerSetupWizardState</name>
-    <message>
-        <source>Failed to parse WebFinger response: %1</source>
-        <translation>Неуспешен анализ на отговора на WebFinger: %1</translation>
+        <source>&lt;empty&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>WebFinger endpoint did not send href attribute</source>
-        <translation>Крайната точка на WebFinger не изпрати атрибута href</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::OAuthCredentialsSetupWizardPage</name>
-    <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Свързване с &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
+        <source>OOBE is not done</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Reopen Browser</source>
-        <translation>Повторно отваряне на браузъра</translation>
+        <source>Invalid credentials</source>
+        <translation>Невалидни идентификационни данни</translation>
     </message>
     <message>
-        <source>Please use your browser to log in to %1.</source>
-        <translation>Моля, използвайте браузъра за да влезете в %1.</translation>
+        <source>Failed to retrieve user information from server</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Invalid local download directory: %1</source>
+        <translation>Невалидна локална директория за изтегляне: %1</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::OAuthCredentialsSetupWizardState</name>
+    <name>APP::Wizard::SetupWidget</name>
+    <message>
+        <source>Cancel Setup</source>
+        <translation>Анулиране на настройката</translation>
+    </message>
+    <message>
+        <source>Do you really want to cancel the account setup?</source>
+        <translation>Наистина ли искате да нулирате настройката на профила?</translation>
+    </message>
+</context>
+<context>
+    <name>AccountConfiguredPage</name>
+    <message>
+        <source>✓ You&apos;re all set!</source>
+        <translation>✓ Всичко е готово!</translation>
+    </message>
+    <message>
+        <source>Advanced configuration</source>
+        <translation>Разширена настройка</translation>
+    </message>
+    <message>
+        <source>Configure files download:</source>
+        <translation>Настройка на изтеглянето на файлове:</translation>
+    </message>
+    <message>
+        <source>Download everything</source>
+        <translation>Изтегляне на всичко</translation>
+    </message>
+    <message>
+        <source>After completing this wizard, you can set up folder synchronization manually.</source>
+        <translation>След като завършите този съветник, можете ръчно да настроите синхронизацията на папки.</translation>
+    </message>
+    <message>
+        <source>Configure synchronization manually</source>
+        <translation>Ръчна настройка на синхронизацията</translation>
+    </message>
+    <message>
+        <source>Choose local download directory:</source>
+        <translation>Избор на локална директория за изтегляне:</translation>
+    </message>
+    <message>
+        <source>Restore default value</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AppImageUpdateAvailableDialogUi</name>
+    <message>
+        <source>Update available</source>
+        <translation>Налична е актуализация</translation>
+    </message>
+    <message>
+        <source>Skip this version</source>
+        <translation>Пропускане на тази версия</translation>
+    </message>
+</context>
+<context>
+    <name>AppProvider</name>
+    <message>
+        <source>Failed to open %1 in web. Error: %2.</source>
+        <translation>Неуспешно отваряне на %1 в мрежата. Грешка: %2.</translation>
+    </message>
+</context>
+<context>
+    <name>ApplicationTheme::aboutVersions()</name>
+    <message>
+        <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
+        <translation>%1 %2%7%8Библиотеки Qt %3, %4%7Използване на модул за виртуални файлове: %5%7%6</translation>
+    </message>
+</context>
+<context>
+    <name>ApplicationTheme::versionWithSha</name>
+    <message>
+        <source>%1 %2</source>
+        <translation>%1 %2</translation>
+    </message>
+</context>
+<context>
+    <name>BasicLoginWidget</name>
+    <message>
+        <source>Username</source>
+        <translation>Потребителско име</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Парола</translation>
+    </message>
+</context>
+<context>
+    <name>CheckBasicAuthJobFactory</name>
+    <message>
+        <source>Invalid reply received from server</source>
+        <translation>От сървъра е получен невалиден отговор</translation>
+    </message>
+</context>
+<context>
+    <name>ChecksumHeader</name>
+    <message>
+        <source>The checksum header is malformed: %1</source>
+        <translation>Заглавната част на контролната сума е нарушена: %1</translation>
+    </message>
+    <message>
+        <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
+        <translation>Заглавната част на контролната сума съдържа неизвестен тип контролна сума &apos;%1&apos;</translation>
+    </message>
+</context>
+<context>
+    <name>CodeDialog</name>
+    <message>
+        <source>Allow remote access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>We have sent a one-time code to authorize this device to access your Personal Cloud. Check your email for the code and enter it here. If you do not see it in your inbox, please check your spam folder.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Allow access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Resend code</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CodeDialogController</name>
+    <message>
+        <source>Incorrect code</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your code has expired</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CodeInputWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Формуляр</translation>
+    </message>
+    <message>
+        <source>Paste code</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ComboWidget</name>
+    <message>
+        <source>button_icon_tool</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Error text</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CommandLine</name>
+    <message>
+        <source>For more information, see %1</source>
+        <translation>За повече информация, вижте %1</translation>
+    </message>
+</context>
+<context>
+    <name>CommonStrings</name>
+    <message>
+        <source>file manager</source>
+        <translation>файлов мениджър</translation>
+    </message>
+    <message>
+        <source>Show in %1</source>
+        <translation>Показване в %1</translation>
+    </message>
+    <message>
+        <source>Show Files in web browser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show Photos in web browser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Копиране</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n Filter(s)</source>
+        <translation><numerusform>%n Филтър(и)</numerusform><numerusform>%n Филтър(и)</numerusform></translation>
+    </message>
+</context>
+<context>
+    <name>ConnectErrorPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Формуляр</translation>
+    </message>
+    <message>
+        <source>Unable to connect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol&gt;&lt;li&gt;Verify that the device is properly connected to the network and that the internet connection is stable&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;2&quot;&gt;&lt;li&gt;Make sure the device is powered on and functioning correctly&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;3&quot;&gt;&lt;li&gt;Check firewall settings to confirm they are not blocking the connection&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;4&quot;&gt;&lt;li&gt;If using a wireless connection, confirm the device is within range of the router&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;5&quot;&gt;&lt;li&gt;Your device and mobile phone must be on the same network&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>If you continue to experience issues, please contact our &lt;a href=&quot;https://seagare.com&quot;&gt;Support team&lt;/a&gt; for further assistance.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Повторен опит</translation>
+    </message>
+</context>
+<context>
+    <name>CredentialsPage</name>
+    <message>
+        <source>helper_frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Can’t find your device?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Password</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Отказ</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>Вход</translation>
+    </message>
+    <message>
+        <source>button_accent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting to</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Парола</translation>
+    </message>
+    <message>
+        <source>Enter a valid email address and password</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Invalid URL</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DetermineAuthTypeJobFactory</name>
+    <message>
+        <source>Server did not ask for authorization</source>
+        <translation>Сървърът не е поискал удостоверяване</translation>
+    </message>
+    <message>
+        <source>Failed to determine auth type: %1</source>
+        <translation>Неуспешно определяне на тип удостоверяване: %1</translation>
+    </message>
+</context>
+<context>
+    <name>DevModel</name>
+    <message>
+        <source>true</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>false</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Url</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OOBE Done</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DevWidget</name>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>---</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friendlyName</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>hostname</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>deviceID</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>certificateCN</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>:</source>
+        <translation>:</translation>
+    </message>
+    <message>
+        <source>origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>deviceType</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Query about and status</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Apply to account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fetch from account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Simulate network change</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>Неизвестно</translation>
+    </message>
+    <message>
+        <source>Local</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Public</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remote</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mDNS</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Static</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DiscoverWebFingerServiceJobFactory</name>
+    <message>
+        <source>Invalid reply received from server</source>
+        <translation>От сървъра е получен невалиден отговор</translation>
+    </message>
+</context>
+<context>
+    <name>EmailPage</name>
+    <message>
+        <source>helper_frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Отказ</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>Вход</translation>
+    </message>
+    <message>
+        <source>Email</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>EmailPageController</name>
+    <message>
+        <source>Invalid email</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Not allowed. Contact the device owner.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ErrorDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>Формуляр</translation>
+    </message>
+    <message>
+        <source>Access to Personal Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Отказ</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Повторен опит</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ErrorDialogController</name>
+    <message>
+        <source>Access to Personal Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unable to connect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Email not registered</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Could not reach your Personal Cloud.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>This email isn’t authorized to access this device. Please contact the owner.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>FetchUserInfoJobFactory</name>
+    <message>
+        <source>Failed to retrieve user info</source>
+        <translation>Неуспешно извличане на информация за потребителя</translation>
+    </message>
+</context>
+<context>
+    <name>FileSystem</name>
+    <message>
+        <source>Can&apos;t rename %1, the file is currently in use</source>
+        <translation>Не може да се преименува %1, файлът се използва в момента</translation>
+    </message>
+    <message>
+        <source>Could not make directories in trash</source>
+        <translation>Директориите в кошчето не можаха да бъдат създадени</translation>
+    </message>
+    <message>
+        <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>Неуспешно преместване на &apos;%1&apos; в &apos;%2&apos;</translation>
+    </message>
+    <message>
+        <source>Moving to the trash is not implemented on this platform</source>
+        <translation>Преместването в кошчето не е осъществено на тази платформа</translation>
+    </message>
+    <message>
+        <source>Could not remove folder</source>
+        <translation>Неуспешно премахване на папка</translation>
+    </message>
+</context>
+<context>
+    <name>FinishedPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Формуляр</translation>
+    </message>
+    <message>
+        <source>You&apos;re all set!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advanced configuration</source>
+        <translation>Разширена настройка</translation>
+    </message>
+    <message>
+        <source>Configure files download:</source>
+        <translation>Настройка на изтеглянето на файлове:</translation>
+    </message>
+    <message>
+        <source>Download everything (recommended)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Configure synchronization manually</source>
+        <translation>Ръчна настройка на синхронизацията</translation>
+    </message>
+    <message>
+        <source>Use &amp;virtual files instead of downloading content immediately</source>
+        <translation>Използване на &amp;виртуални файлове вместо незабавно да се изтегля съдържанието</translation>
+    </message>
+    <message>
+        <source>Choose local download directory:</source>
+        <translation>Избор на локална директория за изтегляне:</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The virtual filesystem feature is not available for this installation.</source>
+        <translation>Функцията Виртуална файлова система не е налична за тази инсталация.</translation>
+    </message>
+    <message>
+        <source>The virtual filesystem feature is not stable yet. Use with caution.</source>
+        <translation>Функцията Виртуална файлова система все още не е стабилна. Използвайте я с повишено внимание.</translation>
+    </message>
+    <message>
+        <source>Enable experimental feature?</source>
+        <translation>Да се активира ли експерименталната функция?</translation>
+    </message>
+    <message>
+        <source>When the &quot;virtual files&quot; mode is enabled no files will be downloaded initially. Instead, a tiny file will be created for each file that exists on the server. The contents can be downloaded by running these files or by using their context menu.
+
+The virtual files mode is mutually exclusive with selective sync. Currently unselected folders will be translated to online-only folders and your selective sync settings will be reset.
+
+Switching to this mode will abort any currently running synchronization.
+
+This is a new, experimental mode. If you decide to use it, please report any issues that come up.</source>
+        <translation>Когато е активиран режимът &quot;виртуални файлове&quot;, първоначално няма да бъдат изтеглени никакви файлове. Вместо това ще бъде създаден малък файл за всеки файл, който съществува на сървъра. Съдържанието може да бъде изтеглено чрез стартиране на тези файлове, или чрез използване на контекстното им меню.
+
+Режимът &quot;виртуални файлове&quot; се изключва взаимно със селективната синхронизация. Неизбраните в момента папки ще бъдат прехвърлени в папки, които са само онлайн, а настройките ви за селективна синхронизация ще бъдат нулирани.
+
+Преминаването към този режим ще прекъсне всяко текущо синхронизиране.
+
+Това е нов, експериментален режим. Ако решите да го използвате, моля съобщавайте за всички възникнали проблеми.</translation>
+    </message>
+    <message>
+        <source>Enable experimental placeholder mode</source>
+        <translation>Активиране на експериментален режим на заместване</translation>
+    </message>
+    <message>
+        <source>Stay safe</source>
+        <translation>Само безопасно</translation>
+    </message>
+    <message>
+        <source>Select the local folder</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>FolderWizard</name>
+    <message>
+        <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;Грешка:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;Внимание:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
+        <translation>&lt;b&gt;Грешка:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
+        <translation>&lt;b&gt;Внимание:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizardSourcePage</name>
+    <message>
+        <source>Form</source>
+        <translation>Формуляр</translation>
+    </message>
+    <message>
+        <source>Pick a local folder on your computer to sync</source>
+        <translation>Изберете локална папка в компютъра, която да синхронизирате</translation>
+    </message>
+    <message>
+        <source>&amp;Choose...</source>
+        <translation>&amp;Избиране...</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizardTargetPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Формуляр</translation>
+    </message>
+    <message>
+        <source>Select a remote destination folder</source>
+        <translation>Избор на отдалечена целева папка</translation>
+    </message>
+    <message>
+        <source>Create Folder</source>
+        <translation>Създаване на папка</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation>Опресняване</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>Папки</translation>
+    </message>
+</context>
+<context>
+    <name>InputWidget</name>
+    <message>
+        <source>Error text</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>LoginRequiredDialog</name>
+    <message>
+        <source>Login required</source>
+        <translation>Изисква се влизане</translation>
+    </message>
+</context>
+<context>
+    <name>NotificationWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Формуляр</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet</source>
+        <translation>Lorem ipsum dolor sit amet</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
+        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </translation>
+    </message>
+</context>
+<context>
+    <name>OAuthCredentialsSetupWizardState</name>
     <message>
         <source>Error while trying to log in to OAuth2-enabled server.</source>
         <translation>Грешка при опит за влизане в сървър с активиран OAuth2.</translation>
@@ -3004,220 +3599,25 @@ This is a new, experimental mode. If you decide to use it, please report any iss
     </message>
 </context>
 <context>
-    <name>APP::Wizard::ServerUrlSetupWizardPage</name>
+    <name>OAuthLoginWidget</name>
     <message>
-        <source>Welcome to %1</source>
-        <translation>Добре дошли в %1</translation>
+        <source>Open Browser</source>
+        <translation>Отваряне в браузър</translation>
+    </message>
+    <message>
+        <source>Copy URL to clipboard</source>
+        <translation>Копиране на URL адреса в клипборда</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Повторен опит</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::ServerUrlSetupWizardState</name>
+    <name>PopupComboWidget</name>
     <message>
-        <source>Invalid server URL</source>
-        <translation>Невалиден URL адрес на сървъра</translation>
-    </message>
-    <message>
-        <source>Insecure connection</source>
-        <translation>Незащитена връзка</translation>
-    </message>
-    <message>
-        <source>The connection to %1 is insecure.
-Are you sure you want to proceed?</source>
-        <translation>Връзката с %1 е незащитена.
-Сигурни ли сте, че искате да продължите?</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Потвърдете</translation>
-    </message>
-    <message>
-        <source>Insecure server rejected by user</source>
-        <translation>Несигурният сървър е отхвърлен от потребителя</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::SetupWizardController</name>
-    <message>
-        <source>Invalid credentials</source>
-        <translation>Невалидни идентификационни данни</translation>
-    </message>
-    <message>
-        <source>Failed to retrieve user information from server</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::SetupWizardWindow</name>
-    <message>
-        <source>Finish</source>
-        <translation>Край</translation>
-    </message>
-    <message>
-        <source>Next &gt;</source>
-        <translation>Напред &gt;</translation>
-    </message>
-    <message>
-        <source>Cancel Setup</source>
-        <translation>Анулиране на настройката</translation>
-    </message>
-    <message>
-        <source>Do you really want to cancel the account setup?</source>
-        <translation>Наистина ли искате да нулирате настройката на профила?</translation>
-    </message>
-</context>
-<context>
-    <name>APP::ApplicationGui</name>
-    <message>
-        <source>Please sign in</source>
-        <translation>Моля, влезте в профила си</translation>
-    </message>
-    <message>
-        <source>Folder %1: %2</source>
-        <translation>Папка на %1: %2</translation>
-    </message>
-    <message>
-        <source>Unresolved %1 conflicts</source>
-        <translation>Неразрешени %1 конфликти</translation>
-    </message>
-    <message>
-        <source>Ignored errors %1</source>
-        <translation>Пренебрегнати грешки %1</translation>
-    </message>
-    <message>
-        <source>There are no sync folders configured.</source>
-        <translation>Няма конфигурирани папки за синхронизиране.</translation>
-    </message>
-    <message>
-        <source>Log in...</source>
-        <translation>Влезте...</translation>
-    </message>
-    <message>
-        <source>Log out</source>
-        <translation>Излизане</translation>
-    </message>
-    <message>
-        <source>Recent Changes</source>
-        <translation>Последни промени</translation>
-    </message>
-    <message>
-        <source>Open folder &apos;%1&apos;</source>
-        <translation>Отваряне на папка &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
-        <translation>Сървърът на профила %1 работи с неподдържана версия %2. Използването на този клиент с неподдържани версии на сървъра не е тествано и е потенциално опасно. Продължете на свой риск.</translation>
-    </message>
-    <message>
-        <source>Account %1</source>
-        <translation>Профил %1</translation>
-    </message>
-    <message>
-        <source>Stop synchronization</source>
-        <translation>Спиране на синхронизацията</translation>
-    </message>
-    <message>
-        <source>Create a new account</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Unknown status</source>
-        <translation>Неизвестен статус</translation>
-    </message>
-    <message>
-        <source>Details...</source>
-        <translation>Подробности...</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation>Помощ</translation>
-    </message>
-    <message>
-        <source>Resume synchronization</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quit %1</source>
-        <translation>Излизане от %1</translation>
-    </message>
-    <message>
-        <source>Disconnected from %1</source>
-        <translation>Прекъсната връзка с %1</translation>
-    </message>
-    <message>
-        <source>Unsupported Server Version</source>
-        <translation>Неподдържана версия на сървъра</translation>
-    </message>
-    <message>
-        <source>Disconnected</source>
-        <translation>Прекъсната връзка</translation>
-    </message>
-    <message>
-        <source>Disconnected from some accounts</source>
-        <translation>Прекъсната връзка с някои профили</translation>
-    </message>
-    <message>
-        <source>Disconnected from accounts:</source>
-        <translation>Прекъсната е връзката с някои от профилите:</translation>
-    </message>
-    <message>
-        <source>Signed out</source>
-        <translation>Излизане</translation>
-    </message>
-    <message>
-        <source>Account synchronization is disabled</source>
-        <translation>Синхронизирането на профила е деактивирано</translation>
-    </message>
-    <message>
-        <source>Synchronization is paused</source>
-        <translation>Синхронизирането е на пауза</translation>
-    </message>
-    <message>
-        <source>Up to date (%1)</source>
-        <translation>Към днешна дата (%1)</translation>
-    </message>
-    <message>
-        <source>No sync folders configured</source>
-        <translation>Няма конфигурирани папки за синхронизация</translation>
-    </message>
-    <message>
-        <source>Show %1</source>
-        <translation>Показване на %1</translation>
-    </message>
-    <message>
-        <source>About %1</source>
-        <translation>Относно %1</translation>
-    </message>
-    <message>
-        <source>No items synced recently</source>
-        <translation>Няма наскоро синхронизирани елементи</translation>
-    </message>
-    <message>
-        <source>Checking for changes in remote &apos;%1&apos;</source>
-        <translation>Проверка за промени в отдалечената &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Checking for changes in local &apos;%1&apos;</source>
-        <translation>Проверка за промени в локалната &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Syncing %1 of %2  (%3 left)</source>
-        <translation>Синхронизиране на %1 от %2 (остават %3)</translation>
-    </message>
-    <message>
-        <source>Syncing %1 of %2</source>
-        <translation>Синхронизиране на %1 от %2</translation>
-    </message>
-    <message>
-        <source>Syncing %1 (%2 left)</source>
-        <translation>Синхронизиране на %1 (остават %2)</translation>
-    </message>
-    <message>
-        <source>Syncing %1</source>
-        <translation>Синхронизиране на %1</translation>
-    </message>
-    <message>
-        <source>%1 (%2, %3)</source>
-        <translation>%1 (%2, %3)</translation>
+        <source>Form</source>
+        <translation>Формуляр</translation>
     </message>
 </context>
 <context>
@@ -3254,6 +3654,10 @@ Are you sure you want to proceed?</source>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
+    <message>
+        <source>Enter a valid email address</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ResolveUrlJobFactory</name>
@@ -3271,29 +3675,17 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
-    <name>ServerUrlSetupWizardPage</name>
+    <name>SetupWidget</name>
     <message>
-        <source>Form</source>
-        <translation>Формуляр</translation>
-    </message>
-    <message>
-        <source>What is your server&apos;s address?</source>
-        <translation>Какъв е адресът на вашия сървър?</translation>
+        <source>Add New Account</source>
+        <translation>Добавяне на нов профил</translation>
     </message>
 </context>
 <context>
     <name>SetupWizardState</name>
     <message>
-        <source>Server URL</source>
-        <translation>URL адрес на сървъра</translation>
-    </message>
-    <message>
         <source>Welcome</source>
         <translation>Добре дошли</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation>Потребителско име</translation>
     </message>
     <message>
         <source>Login</source>
@@ -3305,22 +3697,10 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
-    <name>SetupWizardWindow</name>
+    <name>SimpleResolveUrlJobFactory</name>
     <message>
-        <source>Add New Account</source>
-        <translation>Добавяне на нов профил</translation>
-    </message>
-    <message>
-        <source>Dismiss</source>
-        <translation>Отхвърляне</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Отказ</translation>
-    </message>
-    <message>
-        <source>&lt; Back</source>
-        <translation>&lt; Назад</translation>
+        <source>Could not detect compatible server at %1</source>
+        <translation>Не може да се открие съвместим сървър на %1</translation>
     </message>
 </context>
 <context>
@@ -3451,6 +3831,25 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
+    <name>WaitPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Формуляр</translation>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Logging in to your account</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>WebFingerUserInfoJobFactory</name>
     <message>
         <source>Failed to retrieve user info</source>
@@ -3469,24 +3868,10 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
-    <name>ApplicationTheme::aboutVersions()</name>
-    <message>
-        <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
-        <translation>%1 %2%7%8Библиотеки Qt %3, %4%7Използване на модул за виртуални файлове: %5%7%6</translation>
-    </message>
-</context>
-<context>
-    <name>ApplicationTheme::qtVer</name>
+    <name>ownCloudTheme::qtVer</name>
     <message>
         <source>%1 (Built against Qt %2)</source>
         <translation>%1 (Създаден срещу Qt %2)</translation>
-    </message>
-</context>
-<context>
-    <name>ApplicationTheme::versionWithSha</name>
-    <message>
-        <source>%1 %2</source>
-        <translation>%1 %2</translation>
     </message>
 </context>
 <context>
