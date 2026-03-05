@@ -1,289 +1,13 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="si">
 <context>
-    <name>AccountConfiguredWizardPage</name>
-    <message>
-        <source>✓ You&apos;re all set!</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advanced configuration</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Configure files download:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Download everything</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>After completing this wizard, you can set up folder synchronization manually.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Configure synchronization manually</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Choose local download directory:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Restore default value</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>AppImageUpdateAvailableDialogUi</name>
-    <message>
-        <source>Update available</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Skip this version</source>
-        <translation>මෙම අනුවාදය මඟ හරින්න</translation>
-    </message>
-</context>
-<context>
-    <name>AppProvider</name>
-    <message>
-        <source>Failed to open %1 in web. Error: %2.</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>BasicLoginWidget</name>
-    <message>
-        <source>Username</source>
-        <translation>පරිශීලක නාමය</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>මුර පදය</translation>
-    </message>
-</context>
-<context>
-    <name>CheckBasicAuthJobFactory</name>
-    <message>
-        <source>Invalid reply received from server</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ChecksumHeader</name>
-    <message>
-        <source>The checksum header is malformed: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
-        <translation>චෙක්සම් ශීර්ෂයේ නොදන්නා චෙක්සම් වර්ගය &apos;%1&apos;අඩංගු විය</translation>
-    </message>
-</context>
-<context>
-    <name>CommandLine</name>
-    <message>
-        <source>For more information, see %1</source>
-        <translation>වැඩි විස්තර සඳහා, %1බලන්න</translation>
-    </message>
-</context>
-<context>
-    <name>CommonStrings</name>
-    <message>
-        <source>file manager</source>
-        <translation>ගොනු කළමනාකරු</translation>
-    </message>
-    <message>
-        <source>Show in %1</source>
-        <translation>%1හි පෙන්වන්න</translation>
-    </message>
-    <message>
-        <source>Show in web browser</source>
-        <translation>වෙබ් බ්‍රවුසරයේ පෙන්වන්න</translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation>පිටපත් කරන්න</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n Filter(s)</source>
-        <translation><numerusform>%n පෙරහන්(ය)</numerusform><numerusform>%n පෙරහන්(ය)</numerusform></translation>
-    </message>
-</context>
-<context>
-    <name>CredentialsSetupWizardPage</name>
-    <message>
-        <source>Form</source>
-        <translation>පෝරමය</translation>
-    </message>
-</context>
-<context>
-    <name>DetermineAuthTypeJobFactory</name>
-    <message>
-        <source>Server did not ask for authorization</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Failed to determine auth type: %1</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>DiscoverWebFingerServiceJobFactory</name>
-    <message>
-        <source>Invalid reply received from server</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>FetchUserInfoJobFactory</name>
-    <message>
-        <source>Failed to retrieve user info</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>FileSystem</name>
-    <message>
-        <source>Can&apos;t rename %1, the file is currently in use</source>
-        <translation>&apos;t %1නැවත නම් කළ හැක, ගොනුව දැනට භාවිතා වේ</translation>
-    </message>
-    <message>
-        <source>Could not make directories in trash</source>
-        <translation>කුණු කූඩයේ නාමාවලි සෑදිය නොහැක</translation>
-    </message>
-    <message>
-        <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation>&apos;%1&apos; සිට &apos;%2&apos;දක්වා ගෙන යාමට නොහැකි විය</translation>
-    </message>
-    <message>
-        <source>Moving to the trash is not implemented on this platform</source>
-        <translation>කුණු කූඩයට ගෙන යාම මෙම වේදිකාවේ ක්‍රියාත්මක නොවේ</translation>
-    </message>
-    <message>
-        <source>Could not remove folder</source>
-        <translation>ෆෝල්ඩරය ඉවත් කිරීමට නොහැකි විය</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizard</name>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;දෝෂය:&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;අවවාදයයි:&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;දෝෂය:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;අවවාදයයි:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizardSourcePage</name>
-    <message>
-        <source>Form</source>
-        <translation>පෝරමය</translation>
-    </message>
-    <message>
-        <source>Pick a local folder on your computer to sync</source>
-        <translation>සමමුහුර්ත කිරීමට ඔබේ පරිගණකයේ දේශීය ෆෝල්ඩරයක් තෝරන්න</translation>
-    </message>
-    <message>
-        <source>&amp;Choose...</source>
-        <translation>&amp;තෝරා...</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizardTargetPage</name>
-    <message>
-        <source>Form</source>
-        <translation>පෝරමය</translation>
-    </message>
-    <message>
-        <source>Select a remote destination folder</source>
-        <translation>දුරස්ථ ගමනාන්ත ෆෝල්ඩරයක් තෝරන්න</translation>
-    </message>
-    <message>
-        <source>Create Folder</source>
-        <translation>ෆෝල්ඩරය නිර්මාණය</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation>නැවුම් කරන්න</translation>
-    </message>
-    <message>
-        <source>Folders</source>
-        <translation>ෆෝල්ඩර</translation>
-    </message>
-</context>
-<context>
-    <name>LegacyWebFingerSetupWizardPage</name>
-    <message>
-        <source>Form</source>
-        <translation>පෝරමය</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation>පරිශීලක නාමය</translation>
-    </message>
-</context>
-<context>
-    <name>LoginRequiredDialog</name>
-    <message>
-        <source>Login required</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NotificationWidget</name>
-    <message>
-        <source>Form</source>
-        <translation>පෝරමය</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet</source>
-        <translation>Lorem ipsum dolor sit amet</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
-        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </translation>
-    </message>
-</context>
-<context>
-    <name>OAuthLoginWidget</name>
-    <message>
-        <source>Open Browser</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Copy URL to clipboard</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Retry</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>APP::AboutDialog</name>
-    <message>
-        <source>About</source>
-        <translation>ගැන</translation>
-    </message>
-    <message>
-        <source>Versions</source>
-        <translation>අනුවාද</translation>
-    </message>
     <message>
         <source>About %1</source>
         <translation>%1පමණ</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -403,7 +127,7 @@
         <translation>අතථ්‍ය ගොනු සහාය අක්‍රිය කරන්නද?</translation>
     </message>
     <message>
-        <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as 'available online only' will be downloaded.
+        <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as &apos;available online only&apos; will be downloaded.
 
 The only advantage of disabling virtual file support is that the selective sync feature will become available again.
 
@@ -437,6 +161,14 @@ This action will abort any currently running synchronization.</source>
     <message>
         <source>Connected to %1.</source>
         <translation>%1වෙත සම්බන්ධ කර ඇත.</translation>
+    </message>
+    <message>
+        <source>Show device info</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open share page</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Server %1 is temporarily unavailable.</source>
@@ -651,6 +383,161 @@ The update will be performed in the background, and overwrite the current AppIma
     </message>
 </context>
 <context>
+    <name>APP::ApplicationGui</name>
+    <message>
+        <source>Please sign in</source>
+        <translation>කරුණාකර පුරනය වන්න</translation>
+    </message>
+    <message>
+        <source>Folder %1: %2</source>
+        <translation>ෆෝල්ඩරය %1: %2</translation>
+    </message>
+    <message>
+        <source>Unresolved %1 conflicts</source>
+        <translation>නොවිසඳුනු %1 ගැටුම්</translation>
+    </message>
+    <message>
+        <source>Ignored errors %1</source>
+        <translation>නොසලකා හරින ලද දෝෂ %1</translation>
+    </message>
+    <message>
+        <source>There are no sync folders configured.</source>
+        <translation>වින්‍යාස කර ඇති සමමුහුර්ත ෆෝල්ඩර නොමැත.</translation>
+    </message>
+    <message>
+        <source>Log in...</source>
+        <translation>ඇතුල් වන්න...</translation>
+    </message>
+    <message>
+        <source>Log out</source>
+        <translation>ලොග් අවුට් වෙන්න</translation>
+    </message>
+    <message>
+        <source>Recent Changes</source>
+        <translation>මෑත වෙනස්කම්</translation>
+    </message>
+    <message>
+        <source>Open folder &apos;%1&apos;</source>
+        <translation>ෆෝල්ඩරය විවෘත කරන්න &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
+        <translation>%1 ගිණුමේ සේවාදායකය සහාය නොදක්වන %2අනුවාදයක් ධාවනය කරයි. සහාය නොදක්වන සේවාදායක අනුවාද සමඟ මෙම සේවාලාභියා භාවිතා කිරීම පරීක්ෂා නොකළ අතර අනතුරුදායක විය හැකිය. ඔබේම අවදානමකින් ඉදිරියට යන්න.</translation>
+    </message>
+    <message>
+        <source>Account %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Stop synchronization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Create a new account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unknown status</source>
+        <translation>නොදන්නා තත්ත්වය</translation>
+    </message>
+    <message>
+        <source>Details...</source>
+        <translation>විස්තර...</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation>උදව්</translation>
+    </message>
+    <message>
+        <source>Resume synchronization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Quit %1</source>
+        <translation>%1ඉවත් කරන්න</translation>
+    </message>
+    <message>
+        <source>Disconnected from %1</source>
+        <translation>%1සිට විසන්ධි විය</translation>
+    </message>
+    <message>
+        <source>Unsupported Server Version</source>
+        <translation>සහාය නොදක්වන සේවාදායක අනුවාදය</translation>
+    </message>
+    <message>
+        <source>Disconnected</source>
+        <translation>විසන්ධි විය</translation>
+    </message>
+    <message>
+        <source>Disconnected from some accounts</source>
+        <translation>සමහර ගිණුම් වලින් විසන්ධි විය</translation>
+    </message>
+    <message>
+        <source>Disconnected from accounts:</source>
+        <translation>ගිණුම් වලින් විසන්ධි විය:</translation>
+    </message>
+    <message>
+        <source>Signed out</source>
+        <translation>වරනය විය</translation>
+    </message>
+    <message>
+        <source>Account synchronization is disabled</source>
+        <translation>ගිණුම් සමමුහුර්ත කිරීම අබල කර ඇත</translation>
+    </message>
+    <message>
+        <source>Synchronization is paused</source>
+        <translation>සමමුහුර්ත කිරීම විරාම කර ඇත</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>යාවත්කාලීන (%1)</translation>
+    </message>
+    <message>
+        <source>No sync folders configured</source>
+        <translation>සමමුහුර්ත ෆෝල්ඩර කිසිවක් වින්‍යාස කර නැත</translation>
+    </message>
+    <message>
+        <source>Show %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation>%1පමණ</translation>
+    </message>
+    <message>
+        <source>No items synced recently</source>
+        <translation>මෑතකදී අයිතම කිසිවක් සමමුහුර්ත කර නැත</translation>
+    </message>
+    <message>
+        <source>Checking for changes in remote &apos;%1&apos;</source>
+        <translation>දුරස්ථ &apos;%1&apos;හි වෙනස්කම් සඳහා පරීක්ෂා කිරීම</translation>
+    </message>
+    <message>
+        <source>Checking for changes in local &apos;%1&apos;</source>
+        <translation>දේශීය &apos;%1&apos;හි වෙනස්කම් සඳහා පරීක්ෂා කිරීම</translation>
+    </message>
+    <message>
+        <source>Syncing %1 of %2  (%3 left)</source>
+        <translation>%2  හි %1 සමමුහුර්ත කිරීම (%3 වමේ)</translation>
+    </message>
+    <message>
+        <source>Syncing %1 of %2</source>
+        <translation>%2න් %1 සමමුහුර්ත කිරීම</translation>
+    </message>
+    <message>
+        <source>Syncing %1 (%2 left)</source>
+        <translation>%1 සමමුහුර්ත කරමින් (%2 ඉතිරි)</translation>
+    </message>
+    <message>
+        <source>Syncing %1</source>
+        <translation>සමමුහුර්ත කිරීම %1</translation>
+    </message>
+    <message>
+        <source>%1 (%2, %3)</source>
+        <translation>%1 (%2, %3)</translation>
+    </message>
+</context>
+<context>
     <name>APP::AskExperimentalVirtualFilesFeatureMessageBox</name>
     <message>
         <source>Enable experimental feature?</source>
@@ -707,6 +594,13 @@ This is a new, experimental mode. If you decide to use it, please report any iss
     <message>
         <source>Failed to parse credentials %1</source>
         <translation>අක්තපත්‍ර %1විග්‍රහ කිරීමට අසමත් විය</translation>
+    </message>
+</context>
+<context>
+    <name>APP::CuratorPropagator</name>
+    <message>
+        <source>File %1 is currently in use</source>
+        <translation>ගොනුව %1 දැනට භාවිතා වේ</translation>
     </message>
 </context>
 <context>
@@ -873,7 +767,7 @@ This means that the synchronization client might not upload local changes immedi
 %1</translation>
     </message>
     <message>
-        <source>All files in the sync folder '%1' folder were deleted on the server.
+        <source>All files in the sync folder &apos;%1&apos; folder were deleted on the server.
 These deletes will be synchronized to your local sync folder, making such files unavailable unless you have a right to restore. 
 If you decide to keep the files, they will be re-synced with the server if you have rights to do so.
 If you decide to delete the files, they will be unavailable to you, unless you are the owner.</source>
@@ -883,7 +777,7 @@ If you decide to delete the files, they will be unavailable to you, unless you a
 ඔබ ගොනු මකා දැමීමට තීරණය කරන්නේ නම්, ඔබ හිමිකරු නම් මිස, ඒවා ඔබට ලබාගත නොහැක.</translation>
     </message>
     <message>
-        <source>All the files in your local sync folder '%1' were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
+        <source>All the files in your local sync folder &apos;%1&apos; were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
 Are you sure you want to sync those actions with the server?
 If this was an accident and you decide to keep your files, they will be re-synced from the server.</source>
         <translation>ඔබගේ දේශීය සමමුහුර්ත ෆෝල්ඩරය &apos;%1&apos; තුළ ඇති සියලුම ගොනු මකා ඇත. මෙම මකාදැමීම් ඔබගේ සේවාදායකය සමඟ සමමුහුර්ත වනු ඇත, ප්‍රතිසාධනය කරන්නේ නම් මිස එවැනි ගොනු ලබා ගත නොහැක.
@@ -972,10 +866,6 @@ Please consider removing this folder from the account and adding it again.</sour
         <translation>ගිණුම් කිහිපයක් %1ෆෝල්ඩරය බෙදා ගනී.
 මෙම වින්‍යාසය දත්ත නැතිවීමට තුඩු දෙන බව දන්නා අතර තවදුරටත් සහාය නොදක්වයි.
 කරුණාකර මෙම ෆෝල්ඩරය ගිණුමෙන් ඉවත් කර එය නැවත එක් කිරීමට සලකා බලන්න.</translation>
-    </message>
-    <message>
-        <source>%1 - %2@%3</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1403,6 +1293,13 @@ Items where deletion is allowed will be deleted if they prevent a directory from
         <translation>&apos;%1&apos;ට වෙනස්කම් ලිවිය නොහැක.</translation>
     </message>
     <message>
+        <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
+        <translation>මෙම ප්‍රවේශය &apos;%1&apos; හි පද්ධතිය මඟින් සපයනු ලබන අතර මෙම දර්ශනය තුළ වෙනස් කළ නොහැක.</translation>
+    </message>
+</context>
+<context>
+    <name>APP::InpDlg</name>
+    <message>
         <source>Add Ignore Pattern</source>
         <translation>නොසලකා හැරීමේ රටාව එක් කරන්න</translation>
     </message>
@@ -1411,8 +1308,12 @@ Items where deletion is allowed will be deleted if they prevent a directory from
         <translation>නව නොසලකා හැරීමේ රටාවක් එක් කරන්න:</translation>
     </message>
     <message>
-        <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
-        <translation>මෙම ප්‍රවේශය &apos;%1&apos; හි පද්ධතිය මඟින් සපයනු ලබන අතර මෙම දර්ශනය තුළ වෙනස් කළ නොහැක.</translation>
+        <source>OK</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>අවලංගු කරන්න</translation>
     </message>
 </context>
 <context>
@@ -1783,13 +1684,6 @@ for additional privileges during the process.</source>
     <message>
         <source>Update Check</source>
         <translation>යාවත්කාලීන චෙක්පත</translation>
-    </message>
-</context>
-<context>
-    <name>APP::CuratorPropagator</name>
-    <message>
-        <source>File %1 is currently in use</source>
-        <translation>ගොනුව %1 දැනට භාවිතා වේ</translation>
     </message>
 </context>
 <context>
@@ -2304,16 +2198,16 @@ for additional privileges during the process.</source>
         <translation>ඔබට %1න් ඉවත් වීමට අවශ්‍ය බව විශ්වාසද?</translation>
     </message>
     <message>
+        <source>%1 - %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Account</source>
         <translation>ගිණුම</translation>
     </message>
     <message>
         <source>MainWindow</source>
         <translation>ප්රධාන කවුළුව</translation>
-    </message>
-    <message>
-        <source>Hide</source>
-        <translation>සඟවන්න</translation>
     </message>
 </context>
 <context>
@@ -2329,6 +2223,10 @@ for additional privileges during the process.</source>
     <message>
         <source>Curator Path:</source>
         <translation>ස්වකීය ක්ලවුඩ් මාර්ගය:</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>%1 Sharing</source>
@@ -2739,6 +2637,10 @@ for additional privileges during the process.</source>
         <translation>දේශීය සමමුහුර්ත දත්ත සමුදාය විවෘත කිරීමට හෝ නිර්මාණය කිරීමට නොහැකි විය. ඔබට සමමුහුර්ත ෆෝල්ඩරය තුළ ලිවීමේ ප්‍රවේශය ඇති බවට වග බලා ගන්න.</translation>
     </message>
     <message>
+        <source>Synchronization aborted due to IP address change</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Disk space is low: Downloads that would reduce free space below %1 were skipped.</source>
         <translation>තැටි ඉඩ අඩුයි: %1 ට වඩා අඩු ඉඩ අඩු කරන බාගැනීම් මඟ හරින ලදී.</translation>
     </message>
@@ -2864,14 +2766,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::AccountConfiguredSetupWizardState</name>
-    <message>
-        <source>Invalid local download directory: %1</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::AccountConfiguredWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredPage</name>
     <message>
         <source>Use &amp;virtual files instead of downloading content immediately</source>
         <translation type="unfinished"/>
@@ -2916,62 +2811,756 @@ This is a new, experimental mode. If you decide to use it, please report any iss
     </message>
 </context>
 <context>
-    <name>APP::Wizard::BasicCredentialsSetupWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredState</name>
     <message>
-        <source>Please enter your credentials to log in to your account.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
+        <source>Invalid local download directory: %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::BasicCredentialsSetupWizardState</name>
+    <name>APP::Wizard::CredentialsState</name>
     <message>
         <source>Invalid credentials</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::LegacyWebFingerSetupWizardPage</name>
+    <name>APP::Wizard::SetupController</name>
     <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
+        <source>OS state: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Please enter your %1:</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::LegacyWebFingerSetupWizardState</name>
-    <message>
-        <source>Failed to parse WebFinger response: %1</source>
+        <source>&lt;empty&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>WebFinger endpoint did not send href attribute</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::OAuthCredentialsSetupWizardPage</name>
-    <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
+        <source>OOBE is not done</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Reopen Browser</source>
+        <source>Invalid credentials</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Please use your browser to log in to %1.</source>
+        <source>Failed to retrieve user information from server</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Invalid local download directory: %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::OAuthCredentialsSetupWizardState</name>
+    <name>APP::Wizard::SetupWidget</name>
+    <message>
+        <source>Cancel Setup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you really want to cancel the account setup?</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AccountConfiguredPage</name>
+    <message>
+        <source>✓ You&apos;re all set!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advanced configuration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Configure files download:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Download everything</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>After completing this wizard, you can set up folder synchronization manually.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Configure synchronization manually</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Choose local download directory:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Restore default value</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AppImageUpdateAvailableDialogUi</name>
+    <message>
+        <source>Update available</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Skip this version</source>
+        <translation>මෙම අනුවාදය මඟ හරින්න</translation>
+    </message>
+</context>
+<context>
+    <name>AppProvider</name>
+    <message>
+        <source>Failed to open %1 in web. Error: %2.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ApplicationTheme::aboutVersions()</name>
+    <message>
+        <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ApplicationTheme::versionWithSha</name>
+    <message>
+        <source>%1 %2</source>
+        <translation>%1 %2</translation>
+    </message>
+</context>
+<context>
+    <name>BasicLoginWidget</name>
+    <message>
+        <source>Username</source>
+        <translation>පරිශීලක නාමය</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>මුර පදය</translation>
+    </message>
+</context>
+<context>
+    <name>CheckBasicAuthJobFactory</name>
+    <message>
+        <source>Invalid reply received from server</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ChecksumHeader</name>
+    <message>
+        <source>The checksum header is malformed: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
+        <translation>චෙක්සම් ශීර්ෂයේ නොදන්නා චෙක්සම් වර්ගය &apos;%1&apos;අඩංගු විය</translation>
+    </message>
+</context>
+<context>
+    <name>CodeDialog</name>
+    <message>
+        <source>Allow remote access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>We have sent a one-time code to authorize this device to access your Personal Cloud. Check your email for the code and enter it here. If you do not see it in your inbox, please check your spam folder.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Allow access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Resend code</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CodeDialogController</name>
+    <message>
+        <source>Incorrect code</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your code has expired</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CodeInputWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>පෝරමය</translation>
+    </message>
+    <message>
+        <source>Paste code</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ComboWidget</name>
+    <message>
+        <source>button_icon_tool</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Error text</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CommandLine</name>
+    <message>
+        <source>For more information, see %1</source>
+        <translation>වැඩි විස්තර සඳහා, %1බලන්න</translation>
+    </message>
+</context>
+<context>
+    <name>CommonStrings</name>
+    <message>
+        <source>file manager</source>
+        <translation>ගොනු කළමනාකරු</translation>
+    </message>
+    <message>
+        <source>Show in %1</source>
+        <translation>%1හි පෙන්වන්න</translation>
+    </message>
+    <message>
+        <source>Show Files in web browser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show Photos in web browser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>පිටපත් කරන්න</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n Filter(s)</source>
+        <translation><numerusform>%n පෙරහන්(ය)</numerusform><numerusform>%n පෙරහන්(ය)</numerusform></translation>
+    </message>
+</context>
+<context>
+    <name>ConnectErrorPage</name>
+    <message>
+        <source>Form</source>
+        <translation>පෝරමය</translation>
+    </message>
+    <message>
+        <source>Unable to connect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol&gt;&lt;li&gt;Verify that the device is properly connected to the network and that the internet connection is stable&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;2&quot;&gt;&lt;li&gt;Make sure the device is powered on and functioning correctly&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;3&quot;&gt;&lt;li&gt;Check firewall settings to confirm they are not blocking the connection&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;4&quot;&gt;&lt;li&gt;If using a wireless connection, confirm the device is within range of the router&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;5&quot;&gt;&lt;li&gt;Your device and mobile phone must be on the same network&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>If you continue to experience issues, please contact our &lt;a href=&quot;https://seagare.com&quot;&gt;Support team&lt;/a&gt; for further assistance.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CredentialsPage</name>
+    <message>
+        <source>helper_frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Can’t find your device?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Password</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>අවලංගු කරන්න</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>ප්‍රවිශ්ටය</translation>
+    </message>
+    <message>
+        <source>button_accent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting to</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>මුර පදය</translation>
+    </message>
+    <message>
+        <source>Enter a valid email address and password</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Invalid URL</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DetermineAuthTypeJobFactory</name>
+    <message>
+        <source>Server did not ask for authorization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Failed to determine auth type: %1</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DevModel</name>
+    <message>
+        <source>true</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>false</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Url</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OOBE Done</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DevWidget</name>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>---</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friendlyName</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>hostname</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>deviceID</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>certificateCN</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>:</source>
+        <translation>:</translation>
+    </message>
+    <message>
+        <source>origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>deviceType</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Query about and status</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Apply to account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fetch from account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Simulate network change</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>නොදන්නා</translation>
+    </message>
+    <message>
+        <source>Local</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Public</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remote</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mDNS</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Static</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DiscoverWebFingerServiceJobFactory</name>
+    <message>
+        <source>Invalid reply received from server</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>EmailPage</name>
+    <message>
+        <source>helper_frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>අවලංගු කරන්න</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>ප්‍රවිශ්ටය</translation>
+    </message>
+    <message>
+        <source>Email</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>EmailPageController</name>
+    <message>
+        <source>Invalid email</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Not allowed. Contact the device owner.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ErrorDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>පෝරමය</translation>
+    </message>
+    <message>
+        <source>Access to Personal Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>අවලංගු කරන්න</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ErrorDialogController</name>
+    <message>
+        <source>Access to Personal Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unable to connect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Email not registered</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Could not reach your Personal Cloud.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>This email isn’t authorized to access this device. Please contact the owner.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>FetchUserInfoJobFactory</name>
+    <message>
+        <source>Failed to retrieve user info</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>FileSystem</name>
+    <message>
+        <source>Can&apos;t rename %1, the file is currently in use</source>
+        <translation>&apos;t %1නැවත නම් කළ හැක, ගොනුව දැනට භාවිතා වේ</translation>
+    </message>
+    <message>
+        <source>Could not make directories in trash</source>
+        <translation>කුණු කූඩයේ නාමාවලි සෑදිය නොහැක</translation>
+    </message>
+    <message>
+        <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>&apos;%1&apos; සිට &apos;%2&apos;දක්වා ගෙන යාමට නොහැකි විය</translation>
+    </message>
+    <message>
+        <source>Moving to the trash is not implemented on this platform</source>
+        <translation>කුණු කූඩයට ගෙන යාම මෙම වේදිකාවේ ක්‍රියාත්මක නොවේ</translation>
+    </message>
+    <message>
+        <source>Could not remove folder</source>
+        <translation>ෆෝල්ඩරය ඉවත් කිරීමට නොහැකි විය</translation>
+    </message>
+</context>
+<context>
+    <name>FinishedPage</name>
+    <message>
+        <source>Form</source>
+        <translation>පෝරමය</translation>
+    </message>
+    <message>
+        <source>You&apos;re all set!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advanced configuration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Configure files download:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Download everything (recommended)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Configure synchronization manually</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Use &amp;virtual files instead of downloading content immediately</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Choose local download directory:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The virtual filesystem feature is not available for this installation.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The virtual filesystem feature is not stable yet. Use with caution.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable experimental feature?</source>
+        <translation>පර්යේෂණාත්මක විශේෂාංගය සබල කරන්නද?</translation>
+    </message>
+    <message>
+        <source>When the &quot;virtual files&quot; mode is enabled no files will be downloaded initially. Instead, a tiny file will be created for each file that exists on the server. The contents can be downloaded by running these files or by using their context menu.
+
+The virtual files mode is mutually exclusive with selective sync. Currently unselected folders will be translated to online-only folders and your selective sync settings will be reset.
+
+Switching to this mode will abort any currently running synchronization.
+
+This is a new, experimental mode. If you decide to use it, please report any issues that come up.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable experimental placeholder mode</source>
+        <translation>පර්යේෂණාත්මක ස්ථාන දරණ මාදිලිය සබල කරන්න</translation>
+    </message>
+    <message>
+        <source>Stay safe</source>
+        <translation>පරිස්සමින් ඉන්න</translation>
+    </message>
+    <message>
+        <source>Select the local folder</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>FolderWizard</name>
+    <message>
+        <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;දෝෂය:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;අවවාදයයි:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
+        <translation>&lt;b&gt;දෝෂය:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
+        <translation>&lt;b&gt;අවවාදයයි:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizardSourcePage</name>
+    <message>
+        <source>Form</source>
+        <translation>පෝරමය</translation>
+    </message>
+    <message>
+        <source>Pick a local folder on your computer to sync</source>
+        <translation>සමමුහුර්ත කිරීමට ඔබේ පරිගණකයේ දේශීය ෆෝල්ඩරයක් තෝරන්න</translation>
+    </message>
+    <message>
+        <source>&amp;Choose...</source>
+        <translation>&amp;තෝරා...</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizardTargetPage</name>
+    <message>
+        <source>Form</source>
+        <translation>පෝරමය</translation>
+    </message>
+    <message>
+        <source>Select a remote destination folder</source>
+        <translation>දුරස්ථ ගමනාන්ත ෆෝල්ඩරයක් තෝරන්න</translation>
+    </message>
+    <message>
+        <source>Create Folder</source>
+        <translation>ෆෝල්ඩරය නිර්මාණය</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation>නැවුම් කරන්න</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>ෆෝල්ඩර</translation>
+    </message>
+</context>
+<context>
+    <name>InputWidget</name>
+    <message>
+        <source>Error text</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>LoginRequiredDialog</name>
+    <message>
+        <source>Login required</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>NotificationWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>පෝරමය</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet</source>
+        <translation>Lorem ipsum dolor sit amet</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
+        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </translation>
+    </message>
+</context>
+<context>
+    <name>OAuthCredentialsSetupWizardState</name>
     <message>
         <source>Error while trying to log in to OAuth2-enabled server.</source>
         <translation type="unfinished"/>
@@ -2986,219 +3575,25 @@ This is a new, experimental mode. If you decide to use it, please report any iss
     </message>
 </context>
 <context>
-    <name>APP::Wizard::ServerUrlSetupWizardPage</name>
+    <name>OAuthLoginWidget</name>
     <message>
-        <source>Welcome to %1</source>
+        <source>Open Browser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Copy URL to clipboard</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Retry</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::ServerUrlSetupWizardState</name>
+    <name>PopupComboWidget</name>
     <message>
-        <source>Invalid server URL</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Insecure connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>The connection to %1 is insecure.
-Are you sure you want to proceed?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Insecure server rejected by user</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::SetupWizardController</name>
-    <message>
-        <source>Invalid credentials</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Failed to retrieve user information from server</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::SetupWizardWindow</name>
-    <message>
-        <source>Finish</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next &gt;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cancel Setup</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Do you really want to cancel the account setup?</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>APP::ApplicationGui</name>
-    <message>
-        <source>Please sign in</source>
-        <translation>කරුණාකර පුරනය වන්න</translation>
-    </message>
-    <message>
-        <source>Folder %1: %2</source>
-        <translation>ෆෝල්ඩරය %1: %2</translation>
-    </message>
-    <message>
-        <source>Unresolved %1 conflicts</source>
-        <translation>නොවිසඳුනු %1 ගැටුම්</translation>
-    </message>
-    <message>
-        <source>Ignored errors %1</source>
-        <translation>නොසලකා හරින ලද දෝෂ %1</translation>
-    </message>
-    <message>
-        <source>There are no sync folders configured.</source>
-        <translation>වින්‍යාස කර ඇති සමමුහුර්ත ෆෝල්ඩර නොමැත.</translation>
-    </message>
-    <message>
-        <source>Log in...</source>
-        <translation>ඇතුල් වන්න...</translation>
-    </message>
-    <message>
-        <source>Log out</source>
-        <translation>ලොග් අවුට් වෙන්න</translation>
-    </message>
-    <message>
-        <source>Recent Changes</source>
-        <translation>මෑත වෙනස්කම්</translation>
-    </message>
-    <message>
-        <source>Open folder &apos;%1&apos;</source>
-        <translation>ෆෝල්ඩරය විවෘත කරන්න &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
-        <translation>%1 ගිණුමේ සේවාදායකය සහාය නොදක්වන %2අනුවාදයක් ධාවනය කරයි. සහාය නොදක්වන සේවාදායක අනුවාද සමඟ මෙම සේවාලාභියා භාවිතා කිරීම පරීක්ෂා නොකළ අතර අනතුරුදායක විය හැකිය. ඔබේම අවදානමකින් ඉදිරියට යන්න.</translation>
-    </message>
-    <message>
-        <source>Account %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Stop synchronization</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Create a new account</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Unknown status</source>
-        <translation>නොදන්නා තත්ත්වය</translation>
-    </message>
-    <message>
-        <source>Details...</source>
-        <translation>විස්තර...</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation>උදව්</translation>
-    </message>
-    <message>
-        <source>Resume synchronization</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quit %1</source>
-        <translation>%1ඉවත් කරන්න</translation>
-    </message>
-    <message>
-        <source>Disconnected from %1</source>
-        <translation>%1සිට විසන්ධි විය</translation>
-    </message>
-    <message>
-        <source>Unsupported Server Version</source>
-        <translation>සහාය නොදක්වන සේවාදායක අනුවාදය</translation>
-    </message>
-    <message>
-        <source>Disconnected</source>
-        <translation>විසන්ධි විය</translation>
-    </message>
-    <message>
-        <source>Disconnected from some accounts</source>
-        <translation>සමහර ගිණුම් වලින් විසන්ධි විය</translation>
-    </message>
-    <message>
-        <source>Disconnected from accounts:</source>
-        <translation>ගිණුම් වලින් විසන්ධි විය:</translation>
-    </message>
-    <message>
-        <source>Signed out</source>
-        <translation>වරනය විය</translation>
-    </message>
-    <message>
-        <source>Account synchronization is disabled</source>
-        <translation>ගිණුම් සමමුහුර්ත කිරීම අබල කර ඇත</translation>
-    </message>
-    <message>
-        <source>Synchronization is paused</source>
-        <translation>සමමුහුර්ත කිරීම විරාම කර ඇත</translation>
-    </message>
-    <message>
-        <source>Up to date (%1)</source>
-        <translation>යාවත්කාලීන (%1)</translation>
-    </message>
-    <message>
-        <source>No sync folders configured</source>
-        <translation>සමමුහුර්ත ෆෝල්ඩර කිසිවක් වින්‍යාස කර නැත</translation>
-    </message>
-    <message>
-        <source>Show %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>About %1</source>
-        <translation>%1පමණ</translation>
-    </message>
-    <message>
-        <source>No items synced recently</source>
-        <translation>මෑතකදී අයිතම කිසිවක් සමමුහුර්ත කර නැත</translation>
-    </message>
-    <message>
-        <source>Checking for changes in remote &apos;%1&apos;</source>
-        <translation>දුරස්ථ &apos;%1&apos;හි වෙනස්කම් සඳහා පරීක්ෂා කිරීම</translation>
-    </message>
-    <message>
-        <source>Checking for changes in local &apos;%1&apos;</source>
-        <translation>දේශීය &apos;%1&apos;හි වෙනස්කම් සඳහා පරීක්ෂා කිරීම</translation>
-    </message>
-    <message>
-        <source>Syncing %1 of %2  (%3 left)</source>
-        <translation>%2  හි %1 සමමුහුර්ත කිරීම (%3 වමේ)</translation>
-    </message>
-    <message>
-        <source>Syncing %1 of %2</source>
-        <translation>%2න් %1 සමමුහුර්ත කිරීම</translation>
-    </message>
-    <message>
-        <source>Syncing %1 (%2 left)</source>
-        <translation>%1 සමමුහුර්ත කරමින් (%2 ඉතිරි)</translation>
-    </message>
-    <message>
-        <source>Syncing %1</source>
-        <translation>සමමුහුර්ත කිරීම %1</translation>
-    </message>
-    <message>
-        <source>%1 (%2, %3)</source>
-        <translation>%1 (%2, %3)</translation>
+        <source>Form</source>
+        <translation>පෝරමය</translation>
     </message>
 </context>
 <context>
@@ -3235,6 +3630,10 @@ Are you sure you want to proceed?</source>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
+    <message>
+        <source>Enter a valid email address</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ResolveUrlJobFactory</name>
@@ -3252,29 +3651,17 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
-    <name>ServerUrlSetupWizardPage</name>
+    <name>SetupWidget</name>
     <message>
-        <source>Form</source>
-        <translation>පෝරමය</translation>
-    </message>
-    <message>
-        <source>What is your server&apos;s address?</source>
+        <source>Add New Account</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SetupWizardState</name>
     <message>
-        <source>Server URL</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Welcome</source>
         <translation>වෙත ඔබව සාදරයෙන් පිළිගනිමු</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation>පරිශීලක නාමය</translation>
     </message>
     <message>
         <source>Login</source>
@@ -3286,21 +3673,9 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
-    <name>SetupWizardWindow</name>
+    <name>SimpleResolveUrlJobFactory</name>
     <message>
-        <source>Add New Account</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dismiss</source>
-        <translation>අස් කරන්න</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>අවලංගු කරන්න</translation>
-    </message>
-    <message>
-        <source>&lt; Back</source>
+        <source>Could not detect compatible server at %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3432,6 +3807,25 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
+    <name>WaitPage</name>
+    <message>
+        <source>Form</source>
+        <translation>පෝරමය</translation>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Logging in to your account</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>WebFingerUserInfoJobFactory</name>
     <message>
         <source>Failed to retrieve user info</source>
@@ -3450,24 +3844,10 @@ Are you sure you want to proceed?</source>
     </message>
 </context>
 <context>
-    <name>ApplicationTheme::aboutVersions()</name>
-    <message>
-        <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ApplicationTheme::qtVer</name>
+    <name>ownCloudTheme::qtVer</name>
     <message>
         <source>%1 (Built against Qt %2)</source>
         <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ApplicationTheme::versionWithSha</name>
-    <message>
-        <source>%1 %2</source>
-        <translation>%1 %2</translation>
     </message>
 </context>
 <context>

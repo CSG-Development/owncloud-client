@@ -1,289 +1,13 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="nl">
 <context>
-    <name>AccountConfiguredWizardPage</name>
-    <message>
-        <source>✓ You&apos;re all set!</source>
-        <translation>✓ Alles is klaar!</translation>
-    </message>
-    <message>
-        <source>Advanced configuration</source>
-        <translation>Gedetailleerde instellingen</translation>
-    </message>
-    <message>
-        <source>Configure files download:</source>
-        <translation>Bestanden downloaden configureren:</translation>
-    </message>
-    <message>
-        <source>Download everything</source>
-        <translation>Alles downloaden</translation>
-    </message>
-    <message>
-        <source>After completing this wizard, you can set up folder synchronization manually.</source>
-        <translation>Na het afronden van deze wizard kunt u handmatig synchronisatiemappen instellen.</translation>
-    </message>
-    <message>
-        <source>Configure synchronization manually</source>
-        <translation>Synchronisatie handmatig configureren</translation>
-    </message>
-    <message>
-        <source>Choose local download directory:</source>
-        <translation>Kies locale download folder:</translation>
-    </message>
-    <message>
-        <source>Restore default value</source>
-        <translation>Terugzetten naar standaard waarde</translation>
-    </message>
-</context>
-<context>
-    <name>AppImageUpdateAvailableDialogUi</name>
-    <message>
-        <source>Update available</source>
-        <translation>Update beschikbaar</translation>
-    </message>
-    <message>
-        <source>Skip this version</source>
-        <translation>Deze versie overslaan</translation>
-    </message>
-</context>
-<context>
-    <name>AppProvider</name>
-    <message>
-        <source>Failed to open %1 in web. Error: %2.</source>
-        <translation>Kon %1 niet openen in browser. Foutmelding: %2.</translation>
-    </message>
-</context>
-<context>
-    <name>BasicLoginWidget</name>
-    <message>
-        <source>Username</source>
-        <translation>Gebruikersnaam</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Wachtwoord</translation>
-    </message>
-</context>
-<context>
-    <name>CheckBasicAuthJobFactory</name>
-    <message>
-        <source>Invalid reply received from server</source>
-        <translation>Ontving een ongeldig antwoord van de server</translation>
-    </message>
-</context>
-<context>
-    <name>ChecksumHeader</name>
-    <message>
-        <source>The checksum header is malformed: %1</source>
-        <translation>De checksum header is verkeerd geformatteerd: %1</translation>
-    </message>
-    <message>
-        <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
-        <translation>Het header controlegetal bevat een onbekend controlegetal type &apos;%1&apos;</translation>
-    </message>
-</context>
-<context>
-    <name>CommandLine</name>
-    <message>
-        <source>For more information, see %1</source>
-        <translation>Voor moor informatie, zie %1</translation>
-    </message>
-</context>
-<context>
-    <name>CommonStrings</name>
-    <message>
-        <source>file manager</source>
-        <translation>bestandsbeheer</translation>
-    </message>
-    <message>
-        <source>Show in %1</source>
-        <translation>Toon in %1</translation>
-    </message>
-    <message>
-        <source>Show in web browser</source>
-        <translation>Toon in browser</translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation>Kopiëren</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n Filter(s)</source>
-        <translation><numerusform>%n Filter(s)</numerusform><numerusform>%n Filter(s)</numerusform></translation>
-    </message>
-</context>
-<context>
-    <name>CredentialsSetupWizardPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulier</translation>
-    </message>
-</context>
-<context>
-    <name>DetermineAuthTypeJobFactory</name>
-    <message>
-        <source>Server did not ask for authorization</source>
-        <translation>Server vroeg niet naar autorisatie</translation>
-    </message>
-    <message>
-        <source>Failed to determine auth type: %1</source>
-        <translation>Kon authenticatietype niet bepalen: %1</translation>
-    </message>
-</context>
-<context>
-    <name>DiscoverWebFingerServiceJobFactory</name>
-    <message>
-        <source>Invalid reply received from server</source>
-        <translation>Ontving een ongeldig antwoord van de server</translation>
-    </message>
-</context>
-<context>
-    <name>FetchUserInfoJobFactory</name>
-    <message>
-        <source>Failed to retrieve user info</source>
-        <translation>Kon gebruiker informatie niet ophalen</translation>
-    </message>
-</context>
-<context>
-    <name>FileSystem</name>
-    <message>
-        <source>Can&apos;t rename %1, the file is currently in use</source>
-        <translation>Kan %1 niet verplaatsen, het bestand is in gebruik</translation>
-    </message>
-    <message>
-        <source>Could not make directories in trash</source>
-        <translation>Kon geen mappen aanmaken in de prullenbak</translation>
-    </message>
-    <message>
-        <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation>Kon &apos;%1&apos; niet naar &apos;%2&apos; verplaatsen</translation>
-    </message>
-    <message>
-        <source>Moving to the trash is not implemented on this platform</source>
-        <translation>Naar de prullenbak verplaatsen is niet geïmplementeerd op dit platform</translation>
-    </message>
-    <message>
-        <source>Could not remove folder</source>
-        <translation>Map kan niet verwijderd worden</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizard</name>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Foutmelding:&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Waarschuwing:&lt;/b&gt;  %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;Foutmelding:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;Waarschuwing:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizardSourcePage</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulier</translation>
-    </message>
-    <message>
-        <source>Pick a local folder on your computer to sync</source>
-        <translation>Kies een map op uw computer om te synchroniseren</translation>
-    </message>
-    <message>
-        <source>&amp;Choose...</source>
-        <translation>&amp;Kies...</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizardTargetPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulier</translation>
-    </message>
-    <message>
-        <source>Select a remote destination folder</source>
-        <translation>Kies een externe doelmap</translation>
-    </message>
-    <message>
-        <source>Create Folder</source>
-        <translation>Map aanmaken</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation>Vernieuwen</translation>
-    </message>
-    <message>
-        <source>Folders</source>
-        <translation>Mappen</translation>
-    </message>
-</context>
-<context>
-    <name>LegacyWebFingerSetupWizardPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulier</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation>Gebruikersnaam</translation>
-    </message>
-</context>
-<context>
-    <name>LoginRequiredDialog</name>
-    <message>
-        <source>Login required</source>
-        <translation>Inloggen vereist</translation>
-    </message>
-</context>
-<context>
-    <name>NotificationWidget</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulier</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet</source>
-        <translation>Lorem ipsum dolor sit amet</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
-        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </translation>
-    </message>
-</context>
-<context>
-    <name>OAuthLoginWidget</name>
-    <message>
-        <source>Open Browser</source>
-        <translation>Openen in browser</translation>
-    </message>
-    <message>
-        <source>Copy URL to clipboard</source>
-        <translation>Kopiëren URL naar klembord</translation>
-    </message>
-    <message>
-        <source>Retry</source>
-        <translation>Opniew</translation>
-    </message>
-</context>
-<context>
     <name>APP::AboutDialog</name>
-    <message>
-        <source>About</source>
-        <translation>Over</translation>
-    </message>
-    <message>
-        <source>Versions</source>
-        <translation>Versies</translation>
-    </message>
     <message>
         <source>About %1</source>
         <translation>Over %1</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -403,7 +127,7 @@
         <translation>Ondersteuning voor virtuele bestanden uitschakelen?</translation>
     </message>
     <message>
-        <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as 'available online only' will be downloaded.
+        <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as &apos;available online only&apos; will be downloaded.
 
 The only advantage of disabling virtual file support is that the selective sync feature will become available again.
 
@@ -437,6 +161,14 @@ Deze actie annuleert alle huidig lopende synchronisatie.</translation>
     <message>
         <source>Connected to %1.</source>
         <translation>Verbonden met %1.</translation>
+    </message>
+    <message>
+        <source>Show device info</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open share page</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Server %1 is temporarily unavailable.</source>
@@ -655,6 +387,161 @@ De update wordt uitgevoerd op de achtergrond en zal het bestaande AppImage besta
     </message>
 </context>
 <context>
+    <name>APP::ApplicationGui</name>
+    <message>
+        <source>Please sign in</source>
+        <translation>Log alstublieft in</translation>
+    </message>
+    <message>
+        <source>Folder %1: %2</source>
+        <translation>Map %1: %2</translation>
+    </message>
+    <message>
+        <source>Unresolved %1 conflicts</source>
+        <translation>Onopgeloste %1 conflicten</translation>
+    </message>
+    <message>
+        <source>Ignored errors %1</source>
+        <translation>Genegeerde fouten %1</translation>
+    </message>
+    <message>
+        <source>There are no sync folders configured.</source>
+        <translation>Er zijn geen synchronisatie-mappen geconfigureerd.</translation>
+    </message>
+    <message>
+        <source>Log in...</source>
+        <translation>Inloggen...</translation>
+    </message>
+    <message>
+        <source>Log out</source>
+        <translation>Afmelden</translation>
+    </message>
+    <message>
+        <source>Recent Changes</source>
+        <translation>Recente wijzigingen</translation>
+    </message>
+    <message>
+        <source>Open folder &apos;%1&apos;</source>
+        <translation>Open map &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
+        <translation>De server op account %1 gebruikt een niet-ondersteunde versie %2. Het gebruik van deze applicatie met niet-ondersteunde serverversies is niet getest en mogelijk gevaarlijk. Doorgaan is op eigen risico.</translation>
+    </message>
+    <message>
+        <source>Account %1</source>
+        <translation>Account %1</translation>
+    </message>
+    <message>
+        <source>Stop synchronization</source>
+        <translation>Stop synchronisatie</translation>
+    </message>
+    <message>
+        <source>Create a new account</source>
+        <translation>Maak een nieuw account</translation>
+    </message>
+    <message>
+        <source>Unknown status</source>
+        <translation>Onbekende status</translation>
+    </message>
+    <message>
+        <source>Details...</source>
+        <translation>Details ...</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation>Help</translation>
+    </message>
+    <message>
+        <source>Resume synchronization</source>
+        <translation>Hervat synchronisatie</translation>
+    </message>
+    <message>
+        <source>Quit %1</source>
+        <translation>%1 afsluiten</translation>
+    </message>
+    <message>
+        <source>Disconnected from %1</source>
+        <translation>Losgekoppeld van %1</translation>
+    </message>
+    <message>
+        <source>Unsupported Server Version</source>
+        <translation>Niet-ondersteunde server versie</translation>
+    </message>
+    <message>
+        <source>Disconnected</source>
+        <translation>Niet verbonden</translation>
+    </message>
+    <message>
+        <source>Disconnected from some accounts</source>
+        <translation>Losgekoppeld van sommige accounts</translation>
+    </message>
+    <message>
+        <source>Disconnected from accounts:</source>
+        <translation>Losgekoppeld van account:</translation>
+    </message>
+    <message>
+        <source>Signed out</source>
+        <translation>Afgemeld</translation>
+    </message>
+    <message>
+        <source>Account synchronization is disabled</source>
+        <translation>Account synchronisatie is uitgeschakeld</translation>
+    </message>
+    <message>
+        <source>Synchronization is paused</source>
+        <translation>Synchronisatie is gepauzeerd</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>Bijgewerkt (%1)</translation>
+    </message>
+    <message>
+        <source>No sync folders configured</source>
+        <translation>Geen synchronisatie-mappen geconfigureerd.</translation>
+    </message>
+    <message>
+        <source>Show %1</source>
+        <translation>Toon %1</translation>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation>Over %1</translation>
+    </message>
+    <message>
+        <source>No items synced recently</source>
+        <translation>Recent niets gesynchroniseerd</translation>
+    </message>
+    <message>
+        <source>Checking for changes in remote &apos;%1&apos;</source>
+        <translation>Aan het controleren op wijzigingen op server &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Checking for changes in local &apos;%1&apos;</source>
+        <translation>Aan het controleren op veranderingen in lokale &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Syncing %1 of %2  (%3 left)</source>
+        <translation>Sync %1 van %2  (%3 over)</translation>
+    </message>
+    <message>
+        <source>Syncing %1 of %2</source>
+        <translation>Synchroniseren %1 van %2</translation>
+    </message>
+    <message>
+        <source>Syncing %1 (%2 left)</source>
+        <translation>Sync %1 (%2 over)</translation>
+    </message>
+    <message>
+        <source>Syncing %1</source>
+        <translation>Synchroniseren %1</translation>
+    </message>
+    <message>
+        <source>%1 (%2, %3)</source>
+        <translation>%1 (%2, %3)</translation>
+    </message>
+</context>
+<context>
     <name>APP::AskExperimentalVirtualFilesFeatureMessageBox</name>
     <message>
         <source>Enable experimental feature?</source>
@@ -717,6 +604,13 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
     <message>
         <source>Failed to parse credentials %1</source>
         <translation>Kon inloggegevens niet verwerken %1</translation>
+    </message>
+</context>
+<context>
+    <name>APP::CuratorPropagator</name>
+    <message>
+        <source>File %1 is currently in use</source>
+        <translation>Bestand %1 is in gebruik</translation>
     </message>
 </context>
 <context>
@@ -883,7 +777,7 @@ Dit betekent dat de synchronisatie-applicatie lokale wijzigingen mogelijk niet d
 %1</translation>
     </message>
     <message>
-        <source>All files in the sync folder '%1' folder were deleted on the server.
+        <source>All files in the sync folder &apos;%1&apos; folder were deleted on the server.
 These deletes will be synchronized to your local sync folder, making such files unavailable unless you have a right to restore. 
 If you decide to keep the files, they will be re-synced with the server if you have rights to do so.
 If you decide to delete the files, they will be unavailable to you, unless you are the owner.</source>
@@ -893,7 +787,7 @@ Als u de bestanden wilt behouden, worden ze opnieuw gesynchroniseerd met de serv
 Als u de bestanden wilt verwijderen, worden ze niet beschikbaar, tenzij u de eigenaar bent.</translation>
     </message>
     <message>
-        <source>All the files in your local sync folder '%1' were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
+        <source>All the files in your local sync folder &apos;%1&apos; were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
 Are you sure you want to sync those actions with the server?
 If this was an accident and you decide to keep your files, they will be re-synced from the server.</source>
         <translation>Alle bestanden in de lokale syncmap &apos;%1&apos; werden verwijderd van de server. Deze verwijderingen worden gesynchroniseerd naar uw server, Weet u zeker dat ik deze acties wilt synchroniseren met de server? 
@@ -981,10 +875,6 @@ Please consider removing this folder from the account and adding it again.</sour
         <translation>Meerdere accounts delen de map %1.
 Deze configuratie wordt niet langer ondersteund en kan tot dataverlies leiden.
 Overweeg om deze map te verwijderen van dit account en om hem opnieuw toe te voegen.</translation>
-    </message>
-    <message>
-        <source>%1 - %2@%3</source>
-        <translation>%1 - %2@%3</translation>
     </message>
 </context>
 <context>
@@ -1415,6 +1305,13 @@ Items waar verwijderen is toegestaan zullen gewist worden als ze voorkomen dat e
         <translation>Er kunnen geen wijzigingen worden geschreven naar %1</translation>
     </message>
     <message>
+        <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
+        <translation>Deze entry is door het systeem geleverd op &apos;%1&apos; en kan niet worden aangepast in deze sessie.</translation>
+    </message>
+</context>
+<context>
+    <name>APP::InpDlg</name>
+    <message>
         <source>Add Ignore Pattern</source>
         <translation>Negeerpatroon toevoegen</translation>
     </message>
@@ -1423,8 +1320,12 @@ Items waar verwijderen is toegestaan zullen gewist worden als ze voorkomen dat e
         <translation>Voeg nieuw negeerpatroon toe:</translation>
     </message>
     <message>
-        <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
-        <translation>Deze entry is door het systeem geleverd op &apos;%1&apos; en kan niet worden aangepast in deze sessie.</translation>
+        <source>OK</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuleren</translation>
     </message>
 </context>
 <context>
@@ -1796,13 +1697,6 @@ vragen om extra autorisaties tijdens installatie.</translation>
     <message>
         <source>Update Check</source>
         <translation>Controle update</translation>
-    </message>
-</context>
-<context>
-    <name>APP::CuratorPropagator</name>
-    <message>
-        <source>File %1 is currently in use</source>
-        <translation>Bestand %1 is in gebruik</translation>
     </message>
 </context>
 <context>
@@ -2317,16 +2211,16 @@ vragen om extra autorisaties tijdens installatie.</translation>
         <translation>Weet je zeker dat je %1 wilt afsluiten?</translation>
     </message>
     <message>
+        <source>%1 - %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Account</source>
         <translation>Account</translation>
     </message>
     <message>
         <source>MainWindow</source>
         <translation>MainWindow</translation>
-    </message>
-    <message>
-        <source>Hide</source>
-        <translation>Verbergen</translation>
     </message>
 </context>
 <context>
@@ -2342,6 +2236,10 @@ vragen om extra autorisaties tijdens installatie.</translation>
     <message>
         <source>Curator Path:</source>
         <translation>OwnCloud Pad:</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>%1 Sharing</source>
@@ -2753,6 +2651,10 @@ vragen om extra autorisaties tijdens installatie.</translation>
         <translation>Kan de lokale sync database niet openen of aanmaken. Controleer of je de juiste lees- en schrijfrechten in de lokale sync-map hebt.</translation>
     </message>
     <message>
+        <source>Synchronization aborted due to IP address change</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Disk space is low: Downloads that would reduce free space below %1 were skipped.</source>
         <translation>Onvoldoende schijfruimte: Downloads dat je vrije schijfruime zou reduceren tot onder %1 zijn overgeslagen.</translation>
     </message>
@@ -2878,14 +2780,7 @@ vragen om extra autorisaties tijdens installatie.</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::AccountConfiguredSetupWizardState</name>
-    <message>
-        <source>Invalid local download directory: %1</source>
-        <translation>Ongeldige lokale download folder: %1</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::AccountConfiguredWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredPage</name>
     <message>
         <source>Use &amp;virtual files instead of downloading content immediately</source>
         <translation>Gebruik &amp;virtuele bestanden in plaats van bestanden downloaden.</translation>
@@ -2936,62 +2831,762 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
     </message>
 </context>
 <context>
-    <name>APP::Wizard::BasicCredentialsSetupWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredState</name>
     <message>
-        <source>Please enter your credentials to log in to your account.</source>
-        <translation>Geef de inloggegevens op voor het account.</translation>
-    </message>
-    <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Aan het verbinden met &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
+        <source>Invalid local download directory: %1</source>
+        <translation>Ongeldige lokale download folder: %1</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::BasicCredentialsSetupWizardState</name>
+    <name>APP::Wizard::CredentialsState</name>
     <message>
         <source>Invalid credentials</source>
         <translation>Ongeldige inloggegevens</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::LegacyWebFingerSetupWizardPage</name>
+    <name>APP::Wizard::SetupController</name>
     <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Aan het verbinden met &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
+        <source>OS state: %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Please enter your %1:</source>
-        <translation>Voer uw %1 in:</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::LegacyWebFingerSetupWizardState</name>
-    <message>
-        <source>Failed to parse WebFinger response: %1</source>
-        <translation>Fout bij het verwerken van WebFinger antwoord: %1</translation>
+        <source>&lt;empty&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>WebFinger endpoint did not send href attribute</source>
-        <translation>WebFinger endpoint stuurde geen href attribuut</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::OAuthCredentialsSetupWizardPage</name>
-    <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Aan het verbinden met &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
+        <source>OOBE is not done</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Reopen Browser</source>
-        <translation>Heropen browser</translation>
+        <source>Invalid credentials</source>
+        <translation>Ongeldige inloggegevens</translation>
     </message>
     <message>
-        <source>Please use your browser to log in to %1.</source>
-        <translation>Gebruik de browser om bij %1 in te loggen.</translation>
+        <source>Failed to retrieve user information from server</source>
+        <translation>Het ophalen van gebruikersinformatie van de server heeft gefaald</translation>
+    </message>
+    <message>
+        <source>Invalid local download directory: %1</source>
+        <translation>Ongeldige lokale download folder: %1</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::OAuthCredentialsSetupWizardState</name>
+    <name>APP::Wizard::SetupWidget</name>
+    <message>
+        <source>Cancel Setup</source>
+        <translation>Annuleer installatie</translation>
+    </message>
+    <message>
+        <source>Do you really want to cancel the account setup?</source>
+        <translation>Weet u zeker dat u het instellen van uw account wilt annuleren?</translation>
+    </message>
+</context>
+<context>
+    <name>AccountConfiguredPage</name>
+    <message>
+        <source>✓ You&apos;re all set!</source>
+        <translation>✓ Alles is klaar!</translation>
+    </message>
+    <message>
+        <source>Advanced configuration</source>
+        <translation>Gedetailleerde instellingen</translation>
+    </message>
+    <message>
+        <source>Configure files download:</source>
+        <translation>Bestanden downloaden configureren:</translation>
+    </message>
+    <message>
+        <source>Download everything</source>
+        <translation>Alles downloaden</translation>
+    </message>
+    <message>
+        <source>After completing this wizard, you can set up folder synchronization manually.</source>
+        <translation>Na het afronden van deze wizard kunt u handmatig synchronisatiemappen instellen.</translation>
+    </message>
+    <message>
+        <source>Configure synchronization manually</source>
+        <translation>Synchronisatie handmatig configureren</translation>
+    </message>
+    <message>
+        <source>Choose local download directory:</source>
+        <translation>Kies locale download folder:</translation>
+    </message>
+    <message>
+        <source>Restore default value</source>
+        <translation>Terugzetten naar standaard waarde</translation>
+    </message>
+</context>
+<context>
+    <name>AppImageUpdateAvailableDialogUi</name>
+    <message>
+        <source>Update available</source>
+        <translation>Update beschikbaar</translation>
+    </message>
+    <message>
+        <source>Skip this version</source>
+        <translation>Deze versie overslaan</translation>
+    </message>
+</context>
+<context>
+    <name>AppProvider</name>
+    <message>
+        <source>Failed to open %1 in web. Error: %2.</source>
+        <translation>Kon %1 niet openen in browser. Foutmelding: %2.</translation>
+    </message>
+</context>
+<context>
+    <name>ApplicationTheme::aboutVersions()</name>
+    <message>
+        <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
+        <translation>%1 %2 %7%8biliotheken Qt %3, %4%7Gebruikt virtuele bestandenplugin: %5%7%6</translation>
+    </message>
+</context>
+<context>
+    <name>ApplicationTheme::versionWithSha</name>
+    <message>
+        <source>%1 %2</source>
+        <translation>%1 %2</translation>
+    </message>
+</context>
+<context>
+    <name>BasicLoginWidget</name>
+    <message>
+        <source>Username</source>
+        <translation>Gebruikersnaam</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Wachtwoord</translation>
+    </message>
+</context>
+<context>
+    <name>CheckBasicAuthJobFactory</name>
+    <message>
+        <source>Invalid reply received from server</source>
+        <translation>Ontving een ongeldig antwoord van de server</translation>
+    </message>
+</context>
+<context>
+    <name>ChecksumHeader</name>
+    <message>
+        <source>The checksum header is malformed: %1</source>
+        <translation>De checksum header is verkeerd geformatteerd: %1</translation>
+    </message>
+    <message>
+        <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
+        <translation>Het header controlegetal bevat een onbekend controlegetal type &apos;%1&apos;</translation>
+    </message>
+</context>
+<context>
+    <name>CodeDialog</name>
+    <message>
+        <source>Allow remote access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>We have sent a one-time code to authorize this device to access your Personal Cloud. Check your email for the code and enter it here. If you do not see it in your inbox, please check your spam folder.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Allow access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Resend code</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CodeDialogController</name>
+    <message>
+        <source>Incorrect code</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your code has expired</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CodeInputWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulier</translation>
+    </message>
+    <message>
+        <source>Paste code</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ComboWidget</name>
+    <message>
+        <source>button_icon_tool</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Error text</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CommandLine</name>
+    <message>
+        <source>For more information, see %1</source>
+        <translation>Voor moor informatie, zie %1</translation>
+    </message>
+</context>
+<context>
+    <name>CommonStrings</name>
+    <message>
+        <source>file manager</source>
+        <translation>bestandsbeheer</translation>
+    </message>
+    <message>
+        <source>Show in %1</source>
+        <translation>Toon in %1</translation>
+    </message>
+    <message>
+        <source>Show Files in web browser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show Photos in web browser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopiëren</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n Filter(s)</source>
+        <translation><numerusform>%n Filter(s)</numerusform><numerusform>%n Filter(s)</numerusform></translation>
+    </message>
+</context>
+<context>
+    <name>ConnectErrorPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulier</translation>
+    </message>
+    <message>
+        <source>Unable to connect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol&gt;&lt;li&gt;Verify that the device is properly connected to the network and that the internet connection is stable&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;2&quot;&gt;&lt;li&gt;Make sure the device is powered on and functioning correctly&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;3&quot;&gt;&lt;li&gt;Check firewall settings to confirm they are not blocking the connection&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;4&quot;&gt;&lt;li&gt;If using a wireless connection, confirm the device is within range of the router&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;5&quot;&gt;&lt;li&gt;Your device and mobile phone must be on the same network&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>If you continue to experience issues, please contact our &lt;a href=&quot;https://seagare.com&quot;&gt;Support team&lt;/a&gt; for further assistance.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Opniew</translation>
+    </message>
+</context>
+<context>
+    <name>CredentialsPage</name>
+    <message>
+        <source>helper_frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Can’t find your device?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Password</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuleren</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>Login</translation>
+    </message>
+    <message>
+        <source>button_accent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting to</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Wachtwoord</translation>
+    </message>
+    <message>
+        <source>Enter a valid email address and password</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Invalid URL</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DetermineAuthTypeJobFactory</name>
+    <message>
+        <source>Server did not ask for authorization</source>
+        <translation>Server vroeg niet naar autorisatie</translation>
+    </message>
+    <message>
+        <source>Failed to determine auth type: %1</source>
+        <translation>Kon authenticatietype niet bepalen: %1</translation>
+    </message>
+</context>
+<context>
+    <name>DevModel</name>
+    <message>
+        <source>true</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>false</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Url</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OOBE Done</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DevWidget</name>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>---</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friendlyName</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>hostname</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>deviceID</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>certificateCN</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>:</source>
+        <translation>:</translation>
+    </message>
+    <message>
+        <source>origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>deviceType</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Query about and status</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Apply to account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fetch from account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Simulate network change</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>Onbekend</translation>
+    </message>
+    <message>
+        <source>Local</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Public</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remote</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mDNS</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Static</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DiscoverWebFingerServiceJobFactory</name>
+    <message>
+        <source>Invalid reply received from server</source>
+        <translation>Ontving een ongeldig antwoord van de server</translation>
+    </message>
+</context>
+<context>
+    <name>EmailPage</name>
+    <message>
+        <source>helper_frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuleren</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>Login</translation>
+    </message>
+    <message>
+        <source>Email</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>EmailPageController</name>
+    <message>
+        <source>Invalid email</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Not allowed. Contact the device owner.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ErrorDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulier</translation>
+    </message>
+    <message>
+        <source>Access to Personal Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuleren</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Opniew</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ErrorDialogController</name>
+    <message>
+        <source>Access to Personal Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unable to connect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Email not registered</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Could not reach your Personal Cloud.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>This email isn’t authorized to access this device. Please contact the owner.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>FetchUserInfoJobFactory</name>
+    <message>
+        <source>Failed to retrieve user info</source>
+        <translation>Kon gebruiker informatie niet ophalen</translation>
+    </message>
+</context>
+<context>
+    <name>FileSystem</name>
+    <message>
+        <source>Can&apos;t rename %1, the file is currently in use</source>
+        <translation>Kan %1 niet verplaatsen, het bestand is in gebruik</translation>
+    </message>
+    <message>
+        <source>Could not make directories in trash</source>
+        <translation>Kon geen mappen aanmaken in de prullenbak</translation>
+    </message>
+    <message>
+        <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>Kon &apos;%1&apos; niet naar &apos;%2&apos; verplaatsen</translation>
+    </message>
+    <message>
+        <source>Moving to the trash is not implemented on this platform</source>
+        <translation>Naar de prullenbak verplaatsen is niet geïmplementeerd op dit platform</translation>
+    </message>
+    <message>
+        <source>Could not remove folder</source>
+        <translation>Map kan niet verwijderd worden</translation>
+    </message>
+</context>
+<context>
+    <name>FinishedPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulier</translation>
+    </message>
+    <message>
+        <source>You&apos;re all set!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advanced configuration</source>
+        <translation>Gedetailleerde instellingen</translation>
+    </message>
+    <message>
+        <source>Configure files download:</source>
+        <translation>Bestanden downloaden configureren:</translation>
+    </message>
+    <message>
+        <source>Download everything (recommended)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Configure synchronization manually</source>
+        <translation>Synchronisatie handmatig configureren</translation>
+    </message>
+    <message>
+        <source>Use &amp;virtual files instead of downloading content immediately</source>
+        <translation>Gebruik &amp;virtuele bestanden in plaats van bestanden downloaden.</translation>
+    </message>
+    <message>
+        <source>Choose local download directory:</source>
+        <translation>Kies locale download folder:</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The virtual filesystem feature is not available for this installation.</source>
+        <translation>De feature virtueel bestandssysteem is niet beschikbaar voor deze installatie.</translation>
+    </message>
+    <message>
+        <source>The virtual filesystem feature is not stable yet. Use with caution.</source>
+        <translation>De feature virtueel bestandssysteem is nog niet stabiel. Wees voorzichtig bij het gebruik.</translation>
+    </message>
+    <message>
+        <source>Enable experimental feature?</source>
+        <translation>Experimentele feature inschakelen?</translation>
+    </message>
+    <message>
+        <source>When the &quot;virtual files&quot; mode is enabled no files will be downloaded initially. Instead, a tiny file will be created for each file that exists on the server. The contents can be downloaded by running these files or by using their context menu.
+
+The virtual files mode is mutually exclusive with selective sync. Currently unselected folders will be translated to online-only folders and your selective sync settings will be reset.
+
+Switching to this mode will abort any currently running synchronization.
+
+This is a new, experimental mode. If you decide to use it, please report any issues that come up.</source>
+        <translation>Als de &quot;virtuele bestanden&quot;-modus is ingeschakeld, worden in het begin geen bestanden gedownload. In plaats hiervan wordt een klein &quot;%1&quot; bestand aangemaakt voor elk bestand dat bestaat op de server. De inhoud kan worden gedownload door deze bestanden uit te voeren, of door hun contextmenu&apos;s te gebruiken.
+
+De virtuele bestanden-modus is wederzijds exclusief met selectieve synchronisatie. Op dit moment worden ongeselecteerde mappen vertaald naar alleen-online mappen en je selectieve synchronisatie-instellingen zullen worden gereset.
+
+Overschakelen naar deze modus zal alle op dit moment lopende synchronisaties onderbreken.
+
+Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld dan alsjeblieft alle problemen waar je tegenaan loopt.</translation>
+    </message>
+    <message>
+        <source>Enable experimental placeholder mode</source>
+        <translation>Experimentele tijdelijke plaatsvervanger modus inschakelen?</translation>
+    </message>
+    <message>
+        <source>Stay safe</source>
+        <translation>Blijf veilig</translation>
+    </message>
+    <message>
+        <source>Select the local folder</source>
+        <translation>Selecteer de lokale folder</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizard</name>
+    <message>
+        <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;Foutmelding:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;Waarschuwing:&lt;/b&gt;  %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
+        <translation>&lt;b&gt;Foutmelding:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
+        <translation>&lt;b&gt;Waarschuwing:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizardSourcePage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulier</translation>
+    </message>
+    <message>
+        <source>Pick a local folder on your computer to sync</source>
+        <translation>Kies een map op uw computer om te synchroniseren</translation>
+    </message>
+    <message>
+        <source>&amp;Choose...</source>
+        <translation>&amp;Kies...</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizardTargetPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulier</translation>
+    </message>
+    <message>
+        <source>Select a remote destination folder</source>
+        <translation>Kies een externe doelmap</translation>
+    </message>
+    <message>
+        <source>Create Folder</source>
+        <translation>Map aanmaken</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation>Vernieuwen</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>Mappen</translation>
+    </message>
+</context>
+<context>
+    <name>InputWidget</name>
+    <message>
+        <source>Error text</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>LoginRequiredDialog</name>
+    <message>
+        <source>Login required</source>
+        <translation>Inloggen vereist</translation>
+    </message>
+</context>
+<context>
+    <name>NotificationWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulier</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet</source>
+        <translation>Lorem ipsum dolor sit amet</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
+        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </translation>
+    </message>
+</context>
+<context>
+    <name>OAuthCredentialsSetupWizardState</name>
     <message>
         <source>Error while trying to log in to OAuth2-enabled server.</source>
         <translation>Fout bij het inloggen bij een OAuth2 server.</translation>
@@ -3006,220 +3601,25 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
     </message>
 </context>
 <context>
-    <name>APP::Wizard::ServerUrlSetupWizardPage</name>
+    <name>OAuthLoginWidget</name>
     <message>
-        <source>Welcome to %1</source>
-        <translation>Welkom bij %1</translation>
+        <source>Open Browser</source>
+        <translation>Openen in browser</translation>
+    </message>
+    <message>
+        <source>Copy URL to clipboard</source>
+        <translation>Kopiëren URL naar klembord</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Opniew</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::ServerUrlSetupWizardState</name>
+    <name>PopupComboWidget</name>
     <message>
-        <source>Invalid server URL</source>
-        <translation>Ongeldige server URL</translation>
-    </message>
-    <message>
-        <source>Insecure connection</source>
-        <translation>Onbeveiligde verbinding</translation>
-    </message>
-    <message>
-        <source>The connection to %1 is insecure.
-Are you sure you want to proceed?</source>
-        <translation>De verbinding met %1 is niet beveiligd.
-Weet U zeker dat U verder wilt gaan?</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Bevestigen</translation>
-    </message>
-    <message>
-        <source>Insecure server rejected by user</source>
-        <translation>Onveilige server afgewezen door gebruiker</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::SetupWizardController</name>
-    <message>
-        <source>Invalid credentials</source>
-        <translation>Ongeldige inloggegevens</translation>
-    </message>
-    <message>
-        <source>Failed to retrieve user information from server</source>
-        <translation>Het ophalen van gebruikersinformatie van de server heeft gefaald</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::SetupWizardWindow</name>
-    <message>
-        <source>Finish</source>
-        <translation>Klaar</translation>
-    </message>
-    <message>
-        <source>Next &gt;</source>
-        <translation>Volgende &gt;</translation>
-    </message>
-    <message>
-        <source>Cancel Setup</source>
-        <translation>Annuleer installatie</translation>
-    </message>
-    <message>
-        <source>Do you really want to cancel the account setup?</source>
-        <translation>Weet u zeker dat u het instellen van uw account wilt annuleren?</translation>
-    </message>
-</context>
-<context>
-    <name>APP::ApplicationGui</name>
-    <message>
-        <source>Please sign in</source>
-        <translation>Log alstublieft in</translation>
-    </message>
-    <message>
-        <source>Folder %1: %2</source>
-        <translation>Map %1: %2</translation>
-    </message>
-    <message>
-        <source>Unresolved %1 conflicts</source>
-        <translation>Onopgeloste %1 conflicten</translation>
-    </message>
-    <message>
-        <source>Ignored errors %1</source>
-        <translation>Genegeerde fouten %1</translation>
-    </message>
-    <message>
-        <source>There are no sync folders configured.</source>
-        <translation>Er zijn geen synchronisatie-mappen geconfigureerd.</translation>
-    </message>
-    <message>
-        <source>Log in...</source>
-        <translation>Inloggen...</translation>
-    </message>
-    <message>
-        <source>Log out</source>
-        <translation>Afmelden</translation>
-    </message>
-    <message>
-        <source>Recent Changes</source>
-        <translation>Recente wijzigingen</translation>
-    </message>
-    <message>
-        <source>Open folder &apos;%1&apos;</source>
-        <translation>Open map &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
-        <translation>De server op account %1 gebruikt een niet-ondersteunde versie %2. Het gebruik van deze applicatie met niet-ondersteunde serverversies is niet getest en mogelijk gevaarlijk. Doorgaan is op eigen risico.</translation>
-    </message>
-    <message>
-        <source>Account %1</source>
-        <translation>Account %1</translation>
-    </message>
-    <message>
-        <source>Stop synchronization</source>
-        <translation>Stop synchronisatie</translation>
-    </message>
-    <message>
-        <source>Create a new account</source>
-        <translation>Maak een nieuw account</translation>
-    </message>
-    <message>
-        <source>Unknown status</source>
-        <translation>Onbekende status</translation>
-    </message>
-    <message>
-        <source>Details...</source>
-        <translation>Details ...</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation>Help</translation>
-    </message>
-    <message>
-        <source>Resume synchronization</source>
-        <translation>Hervat synchronisatie</translation>
-    </message>
-    <message>
-        <source>Quit %1</source>
-        <translation>%1 afsluiten</translation>
-    </message>
-    <message>
-        <source>Disconnected from %1</source>
-        <translation>Losgekoppeld van %1</translation>
-    </message>
-    <message>
-        <source>Unsupported Server Version</source>
-        <translation>Niet-ondersteunde server versie</translation>
-    </message>
-    <message>
-        <source>Disconnected</source>
-        <translation>Niet verbonden</translation>
-    </message>
-    <message>
-        <source>Disconnected from some accounts</source>
-        <translation>Losgekoppeld van sommige accounts</translation>
-    </message>
-    <message>
-        <source>Disconnected from accounts:</source>
-        <translation>Losgekoppeld van account:</translation>
-    </message>
-    <message>
-        <source>Signed out</source>
-        <translation>Afgemeld</translation>
-    </message>
-    <message>
-        <source>Account synchronization is disabled</source>
-        <translation>Account synchronisatie is uitgeschakeld</translation>
-    </message>
-    <message>
-        <source>Synchronization is paused</source>
-        <translation>Synchronisatie is gepauzeerd</translation>
-    </message>
-    <message>
-        <source>Up to date (%1)</source>
-        <translation>Bijgewerkt (%1)</translation>
-    </message>
-    <message>
-        <source>No sync folders configured</source>
-        <translation>Geen synchronisatie-mappen geconfigureerd.</translation>
-    </message>
-    <message>
-        <source>Show %1</source>
-        <translation>Toon %1</translation>
-    </message>
-    <message>
-        <source>About %1</source>
-        <translation>Over %1</translation>
-    </message>
-    <message>
-        <source>No items synced recently</source>
-        <translation>Recent niets gesynchroniseerd</translation>
-    </message>
-    <message>
-        <source>Checking for changes in remote &apos;%1&apos;</source>
-        <translation>Aan het controleren op wijzigingen op server &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Checking for changes in local &apos;%1&apos;</source>
-        <translation>Aan het controleren op veranderingen in lokale &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Syncing %1 of %2  (%3 left)</source>
-        <translation>Sync %1 van %2  (%3 over)</translation>
-    </message>
-    <message>
-        <source>Syncing %1 of %2</source>
-        <translation>Synchroniseren %1 van %2</translation>
-    </message>
-    <message>
-        <source>Syncing %1 (%2 left)</source>
-        <translation>Sync %1 (%2 over)</translation>
-    </message>
-    <message>
-        <source>Syncing %1</source>
-        <translation>Synchroniseren %1</translation>
-    </message>
-    <message>
-        <source>%1 (%2, %3)</source>
-        <translation>%1 (%2, %3)</translation>
+        <source>Form</source>
+        <translation>Formulier</translation>
     </message>
 </context>
 <context>
@@ -3256,6 +3656,10 @@ Weet U zeker dat U verder wilt gaan?</translation>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
+    <message>
+        <source>Enter a valid email address</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ResolveUrlJobFactory</name>
@@ -3273,29 +3677,17 @@ Weet U zeker dat U verder wilt gaan?</translation>
     </message>
 </context>
 <context>
-    <name>ServerUrlSetupWizardPage</name>
+    <name>SetupWidget</name>
     <message>
-        <source>Form</source>
-        <translation>Formulier</translation>
-    </message>
-    <message>
-        <source>What is your server&apos;s address?</source>
-        <translation>Wat is uw serveradres?</translation>
+        <source>Add New Account</source>
+        <translation>Nieuw account toevoegen</translation>
     </message>
 </context>
 <context>
     <name>SetupWizardState</name>
     <message>
-        <source>Server URL</source>
-        <translation>Server URL</translation>
-    </message>
-    <message>
         <source>Welcome</source>
         <translation>Welkom</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation>Gebruikersnaam</translation>
     </message>
     <message>
         <source>Login</source>
@@ -3307,22 +3699,10 @@ Weet U zeker dat U verder wilt gaan?</translation>
     </message>
 </context>
 <context>
-    <name>SetupWizardWindow</name>
+    <name>SimpleResolveUrlJobFactory</name>
     <message>
-        <source>Add New Account</source>
-        <translation>Nieuw account toevoegen</translation>
-    </message>
-    <message>
-        <source>Dismiss</source>
-        <translation>Terzijde leggen</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Annuleren</translation>
-    </message>
-    <message>
-        <source>&lt; Back</source>
-        <translation>&lt; Terug</translation>
+        <source>Could not detect compatible server at %1</source>
+        <translation>Kon geen compatibele server detecteren bij %1</translation>
     </message>
 </context>
 <context>
@@ -3453,6 +3833,25 @@ Weet U zeker dat U verder wilt gaan?</translation>
     </message>
 </context>
 <context>
+    <name>WaitPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulier</translation>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Logging in to your account</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>WebFingerUserInfoJobFactory</name>
     <message>
         <source>Failed to retrieve user info</source>
@@ -3471,24 +3870,10 @@ Weet U zeker dat U verder wilt gaan?</translation>
     </message>
 </context>
 <context>
-    <name>ApplicationTheme::aboutVersions()</name>
-    <message>
-        <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
-        <translation>%1 %2 %7%8biliotheken Qt %3, %4%7Gebruikt virtuele bestandenplugin: %5%7%6</translation>
-    </message>
-</context>
-<context>
-    <name>ApplicationTheme::qtVer</name>
+    <name>ownCloudTheme::qtVer</name>
     <message>
         <source>%1 (Built against Qt %2)</source>
         <translation>%1 (Gebouwd met Qt %2)</translation>
-    </message>
-</context>
-<context>
-    <name>ApplicationTheme::versionWithSha</name>
-    <message>
-        <source>%1 %2</source>
-        <translation>%1 %2</translation>
     </message>
 </context>
 <context>

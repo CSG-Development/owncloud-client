@@ -1,289 +1,13 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sq">
 <context>
-    <name>AccountConfiguredWizardPage</name>
-    <message>
-        <source>✓ You&apos;re all set!</source>
-        <translation>✓ Jeni gati!</translation>
-    </message>
-    <message>
-        <source>Advanced configuration</source>
-        <translation>Formësim i mëtejshëm</translation>
-    </message>
-    <message>
-        <source>Configure files download:</source>
-        <translation>Formësoni hkarkim kartelash:</translation>
-    </message>
-    <message>
-        <source>Download everything</source>
-        <translation>Shkarko gjithçka</translation>
-    </message>
-    <message>
-        <source>After completing this wizard, you can set up folder synchronization manually.</source>
-        <translation>Pas plotësimit të këtyre hapave, mun të ujdisni dorazi njëkohësim dosjesh.</translation>
-    </message>
-    <message>
-        <source>Configure synchronization manually</source>
-        <translation>Formësoni njëkohësim dorazi</translation>
-    </message>
-    <message>
-        <source>Choose local download directory:</source>
-        <translation>Zgjidhni drejtori vendore shkarkimesh:</translation>
-    </message>
-    <message>
-        <source>Restore default value</source>
-        <translation>Rikthe vlerën parazgjedhje</translation>
-    </message>
-</context>
-<context>
-    <name>AppImageUpdateAvailableDialogUi</name>
-    <message>
-        <source>Update available</source>
-        <translation>Ka një përditësim gati</translation>
-    </message>
-    <message>
-        <source>Skip this version</source>
-        <translation>Anashkaloje këtë version</translation>
-    </message>
-</context>
-<context>
-    <name>AppProvider</name>
-    <message>
-        <source>Failed to open %1 in web. Error: %2.</source>
-        <translation>S’u arrit të hapej %1 në web. Gabim: %2.</translation>
-    </message>
-</context>
-<context>
-    <name>BasicLoginWidget</name>
-    <message>
-        <source>Username</source>
-        <translation>Emër përdoruesi</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Fjalëkalim</translation>
-    </message>
-</context>
-<context>
-    <name>CheckBasicAuthJobFactory</name>
-    <message>
-        <source>Invalid reply received from server</source>
-        <translation>U mor përgjigje e pavlefshme nga shërbyesi</translation>
-    </message>
-</context>
-<context>
-    <name>ChecksumHeader</name>
-    <message>
-        <source>The checksum header is malformed: %1</source>
-        <translation>Kryet e checksum-it janë të keqformuara: %1</translation>
-    </message>
-    <message>
-        <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
-        <translation>Kryet e checksum-it përmbanin një lloj të panjohur checksum-i &apos;%1&apos;</translation>
-    </message>
-</context>
-<context>
-    <name>CommandLine</name>
-    <message>
-        <source>For more information, see %1</source>
-        <translation>Për më tepër hollësi, shihni %1</translation>
-    </message>
-</context>
-<context>
-    <name>CommonStrings</name>
-    <message>
-        <source>file manager</source>
-        <translation>përgjegjës kartelash</translation>
-    </message>
-    <message>
-        <source>Show in %1</source>
-        <translation>Shfaqe në %1</translation>
-    </message>
-    <message>
-        <source>Show in web browser</source>
-        <translation>Shfaqe në shfletues</translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation>Kopjoje</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n Filter(s)</source>
-        <translation><numerusform>%n Filtër</numerusform><numerusform>%n Filtra</numerusform></translation>
-    </message>
-</context>
-<context>
-    <name>CredentialsSetupWizardPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-</context>
-<context>
-    <name>DetermineAuthTypeJobFactory</name>
-    <message>
-        <source>Server did not ask for authorization</source>
-        <translation>Shërbyesi s’kërkoi mirëfilltësim</translation>
-    </message>
-    <message>
-        <source>Failed to determine auth type: %1</source>
-        <translation>S’u arrit të përcaktohet lloj mirëfilltësimi: %1</translation>
-    </message>
-</context>
-<context>
-    <name>DiscoverWebFingerServiceJobFactory</name>
-    <message>
-        <source>Invalid reply received from server</source>
-        <translation>U mor përgjigje e pavlefshme nga shërbyesi</translation>
-    </message>
-</context>
-<context>
-    <name>FetchUserInfoJobFactory</name>
-    <message>
-        <source>Failed to retrieve user info</source>
-        <translation>S’u arrit të merren hollësi përdoruesi</translation>
-    </message>
-</context>
-<context>
-    <name>FileSystem</name>
-    <message>
-        <source>Can&apos;t rename %1, the file is currently in use</source>
-        <translation>S’riemërtohet dot %1, kartela është aktualisht në përdorim</translation>
-    </message>
-    <message>
-        <source>Could not make directories in trash</source>
-        <translation>S’u krijuan dot drejtori në hedhurina</translation>
-    </message>
-    <message>
-        <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation>S’u kalua dot &apos;%1&apos; te &apos;%2&apos;</translation>
-    </message>
-    <message>
-        <source>Moving to the trash is not implemented on this platform</source>
-        <translation>Shpënia te hedhurinat s’është e sendërtuar në këtë platformë</translation>
-    </message>
-    <message>
-        <source>Could not remove folder</source>
-        <translation>S’u hoq dot dosje</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizard</name>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Gabim:&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Kujdes:&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;Gabim:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;Sinjalizim:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizardSourcePage</name>
-    <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-    <message>
-        <source>Pick a local folder on your computer to sync</source>
-        <translation>Zgjidhni te kompjuteri juaj një dosje që të njëkohësohet</translation>
-    </message>
-    <message>
-        <source>&amp;Choose...</source>
-        <translation>&amp;Zgjidhni…</translation>
-    </message>
-</context>
-<context>
-    <name>FolderWizardTargetPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-    <message>
-        <source>Select a remote destination folder</source>
-        <translation>Përzgjidhni një dosje të largët vendmbërritje</translation>
-    </message>
-    <message>
-        <source>Create Folder</source>
-        <translation>Krijoni Dosje</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation>Rifreskoje</translation>
-    </message>
-    <message>
-        <source>Folders</source>
-        <translation>Dosje</translation>
-    </message>
-</context>
-<context>
-    <name>LegacyWebFingerSetupWizardPage</name>
-    <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation>Emër përdoruesi</translation>
-    </message>
-</context>
-<context>
-    <name>LoginRequiredDialog</name>
-    <message>
-        <source>Login required</source>
-        <translation>Lypset kryerja e hyrjes</translation>
-    </message>
-</context>
-<context>
-    <name>NotificationWidget</name>
-    <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet</source>
-        <translation>Lorem ipsum dolor sit amet</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
-        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </translation>
-    </message>
-</context>
-<context>
-    <name>OAuthLoginWidget</name>
-    <message>
-        <source>Open Browser</source>
-        <translation>Hap Shfletues</translation>
-    </message>
-    <message>
-        <source>Copy URL to clipboard</source>
-        <translation>Kopjoja URL në të papastër</translation>
-    </message>
-    <message>
-        <source>Retry</source>
-        <translation>Riprovo</translation>
-    </message>
-</context>
-<context>
     <name>APP::AboutDialog</name>
-    <message>
-        <source>About</source>
-        <translation>Rreth</translation>
-    </message>
-    <message>
-        <source>Versions</source>
-        <translation>Versione</translation>
-    </message>
     <message>
         <source>About %1</source>
         <translation>Rreth %1</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -403,7 +127,7 @@
         <translation>Të çaktivizohet mbulimi për kartela virtuale?</translation>
     </message>
     <message>
-        <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as 'available online only' will be downloaded.
+        <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as &apos;available online only&apos; will be downloaded.
 
 The only advantage of disabling virtual file support is that the selective sync feature will become available again.
 
@@ -437,6 +161,14 @@ Ky veprim do të shkaktojë ndërprerjen e çfarëdo njëkohësimi në kryerje e
     <message>
         <source>Connected to %1.</source>
         <translation>I lidhur tek %1.</translation>
+    </message>
+    <message>
+        <source>Show device info</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open share page</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Server %1 is temporarily unavailable.</source>
@@ -655,6 +387,161 @@ Përditësimi do të kryhet në prapaskenë dhe do të mbishkruajë kartelën e 
     </message>
 </context>
 <context>
+    <name>APP::ApplicationGui</name>
+    <message>
+        <source>Please sign in</source>
+        <translation>Ju lutemi, bëni hyrjen</translation>
+    </message>
+    <message>
+        <source>Folder %1: %2</source>
+        <translation>Dosja %1: %2</translation>
+    </message>
+    <message>
+        <source>Unresolved %1 conflicts</source>
+        <translation>%1 përplasje të pazgjidhura</translation>
+    </message>
+    <message>
+        <source>Ignored errors %1</source>
+        <translation>Gabime të shpërfillur %1</translation>
+    </message>
+    <message>
+        <source>There are no sync folders configured.</source>
+        <translation>S’ka të formësuara dosje njëkohësimi.</translation>
+    </message>
+    <message>
+        <source>Log in...</source>
+        <translation>Hyni…</translation>
+    </message>
+    <message>
+        <source>Log out</source>
+        <translation>Dilni</translation>
+    </message>
+    <message>
+        <source>Recent Changes</source>
+        <translation>Ndryshime Së Fundi</translation>
+    </message>
+    <message>
+        <source>Open folder &apos;%1&apos;</source>
+        <translation>Hapni dosjen &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
+        <translation>Shërbyesi në llogarinë %1 xhiron një version të pambuluar të %2. Përdorimi i këtij klienti me versione të pambuluar të shërbyesit është i patestuar dhe potencialisht i rrezikshëm. Qari dhe zarari i juaj.</translation>
+    </message>
+    <message>
+        <source>Account %1</source>
+        <translation>Llogari %1</translation>
+    </message>
+    <message>
+        <source>Stop synchronization</source>
+        <translation>Ndal njëkohësimin</translation>
+    </message>
+    <message>
+        <source>Create a new account</source>
+        <translation>Krijoni një llogari të re</translation>
+    </message>
+    <message>
+        <source>Unknown status</source>
+        <translation>Gjendje e panjohur</translation>
+    </message>
+    <message>
+        <source>Details...</source>
+        <translation>Hollësi…</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation>Ndihmë</translation>
+    </message>
+    <message>
+        <source>Resume synchronization</source>
+        <translation>Riktheju njëkohësimit</translation>
+    </message>
+    <message>
+        <source>Quit %1</source>
+        <translation>Dilni nga %1</translation>
+    </message>
+    <message>
+        <source>Disconnected from %1</source>
+        <translation>U shkëput prej %1</translation>
+    </message>
+    <message>
+        <source>Unsupported Server Version</source>
+        <translation>Version i Pambuluar Shërbyesi</translation>
+    </message>
+    <message>
+        <source>Disconnected</source>
+        <translation>I shkëputur</translation>
+    </message>
+    <message>
+        <source>Disconnected from some accounts</source>
+        <translation>I shkëputur prej disa llogarish</translation>
+    </message>
+    <message>
+        <source>Disconnected from accounts:</source>
+        <translation>U shkëput prej llogarive:</translation>
+    </message>
+    <message>
+        <source>Signed out</source>
+        <translation>Dolët</translation>
+    </message>
+    <message>
+        <source>Account synchronization is disabled</source>
+        <translation>Njëkohësimi i llogarisë është çaktivizuar</translation>
+    </message>
+    <message>
+        <source>Synchronization is paused</source>
+        <translation>Njëkohësimi është ndalur</translation>
+    </message>
+    <message>
+        <source>Up to date (%1)</source>
+        <translation>Të përditësuar (%1)</translation>
+    </message>
+    <message>
+        <source>No sync folders configured</source>
+        <translation>S’ka të formësuara dosje njëkohësimesh</translation>
+    </message>
+    <message>
+        <source>Show %1</source>
+        <translation>Shfaq %1</translation>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation>Rreth %1</translation>
+    </message>
+    <message>
+        <source>No items synced recently</source>
+        <translation>Pa objekte të njëkohësuar së fundi</translation>
+    </message>
+    <message>
+        <source>Checking for changes in remote &apos;%1&apos;</source>
+        <translation>Po kërkohet për ndryshime te shërbyesi i largët &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Checking for changes in local &apos;%1&apos;</source>
+        <translation>Po kërkohet për ndryshime te shërbyesi vendor &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Syncing %1 of %2  (%3 left)</source>
+        <translation>Po njëkohësohet %1 nga %2  (mbeten edhe %3)</translation>
+    </message>
+    <message>
+        <source>Syncing %1 of %2</source>
+        <translation>Po njëkohësohet %1 nga %2</translation>
+    </message>
+    <message>
+        <source>Syncing %1 (%2 left)</source>
+        <translation>Po njëkohësohet %1 (mbeten edhe %2)</translation>
+    </message>
+    <message>
+        <source>Syncing %1</source>
+        <translation>Po njëkohësohet %1</translation>
+    </message>
+    <message>
+        <source>%1 (%2, %3)</source>
+        <translation>%1 (%2, %3)</translation>
+    </message>
+</context>
+<context>
     <name>APP::AskExperimentalVirtualFilesFeatureMessageBox</name>
     <message>
         <source>Enable experimental feature?</source>
@@ -717,6 +604,13 @@ Kjo është një mënyrë e re, eksperimentale. Nëse vendosni ta përdorni, ju 
     <message>
         <source>Failed to parse credentials %1</source>
         <translation>S’u arrit të përtypen kredencialet %1</translation>
+    </message>
+</context>
+<context>
+    <name>APP::CuratorPropagator</name>
+    <message>
+        <source>File %1 is currently in use</source>
+        <translation>Kartela %1 është aktualisht në përdorim</translation>
     </message>
 </context>
 <context>
@@ -883,7 +777,7 @@ Kjo do të thotë që klienti i njëkohësimeve mund të mos ngarkojë menjëher
 %1</translation>
     </message>
     <message>
-        <source>All files in the sync folder '%1' folder were deleted on the server.
+        <source>All files in the sync folder &apos;%1&apos; folder were deleted on the server.
 These deletes will be synchronized to your local sync folder, making such files unavailable unless you have a right to restore. 
 If you decide to keep the files, they will be re-synced with the server if you have rights to do so.
 If you decide to delete the files, they will be unavailable to you, unless you are the owner.</source>
@@ -893,7 +787,7 @@ Nëse vendosni t’i mbani këto kartela, ato do të rinjëkohësohen me shërby
 Nëse vendosni t’i fshini këto kartela, s’do të mund t’i keni, veç në mos qofshi i zoti.</translation>
     </message>
     <message>
-        <source>All the files in your local sync folder '%1' were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
+        <source>All the files in your local sync folder &apos;%1&apos; were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
 Are you sure you want to sync those actions with the server?
 If this was an accident and you decide to keep your files, they will be re-synced from the server.</source>
         <translation>Krejt kartelat te dosja juaj vendore e njëkohësimit &apos;%1&apos; u fshinë. Këto fshirje do të njëkohësohen me shërbyesin tuaj, duke jua hequr mundësinë e përdorimit të këtyre kartelave, veç në mos i rikthefshi. 
@@ -982,10 +876,6 @@ Please consider removing this folder from the account and adding it again.</sour
         <translation>Dosja %1 është e përbashkët për disa llogari.
 Ky formësim dihet që shpie në humbje të dhënash dhe nuk mbulohet më.
 Ju lutemi, shihni mundësinë e heqjes së kësaj dosjeje nga llogaria dhe të shtimit të saj sërish.</translation>
-    </message>
-    <message>
-        <source>%1 - %2@%3</source>
-        <translation>%1 - %2@%3</translation>
     </message>
 </context>
 <context>
@@ -1415,6 +1305,13 @@ Objektet mbi të cilët lejohet fshirja do të fshihen, nëse pengojnë heqjen e
         <translation>S’shkruhen dot ndryshimet te &apos;%1&apos;.</translation>
     </message>
     <message>
+        <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
+        <translation>Ky zë sillet nga sistemi në &apos;%1&apos; dhe s’mund të modifikohet në këtë skenë.</translation>
+    </message>
+</context>
+<context>
+    <name>APP::InpDlg</name>
+    <message>
         <source>Add Ignore Pattern</source>
         <translation>Shtoni Mostër Shpërfilljeje</translation>
     </message>
@@ -1423,8 +1320,12 @@ Objektet mbi të cilët lejohet fshirja do të fshihen, nëse pengojnë heqjen e
         <translation>Shtoni një mostër të re shpërfilljeje:</translation>
     </message>
     <message>
-        <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
-        <translation>Ky zë sillet nga sistemi në &apos;%1&apos; dhe s’mund të modifikohet në këtë skenë.</translation>
+        <source>OK</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Anuloje</translation>
     </message>
 </context>
 <context>
@@ -1796,13 +1697,6 @@ Gjatë procesit përditësuesi mund të kërkojë privilegje shtesë.</translati
     <message>
         <source>Update Check</source>
         <translation>Kontroll Përditësimesh</translation>
-    </message>
-</context>
-<context>
-    <name>APP::CuratorPropagator</name>
-    <message>
-        <source>File %1 is currently in use</source>
-        <translation>Kartela %1 është aktualisht në përdorim</translation>
     </message>
 </context>
 <context>
@@ -2317,16 +2211,16 @@ Gjatë procesit përditësuesi mund të kërkojë privilegje shtesë.</translati
         <translation>Jeni i sigurt se doni të dilet nga %1?</translation>
     </message>
     <message>
+        <source>%1 - %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Account</source>
         <translation>Llogari</translation>
     </message>
     <message>
         <source>MainWindow</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Hide</source>
-        <translation>Fshihe</translation>
     </message>
 </context>
 <context>
@@ -2342,6 +2236,10 @@ Gjatë procesit përditësuesi mund të kërkojë privilegje shtesë.</translati
     <message>
         <source>Curator Path:</source>
         <translation>Shteg Curator-i:</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>%1 Sharing</source>
@@ -2752,6 +2650,10 @@ Gjatë procesit përditësuesi mund të kërkojë privilegje shtesë.</translati
         <translation>S’arrihet të hapet apo të krijohet një bazë vendore të dhënash njëkohësimi. Sigurohuni që keni të drejta shkrimi te dosja e njëkohësimeve.</translation>
     </message>
     <message>
+        <source>Synchronization aborted due to IP address change</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Disk space is low: Downloads that would reduce free space below %1 were skipped.</source>
         <translation>Hapësira në disk është e pakët: Shkarkimet që do ta ulnin hapësirën e lirë nën %1 janë anashkaluar.</translation>
     </message>
@@ -2877,14 +2779,7 @@ Gjatë procesit përditësuesi mund të kërkojë privilegje shtesë.</translati
     </message>
 </context>
 <context>
-    <name>APP::Wizard::AccountConfiguredSetupWizardState</name>
-    <message>
-        <source>Invalid local download directory: %1</source>
-        <translation>Drejtori vendore shkarkimesh e pavlefshme: %1</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::AccountConfiguredWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredPage</name>
     <message>
         <source>Use &amp;virtual files instead of downloading content immediately</source>
         <translation>Përdor kartela &amp;virtuale, në vend se shkarkim të menjëhershëm lënde</translation>
@@ -2935,62 +2830,762 @@ Kjo është një mënyrë e re, eksperimentale. Nëse vendosni ta përdorni, ju 
     </message>
 </context>
 <context>
-    <name>APP::Wizard::BasicCredentialsSetupWizardPage</name>
+    <name>APP::Wizard::AccountConfiguredState</name>
     <message>
-        <source>Please enter your credentials to log in to your account.</source>
-        <translation>Për të bërë hyrjen në llogarinë tuaj, ju lutemi, jepni kredencialet tuaja.</translation>
-    </message>
-    <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Po lidhet me &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
+        <source>Invalid local download directory: %1</source>
+        <translation>Drejtori vendore shkarkimesh e pavlefshme: %1</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::BasicCredentialsSetupWizardState</name>
+    <name>APP::Wizard::CredentialsState</name>
     <message>
         <source>Invalid credentials</source>
         <translation>Kredenciale të pavlefshme</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::LegacyWebFingerSetupWizardPage</name>
+    <name>APP::Wizard::SetupController</name>
     <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Po lidhet te &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
+        <source>OS state: %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Please enter your %1:</source>
-        <translation>Ju lutemi, jepni %1 tuaj:</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::LegacyWebFingerSetupWizardState</name>
-    <message>
-        <source>Failed to parse WebFinger response: %1</source>
-        <translation>S’u arrit të përtypet përgjigje WebFinger: %1</translation>
+        <source>&lt;empty&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>WebFinger endpoint did not send href attribute</source>
-        <translation>Pikëmbarim WebFinger s’dërgoi atribut href</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::OAuthCredentialsSetupWizardPage</name>
-    <message>
-        <source>Connecting to &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>Po lidhet te &lt;a href=&apos;%1&apos; style=&apos;color: %2;&apos;&gt;%1&lt;/a&gt;</translation>
+        <source>OOBE is not done</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Reopen Browser</source>
-        <translation>Rihapni Shfletuesin</translation>
+        <source>Invalid credentials</source>
+        <translation>Kredenciale të pavlefshme</translation>
     </message>
     <message>
-        <source>Please use your browser to log in to %1.</source>
-        <translation>Ju lutemi, përdorni shfletuesin tuaj për të bërë hyrjen te %1.</translation>
+        <source>Failed to retrieve user information from server</source>
+        <translation>S’u arrit të merreshin hollësi përdoruesi nga shërbyesi</translation>
+    </message>
+    <message>
+        <source>Invalid local download directory: %1</source>
+        <translation>Drejtori vendore shkarkimesh e pavlefshme: %1</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::OAuthCredentialsSetupWizardState</name>
+    <name>APP::Wizard::SetupWidget</name>
+    <message>
+        <source>Cancel Setup</source>
+        <translation>Anuloni Ujdisjen</translation>
+    </message>
+    <message>
+        <source>Do you really want to cancel the account setup?</source>
+        <translation>Doni vërtet të anuloni ujdisjen e llogarisë?</translation>
+    </message>
+</context>
+<context>
+    <name>AccountConfiguredPage</name>
+    <message>
+        <source>✓ You&apos;re all set!</source>
+        <translation>✓ Jeni gati!</translation>
+    </message>
+    <message>
+        <source>Advanced configuration</source>
+        <translation>Formësim i mëtejshëm</translation>
+    </message>
+    <message>
+        <source>Configure files download:</source>
+        <translation>Formësoni hkarkim kartelash:</translation>
+    </message>
+    <message>
+        <source>Download everything</source>
+        <translation>Shkarko gjithçka</translation>
+    </message>
+    <message>
+        <source>After completing this wizard, you can set up folder synchronization manually.</source>
+        <translation>Pas plotësimit të këtyre hapave, mun të ujdisni dorazi njëkohësim dosjesh.</translation>
+    </message>
+    <message>
+        <source>Configure synchronization manually</source>
+        <translation>Formësoni njëkohësim dorazi</translation>
+    </message>
+    <message>
+        <source>Choose local download directory:</source>
+        <translation>Zgjidhni drejtori vendore shkarkimesh:</translation>
+    </message>
+    <message>
+        <source>Restore default value</source>
+        <translation>Rikthe vlerën parazgjedhje</translation>
+    </message>
+</context>
+<context>
+    <name>AppImageUpdateAvailableDialogUi</name>
+    <message>
+        <source>Update available</source>
+        <translation>Ka një përditësim gati</translation>
+    </message>
+    <message>
+        <source>Skip this version</source>
+        <translation>Anashkaloje këtë version</translation>
+    </message>
+</context>
+<context>
+    <name>AppProvider</name>
+    <message>
+        <source>Failed to open %1 in web. Error: %2.</source>
+        <translation>S’u arrit të hapej %1 në web. Gabim: %2.</translation>
+    </message>
+</context>
+<context>
+    <name>ApplicationTheme::aboutVersions()</name>
+    <message>
+        <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
+        <translation>%1 %2%7%8Biblioteka Qt %3, %4%7Po përdoret shtojcë kartelash virtuale: %5%7%6</translation>
+    </message>
+</context>
+<context>
+    <name>ApplicationTheme::versionWithSha</name>
+    <message>
+        <source>%1 %2</source>
+        <translation>%1 %2</translation>
+    </message>
+</context>
+<context>
+    <name>BasicLoginWidget</name>
+    <message>
+        <source>Username</source>
+        <translation>Emër përdoruesi</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Fjalëkalim</translation>
+    </message>
+</context>
+<context>
+    <name>CheckBasicAuthJobFactory</name>
+    <message>
+        <source>Invalid reply received from server</source>
+        <translation>U mor përgjigje e pavlefshme nga shërbyesi</translation>
+    </message>
+</context>
+<context>
+    <name>ChecksumHeader</name>
+    <message>
+        <source>The checksum header is malformed: %1</source>
+        <translation>Kryet e checksum-it janë të keqformuara: %1</translation>
+    </message>
+    <message>
+        <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
+        <translation>Kryet e checksum-it përmbanin një lloj të panjohur checksum-i &apos;%1&apos;</translation>
+    </message>
+</context>
+<context>
+    <name>CodeDialog</name>
+    <message>
+        <source>Allow remote access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>We have sent a one-time code to authorize this device to access your Personal Cloud. Check your email for the code and enter it here. If you do not see it in your inbox, please check your spam folder.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Allow access</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Resend code</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CodeDialogController</name>
+    <message>
+        <source>Incorrect code</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your code has expired</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CodeInputWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>Paste code</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ComboWidget</name>
+    <message>
+        <source>button_icon_tool</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Error text</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CommandLine</name>
+    <message>
+        <source>For more information, see %1</source>
+        <translation>Për më tepër hollësi, shihni %1</translation>
+    </message>
+</context>
+<context>
+    <name>CommonStrings</name>
+    <message>
+        <source>file manager</source>
+        <translation>përgjegjës kartelash</translation>
+    </message>
+    <message>
+        <source>Show in %1</source>
+        <translation>Shfaqe në %1</translation>
+    </message>
+    <message>
+        <source>Show Files in web browser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show Photos in web browser</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopjoje</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n Filter(s)</source>
+        <translation><numerusform>%n Filtër</numerusform><numerusform>%n Filtra</numerusform></translation>
+    </message>
+</context>
+<context>
+    <name>ConnectErrorPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>Unable to connect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol&gt;&lt;li&gt;Verify that the device is properly connected to the network and that the internet connection is stable&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;2&quot;&gt;&lt;li&gt;Make sure the device is powered on and functioning correctly&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;3&quot;&gt;&lt;li&gt;Check firewall settings to confirm they are not blocking the connection&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;4&quot;&gt;&lt;li&gt;If using a wireless connection, confirm the device is within range of the router&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;ol start=&quot;5&quot;&gt;&lt;li&gt;Your device and mobile phone must be on the same network&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>If you continue to experience issues, please contact our &lt;a href=&quot;https://seagare.com&quot;&gt;Support team&lt;/a&gt; for further assistance.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Riprovo</translation>
+    </message>
+</context>
+<context>
+    <name>CredentialsPage</name>
+    <message>
+        <source>helper_frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Can’t find your device?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Password</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Anuloje</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>Hyrje</translation>
+    </message>
+    <message>
+        <source>button_accent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting to</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Fjalëkalim</translation>
+    </message>
+    <message>
+        <source>Enter a valid email address and password</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Invalid URL</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DetermineAuthTypeJobFactory</name>
+    <message>
+        <source>Server did not ask for authorization</source>
+        <translation>Shërbyesi s’kërkoi mirëfilltësim</translation>
+    </message>
+    <message>
+        <source>Failed to determine auth type: %1</source>
+        <translation>S’u arrit të përcaktohet lloj mirëfilltësimi: %1</translation>
+    </message>
+</context>
+<context>
+    <name>DevModel</name>
+    <message>
+        <source>true</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>false</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Url</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OOBE Done</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DevWidget</name>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>---</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friendlyName</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>hostname</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>deviceID</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>certificateCN</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>:</source>
+        <translation>:</translation>
+    </message>
+    <message>
+        <source>origin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>deviceType</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Query about and status</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Apply to account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fetch from account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Simulate network change</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>E panjohur</translation>
+    </message>
+    <message>
+        <source>Local</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Public</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remote</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mDNS</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Static</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DiscoverWebFingerServiceJobFactory</name>
+    <message>
+        <source>Invalid reply received from server</source>
+        <translation>U mor përgjigje e pavlefshme nga shërbyesi</translation>
+    </message>
+</context>
+<context>
+    <name>EmailPage</name>
+    <message>
+        <source>helper_frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Anuloje</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>Hyrje</translation>
+    </message>
+    <message>
+        <source>Email</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>EmailPageController</name>
+    <message>
+        <source>Invalid email</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Not allowed. Contact the device owner.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ErrorDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>Access to Personal Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Anuloje</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Riprovo</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ErrorDialogController</name>
+    <message>
+        <source>Access to Personal Cloud</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unable to connect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Email not registered</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>There have been too many attempts for access within the last minute. Please wait at least two minutes before retrying.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Could not reach your Personal Cloud.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>This email isn’t authorized to access this device. Please contact the owner.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>FetchUserInfoJobFactory</name>
+    <message>
+        <source>Failed to retrieve user info</source>
+        <translation>S’u arrit të merren hollësi përdoruesi</translation>
+    </message>
+</context>
+<context>
+    <name>FileSystem</name>
+    <message>
+        <source>Can&apos;t rename %1, the file is currently in use</source>
+        <translation>S’riemërtohet dot %1, kartela është aktualisht në përdorim</translation>
+    </message>
+    <message>
+        <source>Could not make directories in trash</source>
+        <translation>S’u krijuan dot drejtori në hedhurina</translation>
+    </message>
+    <message>
+        <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
+        <translation>S’u kalua dot &apos;%1&apos; te &apos;%2&apos;</translation>
+    </message>
+    <message>
+        <source>Moving to the trash is not implemented on this platform</source>
+        <translation>Shpënia te hedhurinat s’është e sendërtuar në këtë platformë</translation>
+    </message>
+    <message>
+        <source>Could not remove folder</source>
+        <translation>S’u hoq dot dosje</translation>
+    </message>
+</context>
+<context>
+    <name>FinishedPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>You&apos;re all set!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advanced configuration</source>
+        <translation>Formësim i mëtejshëm</translation>
+    </message>
+    <message>
+        <source>Configure files download:</source>
+        <translation>Formësoni hkarkim kartelash:</translation>
+    </message>
+    <message>
+        <source>Download everything (recommended)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Configure synchronization manually</source>
+        <translation>Formësoni njëkohësim dorazi</translation>
+    </message>
+    <message>
+        <source>Use &amp;virtual files instead of downloading content immediately</source>
+        <translation>Përdor kartela &amp;virtuale, në vend se shkarkim të menjëhershëm lënde</translation>
+    </message>
+    <message>
+        <source>Choose local download directory:</source>
+        <translation>Zgjidhni drejtori vendore shkarkimesh:</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The virtual filesystem feature is not available for this installation.</source>
+        <translation>Veçoria sistem kartelash virtuale s’është e passhme për këtë instalim.</translation>
+    </message>
+    <message>
+        <source>The virtual filesystem feature is not stable yet. Use with caution.</source>
+        <translation>Veçoria sistem kartelash virtual s’është ende e qëndrueshme. Përdoreni me kujdes.</translation>
+    </message>
+    <message>
+        <source>Enable experimental feature?</source>
+        <translation>Të aktivizohet veçoria eksperimentale?</translation>
+    </message>
+    <message>
+        <source>When the &quot;virtual files&quot; mode is enabled no files will be downloaded initially. Instead, a tiny file will be created for each file that exists on the server. The contents can be downloaded by running these files or by using their context menu.
+
+The virtual files mode is mutually exclusive with selective sync. Currently unselected folders will be translated to online-only folders and your selective sync settings will be reset.
+
+Switching to this mode will abort any currently running synchronization.
+
+This is a new, experimental mode. If you decide to use it, please report any issues that come up.</source>
+        <translation>Kur aktivizohet mënyra “kartela virtuale”, fillimisht s’do të shkarkohen kartela. Në vend të kësaj, për çdo kartelë që ekziston në shërbyes, do të krijohet një kartelë e vockël. Lënda mund të shkarkohet duke i vënë në punë këto kartela, ose duke përdorur menunë përkatëse të kontekstit.
+
+Mënyra kartela virtuale dhe njëkohësimi përzgjedhës përjashtojnë njëra-tjetrin. Dosjet aktualisht të papërzgjedhura do të përshoqërohen me dosje vetëm për në internet dhe nga kjo mundet që rregullimet tuaja për njëkohësim përzgjedhës të rikthehen te parazgjedhjet.
+
+Kalimi te kjo mënyrë do të ndërpresë çfarëdo njëkohësimi aktualisht në punë e sipër.
+
+Kjo është një mënyrë e re, eksperimentale. Nëse vendosni ta përdorni, ju lutemi, njoftoni çfarëdo problemesh që dalin.</translation>
+    </message>
+    <message>
+        <source>Enable experimental placeholder mode</source>
+        <translation>Aktivizoni mënyrë eksperimentale vendëmbajtësish</translation>
+    </message>
+    <message>
+        <source>Stay safe</source>
+        <translation>Rrini i parrezikuar</translation>
+    </message>
+    <message>
+        <source>Select the local folder</source>
+        <translation>Përzgjidhni dosjen vendore</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizard</name>
+    <message>
+        <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;Gabim:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;Kujdes:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
+        <translation>&lt;b&gt;Gabim:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
+        <translation>&lt;b&gt;Sinjalizim:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizardSourcePage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>Pick a local folder on your computer to sync</source>
+        <translation>Zgjidhni te kompjuteri juaj një dosje që të njëkohësohet</translation>
+    </message>
+    <message>
+        <source>&amp;Choose...</source>
+        <translation>&amp;Zgjidhni…</translation>
+    </message>
+</context>
+<context>
+    <name>FolderWizardTargetPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>Select a remote destination folder</source>
+        <translation>Përzgjidhni një dosje të largët vendmbërritje</translation>
+    </message>
+    <message>
+        <source>Create Folder</source>
+        <translation>Krijoni Dosje</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation>Rifreskoje</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>Dosje</translation>
+    </message>
+</context>
+<context>
+    <name>InputWidget</name>
+    <message>
+        <source>Error text</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>LoginRequiredDialog</name>
+    <message>
+        <source>Login required</source>
+        <translation>Lypset kryerja e hyrjes</translation>
+    </message>
+</context>
+<context>
+    <name>NotificationWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet</source>
+        <translation>Lorem ipsum dolor sit amet</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
+        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </translation>
+    </message>
+</context>
+<context>
+    <name>OAuthCredentialsSetupWizardState</name>
     <message>
         <source>Error while trying to log in to OAuth2-enabled server.</source>
         <translation>Gabim teksa provohej të bëhej hyrja te shërbyes me OAuth2 të aktivizuar.</translation>
@@ -3005,220 +3600,25 @@ Kjo është një mënyrë e re, eksperimentale. Nëse vendosni ta përdorni, ju 
     </message>
 </context>
 <context>
-    <name>APP::Wizard::ServerUrlSetupWizardPage</name>
+    <name>OAuthLoginWidget</name>
     <message>
-        <source>Welcome to %1</source>
-        <translation>Mirë se vini te %1</translation>
+        <source>Open Browser</source>
+        <translation>Hap Shfletues</translation>
+    </message>
+    <message>
+        <source>Copy URL to clipboard</source>
+        <translation>Kopjoja URL në të papastër</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Riprovo</translation>
     </message>
 </context>
 <context>
-    <name>APP::Wizard::ServerUrlSetupWizardState</name>
+    <name>PopupComboWidget</name>
     <message>
-        <source>Invalid server URL</source>
-        <translation>URL e pavlefshme shërbyesi</translation>
-    </message>
-    <message>
-        <source>Insecure connection</source>
-        <translation>Lidhje jo e siguruar</translation>
-    </message>
-    <message>
-        <source>The connection to %1 is insecure.
-Are you sure you want to proceed?</source>
-        <translation>Lidhja me %1 është jo e siguruar.
-Jeni i sigurt se doni të ecet më tej?</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Ripohojeni</translation>
-    </message>
-    <message>
-        <source>Insecure server rejected by user</source>
-        <translation>Shërbyes jo i siguruar i hedhur tej nga përdoruesi</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::SetupWizardController</name>
-    <message>
-        <source>Invalid credentials</source>
-        <translation>Kredenciale të pavlefshme</translation>
-    </message>
-    <message>
-        <source>Failed to retrieve user information from server</source>
-        <translation>S’u arrit të merreshin hollësi përdoruesi nga shërbyesi</translation>
-    </message>
-</context>
-<context>
-    <name>APP::Wizard::SetupWizardWindow</name>
-    <message>
-        <source>Finish</source>
-        <translation>Përfundoje</translation>
-    </message>
-    <message>
-        <source>Next &gt;</source>
-        <translation>Pasuesi &gt;</translation>
-    </message>
-    <message>
-        <source>Cancel Setup</source>
-        <translation>Anuloni Ujdisjen</translation>
-    </message>
-    <message>
-        <source>Do you really want to cancel the account setup?</source>
-        <translation>Doni vërtet të anuloni ujdisjen e llogarisë?</translation>
-    </message>
-</context>
-<context>
-    <name>APP::ApplicationGui</name>
-    <message>
-        <source>Please sign in</source>
-        <translation>Ju lutemi, bëni hyrjen</translation>
-    </message>
-    <message>
-        <source>Folder %1: %2</source>
-        <translation>Dosja %1: %2</translation>
-    </message>
-    <message>
-        <source>Unresolved %1 conflicts</source>
-        <translation>%1 përplasje të pazgjidhura</translation>
-    </message>
-    <message>
-        <source>Ignored errors %1</source>
-        <translation>Gabime të shpërfillur %1</translation>
-    </message>
-    <message>
-        <source>There are no sync folders configured.</source>
-        <translation>S’ka të formësuara dosje njëkohësimi.</translation>
-    </message>
-    <message>
-        <source>Log in...</source>
-        <translation>Hyni…</translation>
-    </message>
-    <message>
-        <source>Log out</source>
-        <translation>Dilni</translation>
-    </message>
-    <message>
-        <source>Recent Changes</source>
-        <translation>Ndryshime Së Fundi</translation>
-    </message>
-    <message>
-        <source>Open folder &apos;%1&apos;</source>
-        <translation>Hapni dosjen &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
-        <translation>Shërbyesi në llogarinë %1 xhiron një version të pambuluar të %2. Përdorimi i këtij klienti me versione të pambuluar të shërbyesit është i patestuar dhe potencialisht i rrezikshëm. Qari dhe zarari i juaj.</translation>
-    </message>
-    <message>
-        <source>Account %1</source>
-        <translation>Llogari %1</translation>
-    </message>
-    <message>
-        <source>Stop synchronization</source>
-        <translation>Ndal njëkohësimin</translation>
-    </message>
-    <message>
-        <source>Create a new account</source>
-        <translation>Krijoni një llogari të re</translation>
-    </message>
-    <message>
-        <source>Unknown status</source>
-        <translation>Gjendje e panjohur</translation>
-    </message>
-    <message>
-        <source>Details...</source>
-        <translation>Hollësi…</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation>Ndihmë</translation>
-    </message>
-    <message>
-        <source>Resume synchronization</source>
-        <translation>Riktheju njëkohësimit</translation>
-    </message>
-    <message>
-        <source>Quit %1</source>
-        <translation>Dilni nga %1</translation>
-    </message>
-    <message>
-        <source>Disconnected from %1</source>
-        <translation>U shkëput prej %1</translation>
-    </message>
-    <message>
-        <source>Unsupported Server Version</source>
-        <translation>Version i Pambuluar Shërbyesi</translation>
-    </message>
-    <message>
-        <source>Disconnected</source>
-        <translation>I shkëputur</translation>
-    </message>
-    <message>
-        <source>Disconnected from some accounts</source>
-        <translation>I shkëputur prej disa llogarish</translation>
-    </message>
-    <message>
-        <source>Disconnected from accounts:</source>
-        <translation>U shkëput prej llogarive:</translation>
-    </message>
-    <message>
-        <source>Signed out</source>
-        <translation>Dolët</translation>
-    </message>
-    <message>
-        <source>Account synchronization is disabled</source>
-        <translation>Njëkohësimi i llogarisë është çaktivizuar</translation>
-    </message>
-    <message>
-        <source>Synchronization is paused</source>
-        <translation>Njëkohësimi është ndalur</translation>
-    </message>
-    <message>
-        <source>Up to date (%1)</source>
-        <translation>Të përditësuar (%1)</translation>
-    </message>
-    <message>
-        <source>No sync folders configured</source>
-        <translation>S’ka të formësuara dosje njëkohësimesh</translation>
-    </message>
-    <message>
-        <source>Show %1</source>
-        <translation>Shfaq %1</translation>
-    </message>
-    <message>
-        <source>About %1</source>
-        <translation>Rreth %1</translation>
-    </message>
-    <message>
-        <source>No items synced recently</source>
-        <translation>Pa objekte të njëkohësuar së fundi</translation>
-    </message>
-    <message>
-        <source>Checking for changes in remote &apos;%1&apos;</source>
-        <translation>Po kërkohet për ndryshime te shërbyesi i largët &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Checking for changes in local &apos;%1&apos;</source>
-        <translation>Po kërkohet për ndryshime te shërbyesi vendor &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Syncing %1 of %2  (%3 left)</source>
-        <translation>Po njëkohësohet %1 nga %2  (mbeten edhe %3)</translation>
-    </message>
-    <message>
-        <source>Syncing %1 of %2</source>
-        <translation>Po njëkohësohet %1 nga %2</translation>
-    </message>
-    <message>
-        <source>Syncing %1 (%2 left)</source>
-        <translation>Po njëkohësohet %1 (mbeten edhe %2)</translation>
-    </message>
-    <message>
-        <source>Syncing %1</source>
-        <translation>Po njëkohësohet %1</translation>
-    </message>
-    <message>
-        <source>%1 (%2, %3)</source>
-        <translation>%1 (%2, %3)</translation>
+        <source>Form</source>
+        <translation>Formular</translation>
     </message>
 </context>
 <context>
@@ -3255,6 +3655,10 @@ Jeni i sigurt se doni të ecet më tej?</translation>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
+    <message>
+        <source>Enter a valid email address</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ResolveUrlJobFactory</name>
@@ -3272,29 +3676,17 @@ Jeni i sigurt se doni të ecet më tej?</translation>
     </message>
 </context>
 <context>
-    <name>ServerUrlSetupWizardPage</name>
+    <name>SetupWidget</name>
     <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-    <message>
-        <source>What is your server&apos;s address?</source>
-        <translation>Cila është adresa e shërbyesit tuaj?</translation>
+        <source>Add New Account</source>
+        <translation>Shtoni Llogari të Re</translation>
     </message>
 </context>
 <context>
     <name>SetupWizardState</name>
     <message>
-        <source>Server URL</source>
-        <translation>URL shërbyesi</translation>
-    </message>
-    <message>
         <source>Welcome</source>
         <translation>Mirë se vini</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation>Emër përdoruesi</translation>
     </message>
     <message>
         <source>Login</source>
@@ -3306,22 +3698,10 @@ Jeni i sigurt se doni të ecet më tej?</translation>
     </message>
 </context>
 <context>
-    <name>SetupWizardWindow</name>
+    <name>SimpleResolveUrlJobFactory</name>
     <message>
-        <source>Add New Account</source>
-        <translation>Shtoni Llogari të Re</translation>
-    </message>
-    <message>
-        <source>Dismiss</source>
-        <translation>Mos e merr parasysh</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Anuloje</translation>
-    </message>
-    <message>
-        <source>&lt; Back</source>
-        <translation>&lt; Mbrapasht</translation>
+        <source>Could not detect compatible server at %1</source>
+        <translation>S’u pikas dot shërbyes i përputhshmë te %1</translation>
     </message>
 </context>
 <context>
@@ -3452,6 +3832,25 @@ Jeni i sigurt se doni të ecet më tej?</translation>
     </message>
 </context>
 <context>
+    <name>WaitPage</name>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <source>Curator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Logging in to your account</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>WebFingerUserInfoJobFactory</name>
     <message>
         <source>Failed to retrieve user info</source>
@@ -3470,24 +3869,10 @@ Jeni i sigurt se doni të ecet më tej?</translation>
     </message>
 </context>
 <context>
-    <name>ApplicationTheme::aboutVersions()</name>
-    <message>
-        <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
-        <translation>%1 %2%7%8Biblioteka Qt %3, %4%7Po përdoret shtojcë kartelash virtuale: %5%7%6</translation>
-    </message>
-</context>
-<context>
-    <name>ApplicationTheme::qtVer</name>
+    <name>ownCloudTheme::qtVer</name>
     <message>
         <source>%1 (Built against Qt %2)</source>
         <translation>%1 (Montuar me Qt %2)</translation>
-    </message>
-</context>
-<context>
-    <name>ApplicationTheme::versionWithSha</name>
-    <message>
-        <source>%1 %2</source>
-        <translation>%1 %2</translation>
     </message>
 </context>
 <context>
