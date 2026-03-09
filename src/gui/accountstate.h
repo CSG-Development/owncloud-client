@@ -187,6 +187,7 @@ signals:
     void urlUpdated();
     void urlChanged(const QUuid& id);
     void isSettingUpChanged();
+    void networkUpdateState(bool inProgress);
 
     // internal signal to be able to finish processing device path update when "Skip" code dialog pressed
     void pathUpdateFinished(bool skippedCode, const QList<DevicePath>& paths);

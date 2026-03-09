@@ -235,6 +235,12 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     });
     ui->stackedWidget->setCurrentWidget(ui->folderListPage);
 
+    connect(_accountState.get(), &AccountState::networkUpdateState, this, [this](bool inProgress) {
+        ui->networkIndicator->setVisible(inProgress);
+        ui->networkIndicator->startAnimation();
+    });
+    ui->networkIndicator->setVisible(false);
+
     connect(Theme::instance(), &Theme::themeChanged, this, &AccountSettings::onThemeChanged);
     onThemeChanged(Theme::instance()->isDarkTheme());
 }
