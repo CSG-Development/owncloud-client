@@ -39,7 +39,7 @@ def parseStacktrace(coredumpFile):
     message = []
     if coredumpFile:
         coredumpFilename = os.path.basename(coredumpFile)
-        # example coredump file: core-1648445754-1001-11-!drone!src!build-GUI-tests!bin!curator
+        # example coredump file: core-1648445754-1001-11-!drone!src!build-GUI-tests!bin!personalcloud
         patterns = coredumpFilename.split('-')
         appBinary = "-".join(patterns[4:]).replace('!', '/')
 

@@ -223,7 +223,7 @@ void Utility::usleep(int usec)
 // This can be overriden from the tests
 OCSYNC_EXPORT bool fsCasePreserving_override = []() -> bool {
     static bool ok = false;
-    static int env = qEnvironmentVariableIntValue("CURATOR_TEST_CASE_PRESERVING", &ok);
+    static int env = qEnvironmentVariableIntValue("PERSONALCLOUD_TEST_CASE_PRESERVING", &ok);
     if (ok) {
         return env;
     }

@@ -109,7 +109,7 @@ function(generate_theme TARGET APPLICATION_SIDEBAR_ICONS_OUT)
 
     if (NOT APPLICATION_SIDEBAR_ICONS)
         message(WARNING "The branding does not provide sidebar icons falling back to vanilla icons")
-        file(GLOB_RECURSE APPLICATION_SIDEBAR_ICONS "${PROJECT_SOURCE_DIR}/src/resources/theme/colored/*-curator-icon-sidebar.png")
+        file(GLOB_RECURSE APPLICATION_SIDEBAR_ICONS "${PROJECT_SOURCE_DIR}/src/resources/theme/colored/*-personalcloud-icon-sidebar.png")
     endif()
     set(${APPLICATION_SIDEBAR_ICONS_OUT} ${APPLICATION_SIDEBAR_ICONS} PARENT_SCOPE)
 endfunction()

@@ -23,7 +23,7 @@ target_link_libraries(${LIBRARY_NAME} PUBLIC
     Qt::Widgets
     Qt::Concurrent
     libsync
-    curatorResources
+    PersonalCloudResources
 )
 
 set_target_properties(${LIBRARY_NAME} PROPERTIES AUTOUIC ON AUTORCC ON)

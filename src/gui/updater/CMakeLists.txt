@@ -1,13 +1,13 @@
 if(APPLE)
     if (SPARKLE_FOUND)
         list(APPEND APPLICATION_BUNDLED_RESOURCES
-            "${PROJECT_SOURCE_DIR}/admin/osx/deny_autoupdate_com.curator.desktopclient.plist"
+            "${PROJECT_SOURCE_DIR}/admin/osx/deny_autoupdate_com.personalcloud.desktopclient.plist"
             "${PROJECT_SOURCE_DIR}/admin/osx/sparkle/dsa_pub.pem")
         set(APPLICATION_BUNDLED_RESOURCES ${APPLICATION_BUNDLED_RESOURCES} PARENT_SCOPE)
     endif()
 endif()
 
-target_sources(curatorCore PRIVATE
+target_sources(PersonalCloudCore PRIVATE
     ocupdater.cpp
     ocupdater.h
     updateinfo.cpp
@@ -18,12 +18,12 @@ target_sources(curatorCore PRIVATE
 
 if(SPARKLE_FOUND)
     # Define this, we need to check in updater.cpp
-    target_compile_definitions(curatorCore PUBLIC HAVE_SPARKLE)
-    target_sources(curatorCore PRIVATE
+    target_compile_definitions(PersonalCloudCore PUBLIC HAVE_SPARKLE)
+    target_sources(PersonalCloudCore PRIVATE
         sparkleupdater_mac.mm
         sparkleupdater.h
     )
-    target_link_libraries(curatorCore PRIVATE ${SPARKLE_LIBRARY})
+    target_link_libraries(PersonalCloudCore PRIVATE ${SPARKLE_LIBRARY})
 endif()
 
 if(WITH_APPIMAGEUPDATER)
@@ -37,19 +37,19 @@ if(WITH_APPIMAGEUPDATER)
         ${CMAKE_CURRENT_SOURCE_DIR}/appimageupdater.h
     )
 
-    target_sources(curatorCore PRIVATE ${appimageupdater_sources})
+    target_sources(PersonalCloudCore PRIVATE ${appimageupdater_sources})
 
     # as libappimageupdate uses exceptions, we define a shim that catches all incoming exceptions
     # and handles them in a suitable way
     # we have to enable exceptions for this one compilation unit
     set_source_files_properties(${appimageupdater_sources}
-        TARGET_DIRECTORY curatorCore
+        TARGET_DIRECTORY PersonalCloudCore
         PROPERTIES COMPILE_OPTIONS "-fexceptions"
     )
 
-    target_compile_definitions(curatorCore PRIVATE WITH_APPIMAGEUPDATER)
-    target_link_libraries(curatorCore PRIVATE libappimageupdate)
+    target_compile_definitions(PersonalCloudCore PRIVATE WITH_APPIMAGEUPDATER)
+    target_link_libraries(PersonalCloudCore PRIVATE libappimageupdate)
 
     find_package(Threads REQUIRED)
-    target_link_libraries(curatorCore PUBLIC ${CMAKE_THREAD_LIBS_INIT})
+    target_link_libraries(PersonalCloudCore PUBLIC ${CMAKE_THREAD_LIBS_INIT})
 endif()

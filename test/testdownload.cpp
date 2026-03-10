@@ -6,7 +6,7 @@
  */
 
 
-#include "curatorpropagator.h"
+#include "personalcloudpropagator.h"
 #include "syncengine.h"
 #include "testutils/syncenginetestutils.h"
 

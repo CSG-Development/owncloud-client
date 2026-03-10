@@ -15,7 +15,7 @@
 #ifndef LOCALDISCOVERYTRACKER_H
 #define LOCALDISCOVERYTRACKER_H
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 #include <set>
 #include <QObject>
 #include <QByteArray>

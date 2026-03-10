@@ -76,7 +76,7 @@ private slots:
                 workPath += fileName;
                 QFile file(workPath);
                 QVERIFY(file.open(QFile::WriteOnly));
-                file.write("Curator");
+                file.write("PersonalCloud");
                 file.close();
             };
             if (create) {

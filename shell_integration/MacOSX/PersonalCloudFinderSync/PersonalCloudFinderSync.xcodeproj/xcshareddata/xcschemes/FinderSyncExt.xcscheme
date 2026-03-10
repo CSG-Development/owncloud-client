@@ -18,7 +18,7 @@
                BlueprintIdentifier = "C2B573D61B1CD9CE00303B36"
                BuildableName = "FinderSyncExt.appex"
                BlueprintName = "FinderSyncExt"
-               ReferencedContainer = "container:CuratorFinderSync.xcodeproj">
+               ReferencedContainer = "container:PersonalCloudFinderSync.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -32,7 +32,7 @@
                BlueprintIdentifier = "C2B573B01B1CD91E00303B36"
                BuildableName = "desktopclient.app"
                BlueprintName = "desktopclient"
-               ReferencedContainer = "container:CuratorFinderSync.xcodeproj">
+               ReferencedContainer = "container:PersonalCloudFinderSync.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -50,7 +50,7 @@
             BlueprintIdentifier = "C2B573D61B1CD9CE00303B36"
             BuildableName = "FinderSyncExt.appex"
             BlueprintName = "FinderSyncExt"
-            ReferencedContainer = "container:CuratorFinderSync.xcodeproj">
+            ReferencedContainer = "container:PersonalCloudFinderSync.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -71,7 +71,7 @@
             BlueprintIdentifier = "C2B573B01B1CD91E00303B36"
             BuildableName = "desktopclient.app"
             BlueprintName = "desktopclient"
-            ReferencedContainer = "container:CuratorFinderSync.xcodeproj">
+            ReferencedContainer = "container:PersonalCloudFinderSync.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -91,7 +91,7 @@
             BlueprintIdentifier = "C2B573B01B1CD91E00303B36"
             BuildableName = "desktopclient.app"
             BlueprintName = "desktopclient"
-            ReferencedContainer = "container:CuratorFinderSync.xcodeproj">
+            ReferencedContainer = "container:PersonalCloudFinderSync.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

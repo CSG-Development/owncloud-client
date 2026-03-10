@@ -20,7 +20,7 @@ CLIENT_MESSAGES = [
 
 def get_pipe_path():
     pipename = r"\\.\\pipe\\"
-    pipename = os.path.join(pipename, "Curator-" + os.getenv("USERNAME"))
+    pipename = os.path.join(pipename, "PersonalCloud-" + os.getenv("USERNAME"))
     return pipename
 
 

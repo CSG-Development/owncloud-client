@@ -1,6 +1,6 @@
 #pragma once
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 #include <QList>
 #include <QDebug>
 #include <QDateTime>

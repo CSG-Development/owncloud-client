@@ -319,9 +319,9 @@
                    </spacer>
                   </item>
                   <item>
-                   <widget class="QLabel" name="lblCurator">
+                   <widget class="QLabel" name="lblAppName">
                     <property name="text">
-                     <string>Curator</string>
+                     <string>PersonalCloud</string>
                     </property>
                    </widget>
                   </item>

@@ -13,7 +13,7 @@
  * for more details.
  */
 
-#include "curatorpropagator.h"
+#include "personalcloudpropagator.h"
 #include "account.h"
 #include "common/asserts.h"
 #include "common/syncjournaldb.h"
@@ -55,7 +55,7 @@ qint64 criticalFreeSpaceLimit()
     qint64 value = 50 * 1000 * 1000LL;
 
     static bool hasEnv = false;
-    static qint64 env = qgetenv("CURATOR_CRITICAL_FREE_SPACE_BYTES").toLongLong(&hasEnv);
+    static qint64 env = qgetenv("PERSONALCLOUD_CRITICAL_FREE_SPACE_BYTES").toLongLong(&hasEnv);
     if (hasEnv) {
         value = env;
     }
@@ -68,7 +68,7 @@ qint64 freeSpaceLimit()
     qint64 value = 250 * 1000 * 1000LL;
 
     static bool hasEnv = false;
-    static qint64 env = qgetenv("CURATOR_FREE_SPACE_BYTES").toLongLong(&hasEnv);
+    static qint64 env = qgetenv("PERSONALCLOUD_FREE_SPACE_BYTES").toLongLong(&hasEnv);
     if (hasEnv) {
         value = env;
     }
@@ -76,12 +76,12 @@ qint64 freeSpaceLimit()
     return value;
 }
 
-CuratorPropagator::~CuratorPropagator()
+PersonalCloudPropagator::~PersonalCloudPropagator()
 {
 }
 
 
-int CuratorPropagator::maximumActiveTransferJob()
+int PersonalCloudPropagator::maximumActiveTransferJob()
 {
     if (_bandwidthManager || !_syncOptions._parallelNetworkJobs) {
         // disable parallelism when there is a network limit.
@@ -91,7 +91,7 @@ int CuratorPropagator::maximumActiveTransferJob()
 }
 
 /* The maximum number of active jobs in parallel  */
-int CuratorPropagator::hardMaximumActiveJob()
+int PersonalCloudPropagator::hardMaximumActiveJob()
 {
     if (!_syncOptions._parallelNetworkJobs)
         return 1;
@@ -126,13 +126,13 @@ bool PropagateItemJob::scheduleSelfOrChild()
 
 static qint64 getMinBlacklistTime()
 {
-    return qMax(qEnvironmentVariableIntValue("CURATOR_BLACKLIST_TIME_MIN"),
+    return qMax(qEnvironmentVariableIntValue("PERSONALCLOUD_BLACKLIST_TIME_MIN"),
         25); // 25 seconds
 }
 
 static qint64 getMaxBlacklistTime()
 {
-    int v = qEnvironmentVariableIntValue("CURATOR_BLACKLIST_TIME_MAX");
+    int v = qEnvironmentVariableIntValue("PERSONALCLOUD_BLACKLIST_TIME_MAX");
     if (v > 0)
         return v;
     return 24 * 60 * 60; // 1 day
@@ -319,7 +319,7 @@ void PropagateItemJob::done(SyncFileItem::Status statusArg, const QString &error
 
 // ================================================================================
 
-PropagateItemJob *CuratorPropagator::createJob(const SyncFileItemPtr &item)
+PropagateItemJob *PersonalCloudPropagator::createJob(const SyncFileItemPtr &item)
 {
     qCDebug(lcPropagator) << "Propagating:" << item;
     const bool deleteExisting = item->instruction() == CSYNC_INSTRUCTION_TYPE_CHANGE;
@@ -387,7 +387,7 @@ PropagateItemJob *CuratorPropagator::createJob(const SyncFileItemPtr &item)
     Q_UNREACHABLE();
 }
 
-qint64 CuratorPropagator::smallFileSize()
+qint64 PersonalCloudPropagator::smallFileSize()
 {
     const qint64 smallFileSize = 100 * 1024; //default to 1 MB. Not dynamic right now.
     return smallFileSize;
@@ -397,7 +397,7 @@ qint64 CuratorPropagator::smallFileSize()
  * This builds all the jobs needed for the propagation.
  * Each directory is a PropagateDirectory job, which contains the files in it.
  */
-void CuratorPropagator::start(SyncFileItemSet &&items)
+void PersonalCloudPropagator::start(SyncFileItemSet &&items)
 {
     // The items list is sorted in such a way that an item for a directory come before any items
     // inside that directory. For example:
@@ -555,18 +555,18 @@ void CuratorPropagator::start(SyncFileItemSet &&items)
         }
     }
 
-    connect(_rootJob.data(), &PropagatorJob::finished, this, &CuratorPropagator::emitFinished);
+    connect(_rootJob.data(), &PropagatorJob::finished, this, &PersonalCloudPropagator::emitFinished);
 
     _jobScheduled = false;
     scheduleNextJob();
 }
 
-const SyncOptions &CuratorPropagator::syncOptions() const
+const SyncOptions &PersonalCloudPropagator::syncOptions() const
 {
     return _syncOptions;
 }
 
-Result<QString, bool> CuratorPropagator::localFileNameClash(const QString &relFile)
+Result<QString, bool> PersonalCloudPropagator::localFileNameClash(const QString &relFile)
 {
     OC_ASSERT(!relFile.isEmpty());
     if (!relFile.isEmpty() && Utility::fsCasePreserving()) {
@@ -608,7 +608,7 @@ Result<QString, bool> CuratorPropagator::localFileNameClash(const QString &relFi
     return false;
 }
 
-bool CuratorPropagator::hasCaseClashAccessibilityProblem(const QString &relfile)
+bool PersonalCloudPropagator::hasCaseClashAccessibilityProblem(const QString &relfile)
 {
 #ifdef Q_OS_WIN
     bool result = false;
@@ -638,24 +638,24 @@ bool CuratorPropagator::hasCaseClashAccessibilityProblem(const QString &relfile)
 #endif
 }
 
-QString CuratorPropagator::fullLocalPath(const QString &tmp_file_name) const
+QString PersonalCloudPropagator::fullLocalPath(const QString &tmp_file_name) const
 {
     return _localDir + tmp_file_name;
 }
 
-QString CuratorPropagator::localPath() const
+QString PersonalCloudPropagator::localPath() const
 {
     return _localDir;
 }
 
-void CuratorPropagator::scheduleNextJob()
+void PersonalCloudPropagator::scheduleNextJob()
 {
     if (_jobScheduled) return; // don't schedule more than 1
     _jobScheduled = true;
-    QTimer::singleShot(0, this, &CuratorPropagator::scheduleNextJobImpl);
+    QTimer::singleShot(0, this, &PersonalCloudPropagator::scheduleNextJobImpl);
 }
 
-void CuratorPropagator::scheduleNextJobImpl()
+void PersonalCloudPropagator::scheduleNextJobImpl()
 {
     // TODO: If we see that the automatic up-scaling has a bad impact we
     // need to check how to avoid this.
@@ -688,18 +688,18 @@ void CuratorPropagator::scheduleNextJobImpl()
     }
 }
 
-void CuratorPropagator::reportFileTotal(const SyncFileItem &item, qint64 newSize)
+void PersonalCloudPropagator::reportFileTotal(const SyncFileItem &item, qint64 newSize)
 {
     emit updateFileTotal(item, newSize);
 }
 
-void CuratorPropagator::abort()
+void PersonalCloudPropagator::abort()
 {
     if (_abortRequested)
         return;
     if (_rootJob) {
         // Connect to abortFinished  which signals that abort has been asynchronously finished
-        connect(_rootJob.data(), &PropagateDirectory::abortFinished, this, &CuratorPropagator::emitFinished);
+        connect(_rootJob.data(), &PropagateDirectory::abortFinished, this, &PersonalCloudPropagator::emitFinished);
 
         // Use Queued Connection because we're possibly already in an item's finished stack
         QMetaObject::invokeMethod(
@@ -709,24 +709,24 @@ void CuratorPropagator::abort()
             Qt::QueuedConnection);
 
         // Give asynchronous abort 5 sec to finish on its own
-        QTimer::singleShot(5s, this, &CuratorPropagator::abortTimeout);
+        QTimer::singleShot(5s, this, &PersonalCloudPropagator::abortTimeout);
     } else {
         // No root job, call emitFinished
         emitFinished(SyncFileItem::NormalError);
     }
 }
 
-void CuratorPropagator::reportProgress(const SyncFileItem &item, qint64 bytes)
+void PersonalCloudPropagator::reportProgress(const SyncFileItem &item, qint64 bytes)
 {
     emit progress(item, bytes);
 }
 
-AccountPtr CuratorPropagator::account() const
+AccountPtr PersonalCloudPropagator::account() const
 {
     return _account;
 }
 
-CuratorPropagator::DiskSpaceResult CuratorPropagator::diskSpaceCheck() const
+PersonalCloudPropagator::DiskSpaceResult PersonalCloudPropagator::diskSpaceCheck() const
 {
     const qint64 freeBytes = Utility::freeDiskSpace(_localDir);
     if (freeBytes < 0) {
@@ -744,7 +744,7 @@ CuratorPropagator::DiskSpaceResult CuratorPropagator::diskSpaceCheck() const
     return DiskSpaceOk;
 }
 
-bool CuratorPropagator::createConflict(const SyncFileItemPtr &item,
+bool PersonalCloudPropagator::createConflict(const SyncFileItemPtr &item,
     PropagatorCompositeJob *composite, QString *error)
 {
     QString fn = fullLocalPath(item->_file);
@@ -813,12 +813,12 @@ bool CuratorPropagator::createConflict(const SyncFileItemPtr &item,
     return true;
 }
 
-QString CuratorPropagator::adjustRenamedPath(const QString &original) const
+QString PersonalCloudPropagator::adjustRenamedPath(const QString &original) const
 {
     return APP::adjustRenamedPath(_renamedDirectories, original);
 }
 
-Result<Vfs::ConvertToPlaceholderResult, QString> CuratorPropagator::updatePlaceholder(const SyncFileItem &item, const QString &fileName, const QString &replacesFile)
+Result<Vfs::ConvertToPlaceholderResult, QString> PersonalCloudPropagator::updatePlaceholder(const SyncFileItem &item, const QString &fileName, const QString &replacesFile)
 {
     Q_ASSERT([&] {
         if (item._type == ItemTypeVirtualFileDehydration) {
@@ -834,7 +834,7 @@ Result<Vfs::ConvertToPlaceholderResult, QString> CuratorPropagator::updatePlaceh
     return syncOptions()._vfs->updateMetadata(item, fileName, replacesFile);
 }
 
-Result<Vfs::ConvertToPlaceholderResult, QString> CuratorPropagator::updateMetadata(const SyncFileItem &item)
+Result<Vfs::ConvertToPlaceholderResult, QString> PersonalCloudPropagator::updateMetadata(const SyncFileItem &item)
 {
     const QString fsPath = fullLocalPath(item.destination());
     const auto result = updatePlaceholder(item, fsPath, {});
@@ -855,16 +855,16 @@ Result<Vfs::ConvertToPlaceholderResult, QString> CuratorPropagator::updateMetada
 
 // ================================================================================
 
-PropagatorJob::PropagatorJob(CuratorPropagator *propagator, const QString &path)
+PropagatorJob::PropagatorJob(PersonalCloudPropagator *propagator, const QString &path)
     : QObject(propagator)
     , _state(NotYetStarted)
     , _path(path)
 {
 }
 
-CuratorPropagator *PropagatorJob::propagator() const
+PersonalCloudPropagator *PropagatorJob::propagator() const
 {
-    return qobject_cast<CuratorPropagator *>(parent());
+    return qobject_cast<PersonalCloudPropagator *>(parent());
 }
 
 // ================================================================================
@@ -1009,14 +1009,14 @@ qint64 PropagatorCompositeJob::committedDiskSpace() const
     return needed;
 }
 
-PropagatorCompositeJob::PropagatorCompositeJob(CuratorPropagator *propagator, const QString &path)
+PropagatorCompositeJob::PropagatorCompositeJob(PersonalCloudPropagator *propagator, const QString &path)
     : PropagatorJob(propagator, path)
 {
 }
 
 // ================================================================================
 
-PropagateDirectory::PropagateDirectory(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+PropagateDirectory::PropagateDirectory(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
     : PropagateItemJob(propagator, item)
     , _firstJob(propagator->createJob(item))
     , _subJobs(propagator, path())
@@ -1147,7 +1147,7 @@ void PropagateDirectory::slotSubJobsFinished(const SyncFileItem::Status status)
     }
 }
 
-PropagateRootDirectory::PropagateRootDirectory(CuratorPropagator *propagator)
+PropagateRootDirectory::PropagateRootDirectory(PersonalCloudPropagator *propagator)
     : PropagateDirectory(propagator, SyncFileItemPtr([] {
         auto f = new SyncFileItem;
         f->_file = QLatin1Char('/');
@@ -1266,18 +1266,18 @@ void PropagateRootDirectory::addDeleteJob(PropagatorJob *job)
 
 // ================================================================================
 
-QString CuratorPropagator::fullRemotePath(const QString &tmp_file_name) const
+QString PersonalCloudPropagator::fullRemotePath(const QString &tmp_file_name) const
 {
     // TODO: should this be part of the _item (SyncFileItemPtr)?
     return _remoteFolder + tmp_file_name;
 }
 
-QString CuratorPropagator::remotePath() const
+QString PersonalCloudPropagator::remotePath() const
 {
     return _remoteFolder;
 }
 
-PropagateUpdateMetaDataJob::PropagateUpdateMetaDataJob(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+PropagateUpdateMetaDataJob::PropagateUpdateMetaDataJob(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
     : PropagateItemJob(propagator, item)
 {
 }

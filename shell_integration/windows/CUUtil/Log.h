@@ -22,7 +22,7 @@ template <typename T = std::wstring>
 void log(const std::wstring &msg, const T &error = {})
 {
     std::wstringstream tmp;
-    tmp << L"Curator ShellExtension: " << msg;
+    tmp << L"PersonalCloud ShellExtension: " << msg;
     if (!error.empty()) {
         tmp << L" " << error.data();
     }

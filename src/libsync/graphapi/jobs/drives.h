@@ -15,7 +15,7 @@
 
 #include "networkjobs/jsonjob.h"
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 #include <OAIDrive.h>
 
 namespace APP {

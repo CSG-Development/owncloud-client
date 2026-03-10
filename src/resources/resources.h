@@ -13,7 +13,7 @@
  */
 
 #pragma once
-#include "resources/curatorresources.h"
+#include "resources/personalcloudresources.h"
 
 #include <QIcon>
 

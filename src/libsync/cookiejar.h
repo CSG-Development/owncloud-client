@@ -17,7 +17,7 @@
 
 #include <QNetworkCookieJar>
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 namespace APP {
 

@@ -9,21 +9,21 @@
     background-image: url(":/res/Files-logo.png");
 }
 
-#lblCurator,
+#lblAppName,
 #lblFiles {
     font-size: 34px;
 }
 
-#lblCurator {
+#lblAppName {
     color: #6EBD49;
 }
 
 /*** Light theme */
 
 [theme="light"] #frameContent { background-color: #FFFFFF; }
-[theme="light"] #lblCurator { color: #6EBD49; }
+[theme="light"] #lblAppName { color: #6EBD49; }
 
 /*** Dark theme */
 
 [theme="dark"] #frameContent { background-color: #262729; }
-[theme="dark"] #lblCurator { color: #6EBD49; }
+[theme="dark"] #lblAppName { color: #6EBD49; }

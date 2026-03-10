@@ -10,7 +10,7 @@ Feature: deleting files and folders
 
     @issue-9439
     Scenario Outline: Delete a file
-        Given user "Alice" has uploaded file with content "Curator test text file 0" to "<fileName>" in the server
+        Given user "Alice" has uploaded file with content "PersonalCloud test text file 0" to "<fileName>" in the server
         And user "Alice" has set up a client with default settings
         When the user deletes the file "<fileName>"
         And the user waits for the files to sync

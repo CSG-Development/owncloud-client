@@ -162,12 +162,12 @@ static CSYNC_EXCLUDE_TYPE _csync_excluded_common(QStringView path, bool excludeC
                 return CSYNC_FILE_SILENTLY_EXCLUDED;
             }
         }
-        if (bname.startsWith(QLatin1String(".curatorsync.log"), Qt::CaseInsensitive)) { // ".curatorsync.log*"
+        if (bname.startsWith(QLatin1String(".personalcloudsync.log"), Qt::CaseInsensitive)) { // ".personalcloudsync.log*"
             return CSYNC_FILE_SILENTLY_EXCLUDED;
         }
     }
 
-    if (bname.endsWith(QLatin1String(APPLICATION_DOTVIRTUALFILE_SUFFIX), Qt::CaseInsensitive)) { // ".curator" placeholder
+    if (bname.endsWith(QLatin1String(APPLICATION_DOTVIRTUALFILE_SUFFIX), Qt::CaseInsensitive)) { // ".personalcloud" placeholder
         return CSYNC_FILE_EXCLUDE_RESERVED;
     }
 

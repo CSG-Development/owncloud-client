@@ -19,7 +19,7 @@
 
 #include "accessmanager.h"
 #include "accountfwd.h"
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 #include <csync.h>
 
 class QNetworkAccessManager;

@@ -725,8 +725,8 @@ Kjo është një mënyrë e re, eksperimentale. Nëse vendosni ta përdorni, ju 
     <name>APP::ConnectionValidator</name>
     <message>
         <location filename="../src/gui/connectionvalidator.cpp" line="67"/>
-        <source>No Curator account configured</source>
-        <translation>Nuk ka llogari Curator të formësuar</translation>
+        <source>No PersonalCloud account configured</source>
+        <translation>Nuk ka llogari PersonalCloud të formësuar</translation>
     </message>
     <message>
         <location filename="../src/gui/connectionvalidator.cpp" line="249"/>
@@ -763,9 +763,9 @@ Kjo është një mënyrë e re, eksperimentale. Nëse vendosni ta përdorni, ju 
     </message>
 </context>
 <context>
-    <name>APP::CuratorPropagator</name>
+    <name>APP::PersonalCloudPropagator</name>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="766"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="766"/>
         <source>File %1 is currently in use</source>
         <translation type="unfinished">Kartela %1 është aktualisht në përdorim</translation>
     </message>
@@ -2288,12 +2288,12 @@ Gjatë procesit përditësuesi mund të kërkojë privilegje shtesë.</translati
 <context>
     <name>APP::PropagateDirectory</name>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="1126"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="1126"/>
         <source>Error updating metadata: %1</source>
         <translation>Gabim në përditësim tejtëdhënash: %1</translation>
     </message>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="1129"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="1129"/>
         <source>%1 the folder is currently in use</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2369,7 +2369,7 @@ Gjatë procesit përditësuesi mund të kërkojë privilegje shtesë.</translati
 <context>
     <name>APP::PropagateItemJob</name>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="240"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="240"/>
         <source>; Restoration Failed: %1</source>
         <translation>; Rikthimi Dështoi: %1</translation>
     </message>
@@ -2516,12 +2516,12 @@ Gjatë procesit përditësuesi mund të kërkojë privilegje shtesë.</translati
 <context>
     <name>APP::PropagateUpdateMetaDataJob</name>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="1310"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="1310"/>
         <source>Could not update file : %1</source>
         <translation>S’u përditësua dot kartela : %1</translation>
     </message>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="1313"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="1313"/>
         <source>The file %1 is currently in use</source>
         <translation>Kartela %1 është aktualisht në përdorim</translation>
     </message>
@@ -2807,8 +2807,8 @@ Gjatë procesit përditësuesi mund të kërkojë privilegje shtesë.</translati
     </message>
     <message>
         <location filename="../src/gui/sharedialog.ui" line="72"/>
-        <source>Curator Path:</source>
-        <translation>Shteg Curator-i:</translation>
+        <source>PersonalCloud Path:</source>
+        <translation>Shteg PersonalCloud-i:</translation>
     </message>
     <message>
         <location filename="../src/gui/sharedialog.ui" line="104"/>
@@ -3123,7 +3123,7 @@ Gjatë procesit përditësuesi mund të kërkojë privilegje shtesë.</translati
     <message>
         <location filename="../src/gui/socketapi/socketapi.cpp" line="510"/>
         <source>Share with %1</source>
-        <comment>parameter is Curator</comment>
+        <comment>parameter is PersonalCloud</comment>
         <translation>Ndajeni me %1</translation>
     </message>
     <message>
@@ -3849,7 +3849,7 @@ Kjo është një mënyrë e re, eksperimentale. Nëse vendosni ta përdorni, ju 
     </message>
     <message>
         <location filename="../src/gui/newwizard/pages/connecterrorpage.ui" line="312"/>
-        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <source>We are unable to detect the PersonalCloud device. Please ensure the following:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3897,7 +3897,7 @@ Kjo është një mënyrë e re, eksperimentale. Nëse vendosni ta përdorni, ju 
     </message>
     <message>
         <location filename="../src/gui/newwizard/pages/credentialspage.ui" line="445"/>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4128,7 +4128,7 @@ Kjo është një mënyrë e re, eksperimentale. Nëse vendosni ta përdorni, ju 
     </message>
     <message>
         <location filename="../src/gui/newwizard/pages/emailpage.ui" line="399"/>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4812,7 +4812,7 @@ Kjo është një mënyrë e re, eksperimentale. Nëse vendosni ta përdorni, ju 
     </message>
     <message>
         <location filename="../src/gui/newwizard/pages/waitpage.ui" line="324"/>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

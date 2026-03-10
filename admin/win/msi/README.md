@@ -19,5 +19,5 @@ candle.exe -dPlatform=x64 -arch x64 -dHarvestAppDir="files" -ext WixUtilExtensio
 Create MSI command:
 
 ```
-light.exe -sw1076 -ext WixUIExtension -ext WixUtilExtension collect.wixobj product.wixobj shellext.wixobj -out curator-client.msi
+light.exe -sw1076 -ext WixUIExtension -ext WixUtilExtension collect.wixobj product.wixobj shellext.wixobj -out PersonalCloud-client.msi
 ```

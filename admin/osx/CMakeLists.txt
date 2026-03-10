@@ -1,6 +1,6 @@
 
 # Check if varialbe MAC_INSTALLER_BACKGROUND_FILE is defined. That might come
-# from the OEM.cmake for branded clients or from CURATOR.cmake for the non
+# from the OEM.cmake for branded clients or from PersonalCloud.cmake for the non
 # branded client.
 # Make sure that the MAC_INSTALLER_BACKGROUND_FILE contains the full path, ie.
 # includes CMAKE_SOURCE_DIR or so.

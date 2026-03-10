@@ -100,7 +100,7 @@ SyncJournalDb::SyncJournalDb(const QString &dbFilePath, QObject *parent)
     , _metadataTableIsEmpty(false)
 {
     // Allow forcing the journal mode for debugging
-    static QByteArray envJournalMode = qgetenv("CURATOR_SQLITE_JOURNAL_MODE");
+    static QByteArray envJournalMode = qgetenv("PERSONALCLOUD_SQLITE_JOURNAL_MODE");
     _journalMode = envJournalMode;
     if (_journalMode.isEmpty()) {
         _journalMode = defaultJournalMode(_dbFile);
@@ -317,7 +317,7 @@ bool SyncJournalDb::checkConnect()
     }
 
     // Set locking mode to avoid issues with WAL on Windows
-    static QByteArray locking_mode_env = qgetenv("CURATOR_SQLITE_LOCKING_MODE");
+    static QByteArray locking_mode_env = qgetenv("PERSONALCLOUD_SQLITE_LOCKING_MODE");
     if (locking_mode_env.isEmpty())
         locking_mode_env = "EXCLUSIVE";
     pragma1.prepare("PRAGMA locking_mode=" + locking_mode_env + ";");
@@ -337,7 +337,7 @@ bool SyncJournalDb::checkConnect()
     }
 
     // For debugging purposes, allow temp_store to be set
-    static QByteArray env_temp_store = qgetenv("CURATOR_SQLITE_TEMP_STORE");
+    static QByteArray env_temp_store = qgetenv("PERSONALCLOUD_SQLITE_TEMP_STORE");
     if (!env_temp_store.isEmpty()) {
         pragma1.prepare("PRAGMA temp_store = " + env_temp_store + ";");
         if (!pragma1.exec()) {

@@ -12,7 +12,7 @@ Feature: Visually check all tabs
             | AddAccount   |
             | Activity     |
             | Settings     |
-            | QuitCurator  |
+            | QuitPersonalCloud  |
 
 
     Scenario: Open log dialog with Ctrl+l keys combination

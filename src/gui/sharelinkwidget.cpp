@@ -127,7 +127,7 @@ ShareLinkWidget::ShareLinkWidget(AccountPtr account,
 
     // check if the file is already inside of a synced folder
     if (sharePath.isEmpty()) {
-        // The file is not yet in an Curator synced folder. We could automatically
+        // The file is not yet in an PersonalCloud synced folder. We could automatically
         // copy it over, but that is skipped as not all questions can be answered that
         // are involved in that, see https://github.com/owncloud/client/issues/2732
         //

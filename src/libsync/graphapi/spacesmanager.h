@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 #include "libsync/accountfwd.h"
 #include "libsync/graphapi/space.h"

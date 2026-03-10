@@ -64,7 +64,7 @@ void ConnectionValidator::checkServer(ConnectionValidator::ValidationMode mode)
 {
     _mode = mode;
     if (!_account) {
-        _errors << tr("No Curator account configured");
+        _errors << tr("No PersonalCloud account configured");
         reportResult(NotConfigured);
         return;
     }
@@ -156,7 +156,7 @@ void ConnectionValidator::slotCheckServerAndAuth()
 void ConnectionValidator::slotStatusFound(const QUrl &url, const QJsonObject &info)
 {
     // status.php was found.
-    qCInfo(lcConnectionValidator) << "** Application: Curator found: "
+    qCInfo(lcConnectionValidator) << "** Application: PersonalCloud found: "
                                   << url << " with version "
                                   << info.value(QLatin1String("versionstring")).toString();
 

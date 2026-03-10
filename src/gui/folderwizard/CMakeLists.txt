@@ -17,6 +17,6 @@ if(APPLE)
     add_compile_options(-fexceptions)
 endif()
 
-target_link_libraries(folderwizard PUBLIC Qt::Widgets libsync curatorResources)
+target_link_libraries(folderwizard PUBLIC Qt::Widgets libsync PersonalCloudResources)
 set_target_properties(folderwizard PROPERTIES AUTOUIC ON AUTORCC ON)
 apply_common_target_settings(folderwizard)

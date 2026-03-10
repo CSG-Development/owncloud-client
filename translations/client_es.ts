@@ -725,8 +725,8 @@ Este es nuevo modo en fase experimental. Si decide usarlo, por favor repórtenos
     <name>APP::ConnectionValidator</name>
     <message>
         <location filename="../src/gui/connectionvalidator.cpp" line="67"/>
-        <source>No Curator account configured</source>
-        <translation>No se ha configurado ninguna cuenta de Curator</translation>
+        <source>No PersonalCloud account configured</source>
+        <translation>No se ha configurado ninguna cuenta de PersonalCloud</translation>
     </message>
     <message>
         <location filename="../src/gui/connectionvalidator.cpp" line="249"/>
@@ -763,9 +763,9 @@ Este es nuevo modo en fase experimental. Si decide usarlo, por favor repórtenos
     </message>
 </context>
 <context>
-    <name>APP::CuratorPropagator</name>
+    <name>APP::PersonalCloudPropagator</name>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="766"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="766"/>
         <source>File %1 is currently in use</source>
         <translation type="unfinished">El archivo %1 está actualmente en uso</translation>
     </message>
@@ -2285,12 +2285,12 @@ for additional privileges during the process.</source>
 <context>
     <name>APP::PropagateDirectory</name>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="1126"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="1126"/>
         <source>Error updating metadata: %1</source>
         <translation>Error al actualizar los metadatos de: %1</translation>
     </message>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="1129"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="1129"/>
         <source>%1 the folder is currently in use</source>
         <translation>La carpeta %1 está actualmente en uso</translation>
     </message>
@@ -2366,7 +2366,7 @@ for additional privileges during the process.</source>
 <context>
     <name>APP::PropagateItemJob</name>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="240"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="240"/>
         <source>; Restoration Failed: %1</source>
         <translation>; Falló la restauración: %1</translation>
     </message>
@@ -2513,12 +2513,12 @@ for additional privileges during the process.</source>
 <context>
     <name>APP::PropagateUpdateMetaDataJob</name>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="1310"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="1310"/>
         <source>Could not update file : %1</source>
         <translation>No se pudo actualizar el archivo: %1</translation>
     </message>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="1313"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="1313"/>
         <source>The file %1 is currently in use</source>
         <translation>El archivo %1 está actualmente en uso</translation>
     </message>
@@ -2804,8 +2804,8 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <location filename="../src/gui/sharedialog.ui" line="72"/>
-        <source>Curator Path:</source>
-        <translation>Ruta de OwnCloud:</translation>
+        <source>PersonalCloud Path:</source>
+        <translation>Ruta de PersonalCloud:</translation>
     </message>
     <message>
         <location filename="../src/gui/sharedialog.ui" line="104"/>
@@ -3120,7 +3120,7 @@ for additional privileges during the process.</source>
     <message>
         <location filename="../src/gui/socketapi/socketapi.cpp" line="510"/>
         <source>Share with %1</source>
-        <comment>parameter is Curator</comment>
+        <comment>parameter is PersonalCloud</comment>
         <translation>Compartir con %1</translation>
     </message>
     <message>
@@ -3846,7 +3846,7 @@ Este es nuevo modo en fase experimental. Si decide usarlo, por favor repórtenos
     </message>
     <message>
         <location filename="../src/gui/newwizard/pages/connecterrorpage.ui" line="312"/>
-        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <source>We are unable to detect the PersonalCloud device. Please ensure the following:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3894,7 +3894,7 @@ Este es nuevo modo en fase experimental. Si decide usarlo, por favor repórtenos
     </message>
     <message>
         <location filename="../src/gui/newwizard/pages/credentialspage.ui" line="445"/>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4125,7 +4125,7 @@ Este es nuevo modo en fase experimental. Si decide usarlo, por favor repórtenos
     </message>
     <message>
         <location filename="../src/gui/newwizard/pages/emailpage.ui" line="399"/>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4809,7 +4809,7 @@ Este es nuevo modo en fase experimental. Si decide usarlo, por favor repórtenos
     </message>
     <message>
         <location filename="../src/gui/newwizard/pages/waitpage.ui" line="324"/>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

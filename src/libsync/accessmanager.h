@@ -15,7 +15,7 @@
 #ifndef MIRALL_ACCESS_MANAGER_H
 #define MIRALL_ACCESS_MANAGER_H
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 #include <QNetworkAccessManager>
 
 class QByteArray;

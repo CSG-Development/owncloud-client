@@ -25,7 +25,7 @@ namespace APP {
 
 class UploadDevice;
 class GETFileJob;
-class CuratorPropagator;
+class PersonalCloudPropagator;
 
 /**
  * @brief The BandwidthManager class
@@ -35,7 +35,7 @@ class BandwidthManager : public QObject
 {
     Q_OBJECT
 public:
-    BandwidthManager(CuratorPropagator *p);
+    BandwidthManager(PersonalCloudPropagator *p);
     ~BandwidthManager() override;
 
     bool usingAbsoluteUploadLimit() { return _currentUploadLimit > 0; }
@@ -68,7 +68,7 @@ public slots:
 private:
     // FIXME this timer and this variable should be replaced
     // by the propagator emitting the changed limit values to us as signal
-    CuratorPropagator *_propagator = nullptr;
+    PersonalCloudPropagator *_propagator = nullptr;
 
     // for absolute up/down bw limiting
     QTimer _absoluteLimitTimer;

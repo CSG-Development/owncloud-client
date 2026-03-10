@@ -16,7 +16,7 @@
 #ifndef CAPABILITIES_H
 #define CAPABILITIES_H
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 #include "common/checksumalgorithms.h"
 
@@ -124,7 +124,7 @@ struct APPLICATIONSYNC_EXPORT Migration
 };
 
 /**
- * @brief The Capabilities class represents the capabilities of an Curator
+ * @brief The Capabilities class represents the capabilities of an PersonalCloud
  * server
  * @ingroup libsync
  */

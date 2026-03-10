@@ -13,7 +13,7 @@
  */
 #pragma once
 
-#include "curatorpropagator.h"
+#include "personalcloudpropagator.h"
 #include "networkjobs.h"
 
 namespace APP {
@@ -46,7 +46,7 @@ class PropagateRemoteMove : public PropagateItemJob
     QPointer<MoveJob> _job;
 
 public:
-    PropagateRemoteMove(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateRemoteMove(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
     {
     }

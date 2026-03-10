@@ -23,7 +23,7 @@
 #include "filesystem.h"
 #include "httplogger.h"
 #include "networkjobs.h"
-#include "curatorpropagator_p.h"
+#include "personalcloudpropagator_p.h"
 #include "propagateremotedelete.h"
 #include "propagateupload.h"
 #include "propagatorjobs.h"
@@ -108,7 +108,7 @@ QNetworkRequest PropagateUploadFileTUS::prepareRequest(const quint64 &chunkSize)
     return request;
 }
 
-PropagateUploadFileTUS::PropagateUploadFileTUS(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+PropagateUploadFileTUS::PropagateUploadFileTUS(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
     : PropagateUploadFileCommon(propagator, item)
 {
 }

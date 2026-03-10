@@ -45,4 +45,4 @@ QString pluginFileName(const QString &type, const QString &name);
 
 }
 
-Q_DECLARE_INTERFACE(APP::PluginFactory, "org.curator.PluginFactory")
+Q_DECLARE_INTERFACE(APP::PluginFactory, "org.personalcloud.PluginFactory")

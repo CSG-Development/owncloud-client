@@ -32,7 +32,7 @@ public:
     QIcon wizardHeaderLogo() const override;
     QIcon aboutIcon() const override;
 
-    // For curator-brandings *do* show the virtual files option.
+    // For personalcloud-brandings *do* show the virtual files option.
     bool showVirtualFilesOption() const override { return true; }
     bool enableExperimentalFeatures() const override { return true; };
 

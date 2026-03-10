@@ -15,7 +15,7 @@
 
 #include "common/checksumalgorithms.h"
 #include "networkjobs.h"
-#include "curatorpropagator.h"
+#include "personalcloudpropagator.h"
 
 #include <QBuffer>
 #include <QFile>
@@ -143,7 +143,7 @@ class PropagateDownloadFile : public PropagateItemJob
     QString _expectedEtagForResume;
 
 public:
-    PropagateDownloadFile(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateDownloadFile(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
         , _resumeStart(0)
         , _downloadProgress(0)
