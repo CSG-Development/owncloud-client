@@ -91,7 +91,7 @@ def getCurrentUserSyncPath():
 
 def startClient():
     squish.startApplication(
-        "curator -s"
+        "PersonalCloud -s"
         + " --logfile "
         + get_config('clientLogFile')
         + " --logdebug"
@@ -100,7 +100,7 @@ def startClient():
 
 
 def getPollingInterval():
-    pollingInterval = '''[Curator]
+    pollingInterval = '''[PersonalCloud]
     remotePollInterval={pollingInterval}
     '''
     args = {'pollingInterval': 5000}

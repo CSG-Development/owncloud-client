@@ -12,7 +12,7 @@
  * for more details.
  */
 
-#include "curatorpropagator.h"
+#include "personalcloudpropagator.h"
 #include "propagatedownload.h"
 #include "propagateupload.h"
 #include "propagatorjobs.h"
@@ -39,7 +39,7 @@ static qint64 relativeLimitMeasuringTimerIntervalMsec = 1000 * 2;
 //  * For relative limiting, do less measuring and more delaying+giving quota
 //  * For relative limiting, smoothen measurements
 
-BandwidthManager::BandwidthManager(CuratorPropagator *p)
+BandwidthManager::BandwidthManager(PersonalCloudPropagator *p)
     : QObject(p)
     , _propagator(p)
     , _relativeLimitCurrentMeasuredDevice(nullptr)

@@ -13,7 +13,7 @@
  */
 
 #include "propagateremotemkdir.h"
-#include "curatorpropagator_p.h"
+#include "personalcloudpropagator_p.h"
 #include "account.h"
 #include "common/syncjournalfilerecord.h"
 #include "propagateremotedelete.h"

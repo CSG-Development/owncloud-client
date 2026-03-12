@@ -40,7 +40,7 @@ namespace {
 constexpr int TokenRefreshMaxRetries = 3;
 constexpr std::chrono::seconds TokenRefreshDefaultTimeout = 30s;
 constexpr int CredentialVersion = 1;
-const char authenticationFailedC[] = "curator-authentication-failed";
+const char authenticationFailedC[] = "personalcloud-authentication-failed";
 
 auto isOAuthC()
 {

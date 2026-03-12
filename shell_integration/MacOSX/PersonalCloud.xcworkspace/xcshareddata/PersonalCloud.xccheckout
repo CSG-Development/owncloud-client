@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>5264E8F5-AB49-45F3-868F-647EEFAB70E0</string>
 	<key>IDESourceControlProjectName</key>
-	<string>Curator</string>
+	<string>PersonalCloud</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>D67321A19EF879CA55BF889202BA8C23AC9AA2B5</key>
 		<string>ssh://github.com/owncloud/client.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>shell_integration/MacOSX/Curator.xcworkspace</string>
+	<string>shell_integration/MacOSX/PersonalCloud.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>D67321A19EF879CA55BF889202BA8C23AC9AA2B5</key>

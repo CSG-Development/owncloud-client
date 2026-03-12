@@ -93,7 +93,7 @@ private:
 };
 
 /**
- * @brief Class that uses an Curator proprietary XML format to fetch update information
+ * @brief Class that uses an PersonalCloud proprietary XML format to fetch update information
  * @ingroup gui
  */
 class OCUpdater : public Updater

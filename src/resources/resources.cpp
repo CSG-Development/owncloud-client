@@ -24,7 +24,7 @@ using namespace Resources;
 bool APP::Resources::isUsingDarkTheme()
 {
     // TODO: replace by a command line switch
-    static bool forceDark = qEnvironmentVariableIntValue("CURATOR_FORCE_DARK_MODE") != 0;
+    static bool forceDark = qEnvironmentVariableIntValue("PERSONALCLOUD_FORCE_DARK_MODE") != 0;
     return forceDark || QPalette().base().color().lightnessF() <= 0.5;
 }
 

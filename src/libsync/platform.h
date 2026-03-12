@@ -20,7 +20,7 @@
 
 #include <memory>
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 namespace APP {
 

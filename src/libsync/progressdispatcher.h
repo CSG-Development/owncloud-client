@@ -15,7 +15,7 @@
 #ifndef PROGRESSDISPATCHER_H
 #define PROGRESSDISPATCHER_H
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 #include <QObject>
 #include <QHash>
 #include <QTime>

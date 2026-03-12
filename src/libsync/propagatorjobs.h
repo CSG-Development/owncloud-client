@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "curatorpropagator.h"
+#include "personalcloudpropagator.h"
 #include <QFile>
 
 namespace APP {
@@ -35,7 +35,7 @@ class PropagateLocalRemove : public PropagateItemJob
 {
     Q_OBJECT
 public:
-    PropagateLocalRemove(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateLocalRemove(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
     {
     }
@@ -54,7 +54,7 @@ class PropagateLocalMkdir : public PropagateItemJob
 {
     Q_OBJECT
 public:
-    PropagateLocalMkdir(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateLocalMkdir(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
         , _deleteExistingFile(false)
     {
@@ -81,7 +81,7 @@ class PropagateLocalRename : public PropagateItemJob
 {
     Q_OBJECT
 public:
-    PropagateLocalRename(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateLocalRename(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
     {
     }

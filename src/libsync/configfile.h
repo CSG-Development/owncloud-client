@@ -16,7 +16,7 @@
 #define CONFIGFILE_H
 
 #include "common/result.h"
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 #include <QNetworkProxy>
 #include <QSettings>

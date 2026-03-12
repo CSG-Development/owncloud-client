@@ -106,7 +106,7 @@ CommandLineOptions parseOptions(const QStringList &arguments)
         << QStringLiteral("%1 version %2\r\nFile synchronization desktop utility.").arg(Theme::instance()->appName(), APP::Version::displayString())
         << Qt::endl;
 
-    if (Theme::instance()->appName() == QLatin1String("Curator")) {
+    if (Theme::instance()->appName() == QLatin1String("PersonalCloud")) {
         descriptionTextStream
             << Qt::endl
             << Qt::endl

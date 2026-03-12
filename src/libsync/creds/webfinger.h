@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 #include "account.h"
 

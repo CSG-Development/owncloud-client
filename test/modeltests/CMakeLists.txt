@@ -1,2 +1,2 @@
-curator_add_test(ActivityModel)
-curator_add_test(ProtocolModel)
+personalcloud_add_test(ActivityModel)
+personalcloud_add_test(ProtocolModel)

@@ -30,23 +30,23 @@ SyncOptions::~SyncOptions()
 
 void SyncOptions::fillFromEnvironmentVariables()
 {
-    QByteArray chunkSizeEnv = qgetenv("CURATOR_CHUNK_SIZE");
+    QByteArray chunkSizeEnv = qgetenv("PERSONALCLOUD_CHUNK_SIZE");
     if (!chunkSizeEnv.isEmpty())
         _initialChunkSize = chunkSizeEnv.toUInt();
 
-    QByteArray minChunkSizeEnv = qgetenv("CURATOR_MIN_CHUNK_SIZE");
+    QByteArray minChunkSizeEnv = qgetenv("PERSONALCLOUD_MIN_CHUNK_SIZE");
     if (!minChunkSizeEnv.isEmpty())
         _minChunkSize = minChunkSizeEnv.toUInt();
 
-    QByteArray maxChunkSizeEnv = qgetenv("CURATOR_MAX_CHUNK_SIZE");
+    QByteArray maxChunkSizeEnv = qgetenv("PERSONALCLOUD_MAX_CHUNK_SIZE");
     if (!maxChunkSizeEnv.isEmpty())
         _maxChunkSize = maxChunkSizeEnv.toUInt();
 
-    QByteArray targetChunkUploadDurationEnv = qgetenv("CURATOR_TARGET_CHUNK_UPLOAD_DURATION");
+    QByteArray targetChunkUploadDurationEnv = qgetenv("PERSONALCLOUD_TARGET_CHUNK_UPLOAD_DURATION");
     if (!targetChunkUploadDurationEnv.isEmpty())
         _targetChunkUploadDuration = std::chrono::milliseconds(targetChunkUploadDurationEnv.toUInt());
 
-    int maxParallel = qEnvironmentVariableIntValue("CURATOR_MAX_PARALLEL");
+    int maxParallel = qEnvironmentVariableIntValue("PERSONALCLOUD_MAX_PARALLEL");
     if (maxParallel > 0)
         _parallelNetworkJobs = maxParallel;
 }

@@ -81,7 +81,7 @@ int main()
     int argc;
     wchar_t **argv = CommandLineToArgvW(commandLine, &argc);
 
-    const auto process = getHWND(argc == 2 ? argv[1] : L"curator.exe");
+    const auto process = getHWND(argc == 2 ? argv[1] : L"PersonalCloud.exe");
 //    const auto process = getHWND(L"WINDOW_TEST.exe");
 
     std::wcout << "Query: WM_QUERYENDSESSION" << std::endl;

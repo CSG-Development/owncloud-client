@@ -45,7 +45,7 @@ Updater *Updater::instance()
 
 QUrl Updater::updateUrl()
 {
-    QUrl updateBaseUrl(QString::fromLocal8Bit(qgetenv("CUR_UPDATE_URL")));
+    QUrl updateBaseUrl(QString::fromLocal8Bit(qgetenv("PERSONALCLOUD_UPDATE_URL")));
     if (updateBaseUrl.isEmpty()) {
         updateBaseUrl = Theme::instance()->updateCheckUrl();
     }

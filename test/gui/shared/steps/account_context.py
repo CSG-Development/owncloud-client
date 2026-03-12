@@ -284,4 +284,4 @@ def step(context, username):
 
 @When("the user quits the client")
 def step(context):
-    Toolbar.quit_curator()
+    Toolbar.quit_personalcloud()

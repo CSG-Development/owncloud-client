@@ -13,7 +13,7 @@
  */
 
 #include "propagateremotedelete.h"
-#include "curatorpropagator_p.h"
+#include "personalcloudpropagator_p.h"
 #include "account.h"
 #include "common/asserts.h"
 

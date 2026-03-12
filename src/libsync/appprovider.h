@@ -19,7 +19,7 @@
 
 #include "accountfwd.h"
 #include "capabilities.h"
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 #include <QJsonObject>
 #include <QMimeType>

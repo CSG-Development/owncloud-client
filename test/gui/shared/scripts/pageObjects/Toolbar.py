@@ -13,7 +13,7 @@ class Toolbar:
         "type": "QMessageBox",
         "unnamed": 1,
         "visible": 1,
-        "windowTitle": "Quit Curator",
+        "windowTitle": "Quit PersonalCloud",
     }
     CONFIRM_QUIT_BUTTON = {
         "text": "Yes",
@@ -23,7 +23,7 @@ class Toolbar:
         "window": QUIT_CONFIRMATION_DIALOG,
     }
 
-    TOOLBAR_ITEMS = ["Add account", "Activity", "Settings", "Quit Curator"]
+    TOOLBAR_ITEMS = ["Add account", "Activity", "Settings", "Quit PersonalCloud"]
 
     @staticmethod
     def getItemSelector(item_name):
@@ -60,9 +60,9 @@ class Toolbar:
         squish.clickButton(squish.waitForObject(Toolbar.getItemSelector("Settings")))
 
     @staticmethod
-    def quit_curator():
+    def quit_personalcloud():
         squish.clickButton(
-            squish.waitForObject(Toolbar.getItemSelector("Quit Curator"))
+            squish.waitForObject(Toolbar.getItemSelector("Quit PersonalCloud"))
         )
         squish.clickButton(squish.waitForObject(Toolbar.CONFIRM_QUIT_BUTTON))
         for ctx in squish.applicationContextList():

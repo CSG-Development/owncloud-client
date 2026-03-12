@@ -14,7 +14,7 @@
 
 #include "propagateremotemove.h"
 #include "propagatorjobs.h"
-#include "curatorpropagator_p.h"
+#include "personalcloudpropagator_p.h"
 #include "account.h"
 #include "common/syncjournalfilerecord.h"
 #include "filesystem.h"
@@ -98,13 +98,13 @@ void PropagateRemoteMove::start()
         if (itype == ItemTypeFile) {
             OC_ASSERT(!sourceHadSuffix && !destinationHadSuffix);
 
-            // If foo -> bar.curator, the rename target will be "bar"
+            // If foo -> bar.personalcloud, the rename target will be "bar"
             folderTargetAlt = folderTarget + suffix;
 
         } else if (itype == ItemTypeVirtualFile) {
             OC_ASSERT(sourceHadSuffix && destinationHadSuffix);
 
-            // If foo.curator -> bar, the rename target will be "bar.curator"
+            // If foo.personalcloud -> bar, the rename target will be "bar.personalcloud"
             folderTargetAlt.chop(suffix.size());
         }
 

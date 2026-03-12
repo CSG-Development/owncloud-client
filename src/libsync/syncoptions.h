@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 #include "common/filesystembase.h"
 #include "common/vfs.h"
 

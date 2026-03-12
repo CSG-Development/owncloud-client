@@ -279,7 +279,7 @@ private:
     // the parameters passed to start()
     std::unique_ptr<VfsSetupParams> _setupParams;
 
-    friend class CuratorPropagator;
+    friend class PersonalCloudPropagator;
 };
 
 class OCSYNC_EXPORT VfsPluginManager

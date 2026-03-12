@@ -41,7 +41,7 @@ if(APPLE)
     add_compile_options(-fexceptions)
 endif()
 
-target_link_libraries(newwizard PUBLIC Qt::Widgets Qt::Concurrent libsync curatorResources)
+target_link_libraries(newwizard PUBLIC Qt::Widgets Qt::Concurrent libsync PersonalCloudResources)
 
 set_target_properties(newwizard PROPERTIES AUTOUIC ON AUTORCC ON)
 target_include_directories(newwizard PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")

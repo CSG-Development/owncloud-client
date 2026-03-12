@@ -1,6 +1,6 @@
 #pragma once
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 #include "device/devicetypes.h"
 
 #include <QRestAccessManager>

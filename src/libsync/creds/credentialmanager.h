@@ -3,7 +3,7 @@
 #include <QSettings>
 #include <QVariant>
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 #include <qt6keychain/keychain.h>
 

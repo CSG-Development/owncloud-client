@@ -5,30 +5,30 @@ Test Plan
 
 1.1 Normal Setup
 + Pre-Req: Remove oC-Config and all oC-folders completely from 
-[Linux] ~/.local/share/data/Curator
-[WinXP] c:\Dokumente und Einstellungen\admin\Lokale Einstellungen\Anwendungsdaten\Curator
+[Linux] ~/.local/share/data/PersonalCloud
+[WinXP] c:\Dokumente und Einstellungen\admin\Lokale Einstellungen\Anwendungsdaten\PersonalCloud
 [Win7]  
 
 => Start oCC and configure to 
   - oC setup start
-    = Popup "No Curator connection was configured yet." appears.
+    = Popup "No PersonalCloud connection was configured yet." appears.
 
   - Setup with correct values:
-    - oC where local folder $HOME/Curator does not exist
+    - oC where local folder $HOME/PersonalCloud does not exist
 
-    - oC where local folder $HOME/Curator does exist
+    - oC where local folder $HOME/PersonalCloud does exist
 
     - oC where remote folder clientsync does not exist
       = oC set up, but no initial sync folder created
 
     - oC where remote folder clientsync does not exist
-      = oC set up with initial sync folder ~/Curator => oC//clientsync
+      = oC set up with initial sync folder ~/PersonalCloud => oC//clientsync
 
   - Setup with wrong url
 
   - Setup with wrong credentials
 
-  - check permissions of oC setup file curator.cfg
+  - check permissions of oC setup file PersonalCloud.cfg
     = permissions -rw-------
 
 2. Credentials Migration
@@ -49,7 +49,7 @@ Test Plan
 + Pre-Req: Have a SSL ready host with unsigned certificate.
 
 3.1 SSL connection
-  - Start Curator configuration and enter the SSL url with https://...
+  - Start PersonalCloud configuration and enter the SSL url with https://...
     = The SSL Certificate dialog comes up.
     - Do not check the checkmark to trust
       = Connection does not work: "ssl handshake failed."

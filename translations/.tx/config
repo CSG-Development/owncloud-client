@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[o:curator-org:p:curator:r:client]
+[o:personalcloud-org:p:personalcloud:r:client]
 source_file = client_en.ts
 source_lang = en
 file_filter = client_<lang>.ts

@@ -37,7 +37,7 @@
 namespace {
 QString vanillaThemePath()
 {
-    return QStringLiteral(":/client/Curator/theme");
+    return QStringLiteral(":/client/PersonalCloud/theme");
 }
 
 QString brandThemePath()
@@ -67,7 +67,7 @@ QString blackTheme()
 
 constexpr bool isVanilla()
 {
-    return std::string_view(APPLICATION_SHORTNAME) == "Curator";
+    return std::string_view(APPLICATION_SHORTNAME) == "PersonalCloud";
 }
 }
 namespace APP {
@@ -280,7 +280,7 @@ QString Theme::overrideServerUrl() const
 
 QString Theme::overrideServerUrlV2() const
 {
-    static const auto serverOverride = qEnvironmentVariable("CURATOR_OVERRIDE_SERVER_URL");
+    static const auto serverOverride = qEnvironmentVariable("PERSONALCLOUD_OVERRIDE_SERVER_URL");
     if (serverOverride.isEmpty()) {
         OC_DISABLE_DEPRECATED_WARNING
         return overrideServerUrl();

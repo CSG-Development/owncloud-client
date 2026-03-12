@@ -18,7 +18,7 @@
 #include "abstractcorejob.h"
 
 #include "networkjobs.h"
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 namespace APP {
 

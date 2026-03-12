@@ -13,7 +13,7 @@
  */
 #pragma once
 
-#include "curatorpropagator.h"
+#include "personalcloudpropagator.h"
 #include "networkjobs.h"
 
 namespace APP {
@@ -29,7 +29,7 @@ class PropagateRemoteMkdir : public PropagateItemJob
     bool _deleteExisting;
     friend class PropagateDirectory; // So it can access the _item;
 public:
-    PropagateRemoteMkdir(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateRemoteMkdir(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
         , _deleteExisting(false)
     {

@@ -24,7 +24,7 @@ set(SOURCES
     configfile.cpp
     abstractnetworkjob.cpp
     networkjobs.cpp
-    curatorpropagator.cpp
+    personalcloudpropagator.cpp
     applicationtheme.cpp
     platform.cpp
     progressdispatcher.cpp
@@ -99,10 +99,10 @@ if(APPLE)
     add_compile_options(-fexceptions)
 endif()
 
-# These headers are installed for libcuratorsync to be used by 3rd party apps
+# These headers are installed for libpersonalcloudsync to be used by 3rd party apps
 INSTALL(
     FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/curatorlib.h
+        ${CMAKE_CURRENT_BINARY_DIR}/personalcloudlib.h
         logger.h
         accessmanager.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/${APPLICATION_SHORTNAME}/libsync
@@ -120,7 +120,7 @@ target_link_libraries(${TARGET}
         OpenSSL::SSL
         OpenSSL::Crypto
     PRIVATE
-        curatorResources
+        PersonalCloudResources
         Qt::Concurrent
         ZLIB::ZLIB
         Qt6Keychain::Qt6Keychain
@@ -156,7 +156,7 @@ endif()
 
 GENERATE_EXPORT_HEADER(${TARGET}
         EXPORT_MACRO_NAME APPLICATIONSYNC_EXPORT
-        EXPORT_FILE_NAME curatorlib.h
+        EXPORT_FILE_NAME personalcloudlib.h
         STATIC_DEFINE APPLICATION_BUILT_AS_STATIC
 )
 

@@ -4,12 +4,12 @@
 
 #lblImage { background-image: url(":/res/Files-logo.png"); }
 
-#lblCurator,
+#lblAppName,
 #lblFiles {
     font-size: 34px;
 }
 
-#lblCurator { color: #6EBD49; }
+#lblAppName { color: #6EBD49; }
 #lblEmail { font-size: 16px; }
 #showPasswordButton { border: none; }
 #frameErrorMessageInternal { border: 1px solid transparent; border-radius: 12px; }

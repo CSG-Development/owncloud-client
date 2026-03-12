@@ -25,7 +25,7 @@ void Utility::startShellIntegration()
 
 QString Utility::socketApiSocketPath()
 {
-    return QLatin1String("\\\\.\\pipe\\") + QLatin1String("Curator-") + qEnvironmentVariable("USERNAME");
+    return QLatin1String("\\\\.\\pipe\\") + QLatin1String("PersonalCloud-") + qEnvironmentVariable("USERNAME");
     // TODO: once the windows extension supports multiple
     // client connections, switch back to the theme name
     // See issue #2388

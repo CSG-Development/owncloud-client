@@ -14,7 +14,7 @@
 
 #pragma once
 #include "accountfwd.h"
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 #include <QNetworkReply>
 #include <QPointer>

@@ -203,7 +203,7 @@
 					};
 				};
 			};
-			buildConfigurationList = C2B573981B1CD88000303B36 /* Build configuration list for PBXProject "CuratorFinderSync" */;
+			buildConfigurationList = C2B573981B1CD88000303B36 /* Build configuration list for PBXProject "PersonalCloudFinderSync" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -436,8 +436,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				OC_APPLICATION_NAME = Curator;
-				OC_APPLICATION_REV_DOMAIN = com.curator.desktopclient;
+				OC_APPLICATION_NAME = PersonalCloud;
+				OC_APPLICATION_REV_DOMAIN = com.personalcloud.desktopclient;
 				OC_OEM_SHARE_ICNS = "";
 				OC_SOCKETAPI_TEAM_IDENTIFIER_PREFIX = "";
 				ONLY_ACTIVE_ARCH = YES;
@@ -485,8 +485,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OC_APPLICATION_NAME = Curator;
-				OC_APPLICATION_REV_DOMAIN = com.curator.desktopclient;
+				OC_APPLICATION_NAME = PersonalCloud;
+				OC_APPLICATION_REV_DOMAIN = com.personalcloud.desktopclient;
 				OC_OEM_SHARE_ICNS = "";
 				OC_SOCKETAPI_TEAM_IDENTIFIER_PREFIX = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -499,7 +499,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C2B573981B1CD88000303B36 /* Build configuration list for PBXProject "CuratorFinderSync" */ = {
+		C2B573981B1CD88000303B36 /* Build configuration list for PBXProject "PersonalCloudFinderSync" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C2B573991B1CD88000303B36 /* Debug */,

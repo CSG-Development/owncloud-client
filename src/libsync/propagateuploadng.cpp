@@ -18,7 +18,7 @@
 #include "common/utility.h"
 #include "filesystem.h"
 #include "networkjobs.h"
-#include "curatorpropagator_p.h"
+#include "personalcloudpropagator_p.h"
 #include "propagateremotedelete.h"
 #include "propagateremotemove.h"
 #include "propagateupload.h"
@@ -80,7 +80,7 @@ State machine:
         +-> MOVE +-----> moveJobFinished() +--> finalize()
  */
 
-PropagateUploadFileNG::PropagateUploadFileNG(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+PropagateUploadFileNG::PropagateUploadFileNG(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
     : PropagateUploadFileCommon(propagator, item)
     , _bytesToUpload(item->_size)
 {

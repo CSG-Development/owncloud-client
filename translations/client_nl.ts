@@ -725,8 +725,8 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
     <name>APP::ConnectionValidator</name>
     <message>
         <location filename="../src/gui/connectionvalidator.cpp" line="67"/>
-        <source>No Curator account configured</source>
-        <translation>Geen Curator-account geconfigureerd</translation>
+        <source>No PersonalCloud account configured</source>
+        <translation>Geen PersonalCloud-account geconfigureerd</translation>
     </message>
     <message>
         <location filename="../src/gui/connectionvalidator.cpp" line="249"/>
@@ -763,9 +763,9 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
     </message>
 </context>
 <context>
-    <name>APP::CuratorPropagator</name>
+    <name>APP::PersonalCloudPropagator</name>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="766"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="766"/>
         <source>File %1 is currently in use</source>
         <translation type="unfinished">Bestand %1 is in gebruik</translation>
     </message>
@@ -2288,12 +2288,12 @@ vragen om extra autorisaties tijdens installatie.</translation>
 <context>
     <name>APP::PropagateDirectory</name>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="1126"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="1126"/>
         <source>Error updating metadata: %1</source>
         <translation>Fout bij het bijwerken van de metadata: %1</translation>
     </message>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="1129"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="1129"/>
         <source>%1 the folder is currently in use</source>
         <translation>%1 de folder is op dit moment in gebruik</translation>
     </message>
@@ -2369,7 +2369,7 @@ vragen om extra autorisaties tijdens installatie.</translation>
 <context>
     <name>APP::PropagateItemJob</name>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="240"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="240"/>
         <source>; Restoration Failed: %1</source>
         <translation>; Herstel mislukte: %1</translation>
     </message>
@@ -2516,12 +2516,12 @@ vragen om extra autorisaties tijdens installatie.</translation>
 <context>
     <name>APP::PropagateUpdateMetaDataJob</name>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="1310"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="1310"/>
         <source>Could not update file : %1</source>
         <translation>Kon bestand niet bijwerken : %1</translation>
     </message>
     <message>
-        <location filename="../src/libsync/curatorpropagator.cpp" line="1313"/>
+        <location filename="../src/libsync/personalcloudpropagator.cpp" line="1313"/>
         <source>The file %1 is currently in use</source>
         <translation>Bestand %1 is in gebruik</translation>
     </message>
@@ -2807,8 +2807,8 @@ vragen om extra autorisaties tijdens installatie.</translation>
     </message>
     <message>
         <location filename="../src/gui/sharedialog.ui" line="72"/>
-        <source>Curator Path:</source>
-        <translation>OwnCloud Pad:</translation>
+        <source>PersonalCloud Path:</source>
+        <translation>PersonalCloud Pad:</translation>
     </message>
     <message>
         <location filename="../src/gui/sharedialog.ui" line="104"/>
@@ -3124,7 +3124,7 @@ vragen om extra autorisaties tijdens installatie.</translation>
     <message>
         <location filename="../src/gui/socketapi/socketapi.cpp" line="510"/>
         <source>Share with %1</source>
-        <comment>parameter is Curator</comment>
+        <comment>parameter is PersonalCloud</comment>
         <translation>Delen met %1</translation>
     </message>
     <message>
@@ -3850,7 +3850,7 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
     </message>
     <message>
         <location filename="../src/gui/newwizard/pages/connecterrorpage.ui" line="312"/>
-        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <source>We are unable to detect the PersonalCloud device. Please ensure the following:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3898,7 +3898,7 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
     </message>
     <message>
         <location filename="../src/gui/newwizard/pages/credentialspage.ui" line="445"/>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4129,7 +4129,7 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
     </message>
     <message>
         <location filename="../src/gui/newwizard/pages/emailpage.ui" line="399"/>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4813,7 +4813,7 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
     </message>
     <message>
         <location filename="../src/gui/newwizard/pages/waitpage.ui" line="324"/>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

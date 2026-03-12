@@ -13,7 +13,7 @@
  */
 #pragma once
 
-#include "curatorpropagator.h"
+#include "personalcloudpropagator.h"
 #include "networkjobs.h"
 
 #include <QBuffer>
@@ -172,7 +172,7 @@ protected:
     QByteArray _transmissionChecksumHeader;
 
 public:
-    PropagateUploadFileCommon(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateUploadFileCommon(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
         , _finished(false)
         , _deleteExisting(false)
@@ -294,7 +294,7 @@ private:
     }
 
 public:
-    PropagateUploadFileV1(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateUploadFileV1(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateUploadFileCommon(propagator, item)
     {
     }
@@ -373,7 +373,7 @@ private:
     bool markRangeAsDone(qint64 start, qint64 size);
 
 public:
-    PropagateUploadFileNG(CuratorPropagator *propagator, const SyncFileItemPtr &item);
+    PropagateUploadFileNG(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item);
     void doStartUpload() override;
 
 private:

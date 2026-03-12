@@ -13,7 +13,7 @@
  */
 #pragma once
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 #include <QPointer>
 #include <vector>

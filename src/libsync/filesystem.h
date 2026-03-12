@@ -18,7 +18,7 @@
 #include <ctime>
 #include <functional>
 
-#include <curatorlib.h>
+#include <personalcloudlib.h>
 // Chain in the base include and extend the namespace
 #include "common/filesystembase.h"
 

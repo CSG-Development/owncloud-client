@@ -150,9 +150,9 @@ add_subdirectory(loginrequireddialog)
 add_subdirectory(customui)
 add_subdirectory(remoteaccess)
 
-add_library(curatorCore STATIC ${final_src})
-set_target_properties(curatorCore PROPERTIES AUTOUIC ON AUTORCC ON)
-target_link_libraries(curatorCore PUBLIC
+add_library(PersonalCloudCore STATIC ${final_src})
+set_target_properties(PersonalCloudCore PROPERTIES AUTOUIC ON AUTORCC ON)
+target_link_libraries(PersonalCloudCore PUBLIC
     Qt::Widgets 
     Qt::Network 
     Qt::Xml 
@@ -173,12 +173,12 @@ if(APPLE)
     add_compile_options(-fexceptions)
 endif()
 
-apply_common_target_settings(curatorCore)
+apply_common_target_settings(PersonalCloudCore)
 
 add_subdirectory(spaces)
 add_subdirectory(socketapi)
 
-target_include_directories(curatorCore PUBLIC
+target_include_directories(PersonalCloudCore PUBLIC
     ${CMAKE_SOURCE_DIR}/src/3rdparty/QProgressIndicator
     ${CMAKE_SOURCE_DIR}/src/3rdparty/qtlockedfile
     ${CMAKE_SOURCE_DIR}/src/3rdparty/qtsingleapplication
@@ -186,42 +186,42 @@ target_include_directories(curatorCore PUBLIC
 )
 
 IF( APPLE )
-    target_sources(curatorCore PRIVATE
+    target_sources(PersonalCloudCore PRIVATE
         systray.mm
         settingsdialog_mac.mm
         guiutility_mac.mm
         folderwatcher_mac.cpp)
     set_source_files_properties(guiutility_mac.mm PROPERTIES COMPILE_DEFINITIONS SOCKETAPI_TEAM_IDENTIFIER_PREFIX="${SOCKETAPI_TEAM_IDENTIFIER_PREFIX}")
 elseif( WIN32 )
-    target_sources(curatorCore PRIVATE
+    target_sources(PersonalCloudCore PRIVATE
         guiutility_win.cpp
         folderwatcher_win.cpp)
 elseif(UNIX AND NOT APPLE)
     ## handle DBUS for Fdo notifications
     if (TARGET Qt::DBus)
-        target_link_libraries(curatorCore PUBLIC Qt::DBus)
-        target_compile_definitions(curatorCore PUBLIC "USE_FDO_NOTIFICATIONS")
+        target_link_libraries(PersonalCloudCore PUBLIC Qt::DBus)
+        target_compile_definitions(PersonalCloudCore PUBLIC "USE_FDO_NOTIFICATIONS")
     endif()
-    target_sources(curatorCore PRIVATE
+    target_sources(PersonalCloudCore PRIVATE
         folderwatcher_linux.cpp
         guiutility_unix.cpp)
 endif()
 
 if(WITH_AUTO_UPDATER)
     add_subdirectory(updater)
-    target_compile_definitions(curatorCore PRIVATE WITH_AUTO_UPDATER)
+    target_compile_definitions(PersonalCloudCore PRIVATE WITH_AUTO_UPDATER)
 endif()
 
-add_executable(curator main.cpp)
-set_target_properties(curator PROPERTIES
+add_executable(PersonalCloud main.cpp)
+set_target_properties(PersonalCloud PROPERTIES
     OUTPUT_NAME "${APPLICATION_EXECUTABLE}"
     AUTOUIC ON
     AUTORCC ON
 )
-apply_common_target_settings(curator)
-target_link_libraries(curator
-    curatorCore
-    curatorResources
+apply_common_target_settings(PersonalCloud)
+target_link_libraries(PersonalCloud
+    PersonalCloudCore
+    PersonalCloudResources
     KDAB::kdsingleapplication
     telemetry
 )
@@ -229,11 +229,11 @@ target_link_libraries(curator
 MESSAGE(STATUS "APPLICATION_SIDEBAR_ICONS: ${APPLICATION_ICON_NAME}: ${APPLICATION_SIDEBAR_ICONS}")
 
 ecm_add_app_icon(appIcons ICONS "${APPLICATION_ICONS}" SIDEBAR_ICONS "${APPLICATION_SIDEBAR_ICONS}" OUTFILE_BASENAME "${APPLICATION_ICON_NAME}")
-target_sources(curator PRIVATE ${appIcons})
+target_sources(PersonalCloud PRIVATE ${appIcons})
 
 if(NOT APPLE)
     if(WIN32)
-        target_sources(curator PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/curator.exe.manifest)
+        target_sources(PersonalCloud PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/PersonalCloud.exe.manifest)
     else()
         file(GLOB _icons "${OEM_THEME_DIR}/theme/colored/*-${APPLICATION_ICON_NAME}-icon.png")
         foreach(_file ${_icons})
@@ -245,7 +245,7 @@ if(NOT APPLE)
 
     # we may not add MACOSX_BUNDLE here, if not building one
 else()
-    target_sources(curator PRIVATE ${APPLICATION_BUNDLED_RESOURCES})
+    target_sources(PersonalCloud PRIVATE ${APPLICATION_BUNDLED_RESOURCES})
 
     set_source_files_properties(
       ${APPLICATION_BUNDLED_RESOURCES}
@@ -253,17 +253,17 @@ else()
       MACOSX_PACKAGE_LOCATION Resources
       )
 
-  set_target_properties(curator PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/MacOSXBundleInfo.plist)
+  set_target_properties(PersonalCloud PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/MacOSXBundleInfo.plist)
 endif()
 
-install(TARGETS curator ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS PersonalCloud ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 if(UNIX AND NOT APPLE)
-    configure_file(${CMAKE_SOURCE_DIR}/curator.desktop.in
+    configure_file(${CMAKE_SOURCE_DIR}/PersonalCloud.desktop.in
                    ${CMAKE_CURRENT_BINARY_DIR}/${APPLICATION_EXECUTABLE}.desktop)
     install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/${APPLICATION_EXECUTABLE}.desktop DESTINATION ${KDE_INSTALL_DATADIR}/applications )
 
-    configure_file(curator.xml.in ${APPLICATION_EXECUTABLE}.xml)
+    configure_file(PersonalCloud.xml.in ${APPLICATION_EXECUTABLE}.xml)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${APPLICATION_EXECUTABLE}.xml DESTINATION ${KDE_INSTALL_DATADIR}/mime/packages )
 
     find_package(SharedMimeInfo)
