@@ -2225,7 +2225,7 @@ for additional privileges during the process.</source>
     </message>
 </context>
 <context>
-    <name>APP::OwncloudPropagator</name>
+    <name>APP::CuratorPropagator</name>
     <message>
         <location filename="../src/libsync/curatorpropagator.cpp" line="766"/>
         <source>File %1 is currently in use</source>
