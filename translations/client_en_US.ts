@@ -1,9 +1,9 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="tr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="en_US">
 <context>
     <name>APP::AboutDialog</name>
     <message>
         <source>About %1</source>
-        <translation>%1 hakkında</translation>
+        <translation>About %1</translation>
     </message>
     <message>
         <source>OK</source>
@@ -14,15 +14,15 @@
     <name>APP::AbstractNetworkJob</name>
     <message>
         <source>Connection timed out</source>
-        <translation>Bağlantı zaman aşımına uğradı</translation>
+        <translation>Connection timed out</translation>
     </message>
     <message>
         <source>Unknown error: network reply was deleted</source>
-        <translation>Bilinmeyen hata: ağdan gelen yanıt silindi</translation>
+        <translation>Unknown error: network reply was deleted</translation>
     </message>
     <message>
         <source>Server replied &quot;%1 %2&quot; to &quot;%3 %4&quot;</source>
-        <translation>Sunucu &quot;%1 %2&quot; tarafından &quot;%3 %4&quot; tarafına cevap verdi.</translation>
+        <translation>Server replied &quot;%1 %2&quot; to &quot;%3 %4&quot;</translation>
     </message>
 </context>
 <context>
@@ -44,87 +44,87 @@
     </message>
     <message>
         <source>Preparing the account</source>
-        <translation>Hesap hazırlanıyor</translation>
+        <translation>Preparing the account</translation>
     </message>
     <message>
         <source>Unchecked folders will be &lt;b&gt;removed&lt;/b&gt; from your local file system and will not be synchronized to this computer anymore</source>
-        <translation>Seçilmemiş klasörler yerel dosya sisteminizden &lt;b&gt;kaldırılacak&lt;/b&gt; ve bir daha bu bilgisayarla eşitlenmeyecektir</translation>
+        <translation>Unchecked folders will be &lt;b&gt;removed&lt;/b&gt; from your local file system and will not be synchronised to this computer anymore</translation>
     </message>
     <message>
         <source>Synchronize all</source>
-        <translation>Tümünü eşitle</translation>
+        <translation>Synchronise all</translation>
     </message>
     <message>
         <source>Synchronize none</source>
-        <translation>Hiçbirini eşitleme</translation>
+        <translation>Synchronise none</translation>
     </message>
     <message>
         <source>Apply manual changes</source>
-        <translation>Elle yapılan değişiklikleri uygula</translation>
+        <translation>Apply manual changes</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation>Uygula</translation>
+        <translation>Apply</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>Connected with &lt;server&gt; as &lt;user&gt;</source>
-        <translation>&lt;server&gt; ile &lt;user&gt; olarak bağlantı kuruldu</translation>
+        <translation>Connected with &lt;server&gt; as &lt;user&gt;</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Kaldır</translation>
+        <translation>Remove</translation>
     </message>
     <message>
         <source>Account</source>
-        <translation>Hesap</translation>
+        <translation>Account</translation>
     </message>
     <message>
         <source>Choose what to sync</source>
-        <translation>Ne eşitleneceğini seçin</translation>
+        <translation>Choose what to sync</translation>
     </message>
     <message>
         <source>Force sync now</source>
-        <translation>Şimdi eşitlemeye zorla</translation>
+        <translation>Force sync now</translation>
     </message>
     <message>
         <source>Restart sync</source>
-        <translation>Eşitlemeyi yeniden başlat</translation>
+        <translation>Restart sync</translation>
     </message>
     <message>
         <source>Remove folder sync connection</source>
-        <translation>Klasör eşitleme bağlantısını sil</translation>
+        <translation>Remove folder sync connection</translation>
     </message>
     <message>
         <source>Add Space</source>
-        <translation>Alan Ekle</translation>
+        <translation>Add Space</translation>
     </message>
     <message>
         <source>Add Folder</source>
-        <translation>Klasör Ekle</translation>
+        <translation>Add Folder</translation>
     </message>
     <message>
         <source>Reconnect</source>
-        <translation>Yeniden bağlan</translation>
+        <translation>Reconnect</translation>
     </message>
     <message>
         <source>Disable virtual file support...</source>
-        <translation>Sanal dosya desteğini devre dışı bırak...</translation>
+        <translation>Disable virtual file support...</translation>
     </message>
     <message>
         <source>Confirm Folder Sync Connection Removal</source>
-        <translation>Klasör Eşitleme Bağlantısının Silinmesini Onaylayın</translation>
+        <translation>Confirm Folder Sync Connection Removal</translation>
     </message>
     <message>
         <source>Remove Folder Sync Connection</source>
-        <translation>Klasör Eşitleme Bağlantısını Sil</translation>
+        <translation>Remove Folder Sync Connection</translation>
     </message>
     <message>
         <source>Disable virtual file support?</source>
-        <translation>Sanal dosya desteği devre dışı bırakılsın mı?</translation>
+        <translation>Disable virtual file support?</translation>
     </message>
     <message>
         <source>This action will disable virtual file support. As a consequence contents of folders that are currently marked as &apos;available online only&apos; will be downloaded.
@@ -132,35 +132,35 @@
 The only advantage of disabling virtual file support is that the selective sync feature will become available again.
 
 This action will abort any currently running synchronization.</source>
-        <translation>Bu eylem sanal dosya sistemi desteğini devre dışı bırakır. Sonuç olarak, şu anda &quot;yalnızca çevrimiçi kullanılabilir&quot; olarak işaretlenmiş klasörlerin içeriği indirilecektir.
+        <translation>This action will disable virtual file support. As a consequence contents of folders that are currently marked as &apos;available online only&apos; will be downloaded.
 
-Sanal dosya sistemi desteğini devre dışı bırakmanın tek avantajı, seçmeli senkronizasyon özelliğinin tekrar kullanılabilir hale gelmesidir.
+The only advantage of disabling virtual file support is that the selective sync feature will become available again.
 
-Bu eylem, o anda çalışan herhangi senkronizasyon işlemini iptal edecektir.</translation>
+This action will abort any currently running synchronisation.</translation>
     </message>
     <message>
         <source>Disable support</source>
-        <translation>Desteği devre dışı bırak</translation>
+        <translation>Disable support</translation>
     </message>
     <message>
         <source>Sync Running</source>
-        <translation>Eşitleme Çalışıyor</translation>
+        <translation>Sync Running</translation>
     </message>
     <message>
         <source>The sync operation is running.&lt;br/&gt;Do you want to stop it?</source>
-        <translation>Senkronizasyon işlemi çalışıyor. &lt;br/&gt;Durdurmak ister misiniz?</translation>
+        <translation>The sync operation is running.&lt;br/&gt;Do you want to stop it?</translation>
     </message>
     <message>
         <source>Connecting to: %1.</source>
-        <translation>Bağlantı kuruluyor: %1.</translation>
+        <translation>Connecting to: %1.</translation>
     </message>
     <message>
         <source>Disconnected from: %1.</source>
-        <translation>Bağlantı kesildi: %1.</translation>
+        <translation>Disconnected from: %1.</translation>
     </message>
     <message>
         <source>Connected to %1.</source>
-        <translation>%1 ile bağlı.</translation>
+        <translation>Connected to %1.</translation>
     </message>
     <message>
         <source>Show device info</source>
@@ -172,91 +172,91 @@ Bu eylem, o anda çalışan herhangi senkronizasyon işlemini iptal edecektir.</
     </message>
     <message>
         <source>Server %1 is temporarily unavailable.</source>
-        <translation>%1 sunucusu geçici olarak ulaşılamaz durumda.</translation>
+        <translation>Server %1 is temporarily unavailable.</translation>
     </message>
     <message>
         <source>Server %1 is currently in maintenance mode.</source>
-        <translation>Sunucu %1 bakım modunda.</translation>
+        <translation>Server %1 is currently in maintenance mode.</translation>
     </message>
     <message>
         <source>Signed out from %1.</source>
-        <translation>%1 oturumu sonlandırıldı.</translation>
+        <translation>Signed out from %1.</translation>
     </message>
     <message>
         <source>The account %1 is currently logged out.
 
 Please authenticate using your browser.</source>
-        <translation>%1 hesabının oturumu şu anda kapalı.
+        <translation>The account %1 is currently logged out.
 
-Lütfen tarayıcınızı kullanarak kimliğinizi doğrulayın.</translation>
+Please authenticate using your browser.</translation>
     </message>
     <message>
         <source>Reauthorization required.</source>
-        <translation>Yeniden yetkilendirme gerekli.</translation>
+        <translation>Reauthorisation required.</translation>
     </message>
     <message>
         <source>Connecting to %1...</source>
-        <translation>%1 e bağlanılıyor...</translation>
+        <translation>Connecting to %1...</translation>
     </message>
     <message>
         <source>Server configuration error: %1.</source>
-        <translation>Sunucu yapılandırma hatası: %1.</translation>
+        <translation>Server configuration error: %1.</translation>
     </message>
     <message>
         <source>Log in</source>
-        <translation>Giriş yap</translation>
+        <translation>Log in</translation>
     </message>
     <message>
         <source>Click this button to add a Space.</source>
-        <translation>Bir alan eklemek için bu butona tıklayın.</translation>
+        <translation>Click this button to add a Space.</translation>
     </message>
     <message>
         <source>Click this button to add a folder to synchronize.</source>
-        <translation>Bir klasörü eşitlemeye dahil etmek için bu düğmeye tıklayın.</translation>
+        <translation>Click this button to add a folder to synchronise.</translation>
     </message>
     <message>
         <source>You need to be connected to add a Space.</source>
-        <translation type="unfinished"/>
+        <translation>You need to be connected to add a Space.</translation>
     </message>
     <message>
         <source>You need to be connected to add a folder.</source>
-        <translation>Bir klasör eklemek için bağlı olmanız gerekir.</translation>
+        <translation>You need to be connected to add a folder.</translation>
     </message>
     <message>
         <source>There are folders that were not synchronized because they are too big: </source>
-        <translation>Çok büyük oldukları için eşitlenmeyen klasörler var:</translation>
+        <translation>There are folders that were not synchronised because they are too big: </translation>
     </message>
     <message>
         <source>There are folders that were not synchronized because they are external storages: </source>
-        <translation>Harici depolama diskinde oldukları için eşitlenmeyen klasörler var:</translation>
+        <translation>There are folders that were not synchronised because they are external storages: </translation>
     </message>
     <message>
         <source>There are folders that were not synchronized because they are too big or external storages: </source>
-        <translation>Çok büyük oldukları ya da harici depolama alanında oldukları için eşitlenmeyen klasörler var:</translation>
+        <translation>There are folders that were not synchronised because they are too big or external storages: </translation>
     </message>
     <message>
         <source>Confirm Account Removal</source>
-        <translation>Hesap Silinmesini Onaylayın</translation>
+        <translation>Confirm Account Removal</translation>
     </message>
     <message>
         <source>&lt;p&gt;Do you really want to remove the connection to the account &lt;i&gt;%1&lt;/i&gt;?&lt;/p&gt;&lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; This will &lt;b&gt;not&lt;/b&gt; delete any files.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;&lt;i&gt;%1&lt;/i&gt; hesabının bağlantısını kaldırmayı gerçekten istiyor musunuz?&lt;/p&gt;&lt;p&gt;&lt;b&gt;Not:&lt;/b&gt; Bu işlem herhangi bir dosyayı &lt;b&gt;silmeyecektir&lt;/b&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Do you really want to remove the connection to the account &lt;i&gt;%1&lt;/i&gt;?&lt;/p&gt;&lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; This will &lt;b&gt;not&lt;/b&gt; delete any files.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Remove connection</source>
-        <translation>Bağlantıyı kaldır</translation>
+        <translation>Remove connection</translation>
     </message>
     <message>
         <source>Log out</source>
-        <translation>Çıkış yap</translation>
+        <translation>Log out</translation>
     </message>
     <message>
         <source>Resume sync</source>
-        <translation>Eşitlemeye devam et</translation>
+        <translation>Resume sync</translation>
     </message>
     <message>
         <source>Pause sync</source>
-        <translation>Eşitlemeyi duraklat</translation>
+        <translation>Pause sync</translation>
     </message>
     <message>
         <source>Enable virtual file support%1...</source>
@@ -268,53 +268,53 @@ Lütfen tarayıcınızı kullanarak kimliğinizi doğrulayın.</translation>
     </message>
     <message>
         <source>&lt;p&gt;Do you really want to stop syncing the folder &lt;i&gt;%1&lt;/i&gt;?&lt;/p&gt;&lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; This will &lt;b&gt;not&lt;/b&gt; delete any files.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;&lt;i&gt;%1&lt;/i&gt; klasörünün eşitlemesini durdurmayı gerçekten istiyor musunuz?&lt;/p&gt;&lt;p&gt;&lt;b&gt;Not:&lt;/b&gt; Bu işlem herhangi bir dosyayı &lt;b&gt;silmeyecektir&lt;/b&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Do you really want to stop syncing the folder &lt;i&gt;%1&lt;/i&gt;?&lt;/p&gt;&lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; This will &lt;b&gt;not&lt;/b&gt; delete any files.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>The server version %1 is unsupported! Proceed at your own risk.</source>
-        <translation>Sunucu versiyonu %1 desteklenmiyor! Sorumluluk size ait.</translation>
+        <translation>The server version %1 is unsupported! Proceed at your own risk.</translation>
     </message>
 </context>
 <context>
     <name>APP::ActivityListModel</name>
     <message>
         <source>%1 %2 on %3</source>
-        <translation>%3 üzerinde %1 %2</translation>
+        <translation>%1 %2 on %3</translation>
     </message>
     <message>
         <source>Activity</source>
-        <translation>Etkinlik</translation>
+        <translation>Activity</translation>
     </message>
     <message>
         <source>Account</source>
-        <translation>Hesap</translation>
+        <translation>Account</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Zaman</translation>
+        <translation>Time</translation>
     </message>
     <message>
         <source>Local path</source>
-        <translation>Yerel yol</translation>
+        <translation>Local path</translation>
     </message>
 </context>
 <context>
     <name>APP::ActivitySettings</name>
     <message>
         <source>Server Activity</source>
-        <translation>Sunucu Etkinliği</translation>
+        <translation>Server Activity</translation>
     </message>
     <message>
         <source>Sync Protocol</source>
-        <translation>Eşitleme Protokolü</translation>
+        <translation>Sync Protocol</translation>
     </message>
     <message>
         <source>Not Synced</source>
-        <translation>Eşitlenmedi</translation>
+        <translation>Not Synced</translation>
     </message>
     <message>
         <source>Not Synced (%1)</source>
-        <translation>Eşitlenmedi (%1)</translation>
+        <translation>Not Synced (%1)</translation>
     </message>
 </context>
 <context>
@@ -325,216 +325,216 @@ Lütfen tarayıcınızı kullanarak kimliğinizi doğrulayın.</translation>
     </message>
     <message>
         <source>Filter</source>
-        <translation>Filtre</translation>
+        <translation>Filter</translation>
     </message>
     <message>
         <source>Account</source>
-        <translation>Hesap</translation>
+        <translation>Account</translation>
     </message>
     <message>
         <source>Server Activities</source>
-        <translation>Sunucu Etkinlikleri</translation>
+        <translation>Server Activities</translation>
     </message>
     <message>
         <source>Notifications</source>
-        <translation>Bildirimler</translation>
+        <translation>Notifications</translation>
     </message>
     <message>
         <source>&lt;br/&gt;%1 does not provide activities.</source>
-        <translation>&lt;br/&gt;%1 etkinlikleri desteklenmemektedir.</translation>
+        <translation>&lt;br/&gt;%1 does not provide activities.</translation>
     </message>
     <message numerus="yes">
         <source>%n notifications(s) for %1.</source>
-        <translation><numerusform>%1 için %n bildirim var.</numerusform></translation>
+        <translation><numerusform>%n notifications(s) for %1.</numerusform><numerusform>%n notifications(s) for %1.</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n notifications(s) for %1 and %2.</source>
-        <translation><numerusform>%1 ve %2 için %n bildirim var.</numerusform></translation>
+        <translation><numerusform>%n notifications(s) for %1 and %2.</numerusform><numerusform>%n notifications(s) for %1 and %2.</numerusform></translation>
     </message>
     <message>
         <source>New notifications for %1, %2 and other accounts.</source>
-        <translation>%1, %2 ve diğer hesaplar için yeni bildirim</translation>
+        <translation>New notifications for %1, %2 and other accounts.</translation>
     </message>
     <message>
         <source>Open the activity view for details.</source>
-        <translation>Ayrıntılar için etkinlik görünümünü açın.</translation>
+        <translation>Open the activity view for details.</translation>
     </message>
 </context>
 <context>
     <name>APP::AppImageUpdateAvailableDialog</name>
     <message>
         <source>Installed version: %1</source>
-        <translation>Kurulu sürüm: %1</translation>
+        <translation>Installed version: %1</translation>
     </message>
     <message>
         <source>Available update: %1</source>
-        <translation>Kullanılabilir güncelleme: %1</translation>
+        <translation>Available update: %1</translation>
     </message>
     <message>
         <source>An update is available for this AppImage of %1. Do you want to install this update?
 
 The update will be performed in the background, and overwrite the current AppImage file. You need to restart the app to complete the update.</source>
-        <translation>Bu %1 AppImage için bir güncelleme mevcut. Bu güncellemeyi yüklemek istiyor musunuz?
+        <translation>An update is available for this AppImage of %1. Do you want to install this update?
 
-Güncelleme arka planda gerçekleştirilecek ve mevcut AppImage dosyasının üzerine yazılacaktır. Güncellemeyi tamamlamak için uygulamayı yeniden başlatmanız gerekir.</translation>
+The update will be performed in the background, and overwrite the current AppImage file. You need to restart the app to complete the update.</translation>
     </message>
 </context>
 <context>
     <name>APP::Application</name>
     <message>
         <source>Quit</source>
-        <translation>Çıkış</translation>
+        <translation>Quit</translation>
     </message>
 </context>
 <context>
     <name>APP::ApplicationGui</name>
     <message>
         <source>Please sign in</source>
-        <translation>Lütfen oturum açın</translation>
+        <translation>Please sign in</translation>
     </message>
     <message>
         <source>Folder %1: %2</source>
-        <translation>Klasör %1: %2</translation>
+        <translation>Folder %1: %2</translation>
     </message>
     <message>
         <source>Unresolved %1 conflicts</source>
-        <translation>Çözülmemiş %1 çakışma</translation>
+        <translation>Unresolved %1 conflicts</translation>
     </message>
     <message>
         <source>Ignored errors %1</source>
-        <translation>Yok sayılan hatalar %1</translation>
+        <translation>Ignored errors %1</translation>
     </message>
     <message>
         <source>There are no sync folders configured.</source>
-        <translation>Yapılandırılmış eşitleme klasörü yok.</translation>
+        <translation>There are no sync folders configured.</translation>
     </message>
     <message>
         <source>Log in...</source>
-        <translation>Giriş yap...</translation>
+        <translation>Log in...</translation>
     </message>
     <message>
         <source>Log out</source>
-        <translation>Çıkış yap</translation>
+        <translation>Log out</translation>
     </message>
     <message>
         <source>Recent Changes</source>
-        <translation>Son Değişiklikler</translation>
+        <translation>Recent Changes</translation>
     </message>
     <message>
         <source>Open folder &apos;%1&apos;</source>
-        <translation>&apos;%1&apos; klasörünü aç</translation>
+        <translation>Open folder &apos;%1&apos;</translation>
     </message>
     <message>
         <source>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</source>
-        <translation>%1 hesabındaki sunucu desteklenmeyen %2 sürümünde. Bu istemciyi desteklenmeyen sunucu sürümlerinde kullanmak hem test edilmemiştir hem de tehlikelidir. Kullanmak kendi sorumluluğunuzdadır.</translation>
+        <translation>The server on account %1 runs an unsupported version %2. Using this client with unsupported server versions is untested and potentially dangerous. Proceed at your own risk.</translation>
     </message>
     <message>
         <source>Account %1</source>
-        <translation>Hesap %1</translation>
+        <translation>Account %1</translation>
     </message>
     <message>
         <source>Stop synchronization</source>
-        <translation>Senkronizasyonu durdur</translation>
+        <translation>Stop synchronisation</translation>
     </message>
     <message>
         <source>Create a new account</source>
-        <translation>Yeni bir hesap oluştur</translation>
+        <translation>Create a new account</translation>
     </message>
     <message>
         <source>Unknown status</source>
-        <translation>Bilinmeyen durum</translation>
+        <translation>Unknown status</translation>
     </message>
     <message>
         <source>Details...</source>
-        <translation>Ayrıntılar...</translation>
+        <translation>Details...</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation>Yardım</translation>
+        <translation>Help</translation>
     </message>
     <message>
         <source>Resume synchronization</source>
-        <translation>Senkronizasyonu sürdür</translation>
+        <translation>Resume synchronisation</translation>
     </message>
     <message>
         <source>Quit %1</source>
-        <translation>%1&apos;tan çık</translation>
+        <translation>Quit %1</translation>
     </message>
     <message>
         <source>Disconnected from %1</source>
-        <translation>%1 ile bağlantı kesildi</translation>
+        <translation>Disconnected from %1</translation>
     </message>
     <message>
         <source>Unsupported Server Version</source>
-        <translation>Desteklenmeyen Sunucu Sürümü</translation>
+        <translation>Unsupported Server Version</translation>
     </message>
     <message>
         <source>Disconnected</source>
-        <translation>Bağlantı kesildi</translation>
+        <translation>Disconnected</translation>
     </message>
     <message>
         <source>Disconnected from some accounts</source>
-        <translation>Bazı hesapların bağlantısı kesildi</translation>
+        <translation>Disconnected from some accounts</translation>
     </message>
     <message>
         <source>Disconnected from accounts:</source>
-        <translation>Bu hesapların bağlantıları kesildi:</translation>
+        <translation>Disconnected from accounts:</translation>
     </message>
     <message>
         <source>Signed out</source>
-        <translation>Oturum sonlandırıldı</translation>
+        <translation>Signed out</translation>
     </message>
     <message>
         <source>Account synchronization is disabled</source>
-        <translation>Hesap eşitlemesi devre dışı bırakıldı.</translation>
+        <translation>Account synchronisation is disabled</translation>
     </message>
     <message>
         <source>Synchronization is paused</source>
-        <translation>Eşitleme duraklatıldı</translation>
+        <translation>Synchronisation is paused</translation>
     </message>
     <message>
         <source>Up to date (%1)</source>
-        <translation>Güncel (%1)</translation>
+        <translation>Up to date (%1)</translation>
     </message>
     <message>
         <source>No sync folders configured</source>
-        <translation>Yapılandırılmış eşitleme klasörü yok</translation>
+        <translation>No sync folders configured</translation>
     </message>
     <message>
         <source>Show %1</source>
-        <translation>%1 Göster</translation>
+        <translation>Show %1</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation>%1 hakkında</translation>
+        <translation>About %1</translation>
     </message>
     <message>
         <source>No items synced recently</source>
-        <translation>Yakın zamanda eşitlenen öge yok</translation>
+        <translation>No items synced recently</translation>
     </message>
     <message>
         <source>Checking for changes in remote &apos;%1&apos;</source>
-        <translation>Uzaktaki &apos;%1&apos; için değişiklikler kontrol ediliyor.</translation>
+        <translation>Checking for changes in remote &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Checking for changes in local &apos;%1&apos;</source>
-        <translation>Yereldeki &apos;%1&apos; için değişiklikler kontrol ediliyor.</translation>
+        <translation>Checking for changes in local &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Syncing %1 of %2  (%3 left)</source>
-        <translation>Eşitlenen %1/%2  (%3 kaldı)</translation>
+        <translation>Syncing %1 of %2  (%3 left)</translation>
     </message>
     <message>
         <source>Syncing %1 of %2</source>
-        <translation>%1 / %2 eşitleniyor</translation>
+        <translation>Syncing %1 of %2</translation>
     </message>
     <message>
         <source>Syncing %1 (%2 left)</source>
-        <translation>Eşitlenen %1 (%2 kaldı)</translation>
+        <translation>Syncing %1 (%2 left)</translation>
     </message>
     <message>
         <source>Syncing %1</source>
-        <translation>%1 eşitleniyor</translation>
+        <translation>Syncing %1</translation>
     </message>
     <message>
         <source>%1 (%2, %3)</source>
@@ -545,7 +545,7 @@ Güncelleme arka planda gerçekleştirilecek ve mevcut AppImage dosyasının üz
     <name>APP::AskExperimentalVirtualFilesFeatureMessageBox</name>
     <message>
         <source>Enable experimental feature?</source>
-        <translation>Deneysel özellik etkinleştirilsin mi?</translation>
+        <translation>Enable experimental feature?</translation>
     </message>
     <message>
         <source>When the &quot;virtual files&quot; mode is enabled no files will be downloaded initially. Instead, a tiny file will be created for each file that exists on the server. The contents can be downloaded by running these files or by using their context menu.
@@ -555,214 +555,214 @@ The virtual files mode is mutually exclusive with selective sync. Currently unse
 Switching to this mode will abort any currently running synchronization.
 
 This is a new, experimental mode. If you decide to use it, please report any issues that come up.</source>
-        <translation>&quot;Sanal dosyalar&quot; modu etkinleştirildiğinde, başlangıçta hiçbir dosya indirilmez. Bunun yerine, sunucuda bulunan her dosya için küçük bir &quot;%1&quot; dosyası oluşturulur. İçindekiler bu dosyalar çalıştırılarak veya içerik menüleri kullanılarak indirilebilir.
+        <translation>When the &quot;virtual files&quot; mode is enabled no files will be downloaded initially. Instead, a tiny file will be created for each file that exists on the server. The contents can be downloaded by running these files or by using their context menu.
 
-Sanal dosyalar modu, seçici eşleme ile beraber çalışır. Şu anda seçili olmayan klasörler yalnızca çevrimiçi sanal klasörlere çevrilecek ve seçici senkronizasyon ayarlarınız sıfırlanacaktır.
+The virtual files mode is mutually exclusive with selective sync. Currently unselected folders will be translated to online-only folders and your selective sync settings will be reset.
 
-Bu moda geçmek, o anda çalışan eşlemeyi iptal edecektir.
+Switching to this mode will abort any currently running synchronization.
 
-Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıkan sorunları bildirin.</translation>
+This is a new, experimental mode. If you decide to use it, please report any issues that come up.</translation>
     </message>
     <message>
         <source>Enable experimental placeholder mode</source>
-        <translation>Deneysel yer tutucu modunu etkinleştir</translation>
+        <translation>Enable experimental placeholder mode</translation>
     </message>
     <message>
         <source>Stay safe</source>
-        <translation>Güvenli kal</translation>
+        <translation>Stay safe</translation>
     </message>
 </context>
 <context>
     <name>APP::ConnectionValidator</name>
     <message>
         <source>No PersonalCloud account configured</source>
-        <translation>Hiçbir PersonalCloud hesabı yapılandırılmamış</translation>
+        <translation>No PersonalCloud account configured</translation>
     </message>
     <message>
         <source>Please update to the latest server and restart the client.</source>
-        <translation>Lütfen en son sunucuya güncelleyin veya istemciyi yeniden başlatın</translation>
+        <translation>Please update to the latest server and restart the client.</translation>
     </message>
     <message>
         <source>Authentication error: Either username or password are wrong.</source>
-        <translation>Giriş hatası: Kullanıcı adı veya parola hatalı.</translation>
+        <translation>Authentication error: Either username or password is wrong.</translation>
     </message>
     <message>
         <source>timeout</source>
-        <translation>zaman aşımı</translation>
+        <translation>timeout</translation>
     </message>
     <message>
         <source>The provided credentials are not correct</source>
-        <translation>Sağlanan kimlik bilgileri doğru değil</translation>
+        <translation>The provided credentials are not correct</translation>
     </message>
     <message>
         <source>The configured server for this client is too old.</source>
-        <translation>Bu istemci için yapılandırılmış sunucu çok eski.</translation>
+        <translation>The configured server for this client is too old.</translation>
     </message>
 </context>
 <context>
     <name>APP::CredentialJob</name>
     <message>
         <source>Failed to parse credentials %1</source>
-        <translation>%1 kimlik bilgileri ayrıştırılamadı</translation>
+        <translation>Failed to parse credentials %1</translation>
     </message>
 </context>
 <context>
     <name>APP::PersonalCloudPropagator</name>
     <message>
         <source>File %1 is currently in use</source>
-        <translation>%1 dosyası şu anda kullanımda</translation>
+        <translation>File %1 is currently in use</translation>
     </message>
 </context>
 <context>
     <name>APP::DiscoverySingleDirectoryJob</name>
     <message>
         <source>Server error: PROPFIND reply is not XML formatted!</source>
-        <translation>Sunucu hatası: PROPFIND cevabı XML formatında değil!</translation>
+        <translation>Server error: PROPFIND reply is not XML formatted!</translation>
     </message>
     <message>
         <source>Connection timed out</source>
-        <translation>Bağlantı zaman aşımına uğradı</translation>
+        <translation>Connection timed out</translation>
     </message>
 </context>
 <context>
     <name>APP::DiscoverySingleLocalDirectoryJob</name>
     <message>
         <source>Error while opening directory %1</source>
-        <translation>Dizin %1 açılırken hata oluştu</translation>
+        <translation>Error while opening directory %1</translation>
     </message>
     <message>
         <source>Directory not accessible on client, permission denied</source>
-        <translation>İstemci klasöre erişemiyor, izin reddedildi.</translation>
+        <translation>Directory not accessible on client, permission denied</translation>
     </message>
     <message>
         <source>Directory not found: %1</source>
-        <translation>Dizin bulunamadı: %1</translation>
+        <translation>Directory not found: %1</translation>
     </message>
     <message>
         <source>Error while reading directory %1</source>
-        <translation>Dizin %1 okunurken hata oluştu</translation>
+        <translation>Error while reading directory %1</translation>
     </message>
 </context>
 <context>
     <name>APP::ExpandingHeaderView</name>
     <message>
         <source>Reset column sizes</source>
-        <translation>Sütun boyutlarını sıfırla</translation>
+        <translation>Reset column sizes</translation>
     </message>
 </context>
 <context>
     <name>APP::Folder</name>
     <message>
         <source>Local folder %1 does not exist.</source>
-        <translation>%1 yerel klasörü mevcut değil.</translation>
+        <translation>Local folder %1 does not exist.</translation>
     </message>
     <message>
         <source>%1 should be a folder but is not.</source>
-        <translation>%1 bir dizin olmalı, ancak değil.</translation>
+        <translation>%1 should be a folder but is not.</translation>
     </message>
     <message>
         <source>%1 is not readable.</source>
-        <translation>%1 okunabilir değil.</translation>
+        <translation>%1 is not readable.</translation>
     </message>
     <message>
         <source>%1 has been removed.</source>
-        <translation>%1 kaldırıldı.</translation>
+        <translation>%1 has been removed.</translation>
     </message>
     <message>
         <source>%1 has been updated.</source>
-        <translation>%1 güncellendi.</translation>
+        <translation>%1 has been updated.</translation>
     </message>
     <message>
         <source>%1 has been renamed to %2.</source>
-        <translation>%1, %2 olarak adlandırıldı.</translation>
+        <translation>%1 has been renamed to %2.</translation>
     </message>
     <message>
         <source>%1 has been moved to %2.</source>
-        <translation>%1, %2 konumuna taşındı.</translation>
+        <translation>%1 has been moved to %2.</translation>
     </message>
     <message numerus="yes">
         <source>%1 and %n other file(s) have been removed.</source>
-        <translation><numerusform>%1 ve diğer %n dosya kaldırıldı.</numerusform></translation>
+        <translation><numerusform>%1 and %n other file(s) have been removed.</numerusform><numerusform>%1 and %n other file(s) have been removed.</numerusform></translation>
     </message>
     <message>
         <source>The path &apos;%1&apos; is too long. Please enable long paths in the Windows settings or choose a different folder.</source>
-        <translation>&apos;%1&apos; yolu çok uzun. Lütfen Windows ayarlarındaki uzun yolları etkinleştirin veya farklı bir klasör seçin.</translation>
+        <translation>The path &apos;%1&apos; is too long. Please enable long paths in the Windows settings or choose a different folder.</translation>
     </message>
     <message>
         <source>%1 failed to open the database.</source>
-        <translation>%1 veritabanını açamadı.</translation>
+        <translation>%1 failed to open the database.</translation>
     </message>
     <message>
         <source>%1 is not writable.</source>
-        <translation>%1 yazılabilir değil.</translation>
+        <translation>%1 is not writable.</translation>
     </message>
     <message numerus="yes">
         <source>%1 and %n other file(s) have been added.</source>
-        <translation><numerusform>%1 ve %n diğer dosya eklendi.</numerusform></translation>
+        <translation><numerusform>%1 and %n other file(s) have been added.</numerusform><numerusform>%1 and %n other file(s) have been added.</numerusform></translation>
     </message>
     <message>
         <source>%1 has been added.</source>
-        <translation>%1 eklendi.</translation>
+        <translation>%1 has been added.</translation>
     </message>
     <message numerus="yes">
         <source>%1 and %n other file(s) have been updated.</source>
-        <translation><numerusform>&amp;apos;%1&amp;apos; ve diğer %n dosya güncellendi.</numerusform></translation>
+        <translation><numerusform>%1 and %n other file(s) have been updated.</numerusform><numerusform>%1 and %n other file(s) have been updated.</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%1 has been renamed to %2 and %n other file(s) have been renamed.</source>
-        <translation><numerusform>%1, %2 olarak yeniden adlandırıldı ve %n diğer dosyanın adı değiştirildi.</numerusform></translation>
+        <translation><numerusform>%1 has been renamed to %2 and %n other file(s) have been renamed.</numerusform><numerusform>%1 has been renamed to %2 and %n other file(s) have been renamed.</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%1 has been moved to %2 and %n other file(s) have been moved.</source>
-        <translation><numerusform>%1, %2 konumuna taşındı ve %n diğer dosya taşındı.</numerusform></translation>
+        <translation><numerusform>%1 has been moved to %2 and %n other file(s) have been moved.</numerusform><numerusform>%1 has been moved to %2 and %n other file(s) have been moved.</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%1 has and %n other file(s) have sync conflicts.</source>
-        <translation><numerusform>%1 ve %n diğer dosya eşitleme çakışması bulunduruyor.</numerusform></translation>
+        <translation><numerusform>%1 has and %n other file(s) have sync conflicts.</numerusform><numerusform>%1 has and %n other file(s) have sync conflicts.</numerusform></translation>
     </message>
     <message>
         <source>%1 has a sync conflict. Please check the conflict file!</source>
-        <translation>%1 bir eşitleme çakışması bulunduruyor. Lütfen çakışan dosyayı kontrol edin!</translation>
+        <translation>%1 has a sync conflict. Please check the conflict file!</translation>
     </message>
     <message numerus="yes">
         <source>%1 and %n other file(s) could not be synced due to errors. See the log for details.</source>
-        <translation><numerusform>%1 ve diğer %n dosya hatalar nedeniyle eşlenemedi. Ayrıntılar için ayıt dosyasına bakın.</numerusform></translation>
+        <translation><numerusform>%1 and %n other file(s) could not be synced due to errors. See the log for details.</numerusform><numerusform>%1 and %n other file(s) could not be synced due to errors. See the log for details.</numerusform></translation>
     </message>
     <message>
         <source>%1 could not be synced due to an error. See the log for details.</source>
-        <translation>%1 bir hata nedeniyle eşitlenemedi. Ayrıntılar için günlüğe bakın.</translation>
+        <translation>%1 could not be synced due to an error. See the log for details.</translation>
     </message>
     <message>
         <source>Sync Activity</source>
-        <translation>Eşitleme Etkinliği</translation>
+        <translation>Sync Activity</translation>
     </message>
     <message>
         <source>Could not read system exclude file</source>
-        <translation>Sistem hariç tutulma dosyası okunamadı</translation>
+        <translation>Could not read system exclude file</translation>
     </message>
     <message>
         <source>A new folder larger than %1 MB has been added: %2.
 </source>
-        <translation>%1 MB dan büyük yeni klasör eklendi: %2
+        <translation>A new folder larger than %1 MB has been added: %2.
 </translation>
     </message>
     <message>
         <source>A folder from an external storage has been added.
 </source>
-        <translation>Harici depolama ünitesinden bir klasör eklendi.
+        <translation>A folder from an external storage has been added.
 </translation>
     </message>
     <message>
         <source>Please go in the settings to select it if you wish to download it.</source>
-        <translation>İndirmek isterseniz, lütfen &quot;Ayarlar&quot; bölümünden seçin.</translation>
+        <translation>Please go in the settings to select it if you wish to download it.</translation>
     </message>
     <message>
         <source>The folder %1 was created but was excluded from synchronization previously. Data inside it will not be synchronized.</source>
-        <translation>%1 klasörü yaratıldı ama daha önce senkronizasyondan hariç tutuldu. İçerik eşitlenmeyecek.</translation>
+        <translation>The folder %1 was created but was excluded from synchronisation previously. Data inside it will not be synchronised.</translation>
     </message>
     <message>
         <source>The file %1 was created but was excluded from synchronization previously. It will not be synchronized.</source>
-        <translation>%1 dosyası yaratıldı ama daha önce senkronizasyondan hariç tutuldu, İçerik eşitlenmeyecek.</translation>
+        <translation>The file %1 was created but was excluded from synchronisation previously. It will not be synchronised.</translation>
     </message>
     <message>
         <source>Changes in synchronized folders could not be tracked reliably.
@@ -770,9 +770,9 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
 This means that the synchronization client might not upload local changes immediately and will instead only scan for local changes and upload them occasionally (every two hours by default).
 
 %1</source>
-        <translation>Senkronize edilen klasörlerdeki değişiklikler tam olarak izlenemedi.
+        <translation>Changes in synchronised folders could not be tracked reliably.
 
-Bu yüzden senkronizasyon yerel değişiklikler anlık olarak karşı tarafa yükleyemeyecek ve sadece yereldeki değişimler taranacak ve belli periyotlarda karşı tarafa yükleyecek (varsayılan ayar 2 saatte bir).
+This means that the synchronisation client might not upload local changes immediately and will instead only scan for local changes and upload them occasionally (every two hours by default).
 
 %1</translation>
     </message>
@@ -781,127 +781,127 @@ Bu yüzden senkronizasyon yerel değişiklikler anlık olarak karşı tarafa yü
 These deletes will be synchronized to your local sync folder, making such files unavailable unless you have a right to restore. 
 If you decide to keep the files, they will be re-synced with the server if you have rights to do so.
 If you decide to delete the files, they will be unavailable to you, unless you are the owner.</source>
-        <translation>Senkronizasyon klasörlerinden &apos;%1&apos; klasörü, sunucudan silindi.
-Bu silinmeler yereldeki klasörlerinize de senkronizasyonla yansıyacak, geri yükleme hakkınız olmadığı sürece dosyalar kullanım dışıdır.
-Dosyalar silinmesin istiyorsanız, yetkiniz olduğu sürece sunucu ile tekrar senkronize olacaklardır.
-Silmeye karar verdiyseniz, sahibi olana kadar dosyalar kullanım dışıdır.</translation>
+        <translation>All files in the sync folder &apos;%1&apos; folder were deleted on the server.
+These deletes will be synchronised to your local sync folder, making such files unavailable unless you have a right to restore. 
+If you decide to keep the files, they will be re-synced with the server if you have rights to do so.
+If you decide to delete the files, they will be unavailable to you, unless you are the owner.</translation>
     </message>
     <message>
         <source>All the files in your local sync folder &apos;%1&apos; were deleted. These deletes will be synchronized with your server, making such files unavailable unless restored.
 Are you sure you want to sync those actions with the server?
 If this was an accident and you decide to keep your files, they will be re-synced from the server.</source>
-        <translation>Senkronizasyon klasörlerinden &apos;%1&apos; içindeki tüm dosyalar, yerelden silindi. Bu silinmeler sunucuya senkronizasyonla yansıyacak, geri yüklenmediği sürece dosyalar kullanım dışıdır.
-Bu işlemlerin sunucuda da gerçekleşmesini istiyor musunuz?
-Eğer istenmeden bu durum gerçekleştiyse ve dosyaları tutmak istiyorsanız, dosyalar sunucudan tekrar senkronize edilecektir.</translation>
+        <translation>All the files in your local sync folder &apos;%1&apos; were deleted. These deletes will be synchronised with your server, making such files unavailable unless restored.
+Are you sure you want to sync those actions with the server?
+If this was an accident and you decide to keep your files, they will be re-synced from the server.</translation>
     </message>
     <message>
         <source>Remove All Files?</source>
-        <translation>Tüm Dosyalar Kaldırılsın mı?</translation>
+        <translation>Remove All Files?</translation>
     </message>
     <message>
         <source>Remove all files</source>
-        <translation>Tüm dosyaları kaldır</translation>
+        <translation>Remove all files</translation>
     </message>
     <message>
         <source>Keep files</source>
-        <translation>Dosyaları koru</translation>
+        <translation>Keep files</translation>
     </message>
 </context>
 <context>
     <name>APP::FolderMan</name>
     <message>
         <source>Could not reset folder state</source>
-        <translation>Klasör durumu sıfırılanamadı</translation>
+        <translation>Could not reset folder state</translation>
     </message>
     <message>
         <source>An old sync journal &apos;%1&apos; was found, but could not be removed. Please make sure that no application is currently using it.</source>
-        <translation>Eski eşitleme günlüğü &apos;%1&apos; bulundu ancak kaldırılamadı. Başka bir uygulama tarafından kullanılmadığından emin olun.</translation>
+        <translation>An old sync journal &apos;%1&apos; was found, but could not be removed. Please make sure that no application is currently using it.</translation>
     </message>
     <message>
         <source> (backup)</source>
-        <translation> (yedek)</translation>
+        <translation> (backup)</translation>
     </message>
     <message>
         <source> (backup %1)</source>
-        <translation> (yedek %1)</translation>
+        <translation> (backup %1)</translation>
     </message>
     <message>
         <source>Sync was successful, unresolved conflicts.</source>
-        <translation>Senkronizasyon başarılıydı, çözüm gerektiren eşleşmeler var.</translation>
+        <translation>Sync was successful, unresolved conflicts.</translation>
     </message>
     <message>
         <source>%1 (Sync is paused)</source>
-        <translation>%1 (Eşitleme duraklatıldı)</translation>
+        <translation>%1 (Sync is paused)</translation>
     </message>
     <message>
         <source>No valid folder selected!</source>
-        <translation>Geçerli klasör seçilmedi!</translation>
+        <translation>No valid folder selected!</translation>
     </message>
     <message>
         <source>The folder %1 is used in a folder sync connection!</source>
-        <translation>%1 klasörü bir klasör senkronizasyon bağlantısında kullanılıyor!</translation>
+        <translation>The folder %1 is used in a folder sync connection!</translation>
     </message>
     <message>
         <source>The selected path does not exist!</source>
-        <translation>Seçilen dosya yolu mevcut değil!</translation>
+        <translation>The selected path does not exist!</translation>
     </message>
     <message>
         <source>The selected path is not a folder!</source>
-        <translation>Seçilen yol bir klasör değil!</translation>
+        <translation>The selected path is not a folder!</translation>
     </message>
     <message>
         <source>You have no permission to write to the selected folder!</source>
-        <translation>Seçilen klasöre yazma izniniz yok!</translation>
+        <translation>You don&apos;t have permission to write to the selected folder!</translation>
     </message>
     <message>
         <source>There is already a sync from the server to this local folder. Please pick another local folder!</source>
-        <translation>Yerel klasörde bir sunucu senkronizasyonu zaten mevcut. Lütfen başka bir yerel klasör seçin!</translation>
+        <translation>There is already a sync from the server to this local folder. Please pick another local folder!</translation>
     </message>
     <message>
         <source>The local folder %1 already contains a folder used in a folder sync connection. Please pick another one!</source>
-        <translation>%1 yerel klasörü zaten bir eşitleme klasörü içermektedir. Lütfen farklı bir seçim yapın!</translation>
+        <translation>The local folder %1 already contains a folder used in a folder sync connection. Please pick another one!</translation>
     </message>
     <message>
         <source>The local folder %1 is already contained in a folder used in a folder sync connection. Please pick another one!</source>
-        <translation>%1 yerel klasörü zaten bir eşitleme klasörü içindedir. Lütfen farklı bir seçim yapın!</translation>
+        <translation>The local folder %1 is already contained in a folder used in a folder sync connection. Please pick another one!</translation>
     </message>
     <message>
         <source>%1 Please pick another one!</source>
-        <translation>%1 Lütfen başka bir tane seçin!</translation>
+        <translation>%1 Please pick another one!</translation>
     </message>
     <message>
         <source>Multiple accounts are sharing the folder %1.
 This configuration is know to lead to dataloss and is no longer supported.
 Please consider removing this folder from the account and adding it again.</source>
-        <translation>%1 klasörünü birden çok hesap paylaşıyor.
-Bu yapılandırmanın veri kaybına yol açtığı biliniyor ve artık desteklenmiyor.
-Lütfen bu klasörü hesaptan kaldırıp tekrar eklemeyi düşünün.</translation>
+        <translation>Multiple accounts are sharing the folder %1.
+This configuration is known to lead to data loss and is no longer supported.
+Please consider removing this folder from the account and adding it again.</translation>
     </message>
 </context>
 <context>
     <name>APP::FolderStatusDelegate</name>
     <message>
         <source>%1 of %2 in use</source>
-        <translation>%1 / %2 kullanımda</translation>
+        <translation>%1 of %2 in use</translation>
     </message>
 </context>
 <context>
     <name>APP::FolderStatusModel</name>
     <message>
         <source>Error while loading the list of folders from the server.</source>
-        <translation>Sunucudan klasörlerin listesi yüklenirken hata oluştu.</translation>
+        <translation>Error whilst loading the list of folders from the server.</translation>
     </message>
     <message>
         <source>Virtual file support is enabled.</source>
-        <translation>Sanal dosya sistemi desteği etkinleştirildi.</translation>
+        <translation>Virtual file support is enabled.</translation>
     </message>
     <message>
         <source>Fetching folder list from server...</source>
-        <translation>Sunucudan klasör listesi alınıyor...</translation>
+        <translation>Fetching folder list from server...</translation>
     </message>
     <message>
         <source>There are unresolved conflicts. Click for details.</source>
-        <translation>Çözüm gereken eşleşmeler var. Detaylar için tıklayın.</translation>
+        <translation>There are unresolved conflicts. Click for details.</translation>
     </message>
     <message>
         <source>%1
@@ -912,20 +912,20 @@ Lütfen bu klasörü hesaptan kaldırıp tekrar eklemeyi düşünün.</translati
     <message>
         <source>Signed out
 %1</source>
-        <translation>Çıkış yapıldı
+        <translation>Signed out
 %1</translation>
     </message>
     <message>
         <source>Checking for changes in remote &apos;%1&apos;</source>
-        <translation>Uzaktaki &apos;%1&apos; için değişiklikler kontrol ediliyor.</translation>
+        <translation>Checking for changes in remote &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Checking for changes in local &apos;%1&apos;</source>
-        <translation>Yereldeki &apos;%1&apos; için değişiklikler kontrol ediliyor.</translation>
+        <translation>Checking for changes in local &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Reconciling changes</source>
-        <translation>Değişikliklerin bağlama kavuşturulması</translation>
+        <translation>Reconciling changes</translation>
     </message>
     <message>
         <source>&apos;%1&apos;</source>
@@ -933,7 +933,7 @@ Lütfen bu klasörü hesaptan kaldırıp tekrar eklemeyi düşünün.</translati
     </message>
     <message>
         <source>Syncing %1</source>
-        <translation>%1 eşitleniyor</translation>
+        <translation>Syncing %1</translation>
     </message>
     <message>
         <source>, </source>
@@ -941,23 +941,23 @@ Lütfen bu klasörü hesaptan kaldırıp tekrar eklemeyi düşünün.</translati
     </message>
     <message>
         <source>download %1/s</source>
-        <translation>indirme %1/s</translation>
+        <translation>download %1/s</translation>
     </message>
     <message>
         <source>↓ %1/s</source>
-        <translation>↓ %1/sn</translation>
+        <translation>↓ %1/s</translation>
     </message>
     <message>
         <source>↑ %1/s</source>
-        <translation>↑ %1/sn</translation>
+        <translation>↑ %1/s</translation>
     </message>
     <message>
         <source>Queued</source>
-        <translation>Sıraya alındı</translation>
+        <translation>Queued</translation>
     </message>
     <message>
         <source>upload %1/s</source>
-        <translation>gönderme %1/s</translation>
+        <translation>upload %1/s</translation>
     </message>
     <message>
         <source>%1 (%2)</source>
@@ -965,11 +965,11 @@ Lütfen bu klasörü hesaptan kaldırıp tekrar eklemeyi düşünün.</translati
     </message>
     <message>
         <source>Local folder: %1</source>
-        <translation>Yerel klasör: %1</translation>
+        <translation>Local folder: %1</translation>
     </message>
     <message>
         <source>%1 %2 (%3 of %4)</source>
-        <translation>%1 %2 (%3/%4)</translation>
+        <translation>%1 %2 (%3 of %4)</translation>
     </message>
     <message>
         <source>%1 %2</source>
@@ -977,106 +977,106 @@ Lütfen bu klasörü hesaptan kaldırıp tekrar eklemeyi düşünün.</translati
     </message>
     <message>
         <source>%5 left, %1 of %2, file %3 of %4</source>
-        <translation>Kalan %5, %1/%2, dosya %3/%4</translation>
+        <translation>%5 left, %1 of %2, file %3 of %4</translation>
     </message>
     <message>
         <source>%1 of %2, file %3 of %4</source>
-        <translation>%1/%2, %3/%4 dosya</translation>
+        <translation>%1 of %2, file %3 of %4</translation>
     </message>
     <message>
         <source>file %1 of %2</source>
-        <translation>dosya %1/%2</translation>
+        <translation>file %1 of %2</translation>
     </message>
 </context>
 <context>
     <name>APP::FolderWatcher</name>
     <message>
         <source>The watcher did not receive a test notification.</source>
-        <translation>İzleyici bir test bildirimi almamıştır.</translation>
+        <translation>The watcher did not receive a test notification.</translation>
     </message>
 </context>
 <context>
     <name>APP::FolderWatcherPrivate</name>
     <message>
         <source>This problem usually happens when the inotify watches are exhausted. Check the FAQ for details.</source>
-        <translation>Bu problem genellikle &quot;inotfy&quot; yoğunlaştığında meydana gelir . SSS üzerinden detayları inceleyin.</translation>
+        <translation>This problem usually happens when the inotify watches are exhausted. Check the FAQ for details.</translation>
     </message>
 </context>
 <context>
     <name>APP::FolderWizard</name>
     <message>
         <source>Virtual files are not available for the selected folder</source>
-        <translation>Seçilen klasör için sanal dosyalar mevcut değil</translation>
+        <translation>Virtual files are not available for the selected folder</translation>
     </message>
     <message>
         <source>Add Folder Sync Connection</source>
-        <translation>Klasör Eşitleme Bağlantısı Ekle</translation>
+        <translation>Add Folder Sync Connection</translation>
     </message>
     <message>
         <source>Add Sync Connection</source>
-        <translation>Eşitleme Bağlantısı Ekle</translation>
+        <translation>Add Sync Connection</translation>
     </message>
 </context>
 <context>
     <name>APP::FolderWizardLocalPath</name>
     <message>
         <source>Click to select a local folder to sync.</source>
-        <translation>Eşitlemek için yerel bir klasör seçmek üzere tıklayın.</translation>
+        <translation>Click to select a local folder to sync.</translation>
     </message>
     <message>
         <source>Enter the path to the local folder.</source>
-        <translation>Yerel klasörün yolunu girin.</translation>
+        <translation>Enter the path to the local folder.</translation>
     </message>
     <message>
         <source>Select the local folder</source>
-        <translation>Yerel klasörü seçin</translation>
+        <translation>Select the local folder</translation>
     </message>
 </context>
 <context>
     <name>APP::FolderWizardRemotePath</name>
     <message>
         <source>Create Remote Folder</source>
-        <translation>Uzak Klasör Oluştur</translation>
+        <translation>Create Remote Folder</translation>
     </message>
     <message>
         <source>Enter the name of the new folder to be created below &apos;%1&apos;:</source>
-        <translation>&apos;%1&apos; altında oluşturulacak yeni klasörün adını girin:</translation>
+        <translation>Enter the name of the new folder to be created below &apos;%1&apos;:</translation>
     </message>
     <message>
         <source>Folder was successfully created on %1.</source>
-        <translation>Klasör %1 üzerinde başarıyla oluşturuldu.</translation>
+        <translation>Folder was successfully created on %1.</translation>
     </message>
     <message>
         <source>Authentication failed accessing %1</source>
-        <translation>%1 erişimi için giriş başarısız</translation>
+        <translation>Authentication failed accessing %1</translation>
     </message>
     <message>
         <source>Failed to create the folder on %1. Please check manually.</source>
-        <translation>%1 üzerinde klasör oluşturma başarısız. Lütfen elle denetleyin.</translation>
+        <translation>Failed to create the folder on %1. Please check manually.</translation>
     </message>
     <message>
         <source>Failed to list a folder. Error: %1</source>
-        <translation>Bir klasörün listelenmesi başarısız oldu. Hata: %1</translation>
+        <translation>Failed to list a folder. Error: %1</translation>
     </message>
     <message>
         <source>Choose this to sync the entire account</source>
-        <translation>Tüm hesabı eşitlemek için bunu seçin</translation>
+        <translation>Choose this to sync the entire account</translation>
     </message>
     <message>
         <source>This folder is already being synced.</source>
-        <translation>Bu klasör zaten eşitleniyor.</translation>
+        <translation>This folder is already being synced.</translation>
     </message>
     <message>
         <source>This folder can&apos;t be synced. Please choose another one.</source>
-        <translation>Bu klasör senkronize edilemez. Lütfen başka bir tane seçin.</translation>
+        <translation>This folder can&apos;t be synced. Please choose another one.</translation>
     </message>
     <message>
         <source>You are already syncing &lt;i&gt;%1&lt;/i&gt;, which is a parent folder of &lt;i&gt;%2&lt;/i&gt;.</source>
-        <translation>&lt;i&gt;%1&lt;/i&gt; zaten eşitleniyor. Bu, &lt;i&gt;%2&lt;/i&gt; klasörünün üst klasörü.</translation>
+        <translation>You are already syncing &lt;i&gt;%1&lt;/i&gt;, which is a parent folder of &lt;i&gt;%2&lt;/i&gt;.</translation>
     </message>
     <message>
         <source>You are already syncing &lt;i&gt;%1&lt;/i&gt;, which is a subfolder of &lt;i&gt;%2&lt;/i&gt;.</source>
-        <translation>&lt;i&gt;%2&lt;/i&gt; klasörünün alt klasörü olan &lt;i&gt;%1&lt;/i&gt; klasörünü zaten eşitliyorsunuz.</translation>
+        <translation>You are already syncing &lt;i&gt;%1&lt;/i&gt;, which is a subfolder of &lt;i&gt;%2&lt;/i&gt;.</translation>
     </message>
 </context>
 <context>
@@ -1094,23 +1094,23 @@ Lütfen bu klasörü hesaptan kaldırıp tekrar eklemeyi düşünün.</translati
     <name>APP::GETFileJob</name>
     <message>
         <source>Connection Timeout</source>
-        <translation>Bağlantı Zaman Aşımı</translation>
+        <translation>Connection Timeout</translation>
     </message>
     <message>
         <source>No E-Tag received from server, check Proxy/Gateway</source>
-        <translation>Sunucudan E-Tag alınamadı, Vekil Sunucu/Ağ Geçidi&apos;ni denetleyin.</translation>
+        <translation>No E-Tag received from server, check Proxy/Gateway</translation>
     </message>
     <message>
         <source>We received a different E-Tag for resuming. Retrying next time.</source>
-        <translation>Devam etmek üzere farklı bir E-Etiket aldık. Sonraki işlemde yeniden denenecek.</translation>
+        <translation>We received a different E-Tag for resuming. Retrying next time.</translation>
     </message>
     <message>
         <source>We received an unexpected download Content-Length.</source>
-        <translation>Beklenmeyen bir içerik veya uzunlukta indirme alındı.</translation>
+        <translation>We received an unexpected download Content-Length.</translation>
     </message>
     <message>
         <source>Server returned wrong content-range</source>
-        <translation>Sunucu yanlış içerik aralığı döndürdü</translation>
+        <translation>Server returned wrong content-range</translation>
     </message>
 </context>
 <context>
@@ -1121,19 +1121,19 @@ Lütfen bu klasörü hesaptan kaldırıp tekrar eklemeyi düşünün.</translati
     </message>
     <message>
         <source>General Settings</source>
-        <translation>Genel Ayarlar</translation>
+        <translation>General Settings</translation>
     </message>
     <message>
         <source>Start on &amp;Login</source>
-        <translation>Başla &amp;Giriş Yap</translation>
+        <translation>Start on &amp;Login</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Dil</translation>
+        <translation>Language</translation>
     </message>
     <message>
         <source>Sync hidden files</source>
-        <translation>Gizli dosyaları eşitle</translation>
+        <translation>Sync hidden files</translation>
     </message>
     <message>
         <source>Log Settings</source>
@@ -1141,19 +1141,19 @@ Lütfen bu klasörü hesaptan kaldırıp tekrar eklemeyi düşünün.</translati
     </message>
     <message>
         <source>Advanced - Approval of folder sync (Non virtual file mode only)</source>
-        <translation>Gelişmiş - Klasör senkronizasyon onayı (Yalnızca sanal olmayan dosya modu)</translation>
+        <translation>Advanced - Approval of folder sync (Non virtual file mode only)</translation>
     </message>
     <message>
         <source>Network</source>
-        <translation>Ağ</translation>
+        <translation>Network</translation>
     </message>
     <message>
         <source>Updates</source>
-        <translation>Güncellemeler</translation>
+        <translation>Updates</translation>
     </message>
     <message>
         <source>stable</source>
-        <translation>stabil</translation>
+        <translation>stable</translation>
     </message>
     <message>
         <source>beta</source>
@@ -1161,11 +1161,11 @@ Lütfen bu klasörü hesaptan kaldırıp tekrar eklemeyi düşünün.</translati
     </message>
     <message>
         <source>About</source>
-        <translation>Hakkında</translation>
+        <translation>About</translation>
     </message>
     <message>
         <source>Advanced</source>
-        <translation>Gelişmiş</translation>
+        <translation>Advanced</translation>
     </message>
     <message>
         <source>Use &amp;Monochrome Icons in the system tray</source>
@@ -1173,7 +1173,7 @@ Lütfen bu klasörü hesaptan kaldırıp tekrar eklemeyi düşünün.</translati
     </message>
     <message>
         <source>Ask for confirmation before synchronizing folders larger than</source>
-        <translation>Belirtilen boyuttan daha büyük klasörler için onay iste</translation>
+        <translation>Ask for confirmation before synchronising folders larger than</translation>
     </message>
     <message>
         <source>MB</source>
@@ -1181,143 +1181,143 @@ Lütfen bu klasörü hesaptan kaldırıp tekrar eklemeyi düşünün.</translati
     </message>
     <message>
         <source>Ask for confirmation before synchronizing external storages</source>
-        <translation>Harici depolamalardan senkronizasyon yapmadan onay al</translation>
+        <translation>Ask for confirmation before synchronising external storages</translation>
     </message>
     <message>
         <source>Show &amp;Desktop Notifications</source>
-        <translation>Masaüstü &amp;Bildirimlerini Göster</translation>
+        <translation>Show &amp;Desktop Notifications</translation>
     </message>
     <message>
         <source>&amp;Update Channel</source>
-        <translation>Güncelleme Kanalı</translation>
+        <translation>&amp;Update Channel</translation>
     </message>
     <message>
         <source>Edit &amp;Ignored Files</source>
-        <translation>Yoksayılan &amp;Dosyaları Düzenle</translation>
+        <translation>Edit &amp;Ignored Files</translation>
     </message>
     <message>
         <source>S&amp;how crash reporter</source>
-        <translation>Ç&amp;ökme bildiricisini göster</translation>
+        <translation>S&amp;how crash reporter</translation>
     </message>
     <message>
         <source>&amp;Restart &amp;&amp; Update</source>
-        <translation>&amp;Yeniden Başlat ve Güncelle</translation>
+        <translation>&amp;Restart &amp;&amp; Update</translation>
     </message>
     <message>
         <source>You cannot disable autostart because system-wide autostart is enabled.</source>
-        <translation>Otomatik başlatmayı kapatamazsınız, çünkü sistem bütününde aktif edildi.</translation>
+        <translation>You cannot disable autostart because system-wide autostart is enabled.</translation>
     </message>
     <message>
         <source>Change update channel?</source>
-        <translation>Güncelleme kanalı değiştirilsin mi?</translation>
+        <translation>Change update channel?</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation>Uyarı</translation>
+        <translation>Warning</translation>
     </message>
     <message>
         <source>Language changes require a restart of this application to take effect.</source>
-        <translation>Dil değişikliklerinin etkili olması için bu uygulamanın yeniden başlatılması gerekir.</translation>
+        <translation>Language changes require a restart of this application to take effect.</translation>
     </message>
     <message>
         <source>The update channel determines which client updates will be offered for installation. The &quot;stable&quot; channel contains only upgrades that are considered reliable, while the versions in the &quot;beta&quot; channel may contain newer features and bugfixes, but have not yet been tested thoroughly.
 
 Note that this selects only what pool upgrades are taken from, and that there are no downgrades: So going back from the beta channel to the stable channel usually cannot be done immediately and means waiting for a stable version that is newer than the currently installed beta version.</source>
-        <translation>Güncelleme kanalı, kurulum için hangi istemci güncellemelerinin sunulacağını belirler. &quot;Kararlı&quot; kanal yalnızca güvenilir kabul edilen yükseltmeleri içerirken &quot;Beta&quot; kanalındaki sürümler daha yeni özellikler ve hata düzeltmeleri içerebilir, ancak henüz tam olarak test edilmemiştir.
+        <translation>The update channel determines which client updates will be offered for installation. The &quot;stable&quot; channel contains only upgrades that are considered reliable, while the versions in the &quot;beta&quot; channel may contain newer features and bugfixes, but have not yet been tested thoroughly.
 
-Bunun yalnızca hangi güncelleme kanalından alınacağını seçtiğini ve herhangi bir sürüm indirgeme olmadığını seçtiğini unutmayın. Bu nedenle beta kanalından kararlı kanala geri dönmek genellikle hemen yapılamaz ve bu, şu anda yüklü olan betadan daha yeni kararlı bir sürümü beklemek anlamına gelir.</translation>
+Note that this selects only what pool upgrades are taken from, and that there are no downgrades: So going back from the beta channel to the stable channel usually cannot be done immediately and means waiting for a stable version that is newer than the currently installed beta version.</translation>
     </message>
     <message>
         <source>Change update channel</source>
-        <translation>Güncelleme kanalını değiştir</translation>
+        <translation>Change update channel</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>unknown (%1)</source>
-        <translation>bilinmeyen (%1)</translation>
+        <translation>unknown (%1)</translation>
     </message>
     <message>
         <source>(use default)</source>
-        <translation>(varsayılanı kullan)</translation>
+        <translation>(use default)</translation>
     </message>
 </context>
 <context>
     <name>APP::GraphApi::Space</name>
     <message>
         <source>Personal</source>
-        <translation>Kişisel</translation>
+        <translation>Personal</translation>
     </message>
     <message>
         <source>Shares</source>
-        <translation>Paylaşımlar</translation>
+        <translation>Shares</translation>
     </message>
 </context>
 <context>
     <name>APP::HttpCredentialsGui</name>
     <message>
         <source>Please enter your password to log in to the account %1.</source>
-        <translation>%1 hesabına giriş yapmak için lütfen şifrenizi giriniz.</translation>
+        <translation>Please enter your password to log in to the account %1.</translation>
     </message>
 </context>
 <context>
     <name>APP::IgnoreListEditor</name>
     <message>
         <source>Ignored Files Editor</source>
-        <translation>Yoksayılan Dosya Düzenleyici</translation>
+        <translation>Ignored Files Editor</translation>
     </message>
     <message>
         <source>Files Ignored by Patterns</source>
-        <translation>Desene Göre Yoksayılan Dosyalar</translation>
+        <translation>Files Ignored by Patterns</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Ekle</translation>
+        <translation>Add</translation>
     </message>
     <message>
         <source>Pattern</source>
-        <translation>Desen</translation>
+        <translation>Pattern</translation>
     </message>
     <message>
         <source>Allow Deletion</source>
-        <translation>Silmeye İzin Ver</translation>
+        <translation>Allow Deletion</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Kaldır</translation>
+        <translation>Remove</translation>
     </message>
     <message>
         <source>Files or folders matching a pattern will not be synchronized. Changes take effect the next time folders are synchronized.
 
 Items where deletion is allowed will be deleted if they prevent a directory from being removed. This is useful for meta data.</source>
-        <translation>Bir kalıpla eşleşen dosya veya klasörler eşitlenmez. Değişiklikler klasörlerin bir sonraki eşitlenmesinde geçerli olur.
+        <translation>Files or folders matching a pattern will not be synchronised. Changes take effect the next time folders are synchronised.
 
-Bir dizinin kaldırılmasını engelliyorlarsa işaretli ögeler de silinecektir. Bu, üst veri için kullanışlıdır.</translation>
+Items, where deletion is allowed, will be deleted if they prevent a directory from being removed. This is useful for metadata.</translation>
     </message>
     <message>
         <source>Could not open file</source>
-        <translation>Dosya açılamadı</translation>
+        <translation>Could not open file</translation>
     </message>
     <message>
         <source>Cannot write changes to &apos;%1&apos;.</source>
-        <translation>Değişiklikler &apos;%1&apos; üzerine yazılamıyor.</translation>
+        <translation>Cannot write changes to &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</source>
-        <translation>Bu girdi &apos;%1&apos; üzerinde sistem tarafından sağlanmaktadır ve bu görünümde değiştirilemez.</translation>
+        <translation>This entry is provided by the system at &apos;%1&apos; and cannot be modified in this view.</translation>
     </message>
 </context>
 <context>
     <name>APP::InpDlg</name>
     <message>
         <source>Add Ignore Pattern</source>
-        <translation>Yoksayma Deseni Ekle</translation>
+        <translation>Add Ignore Pattern</translation>
     </message>
     <message>
         <source>Add a new ignore pattern:</source>
-        <translation>Yeni bir yoksayma deseni ekle:</translation>
+        <translation>Add a new ignore pattern:</translation>
     </message>
     <message>
         <source>OK</source>
@@ -1325,7 +1325,7 @@ Bir dizinin kaldırılmasını engelliyorlarsa işaretli ögeler de silinecektir
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>Cancel</translation>
     </message>
 </context>
 <context>
@@ -1336,60 +1336,60 @@ Bir dizinin kaldırılmasını engelliyorlarsa işaretli ögeler de silinecektir
     </message>
     <message>
         <source>List of issues</source>
-        <translation>Sorunların listesi</translation>
+        <translation>List of issues</translation>
     </message>
     <message>
         <source>Filter</source>
-        <translation>Filtre</translation>
+        <translation>Filter</translation>
     </message>
     <message>
         <source>There were too many issues. Not all will be visible here.</source>
-        <translation>Çok fazla sorun mevcut. Hepsi burada görünmeyecek.</translation>
+        <translation>There were too many issues. Not all will be visible here.</translation>
     </message>
     <message>
         <source>There were conflicts. Check the documentation on how to resolve them.</source>
-        <translation>Çakışmalar mevcut. Nasıl çözüleceğini dokümantasyondan kontrol edin.</translation>
+        <translation>There were conflicts. Check the documentation on how to resolve them.</translation>
     </message>
     <message>
         <source>The file %1 was ignored as its name is reserved by %2</source>
-        <translation>%1 dosyası, adı %2 tarafından rezerve edildiğinden yok sayıldı</translation>
+        <translation>The file %1 was ignored as its name is reserved by %2</translation>
     </message>
     <message>
         <source>Reset column sizes</source>
-        <translation>Sütun boyutlarını sıfırla</translation>
+        <translation>Reset column sizes</translation>
     </message>
     <message>
         <source>There were conflicts. &lt;a href=&quot;%1&quot;&gt;Check the documentation on how to resolve them.&lt;/a&gt;</source>
-        <translation>Çakışmalar mevcut. &lt;a href=&quot;%1&quot;&gt;Nasıl çözüleceğini dokümantasyondan kontrol edin.&lt;/a&gt;</translation>
+        <translation>There were conflicts. &lt;a href=&quot;%1&quot;&gt;Check the documentation on how to resolve them.&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Account</source>
-        <translation>Hesap</translation>
+        <translation>Account</translation>
     </message>
 </context>
 <context>
     <name>APP::LogBrowser</name>
     <message>
         <source>Log Output</source>
-        <translation>Günlük Çıktısı</translation>
+        <translation>Log Output</translation>
     </message>
     <message>
         <source>The client can write debug logs to a temporary folder. These logs are very helpful for diagnosing problems.
 Since log files can get large, the client will start a new one for each sync run and compress older ones.</source>
-        <translation>İstemci geçici bir klasöre hata ayıklama günlükleri yazabilir. Bu günlükler problemleri teşhis etmek için çok yararlıdır.
-Günlük dosyaları büyüdüğünde, istemci her senkronizasyon için yeni bir tane başlatır ve eski olanları sıkıştırır.</translation>
+        <translation>The client can write debug logs to a temporary folder. These logs are very helpful for diagnosing problems.
+Since log files can get large, the client will start a new one for each sync run and compress older ones.</translation>
     </message>
     <message>
         <source>Enable logging to temporary folder</source>
-        <translation>Günlüğü geçici klasöre kaydetmeyi etkinleştir</translation>
+        <translation>Enable logging to temporary folder</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ff0000;&quot;&gt;The logs contain sensitive information which you should not make publicly available&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ff0000;&quot;&gt;Günlükler, herkese açık hale getirmemeniz gereken hassas bilgiler içerir.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ff0000;&quot;&gt;The logs contain sensitive information which you should not make publicly available&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>If enabled, logs will be written to:</source>
-        <translation>Etkinleştirilirse, günlükler şuraya yazılır:</translation>
+        <translation>If enabled, logs will be written to:</translation>
     </message>
     <message>
         <source>C:/log</source>
@@ -1397,94 +1397,94 @@ Günlük dosyaları büyüdüğünde, istemci her senkronizasyon için yeni bir 
     </message>
     <message>
         <source>Log Http traffic </source>
-        <translation>Http trafiğini günlüğe kaydet</translation>
+        <translation>Log HTTP traffic </translation>
     </message>
     <message>
         <source>Log files to keep:</source>
-        <translation>Günlük dosyaları tutmak için:</translation>
+        <translation>Log files to keep:</translation>
     </message>
     <message>
         <source>These settings persist across client restarts.
 Note that using any logging command line options will override the settings.</source>
-        <translation>Bu ayarlar istemci yeniden başlatmalarında devam eder.
-Günlüğe kaydetme komut satırı seçeneklerinin kullanılmasının bu ayarları geçersiz kılacağını unutmayın.</translation>
+        <translation>These settings persist across client restarts.
+Note that using any logging command line options will override the settings.</translation>
     </message>
     <message>
         <source>Open folder</source>
-        <translation>Klasörü aç</translation>
+        <translation>Open folder</translation>
     </message>
 </context>
 <context>
     <name>APP::LoginRequiredDialog</name>
     <message>
         <source>Log out</source>
-        <translation>Çıkış yap</translation>
+        <translation>Log out</translation>
     </message>
     <message>
         <source>Log in</source>
-        <translation>Giriş yap</translation>
+        <translation>Log in</translation>
     </message>
 </context>
 <context>
     <name>APP::Models</name>
     <message>
         <source>%1 Filter:</source>
-        <translation>%1 Filtre:</translation>
+        <translation>%1 Filter:</translation>
     </message>
     <message>
         <source>All</source>
-        <translation>Tümü</translation>
+        <translation>All</translation>
     </message>
     <message>
         <source>Reset Filters</source>
-        <translation>Filtreleri Sıfırla</translation>
+        <translation>Reset Filters</translation>
     </message>
     <message>
         <source>Status Filter:</source>
-        <translation>Durum Filtresi:</translation>
+        <translation>Status Filter:</translation>
     </message>
 </context>
 <context>
     <name>APP::NSISUpdater</name>
     <message>
         <source>New Version Available</source>
-        <translation>Yeni Sürüm Mevcut</translation>
+        <translation>New Version Available</translation>
     </message>
     <message>
         <source>&lt;p&gt;A new version of the %1 Client is available.&lt;/p&gt;&lt;p&gt;&lt;b&gt;%2&lt;/b&gt; is available for download. The installed version is %3.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;%1 İstemcisi yeni sürümü mevcut.&lt;/p&gt;&lt;p&gt;&lt;b&gt;%2&lt;/b&gt; artık indirilebilir. Kurulu sürüm %3.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;A new version of the %1 Client is available.&lt;/p&gt;&lt;p&gt;&lt;b&gt;%2&lt;/b&gt; is available for download. The installed version is %3.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Skip this version</source>
-        <translation>Bu sürümü atla</translation>
+        <translation>Skip this version</translation>
     </message>
     <message>
         <source>Skip this time</source>
-        <translation>Bu kez atla</translation>
+        <translation>Skip this time</translation>
     </message>
     <message>
         <source>Get update</source>
-        <translation>Güncellemeyi al</translation>
+        <translation>Get update</translation>
     </message>
     <message>
         <source>Update Failed</source>
-        <translation>Güncelleme Başarısız</translation>
+        <translation>Update Failed</translation>
     </message>
     <message>
         <source>&lt;p&gt;A new version of the %1 Client is available but the updating process failed.&lt;/p&gt;&lt;p&gt;&lt;b&gt;%2&lt;/b&gt; has been downloaded. The installed version is %3.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;%1 İstemcisinin yeni bir sürümü mevcut ancak güncelleme başarısız oldu.&lt;/p&gt;&lt;p&gt;&lt;b&gt;%2&lt;/b&gt; indirildi. Yüklü sürüm %3.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;A new version of the %1 Client is available but the updating process failed.&lt;/p&gt;&lt;p&gt;&lt;b&gt;%2&lt;/b&gt; has been downloaded. The installed version is %3.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Ask again later</source>
-        <translation>Sonra tekrar deneyin</translation>
+        <translation>Ask again later</translation>
     </message>
     <message>
         <source>Restart and update</source>
-        <translation>Yeniden başlat ve güncelle</translation>
+        <translation>Restart and update</translation>
     </message>
     <message>
         <source>Update manually</source>
-        <translation>Elle güncelle</translation>
+        <translation>Update manually</translation>
     </message>
 </context>
 <context>
@@ -1495,23 +1495,23 @@ Günlüğe kaydetme komut satırı seçeneklerinin kullanılmasının bu ayarlar
     </message>
     <message>
         <source>Proxy Settings</source>
-        <translation>Vekil Sunucu Ayarları</translation>
+        <translation>Proxy Settings</translation>
     </message>
     <message>
         <source>No Proxy</source>
-        <translation>Vekil sunucu yok</translation>
+        <translation>No Proxy</translation>
     </message>
     <message>
         <source>Use system proxy</source>
-        <translation>Sistem vekil sunucusunu kullan</translation>
+        <translation>Use system proxy</translation>
     </message>
     <message>
         <source>Specify proxy manually as</source>
-        <translation>Vekil sunucusunu el ile belirle:</translation>
+        <translation>Specify proxy manually as</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation>Sunucu</translation>
+        <translation>Host</translation>
     </message>
     <message>
         <source>:</source>
@@ -1519,93 +1519,93 @@ Günlüğe kaydetme komut satırı seçeneklerinin kullanılmasının bu ayarlar
     </message>
     <message>
         <source>Proxy server requires authentication</source>
-        <translation>Vekil sunucusu kimlik doğrulama gerektiriyor</translation>
+        <translation>Proxy server requires authentication</translation>
     </message>
     <message>
         <source>Note: proxy settings have no effects for accounts on localhost</source>
-        <translation>Not: Proxy ayarlarının localhost üzerindeki hesaplar için hiçbir etkisi yoktur</translation>
+        <translation>Note: proxy settings have no effects for accounts on localhost</translation>
     </message>
     <message>
         <source>Download Bandwidth</source>
-        <translation>İndirme Bant Genişliği</translation>
+        <translation>Download Bandwidth</translation>
     </message>
     <message>
         <source>Limit to</source>
-        <translation>Şuna sınırla:</translation>
+        <translation>Limit to</translation>
     </message>
     <message>
         <source>KBytes/s</source>
-        <translation>KBayt/s</translation>
+        <translation>KBytes/s</translation>
     </message>
     <message>
         <source>No limit</source>
-        <translation>Sınır yok</translation>
+        <translation>No limit</translation>
     </message>
     <message>
         <source>Limit to 3/4 of estimated bandwidth</source>
-        <translation>Tahmini bant genişliğinin 3/4&apos;ü ile sınırla</translation>
+        <translation>Limit to 3/4 of estimated bandwidth</translation>
     </message>
     <message>
         <source>Upload Bandwidth</source>
-        <translation>Gönderme Bant Genişliği</translation>
+        <translation>Upload Bandwidth</translation>
     </message>
     <message>
         <source>Limit automatically</source>
-        <translation>Otomatik sınırla</translation>
+        <translation>Limit automatically</translation>
     </message>
     <message>
         <source>Hostname of proxy server</source>
-        <translation>Vekil sunucu makine adı</translation>
+        <translation>Hostname of proxy server</translation>
     </message>
     <message>
         <source>Username for proxy server</source>
-        <translation>Vekil sunucu kullanıcı adı</translation>
+        <translation>Username for proxy server</translation>
     </message>
     <message>
         <source>Password for proxy server</source>
-        <translation>Vekil sunucu parolası</translation>
+        <translation>Password for proxy server</translation>
     </message>
     <message>
         <source>HTTP(S) proxy</source>
-        <translation>HTTP(S) vekil sunucusu</translation>
+        <translation>HTTP(S) proxy</translation>
     </message>
     <message>
         <source>SOCKS5 proxy</source>
-        <translation>SOCKS5 vekil sunucusu</translation>
+        <translation>SOCKS5 proxy</translation>
     </message>
 </context>
 <context>
     <name>APP::NotificationWidget</name>
     <message>
         <source>Created at %1</source>
-        <translation>Oluşturulma %1</translation>
+        <translation>Created at %1</translation>
     </message>
     <message>
         <source>Closing in a few seconds...</source>
-        <translation>Saniyeler içinde kapatılıyor...</translation>
+        <translation>Closing in a few seconds...</translation>
     </message>
     <message>
         <source>%1 request failed at %2</source>
-        <translation>%1 isteği %2 üzerinde başarısız oldu</translation>
+        <translation>%1 request failed at %2</translation>
     </message>
     <message>
         <source>&apos;%1&apos; selected at %2</source>
-        <translation>%2 üzerinde &apos;%1&apos; seçildi</translation>
+        <translation>&apos;%1&apos; selected at %2</translation>
     </message>
 </context>
 <context>
     <name>APP::OAuth</name>
     <message>
         <source>Error returned from the server: &lt;em&gt;%1&lt;/em&gt;</source>
-        <translation>Sunucudan hata döndü: &lt;em&gt;%1&lt;/em&gt;</translation>
+        <translation>Error returned from the server: &lt;em&gt;%1&lt;/em&gt;</translation>
     </message>
     <message>
         <source>There was an error accessing the &apos;token&apos; endpoint: &lt;br&gt;&lt;em&gt;%1&lt;/em&gt;</source>
-        <translation>&apos;token&apos; uç noktası erişimi sırasında hata meydana geldi: &lt;br&gt;&lt;em&gt;%1&lt;/em&gt;</translation>
+        <translation>There was an error accessing the &apos;token&apos; endpoint: &lt;br&gt;&lt;em&gt;%1&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Could not parse the JSON returned from the server: &lt;br&gt;&lt;em&gt;%1&lt;/em&gt;</source>
-        <translation>Sunucudan gelen JSON ayrıştırılamadı: &lt;br&gt;&lt;em&gt;%1&lt;/em&gt;</translation>
+        <translation>Could not parse the JSON returned from the server: &lt;br&gt;&lt;em&gt;%1&lt;/em&gt;</translation>
     </message>
     <message>
         <source>Unsupported token type: %1</source>
@@ -1623,170 +1623,171 @@ Günlüğe kaydetme komut satırı seçeneklerinin kullanılmasının bu ayarlar
     </message>
     <message>
         <source>Login Error</source>
-        <translation>Oturum Açma Hatası</translation>
+        <translation>Login Error</translation>
     </message>
     <message>
         <source>&lt;h1&gt;Wrong user&lt;/h1&gt;&lt;p&gt;You logged-in with user &lt;em&gt;%1&lt;/em&gt;, but must login with user &lt;em&gt;%2&lt;/em&gt;.&lt;br&gt;Please return to the %3 client and restart the authentication.&lt;/p&gt;</source>
-        <translation>&lt;h1&gt;Yanlış kullanıcı &lt;/h1&gt;&lt;p&gt;&lt;em&gt;%1&lt;/em&gt; kullanıcısıyla oturum açtınız, ancak &lt;em&gt;%2&lt;/em&gt; kullanıcısıyla oturum açmanız gerekiyor. &lt;br&gt;Lütfen %3 istemcisine dönün ve kimlik doğrulamayı yeniden başlatın.&lt;/p&gt;</translation>
+        <translation>&lt;h1&gt;Wrong user&lt;/h1&gt;&lt;p&gt;You logged-in with user &lt;em&gt;%1&lt;/em&gt;, but must login with user &lt;em&gt;%2&lt;/em&gt;.&lt;br&gt;Please return to the %3 client and restart the authentication.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Wrong user</source>
-        <translation>Yanlış kullanıcı</translation>
+        <translation>Wrong user</translation>
     </message>
     <message>
         <source>&lt;h1&gt;Login Successful&lt;/h1&gt;&lt;p&gt;You can close this window.&lt;/p&gt;</source>
-        <translation>&lt;h1&gt;Giriş Başarılı&lt;/h1&gt;&lt;p&gt; Bu pencereyi kapatabilirsiniz.&lt;/p&gt;</translation>
+        <translation>&lt;h1&gt;Login Successful&lt;/h1&gt;&lt;p&gt;You can close this window.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Login Successful</source>
-        <translation>Giriş Başarılı</translation>
+        <translation>Login Successful</translation>
     </message>
     <message>
         <source>&lt;h1&gt;Login Error&lt;/h1&gt;&lt;p&gt;%1&lt;/p&gt;</source>
-        <translation>&lt;h1&gt;Sisteme Giriş Hatası&lt;/h1&gt;&lt;p&gt;%1&lt;/p&gt;</translation>
+        <translation>&lt;h1&gt;Login Error&lt;/h1&gt;&lt;p&gt;%1&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
     <name>APP::OCUpdater</name>
     <message>
         <source>New %1 Update Ready</source>
-        <translation>Yeni %1 Güncellemesi Hazır</translation>
+        <translation>New %1 Update Ready</translation>
     </message>
     <message>
         <source>A new update for %1 is about to be installed. The updater may ask
 for additional privileges during the process.</source>
-        <translation>%1 için yeni bir güncelleme yüklenmek üzere. İşlem sürerken güncelleyici başka yetkiler isteyebilir.</translation>
+        <translation>A new update for %1 is about to be installed. The updater may ask
+for additional privileges during the process.</translation>
     </message>
     <message>
         <source>Could not download update. Please click &lt;a href=&apos;%1&apos;&gt;here&lt;/a&gt; to download the update manually.</source>
-        <translation>Güncelleme indirilemedi. Lütfen güncellemeyi elle indirmek için &lt;a href=&apos;%1&apos;&gt;buraya&lt;/a&gt; tıklayın.</translation>
+        <translation>Could not download update. Please click &lt;a href=&apos;%1&apos;&gt;here&lt;/a&gt; to download the update manually.</translation>
     </message>
     <message>
         <source>Could not check for new updates.</source>
-        <translation>Yeni güncellemeler denetlenemedi.</translation>
+        <translation>Could not check for new updates.</translation>
     </message>
     <message>
         <source>Downloading %1. Please wait...</source>
-        <translation>%1 yükleniyor. Lütfen bekleyin...</translation>
+        <translation>Downloading %1. Please wait...</translation>
     </message>
     <message>
         <source>%1 available. Restart application to start the update.</source>
-        <translation>%1 sürümü mevcut. Güncellemeyi başlatmak için uygulamayı yeniden başlatın.</translation>
+        <translation>%1 available. Restart application to start the update.</translation>
     </message>
     <message>
         <source>New %1 available. Please click &lt;a href=&apos;%2&apos;&gt;here&lt;/a&gt; to download the new AppImage manually.</source>
-        <translation>Yeni %1 mevcut. Yeni AppImage&apos;ı manuel olarak indirmek için lütfen &lt;a href=&apos;%2&apos;&gt;buraya&lt;/a&gt; tıklayın.</translation>
+        <translation>New %1 available. Please click &lt;a href=&apos;%2&apos;&gt;here&lt;/a&gt; to download the new AppImage manually.</translation>
     </message>
     <message>
         <source>New %1 available. Please use the system&apos;s update tool to install it.</source>
-        <translation>Yeni %1 sürümü mevcut. Lütfen kurulum için sistem güncelleştirme aracını kullanın.</translation>
+        <translation>New %1 available. Please use the system&apos;s update tool to install it.</translation>
     </message>
     <message>
         <source>Checking update server...</source>
-        <translation>Güncelleme sunucusu denetleniyor...</translation>
+        <translation>Checking update server...</translation>
     </message>
     <message>
         <source>Update status is unknown: Did not check for new updates.</source>
-        <translation>Güncelleme durumu bilinmiyor: Yeni güncellemeler denetlenemedi.</translation>
+        <translation>Update status is unknown: Did not check for new updates.</translation>
     </message>
     <message>
         <source>No updates available. Your installation is at the latest version.</source>
-        <translation>Güncelleme yok. Kurulumunuz son sürümde.</translation>
+        <translation>No updates available. Your installation is at the latest version.</translation>
     </message>
     <message>
         <source>Update Check</source>
-        <translation>Güncelleme Denetimi</translation>
+        <translation>Update Check</translation>
     </message>
 </context>
 <context>
     <name>APP::ProcessDirectoryJob</name>
     <message>
         <source>Symbolic links are not supported in syncing.</source>
-        <translation>Sembolik bağlantılar eşitlemede desteklenmiyor.</translation>
+        <translation>Symbolic links are not supported in syncing.</translation>
     </message>
     <message>
         <source>File is listed on the ignore list.</source>
-        <translation>Dosya yoksayma listesinde.</translation>
+        <translation>File is listed on the ignore list.</translation>
     </message>
     <message>
         <source>File names ending with a period are not supported on this file system.</source>
-        <translation>Nokta ile biten dosya adları bu dosya sisteminde desteklenmez.</translation>
+        <translation>File names ending with a period are not supported on this file system.</translation>
     </message>
     <message>
         <source>File names containing the character &apos;%1&apos; are not supported on this file system.</source>
-        <translation>&apos;%1&apos; karakterini içeren dosya adları bu dosya sisteminde desteklenmiyor.</translation>
+        <translation>File names containing the character &apos;%1&apos; are not supported on this file system.</translation>
     </message>
     <message>
         <source>File name contains at least one invalid character</source>
-        <translation>Dosya adı en az bir geçersiz karakter içeriyor</translation>
+        <translation>File name contains at least one invalid character</translation>
     </message>
     <message>
         <source>The file name is a reserved name on this file system.</source>
-        <translation>Dosya adı bu dosya sisteminde ayrılmış bir addır.</translation>
+        <translation>The file name is a reserved name on this file system.</translation>
     </message>
     <message>
         <source>Filename contains trailing spaces.</source>
-        <translation>Dosya adı sonunda boşluk mevcut.</translation>
+        <translation>Filename contains trailing spaces.</translation>
     </message>
     <message>
         <source>Filename is too long.</source>
-        <translation>Dosya adı çok uzun.</translation>
+        <translation>Filename is too long.</translation>
     </message>
     <message>
         <source>File/Folder is ignored because it&apos;s hidden.</source>
-        <translation>Dosya/Klasör gizli olduğu için yoksayıldı.</translation>
+        <translation>File/Folder is ignored because it&apos;s hidden.</translation>
     </message>
     <message>
         <source>Stat failed.</source>
-        <translation>Durum alma başarısız.</translation>
+        <translation>Stat failed.</translation>
     </message>
     <message>
         <source>Conflict: Server version downloaded, local copy renamed and not uploaded.</source>
-        <translation>Çakışma: Sunucu sürümü indirildi, yerel kopya yeniden adlandırıldı ve yüklenmedi.</translation>
+        <translation>Conflict: Server version downloaded, local copy renamed and not uploaded.</translation>
     </message>
     <message>
         <source>The filename cannot be encoded on your file system.</source>
-        <translation>Dosya adı dosya sisteminizde görüntülenemeyecek karakterler içeriyor.</translation>
+        <translation>The filename cannot be encoded on your file system.</translation>
     </message>
     <message>
         <source>The filename is blacklisted on the server.</source>
-        <translation>Dosya adı sunucuda kara listeye alınmıştır.</translation>
+        <translation>The filename is blacklisted on the server.</translation>
     </message>
     <message>
         <source>size</source>
-        <translation>boyut</translation>
+        <translation>size</translation>
     </message>
     <message>
         <source>permissions</source>
-        <translation>izinler</translation>
+        <translation>permissions</translation>
     </message>
     <message>
         <source>etag</source>
-        <translation>e-etiket</translation>
+        <translation>etag</translation>
     </message>
     <message>
         <source>file id</source>
-        <translation>dosya kimliği</translation>
+        <translation>file id</translation>
     </message>
     <message>
         <source>server reported no %1</source>
-        <translation>sunucu bildirimi no %1</translation>
+        <translation>server reported no %1</translation>
     </message>
     <message>
         <source>SelectiveSync: Ignored because its path is deselected</source>
-        <translation>SelectiveSync: Yolunun seçimi kaldırıldığı için yok sayıldı</translation>
+        <translation>SelectiveSync: Ignored because its path is deselected</translation>
     </message>
     <message>
         <source>Moved to invalid target, restoring</source>
-        <translation>Geçersiz hedefe taşıma yapıldı, geri yükleniyor</translation>
+        <translation>Moved to invalid target, restoring</translation>
     </message>
     <message>
         <source>Not allowed to remove, restoring</source>
-        <translation>Kaldırmaya izin verilmedi, geri alınıyor</translation>
+        <translation>Not allowed to remove, restoring</translation>
     </message>
     <message>
         <source>Not allowed because you don&apos;t have permission to add subfolders to that folder</source>
-        <translation>Bu dizine alt dizin ekleme yetkiniz olmadığından izin verilmedi</translation>
+        <translation>Not allowed because you don&apos;t have permission to add subfolders to that folder</translation>
     </message>
     <message>
         <source>Error while doing a rename, unhandled status code: %1</source>
@@ -1794,340 +1795,340 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Not allowed because you don&apos;t have permission to add files in that folder</source>
-        <translation>Bu klasöre dosya ekleme yetkiniz olmadığından izin verilmedi</translation>
+        <translation>Not allowed because you don&apos;t have permission to add files in that folder</translation>
     </message>
     <message>
         <source>Not allowed to upload this file because it is read-only on the server, restoring</source>
-        <translation>Bu dosya sunucuda salt okunur olduğu için yüklenemedi, geri alınıyor</translation>
+        <translation>Not allowed to upload this file because it is read-only on the server, restoring</translation>
     </message>
     <message>
         <source>Error while reading the database</source>
-        <translation>Veri tabanını okunurken hata oluştu.</translation>
+        <translation>Error while reading the database</translation>
     </message>
     <message>
         <source>This Space is currently unavailable</source>
-        <translation>Bu Alan şu anda kullanılamıyor</translation>
+        <translation>This Space is currently unavailable</translation>
     </message>
     <message>
         <source>Server replied with an error while reading directory &apos;%1&apos; : %2</source>
-        <translation>Dizin &apos;%1&apos; okunurken sunucu hata cevabı verdi: %2</translation>
+        <translation>Server replied with an error while reading directory &apos;%1&apos; : %2</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateDirectory</name>
     <message>
         <source>Error updating metadata: %1</source>
-        <translation>Metadata güncellenirken hata oluştu: %1</translation>
+        <translation>Error updating metadata: %1</translation>
     </message>
     <message>
         <source>%1 the folder is currently in use</source>
-        <translation>%1 klasör şu anda kullanımda</translation>
+        <translation>%1 the folder is currently in use</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateDownloadFile</name>
     <message>
         <source>Failed to free up space, the file %1 is currently in use</source>
-        <translation>Alan boşaltılamadı, %1 dosyası şu anda kullanımda</translation>
+        <translation>Failed to free up space, the file %1 is currently in use</translation>
     </message>
     <message>
         <source>File %1 can not be downloaded because of a local file name clash with %2!</source>
-        <translation>%1 dosyası, %2 ile yerel bir dosya adı çakışması nedeniyle indirilemiyor!</translation>
+        <translation>File %1 can not be downloaded because of a local file name clash with %2!</translation>
     </message>
     <message>
         <source>The download would reduce free local disk space below the limit</source>
-        <translation>Dosyanın indirilmesi boş disk alanını belirlenen limitin altına düşürecektir.</translation>
+        <translation>The download would reduce free local disk space below the limit</translation>
     </message>
     <message>
         <source>Free space on disk is less than %1</source>
-        <translation>Boş disk alanı %1 altında</translation>
+        <translation>Free space on disk is less than %1</translation>
     </message>
     <message>
         <source>File was deleted from server</source>
-        <translation>Dosya sunucudan silindi</translation>
+        <translation>File was deleted from server</translation>
     </message>
     <message>
         <source>Broken webserver returned empty content length for non-empty file on resume</source>
-        <translation>Bozuk web sunucusu, özgeçmişte boş olmayan dosya için boş içerik uzunluğu döndürdü</translation>
+        <translation>Broken webserver returned empty content length for non-empty file on resume</translation>
     </message>
     <message>
         <source>The file could not be downloaded completely.</source>
-        <translation>Dosya tamamıyla indirilemedi.</translation>
+        <translation>The file could not be downloaded completely.</translation>
     </message>
     <message>
         <source>The downloaded file is empty despite the server announced it should have been %1.</source>
-        <translation>Sunucu boyutunu %1 olarak duyurmasına rağmen indirilen dosya boş.</translation>
+        <translation>The downloaded file is empty despite the server announced it should have been %1.</translation>
     </message>
     <message>
         <source>File %1 cannot be saved because of a local file name clash with %2!</source>
-        <translation>%1 dosyası, %2 ile yerel bir dosya adı çakışması nedeniyle kaydedilemiyor!</translation>
+        <translation>File %1 cannot be saved because of a local file name clash with %2!</translation>
     </message>
     <message>
         <source>Error updating metadata: %1</source>
-        <translation>Metadata güncellenirken hata oluştu: %1</translation>
+        <translation>Error updating metadata: %1</translation>
     </message>
     <message>
         <source>The file %1 is currently in use</source>
-        <translation>%1 dosyası şu anda kullanımda</translation>
+        <translation>The file %1 is currently in use</translation>
     </message>
     <message>
         <source>File has changed since discovery</source>
-        <translation>Dosya, bulunduğundan itibaren değişmiş</translation>
+        <translation>File has changed since discovery</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateItemJob</name>
     <message>
         <source>; Restoration Failed: %1</source>
-        <translation>; Geri Yükleme Başarısız: %1</translation>
+        <translation>; Restoration Failed: %1</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateLocalMkdir</name>
     <message>
         <source>could not delete file %1, error: %2</source>
-        <translation>%1 dosyası silinemedi, hata: %2</translation>
+        <translation>could not delete file %1, error: %2</translation>
     </message>
     <message>
         <source>Can not create local folder %1 because of a local file name clash with %2</source>
-        <translation>%2 ile yerel dosya adı çakışması nedeniyle %1 yerel klasörü oluşturulamıyor</translation>
+        <translation>Can not create local folder %1 because of a local file name clash with %2</translation>
     </message>
     <message>
         <source>Error updating metadata: %1</source>
-        <translation>Metadata güncellenirken hata oluştu: %1</translation>
+        <translation>Error updating metadata: %1</translation>
     </message>
     <message>
         <source>The file %1 is currently in use</source>
-        <translation>%1 dosyası şu anda kullanımda</translation>
+        <translation>The file %1 is currently in use</translation>
     </message>
     <message>
         <source>could not create folder %1</source>
-        <translation>%1 klasörü oluşturulamadı</translation>
+        <translation>could not create folder %1</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateLocalRemove</name>
     <message>
         <source>%1 failed with: %2</source>
-        <translation>%1 ile başarısız oldu: %2</translation>
+        <translation>%1 failed with: %2</translation>
     </message>
     <message>
         <source>Could not remove %1 because of a local file name clash with %2!</source>
-        <translation>%2 ile yerel dosya adı çakışması nedeniyle %1 kaldırılamadı!</translation>
+        <translation>Could not remove %1 because of a local file name clash with %2!</translation>
     </message>
     <message>
         <source>%1 the file is currently in use</source>
-        <translation>%1 dosya şu anda kullanımda</translation>
+        <translation>%1 the file is currently in use</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateLocalRename</name>
     <message>
         <source>File %1 can not be renamed to %2 because of a local file name clash</source>
-        <translation>Yerel bir dosya adı çakışması nedeniyle %1 dosyası %2 olarak adlandırılamadı</translation>
+        <translation>File %1 cannot be renamed to %2 because of a local file name clash</translation>
     </message>
     <message>
         <source>Could not rename %1 to %2, the file is currently in use</source>
-        <translation>%1, %2 olarak yeniden adlandırılamadı, dosya şu anda kullanımda</translation>
+        <translation>Could not rename %1 to %2, the file is currently in use</translation>
     </message>
     <message>
         <source>Error updating metadata: %1</source>
-        <translation>Metadata güncellenirken hata oluştu: %1</translation>
+        <translation>Error updating metadata: %1</translation>
     </message>
     <message>
         <source>The file %1 is currently in use</source>
-        <translation>%1 dosyası şu anda kullanımda</translation>
+        <translation>The file %1 is currently in use</translation>
     </message>
     <message>
         <source>Failed to rename file</source>
-        <translation>Dosya yeniden adlandırılamadı</translation>
+        <translation>Failed to rename file</translation>
     </message>
     <message>
         <source>Error setting pin state</source>
-        <translation>Pin durumu ayarlanırken hata oluştu</translation>
+        <translation>Error setting pin state</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateRemoteDelete</name>
     <message>
         <source>Wrong HTTP code returned by server. Expected 204, but received &quot;%1 %2&quot;.</source>
-        <translation>Sunucudan yanlış HTTP kodu döndü. 204 bekleniyordu, ancak &quot;%1 %2&quot; geldi.</translation>
+        <translation>Wrong HTTP code returned by server. Expected 204, but received &quot;%1 %2&quot;.</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateRemoteMkdir</name>
     <message>
         <source>Wrong HTTP code returned by server. Expected 201, but received &quot;%1 %2&quot;.</source>
-        <translation>Sunucudan yanlış HTTP kodu döndü. 201 bekleniyordu, ancak &quot;%1 %2&quot; geldi.</translation>
+        <translation>Wrong HTTP code returned by server. Expected 201, but received &quot;%1 %2&quot;.</translation>
     </message>
     <message>
         <source>Error writing metadata to the database: %1</source>
-        <translation>Veritabanına metadata yazılırken hata oluştu: %1</translation>
+        <translation>Error writing metadata to the database: %1</translation>
     </message>
     <message>
         <source>Setting file status failed due to file lock</source>
-        <translation>Dosya kilidi nedeniyle dosya durumu ayarlanamadı</translation>
+        <translation>Setting file status failed due to file lock</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateRemoteMove</name>
     <message>
         <source>Could not rename %1 to %2, error: %3</source>
-        <translation>%1, %2 şeklinde yeniden isimlendirilemedi, hata: %3</translation>
+        <translation>Could not rename %1 to %2, error: %3</translation>
     </message>
     <message>
         <source>Wrong HTTP code returned by server. Expected 201, but received &quot;%1 %2&quot;.</source>
-        <translation>Sunucudan yanlış HTTP kodu döndü. 201 bekleniyordu, ancak &quot;%1 %2&quot; geldi.</translation>
+        <translation>Wrong HTTP code returned by server. Expected 201, but received &quot;%1 %2&quot;.</translation>
     </message>
     <message>
         <source>Error updating metadata: %1</source>
-        <translation>Metadata güncellenirken hata oluştu: %1</translation>
+        <translation>Error updating metadata: %1</translation>
     </message>
     <message>
         <source>The file %1 is currently in use</source>
-        <translation>%1 dosyası şu anda kullanımda</translation>
+        <translation>The file %1 is currently in use</translation>
     </message>
     <message>
         <source>Error writing metadata to the database</source>
-        <translation>Veritabanına üstveri yazma hatası</translation>
+        <translation>Error writing metadata to the database</translation>
     </message>
     <message>
         <source>Error setting pin state</source>
-        <translation>Pin durumu ayarlanırken hata oluştu</translation>
+        <translation>Error setting pin state</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateUpdateMetaDataJob</name>
     <message>
         <source>Could not update file : %1</source>
-        <translation>Dosya güncellenemedi: %1</translation>
+        <translation>Could not update file : %1</translation>
     </message>
     <message>
         <source>The file %1 is currently in use</source>
-        <translation>%1 dosyası şu anda kullanımda</translation>
+        <translation>The file %1 is currently in use</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateUploadFileCommon</name>
     <message>
         <source>File %1 cannot be uploaded because another file with the same name, differing only in case, exists</source>
-        <translation>%1 dosyası karşı tarafa yüklenemez, çünkü aynı isimde dosya zaten mevcut.</translation>
+        <translation>File %1 cannot be uploaded because another file with the same name, differing only in case, exists</translation>
     </message>
     <message>
         <source>%1 the file is currently in use</source>
-        <translation>%1 dosya şu anda kullanımda</translation>
+        <translation>%1 the file is currently in use</translation>
     </message>
     <message>
         <source>File Removed</source>
-        <translation>Dosya Kaldırıldı</translation>
+        <translation>File Removed</translation>
     </message>
     <message>
         <source>Local file changed during sync. It will be resumed.</source>
-        <translation>Senkronizasyon sırasında yerel dosya değişti. Yeniden başlatılacaktır.</translation>
+        <translation>Local file changed during sync. It will be resumed.</translation>
     </message>
     <message>
         <source>Error updating metadata: %1</source>
-        <translation>Metadata güncellenirken hata oluştu: %1</translation>
+        <translation>Error updating metadata: %1</translation>
     </message>
     <message>
         <source>Upload of %1 exceeds the quota for the folder</source>
-        <translation>%1 karşı tarafa yüklenmesi klasörün kotasını aşıyor.</translation>
+        <translation>Upload of %1 exceeds the quota for the folder</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateUploadFileNG</name>
     <message>
         <source>%1 the file is currently in use</source>
-        <translation>%1 dosya şu anda kullanımda</translation>
+        <translation>%1 the file is currently in use</translation>
     </message>
     <message>
         <source>The local file was removed during sync.</source>
-        <translation>Eşitleme sırasında yerel dosya kaldırıldı.</translation>
+        <translation>The local file was removed during sync.</translation>
     </message>
     <message>
         <source>The server did ask for a removed legacy feature(polling)</source>
-        <translation>Sunucu, eski bir özelliğin kaldırılmasını istedi (yoklama)</translation>
+        <translation>The server did ask for a removed legacy feature(polling)</translation>
     </message>
     <message>
         <source>Unexpected return code from server (%1)</source>
-        <translation>(%1) Sunucusundan bilinmeyen dönüş kodu </translation>
+        <translation>Unexpected return code from server (%1)</translation>
     </message>
     <message>
         <source>Missing File ID from server</source>
-        <translation>Dosya ID sunucuda eksik</translation>
+        <translation>Missing File ID from server</translation>
     </message>
     <message>
         <source>Missing ETag from server</source>
-        <translation>ETag sunucuda eksik</translation>
+        <translation>Missing ETag from server</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateUploadFileTUS</name>
     <message>
         <source>%1 the file is currently in use</source>
-        <translation>%1 dosya şu anda kullanımda</translation>
+        <translation>%1 the file is currently in use</translation>
     </message>
     <message>
         <source>Checksum computation failed</source>
-        <translation>Sağlama toplamı hesaplaması başarısız</translation>
+        <translation>Checksum computation failed</translation>
     </message>
     <message>
         <source>The local file was removed during sync.</source>
-        <translation>Eşitleme sırasında yerel dosya kaldırıldı.</translation>
+        <translation>The local file was removed during sync.</translation>
     </message>
 </context>
 <context>
     <name>APP::PropagateUploadFileV1</name>
     <message>
         <source>%1 the file is currently in use</source>
-        <translation>%1 dosya şu anda kullanımda</translation>
+        <translation>%1 the file is currently in use</translation>
     </message>
     <message>
         <source>The server did ask for a removed legacy feature(polling)</source>
-        <translation>Sunucu, eski bir özelliğin kaldırılmasını istedi (yoklama)</translation>
+        <translation>The server did ask for a removed legacy feature(polling)</translation>
     </message>
     <message>
         <source>The local file was removed during sync.</source>
-        <translation>Eşitleme sırasında yerel dosya kaldırıldı.</translation>
+        <translation>The local file was removed during sync.</translation>
     </message>
     <message>
         <source>The server did not acknowledge the last chunk. (No e-tag was present)</source>
-        <translation>Sunucu son yığını onaylamadı. (Mevcut e-etiket bulunamadı)</translation>
+        <translation>The server did not acknowledge the last chunk. (No e-tag was present)</translation>
     </message>
 </context>
 <context>
     <name>APP::ProtocolItemModel</name>
     <message>
         <source>Time</source>
-        <translation>Zaman</translation>
+        <translation>Time</translation>
     </message>
     <message>
         <source>File</source>
-        <translation>Dosya</translation>
+        <translation>File</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation>Klasör</translation>
+        <translation>Folder</translation>
     </message>
     <message>
         <source>Issues</source>
-        <translation>Sorunlar</translation>
+        <translation>Issues</translation>
     </message>
     <message>
         <source>Action</source>
-        <translation>Eylem</translation>
+        <translation>Action</translation>
     </message>
     <message>
         <source>Size</source>
-        <translation>Boyut</translation>
+        <translation>Size</translation>
     </message>
     <message>
         <source>Account</source>
-        <translation>Hesap</translation>
+        <translation>Account</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation>Durum</translation>
+        <translation>Status</translation>
     </message>
 </context>
 <context>
@@ -2138,76 +2139,76 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Local sync protocol</source>
-        <translation>Yerel eşitleme protokolü</translation>
+        <translation>Local sync protocol</translation>
     </message>
     <message>
         <source>Filter</source>
-        <translation>Filtre</translation>
+        <translation>Filter</translation>
     </message>
     <message>
         <source>Account</source>
-        <translation>Hesap</translation>
+        <translation>Account</translation>
     </message>
     <message>
         <source>Retry sync</source>
-        <translation>Senkronize etmeyi yeniden dene</translation>
+        <translation>Retry sync</translation>
     </message>
 </context>
 <context>
     <name>APP::SelectiveSyncWidget</name>
     <message>
         <source>Loading ...</source>
-        <translation>Yükleniyor...</translation>
+        <translation>Loading...</translation>
     </message>
     <message>
         <source>Deselect remote folders you do not wish to synchronize.</source>
-        <translation>Senkronize etmek istemediğiniz uzak klasörlerin seçimini kaldırın</translation>
+        <translation>Deselect remote folders you do not wish to synchronise.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Ad</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <source>Size</source>
-        <translation>Boyut</translation>
+        <translation>Size</translation>
     </message>
     <message>
         <source>No subfolders currently on the server.</source>
-        <translation>Sunucuda şu anda alt dizin bulunmuyor.</translation>
+        <translation>No subfolders currently on the server.</translation>
     </message>
     <message>
         <source>An error occurred while loading the list of sub folders.</source>
-        <translation>Alt klasör listesi alınırken bir hata oluştu.</translation>
+        <translation>An error occurred whilst loading the list of sub folders.</translation>
     </message>
 </context>
 <context>
     <name>APP::ServerNotificationHandler</name>
     <message>
         <source>Dismiss</source>
-        <translation>İptal et</translation>
+        <translation>Dismiss</translation>
     </message>
 </context>
 <context>
     <name>APP::SettingsDialog</name>
     <message>
         <source>Settings</source>
-        <translation>Ayarlar</translation>
+        <translation>Settings</translation>
     </message>
     <message>
         <source>Activity</source>
-        <translation>Etkinlik</translation>
+        <translation>Activity</translation>
     </message>
     <message>
         <source>Add account</source>
-        <translation>Hesap ekle</translation>
+        <translation>Add account</translation>
     </message>
     <message>
         <source>Quit %1</source>
-        <translation>%1&apos;tan çık</translation>
+        <translation>Quit %1</translation>
     </message>
     <message>
         <source>Are you sure you want to quit %1?</source>
-        <translation>%1 çıkmak istediğinizden emin misiniz?</translation>
+        <translation>Are you sure you want to quit %1?</translation>
     </message>
     <message>
         <source>%1 - %2</source>
@@ -2215,7 +2216,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Account</source>
-        <translation>Hesap</translation>
+        <translation>Account</translation>
     </message>
     <message>
         <source>MainWindow</source>
@@ -2226,15 +2227,15 @@ for additional privileges during the process.</source>
     <name>APP::ShareDialog</name>
     <message>
         <source>share label</source>
-        <translation>paylaşma etiketi</translation>
+        <translation>share label</translation>
     </message>
     <message>
         <source>Dialog</source>
-        <translation>Diyalog</translation>
+        <translation>Dialog</translation>
     </message>
     <message>
         <source>PersonalCloud Path:</source>
-        <translation>PersonalCloud Yolu:</translation>
+        <translation>PersonalCloud Path:</translation>
     </message>
     <message>
         <source>Close</source>
@@ -2242,7 +2243,7 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>%1 Sharing</source>
-        <translation>%1 Paylaşma</translation>
+        <translation>%1 Sharing</translation>
     </message>
     <message>
         <source>%1</source>
@@ -2250,197 +2251,197 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Folder: %2</source>
-        <translation>Klasör: %2</translation>
+        <translation>Folder: %2</translation>
     </message>
     <message>
         <source>The server does not allow sharing</source>
-        <translation>Sunucu, paylaşımı desteklemiyor</translation>
+        <translation>The server does not allow sharing</translation>
     </message>
     <message>
         <source>Retrieving maximum possible sharing permissions from server...</source>
-        <translation>Sunucudan mümkün olan en fazla paylaşım hakları alınıyor...</translation>
+        <translation>Retrieving maximum possible sharing permissions from server...</translation>
     </message>
     <message>
         <source>The file can not be shared because it was shared without sharing permission.</source>
-        <translation>Dosya paylaşılamaz, çünkü sizinle paylaşım izni olmaksızın paylaşılmış.</translation>
+        <translation>The file can not be shared because it was shared without sharing permission.</translation>
     </message>
     <message>
         <source>Users and Groups</source>
-        <translation>Kullanıcılar ve Gruplar</translation>
+        <translation>Users and Groups</translation>
     </message>
     <message>
         <source>Public Links</source>
-        <translation>Herkese açık bağlantılar</translation>
+        <translation>Public Links</translation>
     </message>
 </context>
 <context>
     <name>APP::ShareLinkWidget</name>
     <message>
         <source>Share NewDocument.odt</source>
-        <translation>YeniBelge.odt dosyasını paylaş</translation>
+        <translation>Share NewDocument.odt</translation>
     </message>
     <message>
         <source>Upload only (File Drop)</source>
-        <translation>Sadece karşı tarafa yükle (Dosya bırak)</translation>
+        <translation>Upload only (File Drop)</translation>
     </message>
     <message>
         <source>Receive files from others without revealing the contents of the folder.</source>
-        <translation>Klasörün içeriğini göstermeden başkalarından dosya alın.</translation>
+        <translation>Receive files from others without revealing the contents of the folder.</translation>
     </message>
     <message>
         <source>Download / View / Edit</source>
-        <translation>İndir / Görüntüle / Düzenle</translation>
+        <translation>Download / View / Edit</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation>Ad:</translation>
+        <translation>Name:</translation>
     </message>
     <message>
         <source>Enter name of new share...</source>
-        <translation>Yeni paylaşımın ismini girin...</translation>
+        <translation>Enter name of new share...</translation>
     </message>
     <message>
         <source>&amp;Create</source>
-        <translation>&amp;Oluştur</translation>
+        <translation>&amp;Create</translation>
     </message>
     <message>
         <source>Set &amp;password </source>
-        <translation>&amp;Parola belirle</translation>
+        <translation>Set &amp;password </translation>
     </message>
     <message>
         <source>Set &amp;expiration date</source>
-        <translation>Son kullanma tarihi b&amp;elirle</translation>
+        <translation>Set &amp;expiration date</translation>
     </message>
     <message>
         <source>Set password</source>
-        <translation>Parolayı ayarla</translation>
+        <translation>Set password</translation>
     </message>
     <message>
         <source>Recipients can view or download contents.</source>
-        <translation>Alıcılar içeriği görüntüleyebilir ve indirebilir</translation>
+        <translation>Recipients can view or download contents.</translation>
     </message>
     <message>
         <source>Download / View</source>
-        <translation>İndir / Görüntüle</translation>
+        <translation>Download / View</translation>
     </message>
     <message>
         <source>Recipients can view, download, edit, delete and upload contents.</source>
-        <translation>Alıcılar içerik görüntüleyebilir, düzenleyebilir, silebilir ve karşı tarafa yükleyebilir.</translation>
+        <translation>Recipients can view, download, edit, delete and upload contents.</translation>
     </message>
     <message>
         <source>Anyone with the link has access to the file/folder</source>
-        <translation>Dosya/klasör linkine sahip herkes erişebilir </translation>
+        <translation>Anyone with the link has access to the file/folder</translation>
     </message>
     <message>
         <source>P&amp;assword protect</source>
-        <translation>&amp;Parola koruması</translation>
+        <translation>P&amp;assword protect</translation>
     </message>
     <message>
         <source>The file can not be shared because it was shared without sharing permission.</source>
-        <translation>Dosya paylaşılamaz, çünkü sizinle paylaşım izni olmaksızın paylaşılmış.</translation>
+        <translation>The file can not be shared because it was shared without sharing permission.</translation>
     </message>
     <message>
         <source>Link shares have been disabled</source>
-        <translation>Bağlantı paylaşımı devre dışı bırakıldı</translation>
+        <translation>Link shares have been disabled</translation>
     </message>
     <message>
         <source>Create public link share</source>
-        <translation>Herkese açık bağlantı paylaşımı oluştur</translation>
+        <translation>Create public link share</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Sil</translation>
+        <translation>Delete</translation>
     </message>
     <message>
         <source>Open link in browser</source>
-        <translation>Bağlantıyı tarayıcıda aç</translation>
+        <translation>Open link in browser</translation>
     </message>
     <message>
         <source>Copy link to clipboard</source>
-        <translation>Linki panoya kopyala</translation>
+        <translation>Copy link to clipboard</translation>
     </message>
     <message>
         <source>Copy link to clipboard (direct download)</source>
-        <translation>Bağlantıyı panoya kopyala (doğrudan indirme)</translation>
+        <translation>Copy link to clipboard (direct download)</translation>
     </message>
     <message>
         <source>Send link by email</source>
-        <translation>Bağlantıyı e-posta ile gönder</translation>
+        <translation>Send link by email</translation>
     </message>
     <message>
         <source>Send link by email (direct download)</source>
-        <translation>Bağlantıyı e-postayla gönder (doğrudan indirme)</translation>
+        <translation>Send link by email (direct download)</translation>
     </message>
     <message>
         <source>Create new...</source>
-        <translation>Yeni oluştur...</translation>
+        <translation>Create new...</translation>
     </message>
     <message>
         <source>I shared %1 with you</source>
-        <translation>Seninle %1 paylaştım</translation>
+        <translation>I shared %1 with you</translation>
     </message>
     <message>
         <source>Confirm Link Share Deletion</source>
-        <translation>Paylaşım Bağlantısını Silmeyi Onaylayın</translation>
+        <translation>Confirm Link Share Deletion</translation>
     </message>
     <message>
         <source>&lt;p&gt;Do you really want to delete the public link share &lt;i&gt;%1&lt;/i&gt;?&lt;/p&gt;&lt;p&gt;Note: This action cannot be undone.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Paylaşım bağlantısını gerçekten silmek istiyor musun &lt;i&gt;%1&lt;/i&gt;?&lt;/p&gt;&lt;p&gt;Not: Bu işlem geri alınamaz.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Do you really want to delete the public link share &lt;i&gt;%1&lt;/i&gt;?&lt;/p&gt;&lt;p&gt;Note: This action cannot be undone.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>Public link</source>
-        <translation>Herkese açık bağlantı</translation>
+        <translation>Public link</translation>
     </message>
     <message>
         <source>Delete link share</source>
-        <translation>Bağlantı paylaşımını sil</translation>
+        <translation>Delete link share</translation>
     </message>
     <message>
         <source>Please Set Password</source>
-        <translation>Lütfen Parola Atayın</translation>
+        <translation>Please Set Password</translation>
     </message>
 </context>
 <context>
     <name>APP::ShareUserGroupWidget</name>
     <message>
         <source>Share NewDocument.odt</source>
-        <translation>YeniBelge.odt dosyasını paylaş</translation>
+        <translation>Share NewDocument.odt</translation>
     </message>
     <message>
         <source>Share with users or groups ...</source>
-        <translation>Kullanıcı ve gruplarla paylaş...</translation>
+        <translation>Share with users or groups ...</translation>
     </message>
     <message>
         <source>You can direct people to this shared file or folder %1 by giving them a private link</source>
-        <translation>Kişileri bu paylaşılan dosyaya veya %1 klasörüne özel bir bağlantı vererek yönlendirebilirsiniz</translation>
+        <translation>You can direct people to this shared file or folder %1 by giving them a private link</translation>
     </message>
     <message>
         <source>The item is not shared with any users or groups</source>
-        <translation>Bu öge hiçbir kullanıcı veya grupla paylaşılmıyor</translation>
+        <translation>The item is not shared with any users or groups</translation>
     </message>
     <message>
         <source>Open link in browser</source>
-        <translation>Bağlantıyı tarayıcıda aç</translation>
+        <translation>Open link in browser</translation>
     </message>
     <message>
         <source>Copy link to clipboard</source>
-        <translation>Linki panoya kopyala</translation>
+        <translation>Copy link to clipboard</translation>
     </message>
     <message>
         <source>Send link by email</source>
-        <translation>Bağlantıyı e-posta ile gönder</translation>
+        <translation>Send link by email</translation>
     </message>
     <message>
         <source>No results for &apos;%1&apos;</source>
-        <translation>&apos;%1&apos; için sonuç yok</translation>
+        <translation>No results for &apos;%1&apos;</translation>
     </message>
     <message>
         <source>I shared something with you</source>
-        <translation>Seninle bir şey paylaştım</translation>
+        <translation>I shared something with you</translation>
     </message>
 </context>
 <context>
@@ -2451,11 +2452,11 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>can edit</source>
-        <translation>düzenleyebilir</translation>
+        <translation>can edit</translation>
     </message>
     <message>
         <source>can share</source>
-        <translation>paylaşabilir</translation>
+        <translation>can share</translation>
     </message>
     <message>
         <source>...</source>
@@ -2463,15 +2464,15 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>create</source>
-        <translation>oluştur</translation>
+        <translation>create</translation>
     </message>
     <message>
         <source>change</source>
-        <translation>değiştir</translation>
+        <translation>change</translation>
     </message>
     <message>
         <source>delete</source>
-        <translation>sil</translation>
+        <translation>delete</translation>
     </message>
 </context>
 <context>
@@ -2485,133 +2486,133 @@ for additional privileges during the process.</source>
     <name>APP::SocketApi</name>
     <message>
         <source>Share with %1</source>
-        <translation>%1 ile paylaş</translation>
+        <translation>Share with %1</translation>
     </message>
     <message>
         <source>Context menu share</source>
-        <translation>İçerik menüsü paylaşımı</translation>
+        <translation>Context menu share</translation>
     </message>
     <message>
         <source>Context menu share %1</source>
-        <translation>İçerik menüsü paylaşımı %1</translation>
+        <translation>Context menu share %1</translation>
     </message>
     <message>
         <source>Confirm deletion</source>
-        <translation>Silmeyi onayla</translation>
+        <translation>Confirm deletion</translation>
     </message>
     <message>
         <source>Do you want to delete the directory &lt;i&gt;%1&lt;/i&gt; and all its contents permanently?</source>
-        <translation>&lt;i&gt;%1&lt;/i&gt; dizinini ve tüm içeriğini kalıcı olarak silmek istiyor musunuz?</translation>
+        <translation>Do you want to delete the directory &lt;i&gt;%1&lt;/i&gt; and all its contents permanently?</translation>
     </message>
     <message>
         <source>Do you want to delete the file &lt;i&gt;%1&lt;/i&gt; permanently?</source>
-        <translation>&lt;i&gt;%1&lt;/i&gt; dosyasını kalıcı olarak silmek istiyor musunuz?</translation>
+        <translation>Do you want to delete the file &lt;i&gt;%1&lt;/i&gt; permanently?</translation>
     </message>
     <message>
         <source>Select new location...</source>
-        <translation>Yeni konum seçin...</translation>
+        <translation>Select new location...</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation>Hata</translation>
+        <translation>Error</translation>
     </message>
     <message>
         <source>Moving file failed:
 
 %1</source>
-        <translation>Dosya taşınamadı:
+        <translation>Moving file failed:
 
 %1</translation>
     </message>
     <message>
         <source>I shared something with you</source>
-        <translation>Seninle bir şey paylaştım</translation>
+        <translation>I shared something with you</translation>
     </message>
     <message>
         <source>Share...</source>
-        <translation>Paylaş...</translation>
+        <translation>Share...</translation>
     </message>
     <message>
         <source>Copy private link to clipboard</source>
-        <translation>Özel bağlantıyı panoya kopyala</translation>
+        <translation>Copy private link to clipboard</translation>
     </message>
     <message>
         <source>Send private link by email...</source>
-        <translation>Özel bağlantıyı e-posta ile gönder...</translation>
+        <translation>Send private link by email...</translation>
     </message>
     <message>
         <source>Resharing this file is not allowed</source>
-        <translation>Bu dosyanın yeniden paylaşılmasına izin verilmiyor</translation>
+        <translation>Resharing this file is not allowed</translation>
     </message>
     <message>
         <source>Resharing this folder is not allowed</source>
-        <translation>Bu klasörün yeniden paylaşılmasına izin verilmiyor</translation>
+        <translation>Resharing this folder is not allowed</translation>
     </message>
     <message>
         <source>Create and copy public link to clipboard</source>
-        <translation>Herkese açık bağlantı oluştur ve panoya kopyala</translation>
+        <translation>Create and copy public link to clipboard</translation>
     </message>
     <message>
         <source>Copy public link to clipboard</source>
-        <translation>Herkese açık bağlantıyı panoya kopyala</translation>
+        <translation>Copy public link to clipboard</translation>
     </message>
     <message>
         <source>Open in %1</source>
-        <translation>%1&apos;de Aç</translation>
+        <translation>Open in %1</translation>
     </message>
     <message>
         <source>Show file versions in web browser</source>
-        <translation>Dosya versiyonlarını web tarayıcıda göster</translation>
+        <translation>Show file versions in web browser</translation>
     </message>
     <message>
         <source>Rename...</source>
-        <translation>Yeniden adlandır...</translation>
+        <translation>Rename...</translation>
     </message>
     <message>
         <source>Rename and upload...</source>
-        <translation>Yeniden adlandır ve yükle...</translation>
+        <translation>Rename and upload...</translation>
     </message>
     <message>
         <source>Move and rename...</source>
-        <translation>Taşı ve yeniden adlandır...</translation>
+        <translation>Move and rename...</translation>
     </message>
     <message>
         <source>Move, rename and upload...</source>
-        <translation>Taşı, yeniden adlandır ve yükle...</translation>
+        <translation>Move, rename and upload...</translation>
     </message>
     <message>
         <source>Delete local changes</source>
-        <translation>Yerel değişiklikleri sil</translation>
+        <translation>Delete local changes</translation>
     </message>
     <message>
         <source>Move and upload...</source>
-        <translation>Taşı ve yükle...</translation>
+        <translation>Move and upload...</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Sil</translation>
+        <translation>Delete</translation>
     </message>
 </context>
 <context>
     <name>APP::Spaces::SpacesDelegate</name>
     <message>
         <source>Open in Web</source>
-        <translation>Web&apos;de Aç</translation>
+        <translation>Open in Web</translation>
     </message>
 </context>
 <context>
     <name>APP::Spaces::SpacesModel</name>
     <message>
         <source>Sync</source>
-        <translation>Senkronize et</translation>
+        <translation>Sync</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Ad</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <source>Subtitle</source>
-        <translation>Alt başlık</translation>
+        <translation>Subtitle</translation>
     </message>
     <message>
         <source>Web URL</source>
@@ -2623,30 +2624,30 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Image</source>
-        <translation>Resim</translation>
+        <translation>Image</translation>
     </message>
     <message>
         <source>Priority</source>
-        <translation>Öncelik</translation>
+        <translation>Priority</translation>
     </message>
     <message>
         <source>Enabled</source>
-        <translation>Etkin</translation>
+        <translation>Enabled</translation>
     </message>
 </context>
 <context>
     <name>APP::SyncEngine</name>
     <message>
         <source>%1 (skipped due to earlier error, trying again in %2)</source>
-        <translation>%1 (daha önceki hatadan ötürü atlandı, %2 içinde tekrar deneniyor)</translation>
+        <translation>%1 (skipped due to earlier error, trying again in %2)</translation>
     </message>
     <message>
         <source>Only %1 are available, need at least %2 to start</source>
-        <translation>Sadece %1 mevcut, Çalıştırmak için en az %2 gerekmektedir</translation>
+        <translation>Only %1 are available, need at least %2 to start</translation>
     </message>
     <message>
         <source>Unable to open or create the local sync database. Make sure you have write access in the sync folder.</source>
-        <translation>Yerel eşleme veritabanı açılamıyor veya oluşturulamıyor. Eşleme klasöründe yazma iznine sahip olduğunuzdan emin olun.</translation>
+        <translation>Unable to open or create the local sync database. Make sure you have write access in the sync folder.</translation>
     </message>
     <message>
         <source>Synchronization aborted due to IP address change</source>
@@ -2654,42 +2655,42 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>Disk space is low: Downloads that would reduce free space below %1 were skipped.</source>
-        <translation>Disk alanı az: Boş alanı %1 altına indirecek indirmeler atlandı.</translation>
+        <translation>Disk space is low: Downloads that would reduce free space below %1 were skipped.</translation>
     </message>
     <message>
         <source>There is insufficient space available on the server for some uploads.</source>
-        <translation>Bazı yüklemeler için sunucuda yeterli alan yok.</translation>
+        <translation>There is insufficient space available on the server for some uploads.</translation>
     </message>
     <message>
         <source>Unresolved conflict.</source>
-        <translation>Çözümlenmemiş çakışma mevcut.</translation>
+        <translation>Unresolved conflict.</translation>
     </message>
     <message>
         <source>Using virtual files with suffix, but suffix is not set</source>
-        <translation>Sanal dosyalar uzantılarla kullanılıyor, ancak henüz uzantı ayarlanmadı</translation>
+        <translation>Using virtual files with suffix, but suffix is not set</translation>
     </message>
     <message>
         <source>Unable to read the blacklist from the local database</source>
-        <translation>Yerel veritabanından kara liste okunamadı</translation>
+        <translation>Unable to read the blacklist from the local database</translation>
     </message>
     <message>
         <source>Unable to read from the sync journal.</source>
-        <translation>Eşitleme günlüğünden okunamadı.</translation>
+        <translation>Unable to read from the sync journal.</translation>
     </message>
     <message>
         <source>Cannot open the sync journal</source>
-        <translation>Eşitleme günlüğü açılamıyor</translation>
+        <translation>Cannot open the sync journal</translation>
     </message>
     <message>
         <source>Aborted</source>
-        <translation>İptal Edildi</translation>
+        <translation>Aborted</translation>
     </message>
 </context>
 <context>
     <name>APP::SyncJournalDb</name>
     <message>
         <source>Failed to connect database.</source>
-        <translation>Veritabanına bağlanılamadı.</translation>
+        <translation>Failed to connect database.</translation>
     </message>
 </context>
 <context>
@@ -2703,49 +2704,49 @@ for additional privileges during the process.</source>
     <name>APP::Theme</name>
     <message>
         <source>&lt;p&gt;Version %1. For more information visit &lt;a href=&quot;%2&quot;&gt;https://%3&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For known issues and help, please visit: &lt;a href=&quot;https://central.owncloud.com/c/desktop-client&quot;&gt;https://central.owncloud.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;small&gt;By Klaas Freitag, Daniel Molkentin, Olivier Goffart, Markus Götz,  Jan-Christoph Borchardt, Thomas Müller,&lt;br&gt;Dominik Schmidt, Michael Stingl, Hannah von Reth, Fabian Müller and others.&lt;/small&gt;&lt;/p&gt;&lt;p&gt;Copyright Seagate Technologies LLC&lt;/p&gt;&lt;p&gt;Distributed by %4 and licensed under the GNU General Public License (GPL) Version 2.0.&lt;br/&gt;%5 and the %5 logo are registered trademarks of %4 in the United States, other countries, or both.&lt;/p&gt;&lt;p&gt;&lt;small&gt;%6&lt;/small&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Versiyon %1. Daha fazla bilgi için &lt;a href=&quot;%2&quot;&gt;https://%3&lt;/a&gt; adresini ziyaret edin&lt;/p&gt;&lt;p&gt;Bilinen sorunlar ve yardım için lütfen şu adresi ziyaret edin: &lt;a href=&quot;https://central.owncloud.com/c/desktop-client&quot;&gt;https://central.owncloud.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;small&gt;Klaas Freitag, Daniel Molkentin, Olivier Goffart, Markus Götz, Jan-Christoph Borchardt, Thomas Müller, Dominik Schmidt, Michael Stingl, Hannah von Reth ve diğerleri.&lt;/small&gt;&lt;/p&gt;&lt;p&gt;Telif hakkı Seagate Technologies LLC&lt;/p&gt;&lt;p&gt;%4 tarafından dağıtılır ve GNU Genel Kamu Lisansı (GPL) Sürüm 2.0 altında lisanslanır.&lt;br/&gt;%5 ve %5 logosu ABD&apos;de, diğer ülkelerde veya her ikisinde %4&apos;ün tescilli ticari markalarıdır.&lt;/p&gt;&lt;p&gt;&lt;small&gt;%6&lt;/small&gt;&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Version %1. For more information visit &lt;a href=&quot;%2&quot;&gt;https://%3&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For known issues and help, please visit: &lt;a href=&quot;https://central.owncloud.com/c/desktop-client&quot;&gt;https://central.owncloud.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;small&gt;By Klaas Freitag, Daniel Molkentin, Olivier Goffart, Markus Götz,  Jan-Christoph Borchardt, Thomas Müller,&lt;br&gt;Dominik Schmidt, Michael Stingl, Hannah von Reth, Fabian Müller and others.&lt;/small&gt;&lt;/p&gt;&lt;p&gt;Copyright Seagate Technologies LLC&lt;/p&gt;&lt;p&gt;Distributed by %4 and licensed under the GNU General Public Licence (GPL) Version 2.0.&lt;br/&gt;%5 and the %5 logo are registered trademarks of %4 in the United States, other countries, or both.&lt;/p&gt;&lt;p&gt;&lt;small&gt;%6&lt;/small&gt;&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
     <name>APP::TlsErrorDialog</name>
     <message>
         <source>TLS Certificate Error</source>
-        <translation>TLS Sertifika Hatası</translation>
+        <translation>TLS Certificate Error</translation>
     </message>
     <message>
         <source>Do you want to trust this certificate anyway?</source>
-        <translation>Sertifikaya yine de güvenmek istiyor musunuz?</translation>
+        <translation>Do you want to trust this certificate anyway?</translation>
     </message>
     <message>
         <source>Cannot connect securely to %1</source>
-        <translation>%1 ile güvenli bir şekilde bağlanılamıyor</translation>
+        <translation>Cannot connect securely to %1</translation>
     </message>
     <message>
         <source>&amp;lt;not specified&amp;gt;</source>
-        <translation>&amp;lt;belirtilmemiş&amp;gt;</translation>
+        <translation>&amp;lt;not specified&amp;gt;</translation>
     </message>
     <message>
         <source>&lt;div id=&quot;cert&quot;&gt;&lt;h3&gt;with Certificate %1&lt;/h3&gt;&lt;div id=&quot;ccert&quot;&gt;&lt;p&gt;Organization: %2&lt;br/&gt;Unit: %3&lt;br/&gt;Country: %4&lt;/p&gt;&lt;p&gt;Fingerprint (MD5): &lt;tt&gt;%5&lt;/tt&gt;&lt;br/&gt;Fingerprint (SHA1): &lt;tt&gt;%6&lt;/tt&gt;&lt;br/&gt;Fingerprint (SHA256): &lt;tt&gt;%7&lt;/tt&gt;&lt;br/&gt;&lt;br/&gt;Effective Date: %8Expiration Date: %9&lt;/div&gt;&lt;h3&gt;Issuer: %10&lt;/h3&gt;&lt;div id=&quot;issuer&quot;&gt;&lt;p&gt;Organization: %11&lt;br/&gt;Unit: %12&lt;br/&gt;Country: %13&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;</source>
-        <translation>&lt;div id=&quot;cert&quot;&gt;&lt;h3&gt;Sertifikalı %1&lt;/h3&gt;&lt;div id=&quot;ccert&quot;&gt;&lt;p&gt;Organizasyon: %2&lt;br/&gt;Birim: %3&lt;br/&gt;Ülke: %4&lt;/p&gt;&lt;p&gt;Parmak İzi (MD5): &lt;tt&gt;%5&lt;/tt&gt;&lt;br/&gt;Parmak İzi (SHA1): &lt;tt&gt;%6&lt;/tt&gt;&lt;br/&gt;Parmak İzi (SHA256): &lt;tt&gt;%7&lt;/tt&gt;&lt;br/&gt;&lt;br/&gt;Geçerlilik Tarihi: %8Bitiş Tarihi: %9&lt;/div&gt;&lt;h3&gt;İhraç Eden: %10&lt;/h3&gt;&lt;div id=&quot;issuer&quot;&gt;&lt;p&gt;Organizasyon: %11&lt;br/&gt;Birim: %12&lt;br/&gt;Ülke: %13&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;</translation>
+        <translation>&lt;div id=&quot;cert&quot;&gt;&lt;h3&gt;with Certificate %1&lt;/h3&gt;&lt;div id=&quot;ccert&quot;&gt;&lt;p&gt;Organisation: %2&lt;br/&gt;Unit: %3&lt;br/&gt;Country: %4&lt;/p&gt;&lt;p&gt;Fingerprint (MD5): &lt;tt&gt;%5&lt;/tt&gt;&lt;br/&gt;Fingerprint (SHA1): &lt;tt&gt;%6&lt;/tt&gt;&lt;br/&gt;Fingerprint (SHA256): &lt;tt&gt;%7&lt;/tt&gt;&lt;br/&gt;&lt;br/&gt;Effective Date: %8Expiration Date: %9&lt;/div&gt;&lt;h3&gt;Issuer: %10&lt;/h3&gt;&lt;div id=&quot;issuer&quot;&gt;&lt;p&gt;Organisation: %11&lt;br/&gt;Unit: %12&lt;br/&gt;Country: %13&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;</translation>
     </message>
 </context>
 <context>
     <name>APP::UpdateUrlDialog</name>
     <message>
         <source>Change url permanently to %1</source>
-        <translation>URL&apos;yi kalıcı olarak %1 olarak değiştir</translation>
+        <translation>Change url permanently to %1</translation>
     </message>
     <message>
         <source>Reject</source>
-        <translation>Reddet</translation>
+        <translation>Reject</translation>
     </message>
     <message>
         <source>Url update requested for %1</source>
-        <translation>%1 için URL güncellemesi istendi</translation>
+        <translation>Url update requested for %1</translation>
     </message>
     <message>
         <source>The url for %1 changed from %2 to %3, do you want to accept the changed url?</source>
-        <translation>%1 için url %2 iken %3 olarak değiştirildi, değiştirilen url&apos;yi kabul etmek istiyor musunuz?</translation>
+        <translation>The URL for %1 changed from %2 to %3, do you want to accept the changed URL?</translation>
     </message>
 </context>
 <context>
@@ -2759,22 +2760,22 @@ for additional privileges during the process.</source>
     <name>APP::Vfs</name>
     <message>
         <source>The Virtual filesystem feature does not support a drive as sync root</source>
-        <translation>Sanal dosya sistemi özelliği, bir sürücüyü senkronizasyon kökü olarak desteklemiyor</translation>
+        <translation>The Virtual filesystem feature does not support a drive as sync root</translation>
     </message>
     <message>
         <source>The Virtual filesystem feature requires a NTFS file system, %1 is using %2</source>
-        <translation>Sanal dosya sistemi özelliği bir NTFS dosya sistemi gerektirir, %1, %2 kullanıyor</translation>
+        <translation>The Virtual filesystem feature requires a NTFS file system, %1 is using %2</translation>
     </message>
     <message>
         <source>The Virtual filesystem feature is not supported on network drives</source>
-        <translation>Sanal dosya sistemi özelliği ağ sürücülerinde desteklenmez</translation>
+        <translation>The Virtual filesystem feature is not supported on network drives</translation>
     </message>
 </context>
 <context>
     <name>APP::VfsSuffix</name>
     <message>
         <source>Cannot create a placeholder because a file with the placeholder name already exist</source>
-        <translation>Yer tutucu adına sahip bir dosya zaten mevcut olduğundan yer tutucu oluşturulamıyor</translation>
+        <translation>Cannot create a placeholder because a file with the placeholder name already exist</translation>
     </message>
 </context>
 <context>
@@ -2785,23 +2786,23 @@ for additional privileges during the process.</source>
     </message>
     <message>
         <source>%1 (recommended)</source>
-        <translation>%1 (tavsiye edilen)</translation>
+        <translation>%1 (recommended)</translation>
     </message>
     <message>
         <source>The virtual filesystem feature is not available for this installation.</source>
-        <translation>Sanal dosya sistemi özelliği bu kurulum için kullanılamaz.</translation>
+        <translation>The virtual filesystem feature is not available for this installation.</translation>
     </message>
     <message>
         <source>The virtual filesystem feature is not stable yet. Use with caution.</source>
-        <translation>Sanal dosya sistemi özelliği henüz kararlı değil. Dikkatli kullanın.</translation>
+        <translation>The virtual filesystem feature is not stable yet. Use with caution.</translation>
     </message>
     <message>
         <source>Select the local folder</source>
-        <translation>Yerel klasörü seçin</translation>
+        <translation>Select the local folder</translation>
     </message>
     <message>
         <source>Enable experimental feature?</source>
-        <translation>Deneysel özellik etkinleştirilsin mi?</translation>
+        <translation>Enable experimental feature?</translation>
     </message>
     <message>
         <source>When the &quot;virtual files&quot; mode is enabled no files will be downloaded initially. Instead, a tiny file will be created for each file that exists on the server. The contents can be downloaded by running these files or by using their context menu.
@@ -2811,35 +2812,35 @@ The virtual files mode is mutually exclusive with selective sync. Currently unse
 Switching to this mode will abort any currently running synchronization.
 
 This is a new, experimental mode. If you decide to use it, please report any issues that come up.</source>
-        <translation>&quot;Sanal dosyalar&quot; modu etkinleştirildiğinde, başlangıçta hiçbir dosya indirilmez. Bunun yerine, sunucuda bulunan her dosya için küçük bir &quot;%1&quot; dosyası oluşturulur. İçindekiler bu dosyalar çalıştırılarak veya içerik menüleri kullanılarak indirilebilir.
+        <translation>When the &quot;virtual files&quot; mode is enabled no files will be downloaded initially. Instead, a tiny file will be created for each file that exists on the server. The contents can be downloaded by running these files or by using their context menu.
 
-Sanal dosyalar modu, seçici eşleme ile beraber çalışır. Şu anda seçili olmayan klasörler yalnızca çevrimiçi sanal klasörlere çevrilecek ve seçici senkronizasyon ayarlarınız sıfırlanacaktır.
+The virtual files mode is mutually exclusive with selective sync. Currently unselected folders will be translated to online-only folders and your selective sync settings will be reset.
 
-Bu moda geçmek, o anda çalışan eşlemeyi iptal edecektir.
+Switching to this mode will abort any currently running synchronization.
 
-Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıkan sorunları bildirin.</translation>
+This is a new, experimental mode. If you decide to use it, please report any issues that come up.</translation>
     </message>
     <message>
         <source>Enable experimental placeholder mode</source>
-        <translation>Deneysel yer tutucu modunu etkinleştir</translation>
+        <translation>Enable experimental placeholder mode</translation>
     </message>
     <message>
         <source>Stay safe</source>
-        <translation>Güvenli kal</translation>
+        <translation>Stay safe</translation>
     </message>
 </context>
 <context>
     <name>APP::Wizard::AccountConfiguredState</name>
     <message>
         <source>Invalid local download directory: %1</source>
-        <translation>Geçersiz yerel indirme dizini: %1</translation>
+        <translation>Invalid local download directory: %1</translation>
     </message>
 </context>
 <context>
     <name>APP::Wizard::CredentialsState</name>
     <message>
         <source>Invalid credentials</source>
-        <translation>Geçersiz kimlik bilgileri</translation>
+        <translation>Invalid credentials</translation>
     </message>
 </context>
 <context>
@@ -2858,86 +2859,86 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Invalid credentials</source>
-        <translation>Geçersiz kimlik bilgileri</translation>
+        <translation>Invalid credentials</translation>
     </message>
     <message>
         <source>Failed to retrieve user information from server</source>
-        <translation>Sunucudan kullanıcı bilgilerini alma başarısız</translation>
+        <translation>Failed to retrieve user information from server</translation>
     </message>
     <message>
         <source>Invalid local download directory: %1</source>
-        <translation>Geçersiz yerel indirme dizini: %1</translation>
+        <translation>Invalid local download directory: %1</translation>
     </message>
 </context>
 <context>
     <name>APP::Wizard::SetupWidget</name>
     <message>
         <source>Cancel Setup</source>
-        <translation>Kurulumu İptal Et</translation>
+        <translation>Cancel Setup</translation>
     </message>
     <message>
         <source>Do you really want to cancel the account setup?</source>
-        <translation>Hesap kurulumunu gerçekten iptal etmek istiyor musunuz?</translation>
+        <translation>Do you really want to cancel the account setup?</translation>
     </message>
 </context>
 <context>
     <name>AccountConfiguredPage</name>
     <message>
         <source>✓ You&apos;re all set!</source>
-        <translation>✓ Hazırsınız!</translation>
+        <translation>✓ You&apos;re all set!</translation>
     </message>
     <message>
         <source>Advanced configuration</source>
-        <translation>Gelişmiş yapılandırma</translation>
+        <translation>Advanced configuration</translation>
     </message>
     <message>
         <source>Configure files download:</source>
-        <translation>Yapılandırma dosyalarını indir:</translation>
+        <translation>Configure files download:</translation>
     </message>
     <message>
         <source>Download everything</source>
-        <translation>Her şeyi indir</translation>
+        <translation>Download everything</translation>
     </message>
     <message>
         <source>After completing this wizard, you can set up folder synchronization manually.</source>
-        <translation>Bu sihirbazı tamamladıktan sonra klasör senkronizasyonunu manuel olarak ayarlayabilirsiniz.</translation>
+        <translation>After completing this wizard, you can set up folder synchronisation manually.</translation>
     </message>
     <message>
         <source>Configure synchronization manually</source>
-        <translation>Senkronizasyonu manuel olarak yapılandırın</translation>
+        <translation>Configure synchronisation manually</translation>
     </message>
     <message>
         <source>Choose local download directory:</source>
-        <translation>Yerel indirme dizinini seçin:</translation>
+        <translation>Choose local download directory:</translation>
     </message>
     <message>
         <source>Restore default value</source>
-        <translation>Varsayılan değeri eski haline getir</translation>
+        <translation>Restore default value</translation>
     </message>
 </context>
 <context>
     <name>AppImageUpdateAvailableDialogUi</name>
     <message>
         <source>Update available</source>
-        <translation>Güncelleme mevcut</translation>
+        <translation>Update available</translation>
     </message>
     <message>
         <source>Skip this version</source>
-        <translation>Bu sürümü atla</translation>
+        <translation>Skip this version</translation>
     </message>
 </context>
 <context>
     <name>AppProvider</name>
     <message>
         <source>Failed to open %1 in web. Error: %2.</source>
-        <translation>%1&apos;yi webte açma başarısız. Hata: %2.</translation>
+        <translation>Failed to open %1 in web. Error: %2.</translation>
     </message>
 </context>
 <context>
     <name>ApplicationTheme::aboutVersions()</name>
     <message>
         <source>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</source>
-        <translation>%1 %2%7%8Kütüphaneler Qt %3, %4%7Sanal dosya eklentisi kullanıyor: %5%7%6</translation>
+        <translation>%1 %2%7%8Libraries Qt %3, %4%7Using virtual files plugin: %5%7%6</translation>
     </message>
 </context>
 <context>
@@ -2951,29 +2952,29 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     <name>BasicLoginWidget</name>
     <message>
         <source>Username</source>
-        <translation>Kullanıcı adı</translation>
+        <translation>Username</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation>Parola</translation>
+        <translation>Password</translation>
     </message>
 </context>
 <context>
     <name>CheckBasicAuthJobFactory</name>
     <message>
         <source>Invalid reply received from server</source>
-        <translation>Sunucudan geçersiz yanıt alındı</translation>
+        <translation>Invalid reply received from server</translation>
     </message>
 </context>
 <context>
     <name>ChecksumHeader</name>
     <message>
         <source>The checksum header is malformed: %1</source>
-        <translation>Sağlama toplamı başlığı hatalı biçimlendirilmiş: %1</translation>
+        <translation>The checksum header is malformed: %1</translation>
     </message>
     <message>
         <source>The checksum header contained an unknown checksum type &apos;%1&apos;</source>
-        <translation>Sağlama başlığı bilinmeyen &apos;%1&apos; sağlama tipi içeriyor</translation>
+        <translation>The checksum header contained an unknown checksum type &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -3036,18 +3037,18 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     <name>CommandLine</name>
     <message>
         <source>For more information, see %1</source>
-        <translation>Daha fazla bilgi için, bkz: %1</translation>
+        <translation>For more information, see %1</translation>
     </message>
 </context>
 <context>
     <name>CommonStrings</name>
     <message>
         <source>file manager</source>
-        <translation>dosya yöneticisi</translation>
+        <translation>file manager</translation>
     </message>
     <message>
         <source>Show in %1</source>
-        <translation>%1&apos;de göster</translation>
+        <translation>Show in %1</translation>
     </message>
     <message>
         <source>Show Files in web browser</source>
@@ -3059,11 +3060,11 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Copy</source>
-        <translation>Kopyala</translation>
+        <translation>Copy</translation>
     </message>
     <message numerus="yes">
         <source>%n Filter(s)</source>
-        <translation><numerusform>%n Filtre</numerusform></translation>
+        <translation><numerusform>%n Filter(s)</numerusform><numerusform>%n Filter(s)</numerusform></translation>
     </message>
 </context>
 <context>
@@ -3106,7 +3107,7 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Retry</source>
-        <translation>Yeniden Dene</translation>
+        <translation>Retry</translation>
     </message>
 </context>
 <context>
@@ -3133,11 +3134,11 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>Login</source>
-        <translation>Oturum Aç</translation>
+        <translation>Login</translation>
     </message>
     <message>
         <source>button_accent</source>
@@ -3149,7 +3150,7 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Password</source>
-        <translation>Parola</translation>
+        <translation>Password</translation>
     </message>
     <message>
         <source>Enter a valid email address and password</source>
@@ -3164,11 +3165,11 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     <name>DetermineAuthTypeJobFactory</name>
     <message>
         <source>Server did not ask for authorization</source>
-        <translation>Sunucu yetki istemedi</translation>
+        <translation>Server did not ask for authorisation</translation>
     </message>
     <message>
         <source>Failed to determine auth type: %1</source>
-        <translation>Kimlik doğrulama türü belirlenemedi: %1</translation>
+        <translation>Failed to determine auth type: %1</translation>
     </message>
 </context>
 <context>
@@ -3262,7 +3263,7 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Unknown</source>
-        <translation>Bilinmeyen</translation>
+        <translation>Unknown</translation>
     </message>
     <message>
         <source>Local</source>
@@ -3289,7 +3290,7 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     <name>DiscoverWebFingerServiceJobFactory</name>
     <message>
         <source>Invalid reply received from server</source>
-        <translation>Sunucudan geçersiz yanıt alındı</translation>
+        <translation>Invalid reply received from server</translation>
     </message>
 </context>
 <context>
@@ -3308,11 +3309,11 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>Login</source>
-        <translation>Oturum Aç</translation>
+        <translation>Login</translation>
     </message>
     <message>
         <source>Email</source>
@@ -3346,11 +3347,11 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>Retry</source>
-        <translation>Yeniden Dene</translation>
+        <translation>Retry</translation>
     </message>
     <message>
         <source>OK</source>
@@ -3388,30 +3389,30 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     <name>FetchUserInfoJobFactory</name>
     <message>
         <source>Failed to retrieve user info</source>
-        <translation>Kullanıcı bilgileri alınamadı</translation>
+        <translation>Failed to retrieve user info</translation>
     </message>
 </context>
 <context>
     <name>FileSystem</name>
     <message>
         <source>Can&apos;t rename %1, the file is currently in use</source>
-        <translation>%1 yeniden adlandırılamıyor, dosya şu anda kullanımda</translation>
+        <translation>Can&apos;t rename %1, the file is currently in use</translation>
     </message>
     <message>
         <source>Could not make directories in trash</source>
-        <translation>Çöpte klasör oluşturulamaz.</translation>
+        <translation>Could not make directories in the rubbish bin</translation>
     </message>
     <message>
         <source>Could not move &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation>%1, %2 ye taşınamadı.</translation>
+        <translation>Could not move &apos;%1&apos; to &apos;%2&apos;</translation>
     </message>
     <message>
         <source>Moving to the trash is not implemented on this platform</source>
-        <translation>Çöp kutusuna taşıma işlemi bu platformda sağlanmıyor.</translation>
+        <translation>Moving to the rubbish bin is not implemented on this platform</translation>
     </message>
     <message>
         <source>Could not remove folder</source>
-        <translation>Klasör kaldırılamadı</translation>
+        <translation>Could not remove folder</translation>
     </message>
 </context>
 <context>
@@ -3426,11 +3427,11 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Advanced configuration</source>
-        <translation>Gelişmiş yapılandırma</translation>
+        <translation>Advanced configuration</translation>
     </message>
     <message>
         <source>Configure files download:</source>
-        <translation>Yapılandırma dosyalarını indir:</translation>
+        <translation>Configure files download:</translation>
     </message>
     <message>
         <source>Download everything (recommended)</source>
@@ -3438,7 +3439,7 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Configure synchronization manually</source>
-        <translation>Senkronizasyonu manuel olarak yapılandırın</translation>
+        <translation>Configure synchronisation manually</translation>
     </message>
     <message>
         <source>Use &amp;virtual files instead of downloading content immediately</source>
@@ -3446,7 +3447,7 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Choose local download directory:</source>
-        <translation>Yerel indirme dizinini seçin:</translation>
+        <translation>Choose local download directory:</translation>
     </message>
     <message>
         <source>Back</source>
@@ -3458,15 +3459,15 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>The virtual filesystem feature is not available for this installation.</source>
-        <translation>Sanal dosya sistemi özelliği bu kurulum için kullanılamaz.</translation>
+        <translation>The virtual filesystem feature is not available for this installation.</translation>
     </message>
     <message>
         <source>The virtual filesystem feature is not stable yet. Use with caution.</source>
-        <translation>Sanal dosya sistemi özelliği henüz kararlı değil. Dikkatli kullanın.</translation>
+        <translation>The virtual filesystem feature is not stable yet. Use with caution.</translation>
     </message>
     <message>
         <source>Enable experimental feature?</source>
-        <translation>Deneysel özellik etkinleştirilsin mi?</translation>
+        <translation>Enable experimental feature?</translation>
     </message>
     <message>
         <source>When the &quot;virtual files&quot; mode is enabled no files will be downloaded initially. Instead, a tiny file will be created for each file that exists on the server. The contents can be downloaded by running these files or by using their context menu.
@@ -3476,44 +3477,44 @@ The virtual files mode is mutually exclusive with selective sync. Currently unse
 Switching to this mode will abort any currently running synchronization.
 
 This is a new, experimental mode. If you decide to use it, please report any issues that come up.</source>
-        <translation>&quot;Sanal dosyalar&quot; modu etkinleştirildiğinde, başlangıçta hiçbir dosya indirilmez. Bunun yerine, sunucuda bulunan her dosya için küçük bir &quot;%1&quot; dosyası oluşturulur. İçindekiler bu dosyalar çalıştırılarak veya içerik menüleri kullanılarak indirilebilir.
+        <translation>When the &quot;virtual files&quot; mode is enabled no files will be downloaded initially. Instead, a tiny file will be created for each file that exists on the server. The contents can be downloaded by running these files or by using their context menu.
 
-Sanal dosyalar modu, seçici eşleme ile beraber çalışır. Şu anda seçili olmayan klasörler yalnızca çevrimiçi sanal klasörlere çevrilecek ve seçici senkronizasyon ayarlarınız sıfırlanacaktır.
+The virtual files mode is mutually exclusive with selective sync. Currently unselected folders will be translated to online-only folders and your selective sync settings will be reset.
 
-Bu moda geçmek, o anda çalışan eşlemeyi iptal edecektir.
+Switching to this mode will abort any currently running synchronization.
 
-Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıkan sorunları bildirin.</translation>
+This is a new, experimental mode. If you decide to use it, please report any issues that come up.</translation>
     </message>
     <message>
         <source>Enable experimental placeholder mode</source>
-        <translation>Deneysel yer tutucu modunu etkinleştir</translation>
+        <translation>Enable experimental placeholder mode</translation>
     </message>
     <message>
         <source>Stay safe</source>
-        <translation>Güvenli kal</translation>
+        <translation>Stay safe</translation>
     </message>
     <message>
         <source>Select the local folder</source>
-        <translation>Yerel klasörü seçin</translation>
+        <translation>Select the local folder</translation>
     </message>
 </context>
 <context>
     <name>FolderWizard</name>
     <message>
         <source>&lt;b&gt;Error:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Hata:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;Error:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;Warning:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Uyarı:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;Warning:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;Hata:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
+        <translation>&lt;b&gt;Error:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;Uyarı:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
+        <translation>&lt;b&gt;Warning:&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;</translation>
     </message>
 </context>
 <context>
@@ -3524,11 +3525,11 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Pick a local folder on your computer to sync</source>
-        <translation>Eşitlemek için bilgisayarınızdan yerel bir klasör seçin</translation>
+        <translation>Pick a local folder on your computer to sync</translation>
     </message>
     <message>
         <source>&amp;Choose...</source>
-        <translation>&amp;Seç...</translation>
+        <translation>&amp;Choose...</translation>
     </message>
 </context>
 <context>
@@ -3539,19 +3540,19 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Select a remote destination folder</source>
-        <translation>Bir uzak hedef klasörü seçin</translation>
+        <translation>Select a remote destination folder</translation>
     </message>
     <message>
         <source>Create Folder</source>
-        <translation>Klasör Oluştur</translation>
+        <translation>Create Folder</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation>Yenile</translation>
+        <translation>Refresh</translation>
     </message>
     <message>
         <source>Folders</source>
-        <translation>Klasörler</translation>
+        <translation>Folders</translation>
     </message>
 </context>
 <context>
@@ -3565,7 +3566,7 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     <name>LoginRequiredDialog</name>
     <message>
         <source>Login required</source>
-        <translation>Giriş gerekli</translation>
+        <translation>Login required</translation>
     </message>
 </context>
 <context>
@@ -3580,37 +3581,37 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </source>
-        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm</translation>
+        <translation>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod temporm </translation>
     </message>
 </context>
 <context>
     <name>OAuthCredentialsSetupWizardState</name>
     <message>
         <source>Error while trying to log in to OAuth2-enabled server.</source>
-        <translation>OAuth2&apos;nin etkin olduğu sunucuda oturum açmaya çalışırken hata oluştu.</translation>
+        <translation>Error while trying to log in to OAuth2-enabled server.</translation>
     </message>
     <message>
         <source>Server reports that OAuth2 is not supported.</source>
-        <translation>Sunucu, OAuth2&apos;nin desteklenmediğini bildiriyor.</translation>
+        <translation>Server reports that OAuth2 is not supported.</translation>
     </message>
     <message>
         <source>Oauth2 authentication requires a secured connection.</source>
-        <translation>Oauth2 kimlik doğrulaması, güvenli bir bağlantı gerektirir.</translation>
+        <translation>Oauth2 authentication requires a secured connection.</translation>
     </message>
 </context>
 <context>
     <name>OAuthLoginWidget</name>
     <message>
         <source>Open Browser</source>
-        <translation>Tarayıcıyı Aç</translation>
+        <translation>Open Browser</translation>
     </message>
     <message>
         <source>Copy URL to clipboard</source>
-        <translation>URL&apos;yi panoya kopyala</translation>
+        <translation>Copy URL to clipboard</translation>
     </message>
     <message>
         <source>Retry</source>
-        <translation>Yeniden Dene</translation>
+        <translation>Retry</translation>
     </message>
 </context>
 <context>
@@ -3624,31 +3625,31 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     <name>QObject</name>
     <message>
         <source>in the future</source>
-        <translation>gelecekte</translation>
+        <translation>in the future</translation>
     </message>
     <message numerus="yes">
         <source>%n day(s) ago</source>
-        <translation><numerusform>%n gün önce</numerusform></translation>
+        <translation><numerusform>%n day(s) ago</numerusform><numerusform>%n day(s) ago</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n hour(s) ago</source>
-        <translation><numerusform>%n saat önce</numerusform></translation>
+        <translation><numerusform>%n hour(s) ago</numerusform><numerusform>%n hour(s) ago</numerusform></translation>
     </message>
     <message>
         <source>now</source>
-        <translation>şimdi</translation>
+        <translation>now</translation>
     </message>
     <message>
         <source>Less than a minute ago</source>
-        <translation>1 dakika önce</translation>
+        <translation>Less than a minute ago</translation>
     </message>
     <message numerus="yes">
         <source>%n minute(s) ago</source>
-        <translation><numerusform>%n dakika önce</numerusform></translation>
+        <translation><numerusform>%n minute(s) ago</numerusform><numerusform>%n minute(s) ago</numerusform></translation>
     </message>
     <message>
         <source>Some time ago</source>
-        <translation>Bir süre önce</translation>
+        <translation>Some time ago</translation>
     </message>
     <message>
         <source>%1: %2</source>
@@ -3663,44 +3664,44 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     <name>ResolveUrlJobFactory</name>
     <message>
         <source>Could not detect compatible server at %1</source>
-        <translation>%1 konumunda uyumlu sunucu algılanamadı</translation>
+        <translation>Could not detect compatible server at %1</translation>
     </message>
     <message>
         <source>User rejected redirect from %1 to %2</source>
-        <translation>Kullanıcı %1&apos;den %2&apos;ye yönlendirmeyi reddetti</translation>
+        <translation>User rejected redirect from %1 to %2</translation>
     </message>
     <message>
         <source>User rejected invalid SSL certificate</source>
-        <translation>Kullanıcı geçersiz SSL sertifikasını reddetti</translation>
+        <translation>User rejected invalid SSL certificate</translation>
     </message>
 </context>
 <context>
     <name>SetupWidget</name>
     <message>
         <source>Add New Account</source>
-        <translation>Yeni Hesap Ekle</translation>
+        <translation>Add New Account</translation>
     </message>
 </context>
 <context>
     <name>SetupWizardState</name>
     <message>
         <source>Welcome</source>
-        <translation>Hoş Geldiniz</translation>
+        <translation>Welcome</translation>
     </message>
     <message>
         <source>Login</source>
-        <translation>Oturum Aç</translation>
+        <translation>Login</translation>
     </message>
     <message>
         <source>Sync Options</source>
-        <translation>Eşitleme Seçenekleri</translation>
+        <translation>Sync Options</translation>
     </message>
 </context>
 <context>
     <name>SimpleResolveUrlJobFactory</name>
     <message>
         <source>Could not detect compatible server at %1</source>
-        <translation>%1 konumunda uyumlu sunucu algılanamadı</translation>
+        <translation>Could not detect compatible server at %1</translation>
     </message>
 </context>
 <context>
@@ -3714,69 +3715,69 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     <name>SpacesPage</name>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Add a Space&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Select a Space to sync it to your computer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Alan Ekle&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Bilgisayarınızla senkronize etmek için bir Alan seçin.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Add a Space&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Select a Space to sync it to your computer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
     <name>SyncFileItem::Status</name>
     <message>
         <source>Undefined</source>
-        <translation>Tanımlanmamış</translation>
+        <translation>Undefined</translation>
     </message>
     <message>
         <source>Fatal Error</source>
-        <translation>Ölümcül Hata</translation>
+        <translation>Fatal Error</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation>Hata</translation>
+        <translation>Error</translation>
     </message>
     <message>
         <source>Info</source>
-        <translation>Bilgi</translation>
+        <translation>Info</translation>
     </message>
     <message>
         <source>Success</source>
-        <translation>Başarılı</translation>
+        <translation>Success</translation>
     </message>
     <message>
         <source>Conflict</source>
-        <translation>Çakışma</translation>
+        <translation>Conflict</translation>
     </message>
     <message>
         <source>File Ignored</source>
-        <translation>Dosya Yoksayıldı</translation>
+        <translation>File Ignored</translation>
     </message>
     <message>
         <source>Restored</source>
-        <translation>Geri yüklendi</translation>
+        <translation>Restored</translation>
     </message>
     <message>
         <source>Blacklisted</source>
-        <translation>Kara listede</translation>
+        <translation>Blacklisted</translation>
     </message>
     <message>
         <source>Excluded</source>
-        <translation>Hariç</translation>
+        <translation>Excluded</translation>
     </message>
     <message>
         <source>Message</source>
-        <translation>Mesaj</translation>
+        <translation>Message</translation>
     </message>
     <message>
         <source>Filename Reserved</source>
-        <translation>Dosya Adı Alındı</translation>
+        <translation>Filename Reserved</translation>
     </message>
 </context>
 <context>
     <name>Type of user ID</name>
     <message>
         <source>Username</source>
-        <translation>Kullanıcı adı</translation>
+        <translation>Username</translation>
     </message>
     <message>
         <source>E-mail address</source>
-        <translation>E-posta adresi</translation>
+        <translation>E-mail address</translation>
     </message>
 </context>
 <context>
@@ -3799,27 +3800,27 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message numerus="yes">
         <source>%n year(s)</source>
-        <translation><numerusform>%n yıl</numerusform></translation>
+        <translation><numerusform>%n year(s)</numerusform><numerusform>%n year(s)</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n month(s)</source>
-        <translation><numerusform>%n ay</numerusform></translation>
+        <translation><numerusform>%n month(s)</numerusform><numerusform>%n month(s)</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n day(s)</source>
-        <translation><numerusform>%n gün</numerusform></translation>
+        <translation><numerusform>%n day(s)</numerusform><numerusform>%n day(s)</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n hour(s)</source>
-        <translation><numerusform>%n saat</numerusform></translation>
+        <translation><numerusform>%n hour(s)</numerusform><numerusform>%n hour(s)</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n minute(s)</source>
-        <translation><numerusform>%n dakika</numerusform></translation>
+        <translation><numerusform>%n minute(s)</numerusform><numerusform>%n minute(s)</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n second(s)</source>
-        <translation><numerusform>%n saniye</numerusform></translation>
+        <translation><numerusform>%n second(s)</numerusform><numerusform>%n second(s)</numerusform></translation>
     </message>
     <message>
         <source>%1 %2</source>
@@ -3827,7 +3828,7 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
     <message>
         <source>Shutting down %1</source>
-        <translation>Kapatılıyor %1</translation>
+        <translation>Shutting down %1</translation>
     </message>
 </context>
 <context>
@@ -3853,153 +3854,153 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     <name>WebFingerUserInfoJobFactory</name>
     <message>
         <source>Failed to retrieve user info</source>
-        <translation>Kullanıcı bilgileri alınamadı</translation>
+        <translation>Failed to retrieve user info</translation>
     </message>
 </context>
 <context>
     <name>account loading</name>
     <message>
         <source>Error accessing the configuration file</source>
-        <translation>Konfigürasyon dosyasına erişimde hata</translation>
+        <translation>Error accessing the configuration file</translation>
     </message>
     <message>
         <source>There was an error while accessing the configuration file at %1.</source>
-        <translation>Konfigürasyon dosyası %1 satırına erişimde hata</translation>
+        <translation>There was an error while accessing the configuration file at %1.</translation>
     </message>
 </context>
 <context>
     <name>ownCloudTheme::qtVer</name>
     <message>
         <source>%1 (Built against Qt %2)</source>
-        <translation>%1 (Qt %2&apos;e göre oluşturuldu)</translation>
+        <translation>%1 (Built against Qt %2)</translation>
     </message>
 </context>
 <context>
     <name>pinstate</name>
     <message>
         <source>Always available locally</source>
-        <translation>Yerel olarak her zaman kullanılabilir</translation>
+        <translation>Always available locally</translation>
     </message>
     <message>
         <source>Currently available locally</source>
-        <translation>Şu anda yerel olarak kullanılabilir</translation>
+        <translation>Currently available locally</translation>
     </message>
     <message>
         <source>Some available online only</source>
-        <translation>Yalnızca bazıları çevrimiçi kullanılabilir</translation>
+        <translation>Some available online only</translation>
     </message>
     <message>
         <source>Available online only</source>
-        <translation>Sadece çevrimiçi kullanılabilir</translation>
+        <translation>Available online only</translation>
     </message>
 </context>
 <context>
     <name>progress</name>
     <message>
         <source>Virtual file created</source>
-        <translation>Sanal dosya oluşturuldu</translation>
+        <translation>Virtual file created</translation>
     </message>
     <message>
         <source>Replaced by virtual file</source>
-        <translation>Sanal dosya ile değiştirilmiştir</translation>
+        <translation>Replaced by virtual file</translation>
     </message>
     <message>
         <source>Downloaded</source>
-        <translation>İndirildi</translation>
+        <translation>Downloaded</translation>
     </message>
     <message>
         <source>Uploaded</source>
-        <translation>Yüklendi</translation>
+        <translation>Uploaded</translation>
     </message>
     <message>
         <source>Deleted</source>
-        <translation>Silindi</translation>
+        <translation>Deleted</translation>
     </message>
     <message>
         <source>%1 moved to %2</source>
-        <translation>%1, %2&apos;ye taşındı</translation>
+        <translation>%1 moved to %2</translation>
     </message>
     <message>
         <source>Ignored</source>
-        <translation>Yoksayıldı</translation>
+        <translation>Ignored</translation>
     </message>
     <message>
         <source>Server version downloaded, local copy was backed up as conflict file</source>
-        <translation>Sunucu sürümü indirildi, yerel kopya çakışma dosyası olarak yedeklendi</translation>
+        <translation>Server version downloaded, local copy was backed up as conflict file</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation>Hata</translation>
+        <translation>Error</translation>
     </message>
     <message>
         <source>Updated local metadata</source>
-        <translation>Yerel üstveri güncellendi</translation>
+        <translation>Updated local metadata</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation>Bilinmeyen</translation>
+        <translation>Unknown</translation>
     </message>
     <message>
         <source>downloading</source>
-        <translation>indirilen:</translation>
+        <translation>downloading</translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation>yüklenen:</translation>
+        <translation>uploading</translation>
     </message>
     <message>
         <source>deleting</source>
-        <translation>silinen:</translation>
+        <translation>deleting</translation>
     </message>
     <message>
         <source>moving</source>
-        <translation>taşınan:</translation>
+        <translation>moving</translation>
     </message>
     <message>
         <source>ignoring</source>
-        <translation>yoksayılan:</translation>
+        <translation>ignoring</translation>
     </message>
     <message>
         <source>error</source>
-        <translation>hata</translation>
+        <translation>error</translation>
     </message>
     <message>
         <source>updating local metadata</source>
-        <translation>yerel üstveri güncelleniyor</translation>
+        <translation>updating local metadata</translation>
     </message>
 </context>
 <context>
     <name>utility</name>
     <message>
         <source>Could not open browser</source>
-        <translation>Tarayıcı açılamadı</translation>
+        <translation>Could not open browser</translation>
     </message>
     <message>
         <source>There was an error when launching the browser to go to URL %1. Maybe no default browser is configured?</source>
-        <translation>%1 bağlantısına gitmek için tarayıcı başlatılırken bir hata oluştu. Herhangi bir varsayılan tarayıcı yapılandırılmamış olabilir.</translation>
+        <translation>There was an error when launching the browser to go to URL %1. Maybe no default browser is configured?</translation>
     </message>
     <message>
         <source>Could not open email client</source>
-        <translation>E-posta istemcisi açılamadı</translation>
+        <translation>Could not open email client</translation>
     </message>
     <message>
         <source>There was an error when launching the email client to create a new message. Maybe no default email client is configured?</source>
-        <translation>Yeni mesaj oluşturmak için eposta istemcisini çalıştırıken bir hata oluştu. Belki varsayılan eposta istemcisi ayarlanmamıştır? </translation>
+        <translation>There was an error when launching the email client to create a new message. Maybe no default email client is configured?</translation>
     </message>
     <message>
         <source>Make always available locally</source>
-        <translation>Her zaman yerel olarak erişilebilir yapın</translation>
+        <translation>Make always available locally</translation>
     </message>
     <message>
         <source>Free up local space</source>
-        <translation>Yerel kapasite alanında yer açın</translation>
+        <translation>Free up local space</translation>
     </message>
 </context>
 <context>
     <name>version check</name>
     <message>
         <source>Some settings were configured in newer versions of this client and use features that are not available in this version</source>
-        <translation>Bazı ayarlar bu istemcinin daha yeni sürümlerinde yapılandırılmış ve bu sürümde bulunmayan özellikler kullanılıyor</translation>
+        <translation>Some settings were configured in newer versions of this client and use features that are not available in this version</translation>
     </message>
 </context>
 </TS>
