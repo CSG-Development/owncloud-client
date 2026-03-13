@@ -575,8 +575,8 @@ This is a new, experimental mode. If you decide to use it, please report any iss
 <context>
     <name>APP::ConnectionValidator</name>
     <message>
-        <source>No Curator account configured</source>
-        <translation>Curator 계정이 설정되지 않았음</translation>
+        <source>No PersonalCloud account configured</source>
+        <translation>PersonalCloud 계정이 설정되지 않았음</translation>
     </message>
     <message>
         <source>Please update to the latest server and restart the client.</source>
@@ -607,7 +607,7 @@ This is a new, experimental mode. If you decide to use it, please report any iss
     </message>
 </context>
 <context>
-    <name>APP::CuratorPropagator</name>
+    <name>APP::PersonalCloudPropagator</name>
     <message>
         <source>File %1 is currently in use</source>
         <translation>파일 %1 은(는) 현재 이용 중입니다</translation>
@@ -2233,8 +2233,8 @@ for additional privileges during the process.</source>
         <translation>다이얼로그</translation>
     </message>
     <message>
-        <source>Curator Path:</source>
-        <translation>Curator 경로:</translation>
+        <source>PersonalCloud Path:</source>
+        <translation>PersonalCloud 경로:</translation>
     </message>
     <message>
         <source>Close</source>
@@ -3077,7 +3077,7 @@ This is a new, experimental mode. If you decide to use it, please report any iss
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <source>We are unable to detect the PersonalCloud device. Please ensure the following:</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3116,7 +3116,7 @@ This is a new, experimental mode. If you decide to use it, please report any iss
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3299,7 +3299,7 @@ This is a new, experimental mode. If you decide to use it, please report any iss
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3837,7 +3837,7 @@ This is a new, experimental mode. If you decide to use it, please report any iss
         <translation>폼</translation>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>

@@ -575,8 +575,8 @@ Este es nuevo modo en fase experimental. Si decide usarlo, por favor repórtenos
 <context>
     <name>APP::ConnectionValidator</name>
     <message>
-        <source>No Curator account configured</source>
-        <translation>No se ha configurado ninguna cuenta de Curator</translation>
+        <source>No PersonalCloud account configured</source>
+        <translation>No se ha configurado ninguna cuenta de PersonalCloud</translation>
     </message>
     <message>
         <source>Please update to the latest server and restart the client.</source>
@@ -607,7 +607,7 @@ Este es nuevo modo en fase experimental. Si decide usarlo, por favor repórtenos
     </message>
 </context>
 <context>
-    <name>APP::CuratorPropagator</name>
+    <name>APP::PersonalCloudPropagator</name>
     <message>
         <source>File %1 is currently in use</source>
         <translation>El archivo %1 está actualmente en uso</translation>
@@ -2231,8 +2231,8 @@ for additional privileges during the process.</source>
         <translation>Diálogo</translation>
     </message>
     <message>
-        <source>Curator Path:</source>
-        <translation>Ruta de OwnCloud:</translation>
+        <source>PersonalCloud Path:</source>
+        <translation>Ruta de PersonalCloud:</translation>
     </message>
     <message>
         <source>Close</source>
@@ -3075,7 +3075,7 @@ Este es nuevo modo en fase experimental. Si decide usarlo, por favor repórtenos
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <source>We are unable to detect the PersonalCloud device. Please ensure the following:</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3114,7 +3114,7 @@ Este es nuevo modo en fase experimental. Si decide usarlo, por favor repórtenos
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3297,7 +3297,7 @@ Este es nuevo modo en fase experimental. Si decide usarlo, por favor repórtenos
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3835,7 +3835,7 @@ Este es nuevo modo en fase experimental. Si decide usarlo, por favor repórtenos
         <translation>Formulario</translation>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>

@@ -575,8 +575,8 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
 <context>
     <name>APP::ConnectionValidator</name>
     <message>
-        <source>No Curator account configured</source>
-        <translation>Geen Curator-account geconfigureerd</translation>
+        <source>No PersonalCloud account configured</source>
+        <translation>Geen PersonalCloud-account geconfigureerd</translation>
     </message>
     <message>
         <source>Please update to the latest server and restart the client.</source>
@@ -607,7 +607,7 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
     </message>
 </context>
 <context>
-    <name>APP::CuratorPropagator</name>
+    <name>APP::PersonalCloudPropagator</name>
     <message>
         <source>File %1 is currently in use</source>
         <translation>Bestand %1 is in gebruik</translation>
@@ -2234,8 +2234,8 @@ vragen om extra autorisaties tijdens installatie.</translation>
         <translation>Dialoog</translation>
     </message>
     <message>
-        <source>Curator Path:</source>
-        <translation>OwnCloud Pad:</translation>
+        <source>PersonalCloud Path:</source>
+        <translation>PersonalCloud Pad:</translation>
     </message>
     <message>
         <source>Close</source>
@@ -3079,7 +3079,7 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <source>We are unable to detect the PersonalCloud device. Please ensure the following:</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3118,7 +3118,7 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3301,7 +3301,7 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3839,7 +3839,7 @@ Dit is een nieuwe, experimentele modus. Als je besluit deze te gebruiken, meld d
         <translation>Formulier</translation>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>

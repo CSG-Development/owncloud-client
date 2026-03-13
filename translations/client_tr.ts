@@ -575,8 +575,8 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
 <context>
     <name>APP::ConnectionValidator</name>
     <message>
-        <source>No Curator account configured</source>
-        <translation>Hiçbir Curator hesabı yapılandırılmamış</translation>
+        <source>No PersonalCloud account configured</source>
+        <translation>Hiçbir PersonalCloud hesabı yapılandırılmamış</translation>
     </message>
     <message>
         <source>Please update to the latest server and restart the client.</source>
@@ -607,7 +607,7 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
     </message>
 </context>
 <context>
-    <name>APP::CuratorPropagator</name>
+    <name>APP::PersonalCloudPropagator</name>
     <message>
         <source>File %1 is currently in use</source>
         <translation>%1 dosyası şu anda kullanımda</translation>
@@ -2233,8 +2233,8 @@ for additional privileges during the process.</source>
         <translation>Diyalog</translation>
     </message>
     <message>
-        <source>Curator Path:</source>
-        <translation>Curator Yolu:</translation>
+        <source>PersonalCloud Path:</source>
+        <translation>PersonalCloud Yolu:</translation>
     </message>
     <message>
         <source>Close</source>
@@ -3077,7 +3077,7 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <source>We are unable to detect the PersonalCloud device. Please ensure the following:</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3116,7 +3116,7 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3299,7 +3299,7 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3837,7 +3837,7 @@ Bu yeni, deneysel bir moddur. Kullanmaya karar verirseniz, lütfen ortaya çıka
         <translation>Form</translation>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>

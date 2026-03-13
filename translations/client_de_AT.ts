@@ -573,8 +573,8 @@ Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, ber
 <context>
     <name>APP::ConnectionValidator</name>
     <message>
-        <source>No Curator account configured</source>
-        <translation>Kein Curator-Konto konfiguriert</translation>
+        <source>No PersonalCloud account configured</source>
+        <translation>Kein PersonalCloud-Konto konfiguriert</translation>
     </message>
     <message>
         <source>Please update to the latest server and restart the client.</source>
@@ -605,7 +605,7 @@ Dies ist ein neuer, experimenteller Modus. Wenn Sie sich dafür entscheiden, ber
     </message>
 </context>
 <context>
-    <name>APP::CuratorPropagator</name>
+    <name>APP::PersonalCloudPropagator</name>
     <message>
         <source>File %1 is currently in use</source>
         <translation>Datei %1 wird gerade benutzt</translation>
@@ -2230,8 +2230,8 @@ for additional privileges during the process.</source>
         <translation>Dialog</translation>
     </message>
     <message>
-        <source>Curator Path:</source>
-        <translation>Curator-Pfad:</translation>
+        <source>PersonalCloud Path:</source>
+        <translation>PersonalCloud-Pfad:</translation>
     </message>
     <message>
         <source>Close</source>
@@ -3068,7 +3068,7 @@ This is a new, experimental mode. If you decide to use it, please report any iss
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>We are unable to detect the Curator device. Please ensure the following:</source>
+        <source>We are unable to detect the PersonalCloud device. Please ensure the following:</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3107,7 +3107,7 @@ This is a new, experimental mode. If you decide to use it, please report any iss
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3290,7 +3290,7 @@ This is a new, experimental mode. If you decide to use it, please report any iss
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3822,7 +3822,7 @@ This is a new, experimental mode. If you decide to use it, please report any iss
         <translation>Formular</translation>
     </message>
     <message>
-        <source>Curator</source>
+        <source>PersonalCloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
