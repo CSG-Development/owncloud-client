@@ -2,10 +2,10 @@
 #include "ui_finishedpage.h"
 #include "gui/customui/stylehelper.h"
 #include "gui/customui/loginpushbutton.h"
+#include "gui/customdialogs/custommessagebox.h"
 #include "theme.h"
 
 #include <QFileDialog>
-#include <QMessageBox>
 
 namespace {
 constexpr int smallHeight = 232;
@@ -124,10 +124,9 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
 
     if (vfsModeIsExperimental) {
         connect(ui->rbUseVfs, &QRadioButton::clicked, this, [this]() {
-            auto messageBox = new QMessageBox(
-                QMessageBox::Warning,
-                tr("Enable experimental feature?"),
-                tr("When the \"virtual files\" mode is enabled no files will be downloaded initially. "
+            auto messageBox = new APP::CustomMessageBox(this);
+            messageBox->setHeaderText(tr("Enable experimental feature?"))
+                .setMessageText(tr("When the \"virtual files\" mode is enabled no files will be downloaded initially. "
                    "Instead, a tiny file will be created for each file that exists on the server. "
                    "The contents can be downloaded by running these files or by using their context menu."
                    "\n\n"
@@ -138,22 +137,23 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
                    "Switching to this mode will abort any currently running synchronization."
                    "\n\n"
                    "This is a new, experimental mode. If you decide to use it, please report any "
-                   "issues that come up."),
-                QMessageBox::NoButton,
-                this);
+                   "issues that come up."))
+                .setAcceptButtonText(tr("Enable experimental placeholder mode"))
+                .setRejectButtonText(tr("Stay safe"))
+                .setWide(true)
+                .setWarningIconVisible(true)
+                .setDeleteOnClose(true);
 
-            messageBox->addButton(tr("Enable experimental placeholder mode"), QMessageBox::AcceptRole);
-            messageBox->addButton(tr("Stay safe"), QMessageBox::RejectRole);
-
-            messageBox->setAttribute(Qt::WA_DeleteOnClose);
-            APP::StyleHelper::applyPushButtonStyle(messageBox);
-
-            connect(messageBox, &QMessageBox::rejected, this, [this]() {
+            connect(messageBox, &APP::CustomMessageBox::rejected, this, [this]() {
                 // bring back to "safety"
                 ui->rbDownloadEverything->setChecked(true);
             });
 
+#ifdef Q_OS_MACOS
             messageBox->show();
+#else
+            messageBox->open();
+#endif
         });
     }
 

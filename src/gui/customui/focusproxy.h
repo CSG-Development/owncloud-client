@@ -10,7 +10,17 @@ public:
     {
         setParent(parent);
     }
-    explicit FocusProxyStyle(QStyle* baseStyle = nullptr);
 
-    void drawPrimitive(PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const;
+    explicit FocusProxyStyle(QStyle* baseStyle = nullptr)
+        : QProxyStyle(baseStyle)
+    {
+    }
+
+    void drawPrimitive(PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const
+    {
+        if (element == QStyle::PE_FrameFocusRect)
+            return;
+
+        QProxyStyle::drawPrimitive(element, option, painter, widget);
+    }
 };

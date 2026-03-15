@@ -26,7 +26,6 @@
 
 #include <QBuffer>
 #include <QDesktopServices>
-#include <QMessageBox>
 #include <QNetworkReply>
 #include <QTimer>
 

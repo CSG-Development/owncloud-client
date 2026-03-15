@@ -18,6 +18,7 @@
 #include "common/version.h"
 #include "configfile.h"
 #include "theme.h"
+#include "customdialogs/custommessagebox.h"
 
 #include "updater/ocupdater.h"
 #include "updater/updater_private.h"
@@ -108,11 +109,13 @@ bool OCUpdater::performUpdate()
     if (!updateFile.isEmpty() && QFile(updateFile).exists()
         && !updateSucceeded() /* Someone might have run the updater manually between restarts */) {
         const QString name = Theme::instance()->appNameGUI();
-        if (QMessageBox::information(nullptr, tr("New %1 Update Ready").arg(name),
-                tr("A new update for %1 is about to be installed. The updater may ask\n"
-                   "for additional privileges during the process.")
-                    .arg(name),
-                QMessageBox::Ok)) {
+        CustomMessageBox msgbox;
+        msgbox.setHeaderText(tr("New %1 Update Ready").arg(name))
+            .setMessageText(tr("A new update for %1 is about to be installed. The updater may ask\n"
+                               "for additional privileges during the process.").arg(name))
+            .setAcceptButtonText(tr("Update"))
+            .setRejectButtonText(tr("Cancel"));
+        if (msgbox.exec() == QDialog::Accepted) {
             slotStartInstaller();
             return true;
         }

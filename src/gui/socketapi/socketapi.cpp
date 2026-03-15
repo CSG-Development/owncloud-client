@@ -20,6 +20,7 @@
 
 #include "gui/commonstrings.h"
 #include "gui/customui/stylehelper.h"
+#include "gui/customdialogs/custommessagebox.h"
 
 #include "accountmanager.h"
 #include "common/asserts.h"
@@ -47,7 +48,6 @@
 #include <QApplication>
 #include <QLocalSocket>
 #include <QStringBuilder>
-#include <QMessageBox>
 #include <QFileDialog>
 
 
@@ -743,15 +743,17 @@ void SocketApi::command_DELETE_ITEM(const QString &localFile, SocketListener *)
 {
     QFileInfo info(localFile);
 
-    QMessageBox msg(QMessageBox::Question,
-        tr("Confirm deletion"),
-        info.isDir()
-            ? tr("Do you want to delete the directory <i>%1</i> and all its contents permanently?").arg(info.dir().dirName())
-            : tr("Do you want to delete the file <i>%1</i> permanently?").arg(info.fileName()),
-        QMessageBox::Yes|QMessageBox::No, nullptr);
-    StyleHelper::applyPushButtonStyle(&msg);
+    QString text = info.isDir() ? tr("Do you want to delete the directory <i>%1</i> and all its contents permanently?").arg(info.dir().dirName())
+                                :  tr("Do you want to delete the file <i>%1</i> permanently?").arg(info.fileName());
+
+    CustomMessageBox msg;
+    msg.setHeaderText(tr("Confirm deletion"))
+        .setMessageText(text)
+        .setAcceptButtonText(tr("Yes"))
+        .setRejectButtonText(tr("No"));
+
     auto result = msg.exec();
-    if (result != QMessageBox::Yes)
+    if (result != QDialog::Accepted)
         return;
 
     if (info.isDir()) {
@@ -800,9 +802,12 @@ void SocketApi::command_MOVE_ITEM(const QString &localFile, SocketListener *)
     QString error;
     if (!FileSystem::uncheckedRenameReplace(localFile, target, &error)) {
         qCWarning(lcSocketApi) << "Rename error:" << error;
-        QMessageBox::warning(
-            nullptr, tr("Error"),
-            tr("Moving file failed:\n\n%1").arg(error));
+        CustomMessageBox msgbox;
+        msgbox.setHeaderText(tr("Error"))
+            .setMessageText(tr("Moving file failed:\n\n%1").arg(error))
+            .setSingleButton(true)
+            .setSingleButtonText(tr("OK"));
+        msgbox.exec();
     }
 }
 

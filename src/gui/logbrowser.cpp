@@ -25,7 +25,6 @@
 #include <QDir>
 #include <QLabel>
 #include <QLayout>
-#include <QMessageBox>
 #include <QPushButton>
 #include <QSettings>
 #include <QTextStream>

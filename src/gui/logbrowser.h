@@ -12,8 +12,7 @@
  * for more details.
  */
 
-#ifndef LOGBROWSER_H
-#define LOGBROWSER_H
+#pragma once
 
 #include <QPlainTextEdit>
 #include <QTextStream>
@@ -39,6 +38,7 @@ namespace Ui {
 class LogBrowser : public QDialog
 {
     Q_OBJECT
+
 public:
     explicit LogBrowser(QWidget *parent);
     ~LogBrowser() override;
@@ -61,5 +61,3 @@ private:
 };
 
 } // namespace
-
-#endif // LOGBROWSER_H

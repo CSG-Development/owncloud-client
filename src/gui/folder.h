@@ -45,6 +45,7 @@ class SyncEngine;
 class SyncRunFileLog;
 class FolderWatcher;
 class LocalDiscoveryTracker;
+class CustomMessageBox;
 
 /**
  * @brief The Folder class
@@ -440,7 +441,7 @@ private:
      */
     QSharedPointer<Vfs> _vfs;
 
-    QPointer<QMessageBox> _removeAllFilesDialog;
+    QPointer<CustomMessageBox> _removeAllFilesDialog;
 
     // allow that all files are removed in the next run
     bool _allowRemoveAllOnce = false;

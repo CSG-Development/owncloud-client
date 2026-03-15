@@ -32,6 +32,7 @@
 #include "folderwatcher.h"
 #include "gui/accountsettings.h"
 #include "gui/customui/stylehelper.h"
+#include "gui/customdialogs/custommessagebox.h"
 #include "libsync/graphapi/spacesmanager.h"
 #include "localdiscoverytracker.h"
 #include "scheduling/syncscheduler.h"
@@ -51,7 +52,6 @@
 #include <QDir>
 #include <QSettings>
 
-#include <QMessageBox>
 #include <QPushButton>
 #include <QApplication>
 
@@ -1225,19 +1225,22 @@ void Folder::slotWatcherUnreliable(const QString &message)
 {
     qCWarning(lcFolder) << "Folder watcher for" << path() << "became unreliable:" << message;
 
-    QMessageBox *msgBox = new QMessageBox(QMessageBox::Information, Theme::instance()->appNameGUI(),
-        tr("Changes in synchronized folders could not be tracked reliably.\n"
-           "\n"
-           "This means that the synchronization client might not upload local changes "
-           "immediately and will instead only scan for local changes and upload them "
-           "occasionally (every two hours by default).\n"
-           "\n"
-           "%1")
-            .arg(message),
-        {}, ocApp()->gui()->settingsDialog());
+    auto* msgBox = new CustomMessageBox(ocApp()->gui()->settingsDialog());
+    msgBox->setHeaderText(Theme::instance()->appNameGUI())
+        .setMessageText(tr("Changes in synchronized folders could not be tracked reliably.\n"
+                           "\n"
+                           "This means that the synchronization client might not upload local changes "
+                           "immediately and will instead only scan for local changes and upload them "
+                           "occasionally (every two hours by default).\n"
+                           "\n"
+                           "%1")
+                            .arg(message))
+        .setDeleteOnClose(true)
+        .setSingleButton(true)
+        .setWide(true)
+        .setWarningIconVisible(true)
+        .setSingleButtonText(tr("OK"));
 
-    msgBox->setAttribute(Qt::WA_DeleteOnClose);
-    StyleHelper::applyPushButtonStyle(msgBox);
     ApplicationGui::raise();
     msgBox->open();
 }
@@ -1284,18 +1287,22 @@ void Folder::slotAboutToRemoveAllFiles(SyncFileItem::Direction direction)
                       "If this was an accident and you decide to keep your files, they will be re-synced from the server.");
         }
     }();
-    _removeAllFilesDialog =
-        new QMessageBox(QMessageBox::Warning, tr("Remove All Files?"), msg.arg(shortGuiLocalPath()), QMessageBox::NoButton, ocApp()->gui()->settingsDialog());
-    _removeAllFilesDialog->setAttribute(Qt::WA_DeleteOnClose);
-    _removeAllFilesDialog->setWindowFlags(_removeAllFilesDialog->windowFlags() | Qt::WindowStaysOnTopHint);
-    auto removeBtn = _removeAllFilesDialog->addButton(tr("Remove all files"), QMessageBox::DestructiveRole);
-    removeBtn->setCursor(Qt::PointingHandCursor);
-    QPushButton *keepBtn = _removeAllFilesDialog->addButton(tr("Keep files"), QMessageBox::AcceptRole);
-    _removeAllFilesDialog->setDefaultButton(keepBtn);
-    StyleHelper::applyPushButtonStyle(_removeAllFilesDialog);
+
+    _removeAllFilesDialog = new APP::CustomMessageBox(ocApp()->gui()->settingsDialog());
+    _removeAllFilesDialog->setHeaderText(tr("Remove All Files?"))
+        .setMessageText(msg.arg(shortGuiLocalPath()))
+        .setDeleteOnClose(true)
+        .setWide(true)
+        .setWarningIconVisible(true)
+        .setAcceptButtonText(tr("Remove all files"))
+        .setRejectButtonText(tr("Keep files"))
+        .setDefaultButton(QDialog::Rejected);
+
+    // _removeAllFilesDialog->setWindowFlags(_removeAllFilesDialog->windowFlags() | Qt::WindowStaysOnTopHint);
     setSyncPaused(true);
-    connect(_removeAllFilesDialog, &QMessageBox::finished, this, [keepBtn, this] {
-        if (_removeAllFilesDialog->clickedButton() == keepBtn) {
+
+    connect(_removeAllFilesDialog, &APP::CustomMessageBox::finished, this, [this](int result) {
+        if (result == QDialog::Accepted) {
             // reset the db upload all local files or download all remote files
             FileSystem::setFolderMinimumPermissions(path());
             // will remove all dehydrated placeholders
@@ -1305,18 +1312,19 @@ void Folder::slotAboutToRemoveAllFiles(SyncFileItem::Direction direction)
         // if all local files where placeholders, they might be gone after the next sync
         // therefor we need to allow removal off all files in the next sync even if we selected keep
         _allowRemoveAllOnce = true;
+
         // the only way we end up in here is that the folder was not paused
         setSyncPaused(false);
         if (canSync()) {
             FolderMan::instance()->scheduler()->enqueueFolder(this);
         }
     });
-    connect(this, &Folder::destroyed, _removeAllFilesDialog, &QMessageBox::deleteLater);
+    connect(this, &Folder::destroyed, _removeAllFilesDialog, &CustomMessageBox::deleteLater);
     ocApp()
         ->gui()
         ->settingsDialog()
         ->accountSettings(_accountState->account().get())
-        ->addModalWidget(_removeAllFilesDialog, AccountSettings::ModalWidgetSizePolicy::Minimum);
+        ->addModalWidget(_removeAllFilesDialog->widgetPtr(), AccountSettings::ModalWidgetSizePolicy::Minimum);
 }
 
 FolderDefinition::FolderDefinition(const QByteArray &id, const QUrl &davUrl, const QString &spaceId, const QString &displayName)

@@ -37,6 +37,7 @@
 #include "gui/selectivesyncwidget.h"
 #include "gui/spaces/spacesmodel.h"
 #include "gui/customui/stylehelper.h"
+#include "gui/customdialogs/custommessagebox.h"
 
 #include <QDesktopServices>
 #include <QDir>
@@ -165,9 +166,12 @@ bool FolderWizardPrivate::useVirtualFiles() const
     if (useVirtualFiles) {
         const auto availability = Vfs::checkAvailability(initialLocalPath(), mode);
         if (!availability) {
-            auto msg = new QMessageBox(QMessageBox::Warning, FolderWizard::tr("Virtual files are not available for the selected folder"), availability.error(), QMessageBox::Ok, ocApp()->gui()->settingsDialog());
-            msg->setAttribute(Qt::WA_DeleteOnClose);
-            StyleHelper::applyPushButtonStyle(msg);
+            auto msg = new CustomMessageBox(ocApp()->gui()->settingsDialog());
+            msg->setHeaderText(FolderWizard::tr("Virtual files are not available for the selected folder"))
+                .setMessageText(availability.error())
+                .setSingleButtonText(FolderWizard::tr("OK"))
+                .setSingleButton(true)
+                .setDeleteOnClose(true);
             msg->open();
             return false;
         }

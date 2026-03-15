@@ -28,6 +28,7 @@
 #include "customui/dimwidget.h"
 #include "customui/menu_toolbutton.h"
 #include "customui/stylehelper.h"
+#include "customdialogs/custommessagebox.h"
 #include "resources/resources.h"
 
 #include <QActionGroup>
@@ -35,7 +36,6 @@
 #include <QImage>
 #include <QLabel>
 #include <QLayout>
-#include <QMessageBox>
 #include <QPainter>
 #include <QPixmap>
 #include <QPushButton>
@@ -288,11 +288,13 @@ SettingsDialog::SettingsDialog(ApplicationGui *gui, QWidget *parent)
     auto *quitAction = new ToolButtonAction(QStringLiteral("quit"), tr("Quit %1").arg(appNameGui), this);
     quitAction->setCheckable(false);
     connect(quitAction, &QAction::triggered, this, [this, appNameGui] {
-        auto box = new QMessageBox(QMessageBox::Question, tr("Quit %1").arg(appNameGui),
-            tr("Are you sure you want to quit %1?").arg(appNameGui), QMessageBox::Yes | QMessageBox::No, this);
-        box->setAttribute(Qt::WA_DeleteOnClose);
-        StyleHelper::applyPushButtonStyle(box);
-        connect(box, &QMessageBox::accepted, qApp, &QCoreApplication::quit, Qt::QueuedConnection);
+        auto box = new CustomMessageBox(this);
+        box->setHeaderText(tr("Quit %1").arg(appNameGui))
+            .setMessageText(tr("Are you sure you want to quit %1?").arg(appNameGui))
+            .setAcceptButtonText(tr("Yes"))
+            .setRejectButtonText(tr("No"))
+            .setDeleteOnClose(true);
+        connect(box, &CustomMessageBox::accepted, qApp, &QCoreApplication::quit, Qt::QueuedConnection);
         box->open();
     });
     _ui->toolBar->addAction(quitAction);

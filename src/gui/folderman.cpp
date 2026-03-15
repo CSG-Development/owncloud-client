@@ -26,6 +26,7 @@
 #include "scheduling/syncscheduler.h"
 #include "socketapi/socketapi.h"
 #include "customui/stylehelper.h"
+#include "customdialogs/custommessagebox.h"
 #include "syncresult.h"
 #include "theme.h"
 
@@ -33,7 +34,6 @@
 #include "common/utility_win.h"
 #endif
 
-#include <QMessageBox>
 #include <QMutableSetIterator>
 #include <QNetworkProxy>
 #include <QtCore>
@@ -295,10 +295,13 @@ bool FolderMan::ensureJournalGone(const QString &journalDbFile)
                              "but could not be removed. Please make sure "
                              "that no application is currently using it.")
                               .arg(QDir::fromNativeSeparators(QDir::cleanPath(journalDbFile)));
-        QMessageBox msg(QMessageBox::Warning, tr("Could not reset folder state"), text, QMessageBox::Retry|QMessageBox::Abort);
-        StyleHelper::applyPushButtonStyle(&msg);
+        CustomMessageBox msg;
+        msg.setHeaderText(tr("Could not reset folder state"))
+            .setMessageText(text)
+            .setAcceptButtonText(tr("Retry"))
+            .setRejectButtonText(tr("Abort"));
         int ret = msg.exec();
-        if (ret == QMessageBox::Abort) {
+        if (ret == QDialog::Accepted) {
             return false;
         }
     }

@@ -43,7 +43,7 @@
           <string notr="true"/>
          </property>
          <property name="pixmap">
-          <pixmap resource="customui/customui_res.qrc">:/res/Files-logo.png</pixmap>
+          <pixmap resource="customdialogs/customdialogs_res.qrc">:/res/Files-logo.png</pixmap>
          </property>
         </widget>
        </item>
@@ -69,6 +69,11 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
        </property>
        <property name="wordWrap">
         <bool>true</bool>
@@ -112,7 +117,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="customui/customui_res.qrc"/>
+  <include location="customdialogs/customdialogs_res.qrc"/>
  </resources>
  <connections/>
 </ui>

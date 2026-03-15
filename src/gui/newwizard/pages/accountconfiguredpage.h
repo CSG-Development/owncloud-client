@@ -15,7 +15,7 @@
 #pragma once
 
 #include "abstractpage.h"
-#include "setupcontroller.h"
+#include "enums.h"
 
 #include <QSharedPointer>
 

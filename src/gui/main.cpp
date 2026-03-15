@@ -17,13 +17,14 @@
 #include "accountmanager.h"
 #include "common/utility.h"
 #include "gui/application.h"
-#include "gui/logbrowser.h"
+#include "gui/customdialogs/logbrowserdlg.h"
 #include "libsync/configfile.h"
 #include "libsync/platform.h"
 #include "libsync/theme.h"
 #include "resources/loadresources.h"
 #include "resources/resources.h"
-#include "customui/stylehelper.h"
+#include "gui/customui/stylehelper.h"
+#include "gui/customdialogs/custommessagebox.h"
 
 #include "common/version.h"
 #include "gui/translations.h"
@@ -40,7 +41,6 @@
 
 #include <QApplication>
 #include <QCommandLineParser>
-#include <QMessageBox>
 #include <QProcess>
 #include <QRandomGenerator>
 #include <QTimer>
@@ -72,9 +72,18 @@ void displayHelpText(const QString &t)
 #ifdef Q_OS_WIN
     // No console on Windows.
     QString spaces(80, QLatin1Char(' ')); // Add a line of non-wrapped space to make the messagebox wide enough.
-    QString text =
-        QStringLiteral("<qt><pre style='white-space:pre-wrap'>") + t.toHtmlEscaped() + QStringLiteral("</pre><pre>") + spaces + QStringLiteral("</pre></qt>");
-    QMessageBox::information(0, Theme::instance()->appNameGUI(), text);
+    QString text = QStringLiteral("<qt><pre style='white-space:pre-wrap'>") +
+                   t.toHtmlEscaped() +
+                   QStringLiteral("</pre><pre>") +
+                   spaces +
+                   QStringLiteral("</pre></qt>");
+
+    CustomMessageBox msgbox;
+    msgbox.setHeaderText(Theme::instance()->appNameGUI())
+        .setMessageText(text)
+        .setSingleButton(true)
+        .setSingleButtonText(QObject::tr("OK"));
+    msgbox.exec();
 #endif
 }
 
@@ -213,13 +222,14 @@ CommandLineOptions parseOptions(const QStringList &arguments)
 
 void showDowngradeDialog()
 {
-    QMessageBox box(QMessageBox::Warning, Theme::instance()->appNameGUI(),
-        QCoreApplication::translate("version check",
-            "Some settings were configured in newer versions of this client "
-            "and use features that are not available in this version"));
-    box.addButton(APP::Application::tr("Quit"), QMessageBox::AcceptRole);
-    StyleHelper::applyPushButtonStyle(&box);
-    box.exec();
+    CustomMessageBox msgbox;
+    msgbox.setHeaderText(Theme::instance()->appNameGUI())
+        .setMessageText(QCoreApplication::translate("version check",
+                                                    "Some settings were configured in newer versions of this client "
+                                                    "and use features that are not available in this version"))
+        .setSingleButton(true)
+        .setSingleButtonText(APP::Application::tr("Quit"));
+    msgbox.exec();
     QTimer::singleShot(0, qApp, &QApplication::quit);
 }
 
@@ -300,7 +310,7 @@ void setupLogging(const CommandLineOptions &options)
     logger->setLogDebug(options.logDebug);
 
     // Possibly configure logging from config file
-    LogBrowser::setupLoggingFromConfig();
+    LogBrowserDlg::setupLoggingFromConfig();
 
     qCInfo(lcMain) << "##################" << Theme::instance()->appName() << "locale:" << QLocale::system().name()
                    << "version:" << Theme::instance()->aboutVersions(Theme::VersionFormat::OneLiner);
@@ -419,10 +429,12 @@ int main(int argc, char **argv)
         Utility::sleep(5);
         if (!AccountManager::instance()->restore()) {
             qCCritical(lcApplication) << "Could not read the account settings, quitting";
-            QMessageBox::critical(nullptr, QCoreApplication::translate("account loading", "Error accessing the configuration file"),
-                QCoreApplication::translate("account loading", "There was an error while accessing the configuration file at %1.")
-                    .arg(ConfigFile::configFile()),
-                QMessageBox::Close);
+
+            CustomMessageBox msgbox;
+            msgbox.setHeaderText(QCoreApplication::translate("account loading", "Error accessing the configuration file"))
+                .setMessageText(QCoreApplication::translate("account loading", "There was an error while accessing the configuration file at %1.")
+                                    .arg(ConfigFile::configFile()));
+            msgbox.exec();
             return -1;
         }
     }

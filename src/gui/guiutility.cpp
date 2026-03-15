@@ -15,13 +15,12 @@
 #include "guiutility.h"
 #include "application.h"
 #include "settingsdialog.h"
-#include "customui/stylehelper.h"
+#include "customdialogs/custommessagebox.h"
 
 #include <QClipboard>
 #include <QApplication>
 #include <QDesktopServices>
 #include <QLoggingCategory>
-#include <QMessageBox>
 #include <QUrlQuery>
 #include <QIcon>
 
@@ -39,13 +38,13 @@ bool Utility::openBrowser(const QUrl &url, QWidget *errorWidgetParent)
 {
     if (!QDesktopServices::openUrl(url)) {
         if (errorWidgetParent) {
-            QMessageBox msg(QMessageBox::Warning,
-                QCoreApplication::translate("utility", "Could not open browser"),
-                QCoreApplication::translate("utility",
+            CustomMessageBox msg(errorWidgetParent);
+            msg.setHeaderText(QCoreApplication::translate("utility", "Could not open browser"))
+                .setMessageText(QCoreApplication::translate("utility",
                     "There was an error when launching the browser to go to "
-                    "URL %1. Maybe no default browser is configured?")
-                    .arg(url.toString()), QMessageBox::Ok, errorWidgetParent);
-            StyleHelper::applyPushButtonStyle(&msg);
+                    "URL %1. Maybe no default browser is configured?").arg(url.toString()))
+                .setSingleButton(true)
+                .setSingleButtonText(QCoreApplication::translate("utility", "OK"));
             msg.exec();
         }
         qCWarning(lcGuiUtility) << "QDesktopServices::openUrl failed for" << url;
@@ -64,13 +63,14 @@ bool Utility::openEmailComposer(const QString &subject, const QString &body, QWi
 
     if (!QDesktopServices::openUrl(url)) {
         if (errorWidgetParent) {
-            QMessageBox msg(QMessageBox::Warning,
-                QCoreApplication::translate("utility", "Could not open email client"),
-                QCoreApplication::translate("utility",
-                    "There was an error when launching the email client to "
-                    "create a new message. Maybe no default email client is "
-                    "configured?"), QMessageBox::Ok, errorWidgetParent);
-            StyleHelper::applyPushButtonStyle(&msg);
+            CustomMessageBox msg(errorWidgetParent);
+            msg.setHeaderText(QCoreApplication::translate("utility", "Could not open email client"))
+                .setMessageText(QCoreApplication::translate("utility",
+                                                            "There was an error when launching the email client to "
+                                                            "create a new message. Maybe no default email client is "
+                                                            "configured?"))
+                .setSingleButton(true)
+                .setSingleButtonText(QCoreApplication::translate("utility", "OK"));
             msg.exec();
         }
         qCWarning(lcGuiUtility) << "QDesktopServices::openUrl failed for" << url;

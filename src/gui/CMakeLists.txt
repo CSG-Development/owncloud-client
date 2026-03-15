@@ -58,9 +58,7 @@ set(client_SRCS
     issueswidget.h
     issueswidget.ui
     lockwatcher.cpp
-    logbrowser.cpp
     lockwatcher.h
-    logbrowser.ui
     networksettings.cpp
     networksettings.h
     networksettings.ui
@@ -148,6 +146,7 @@ add_subdirectory(newwizard)
 add_subdirectory(folderwizard)
 add_subdirectory(loginrequireddialog)
 add_subdirectory(customui)
+add_subdirectory(customdialogs)
 add_subdirectory(remoteaccess)
 
 add_library(PersonalCloudCore STATIC ${final_src})
@@ -162,6 +161,7 @@ target_link_libraries(PersonalCloudCore PUBLIC
     spaces 
     loginrequireddialog
     customui
+    customdialogs
     remoteaccess
     libsync
 #   telemetry
