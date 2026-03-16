@@ -20,7 +20,7 @@
 #include <QDateTime>
 
 #include "common/utility.h"
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 #include "syncfileitem.h"
 
 namespace APP {

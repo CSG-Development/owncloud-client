@@ -3,7 +3,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(VERSION.cmake)
-project(curator-client LANGUAGES CXX C VERSION ${MIRALL_VERSION_MAJOR}.${MIRALL_VERSION_MINOR}.${MIRALL_VERSION_PATCH})
+project(personalcloud-client LANGUAGES CXX C VERSION ${MIRALL_VERSION_MAJOR}.${MIRALL_VERSION_MINOR}.${MIRALL_VERSION_PATCH})
 include(FeatureSummary)
 
 find_package(ECM 5.50.0 REQUIRED NO_MODULE)
@@ -88,7 +88,7 @@ option(BUILD_SHELL_INTEGRATION "BUILD_SHELL_INTEGRATION" ON)
 # this option builds/installs the generic shell integration icons
 option(BUILD_SHELL_INTEGRATION_ICONS "BUILD_SHELL_INTEGRATION_ICONS" ON)
 
-# build the GUI component, when disabled only curatorcmd is built
+# build the GUI component, when disabled only PersonalCloudCmd is built
 option(BUILD_GUI "BUILD_GUI" ON)
 
 # build the auto updater component

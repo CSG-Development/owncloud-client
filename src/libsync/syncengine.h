@@ -40,7 +40,7 @@ namespace APP {
 
 class SyncJournalFileRecord;
 class SyncJournalDb;
-class CuratorPropagator;
+class PersonalCloudPropagator;
 class ProcessDirectoryJob;
 
 /**
@@ -169,7 +169,7 @@ signals:
 
     /** Emitted when propagation has problems with a locked file.
      *
-     * Forwarded from CuratorPropagator::seenLockedFile.
+     * Forwarded from PersonalCloudPropagator::seenLockedFile.
      */
     void seenLockedFile(const QString &fileName, FileSystem::LockMode mode);
 
@@ -231,7 +231,7 @@ private:
     QString _remoteRootEtag;
     SyncJournalDb *_journal;
     std::unique_ptr<DiscoveryPhase> _discoveryPhase;
-    QSharedPointer<CuratorPropagator> _propagator;
+    QSharedPointer<PersonalCloudPropagator> _propagator;
 
     // List of all files with conflicts
     QSet<QString> _seenConflictFiles;

@@ -53,8 +53,8 @@ QString UpdateInfo::downloadUrl() const
 
 UpdateInfo UpdateInfo::parseElement(const QDomElement &element, bool *ok)
 {
-    if (element.tagName() != QLatin1String("curatorclient")) {
-        qCCritical(lcUpdater) << "Expected 'curatorclient', got '" << element.tagName() << "'.";
+    if (element.tagName() != QLatin1String("personalcloudclient")) {
+        qCCritical(lcUpdater) << "Expected 'personalcloudclient', got '" << element.tagName() << "'.";
         if (ok)
             *ok = false;
         return UpdateInfo();

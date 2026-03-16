@@ -12,8 +12,7 @@
  * for more details.
  */
 
-#ifndef CURATORPROPAGATOR_H
-#define CURATORPROPAGATOR_H
+#pragma once
 
 #include <QHash>
 #include <QObject>
@@ -47,7 +46,7 @@ qint64 criticalFreeSpaceLimit();
 qint64 freeSpaceLimit();
 
 class SyncJournalDb;
-class CuratorPropagator;
+class PersonalCloudPropagator;
 class PropagatorCompositeJob;
 
 /**
@@ -63,7 +62,7 @@ class PropagatorJob : public QObject
     Q_OBJECT
 
 public:
-    explicit PropagatorJob(CuratorPropagator *propagator, const QString &path);
+    explicit PropagatorJob(PersonalCloudPropagator *propagator, const QString &path);
 
     enum AbortType {
         Synchronous,
@@ -141,7 +140,7 @@ signals:
      */
     void abortFinished(SyncFileItem::Status status = SyncFileItem::NormalError);
 protected:
-    CuratorPropagator *propagator() const;
+    PersonalCloudPropagator *propagator() const;
 
     /** If this job gets added to a composite job, this will point to the parent.
      *
@@ -170,7 +169,7 @@ protected:
     friend class PropagateDirectory;
 
 public:
-    PropagateItemJob(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateItemJob(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
         : PropagatorJob(propagator, item->destination())
         , _item(item)
     {
@@ -191,7 +190,7 @@ class PropagatorCompositeJob : public PropagatorJob
 {
     Q_OBJECT
 public:
-    explicit PropagatorCompositeJob(CuratorPropagator *propagator, const QString &path);
+    explicit PropagatorCompositeJob(PersonalCloudPropagator *propagator, const QString &path);
 
     ~PropagatorCompositeJob() override
     {
@@ -271,7 +270,7 @@ public:
 
     PropagatorCompositeJob _subJobs;
 
-    explicit PropagateDirectory(CuratorPropagator *propagator, const SyncFileItemPtr &item);
+    explicit PropagateDirectory(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item);
 
     void appendJob(PropagatorJob *job)
     {
@@ -330,7 +329,7 @@ class APPLICATIONSYNC_EXPORT PropagateRootDirectory : public PropagateDirectory
 {
     Q_OBJECT
 public:
-    explicit PropagateRootDirectory(CuratorPropagator *propagator);
+    explicit PropagateRootDirectory(PersonalCloudPropagator *propagator);
 
     bool scheduleSelfOrChild() override;
     JobParallelism parallelism() override;
@@ -357,7 +356,7 @@ class PropagateIgnoreJob : public PropagateItemJob
 {
     Q_OBJECT
 public:
-    PropagateIgnoreJob(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateIgnoreJob(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
     {
     }
@@ -376,7 +375,7 @@ public:
     }
 };
 
-class APPLICATIONSYNC_EXPORT CuratorPropagator : public QObject
+class APPLICATIONSYNC_EXPORT PersonalCloudPropagator : public QObject
 {
     Q_OBJECT
 public:
@@ -384,7 +383,7 @@ public:
     bool _finishedEmited; // used to ensure that finished is only emitted once
 
 public:
-    CuratorPropagator(AccountPtr account, const SyncOptions &options, const QUrl &baseUrl, const QString &localDir,
+    PersonalCloudPropagator(AccountPtr account, const SyncOptions &options, const QUrl &baseUrl, const QString &localDir,
         const QString &remoteFolder, SyncJournalDb *progressDb)
         : _journal(progressDb)
         , _finishedEmited(false)
@@ -399,7 +398,7 @@ public:
         qRegisterMetaType<PropagatorJob::AbortType>("PropagatorJob::AbortType");
     }
 
-    ~CuratorPropagator() override;
+    ~PersonalCloudPropagator() override;
 
     void start(SyncFileItemSet &&_syncedItems);
 
@@ -586,9 +585,7 @@ class PropagateUpdateMetaDataJob : public PropagateItemJob
 {
     Q_OBJECT
 public:
-    PropagateUpdateMetaDataJob(CuratorPropagator *propagator, const SyncFileItemPtr &item);
+    PropagateUpdateMetaDataJob(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item);
     void start() override;
 };
 }
-
-#endif

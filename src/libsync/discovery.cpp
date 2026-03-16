@@ -14,7 +14,7 @@
 
 #include "discovery.h"
 #include "csync.h"
-#include "curatorpropagator.h"
+#include "personalcloudpropagator.h"
 #include "syncfileitem.h"
 
 #include "csync/csync_exclude.h"
@@ -71,8 +71,8 @@ void ProcessDirectoryJob::process()
     // Build lookup tables for local, remote and db entries.
     // For suffix-virtual files, the key will normally be the base file name
     // without the suffix.
-    // However, if foo and foo.curator exists locally, there'll be "foo"
-    // with local, db, server entries and "foo.curator" with only a local
+    // However, if foo and foo.personalcloud exists locally, there'll be "foo"
+    // with local, db, server entries and "foo.personalcloud" with only a local
     // entry.
     struct Entries {
         QString nameOverride;
@@ -682,7 +682,7 @@ void ProcessDirectoryJob::processFileAnalyzeLocalInfo(
     auto finalize = [item, localEntry, serverEntry, this](const PathTuple &path, QueryMode recurseQueryServer) {
         bool recurse = item->isDirectory() || localEntry.isDirectory || serverEntry.isDirectory;
         // Even if we have a local directory: If the remote is a file that's propagated as a
-        // conflict we don't need to recurse into it. (local c1.curator, c1/ ; remote: c1)
+        // conflict we don't need to recurse into it. (local c1.personalcloud, c1/ ; remote: c1)
         if (item->instruction() == CSYNC_INSTRUCTION_CONFLICT && !item->isDirectory())
             recurse = false;
         if (_queryLocal != NormalQuery && _queryServer != NormalQuery)
@@ -742,7 +742,7 @@ void ProcessDirectoryJob::processFileAnalyzeLocalInfo(
                 item->setInstruction(CSYNC_INSTRUCTION_REMOVE);
                 item->_direction = SyncFileItem::Down;
             } else if (!dbEntry.isVirtualFile() && isVfsWithSuffix()) {
-                // If we find what looks to be a spurious "abc.curator" the base file "abc"
+                // If we find what looks to be a spurious "abc.personalcloud" the base file "abc"
                 // might have been renamed to that. Make sure that the base file is not
                 // deleted from the server.
                 if (dbEntry._modtime == localEntry.modtime && dbEntry._fileSize == localEntry.size) {

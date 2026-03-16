@@ -36,7 +36,7 @@ private:
     QUrl _location;
 
 public:
-    PropagateUploadFileTUS(CuratorPropagator *propagator, const SyncFileItemPtr &item);
+    PropagateUploadFileTUS(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item);
 
     void doStartUpload() override;
 public Q_SLOTS:

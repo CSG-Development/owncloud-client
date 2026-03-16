@@ -456,10 +456,10 @@ int main(int argc, char **argv)
 
         const QUrl baseUrl = [&ctx] {
             auto tmp = ctx.options.server_url;
-            // Find the folder and the original curator url
+            // Find the folder and the original PersonalCloud url
             QStringList splitted = tmp.path().split(ctx.account->davPath());
             tmp.setPath(splitted.value(0));
-            tmp.setScheme(tmp.scheme().replace(QLatin1String("curator"), QLatin1String("http")));
+            tmp.setScheme(tmp.scheme().replace(QLatin1String("PersonalCloud"), QLatin1String("http")));
             return tmp;
         }();
 

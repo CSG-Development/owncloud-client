@@ -1,6 +1,6 @@
 #pragma once
 
-#include "curatorresources.h"
+#include "personalcloudresources.h"
 
 namespace APP {
 class APPLICATIONRESOURCES_EXPORT ResourcesLoader

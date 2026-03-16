@@ -27,7 +27,7 @@ namespace TestUtils {
 
     /***
      * Create a QTemporaryDir with a test specific name pattern
-     * Curator-unit-test-{TestName}-XXXXXX
+     * PersonalCloud-unit-test-{TestName}-XXXXXX
      * This allow to clean up after failed tests
      */
     QTemporaryDir createTempDir();

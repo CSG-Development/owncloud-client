@@ -38,7 +38,7 @@ UnixPlatform::~UnixPlatform()
 void UnixPlatform::setLimitsForCoreDumps()
 {
     // check a environment variable for core dumps
-    if (!qEnvironmentVariableIsEmpty("CURATOR_CORE_DUMP")) {
+    if (!qEnvironmentVariableIsEmpty("PERSONALCLOUD_CORE_DUMP")) {
         struct rlimit core_limit;
         core_limit.rlim_cur = RLIM_INFINITY;
         core_limit.rlim_max = RLIM_INFINITY;

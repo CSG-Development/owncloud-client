@@ -14,8 +14,8 @@
  */
 
 #include "propagatorjobs.h"
-#include "curatorpropagator.h"
-#include "curatorpropagator_p.h"
+#include "personalcloudpropagator.h"
+#include "personalcloudpropagator_p.h"
 #include "propagateremotemove.h"
 #include "common/utility.h"
 #include "common/syncjournaldb.h"

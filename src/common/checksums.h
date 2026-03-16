@@ -77,7 +77,7 @@ private:
     QString _error;
 };
 
-/// Checks CURATOR_DISABLE_CHECKSUM_UPLOAD
+/// Checks PERSONALCLOUD_DISABLE_CHECKSUM_UPLOAD
 OCSYNC_EXPORT bool uploadChecksumEnabled();
 
 /**

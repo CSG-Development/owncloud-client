@@ -735,6 +735,7 @@ void AccountState::setUpdateDeviceProgress(bool inProgress)
 {
     _updateDeviceInProgress = inProgress;
     qCDebug(lcAccountState) << "inProgress" << inProgress;
+    emit networkUpdateState(inProgress);
 }
 
 void AccountState::slotConnectionValidatorResult(ConnectionValidator::Status status, const QStringList &errors)

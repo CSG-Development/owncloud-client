@@ -39,16 +39,16 @@ def getWinUserHome():
 
 def getClientRootPath():
     if isWindows():
-        return os.path.join(getWinUserHome(), 'curatortest')
-    return os.path.join(gettempdir(), 'curatortest')
+        return os.path.join(getWinUserHome(), 'personalcloudtest')
+    return os.path.join(gettempdir(), 'personalcloudtest')
 
 
 def getConfigHome():
     if isWindows():
         # There is no way to set custom config path in windows
         # TODO: set to different path if option is available
-        return os.path.join(getWinUserHome(), "AppData", "Roaming", "Curator")
-    return os.path.join(get_config_from_env_file("XDG_CONFIG_HOME"), "Curator")
+        return os.path.join(getWinUserHome(), "AppData", "Roaming", "PersonalCloud")
+    return os.path.join(get_config_from_env_file("XDG_CONFIG_HOME"), "PersonalCloud")
 
 
 # map environment variables to config keys

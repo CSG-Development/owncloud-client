@@ -212,7 +212,7 @@ QByteArray findBestChecksum(const QByteArray &_checksums)
 
 bool uploadChecksumEnabled()
 {
-    static bool enabled = qEnvironmentVariableIsEmpty("CURATOR_DISABLE_CHECKSUM_UPLOAD");
+    static bool enabled = qEnvironmentVariableIsEmpty("PERSONALCLOUD_DISABLE_CHECKSUM_UPLOAD");
     return enabled;
 }
 

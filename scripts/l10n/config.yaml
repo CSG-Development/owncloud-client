@@ -1,0 +1,16 @@
+input:
+  frontend: "spreadsheet"
+  spreadsheet_key: "19hst4kSiZtin54cHnIc925wquhXXWMR6_E3Wih1sTGk"
+  credentials_json: "scripts/l10n/homecloud-l10n-5f2611435b25.json"
+  worksheet_names: ["QT"]
+  key_column_name: "KEY"
+  value_column_names: ["ar", "bg_BG", "cs_CZ", "de", "de_DE", "de_AT", "de_CH", "en_US", "en_GB", "es", "et_EE", "fr", "gl", "he", "it", "ja_JP", "ko", "nl", "pt_BR", "ru", "si", "sq", "th_TH", "tr", "zh_CN", "zh_TW"]
+  namespace_column_name: "NAMESPACE"
+
+output:
+  - backend: "qt"
+    namespace_paths: 
+      - ["QT", "main"]  
+    output_dir: "translations/"
+    output_filename: "client_{locale}.ts"
+    key_delimiter: "~~~"    

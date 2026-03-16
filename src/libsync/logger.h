@@ -23,7 +23,7 @@
 #include <QSet>
 #include <QTextStream>
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 namespace APP {
 

@@ -309,7 +309,7 @@
                      </font>
                     </property>
                     <property name="text">
-                     <string>We are unable to detect the Curator device. Please ensure the following:</string>
+                     <string>We are unable to detect the PersonalCloud device. Please ensure the following:</string>
                     </property>
                     <property name="wordWrap">
                      <bool>true</bool>

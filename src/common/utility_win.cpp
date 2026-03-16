@@ -99,7 +99,7 @@ void AddRemoveLib(bool add, const QString& folderPath, bool createLib)
     }
 
     CComPtr<IShellLibrary> pLibrary;
-    hr = OpenShellLibrary(const_cast<LPWSTR>(L"Curator Files"), &pLibrary);
+    hr = OpenShellLibrary(const_cast<LPWSTR>(L"PersonalCloud Files"), &pLibrary);
     if (FAILED(hr))
     {
         qCWarning(lcUtilityWin) << "OpenShellLibrary error:" << std::system_category().message(hr);
@@ -117,7 +117,7 @@ void AddRemoveLib(bool add, const QString& folderPath, bool createLib)
 
         // Save the new library under the user's Libraries folder.
         CComPtr<IShellItem> pSavedTo;
-        hr = pLibrary->SaveInKnownFolder(FOLDERID_UsersLibraries, L"Curator Files", LSF_OVERRIDEEXISTING, &pSavedTo);
+        hr = pLibrary->SaveInKnownFolder(FOLDERID_UsersLibraries, L"PersonalCloud Files", LSF_OVERRIDEEXISTING, &pSavedTo);
         if (FAILED(hr)) {
             qCWarning(lcUtilityWin) << "SaveInKnownFolder error:" << std::system_category().message(hr);
             return;

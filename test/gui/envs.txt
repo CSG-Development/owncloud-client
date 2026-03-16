@@ -1,1 +1,1 @@
-XDG_CONFIG_HOME=/tmp/curatortest/
+XDG_CONFIG_HOME=/tmp/personalcloudtest/

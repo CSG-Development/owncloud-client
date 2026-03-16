@@ -381,7 +381,7 @@ void Application::openVirtualFile(const QString &filename)
 {
     QString virtualFileExt = Theme::instance()->appDotVirtualFileSuffix();
     if (!filename.endsWith(virtualFileExt)) {
-        qWarning(lcApplication) << "Can only handle file ending in .curator. Unable to open" << filename;
+        qWarning(lcApplication) << "Can only handle file ending in .personalcloud. Unable to open" << filename;
         return;
     }
     QString relativePath;

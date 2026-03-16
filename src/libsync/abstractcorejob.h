@@ -19,7 +19,7 @@
 #include <QNetworkReply>
 
 #include "abstractnetworkjob.h"
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 namespace APP {
 

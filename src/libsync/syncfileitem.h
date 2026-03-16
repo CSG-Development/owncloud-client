@@ -27,7 +27,7 @@
 #include "common/utility.h"
 #include "csync.h"
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 namespace APP {
 

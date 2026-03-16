@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "curatorpropagator.h"
+#include "personalcloudpropagator.h"
 #include "syncfileitem.h"
 #include "networkjobs.h"
 #include <QLoggingCategory>

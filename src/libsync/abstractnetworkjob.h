@@ -20,7 +20,7 @@
 
 #include "common/asserts.h"
 
-#include "curatorlib.h"
+#include "personalcloudlib.h"
 
 #include <QDateTime>
 #include <QElapsedTimer>

@@ -7,7 +7,7 @@
 #include <QtTest>
 #include <QDebug>
 
-#include "curatorpropagator_p.h"
+#include "personalcloudpropagator_p.h"
 #include "propagatedownload.h"
 #include "qchar.h"
 
@@ -16,14 +16,14 @@ namespace APP {
 QString APPLICATIONSYNC_EXPORT createDownloadTmpFileName(const QString &previous);
 }
 
-class TestCuratorPropagator : public QObject
+class TestPersonalCloudPropagator : public QObject
 {
     Q_OBJECT
 
 private slots:
     void testUpdateErrorFromSession()
     {
-//        CuratorPropagator propagator( NULL, QLatin1String("test1"), QLatin1String("test2"), new ProgressDatabase);
+//        PersonalCloudPropagator propagator( NULL, QLatin1String("test1"), QLatin1String("test2"), new ProgressDatabase);
         QVERIFY( true );
     }
 
@@ -65,5 +65,5 @@ private slots:
     }
 };
 
-QTEST_APPLESS_MAIN(TestCuratorPropagator)
-#include "testcuratorpropagator.moc"
+QTEST_APPLESS_MAIN(TestPersonalCloudPropagator)
+#include "testpersonalcloudpropagator.moc"

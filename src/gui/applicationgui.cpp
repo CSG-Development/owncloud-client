@@ -434,7 +434,7 @@ void ApplicationGui::hideAndShowTray()
 
 static bool updateWhileVisible()
 {
-    static QByteArray var = qgetenv("CURATOR_TRAY_UPDATE_WHILE_VISIBLE");
+    static QByteArray var = qgetenv("PERSONALCLOUD_TRAY_UPDATE_WHILE_VISIBLE");
     if (var == "1") {
         return true;
     } else if (var == "0") {
@@ -448,31 +448,31 @@ static bool updateWhileVisible()
 
 static QByteArray envForceQDBusTrayWorkaround()
 {
-    static QByteArray var = qgetenv("CURATOR_FORCE_QDBUS_TRAY_WORKAROUND");
+    static QByteArray var = qgetenv("PERSONALCLOUD_FORCE_QDBUS_TRAY_WORKAROUND");
     return var;
 }
 
 static QByteArray envForceWorkaroundShowAndHideTray()
 {
-    static QByteArray var = qgetenv("CURATOR_FORCE_TRAY_SHOW_HIDE");
+    static QByteArray var = qgetenv("PERSONALCLOUD_FORCE_TRAY_SHOW_HIDE");
     return var;
 }
 
 static QByteArray envForceWorkaroundNoAboutToShowUpdate()
 {
-    static QByteArray var = qgetenv("CURATOR_FORCE_TRAY_NO_ABOUT_TO_SHOW");
+    static QByteArray var = qgetenv("PERSONALCLOUD_FORCE_TRAY_NO_ABOUT_TO_SHOW");
     return var;
 }
 
 static QByteArray envForceWorkaroundFakeDoubleClick()
 {
-    static QByteArray var = qgetenv("CURATOR_FORCE_TRAY_FAKE_DOUBLE_CLICK");
+    static QByteArray var = qgetenv("PERSONALCLOUD_FORCE_TRAY_FAKE_DOUBLE_CLICK");
     return var;
 }
 
 static QByteArray envForceWorkaroundManualVisibility()
 {
-    static QByteArray var = qgetenv("CURATOR_FORCE_TRAY_MANUAL_VISIBILITY");
+    static QByteArray var = qgetenv("PERSONALCLOUD_FORCE_TRAY_MANUAL_VISIBILITY");
     return var;
 }
 

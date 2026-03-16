@@ -13,7 +13,7 @@
  */
 #pragma once
 
-#include "curatorpropagator.h"
+#include "personalcloudpropagator.h"
 #include "networkjobs.h"
 
 namespace APP {
@@ -42,7 +42,7 @@ class PropagateRemoteDelete : public PropagateItemJob
     QPointer<DeleteJob> _job;
 
 public:
-    PropagateRemoteDelete(CuratorPropagator *propagator, const SyncFileItemPtr &item)
+    PropagateRemoteDelete(PersonalCloudPropagator *propagator, const SyncFileItemPtr &item)
         : PropagateItemJob(propagator, item)
     {
     }

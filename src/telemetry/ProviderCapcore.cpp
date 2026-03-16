@@ -19,7 +19,7 @@ void ProviderCapcore::Initialize()
 {
     Json::Value config;
     config[Telemetry::ENABLED_TAG] = Telemetry::ENABLED_DEFAULT;
-    Telemetry::TelemetryClient::init("client_id", "hw_id", "Curator Files", config);
+    Telemetry::TelemetryClient::init("client_id", "hw_id", "Personal Cloud Files", config);
 }
 
 void ProviderCapcore::Finalize()

@@ -26,7 +26,7 @@
 #include "discovery.h"
 #include "discoveryphase.h"
 #include "filesystem.h"
-#include "curatorpropagator.h"
+#include "personalcloudpropagator.h"
 #include "propagatedownload.h"
 #include "propagateremotedelete.h"
 
@@ -588,9 +588,9 @@ void SyncEngine::slotDiscoveryFinished()
         _progressInfo->startEstimateUpdates();
 
         // post update phase script: allow to tweak stuff by a custom script in debug mode.
-        if (!qEnvironmentVariableIsEmpty("CURATOR_POST_UPDATE_SCRIPT")) {
+        if (!qEnvironmentVariableIsEmpty("PERSONALCLOUD_POST_UPDATE_SCRIPT")) {
 #ifndef NDEBUG
-            const QString script = qEnvironmentVariable("CURATOR_POST_UPDATE_SCRIPT");
+            const QString script = qEnvironmentVariable("PERSONALCLOUD_POST_UPDATE_SCRIPT");
 
             qCDebug(lcEngine) << "Post Update Script: " << script;
             QProcess::execute(script, {});
@@ -602,18 +602,18 @@ void SyncEngine::slotDiscoveryFinished()
         // do a database commit
         _journal->commit(QStringLiteral("post treewalk"));
 
-        _propagator = QSharedPointer<CuratorPropagator>::create(_account, syncOptions(), _baseUrl, _localPath, _remotePath, _journal);
-        connect(_propagator.data(), &CuratorPropagator::itemCompleted,
+        _propagator = QSharedPointer<PersonalCloudPropagator>::create(_account, syncOptions(), _baseUrl, _localPath, _remotePath, _journal);
+        connect(_propagator.data(), &PersonalCloudPropagator::itemCompleted,
             this, &SyncEngine::slotItemCompleted);
-        connect(_propagator.data(), &CuratorPropagator::progress,
+        connect(_propagator.data(), &PersonalCloudPropagator::progress,
             this, &SyncEngine::slotProgress);
-        connect(_propagator.data(), &CuratorPropagator::updateFileTotal,
+        connect(_propagator.data(), &PersonalCloudPropagator::updateFileTotal,
             this, &SyncEngine::updateFileTotal);
-        connect(_propagator.data(), &CuratorPropagator::finished, this, &SyncEngine::slotPropagationFinished, Qt::QueuedConnection);
-        connect(_propagator.data(), &CuratorPropagator::seenLockedFile, this, &SyncEngine::seenLockedFile);
-        connect(_propagator.data(), &CuratorPropagator::insufficientLocalStorage, this, &SyncEngine::slotInsufficientLocalStorage);
-        connect(_propagator.data(), &CuratorPropagator::insufficientRemoteStorage, this, &SyncEngine::slotInsufficientRemoteStorage);
-        connect(_propagator.data(), &CuratorPropagator::newItem, this, &SyncEngine::slotNewItem);
+        connect(_propagator.data(), &PersonalCloudPropagator::finished, this, &SyncEngine::slotPropagationFinished, Qt::QueuedConnection);
+        connect(_propagator.data(), &PersonalCloudPropagator::seenLockedFile, this, &SyncEngine::seenLockedFile);
+        connect(_propagator.data(), &PersonalCloudPropagator::insufficientLocalStorage, this, &SyncEngine::slotInsufficientLocalStorage);
+        connect(_propagator.data(), &PersonalCloudPropagator::insufficientRemoteStorage, this, &SyncEngine::slotInsufficientRemoteStorage);
+        connect(_propagator.data(), &PersonalCloudPropagator::newItem, this, &SyncEngine::slotNewItem);
 
         // apply the network limits to the propagator
         setNetworkLimits(_uploadLimit, _downloadLimit);

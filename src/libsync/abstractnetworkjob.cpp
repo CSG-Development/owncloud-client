@@ -33,7 +33,7 @@
 #include "common/asserts.h"
 #include "networkjobs.h"
 #include "account.h"
-#include "curatorpropagator.h"
+#include "personalcloudpropagator.h"
 #include "httplogger.h"
 
 #include "creds/abstractcredentials.h"
@@ -54,7 +54,7 @@ Q_LOGGING_CATEGORY(lcNetworkJob, "sync.networkjob", QtInfoMsg)
 
 // If not set, it is overwritten by the Application constructor with the value from the config
 seconds AbstractNetworkJob::httpTimeout = [] {
-    const auto def = qEnvironmentVariableIntValue("CURATOR_TIMEOUT");
+    const auto def = qEnvironmentVariableIntValue("PERSONALCLOUD_TIMEOUT");
     if (def <= 0) {
         return AbstractNetworkJob::DefaultHttpTimeout;
     }
