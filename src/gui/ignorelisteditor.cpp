@@ -19,21 +19,30 @@
 #include "theme.h"
 #include "gui/folderman.h"
 #include "gui/guiutility.h"
+#include "gui/customdialogs/custommessagebox.h"
+#include "gui/customdialogs/custominputdlg.h"
+#include "gui/customdialogs/platform/common/windowdragger.h"
+#include "gui/customdialogs/dlgutils.h"
+#include "gui/customui/stylehelper.h"
+#include "gui/customui/focusproxy.h"
 
 #include <QFile>
 #include <QDir>
 #include <QListWidget>
 #include <QListWidgetItem>
-#include <QMessageBox>
 #include <QFormLayout>
 
 namespace {
 
-QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/ignorelisteditor_light.qss"),
-    QStringLiteral(":/res/ignorelisteditor_dark.qss")
+const auto logo_icon = QStringLiteral(":/res/Files-logo.png");
+std::pair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/ignorelisteditor.qss"),
+    QStringLiteral(":/res/ignorelisteditor_mac.qss")
 };
-
+const std::pair<QString,QString> close_icon = {
+    QStringLiteral(":/res/close_light.svg"),
+    QStringLiteral(":/res/close_dark.svg"),
+};
 }
 
 namespace APP {
@@ -44,12 +53,37 @@ static const int skippedLinesRole = Qt::UserRole;
 static const int isGlobalRole = Qt::UserRole + 1;
 
 IgnoreListEditor::IgnoreListEditor(QWidget *parent)
+#ifdef Q_OS_MACOS
+    : QDialog(parent, Qt::Window|Qt::FramelessWindowHint|Qt::NoDropShadowWindowHint|Qt::BypassWindowManagerHint)
+#else
     : QDialog(parent)
+#endif
     , ui(new Ui::IgnoreListEditor)
 {
     ui->setupUi(this);
 
+    DlgUtils::setTransparent(this);
+    DlgUtils::applyDropShadowDialog(ui->frame);
+
+    DlgUtils::clearStyleSheet(this);
+#ifdef Q_OS_WIN
+    setStyleSheet(StyleHelper::loadFileToString(widgetStyle.first));
+#else
+    setStyleSheet(StyleHelper::loadFileToString(widgetStyle.second));
+#endif
+
+    ui->btnOk->setStyle(new FocusProxyStyle(ui->btnOk));
+    ui->btnCancel->setStyle(new FocusProxyStyle(ui->btnCancel));
+
     StyleHelper::applyPushButtonStyle(this);
+
+    ui->btnIconTitle->setAttribute(Qt::WA_TransparentForMouseEvents);
+#ifdef Q_OS_WIN
+    ui->btnIconTitle->setIcon(QIcon(logo_icon));
+#else
+    ui->btnIconTitle->setVisible(false);
+    ui->btnHeadClose->setVisible(false);
+#endif
 
     ConfigFile cfgFile;
     readOnlyTooltip = tr("This entry is provided by the system at '%1' "
@@ -61,6 +95,10 @@ IgnoreListEditor::IgnoreListEditor(QWidget *parent)
     addPattern(QStringLiteral(".sync_*.db*"), /*deletable=*/false, /*readonly=*/true, /*global=*/true);
     readIgnoreFile(cfgFile.excludeFile(ConfigFile::SystemScope), /*global=*/true);
     readIgnoreFile(cfgFile.excludeFile(ConfigFile::UserScope), /*global=*/false);
+
+    connect(ui->btnOk, &QPushButton::clicked, this, &IgnoreListEditor::accept);
+    connect(ui->btnCancel, &QPushButton::clicked, this, &IgnoreListEditor::reject);
+    connect(ui->btnHeadClose, &QPushButton::clicked, this, &IgnoreListEditor::reject);
 
     connect(this, &QDialog::accepted, this, &IgnoreListEditor::slotUpdateLocalIgnoreList);
     ui->removePushButton->setEnabled(false);
@@ -74,6 +112,8 @@ IgnoreListEditor::IgnoreListEditor(QWidget *parent)
 
     connect(Theme::instance(), &Theme::themeChanged, this, &IgnoreListEditor::updateTheme);
     updateTheme(APP::Theme::instance()->isDarkTheme());
+
+    new WindowDragger(ui->frameTitle, this);
 }
 
 IgnoreListEditor::~IgnoreListEditor()
@@ -83,8 +123,9 @@ IgnoreListEditor::~IgnoreListEditor()
 
 void IgnoreListEditor::updateTheme(bool isDark)
 {
-    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
-    StyleHelper::applyPushButtonStyle(ui->buttonBox);
+    DlgUtils::setTheme(this, isDark);
+    StyleHelper::applyPushButtonStyle(ui->btnOk);
+    StyleHelper::applyPushButtonStyle(ui->btnCancel);
 }
 
 void IgnoreListEditor::slotItemSelectionChanged()
@@ -130,8 +171,12 @@ void IgnoreListEditor::slotUpdateLocalIgnoreList()
             ignores.write(prepend + patternItem->text().toUtf8() + '\n');
         }
     } else {
-        QMessageBox::warning(this, tr("Could not open file"),
-            tr("Cannot write changes to '%1'.").arg(ignoreFile));
+        CustomMessageBox msgbox(this);
+        msgbox.setHeaderText(tr("Could not open file"))
+            .setMessageText(tr("Cannot write changes to '%1'.").arg(ignoreFile))
+            .setSingleButton(true)
+            .setSingleButtonText(tr("OK"));
+        msgbox.exec();
     }
     ignores.close(); //close the file before reloading stuff.
 
@@ -152,13 +197,18 @@ void IgnoreListEditor::slotUpdateLocalIgnoreList()
 
 void IgnoreListEditor::slotAddPattern()
 {
-    InpDlg dlg(this);
+    CustomInputDlg dlg(this);
+    dlg.setHeaderText(tr("Add Ignore Pattern"))
+        .setPromptText(tr("Add a new ignore pattern:"))
+        .setAcceptButtonText(tr("OK"))
+        .setRejectButtonText(tr("Cancel"));
 
     int result = dlg.exec();
-    const auto pattern = dlg.textValue();
+    const auto pattern = dlg.inputText();
 
-    if ((result != QDialog::Accepted) || pattern.isEmpty())
+    if ((result != QDialog::Accepted) || pattern.isEmpty()) {
         return;
+    }
 
     addPattern(pattern, /*deletable=*/false, /*readonly=*/false, /*global=*/false);
     ui->tableWidget->scrollToBottom();

@@ -23,13 +23,13 @@
 
 #include "resources/resources.h"
 #include "customui/stylehelper.h"
+#include "customdialogs/custommessagebox.h"
 
 #include "QProgressIndicator.h"
 #include <QBuffer>
 #include <QClipboard>
 #include <QFileInfo>
 #include <QDesktopServices>
-#include <QMessageBox>
 #include <QMenu>
 #include <QToolButton>
 
@@ -590,25 +590,15 @@ void ShareLinkWidget::openShareLink(const QUrl &url)
 
 void ShareLinkWidget::confirmAndDeleteShare(const QSharedPointer<LinkShare> &share)
 {
-    auto messageBox = new QMessageBox(
-        QMessageBox::Question,
-        tr("Confirm Link Share Deletion"),
-        tr("<p>Do you really want to delete the public link share <i>%1</i>?</p>"
-           "<p>Note: This action cannot be undone.</p>")
-            .arg(shareName(*share)),
-        QMessageBox::NoButton,
-        this);
+    auto messageBox = new CustomMessageBox(this);
+        messageBox->setHeaderText(tr("Confirm Link Share Deletion"))
+        .setMessageText(tr("<p>Do you really want to delete the public link share <i>%1</i>?</p>"
+           "<p>Note: This action cannot be undone.</p>").arg(shareName(*share)))
+        .setAcceptButtonText(tr("Delete"))
+        .setRejectButtonText(tr("Cancel"));
 
-    QPushButton *yesButton = messageBox->addButton(tr("Delete"), QMessageBox::YesRole);
-    yesButton->setCursor(Qt::PointingHandCursor);
-    auto addBtn = messageBox->addButton(tr("Cancel"), QMessageBox::NoRole);
-    addBtn->setCursor(Qt::PointingHandCursor);
-
-    StyleHelper::applyPushButtonStyle(messageBox);
-
-    connect(messageBox, &QMessageBox::finished, this,
-        [messageBox, yesButton, share]() {
-        if (messageBox->clickedButton() == yesButton)
+    connect(messageBox, &CustomMessageBox::finished, this, [share](int result) {
+        if (result == QDialog::Accepted)
             share->deleteShare();
     });
     messageBox->open();

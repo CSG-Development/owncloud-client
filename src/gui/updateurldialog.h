@@ -15,8 +15,8 @@
 #pragma once
 
 #include "account.h"
+#include "gui/customdialogs/custommessagebox.h"
 
-#include <QMessageBox>
 #include <QUrl>
 #include <QWidget>
 
@@ -28,7 +28,7 @@ namespace APP {
  * Otherwise, no dialog will be shown, and accept() will be emitted.
  * This special dialog cleans itself up one hidden.
  */
-class UpdateUrlDialog : public QMessageBox
+class UpdateUrlDialog : public CustomMessageBox
 {
     Q_OBJECT
 public:

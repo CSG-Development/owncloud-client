@@ -72,8 +72,8 @@
         <file>res/dots/dots_pressed.svg</file>
         <file>res/generalsettings_dark.qss</file>
         <file>res/generalsettings_light.qss</file>
-        <file>res/ignorelisteditor_dark.qss</file>
-        <file>res/ignorelisteditor_light.qss</file>
+        <file>res/ignorelisteditor.qss</file>
+        <file>res/ignorelisteditor_mac.qss</file>
         <file>res/inputwidget/inputwidget_dark.qss</file>
         <file>res/inputwidget/inputwidget_light.qss</file>
         <file>res/inputwidget/inputwidget_error_dark.qss</file>

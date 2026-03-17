@@ -28,7 +28,7 @@
 #include "gui/remoteaccess/overlaycontroller.h"
 #include "guiutility.h"
 #include "libsync/theme.h"
-#include "logbrowser.h"
+#include "gui/customdialogs/logbrowserdlg.h"
 #include "logger.h"
 #include "openfilemanager.h"
 #include "progressdispatcher.h"
@@ -46,7 +46,6 @@
 #include <QDialog>
 #include <QDir>
 #include <QHBoxLayout>
-#include <QMessageBox>
 #include <QScreen>
 
 #ifdef Q_OS_WIN
@@ -985,8 +984,8 @@ void ApplicationGui::slotShutdown()
 
 void ApplicationGui::slotToggleLogBrowser()
 {
-    auto logBrowser = new LogBrowser(settingsDialog());
-    logBrowser->setAttribute(Qt::WA_DeleteOnClose);
+    auto logBrowser = new LogBrowserDlg(settingsDialog());
+    logBrowser->setDeleteOnClose(true);
     ApplicationGui::raise();
     logBrowser->open();
 }

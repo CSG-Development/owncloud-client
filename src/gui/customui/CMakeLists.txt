@@ -42,7 +42,6 @@ add_library(${LIBRARY_NAME} STATIC
     overlaywidget.h
     loginpushbutton.cpp
     loginpushbutton.h
-    focusproxy.cpp
     focusproxy.h
     customui_res.qrc
     codeinputwidget.cpp

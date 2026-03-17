@@ -25,7 +25,6 @@
 #include "platform.h"
 #include "telemetry/Telemetry.h"
 
-class QMessageBox;
 class QSystemTrayIcon;
 class QSocket;
 

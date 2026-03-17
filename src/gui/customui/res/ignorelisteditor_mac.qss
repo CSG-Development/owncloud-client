@@ -1,0 +1,89 @@
+.helper_frame { border: none; }
+
+#frame,
+#frameTitle,
+#frameButtons {border-radius: 7px;}
+
+#frameContent,
+#frameButtons {
+    border: none;
+}
+
+#frameTitle {
+    border-bottom: none;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+#frameButtons {
+    border-top: none;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+#lblHeaderTitle {
+    font-size: 16px;
+    font-weight: bold;
+    padding-top: 20px;
+    padding-left: -3px;
+}
+
+QTableWidget::indicator {
+    width: 16px;
+    height: 20px;
+}
+
+QAbstractItemView {
+    icon-size: 20px;
+}
+
+[theme="light"] #frame {
+    background: #FFFFFF;
+    border: 1px solid rgb(203, 205, 211);
+}
+
+[theme="light"] #frameContent {
+    background: #FFFFFF;
+}
+
+[theme="light"] #frameButtons {
+    background: rgb(240, 241, 245);
+}
+
+[theme="light"] #frameGrid {
+    background: rgba(240, 241, 245, 1);
+    border: 1px solid rgba(203, 205, 211, 1);
+}
+
+[theme="light"] QTableWidget::indicator:checked {image: url(:/res/checkbox/light/normal/checked.svg);}
+[theme="light"] QTableWidget::indicator:unchecked {image: url(:/res/checkbox/light/normal/unchecked.svg);}
+[theme="light"] QTableWidget::indicator:checked:hover {image: url(:/res/checkbox/light/hover/checked.svg);}
+[theme="light"] QTableWidget::indicator:unchecked:hover {image: url(:/res/checkbox/light/hover/unchecked.svg);}
+[theme="light"] QTableWidget::indicator:checked:pressed {image: url(:/res/checkbox/light/pressed/checked.svg);}
+[theme="light"] QTableWidget::indicator:unchecked:pressed {image: url(:/res/checkbox/light/pressed/unchecked.svg);}
+[theme="light"] QTableWidget::indicator:checked:disabled {image: url(:/res/checkbox/light/disabled/checked.svg);}
+[theme="light"] QTableWidget::indicator:unchecked:disabled {image: url(:/res/checkbox/light/disabled/unchecked.svg);}
+
+[theme="dark"] #frame {background: #000000;}
+
+[theme="dark"] #frameContent {
+    background: rgb(38, 38, 41);
+}
+
+[theme="dark"] #frameButtons {
+    background: rgb(61, 61, 65);
+}
+
+[theme="dark"] #frameGrid {
+    background: rgba(61, 62, 65, 1);
+    border: 1px solid rgba(97, 97, 97, 1);
+}
+
+[theme="dark"] QTableWidget::indicator:checked {image: url(:/res/checkbox/dark/normal/checked.svg);}
+[theme="dark"] QTableWidget::indicator:unchecked {image: url(:/res/checkbox/dark/normal/unchecked.svg);}
+[theme="dark"] QTableWidget::indicator:checked:hover {image: url(:/res/checkbox/dark/hover/checked.svg);}
+[theme="dark"] QTableWidget::indicator:unchecked:hover {image: url(:/res/checkbox/dark/hover/unchecked.svg);}
+[theme="dark"] QTableWidget::indicator:checked:pressed {image: url(:/res/checkbox/dark/pressed/checked.svg);}
+[theme="dark"] QTableWidget::indicator:unchecked:pressed {image: url(:/res/checkbox/dark/pressed/unchecked.svg);}
+[theme="dark"] QTableWidget::indicator:checked:disabled {image: url(:/res/checkbox/dark/disabled/checked.svg);}
+[theme="dark"] QTableWidget::indicator:unchecked:disabled {image: url(:/res/checkbox/dark/disabled/unchecked.svg);}

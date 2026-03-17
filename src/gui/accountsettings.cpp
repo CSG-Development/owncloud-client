@@ -34,6 +34,7 @@
 #include "theme.h"
 #include "tooltipupdater.h"
 #include "customui/stylehelper.h"
+#include "customdialogs/custommessagebox.h"
 #include "devwidget.h"
 #include "socketapi/socketapi.h"
 #include "device/devicedefines.h"
@@ -46,7 +47,6 @@
 #include <QDir>
 #include <QIcon>
 #include <QKeySequence>
-#include <QMessageBox>
 #include <QPropertyAnimation>
 #include <QSortFilterProxyModel>
 #include <QToolTip>
@@ -540,21 +540,16 @@ void AccountSettings::slotRemoveCurrentFolder()
         qCInfo(lcAccountSettings) << "Remove Folder " << folder->path();
         QString shortGuiLocalPath = folder->shortGuiLocalPath();
 
-        auto messageBox = new QMessageBox(QMessageBox::Question,
-            tr("Confirm Folder Sync Connection Removal"),
-            tr("<p>Do you really want to stop syncing the folder <i>%1</i>?</p>"
-               "<p><b>Note:</b> This will <b>not</b> delete any files.</p>")
-                .arg(shortGuiLocalPath),
-            QMessageBox::NoButton,
-            ocApp()->gui()->settingsDialog());
-        messageBox->setAttribute(Qt::WA_DeleteOnClose);
-        QPushButton *yesButton =
-            messageBox->addButton(tr("Remove Folder Sync Connection"), QMessageBox::YesRole);
-        yesButton->setCursor(Qt::PointingHandCursor);
-        messageBox->addButton(tr("Cancel"), QMessageBox::NoRole);
-        StyleHelper::applyPushButtonStyle(messageBox);
-        connect(messageBox, &QMessageBox::finished, this, [messageBox, yesButton, folder, row, this]{
-            if (messageBox->clickedButton() == yesButton) {
+        auto messageBox = new CustomMessageBox(ocApp()->gui()->settingsDialog());
+        messageBox->setHeaderText(tr("Confirm Folder Sync Connection Removal"))
+            .setMessageText(tr("<p>Do you really want to stop syncing the folder <i>%1</i>?</p>"
+                               "<p><b>Note:</b> This will <b>not</b> delete any files.</p>").arg(shortGuiLocalPath))
+            .setAcceptButtonText(tr("Remove Folder Sync Connection"))
+            .setRejectButtonText(tr("Cancel"))
+            .setDeleteOnClose(true);
+
+        connect(messageBox, &CustomMessageBox::finished, this, [folder, row, this](int result){
+            if (result == QDialog::Accepted) {
                 FolderMan::instance()->removeFolder(folder);
                 _sortModel->removeRow(row);
 
@@ -573,9 +568,8 @@ void AccountSettings::slotEnableVfsCurrentFolder()
     if (!selected.isValid() || !folder)
         return;
 
-    auto messageBox = new AskExperimentalVirtualFilesFeatureMessageBox(ocApp()->gui()->settingsDialog());
-
-    connect(messageBox, &AskExperimentalVirtualFilesFeatureMessageBox::accepted, this, [this, folder]() {
+    auto messageBox = CreateExperimentalVirtualFilesFeatureMessageBox(ocApp()->gui()->settingsDialog());
+    connect(messageBox, &CustomMessageBox::accepted, this, [this, folder]() {
         if (!folder) {
             return;
         }
@@ -626,7 +620,11 @@ void AccountSettings::slotEnableVfsCurrentFolder()
         Q_EMIT messageBox->accepted();
     } else {
         ApplicationGui::raise();
+#ifdef Q_OS_MACOS
         messageBox->show();
+#else
+        messageBox->open();
+#endif
     }
 }
 
@@ -637,22 +635,23 @@ void AccountSettings::slotDisableVfsCurrentFolder()
     if (!selected.isValid() || !folder)
         return;
 
-    auto msgBox = new QMessageBox(
-        QMessageBox::Question,
-        tr("Disable virtual file support?"),
-        tr("This action will disable virtual file support. As a consequence contents of folders that "
+    auto msgBox = new CustomMessageBox();
+    msgBox->setHeaderText(tr("Disable virtual file support?"))
+        .setMessageText(tr("This action will disable virtual file support. As a consequence contents of folders that "
            "are currently marked as 'available online only' will be downloaded."
            "\n\n"
            "The only advantage of disabling virtual file support is that the selective sync feature "
            "will become available again."
            "\n\n"
-           "This action will abort any currently running synchronization."));
-    auto acceptButton = msgBox->addButton(tr("Disable support"), QMessageBox::AcceptRole);
-    msgBox->addButton(tr("Cancel"), QMessageBox::RejectRole);
-    StyleHelper::applyPushButtonStyle(msgBox);
-    connect(msgBox, &QMessageBox::finished, msgBox, [this, msgBox, folder, acceptButton] {
+           "This action will abort any currently running synchronization."))
+        .setAcceptButtonText(tr("Disable support"))
+        .setRejectButtonText(tr("Cancel"))
+        .setWarningIconVisible(true)
+        .setWide(true);
+
+    connect(msgBox, &CustomMessageBox::finished, msgBox, [this, msgBox, folder](int result) {
         msgBox->deleteLater();
-        if (msgBox->clickedButton() != acceptButton|| !folder)
+        if (result != QDialog::Accepted || !folder)
             return;
 
         // It is unsafe to switch off vfs while a sync is running - wait if necessary.
@@ -716,12 +715,13 @@ void AccountSettings::slotEnableCurrentFolder(bool terminate)
         if (!currentlyPaused && !terminate) {
             // check if a sync is still running and if so, ask if we should terminate.
             if (folder->isSyncRunning()) { // its still running
-                auto msgbox = new QMessageBox(QMessageBox::Question, tr("Sync Running"),
-                    tr("The sync operation is running.<br/>Do you want to stop it?"),
-                    QMessageBox::Yes | QMessageBox::No, this);
-                msgbox->setAttribute(Qt::WA_DeleteOnClose);
-                msgbox->setDefaultButton(QMessageBox::Yes);
-                connect(msgbox, &QMessageBox::accepted, this, [this]{
+                auto msgbox = new CustomMessageBox(this);
+                msgbox->setHeaderText(tr("Sync Running"))
+                    .setMessageText(tr("The sync operation is running.<br/>Do you want to stop it?"))
+                    .setAcceptButtonText(tr("Yes"))
+                    .setAcceptButtonText(tr("No"))
+                    .setDeleteOnClose(true);
+                connect(msgbox, &CustomMessageBox::accepted, this, [this]{
                     slotEnableCurrentFolder(true);
                 });
                 msgbox->open();
@@ -1102,20 +1102,16 @@ void AccountSettings::slotDeleteAccount()
         return;
 
     // Deleting the account potentially deletes 'this', so
-    // the QMessageBox should be destroyed before that happens.
-    auto messageBox = new QMessageBox(QMessageBox::Question,
-        tr("Confirm Account Removal"),
-        tr("<p>Do you really want to remove the connection to the account <i>%1</i>?</p>"
-           "<p><b>Note:</b> This will <b>not</b> delete any files.</p>")
-            .arg(_accountState->account()->displayName()),
-        QMessageBox::NoButton,
-        this);
-    auto yesButton = messageBox->addButton(tr("Remove connection"), QMessageBox::YesRole);
-    messageBox->addButton(tr("Cancel"), QMessageBox::NoRole);
-    StyleHelper::applyPushButtonStyle(messageBox);
+    // the MessageBox should be destroyed before that happens.
+    auto messageBox = new CustomMessageBox(this);
+    messageBox->setHeaderText(tr("Confirm Account Removal"))
+        .setMessageText(tr("<p>Do you really want to remove the connection to the account <i>%1</i>?</p>"
+           "<p><b>Note:</b> This will <b>not</b> delete any files.</p>").arg(_accountState->account()->displayName()))
+        .setAcceptButtonText(tr("Remove connection"))
+        .setRejectButtonText(tr("Cancel"));
 
-    connect(messageBox, &QMessageBox::finished, this, [this,yesButton,messageBox]{
-        if (messageBox->clickedButton() == yesButton) {
+    connect(messageBox, &CustomMessageBox::finished, this, [this] (int result) {
+        if (result == QDialog::Accepted) {
             auto manager = AccountManager::instance();
             manager->deleteAccount(_accountState);
             manager->save();

@@ -398,17 +398,19 @@ QString Theme::about() const
     const QString vendor = isVanilla() ? QStringLiteral("Seagate Technologies LLC") : QStringLiteral(APPLICATION_VENDOR);
     return tr("<p>Version %1. For more information visit <a href=\"%2\">https://%3</a></p>"
               "<p>For known issues and help, please visit: <a href=\"https://central.owncloud.com/c/desktop-client\">https://central.owncloud.com</a></p>"
-              "<p><small>By Klaas Freitag, Daniel Molkentin, Olivier Goffart, Markus Götz, "
+              "<p>By Klaas Freitag, Daniel Molkentin, Olivier Goffart, Markus Götz, "
               " Jan-Christoph Borchardt, Thomas Müller,<br>"
-              "Dominik Schmidt, Michael Stingl, Hannah von Reth, Fabian Müller and others.</small></p>"
+              "Dominik Schmidt, Michael Stingl, Hannah von Reth, Fabian Müller and others.</p>"
               "<p>Copyright Seagate Technologies LLC</p>"
               "<p>Distributed by %4 and licensed under the GNU General Public License (GPL) Version 2.0.<br/>"
               "%5 and the %5 logo are registered trademarks of %4 in the "
               "United States, other countries, or both.</p>"
-              "<p><small>%6</small></p>")
-        .arg(Utility::escape(Version::displayString()), Utility::escape(QStringLiteral("https://" APPLICATION_DOMAIN)),
-            Utility::escape(QStringLiteral(APPLICATION_DOMAIN)), Utility::escape(vendor), Utility::escape(appNameGUI()),
-            aboutVersions(Theme::VersionFormat::RichText));
+              "<p>%6</p>")
+        .arg(Utility::escape(Version::displayString()),
+             Utility::escape(QStringLiteral("https://" APPLICATION_DOMAIN)),
+             Utility::escape(QStringLiteral(APPLICATION_DOMAIN)),
+             Utility::escape(vendor), Utility::escape(appNameGUI()),
+             aboutVersions(Theme::VersionFormat::RichText));
 }
 
 bool Theme::aboutShowCopyright() const

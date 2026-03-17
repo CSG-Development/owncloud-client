@@ -1,0 +1,50 @@
+.helper_frame { border: none; }
+
+#frame {
+    border-radius: 10px;
+    border: 1px solid transparent;
+}
+
+#frameContent, #frameButtons {
+    border: none;
+    background: transparent;
+}
+
+#btnIcon, #btnIcon:pressed {
+    border: none;
+    padding: 0px;
+}
+
+#lblHeader {
+    font-size: 14px;
+}
+
+#lblText {
+    font-size: 12px;
+}
+
+#btnAccept,
+#btnReject {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    border-radius: 6px;
+}
+
+[theme="light"] #frame {background: #FFFFFF;}
+[theme="light"] #lblHeader,
+[theme="light"] #lblText {color: rgba(0, 0, 0, 0.87);}
+[theme="light"] #btnAccept {
+    color: rgba(255, 255, 255, 0.87);
+    background: rgba(25, 118, 210, 1);
+    border: none;
+}
+[theme="light"] #btnReject {
+    color: rgba(0, 0, 0, 0.87);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(223, 223, 223, 1);
+}
+
+[theme="dark"] #frame {background: rgba(38, 39, 41, 1);}
+[theme="dark"] #lblHeader,
+[theme="dark"] #lblText {color: rgba(255, 255, 255, 0.87);}
