@@ -112,7 +112,7 @@ bool CodeInputWidget::eventFilter(QObject *obj, QEvent *event)
             if (!ed->text().isEmpty()) {
                 ed->selectAll();
                 if (errorState) {
-                    setErrorState(false);
+                    // setErrorState(false);
                     emit focusGained();
                 }
             }

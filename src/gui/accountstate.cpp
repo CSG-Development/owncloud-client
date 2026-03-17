@@ -669,6 +669,7 @@ void AccountState::initializeRA()
         }
         else { qCDebug(lcAccountState) << "errorCancel id isn't match"; }
     });
+
     connect(oc.get(), &OverlayController::errorOk, this, [this](ErrorDialogState state, const QUuid& id) {
         if (_account && _account->uuid() == id) {
             qCDebug(lcAccountState) << "errorOk";
@@ -678,7 +679,6 @@ void AccountState::initializeRA()
     });
 
     connect(_deviceController, &DeviceController::accessCodeRequest, this, [this,oc] {
-        qCDebug(lcAccountState) << "accessCodeRequest";
         if (oc && _account) {
             qCDebug(lcAccountState) << "accessCodeRequest";
             oc->requestAccessCode(_account->uuid(), true);
