@@ -27,6 +27,8 @@ protected:
 
     QPainterPath focusFrame(const QRectF& r);
 
+    static QIcon pickIcon(bool checked, bool hovered, bool pressed, bool disabled, bool dark);
+
 private:
     QSize iconSize_ {20, 20};
     int frameWidth_ = 2;

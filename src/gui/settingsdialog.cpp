@@ -336,7 +336,11 @@ SettingsDialog::SettingsDialog(ApplicationGui *gui, QWidget *parent)
     connect(_ui->dialogStack, &QStackedWidget::currentChanged, this, [this] {
         auto *w = _ui->dialogStack->currentWidget();
         if (!w->windowTitle().isEmpty()) {
-            setWindowTitle(tr("%1 - %2").arg(Theme::instance()->appNameGUI(), w->windowTitle()));
+            if (w->objectName() == QStringLiteral("SetupWidget")) {
+                setWindowTitle(w->windowTitle());
+            } else {
+                setWindowTitle(tr("%1 - %2").arg(Theme::instance()->appNameGUI(), w->windowTitle()));
+            }
         } else {
             setWindowTitle(Theme::instance()->appNameGUI());
         }
@@ -401,18 +405,6 @@ QWidget* SettingsDialog::currentPage()
 {
     return _ui->stack->currentWidget();
 }
-
-// void SettingsDialog::attachCodeDialog(bool attach)
-// {
-//     disconnect(_codeDialog, &CodeDialog::codeAction, this, nullptr);
-
-//     if (attach) {
-//         connect(_codeDialog, &CodeDialog::codeAction, this, [this](CodeAction act, const QString& /*code*/) {
-//             if (act == CodeAction::Skip)
-//                 showCodePage(CodeRequestDialog::Hide, SyncState::Enabled);
-//         });
-//     }
-// }
 
 void SettingsDialog::changeEvent(QEvent *e)
 {

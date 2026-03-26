@@ -50,9 +50,17 @@ CodeInputWidget::CodeInputWidget(QWidget *parent)
 
     ui->ed1->setFocus();
 
+    connect(APP::Theme::instance(), &APP::Theme::themeChanged, this, [this](bool isDark) {
+        darkTheme_.setValue(isDark);
+    });
+
+    darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
     themeNotifier = darkTheme_.addNotifier([this] {
         updateStyles();
     });
+
+
+
     updateStyles();
 }
 

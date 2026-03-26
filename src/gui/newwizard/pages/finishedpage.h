@@ -7,6 +7,10 @@
 
 namespace Ui {class FinishedPage;}
 
+class QFrame;
+class QRadioButton;
+class FocusFrame;
+
 class FinishedPage : public QWidget
 {
     Q_OBJECT
@@ -23,7 +27,6 @@ public:
         bool vfsModeIsExperimental);
 
     void updateTheme();
-    void showErrorMessage(const QString& msg);
 
     APP::Wizard::SyncMode syncMode() const;
     QString syncTargetDir() const;
@@ -33,6 +36,8 @@ public:
 
     QBindable<bool> bindableDarkTheme() {return &darkTheme_;}
 
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 Q_SIGNALS:
     void backClicked();
     void doneClicked(APP::Wizard::SyncMode syncMode, const QString& targetDir);
@@ -40,6 +45,10 @@ Q_SIGNALS:
 private:
     void advancedStateChanged(bool checked);
     void onBrowseClicked();
+
+    void handleFrameEvent(QEvent *event, QRadioButton* button);
+    bool handleFrameMouse(QEvent *event, QRadioButton* button);
+    void handleFocusEvent(QEvent *event, FocusFrame* frame);
 
     Ui::FinishedPage *ui = nullptr;
     QString defaultTargetDir_;

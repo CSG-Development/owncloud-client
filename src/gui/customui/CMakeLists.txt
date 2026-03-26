@@ -24,10 +24,7 @@ add_library(${LIBRARY_NAME} STATIC
     ccheckbox.h
     checkboxres.cpp
     checkboxres.h
-    cradiobutton.cpp
-    cradiobutton.h
-    radiobuttonres.cpp
-    radiobuttonres.h
+    radioindicatorproxy.h
     inputwidget.cpp
     inputwidget.h
     inputwidget.ui
