@@ -25,6 +25,7 @@ std::pair<QString,QString> backIcon = {
     QStringLiteral(":/res/login/arrow_back_btn_dark.svg")
 };
 constexpr int code_expire_seconds = 10 * 60;     // 10 min
+const auto widget_style = QStringLiteral(":/res/login/cred_page.qss");
 }
 
 Q_LOGGING_CATEGORY(lcCredPage, "gui.page.credential", QtDebugMsg)
@@ -35,7 +36,7 @@ CredentialsPage::CredentialsPage(QWidget *parent)
 {
     ui->setupUi(this);
 
-    setStyleSheet(APP::StyleHelper::loadFileToString(QStringLiteral(":/res/login/cred_page.qss")));
+    setStyleSheet(APP::StyleHelper::loadFileToString(widget_style));
 
     themeNotifier = darkTheme_.addNotifier([this] {
         updateTheme();
@@ -62,8 +63,17 @@ CredentialsPage::CredentialsPage(QWidget *parent)
         emit actionTriggered(CredentialsAction::CancelClicked);
     });
     connect(ui->btnSettings, &QToolButton::clicked, this, [this] {
-        showDevicesInfo(true);
-        emit actionTriggered(CredentialsAction::SettingsClicked);
+        // showDevicesInfo(true);
+        // emit actionTriggered(CredentialsAction::SettingsClicked);
+        // static bool visible = false;
+        // if (!visible) {
+        //     showErrorMessage(tr("Some error message"));
+        //     visible = true;
+        // }
+        // else {
+        //     showErrorMessage({});
+        //     visible = false;
+        // }
     });
 
     connect(ui->btnCantFindDevice, &QPushButton::clicked, this, [this] {
@@ -109,10 +119,10 @@ CredentialsPage::CredentialsPage(QWidget *parent)
 
     ui->btnSettings->setVisible(false);
 
-    showErrorMessage({});
     showProgressIndicator(false);
 
     updateTheme();
+    showErrorMessage({});
 }
 
 CredentialsPage::~CredentialsPage()
@@ -176,9 +186,23 @@ QString CredentialsPage::password() const
 void CredentialsPage::showErrorMessage(const QString& msg, const QString& tooltip)
 {
     showProgressIndicator(false);
-    ui->frameErrorMessage->setVisible(!msg.isEmpty());
+    const bool hasError = !msg.isEmpty();
+
     ui->lblErrorText->setText(msg);
     ui->lblErrorText->setToolTip(tooltip);
+    ui->frameErrorMessage->setVisible(hasError);
+
+    ui->frameContent->layout()->invalidate();
+    ui->frameContent->layout()->activate();
+
+    if (hasError) {
+        QTimer::singleShot(0, window(), [this]() {
+            // Use sizeHint height directly, ignore broken adjustSize() on macOS.
+            const int newHeight = window()->sizeHint().height();
+            window()->resize(window()->width(), newHeight);
+        });
+    }
+
 }
 
 void CredentialsPage::showInvalidUrlError()
@@ -191,6 +215,7 @@ void CredentialsPage::showInvalidCredentialsError()
 {
     ui->edPassword->setErrorState(true, {});
     ui->btnLogin->setEnabled(false);
+    showErrorMessage(tr("Incorrect password"));
 }
 
 void CredentialsPage::showProgressIndicator(bool show)
@@ -247,6 +272,7 @@ void CredentialsPage::onTextEdited(const QString&/*txt*/)
     }
     else if (sender() == ui->edPassword) {
         ui->edPassword->setErrorState(false);
+        showErrorMessage({});
     }
 
     validateFormData();

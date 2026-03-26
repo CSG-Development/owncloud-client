@@ -27,7 +27,7 @@
        <number>3</number>
       </property>
       <item>
-       <widget class="CRadioButton" name="noProxyRadioButton">
+       <widget class="QRadioButton" name="noProxyRadioButton">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -49,13 +49,16 @@
         <property name="checked">
          <bool>true</bool>
         </property>
+        <property name="class" stdset="0">
+         <string notr="true">button_radio</string>
+        </property>
         <attribute name="buttonGroup">
          <string notr="true">proxyButtonGroup</string>
         </attribute>
        </widget>
       </item>
       <item>
-       <widget class="CRadioButton" name="systemProxyRadioButton">
+       <widget class="QRadioButton" name="systemProxyRadioButton">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -74,6 +77,9 @@
         <property name="text">
          <string>Use system proxy</string>
         </property>
+        <property name="class" stdset="0">
+         <string notr="true">button_radio</string>
+        </property>
         <attribute name="buttonGroup">
          <string notr="true">proxyButtonGroup</string>
         </attribute>
@@ -82,7 +88,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="CRadioButton" name="manualProxyRadioButton">
+         <widget class="QRadioButton" name="manualProxyRadioButton">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -100,6 +106,9 @@
           </property>
           <property name="text">
            <string>Specify proxy manually as</string>
+          </property>
+          <property name="class" stdset="0">
+           <string notr="true">button_radio</string>
           </property>
           <attribute name="buttonGroup">
            <string notr="true">proxyButtonGroup</string>
@@ -271,7 +280,7 @@
          <number>3</number>
         </property>
         <item>
-         <widget class="CRadioButton" name="noDownloadLimitRadioButton">
+         <widget class="QRadioButton" name="noDownloadLimitRadioButton">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -293,10 +302,13 @@
           <property name="checked">
            <bool>true</bool>
           </property>
+          <property name="class" stdset="0">
+           <string notr="true">button_radio</string>
+          </property>
          </widget>
         </item>
         <item>
-         <widget class="CRadioButton" name="autoDownloadLimitRadioButton">
+         <widget class="QRadioButton" name="autoDownloadLimitRadioButton">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -318,12 +330,15 @@
           <property name="text">
            <string>Limit automatically</string>
           </property>
+          <property name="class" stdset="0">
+           <string notr="true">button_radio</string>
+          </property>
          </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
-           <widget class="CRadioButton" name="downloadLimitRadioButton">
+           <widget class="QRadioButton" name="downloadLimitRadioButton">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -341,6 +356,9 @@
             </property>
             <property name="text">
              <string>Limit to</string>
+            </property>
+            <property name="class" stdset="0">
+             <string notr="true">button_radio</string>
             </property>
            </widget>
           </item>
@@ -398,7 +416,7 @@
          <number>3</number>
         </property>
         <item>
-         <widget class="CRadioButton" name="noUploadLimitRadioButton">
+         <widget class="QRadioButton" name="noUploadLimitRadioButton">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -420,10 +438,13 @@
           <property name="checked">
            <bool>true</bool>
           </property>
+          <property name="class" stdset="0">
+           <string notr="true">button_radio</string>
+          </property>
          </widget>
         </item>
         <item>
-         <widget class="CRadioButton" name="autoUploadLimitRadioButton">
+         <widget class="QRadioButton" name="autoUploadLimitRadioButton">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -445,12 +466,15 @@
           <property name="text">
            <string>Limit automatically</string>
           </property>
+          <property name="class" stdset="0">
+           <string notr="true">button_radio</string>
+          </property>
          </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
-           <widget class="CRadioButton" name="uploadLimitRadioButton">
+           <widget class="QRadioButton" name="uploadLimitRadioButton">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -468,6 +492,9 @@
             </property>
             <property name="text">
              <string>Limit to</string>
+            </property>
+            <property name="class" stdset="0">
+             <string notr="true">button_radio</string>
             </property>
            </widget>
           </item>
@@ -521,11 +548,6 @@
    <class>CCheckBox</class>
    <extends>QCheckBox</extends>
    <header>gui/customui/ccheckbox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>CRadioButton</class>
-   <extends>QRadioButton</extends>
-   <header>gui/customui/cradiobutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

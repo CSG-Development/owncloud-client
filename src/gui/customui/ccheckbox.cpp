@@ -5,12 +5,14 @@
 
 #include <QPainter>
 #include <QStyleOptionButton>
+#include <QStyle>
 #include <QFlags>
 #include <QScreen>
 
 namespace {
 std::pair<QColor,QColor> textColor =       {QColor(0,0,0,0xDE), QColor(0xFF,0xFF,0xFF,0xDE)};
 std::pair<QColor,QColor> focusFrameColor = {QColor(0,0,0,0xDE), QColor(0xFF,0xFF,0xFF,0xDE)};
+const QSize icon_size = {20, 20};
 }
 
 CCheckBox::CCheckBox(QWidget* parent)
@@ -65,10 +67,16 @@ void CCheckBox::paintEvent(QPaintEvent* /*event*/)
 
     painter.setRenderHint(QPainter::Antialiasing);
 
-    int icon_offs = (contentRect.height() - iconSize().height()) / 2;
+    int icon_offs = (contentRect.height() - icon_size.height()) / 2;
 
-    const auto& icon = CheckboxRes::getChkIcon(so.state, darkTheme_.value());
-    icon.paint(&painter, QRect(QPoint(contentRect.x() + icon_offs, contentRect.y() + icon_offs), iconSize()));
+    const bool checked  = so.state & QStyle::State_On;
+    const bool hovered  = so.state & QStyle::State_MouseOver;
+    const bool pressed  = so.state & QStyle::State_Sunken;
+    const bool disabled = !(so.state & QStyle::State_Enabled);
+    const bool dark     = darkTheme_.value();
+
+    const auto& icon = pickIcon(checked, hovered, pressed, disabled, dark);
+    icon.paint(&painter, QRect(QPoint(contentRect.x() + icon_offs, contentRect.y() + icon_offs), icon_size));
 
     if (so.state.testFlag(QStyle::State_Enabled)) {
         if (so.state.testFlag(QStyle::State_HasFocus)) {
@@ -78,7 +86,7 @@ void CCheckBox::paintEvent(QPaintEvent* /*event*/)
     }
 
     QRectF textRect = contentRect;
-    textRect.adjust(contentRect.x() + icon_offs * 2 + iconSize().width(), 1,  contentRect.x() + icon_offs, 0);
+    textRect.adjust(contentRect.x() + icon_offs * 2 + icon_size.width(), 1,  contentRect.x() + icon_offs, 0);
 
     int alignment = style()->visualAlignment(layoutDirection(), Qt::AlignLeft | Qt::AlignVCenter);
 
@@ -109,4 +117,46 @@ QPainterPath CCheckBox::focusFrame(const QRectF& r)
     QPainterPath p;
     p.addRoundedRect(r, frameRadius_, frameRadius_);
     return p;
+}
+
+QIcon CCheckBox::pickIcon(bool checked, bool hovered, bool pressed, bool disabled, bool dark)
+{
+    static const auto _ = [] {
+        Q_INIT_RESOURCE(customui_res);
+        return true;
+    }();
+
+    // state: 0=normal, 1=hover, 2=pressed, 3=disabled
+    static const QIcon icons[2][2][4] = {
+    { // light
+        { // unchecked
+            QIcon(QStringLiteral(":/res/checkbox/light/normal/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox/light/hover/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox/light/pressed/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox/light/disabled/unchecked.svg")),
+        },
+        { // checked
+            QIcon(QStringLiteral(":/res/checkbox/light/normal/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox/light/hover/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox/light/pressed/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox/light/disabled/checked.svg")),
+        },
+    },
+    { // dark
+        { /* unchecked dark ... */
+            QIcon(QStringLiteral(":/res/checkbox/dark/normal/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox/dark/hover/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox/dark/pressed/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox/dark/disabled/unchecked.svg")),
+        },
+        { /* checked dark ... */
+            QIcon(QStringLiteral(":/res/checkbox/dark/normal/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox/dark/hover/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox/dark/pressed/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox/dark/disabled/checked.svg")),
+        },
+        },
+    };
+    const int state = disabled ? 3 : pressed ? 2 : hovered ? 1 : 0;
+    return icons[dark ? 1 : 0][checked ? 1 : 0][state];
 }

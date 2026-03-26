@@ -102,9 +102,13 @@
         <file>res/login/gear_light.svg</file>
         <file>res/login/reset_dark.svg</file>
         <file>res/login/reset_light.svg</file>
+        <file>res/login/reset_light_disabled.svg</file>
+        <file>res/login/reset_dark_disabled.svg</file>
         <file>res/login/setupwidget.qss</file>
         <file>res/login/wait_page.qss</file>
         <file>res/login/warning_light.svg</file>
+        <file>res/login/vfs_warning_dark.svg</file>
+        <file>res/login/vfs_warning_light.svg</file>
         <file>res/login/codedialog.qss</file>
         <file>res/login/errordialog.qss</file>
         <file>res/login/refresh_light.svg</file>

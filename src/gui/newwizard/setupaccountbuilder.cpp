@@ -126,6 +126,9 @@ void SetupAccountBuilder::setLegacyWebFingerUsername(const QString &username)
 
 AccountPtr SetupAccountBuilder::build()
 {
+    if (_serverUrl.isEmpty() || !_serverUrl.isValid()) {
+        return nullptr;
+    }
     auto newAccountPtr = Account::create(QUuid::createUuid());
 
     Q_ASSERT(!_serverUrl.isEmpty() && _serverUrl.isValid());

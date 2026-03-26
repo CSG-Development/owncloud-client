@@ -23,6 +23,7 @@
 
 #include "resources/resources.h"
 #include "customui/stylehelper.h"
+#include "customui/radioindicatorproxy.h"
 #include "customdialogs/custommessagebox.h"
 
 #include "QProgressIndicator.h"
@@ -54,6 +55,10 @@ ShareLinkWidget::ShareLinkWidget(AccountPtr account,
     _ui->setupUi(this);
 
     StyleHelper::applyPushButtonStyle(this);
+
+    _ui->radio_readOnly->setStyle(new RadioIndicatorProxy(_ui->radio_readOnly));
+    _ui->radio_readWrite->setStyle(new RadioIndicatorProxy(_ui->radio_readWrite));
+    _ui->radio_uploadOnly->setStyle(new RadioIndicatorProxy(_ui->radio_uploadOnly));
 
     _ui->linkShares->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     _ui->linkShares->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);

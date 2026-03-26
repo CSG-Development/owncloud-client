@@ -35,7 +35,7 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-123</y>
+        <y>0</y>
         <width>487</width>
         <height>584</height>
        </rect>
@@ -169,7 +169,7 @@
              <item>
               <layout class="QHBoxLayout" name="layout_editing">
                <item>
-                <widget class="CRadioButton" name="radio_readOnly">
+                <widget class="QRadioButton" name="radio_readOnly">
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -184,6 +184,9 @@
                  </property>
                  <property name="text">
                   <string>Download / View</string>
+                 </property>
+                 <property name="class" stdset="0">
+                  <string notr="true">button_radio</string>
                  </property>
                 </widget>
                </item>
@@ -206,7 +209,7 @@
               </widget>
              </item>
              <item>
-              <widget class="CRadioButton" name="radio_readWrite">
+              <widget class="QRadioButton" name="radio_readWrite">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -221,6 +224,9 @@
                </property>
                <property name="text">
                 <string>Download / View / Edit</string>
+               </property>
+               <property name="class" stdset="0">
+                <string notr="true">button_radio</string>
                </property>
               </widget>
              </item>
@@ -241,7 +247,7 @@
               </widget>
              </item>
              <item>
-              <widget class="CRadioButton" name="radio_uploadOnly">
+              <widget class="QRadioButton" name="radio_uploadOnly">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -256,6 +262,9 @@
                </property>
                <property name="text">
                 <string>Upload only (File Drop)</string>
+               </property>
+               <property name="class" stdset="0">
+                <string notr="true">button_radio</string>
                </property>
               </widget>
              </item>
@@ -571,11 +580,6 @@
    <class>CCheckBox</class>
    <extends>QCheckBox</extends>
    <header>gui/customui/ccheckbox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>CRadioButton</class>
-   <extends>QRadioButton</extends>
-   <header>gui/customui/cradiobutton.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

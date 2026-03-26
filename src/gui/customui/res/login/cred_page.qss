@@ -29,6 +29,7 @@
 
 .text_button {
     font-size: 14px;
+    font-weight: bold;
     outline: none;
     border: 1px solid transparent;
     border-radius: 18px;
@@ -95,7 +96,7 @@
 [theme="dark"] .text_button { color: rgba(100, 181, 246, 1); }
 [theme="dark"] .text_button:disabled { color: rgba(158, 158, 158, 1); }
 [theme="dark"] .text_button:hover { background: rgba(144, 202, 249, 0.12); }
-[theme="dark"] .text_button::pressed { background: rgba(144, 202, 249, 0.3); }
+[theme="dark"] .text_button:pressed { background: rgba(144, 202, 249, 0.3); }
 
 [theme="dark"] .button_icon_tool:hover { background: rgba(144, 202, 249, 0.12); }
 [theme="dark"] .button_icon_tool:pressed { background: rgba(144, 202, 249, 0.3); }

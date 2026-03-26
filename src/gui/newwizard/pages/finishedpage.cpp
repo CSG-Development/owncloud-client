@@ -2,30 +2,44 @@
 #include "ui_finishedpage.h"
 #include "gui/customui/stylehelper.h"
 #include "gui/customui/loginpushbutton.h"
+#include "gui/customui/radioindicatorproxy.h"
 #include "gui/customdialogs/custommessagebox.h"
+#include "gui/customdialogs/dlgutils.h"
 #include "theme.h"
 
 #include <QFileDialog>
+#include <QMouseEvent>
 
 namespace {
 constexpr int smallHeight = 232;
 constexpr int advHeight = 540;
-QPair<QString,QString> doneIcon = {
+constexpr QSize icon_size = {24, 24};
+const auto widget_style = QStringLiteral(":/res/login/finished_page.qss");
+std::pair<QString,QString> doneIcon = {
     QStringLiteral(":/res/login/done_light.svg"),
     QStringLiteral(":/res/login/done_dark.svg")
 };
-QPair<QString,QString> backIcon = {
+std::pair<QString,QString> backIcon = {
     QStringLiteral(":/res/login/back_arrow_light.svg"),
     QStringLiteral(":/res/login/back_arrow_dark.svg")
 };
-QPair<QString,QString> browseIcon = {
+std::pair<QString,QString> browseIcon = {
     QStringLiteral(":/res/login/browse_light.svg"),
     QStringLiteral(":/res/login/browse_dark.svg")
 };
-QPair<QString,QString> resetIcon = {
+std::pair<QString,QString> resetIcon = {
     QStringLiteral(":/res/login/reset_light.svg"),
     QStringLiteral(":/res/login/reset_dark.svg")
 };
+std::pair<QString,QString> warnIcon = {
+    QStringLiteral(":/res/login/vfs_warning_light.svg"),
+    QStringLiteral(":/res/login/vfs_warning_dark.svg")
+};
+const std::pair<FrameData,FrameData> frame_data = {
+    {6, 2, QColor(0, 0, 0, 222), QColor(0, 0, 0, 0), 0},
+    {6, 2, QColor(255, 255, 255, 222), QColor(0, 0, 0, 0), 0}
+};
+
 }
 
 FinishedPage::FinishedPage(QWidget *parent)
@@ -34,7 +48,14 @@ FinishedPage::FinishedPage(QWidget *parent)
 {
     ui->setupUi(this);
 
-    setStyleSheet(APP::StyleHelper::loadFileToString(QStringLiteral(":/res/login/finished_page.qss")));
+    setStyleSheet(APP::StyleHelper::loadFileToString(widget_style));
+
+    ui->btnBrowse->setIconSize(icon_size);
+    ui->btnReset->setIconSize(icon_size);
+
+    ui->rbDownloadEverything->setStyle(new RadioIndicatorProxy(ui->rbDownloadEverything));
+    ui->rbConfigManually->setStyle(new RadioIndicatorProxy(ui->rbConfigManually));
+    ui->rbUseVfs->setStyle(new RadioIndicatorProxy(ui->rbUseVfs));
 
     themeNotifier = darkTheme_.addNotifier([this] {
         updateTheme();
@@ -52,15 +73,58 @@ FinishedPage::FinishedPage(QWidget *parent)
         Q_EMIT doneClicked(syncMode(), syncTargetDir());
     });
 
+    ui->btnReset->setEnabled(false);
     connect(ui->edDownloadDir, &InputWidget::textChanged, this, [this] {
-        ui->btnReset->setEnabled(ui->edDownloadDir->text() != QDir::toNativeSeparators(defaultTargetDir_));
+        ui->btnReset->setEnabled(QDir::toNativeSeparators(ui->edDownloadDir->text()) != QDir::toNativeSeparators(defaultTargetDir_));
     });
     connect(ui->btnReset, &QToolButton::clicked, this, [this] {
         ui->edDownloadDir->setText(QDir::toNativeSeparators(defaultTargetDir_));
     });
 
     ui->btnDone->setIconSidePosition(LoginPushButton::IconSidePosition::Right);
-    showErrorMessage({});
+
+    ui->btnVfsIcon->setAttribute(Qt::WA_TransparentForMouseEvents);
+
+    ui->lblUseVfs->setAttribute(Qt::WA_TransparentForMouseEvents);
+    ui->lblConfigManually->setAttribute(Qt::WA_TransparentForMouseEvents);
+    ui->lblDownloadEverything->setAttribute(Qt::WA_TransparentForMouseEvents);
+
+    ui->frameDownloadEverything->setFrameData(APP::Theme::instance()->isDarkTheme() ? frame_data.second : frame_data.first);
+    ui->frameConfigManually->setFrameData(APP::Theme::instance()->isDarkTheme() ? frame_data.second : frame_data.first);
+    ui->frameFocusUseVfs->setFrameData(APP::Theme::instance()->isDarkTheme() ? frame_data.second : frame_data.first);
+
+    ui->frameFocusUseVfs->setFocusPolicy(Qt::StrongFocus);
+    ui->frameFocusUseVfs->installEventFilter(this);
+
+    ui->frameConfigManually->setFocusPolicy(Qt::StrongFocus);
+    ui->frameConfigManually->installEventFilter(this);
+
+    ui->frameDownloadEverything->setFocusPolicy(Qt::StrongFocus);
+    ui->frameDownloadEverything->installEventFilter(this);
+
+    // Handle focus frame
+    ui->rbDownloadEverything->installEventFilter(this);
+    ui->rbConfigManually->installEventFilter(this);
+    ui->rbUseVfs->installEventFilter(this);
+
+    auto radioHandler = [this](QRadioButton* sender, QList<QRadioButton*> others) {
+        return [this, sender, others](bool toggled) {
+            const QSignalBlocker _b1(ui->rbDownloadEverything),
+                _b2(ui->rbConfigManually),
+                _b3(ui->rbUseVfs);
+            if (toggled)
+                for (auto* rb : others) rb->setChecked(false);
+            else
+                sender->setChecked(true);
+        };
+    };
+
+    connect(ui->rbDownloadEverything, &QRadioButton::toggled, this, radioHandler(ui->rbDownloadEverything, {ui->rbConfigManually, ui->rbUseVfs}));
+    connect(ui->rbConfigManually, &QRadioButton::toggled, this, radioHandler(ui->rbConfigManually, {ui->rbDownloadEverything, ui->rbUseVfs}));
+    connect(ui->rbUseVfs, &QRadioButton::toggled, this, radioHandler(ui->rbUseVfs, {ui->rbDownloadEverything, ui->rbConfigManually}));
+
+
+    updateTheme();
 }
 
 FinishedPage::~FinishedPage()
@@ -68,18 +132,23 @@ FinishedPage::~FinishedPage()
     delete ui;
 }
 
-void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const QString &userChosenSyncTargetDir, bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental)
+void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const QString &userChosenSyncTargetDir,
+                                     bool vfsIsAvailable, bool enableVfsByDefault, bool vfsModeIsExperimental)
 {
-    ui->edDownloadDir->setText(QDir::toNativeSeparators(userChosenSyncTargetDir));
+    {
+        const QSignalBlocker b(ui->edDownloadDir);
+        ui->edDownloadDir->setText(QDir::toNativeSeparators(userChosenSyncTargetDir));
+    }
     ui->rbDownloadEverything->setChecked(true);
 
     // could also make it invisible, but then the UX is different for different installations
     // this may be overwritten by a branding option (see below)
-    ui->rbUseVfs->setEnabled(vfsIsAvailable);
-    ui->rbUseVfs->setText(tr("Use &virtual files instead of downloading content immediately"));
+    // ui->rbUseVfs->setEnabled(vfsIsAvailable);
+    // ui->rbUseVfs->setText(tr("Use &virtual files instead of downloading content immediately"));
+    ui->frameFocusUseVfs->setEnabled(vfsIsAvailable);
 
     if (vfsModeIsExperimental) {
-        ui->rbUseVfs->setIcon(QIcon(QStringLiteral(":/res/login/warning_light.svg")));
+        // ui->rbUseVfs->setIcon(QIcon(QStringLiteral(":/res/login/warning_light.svg")));
 
         // when a feature is experimental and experimental features are disabled globally, it should be hidden
         if (!APP::Theme::instance()->enableExperimentalFeatures()) {
@@ -99,7 +168,6 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
     if (!vfsIsAvailable) {
         // fallback: it's set as default option in Qt Designer, but we should make sure the option is selected if VFS is not available
         ui->rbDownloadEverything->setChecked(true);
-
         ui->rbUseVfs->setToolTip(tr("The virtual filesystem feature is not available for this installation."));
     } else if (vfsModeIsExperimental) {
         ui->rbUseVfs->setToolTip(tr("The virtual filesystem feature is not stable yet. Use with caution."));
@@ -122,6 +190,7 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
         ui->chkAdvanced->setVisible(false);
     }
 
+#if 1
     if (vfsModeIsExperimental) {
         connect(ui->rbUseVfs, &QRadioButton::clicked, this, [this]() {
             auto messageBox = new APP::CustomMessageBox(this);
@@ -156,9 +225,11 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
 #endif
         });
     }
+#endif
 
     defaultTargetDir_ = defaultSyncTargetDir;
-    ui->edDownloadDir->setEnabled(ui->edDownloadDir->text() != QDir::toNativeSeparators(defaultTargetDir_));
+    //ui->edDownloadDir->setEnabled(ui->edDownloadDir->text() != QDir::toNativeSeparators(defaultTargetDir_));
+    ui->btnDone->setFocus();
 }
 
 void FinishedPage::updateTheme()
@@ -166,13 +237,12 @@ void FinishedPage::updateTheme()
     ui->btnDone->setSideIcon(QIcon(darkTheme_.value() ? doneIcon.second : doneIcon.first));
     ui->btnBack->setSideIcon(QIcon(darkTheme_.value() ? backIcon.second : backIcon.first));
     APP::StyleHelper::setTheme(this, darkTheme_.value());
-    update();
-}
 
-void FinishedPage::showErrorMessage(const QString &msg)
-{
-    ui->frameErrorMessage->setVisible(!msg.isEmpty());
-    ui->lblErrorText->setText(msg);
+    ui->btnBrowse->setIcon(QIcon(darkTheme_.value() ? browseIcon.second : browseIcon.first));
+    ui->btnReset->setIcon(QIcon(darkTheme_.value() ? resetIcon.second : resetIcon.first));
+    ui->btnVfsIcon->setIcon(QIcon(darkTheme_.value() ? warnIcon.second : warnIcon.first));
+
+    update();
 }
 
 APP::Wizard::SyncMode FinishedPage::syncMode() const
@@ -194,11 +264,83 @@ QString FinishedPage::syncTargetDir() const
     return QDir::toNativeSeparators(ui->edDownloadDir->text());
 }
 
+void FinishedPage::handleFrameEvent(QEvent *event, QRadioButton* button)
+{
+    if (event->type() == QEvent::Enter) {
+        button->setAttribute(Qt::WA_UnderMouse, true);
+        button->update();
+    } else if (event->type() == QEvent::Leave) {
+        button->setAttribute(Qt::WA_UnderMouse, false);
+        button->update();
+    }
+}
+
+bool FinishedPage::handleFrameMouse(QEvent *event, QRadioButton* button)
+{
+    if (event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::MouseButtonDblClick) {
+        auto *mouseEvent = static_cast<QMouseEvent*>(event);
+        if (mouseEvent->button() == Qt::LeftButton) {
+            button->setFocus(Qt::MouseFocusReason);
+            button->setDown(true);
+            return true;
+        }
+    } else if (event->type() == QEvent::MouseButtonRelease) {
+        auto *mouseEvent = static_cast<QMouseEvent*>(event);
+        if (mouseEvent->button() == Qt::LeftButton) {
+            button->setDown(false);
+            button->click();
+            return true;
+        }
+    }
+    return false;
+}
+
+void FinishedPage::handleFocusEvent(QEvent *event, FocusFrame* frame)
+{
+    if (event->type() == QEvent::FocusIn) {
+        frame->setProperty("focused", true);
+    }
+    else if (event->type() == QEvent::FocusOut) {
+        frame->setProperty("focused", false);
+    } else {
+        return;
+    }
+    frame->update();
+}
+
+bool FinishedPage::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == ui->frameFocusUseVfs) {
+        handleFrameEvent(event, ui->rbUseVfs);
+        handleFrameMouse(event, ui->rbUseVfs);
+    }
+    else if (watched == ui->frameConfigManually) {
+        handleFrameEvent(event, ui->rbConfigManually);
+        handleFrameMouse(event, ui->rbConfigManually);
+    }
+    else if (watched == ui->frameDownloadEverything) {
+        handleFrameEvent(event, ui->rbDownloadEverything);
+        handleFrameMouse(event, ui->rbDownloadEverything);
+    }
+    else if (watched == ui->rbUseVfs) {
+        handleFocusEvent(event, ui->frameFocusUseVfs);
+    }
+    else if (watched == ui->rbDownloadEverything) {
+        handleFocusEvent(event, ui->frameDownloadEverything);
+    }
+    else if (watched == ui->rbConfigManually) {
+        handleFocusEvent(event, ui->frameConfigManually);
+    }
+
+    return QWidget::eventFilter(watched, event);
+}
+
 void FinishedPage::advancedStateChanged(bool checked)
 {
-    ui->frameAdvanced->setVisible(checked);
+    ui->frameAdvancedContext->setVisible(checked);
     ui->frameContent->setMinimumHeight(checked ? advHeight : smallHeight);
-    // ui->frameContent->setMaximumHeight(checked ? advHeight : smallHeight);
+    ui->frameContent->setMaximumHeight(checked ? 1000 : smallHeight);
     update();
 }
 
