@@ -354,10 +354,32 @@ SettingsDialog::~SettingsDialog()
 
 void SettingsDialog::updateToolbarTheme()
 {
-    _ui->toolBar->setStyleSheet(QStringLiteral(
-        "background-color: %1;"
-        "border: none;").arg(Theme::instance()->isDarkTheme() ? QStringLiteral("#000000") : QStringLiteral("#FFFFFF"))
+    const bool isDark = Theme::instance()->isDarkTheme();
+#ifdef Q_OS_WINDOWS
+    QString styleStr = QStringLiteral(
+        "#toolBar {background-color: %1;"
+        "border: none;"
+        "border-bottom: 1px solid %2;"
+        "}"
         );
+    _ui->toolBar->setStyleSheet(styleStr
+                                    .arg(isDark ? QStringLiteral("#1D1E21") : QStringLiteral("#FFFFFF"))
+                                    .arg(isDark ? QStringLiteral("#616161") : QStringLiteral("rgba(203, 205, 211, 1)"))
+                                );
+#else
+    QString styleStr = QStringLiteral(
+        "#toolBar {background-color: %1;"
+        "border: none;"
+        "border-bottom: 1px solid %2;"
+        "border-top: 1px solid %3;"
+        "}"
+        );
+    _ui->toolBar->setStyleSheet(styleStr
+                                    .arg(isDark ? QStringLiteral("#1D1E21") : QStringLiteral("#FFFFFF"))
+                                    .arg(isDark ? QStringLiteral("rgba(97, 97, 97, 1)") : QStringLiteral("rgba(203, 205, 211, 1)"))
+                                    .arg(isDark ? QStringLiteral("transparent") : QStringLiteral("#F3F3F3"))
+                                );
+#endif
 }
 
 void SettingsDialog::addModalWidget(QWidget *w)

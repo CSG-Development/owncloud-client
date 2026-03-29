@@ -26,12 +26,18 @@
 #include "openfilemanager.h"
 #include "protocolwidget.h"
 #include "syncfileitem.h"
+#include "theme.h"
 #include "device/devicetypes.h"
 
 #include "models/expandingheaderview.h"
 #include "gui/customui/stylehelper.h"
+#include "gui/customdialogs/dlgutils.h"
 
 #include "ui_protocolwidget.h"
+
+namespace {
+const auto widget_style = QStringLiteral(":/res/protocolwidget.qss");
+}
 
 namespace APP {
 
@@ -42,6 +48,7 @@ ProtocolWidget::ProtocolWidget(QWidget *parent)
     _ui->setupUi(this);
 
     StyleHelper::applyPushButtonStyle(this);
+    setStyleSheet(DlgUtils::loadFileToString(widget_style));
 
     connect(ProgressDispatcher::instance(), &ProgressDispatcher::itemCompleted,
         this, &ProtocolWidget::slotItemCompleted);
@@ -80,6 +87,9 @@ ProtocolWidget::ProtocolWidget(QWidget *parent)
             return item.folder() == f;
         });
     });
+
+    connect(Theme::instance(), &Theme::themeChanged, this, &ProtocolWidget::onThemeChanged);
+    onThemeChanged(Theme::instance()->isDarkTheme());
 }
 
 ProtocolWidget::~ProtocolWidget()
@@ -99,7 +109,9 @@ ProtocolWidget::~ProtocolWidget()
 QMenu *ProtocolWidget::showFilterMenu(QWidget *parent, Models::SignalledQSortFilterProxyModel *model, int role, const QString &columnName)
 {
     auto menu = new QMenu(parent);
+    menu->setObjectName("ProtocolWidgetPopup");
     menu->setAttribute(Qt::WA_DeleteOnClose);
+
     Models::addFilterMenuItems(menu, AccountManager::instance()->accountNames(), model, role, columnName, Qt::DisplayRole);
     QTimer::singleShot(0, menu, [menu] {
         menu->popup(QCursor::pos());
@@ -187,6 +199,12 @@ bool ProtocolWidget::eventFilter(QObject */*obj*/, QEvent *event)
         return true;
     }
     return false;
+}
+
+void ProtocolWidget::onThemeChanged(bool isDark)
+{
+    DlgUtils::setTheme(this, isDark);
+    APP::StyleHelper::invoke_setDarkTheme_recursive(this);
 }
 
 void ProtocolWidget::slotItemCompleted(Folder *folder, const SyncFileItemPtr &item)

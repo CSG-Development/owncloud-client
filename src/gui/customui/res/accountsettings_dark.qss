@@ -1,57 +1,43 @@
-QTreeView::indicator {
+#_folderList {
+    border: 1px solid rgba(97, 97, 97, 1);
+}
+
+#_folderList::indicator {
      width: 16px;
      height: 20px;
 }
 
-QTreeView::indicator:checked {
-     image: url(:/res/checkbox/dark/normal/checked.svg);
+#_folderList::indicator:checked { image: url(:/res/checkbox_win/dark/normal/checked.svg); }
+#_folderList::indicator:unchecked { image: url(:/res/checkbox_win/dark/normal/unchecked.svg); }
+#_folderList::indicator:checked:hover { image: url(:/res/checkbox_win/dark/hover/checked.svg); }
+#_folderList::indicator:unchecked:hover { image: url(:/res/checkbox_win/dark/hover/unchecked.svg); }
+#_folderList::indicator:checked:pressed { image: url(:/res/checkbox_win/dark/pressed/checked.svg); }
+#_folderList::indicator:unchecked:pressed { image: url(:/res/checkbox_win/dark/pressed/unchecked.svg); }
+#_folderList::indicator:checked:disabled { image: url(:/res/checkbox_win/dark/disabled/checked.svg); }
+#_folderList::indicator:unchecked:disabled { image: url(:/res/checkbox_win/dark/disabled/unchecked.svg); }
+
+#_folderList::item:selected:active,
+#_folderList::item:selected:!active {
+    background: rgba(100, 181, 246, 0.24);
+    color: rgba(255, 255, 255, 0.87);
 }
 
-QTreeView::indicator:unchecked {
-     image: url(:/res/checkbox/dark/normal/unchecked.svg);
+#_folderList::item:focus {
+    outline: none;
+    border: none;
 }
 
-QTreeView::indicator:checked:hover {
-     image: url(:/res/checkbox/dark/hover/checked.svg);
+#_folderList::branch {
+    background: transparent;
+    image: none;
 }
 
-QTreeView::indicator:unchecked:hover {
-     image: url(:/res/checkbox/dark/hover/unchecked.svg);
+#_folderList::branch:selected {
+    background: rgba(100, 181, 246, 0.24);
+    image: none;
 }
 
-QTreeView::indicator:checked:pressed {
-     image: url(:/res/checkbox/dark/pressed/checked.svg);
-}
-
-QTreeView::indicator:unchecked:pressed {
-     image: url(:/res/checkbox/dark/pressed/unchecked.svg);
-}
-
-QTreeView::indicator:checked:disabled {
-     image: url(:/res/checkbox/dark/disabled/checked.svg);
-}
-
-QTreeView::indicator:unchecked:disabled {
-     image: url(:/res/checkbox/dark/disabled/unchecked.svg);
-}
 
 QAbstractItemView {
     icon-size: 20px;
 }
-
-/*
-QTreeView::branch:open {
-     image: url(:/res/branch_open.svg);
-     height: 16px;
-     icon-size: 16px;
-}
-
-QTreeView::branch:closed {
-     image: url(:/res/branch_closed.svg);
-}
-
-QTreeView::branch:!has-children {
-     image: none;
-}
-
-*/

@@ -1,0 +1,48 @@
+#IssuesWidgetPopup::indicator {
+    width: 8px;
+    height: 8px;
+    left: 6px;
+    background: transparent;
+    border: 0px solid transparent;
+    outline: none;
+}
+
+#IssuesWidgetPopup::item {
+    padding: 4px 16px 4px 16px;
+}
+
+#IssuesWidgetPopup::indicator:unchecked {
+    image: none;
+}
+
+[theme="light"] #IssuesWidgetPopup {
+    color: rgba(0, 0, 0, 0.87);
+    background: #FFFFFF;
+}
+
+[theme="light"] #IssuesWidgetPopup::item:selected {
+    background: rgba(25, 118, 210, 1);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="light"] #IssuesWidgetPopup::item:disabled {
+    color: rgba(158, 158, 158, 1);
+}
+
+[theme="light"] #IssuesWidgetPopup::indicator:checked { image: url(:/res/menu/check_light.svg); }
+
+[theme="dark"] #IssuesWidgetPopup {
+    color: rgba(255, 255, 255, 0.87);
+    background: rgba(66, 66, 66, 0.47);
+}
+
+[theme="dark"] #IssuesWidgetPopup::item:selected {
+    background: rgba(100, 181, 246, 1);
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="dark"] #IssuesWidgetPopup::item:disabled {
+    color: rgba(158, 158, 158, 1);
+}
+
+[theme="dark"] #IssuesWidgetPopup::indicator:checked { image: url(:/res/menu/check_dark.svg); }

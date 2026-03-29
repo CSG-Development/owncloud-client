@@ -1,0 +1,40 @@
+#_folderList {
+    /*show-decoration-selected: 1;*/
+    border: 1px solid rgba(203, 205, 211, 1);
+}
+
+#_folderList::indicator {
+     width: 16px;
+     height: 20px;
+}
+
+#_folderList::indicator:checked { image: url(:/res/checkbox_mac/light/normal/checked.svg); }
+#_folderList::indicator:unchecked { image: url(:/res/checkbox_mac/light/normal/unchecked.svg); }
+#_folderList::indicator:checked:disabled { image: url(:/res/checkbox_mac/light/disabled/checked.svg); }
+#_folderList::indicator:unchecked:disabled { image: url(:/res/checkbox_mac/light/disabled/unchecked.svg); }
+
+#_folderList::item:selected:active,
+#_folderList::item:selected:!active {
+    background: rgba(25, 118, 210, 0.24);
+    color: rgba(0, 0, 0, 0.87);
+}
+
+#_folderList::item:focus {
+    outline: none;
+    border: none;
+}
+
+#_folderList::branch {
+    background: transparent;
+    image: none;
+}
+
+#_folderList::branch:selected {
+    background: rgba(25, 118, 210, 0.24);
+    image: none;
+}
+
+
+QAbstractItemView {
+    icon-size: 20px;
+}

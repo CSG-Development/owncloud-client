@@ -62,6 +62,8 @@ private slots:
 private:
     bool eventFilter(QObject* obj, QEvent* event) override;
 
+    void onThemeChanged(bool isDark);
+
     ProtocolItemModel *_model;
     Models::SignalledQSortFilterProxyModel *_sortModel;
     Ui::ProtocolWidget *_ui;

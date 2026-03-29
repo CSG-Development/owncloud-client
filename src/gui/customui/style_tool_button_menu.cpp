@@ -38,8 +38,6 @@ ProxyStyleToolButtonMenu::ProxyStyleToolButtonMenu(QStyle* baseStyle)
 
 void ProxyStyleToolButtonMenu::drawPrimitive(PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const
 {
-    qDebug() << element << option->state;
-
     if (element == QStyle::PE_FrameFocusRect) {
         if (const QStyleOptionFocusRect *fropt = qstyleoption_cast<const QStyleOptionFocusRect *>(option)) {
             if (!(fropt->state & State_KeyboardFocusChange))

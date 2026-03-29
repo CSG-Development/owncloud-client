@@ -95,6 +95,8 @@ private slots:
 private:
     bool eventFilter(QObject* obj, QEvent* event) override;
 
+    void onThemeChanged(bool isDark);
+
     void slotItemContextMenu();
     void showLabels();
     QString timeString(QDateTime dt, QLocale::FormatType format) const;

@@ -1,0 +1,102 @@
+#ActivityWidgetPopup::indicator {
+    width: 8px;
+    height: 8px;
+    left: 6px;
+    border: none;
+    background: transparent;
+}
+
+#ActivityWidgetPopup::item {
+    padding: 4px 16px 4px 16px;
+}
+
+#ActivityWidgetPopup::indicator:unchecked {
+    image: none;
+}
+
+[theme="light"] #ActivityWidgetPopup {
+    color: rgba(0, 0, 0, 0.87);
+    background: #FFFFFF;
+}
+
+[theme="light"] #ActivityWidgetPopup::item:selected {
+    background: rgba(25, 118, 210, 1);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="light"] #ActivityWidgetPopup::item:disabled {
+    color: rgba(158, 158, 158, 1);
+}
+
+[theme="light"] #ActivityWidgetPopup::indicator:checked {
+    image: url(:/res/menu/check_light.svg);
+}
+
+[theme="dark"] #ActivityWidgetPopup {
+    color: rgba(255, 255, 255, 0.87);
+    background: rgba(66, 66, 66, 0.47);
+}
+
+[theme="dark"] #ActivityWidgetPopup::item:selected {
+    background: rgba(100, 181, 246, 1);
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="dark"] #ActivityWidgetPopup::item:disabled {
+    color: rgba(158, 158, 158, 1);
+}
+
+[theme="dark"] #ActivityWidgetPopup::indicator:checked {
+    image: url(:/res/menu/check_dark.svg);
+}
+
+/* Copied from protocolwidget.qss because it called from ActivityWidget */
+
+#ProtocolWidgetPopup::indicator {
+    width: 8px;
+    height: 8px;
+    left: 6px;
+    background: transparent;
+    border: 0px solid transparent;
+    outline: none;
+}
+
+#ProtocolWidgetPopup::item {
+    padding: 4px 16px 4px 16px;
+}
+
+#ProtocolWidgetPopup::indicator:unchecked {
+    image: none;
+}
+
+[theme="light"] #ProtocolWidgetPopup {
+    color: rgba(0, 0, 0, 0.87);
+    background: #FFFFFF;
+}
+
+[theme="light"] #ProtocolWidgetPopup::item:selected {
+    background: rgba(25, 118, 210, 1);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="light"] #ProtocolWidgetPopup::item:disabled {
+    color: rgba(158, 158, 158, 1);
+}
+
+[theme="light"] #ProtocolWidgetPopup::indicator:checked { image: url(:/res/menu/check_light.svg); }
+
+[theme="dark"] #ProtocolWidgetPopup {
+    color: rgba(255, 255, 255, 0.87);
+    background: rgba(66, 66, 66, 0.47);
+}
+
+[theme="dark"] #ProtocolWidgetPopup::item:selected {
+    background: rgba(100, 181, 246, 1);
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="dark"] #ProtocolWidgetPopup::item:disabled {
+    color: rgba(158, 158, 158, 1);
+}
+
+[theme="dark"] #ProtocolWidgetPopup::indicator:checked { image: url(:/res/menu/check_dark.svg); }

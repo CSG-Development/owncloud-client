@@ -66,6 +66,8 @@ private:
     static void addResetFiltersAction(QMenu *menu, const QList<std::function<void()>> &resetFunctions);
     std::function<void()> addStatusFilter(QMenu *menu);
 
+    void onThemeChanged(bool isDark);
+
     ProtocolItemModel *_model;
     Models::SignalledQSortFilterProxyModel *_sortModel;
     SyncFileItemStatusSetSortFilterProxyModel *_statusSortModel;
