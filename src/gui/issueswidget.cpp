@@ -29,6 +29,7 @@
 #include "syncfileitem.h"
 #include "theme.h"
 #include "gui/customui/stylehelper.h"
+#include "gui/customdialogs/dlgutils.h"
 
 #include "ui_issueswidget.h"
 
@@ -39,7 +40,7 @@ bool persistsUntilLocalDiscovery(const APP::ProtocolItem &data)
         || (data.status() == APP::SyncFileItem::FileIgnored && data.direction() == APP::SyncFileItem::Up)
         || data.status() == APP::SyncFileItem::Excluded;
 }
-
+const auto widget_style = QStringLiteral(":/res/issuewidget.qss");
 }
 namespace APP {
 
@@ -192,6 +193,7 @@ IssuesWidget::IssuesWidget(QWidget *parent)
     _ui->setupUi(this);
 
     StyleHelper::applyPushButtonStyle(this);
+    setStyleSheet(DlgUtils::loadFileToString(widget_style));
 
     connect(ProgressDispatcher::instance(), &ProgressDispatcher::progressInfo,
         this, &IssuesWidget::slotProgressInfo);
@@ -265,6 +267,9 @@ IssuesWidget::IssuesWidget(QWidget *parent)
             return item.folder() == f;
         });
     });
+
+    connect(Theme::instance(), &Theme::themeChanged, this, &IssuesWidget::onThemeChanged);
+    onThemeChanged(Theme::instance()->isDarkTheme());
 }
 
 IssuesWidget::~IssuesWidget()
@@ -275,6 +280,7 @@ IssuesWidget::~IssuesWidget()
 QMenu *IssuesWidget::showFilterMenu(QWidget *parent)
 {
     auto menu = new QMenu(parent);
+    menu->setObjectName("IssuesWidgetPopup");
     menu->setAttribute(Qt::WA_DeleteOnClose);
 
     auto accountFilterReset = Models::addFilterMenuItems(menu, AccountManager::instance()->accountNames(), _sortModel, static_cast<int>(ProtocolItemModel::ProtocolItemRole::Account), tr("Account"), Qt::DisplayRole);
@@ -444,4 +450,11 @@ std::function<void(void)> IssuesWidget::addStatusFilter(QMenu *menu)
         _statusSortModel->resetFilter();
     };
 }
+
+void IssuesWidget::onThemeChanged(bool isDark)
+{
+    DlgUtils::setTheme(this, isDark);
+    APP::StyleHelper::invoke_setDarkTheme_recursive(this);
+}
+
 }

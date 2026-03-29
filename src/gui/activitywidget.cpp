@@ -36,6 +36,7 @@
 #include "models/expandingheaderview.h"
 #include "models/models.h"
 #include "gui/customui/stylehelper.h"
+#include "gui/customdialogs/dlgutils.h"
 
 #include "ui_activitywidget.h"
 
@@ -94,6 +95,8 @@ QPair<QString,QString> issuesIconSelected = {
 };
 #endif
 
+const auto widget_style = QStringLiteral(":/res/activitywidget.qss");
+
 } // namespace
 
 
@@ -107,6 +110,7 @@ ActivityWidget::ActivityWidget(QWidget *parent)
     _ui->setupUi(this);
 
     StyleHelper::applyPushButtonStyle(this);
+    setStyleSheet(DlgUtils::loadFileToString(widget_style));
 
     _model = new ActivityListModel(this);
     _sortModel = new Models::SignalledQSortFilterProxyModel(this);
@@ -167,6 +171,9 @@ ActivityWidget::ActivityWidget(QWidget *parent)
 
     connect(&_removeTimer, &QTimer::timeout, this, &ActivityWidget::slotCheckToCleanWidgets);
     _removeTimer.setInterval(1000);
+
+    connect(Theme::instance(), &Theme::themeChanged, this, &ActivityWidget::onThemeChanged);
+    onThemeChanged(Theme::instance()->isDarkTheme());
 }
 
 ActivityWidget::~ActivityWidget()
@@ -493,10 +500,17 @@ bool ActivityWidget::eventFilter(QObject */*obj*/, QEvent *event)
     return false;
 }
 
+void ActivityWidget::onThemeChanged(bool isDark)
+{
+    DlgUtils::setTheme(this, isDark);
+    APP::StyleHelper::invoke_setDarkTheme_recursive(this);
+}
+
 void ActivityWidget::slotItemContextMenu()
 {
     auto rows = _ui->_activityList->selectionModel()->selectedRows();
     auto menu = new QMenu(this);
+    menu->setObjectName("ActivityWidgetPopup");
     menu->setAttribute(Qt::WA_DeleteOnClose);
 
     // keep in sync with ProtocolWidget::showContextMenu

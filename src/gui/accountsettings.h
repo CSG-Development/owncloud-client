@@ -31,6 +31,7 @@ class QNetworkReply;
 class QLabel;
 class QSortFilterProxyModel;
 class DevWidget;
+class ProgressIndicator;
 
 namespace APP {
 
@@ -92,8 +93,8 @@ protected slots:
 
 private:
     void onThemeChanged(bool isDark);
-    void showConnectionLabel(const QString &message,
-        QStringList errors = QStringList());
+    void showConnectionLabel(const QString &message, QStringList errors = {});
+    void refreshConnectionLabel(); // re-applies current message with new theme
     bool event(QEvent *) override;
     void createAccountToolbox();
 
@@ -112,8 +113,15 @@ private:
     QMenu* _accountToolboxMenu = nullptr;
     QAction* _developerWindow = nullptr;
     DevWidget* devWidget = nullptr;
+#ifdef Q_OS_WIN
+    ProgressIndicator* _winSpinner = nullptr;
+#endif
     // are we already in the destructor
     bool _goingDown = false;
+
+    QString _connectionMessage;
+    QStringList _connectionErrors;
+
 
     // needed to make sure we show only one dialog at a time
     QPointer<LoginRequiredDialog> _askForOAuthLoginDialog = nullptr;

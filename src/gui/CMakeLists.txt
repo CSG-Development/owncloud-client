@@ -44,6 +44,8 @@ set(client_SRCS
     folderstatusmodel.h
     folderstatusdelegate.cpp
     folderstatusdelegate.h
+    foldertreeview.cpp
+    foldertreeview.h
     folderwatcher.cpp
     folderwatcher.h
     generalsettings.cpp

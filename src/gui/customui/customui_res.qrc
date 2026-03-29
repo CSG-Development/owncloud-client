@@ -4,6 +4,8 @@
         <file>res/Files-logo.png</file>
         <file>res/accountsettings_dark.qss</file>
         <file>res/accountsettings_light.qss</file>
+        <file>res/accountsettings_dark_mac.qss</file>
+        <file>res/accountsettings_light_mac.qss</file>
         <file>res/activitypage/activitysettings_dark.qss</file>
         <file>res/activitypage/activitysettings_light.qss</file>
         <file>res/activitypage/activitysettings_dark_mac.qss</file>
@@ -40,32 +42,44 @@
         <file>res/arrow/arrow_up_pressed.png</file>
         <file>res/arrow/arrow_up_pressed.svg</file>
         <file>res/arrow/arrow_up_pressed_dark.png</file>
-        <file>res/branch_closed.svg</file>
-        <file>res/branch_open.svg</file>
-        <file>res/checkbox/light/disabled/checked.svg</file>
-        <file>res/checkbox/light/disabled/partial.svg</file>
-        <file>res/checkbox/light/disabled/unchecked.svg</file>
-        <file>res/checkbox/light/hover/checked.svg</file>
-        <file>res/checkbox/light/hover/partial.svg</file>
-        <file>res/checkbox/light/hover/unchecked.svg</file>
-        <file>res/checkbox/light/normal/checked.svg</file>
-        <file>res/checkbox/light/normal/partial.svg</file>
-        <file>res/checkbox/light/normal/unchecked.svg</file>
-        <file>res/checkbox/light/pressed/checked.svg</file>
-        <file>res/checkbox/light/pressed/partial.svg</file>
-        <file>res/checkbox/light/pressed/unchecked.svg</file>
-        <file>res/checkbox/dark/disabled/checked.svg</file>
-        <file>res/checkbox/dark/disabled/partial.svg</file>
-        <file>res/checkbox/dark/disabled/unchecked.svg</file>
-        <file>res/checkbox/dark/hover/checked.svg</file>
-        <file>res/checkbox/dark/hover/partial.svg</file>
-        <file>res/checkbox/dark/hover/unchecked.svg</file>
-        <file>res/checkbox/dark/normal/checked.svg</file>
-        <file>res/checkbox/dark/normal/partial.svg</file>
-        <file>res/checkbox/dark/normal/unchecked.svg</file>
-        <file>res/checkbox/dark/pressed/checked.svg</file>
-        <file>res/checkbox/dark/pressed/partial.svg</file>
-        <file>res/checkbox/dark/pressed/unchecked.svg</file>
+        <file>res/branch_closed.png</file>
+        <file>res/branch_open.png</file>
+        <file>res/checkbox_win/light/disabled/checked.svg</file>
+        <file>res/checkbox_win/light/disabled/partial.svg</file>
+        <file>res/checkbox_win/light/disabled/unchecked.svg</file>
+        <file>res/checkbox_win/light/hover/checked.svg</file>
+        <file>res/checkbox_win/light/hover/partial.svg</file>
+        <file>res/checkbox_win/light/hover/unchecked.svg</file>
+        <file>res/checkbox_win/light/normal/checked.svg</file>
+        <file>res/checkbox_win/light/normal/partial.svg</file>
+        <file>res/checkbox_win/light/normal/unchecked.svg</file>
+        <file>res/checkbox_win/light/pressed/checked.svg</file>
+        <file>res/checkbox_win/light/pressed/partial.svg</file>
+        <file>res/checkbox_win/light/pressed/unchecked.svg</file>
+        <file>res/checkbox_win/dark/disabled/checked.svg</file>
+        <file>res/checkbox_win/dark/disabled/partial.svg</file>
+        <file>res/checkbox_win/dark/disabled/unchecked.svg</file>
+        <file>res/checkbox_win/dark/hover/checked.svg</file>
+        <file>res/checkbox_win/dark/hover/partial.svg</file>
+        <file>res/checkbox_win/dark/hover/unchecked.svg</file>
+        <file>res/checkbox_win/dark/normal/checked.svg</file>
+        <file>res/checkbox_win/dark/normal/partial.svg</file>
+        <file>res/checkbox_win/dark/normal/unchecked.svg</file>
+        <file>res/checkbox_win/dark/pressed/checked.svg</file>
+        <file>res/checkbox_win/dark/pressed/partial.svg</file>
+        <file>res/checkbox_win/dark/pressed/unchecked.svg</file>
+        <file>res/checkbox_mac/dark/disabled/checked.svg</file>
+        <file>res/checkbox_mac/dark/disabled/partial.svg</file>
+        <file>res/checkbox_mac/dark/disabled/unchecked.svg</file>
+        <file>res/checkbox_mac/dark/normal/checked.svg</file>
+        <file>res/checkbox_mac/dark/normal/partial.svg</file>
+        <file>res/checkbox_mac/dark/normal/unchecked.svg</file>
+        <file>res/checkbox_mac/light/disabled/checked.svg</file>
+        <file>res/checkbox_mac/light/disabled/partial.svg</file>
+        <file>res/checkbox_mac/light/disabled/unchecked.svg</file>
+        <file>res/checkbox_mac/light/normal/checked.svg</file>
+        <file>res/checkbox_mac/light/normal/partial.svg</file>
+        <file>res/checkbox_mac/light/normal/unchecked.svg</file>
         <file>res/dots/dots_disabled.svg</file>
         <file>res/dots/dots_hover.svg</file>
         <file>res/dots/dots_normal.svg</file>
@@ -74,6 +88,9 @@
         <file>res/generalsettings_light.qss</file>
         <file>res/ignorelisteditor.qss</file>
         <file>res/ignorelisteditor_mac.qss</file>
+        <file>res/issuewidget.qss</file>
+        <file>res/protocolwidget.qss</file>
+        <file>res/activitywidget.qss</file>
         <file>res/inputwidget/inputwidget_dark.qss</file>
         <file>res/inputwidget/inputwidget_light.qss</file>
         <file>res/inputwidget/inputwidget_error_dark.qss</file>
@@ -157,5 +174,7 @@
         <file>res/combowidget/device_icon.svg</file>
         <file>res/tooltips/tooltip_dark.qss</file>
         <file>res/tooltips/tooltip_light.qss</file>
+        <file>res/menu/check_dark.svg</file>
+        <file>res/menu/check_light.svg</file>
     </qresource>
 </RCC>

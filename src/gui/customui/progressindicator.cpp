@@ -51,26 +51,31 @@ void ProgressIndicator::paintEvent(QPaintEvent *event)
 
     int size = qMin(width(), height());
     double thickness = size * 0.1;
-
-    QPen pen;
-    pen.setWidthF(thickness);
-    pen.setCapStyle(Qt::RoundCap);
-    pen.setColor(isDark ? bgColor.second : bgColor.first);
-    painter.setPen(pen);
-    painter.drawEllipse(QRectF(thickness/2, thickness/2, width() - thickness, height() - thickness));
+    QRectF arcRect(thickness / 2, thickness / 2, width() - thickness, height() - thickness);
 
     int elapsed = startTime_.msecsTo(QTime::currentTime());
     float progress = fmod(elapsed / 1000.0, 2.0) / 2.0;
-
     float easedProgress = easingCurve_.valueForProgress(progress);
 
     double startAngle = easedProgress * 360 * 2;
     double spanAngle = 90 + 45 * sin(progress * M_PI * 2);
+    constexpr double gapAngle = 20.0;
 
+    QPen pen;
+    pen.setWidthF(thickness);
+    pen.setCapStyle(Qt::RoundCap);
+
+    // Background arc: complement of foreground with gaps on both sides
+    double bgStartAngle = startAngle + spanAngle + gapAngle;
+    double bgSpanAngle = 360.0 - spanAngle - 2 * gapAngle;
+    pen.setColor(isDark ? bgColor.second : bgColor.first);
+    painter.setPen(pen);
+    painter.drawArc(arcRect, bgStartAngle * 16, bgSpanAngle * 16);
+
+    // Foreground arc
     pen.setColor(isDark ? fgColor.second : fgColor.first);
     painter.setPen(pen);
-
-    painter.drawArc(QRectF(thickness/2, thickness/2, width() - thickness, height() - thickness), startAngle * 16, spanAngle * 16);
+    painter.drawArc(arcRect, startAngle * 16, spanAngle * 16);
 }
 
 void ProgressIndicator::flipHorizontal(QPainter &painter, const QRect &r)

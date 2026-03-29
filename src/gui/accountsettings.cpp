@@ -34,6 +34,9 @@
 #include "theme.h"
 #include "tooltipupdater.h"
 #include "customui/stylehelper.h"
+#ifdef Q_OS_WIN
+#include "customui/progressindicator.h"
+#endif
 #include "customdialogs/custommessagebox.h"
 #include "devwidget.h"
 #include "socketapi/socketapi.h"
@@ -52,6 +55,7 @@
 #include <QToolTip>
 #include <QTreeView>
 #include <QGroupBox>
+#include <QPainter>
 
 #include "askexperimentalvirtualfilesfeaturemessagebox.h"
 #include "gui/models/models.h"
@@ -60,10 +64,17 @@
 
 namespace {
 
+#ifdef Q_OS_MACOS
+QPair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/accountsettings_light_mac.qss"),
+    QStringLiteral(":/res/accountsettings_dark_mac.qss")
+};
+#else
 QPair<QString,QString> widgetStyle = {
     QStringLiteral(":/res/accountsettings_light.qss"),
     QStringLiteral(":/res/accountsettings_dark.qss")
 };
+#endif
 
 //constexpr auto modalWidgetStretchedMarginC = 50;
 constexpr auto modalWidgetStretchedMarginC = 4;
@@ -144,17 +155,15 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     _sortModel = weightedModel;
 
     ui->_folderList->setModel(_sortModel);
-
     ui->_folderList->setItemDelegate(_delegate);
 
     for (int i = 1; i <= _sortModel->columnCount(); ++i) {
         ui->_folderList->header()->hideSection(i);
     }
     ui->_folderList->header()->setStretchLastSection(true);
-
     ui->_folderList->sortByColumn(static_cast<int>(FolderStatusModel::Columns::HeaderRole), Qt::AscendingOrder);
-
     ui->_folderList->header()->hide();
+
 #if defined(Q_OS_MACOS)
     ui->_folderList->setMinimumWidth(400);
 #else
@@ -173,14 +182,12 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     ui->selectiveSyncStatus->hide();
 
     createAccountToolbox();
-    connect(ui->_folderList, &QWidget::customContextMenuRequested,
-        this, &AccountSettings::slotCustomContextMenuRequested);
-    connect(ui->_folderList, &QAbstractItemView::clicked,
-        this, &AccountSettings::slotFolderListClicked);
+    connect(ui->_folderList, &QWidget::customContextMenuRequested, this, &AccountSettings::slotCustomContextMenuRequested);
+    connect(ui->_folderList, &QAbstractItemView::clicked, this, &AccountSettings::slotFolderListClicked);
     connect(ui->_folderList, &QTreeView::expanded, this, &AccountSettings::refreshSelectiveSyncStatus);
     connect(ui->_folderList, &QTreeView::collapsed, this, &AccountSettings::refreshSelectiveSyncStatus);
-    connect(ui->selectiveSyncNotification, &QLabel::linkActivated,
-        this, &AccountSettings::slotLinkActivated);
+    connect(ui->selectiveSyncNotification, &QLabel::linkActivated, this, &AccountSettings::slotLinkActivated);
+
     QAction *syncNowAction = new QAction(this);
     syncNowAction->setShortcut(QKeySequence(Qt::Key_F6));
     connect(syncNowAction, &QAction::triggered, this, &AccountSettings::slotScheduleCurrentFolder);
@@ -190,7 +197,6 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     syncNowWithRemoteDiscovery->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_F6));
     connect(syncNowWithRemoteDiscovery, &QAction::triggered, this, &AccountSettings::slotScheduleCurrentFolderForceFullDiscovery);
     addAction(syncNowWithRemoteDiscovery);
-
 
     connect(_model, &FolderStatusModel::suggestExpand, this, [this](const QModelIndex &index) {
         ui->_folderList->expand(_sortModel->mapFromSource(index));
@@ -224,12 +230,28 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
         ui->addButton->setVisible(!Theme::instance()->singleSyncFolder() || _model->rowCount() == 0);
     });
 
+#ifdef Q_OS_WIN
+    ui->spinner->setVisible(false);
+    _winSpinner = new ProgressIndicator(this);
+    _winSpinner->setMaximumSize({32,32});
+    _winSpinner->setIndicatorVisible(false);
+    ui->horizontalLayout_6->addWidget(_winSpinner);
+#endif
+
     connect(_accountState.get(), &AccountState::isSettingUpChanged, this, [this] {
         if (_accountState->isSettingUp()) {
+#ifdef Q_OS_WIN
+            _winSpinner->setIndicatorVisible(true);
+#else
             ui->spinner->startAnimation();
+#endif
             ui->stackedWidget->setCurrentWidget(ui->loadingPage);
         } else {
+#ifdef Q_OS_WIN
+            _winSpinner->setIndicatorVisible(false);
+#else
             ui->spinner->stopAnimation();
+#endif
             ui->stackedWidget->setCurrentWidget(ui->folderListPage);
         }
     });
@@ -348,6 +370,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
         QMenu *menu = new QMenu(tv);
         menu->setAttribute(Qt::WA_DeleteOnClose);
         addRemoveFolderAction(menu);
+        connect(menu, &QMenu::aboutToHide, this, [this] { _delegate->resetButtonState(); ui->_folderList->viewport()->update(); });
         menu->popup(QCursor::pos());
         return;
     }
@@ -410,6 +433,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
     // For sub-folders we're now done.
 
     if (index.siblingAtColumn(static_cast<int>(FolderStatusModel::Columns::ItemType)).data().value<FolderStatusModel::ItemType>() == FolderStatusModel::SubFolder) {
+        connect(menu, &QMenu::aboutToHide, this, [this] { _delegate->resetButtonState(); ui->_folderList->viewport()->update(); });
         menu->popup(QCursor::pos());
         return;
     }
@@ -462,6 +486,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
                 }
             }
         }
+        connect(menu, &QMenu::aboutToHide, this, [this] { _delegate->resetButtonState(); ui->_folderList->viewport()->update(); });
         menu->popup(QCursor::pos());
     } else {
         menu->deleteLater();
@@ -684,22 +709,33 @@ void AccountSettings::slotDisableVfsCurrentFolder()
 
 void AccountSettings::showConnectionLabel(const QString &message, QStringList errors)
 {
-    const QString errStyle = QStringLiteral("color:#ffffff; background-color:#bb4d4d;padding:5px;"
-                                            "border-width: 1px; border-style: solid; border-color: #aaaaaa;"
-                                            "border-radius:5px;");
-    if (errors.isEmpty()) {
-        ui->connectLabel->setText(message);
+    _connectionMessage = message;
+    _connectionErrors = errors;
+    refreshConnectionLabel();
+}
+
+void AccountSettings::refreshConnectionLabel()
+{
+    const bool isDark = Theme::instance()->isDarkTheme();
+    const QString linkColor = isDark ? QStringLiteral("#64b5f6") : QStringLiteral("#1976d2");
+
+    // Replace href-only anchors with colored ones
+    const QString colored = QString(_connectionMessage).replace(
+        QRegularExpression(QStringLiteral("<a href=\"([^\"]+)\">")),
+                           QStringLiteral("<a href=\"\\1\" style=\"color: ") + linkColor + QLatin1String(";\">")
+        );
+
+    if (_connectionErrors.isEmpty()) {
+        ui->connectLabel->setText(colored);
         ui->connectLabel->setToolTip(QString());
-        //ui->connectLabel->setStyleSheet(QString());
     } else {
-        errors.prepend(message);
-        const QString msg = errors.join(QLatin1String("\n"));
-        qCDebug(lcAccountSettings) << msg;
-        ui->connectLabel->setText(msg);
+        QStringList parts = _connectionErrors;
+        parts.prepend(colored);
+        ui->connectLabel->setText(parts.join(QLatin1Char('\n')));
         ui->connectLabel->setToolTip(QString());
-        //ui->connectLabel->setStyleSheet(errStyle);
     }
-    ui->accountStatus->setVisible(!message.isEmpty());
+
+    ui->accountStatus->setVisible(!_connectionMessage.isEmpty());
 }
 
 void AccountSettings::slotEnableCurrentFolder(bool terminate)
@@ -817,6 +853,7 @@ void AccountSettings::slotAccountStateChanged()
     case AccountState::SignedOut:
         showConnectionLabel(tr("Signed out from %1.").arg(server));
         break;
+
     case AccountState::AskingCredentials: {
         auto cred = qobject_cast<HttpCredentialsGui *>(account->credentials());
         if (cred && cred->isUsingOAuth()) {
@@ -973,6 +1010,17 @@ void AccountSettings::slotLinkActivated(const QString &link)
 void AccountSettings::onThemeChanged(bool isDark)
 {
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    ui->_folderList->setSelectionColor(isDark ? QColor(100, 181, 246, 61) : QColor(25, 118, 210, 61));
+
+    refreshConnectionLabel();
+
+    ui->networkIndicator->setColor(isDark ? Qt::gray : Qt::black);
+
+#ifdef Q_OS_WIN
+    _winSpinner->setDarkTheme();
+#else
+    ui->spinner->setColor(isDark ? Qt::gray : Qt::black);
+#endif
 }
 
 AccountSettings::~AccountSettings()
