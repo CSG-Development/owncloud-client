@@ -189,6 +189,7 @@ QString CodeDialog::getCode() const
 void CodeDialog::clearCode()
 {
     ui->codeInputWidget->clearCode();
+    controller_->codeString.setValue(QString());
 }
 
 void CodeDialog::keyPressEvent(QKeyEvent *event)
