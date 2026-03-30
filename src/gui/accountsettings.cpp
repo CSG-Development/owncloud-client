@@ -34,6 +34,10 @@
 #include "theme.h"
 #include "tooltipupdater.h"
 #include "customui/stylehelper.h"
+#ifdef Q_OS_WIN
+#include "customui/progressindicator.h"
+#endif
+#include "customdialogs/custommessagebox.h"
 #include "devwidget.h"
 #include "socketapi/socketapi.h"
 #include "device/devicedefines.h"
@@ -46,12 +50,12 @@
 #include <QDir>
 #include <QIcon>
 #include <QKeySequence>
-#include <QMessageBox>
 #include <QPropertyAnimation>
 #include <QSortFilterProxyModel>
 #include <QToolTip>
 #include <QTreeView>
 #include <QGroupBox>
+#include <QPainter>
 
 #include "askexperimentalvirtualfilesfeaturemessagebox.h"
 #include "gui/models/models.h"
@@ -60,10 +64,17 @@
 
 namespace {
 
+#ifdef Q_OS_MACOS
+QPair<QString,QString> widgetStyle = {
+    QStringLiteral(":/res/accountsettings_light_mac.qss"),
+    QStringLiteral(":/res/accountsettings_dark_mac.qss")
+};
+#else
 QPair<QString,QString> widgetStyle = {
     QStringLiteral(":/res/accountsettings_light.qss"),
     QStringLiteral(":/res/accountsettings_dark.qss")
 };
+#endif
 
 //constexpr auto modalWidgetStretchedMarginC = 50;
 constexpr auto modalWidgetStretchedMarginC = 4;
@@ -144,17 +155,15 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     _sortModel = weightedModel;
 
     ui->_folderList->setModel(_sortModel);
-
     ui->_folderList->setItemDelegate(_delegate);
 
     for (int i = 1; i <= _sortModel->columnCount(); ++i) {
         ui->_folderList->header()->hideSection(i);
     }
     ui->_folderList->header()->setStretchLastSection(true);
-
     ui->_folderList->sortByColumn(static_cast<int>(FolderStatusModel::Columns::HeaderRole), Qt::AscendingOrder);
-
     ui->_folderList->header()->hide();
+
 #if defined(Q_OS_MACOS)
     ui->_folderList->setMinimumWidth(400);
 #else
@@ -173,14 +182,12 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     ui->selectiveSyncStatus->hide();
 
     createAccountToolbox();
-    connect(ui->_folderList, &QWidget::customContextMenuRequested,
-        this, &AccountSettings::slotCustomContextMenuRequested);
-    connect(ui->_folderList, &QAbstractItemView::clicked,
-        this, &AccountSettings::slotFolderListClicked);
+    connect(ui->_folderList, &QWidget::customContextMenuRequested, this, &AccountSettings::slotCustomContextMenuRequested);
+    connect(ui->_folderList, &QAbstractItemView::clicked, this, &AccountSettings::slotFolderListClicked);
     connect(ui->_folderList, &QTreeView::expanded, this, &AccountSettings::refreshSelectiveSyncStatus);
     connect(ui->_folderList, &QTreeView::collapsed, this, &AccountSettings::refreshSelectiveSyncStatus);
-    connect(ui->selectiveSyncNotification, &QLabel::linkActivated,
-        this, &AccountSettings::slotLinkActivated);
+    connect(ui->selectiveSyncNotification, &QLabel::linkActivated, this, &AccountSettings::slotLinkActivated);
+
     QAction *syncNowAction = new QAction(this);
     syncNowAction->setShortcut(QKeySequence(Qt::Key_F6));
     connect(syncNowAction, &QAction::triggered, this, &AccountSettings::slotScheduleCurrentFolder);
@@ -190,7 +197,6 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     syncNowWithRemoteDiscovery->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_F6));
     connect(syncNowWithRemoteDiscovery, &QAction::triggered, this, &AccountSettings::slotScheduleCurrentFolderForceFullDiscovery);
     addAction(syncNowWithRemoteDiscovery);
-
 
     connect(_model, &FolderStatusModel::suggestExpand, this, [this](const QModelIndex &index) {
         ui->_folderList->expand(_sortModel->mapFromSource(index));
@@ -224,12 +230,28 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
         ui->addButton->setVisible(!Theme::instance()->singleSyncFolder() || _model->rowCount() == 0);
     });
 
+#ifdef Q_OS_WIN
+    ui->spinner->setVisible(false);
+    _winSpinner = new ProgressIndicator(this);
+    _winSpinner->setMaximumSize({32,32});
+    _winSpinner->setIndicatorVisible(false);
+    ui->horizontalLayout_6->addWidget(_winSpinner);
+#endif
+
     connect(_accountState.get(), &AccountState::isSettingUpChanged, this, [this] {
         if (_accountState->isSettingUp()) {
+#ifdef Q_OS_WIN
+            _winSpinner->setIndicatorVisible(true);
+#else
             ui->spinner->startAnimation();
+#endif
             ui->stackedWidget->setCurrentWidget(ui->loadingPage);
         } else {
+#ifdef Q_OS_WIN
+            _winSpinner->setIndicatorVisible(false);
+#else
             ui->spinner->stopAnimation();
+#endif
             ui->stackedWidget->setCurrentWidget(ui->folderListPage);
         }
     });
@@ -348,6 +370,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
         QMenu *menu = new QMenu(tv);
         menu->setAttribute(Qt::WA_DeleteOnClose);
         addRemoveFolderAction(menu);
+        connect(menu, &QMenu::aboutToHide, this, [this] { _delegate->resetButtonState(); ui->_folderList->viewport()->update(); });
         menu->popup(QCursor::pos());
         return;
     }
@@ -410,6 +433,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
     // For sub-folders we're now done.
 
     if (index.siblingAtColumn(static_cast<int>(FolderStatusModel::Columns::ItemType)).data().value<FolderStatusModel::ItemType>() == FolderStatusModel::SubFolder) {
+        connect(menu, &QMenu::aboutToHide, this, [this] { _delegate->resetButtonState(); ui->_folderList->viewport()->update(); });
         menu->popup(QCursor::pos());
         return;
     }
@@ -462,6 +486,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
                 }
             }
         }
+        connect(menu, &QMenu::aboutToHide, this, [this] { _delegate->resetButtonState(); ui->_folderList->viewport()->update(); });
         menu->popup(QCursor::pos());
     } else {
         menu->deleteLater();
@@ -540,21 +565,16 @@ void AccountSettings::slotRemoveCurrentFolder()
         qCInfo(lcAccountSettings) << "Remove Folder " << folder->path();
         QString shortGuiLocalPath = folder->shortGuiLocalPath();
 
-        auto messageBox = new QMessageBox(QMessageBox::Question,
-            tr("Confirm Folder Sync Connection Removal"),
-            tr("<p>Do you really want to stop syncing the folder <i>%1</i>?</p>"
-               "<p><b>Note:</b> This will <b>not</b> delete any files.</p>")
-                .arg(shortGuiLocalPath),
-            QMessageBox::NoButton,
-            ocApp()->gui()->settingsDialog());
-        messageBox->setAttribute(Qt::WA_DeleteOnClose);
-        QPushButton *yesButton =
-            messageBox->addButton(tr("Remove Folder Sync Connection"), QMessageBox::YesRole);
-        yesButton->setCursor(Qt::PointingHandCursor);
-        messageBox->addButton(tr("Cancel"), QMessageBox::NoRole);
-        StyleHelper::applyPushButtonStyle(messageBox);
-        connect(messageBox, &QMessageBox::finished, this, [messageBox, yesButton, folder, row, this]{
-            if (messageBox->clickedButton() == yesButton) {
+        auto messageBox = new CustomMessageBox(ocApp()->gui()->settingsDialog());
+        messageBox->setHeaderText(tr("Confirm Folder Sync Connection Removal"))
+            .setMessageText(tr("<p>Do you really want to stop syncing the folder <i>%1</i>?</p>"
+                               "<p><b>Note:</b> This will <b>not</b> delete any files.</p>").arg(shortGuiLocalPath))
+            .setAcceptButtonText(tr("Remove Folder Sync Connection"))
+            .setRejectButtonText(tr("Cancel"))
+            .setDeleteOnClose(true);
+
+        connect(messageBox, &CustomMessageBox::finished, this, [folder, row, this](int result){
+            if (result == QDialog::Accepted) {
                 FolderMan::instance()->removeFolder(folder);
                 _sortModel->removeRow(row);
 
@@ -573,9 +593,8 @@ void AccountSettings::slotEnableVfsCurrentFolder()
     if (!selected.isValid() || !folder)
         return;
 
-    auto messageBox = new AskExperimentalVirtualFilesFeatureMessageBox(ocApp()->gui()->settingsDialog());
-
-    connect(messageBox, &AskExperimentalVirtualFilesFeatureMessageBox::accepted, this, [this, folder]() {
+    auto messageBox = CreateExperimentalVirtualFilesFeatureMessageBox(ocApp()->gui()->settingsDialog());
+    connect(messageBox, &CustomMessageBox::accepted, this, [this, folder]() {
         if (!folder) {
             return;
         }
@@ -626,7 +645,11 @@ void AccountSettings::slotEnableVfsCurrentFolder()
         Q_EMIT messageBox->accepted();
     } else {
         ApplicationGui::raise();
+#ifdef Q_OS_MACOS
         messageBox->show();
+#else
+        messageBox->open();
+#endif
     }
 }
 
@@ -637,22 +660,23 @@ void AccountSettings::slotDisableVfsCurrentFolder()
     if (!selected.isValid() || !folder)
         return;
 
-    auto msgBox = new QMessageBox(
-        QMessageBox::Question,
-        tr("Disable virtual file support?"),
-        tr("This action will disable virtual file support. As a consequence contents of folders that "
+    auto msgBox = new CustomMessageBox();
+    msgBox->setHeaderText(tr("Disable virtual file support?"))
+        .setMessageText(tr("This action will disable virtual file support. As a consequence contents of folders that "
            "are currently marked as 'available online only' will be downloaded."
            "\n\n"
            "The only advantage of disabling virtual file support is that the selective sync feature "
            "will become available again."
            "\n\n"
-           "This action will abort any currently running synchronization."));
-    auto acceptButton = msgBox->addButton(tr("Disable support"), QMessageBox::AcceptRole);
-    msgBox->addButton(tr("Cancel"), QMessageBox::RejectRole);
-    StyleHelper::applyPushButtonStyle(msgBox);
-    connect(msgBox, &QMessageBox::finished, msgBox, [this, msgBox, folder, acceptButton] {
+           "This action will abort any currently running synchronization."))
+        .setAcceptButtonText(tr("Disable support"))
+        .setRejectButtonText(tr("Cancel"))
+        .setWarningIconVisible(true)
+        .setWide(true);
+
+    connect(msgBox, &CustomMessageBox::finished, msgBox, [this, msgBox, folder](int result) {
         msgBox->deleteLater();
-        if (msgBox->clickedButton() != acceptButton|| !folder)
+        if (result != QDialog::Accepted || !folder)
             return;
 
         // It is unsafe to switch off vfs while a sync is running - wait if necessary.
@@ -685,22 +709,33 @@ void AccountSettings::slotDisableVfsCurrentFolder()
 
 void AccountSettings::showConnectionLabel(const QString &message, QStringList errors)
 {
-    const QString errStyle = QStringLiteral("color:#ffffff; background-color:#bb4d4d;padding:5px;"
-                                            "border-width: 1px; border-style: solid; border-color: #aaaaaa;"
-                                            "border-radius:5px;");
-    if (errors.isEmpty()) {
-        ui->connectLabel->setText(message);
+    _connectionMessage = message;
+    _connectionErrors = errors;
+    refreshConnectionLabel();
+}
+
+void AccountSettings::refreshConnectionLabel()
+{
+    const bool isDark = Theme::instance()->isDarkTheme();
+    const QString linkColor = isDark ? QStringLiteral("#64b5f6") : QStringLiteral("#1976d2");
+
+    // Replace href-only anchors with colored ones
+    const QString colored = QString(_connectionMessage).replace(
+        QRegularExpression(QStringLiteral("<a href=\"([^\"]+)\">")),
+                           QStringLiteral("<a href=\"\\1\" style=\"color: ") + linkColor + QLatin1String(";\">")
+        );
+
+    if (_connectionErrors.isEmpty()) {
+        ui->connectLabel->setText(colored);
         ui->connectLabel->setToolTip(QString());
-        //ui->connectLabel->setStyleSheet(QString());
     } else {
-        errors.prepend(message);
-        const QString msg = errors.join(QLatin1String("\n"));
-        qCDebug(lcAccountSettings) << msg;
-        ui->connectLabel->setText(msg);
+        QStringList parts = _connectionErrors;
+        parts.prepend(colored);
+        ui->connectLabel->setText(parts.join(QLatin1Char('\n')));
         ui->connectLabel->setToolTip(QString());
-        //ui->connectLabel->setStyleSheet(errStyle);
     }
-    ui->accountStatus->setVisible(!message.isEmpty());
+
+    ui->accountStatus->setVisible(!_connectionMessage.isEmpty());
 }
 
 void AccountSettings::slotEnableCurrentFolder(bool terminate)
@@ -716,12 +751,13 @@ void AccountSettings::slotEnableCurrentFolder(bool terminate)
         if (!currentlyPaused && !terminate) {
             // check if a sync is still running and if so, ask if we should terminate.
             if (folder->isSyncRunning()) { // its still running
-                auto msgbox = new QMessageBox(QMessageBox::Question, tr("Sync Running"),
-                    tr("The sync operation is running.<br/>Do you want to stop it?"),
-                    QMessageBox::Yes | QMessageBox::No, this);
-                msgbox->setAttribute(Qt::WA_DeleteOnClose);
-                msgbox->setDefaultButton(QMessageBox::Yes);
-                connect(msgbox, &QMessageBox::accepted, this, [this]{
+                auto msgbox = new CustomMessageBox(this);
+                msgbox->setHeaderText(tr("Sync Running"))
+                    .setMessageText(tr("The sync operation is running.<br/>Do you want to stop it?"))
+                    .setAcceptButtonText(tr("Yes"))
+                    .setRejectButtonText(tr("No"))
+                    .setDeleteOnClose(true);
+                connect(msgbox, &CustomMessageBox::accepted, this, [this]{
                     slotEnableCurrentFolder(true);
                 });
                 msgbox->open();
@@ -817,6 +853,7 @@ void AccountSettings::slotAccountStateChanged()
     case AccountState::SignedOut:
         showConnectionLabel(tr("Signed out from %1.").arg(server));
         break;
+
     case AccountState::AskingCredentials: {
         auto cred = qobject_cast<HttpCredentialsGui *>(account->credentials());
         if (cred && cred->isUsingOAuth()) {
@@ -973,6 +1010,17 @@ void AccountSettings::slotLinkActivated(const QString &link)
 void AccountSettings::onThemeChanged(bool isDark)
 {
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    ui->_folderList->setSelectionColor(isDark ? QColor(100, 181, 246, 61) : QColor(25, 118, 210, 61));
+
+    refreshConnectionLabel();
+
+    ui->networkIndicator->setColor(isDark ? Qt::gray : Qt::black);
+
+#ifdef Q_OS_WIN
+    _winSpinner->setDarkTheme();
+#else
+    ui->spinner->setColor(isDark ? Qt::gray : Qt::black);
+#endif
 }
 
 AccountSettings::~AccountSettings()
@@ -1102,20 +1150,16 @@ void AccountSettings::slotDeleteAccount()
         return;
 
     // Deleting the account potentially deletes 'this', so
-    // the QMessageBox should be destroyed before that happens.
-    auto messageBox = new QMessageBox(QMessageBox::Question,
-        tr("Confirm Account Removal"),
-        tr("<p>Do you really want to remove the connection to the account <i>%1</i>?</p>"
-           "<p><b>Note:</b> This will <b>not</b> delete any files.</p>")
-            .arg(_accountState->account()->displayName()),
-        QMessageBox::NoButton,
-        this);
-    auto yesButton = messageBox->addButton(tr("Remove connection"), QMessageBox::YesRole);
-    messageBox->addButton(tr("Cancel"), QMessageBox::NoRole);
-    StyleHelper::applyPushButtonStyle(messageBox);
+    // the MessageBox should be destroyed before that happens.
+    auto messageBox = new CustomMessageBox(this);
+    messageBox->setHeaderText(tr("Confirm Account Removal"))
+        .setMessageText(tr("<p>Do you really want to remove the connection to the account <i>%1</i>?</p>"
+           "<p><b>Note:</b> This will <b>not</b> delete any files.</p>").arg(_accountState->account()->displayName()))
+        .setAcceptButtonText(tr("Remove connection"))
+        .setRejectButtonText(tr("Cancel"));
 
-    connect(messageBox, &QMessageBox::finished, this, [this,yesButton,messageBox]{
-        if (messageBox->clickedButton() == yesButton) {
+    connect(messageBox, &CustomMessageBox::finished, this, [this] (int result) {
+        if (result == QDialog::Accepted) {
             auto manager = AccountManager::instance();
             manager->deleteAccount(_accountState);
             manager->save();

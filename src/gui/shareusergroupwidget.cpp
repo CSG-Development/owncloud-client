@@ -39,7 +39,6 @@
 #include <QDesktopServices>
 #include <QFileInfo>
 #include <QMenu>
-#include <QMessageBox>
 #include <QPainter>
 #include <QPropertyAnimation>
 

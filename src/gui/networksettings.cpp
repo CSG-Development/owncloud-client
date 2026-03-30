@@ -21,6 +21,7 @@
 #include "folderman.h"
 #include "theme.h"
 #include "customui/stylehelper.h"
+#include "customui/radioindicatorproxy.h"
 
 #include <QList>
 #include <QNetworkProxy>
@@ -53,6 +54,16 @@ NetworkSettings::NetworkSettings(QWidget *parent)
 
     StyleHelper::applyPushButtonStyle(this);
 
+    _ui->noProxyRadioButton->setStyle(new RadioIndicatorProxy(_ui->noProxyRadioButton));
+    _ui->systemProxyRadioButton->setStyle(new RadioIndicatorProxy(_ui->systemProxyRadioButton));
+    _ui->manualProxyRadioButton->setStyle(new RadioIndicatorProxy(_ui->manualProxyRadioButton));
+    _ui->noDownloadLimitRadioButton->setStyle(new RadioIndicatorProxy(_ui->noDownloadLimitRadioButton));
+    _ui->autoDownloadLimitRadioButton->setStyle(new RadioIndicatorProxy(_ui->autoDownloadLimitRadioButton));
+    _ui->downloadLimitRadioButton->setStyle(new RadioIndicatorProxy(_ui->downloadLimitRadioButton));
+    _ui->noUploadLimitRadioButton->setStyle(new RadioIndicatorProxy(_ui->noUploadLimitRadioButton));
+    _ui->autoUploadLimitRadioButton->setStyle(new RadioIndicatorProxy(_ui->autoUploadLimitRadioButton));
+    _ui->uploadLimitRadioButton->setStyle(new RadioIndicatorProxy(_ui->uploadLimitRadioButton));
+
     _ui->hostLineEdit->setPlaceholderText(tr("Hostname of proxy server"));
     _ui->userLineEdit->setPlaceholderText(tr("Username for proxy server"));
     _ui->passwordLineEdit->setPlaceholderText(tr("Password for proxy server"));
@@ -67,15 +78,11 @@ NetworkSettings::NetworkSettings(QWidget *parent)
     _ui->userLineEdit->setEnabled(true);
     _ui->passwordLineEdit->setEnabled(true);
     _ui->authWidgets->setEnabled(_ui->authRequiredcheckBox->isChecked());
-    connect(_ui->authRequiredcheckBox, &QAbstractButton::toggled,
-        _ui->authWidgets, &QWidget::setEnabled);
 
-    connect(_ui->manualProxyRadioButton, &QAbstractButton::toggled,
-        _ui->manualSettings, &QWidget::setEnabled);
-    connect(_ui->manualProxyRadioButton, &QAbstractButton::toggled,
-        _ui->typeComboBox, &QWidget::setEnabled);
-    connect(_ui->manualProxyRadioButton, &QAbstractButton::toggled,
-        this, &NetworkSettings::checkAccountLocalhost);
+    connect(_ui->authRequiredcheckBox, &QAbstractButton::toggled, _ui->authWidgets, &QWidget::setEnabled);
+    connect(_ui->manualProxyRadioButton, &QAbstractButton::toggled, _ui->manualSettings, &QWidget::setEnabled);
+    connect(_ui->manualProxyRadioButton, &QAbstractButton::toggled, _ui->typeComboBox, &QWidget::setEnabled);
+    connect(_ui->manualProxyRadioButton, &QAbstractButton::toggled, this, &NetworkSettings::checkAccountLocalhost);
 
     loadProxySettings();
     loadBWLimitSettings();
@@ -255,9 +262,7 @@ void NetworkSettings::checkEmptyProxyHost()
 
 void NetworkSettings::showEvent(QShowEvent *event)
 {
-    if (!event->spontaneous()
-        && _ui->manualProxyRadioButton->isChecked()
-        && _ui->hostLineEdit->text().isEmpty()) {
+    if (!event->spontaneous() && _ui->manualProxyRadioButton->isChecked() && _ui->hostLineEdit->text().isEmpty()) {
         _ui->noProxyRadioButton->setChecked(true);
         checkEmptyProxyHost();
         saveProxySettings();

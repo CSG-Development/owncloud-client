@@ -15,19 +15,20 @@
 #include "updateurldialog.h"
 #include "customui/stylehelper.h"
 
-#include <QMessageBox>
 #include <QPushButton>
 #include <QTimer>
 
 namespace APP {
 
 UpdateUrlDialog::UpdateUrlDialog(const QString &title, const QString &content, const QUrl &oldUrl, const QUrl &newUrl, QWidget *parent)
-    : QMessageBox(QMessageBox::Warning, title, content, QMessageBox::NoButton, parent)
+    : CustomMessageBox(parent)
     , _oldUrl(oldUrl)
     , _newUrl(newUrl)
 {
+    setHeaderText(title);
+    setMessageText(content);
     // this special dialog deletes itself after use
-    setAttribute(Qt::WA_DeleteOnClose);
+    setDeleteOnClose(true);
 
     if (Utility::urlEqual(_oldUrl, _newUrl)) {
         // need to show the dialog before accepting the change
@@ -38,9 +39,8 @@ UpdateUrlDialog::UpdateUrlDialog(const QString &title, const QString &content, c
         return;
     }
 
-    addButton(tr("Change url permanently to %1").arg(_newUrl.toString()), QMessageBox::AcceptRole);
-    addButton(tr("Reject"), QMessageBox::RejectRole);
-    StyleHelper::applyPushButtonStyle(this);
+    setAcceptButtonText(tr("Change url permanently to %1").arg(_newUrl.toString()));
+    setRejectButtonText(tr("Reject"));
 }
 
 UpdateUrlDialog *UpdateUrlDialog::fromAccount(AccountPtr account, const QUrl &newUrl, QWidget *parent)

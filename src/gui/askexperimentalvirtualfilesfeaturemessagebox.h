@@ -1,17 +1,11 @@
 #pragma once
 
-#include <QMessageBox>
+class QWidget;
 
 namespace APP {
 
-/**
- * A simple message box used whenever we have to ask the user whether to enable VFS, which is an experimental feature.
- * The dialog will clean itself up after it has been closed.
- */
-class AskExperimentalVirtualFilesFeatureMessageBox : public QMessageBox
-{
-public:
-    AskExperimentalVirtualFilesFeatureMessageBox(QWidget *parent = nullptr);
-};
+class CustomMessageBox;
+
+CustomMessageBox* CreateExperimentalVirtualFilesFeatureMessageBox(QWidget *parent);
 
 }

@@ -35,7 +35,7 @@ CodeDialogController::CodeDialogController(QObject *parent)
     });
 
     btnResendCodeEnabled.setBinding([this]() {
-        return isCodeValid() && errorState.value() == CodeErrorState::None;
+        return isCodeValid();
     });
 
     spinnerVisible.setBinding([this]() {
@@ -73,7 +73,6 @@ CodeDialog::CodeDialog(QWidget *parent)
         controller_->darkTheme.setValue(isDark);
     });
 
-    // setWindowFlags(Qt::Tool|Qt::FramelessWindowHint|Qt::NoDropShadowWindowHint);
     setWindowFlags(Qt::FramelessWindowHint|Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
     setAutoFillBackground(false);
@@ -144,9 +143,9 @@ CodeDialog::CodeDialog(QWidget *parent)
         controller_->codeString.setValue(ui->codeInputWidget->codeStr());
     });
 
-    connect(ui->codeInputWidget, &CodeInputWidget::focusGained, this, [this] {
-        controller_->clearError();
-    });
+    //connect(ui->codeInputWidget, &CodeInputWidget::focusGained, this, [this] {
+    //    controller_->clearError();
+    //});
 
     setDialogState(CodeDialogState::AllowAccess);
     controller_->darkTheme.setValue(APP::Theme::instance()->isDarkTheme());
@@ -190,6 +189,7 @@ QString CodeDialog::getCode() const
 void CodeDialog::clearCode()
 {
     ui->codeInputWidget->clearCode();
+    controller_->codeString.setValue(QString());
 }
 
 void CodeDialog::keyPressEvent(QKeyEvent *event)

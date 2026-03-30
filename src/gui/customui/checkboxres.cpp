@@ -40,47 +40,91 @@ void init()
 {
     static bool is_initialized = false;
     if (!is_initialized) {
+#ifdef Q_OS_MACOS
         checkboxUncheckedIcons[0] = {
-            QIcon(QStringLiteral(":/res/checkbox/light/normal/unchecked.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/light/hover/unchecked.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/light/pressed/unchecked.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/light/disabled/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/light/normal/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/light/normal/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/light/normal/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/light/disabled/unchecked.svg")),
         };
 
         checkboxUncheckedIcons[1] = {
-            QIcon(QStringLiteral(":/res/checkbox/dark/normal/unchecked.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/dark/hover/unchecked.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/dark/pressed/unchecked.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/dark/disabled/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/dark/normal/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/dark/normal/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/dark/normal/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/dark/disabled/unchecked.svg")),
         };
 
         checkboxCheckedIcons[0] = {
-            QIcon(QStringLiteral(":/res/checkbox/light/normal/checked.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/light/hover/checked.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/light/pressed/checked.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/light/disabled/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/light/normal/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/light/normal/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/light/normal/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/light/disabled/checked.svg")),
         };
 
         checkboxCheckedIcons[1] = {
-            QIcon(QStringLiteral(":/res/checkbox/dark/normal/checked.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/dark/hover/checked.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/dark/pressed/checked.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/dark/disabled/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/dark/normal/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/dark/normal/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/dark/normal/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/dark/disabled/checked.svg")),
         };
 
         checkboxPartialIcons[0] = {
-            QIcon(QStringLiteral(":/res/checkbox/light/normal/partial.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/light/hover/partial.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/light/pressed/partial.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/light/disabled/partial.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/light/normal/partial.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/light/normal/partial.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/light/normal/partial.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/light/disabled/partial.svg")),
         };
 
         checkboxPartialIcons[1] = {
-            QIcon(QStringLiteral(":/res/checkbox/dark/normal/partial.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/dark/hover/partial.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/dark/pressed/partial.svg")),
-            QIcon(QStringLiteral(":/res/checkbox/dark/disabled/partial.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/dark/normal/partial.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/dark/normal/partial.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/dark/normal/partial.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_mac/dark/disabled/partial.svg")),
         };
+#else
+        checkboxUncheckedIcons[0] = {
+            QIcon(QStringLiteral(":/res/checkbox_win/light/normal/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/light/hover/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/light/pressed/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/light/disabled/unchecked.svg")),
+        };
+
+        checkboxUncheckedIcons[1] = {
+            QIcon(QStringLiteral(":/res/checkbox_win/dark/normal/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/dark/hover/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/dark/pressed/unchecked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/dark/disabled/unchecked.svg")),
+        };
+
+        checkboxCheckedIcons[0] = {
+            QIcon(QStringLiteral(":/res/checkbox_win/light/normal/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/light/hover/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/light/pressed/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/light/disabled/checked.svg")),
+        };
+
+        checkboxCheckedIcons[1] = {
+            QIcon(QStringLiteral(":/res/checkbox_win/dark/normal/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/dark/hover/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/dark/pressed/checked.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/dark/disabled/checked.svg")),
+        };
+
+        checkboxPartialIcons[0] = {
+            QIcon(QStringLiteral(":/res/checkbox_win/light/normal/partial.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/light/hover/partial.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/light/pressed/partial.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/light/disabled/partial.svg")),
+        };
+
+        checkboxPartialIcons[1] = {
+            QIcon(QStringLiteral(":/res/checkbox_win/dark/normal/partial.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/dark/hover/partial.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/dark/pressed/partial.svg")),
+            QIcon(QStringLiteral(":/res/checkbox_win/dark/disabled/partial.svg")),
+        };
+#endif
 
         is_initialized = true;
     }

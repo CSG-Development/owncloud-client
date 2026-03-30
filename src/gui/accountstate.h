@@ -29,7 +29,6 @@
 #include <memory>
 
 class QDialog;
-class QMessageBox;
 class QSettings;
 
 namespace APP {

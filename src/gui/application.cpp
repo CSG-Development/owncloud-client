@@ -51,7 +51,6 @@
 #include <QDir>
 #include <QFileOpenEvent>
 #include <QLibraryInfo>
-#include <QMessageBox>
 #include <QPushButton>
 #include <QTranslator>
 
@@ -388,7 +387,7 @@ void Application::openVirtualFile(const QString &filename)
     auto folder = FolderMan::instance()->folderForPath(filename, &relativePath);
     if (!folder) {
         qWarning(lcApplication) << "Can't find sync folder for" << filename;
-        // TODO: show a QMessageBox for errors
+        // TODO: show a MessageBox for errors
         return;
     }
     folder->implicitlyHydrateFile(relativePath);

@@ -30,6 +30,7 @@
 #include "common/vfs.h"
 #include "gui/settingsdialog.h"
 #include "gui/customui/ccheckbox.h"
+#include "gui/customdialogs/custommessagebox.h"
 
 #include <QVBoxLayout>
 
@@ -92,11 +93,8 @@ void FolderWizardSelectiveSync::virtualFilesCheckboxClicked()
     // The click has already had an effect on the box, so if it's
     // checked it was newly activated.
     if (_virtualFilesCheckBox->isChecked()) {
-        auto *messageBox = new AskExperimentalVirtualFilesFeatureMessageBox(ocApp()->gui()->settingsDialog());
-
-        messageBox->setAttribute(Qt::WA_DeleteOnClose);
-
-        connect(messageBox, &AskExperimentalVirtualFilesFeatureMessageBox::rejected, this, [this]() {
+        auto *messageBox = CreateExperimentalVirtualFilesFeatureMessageBox(ocApp()->gui()->settingsDialog());
+        connect(messageBox, &CustomMessageBox::rejected, this, [this]() {
             _virtualFilesCheckBox->setChecked(false);
         });
 
@@ -106,7 +104,11 @@ void FolderWizardSelectiveSync::virtualFilesCheckboxClicked()
             Q_EMIT messageBox->accepted();
         } else {
             ApplicationGui::raise();
+#ifdef Q_OS_MACOS
             messageBox->show();
+#else
+            messageBox->open();
+#endif
         }
     }
 }

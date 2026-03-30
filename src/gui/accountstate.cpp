@@ -29,6 +29,7 @@
 #include "gui/settingsdialog.h"
 #include "gui/spacemigration.h"
 #include "gui/tlserrordialog.h"
+#include "gui/customdialogs/custommessagebox.h"
 
 #include "settingsdialog.h"
 #include "socketapi/socketapi.h"
@@ -156,8 +157,13 @@ AccountState::AccountState(AccountPtr account)
     }
 
     connect(account.data(), &Account::appProviderErrorOccured, this, [](const QString &error) {
-        QMessageBox *msgBox = new QMessageBox(QMessageBox::Information, Theme::instance()->appNameGUI(), error, {}, ocApp()->gui()->settingsDialog());
-        msgBox->setAttribute(Qt::WA_DeleteOnClose);
+        CustomMessageBox *msgBox = new CustomMessageBox(ocApp()->gui()->settingsDialog());
+        msgBox->setHeaderText(Theme::instance()->appNameGUI())
+            .setMessageText(error)
+            .setSingleButton(true)
+            .setSingleButtonText(tr("OK"))
+            .setDeleteOnClose(true);
+
         ApplicationGui::raise();
         msgBox->open();
     });
@@ -663,6 +669,7 @@ void AccountState::initializeRA()
         }
         else { qCDebug(lcAccountState) << "errorCancel id isn't match"; }
     });
+
     connect(oc.get(), &OverlayController::errorOk, this, [this](ErrorDialogState state, const QUuid& id) {
         if (_account && _account->uuid() == id) {
             qCDebug(lcAccountState) << "errorOk";
@@ -672,7 +679,6 @@ void AccountState::initializeRA()
     });
 
     connect(_deviceController, &DeviceController::accessCodeRequest, this, [this,oc] {
-        qCDebug(lcAccountState) << "accessCodeRequest";
         if (oc && _account) {
             qCDebug(lcAccountState) << "accessCodeRequest";
             oc->requestAccessCode(_account->uuid(), true);

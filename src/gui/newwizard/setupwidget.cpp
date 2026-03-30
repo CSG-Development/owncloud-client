@@ -6,6 +6,7 @@
 #include "gui/applicationgui.h"
 #include "gui/settingsdialog.h"
 #include "gui/customui/stylehelper.h"
+#include "gui/customdialogs/custommessagebox.h"
 #include "pages/emailpage.h"
 #include "pages/credentialspage.h"
 #include "pages/waitpage.h"
@@ -17,7 +18,6 @@
 #include "configfile.h"
 
 #include <QLabel>
-#include <QMessageBox>
 #include <QStyleFactory>
 
 using namespace std::chrono_literals;
@@ -121,13 +121,14 @@ void SetupWidget::setEmail(const QString &email)
 
 void SetupWidget::onCancelClicked()
 {
-    auto messageBox = new QMessageBox(QMessageBox::Warning,
-        tr("Cancel Setup"),
-        tr("Do you really want to cancel the account setup?"),
-        QMessageBox::Yes | QMessageBox::No, ocApp()->gui()->settingsDialog());
-    messageBox->setAttribute(Qt::WA_DeleteOnClose);
-    StyleHelper::applyPushButtonStyle(messageBox);
-    connect(messageBox, &QMessageBox::accepted, this, [this] {
+    auto messageBox = new CustomMessageBox(ocApp()->gui()->settingsDialog());
+    messageBox->setHeaderText(tr("Cancel Setup"))
+        .setMessageText(tr("Do you really want to cancel the account setup?"))
+        .setAcceptButtonText(tr("Yes"))
+        .setRejectButtonText(tr("No"))
+        .setDeleteOnClose(true);
+
+    connect(messageBox, &CustomMessageBox::accepted, this, [this] {
         Q_EMIT rejected();
     });
     ApplicationGui::raise();

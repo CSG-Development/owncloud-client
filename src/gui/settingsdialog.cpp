@@ -28,6 +28,7 @@
 #include "customui/dimwidget.h"
 #include "customui/menu_toolbutton.h"
 #include "customui/stylehelper.h"
+#include "customdialogs/custommessagebox.h"
 #include "resources/resources.h"
 
 #include <QActionGroup>
@@ -35,7 +36,6 @@
 #include <QImage>
 #include <QLabel>
 #include <QLayout>
-#include <QMessageBox>
 #include <QPainter>
 #include <QPixmap>
 #include <QPushButton>
@@ -288,11 +288,13 @@ SettingsDialog::SettingsDialog(ApplicationGui *gui, QWidget *parent)
     auto *quitAction = new ToolButtonAction(QStringLiteral("quit"), tr("Quit %1").arg(appNameGui), this);
     quitAction->setCheckable(false);
     connect(quitAction, &QAction::triggered, this, [this, appNameGui] {
-        auto box = new QMessageBox(QMessageBox::Question, tr("Quit %1").arg(appNameGui),
-            tr("Are you sure you want to quit %1?").arg(appNameGui), QMessageBox::Yes | QMessageBox::No, this);
-        box->setAttribute(Qt::WA_DeleteOnClose);
-        StyleHelper::applyPushButtonStyle(box);
-        connect(box, &QMessageBox::accepted, qApp, &QCoreApplication::quit, Qt::QueuedConnection);
+        auto box = new CustomMessageBox(this);
+        box->setHeaderText(tr("Quit %1").arg(appNameGui))
+            .setMessageText(tr("Are you sure you want to quit %1?").arg(appNameGui))
+            .setAcceptButtonText(tr("Yes"))
+            .setRejectButtonText(tr("No"))
+            .setDeleteOnClose(true);
+        connect(box, &CustomMessageBox::accepted, qApp, &QCoreApplication::quit, Qt::QueuedConnection);
         box->open();
     });
     _ui->toolBar->addAction(quitAction);
@@ -334,7 +336,11 @@ SettingsDialog::SettingsDialog(ApplicationGui *gui, QWidget *parent)
     connect(_ui->dialogStack, &QStackedWidget::currentChanged, this, [this] {
         auto *w = _ui->dialogStack->currentWidget();
         if (!w->windowTitle().isEmpty()) {
-            setWindowTitle(tr("%1 - %2").arg(Theme::instance()->appNameGUI(), w->windowTitle()));
+            if (w->objectName() == QStringLiteral("SetupWidget")) {
+                setWindowTitle(w->windowTitle());
+            } else {
+                setWindowTitle(tr("%1 - %2").arg(Theme::instance()->appNameGUI(), w->windowTitle()));
+            }
         } else {
             setWindowTitle(Theme::instance()->appNameGUI());
         }
@@ -348,10 +354,32 @@ SettingsDialog::~SettingsDialog()
 
 void SettingsDialog::updateToolbarTheme()
 {
-    _ui->toolBar->setStyleSheet(QStringLiteral(
-        "background-color: %1;"
-        "border: none;").arg(Theme::instance()->isDarkTheme() ? QStringLiteral("#000000") : QStringLiteral("#FFFFFF"))
+    const bool isDark = Theme::instance()->isDarkTheme();
+#ifdef Q_OS_WINDOWS
+    QString styleStr = QStringLiteral(
+        "#toolBar {background-color: %1;"
+        "border: none;"
+        "border-bottom: 1px solid %2;"
+        "}"
         );
+    _ui->toolBar->setStyleSheet(styleStr
+                                    .arg(isDark ? QStringLiteral("#1D1E21") : QStringLiteral("#FFFFFF"))
+                                    .arg(isDark ? QStringLiteral("#616161") : QStringLiteral("rgba(203, 205, 211, 1)"))
+                                );
+#else
+    QString styleStr = QStringLiteral(
+        "#toolBar {background-color: %1;"
+        "border: none;"
+        "border-bottom: 1px solid %2;"
+        "border-top: 1px solid %3;"
+        "}"
+        );
+    _ui->toolBar->setStyleSheet(styleStr
+                                    .arg(isDark ? QStringLiteral("#1D1E21") : QStringLiteral("#FFFFFF"))
+                                    .arg(isDark ? QStringLiteral("rgba(97, 97, 97, 1)") : QStringLiteral("rgba(203, 205, 211, 1)"))
+                                    .arg(isDark ? QStringLiteral("transparent") : QStringLiteral("#F3F3F3"))
+                                );
+#endif
 }
 
 void SettingsDialog::addModalWidget(QWidget *w)
@@ -399,18 +427,6 @@ QWidget* SettingsDialog::currentPage()
 {
     return _ui->stack->currentWidget();
 }
-
-// void SettingsDialog::attachCodeDialog(bool attach)
-// {
-//     disconnect(_codeDialog, &CodeDialog::codeAction, this, nullptr);
-
-//     if (attach) {
-//         connect(_codeDialog, &CodeDialog::codeAction, this, [this](CodeAction act, const QString& /*code*/) {
-//             if (act == CodeAction::Skip)
-//                 showCodePage(CodeRequestDialog::Hide, SyncState::Enabled);
-//         });
-//     }
-// }
 
 void SettingsDialog::changeEvent(QEvent *e)
 {

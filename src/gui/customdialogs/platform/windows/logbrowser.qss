@@ -1,0 +1,145 @@
+.helper_frame { border: none; }
+
+#frame {border-radius: 7px;}
+
+#frameContent {
+    border: none;
+}
+
+#btnIcon,
+#btnIconTitle,
+#btnHeadClose {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+#frameButtons {
+    border-top: none;
+    border-radius: 7px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+#frameTitle {
+    border-bottom: none;
+    border-radius: 7px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+#btnClose,
+#btnOpenFolder {
+    border-radius: 4px;
+    font-size: 14px;
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+#lblHeaderTitle,
+#lblWarn,
+#lblText,
+#lblPath,
+#lblLocation,
+#chkEnableLogging,
+#chkLogHttp,
+#lblFilesKeep,
+#lblFooter,
+#edFilesKeep {
+    font-size: 14px;
+}
+
+
+[theme="light"] #frame {background: #FFFFFF;}
+[theme="light"] #frameTitle {
+    background: rgba(240, 241, 245, 1);
+    border-left: 1px solid rgba(203, 205, 211, 1);
+    border-right: 1px solid rgba(203, 205, 211, 1);
+    border-top: 1px solid rgba(203, 205, 211, 1);
+}
+
+[theme="light"] #frameContent {
+    background: #FFFFFF;
+    border: 1px solid rgba(203, 205, 211, 1);
+}
+
+[theme="light"] #frameButtons {
+    background: rgba(240, 241, 245, 1);
+    border-left: 1px solid rgba(203, 205, 211, 1);
+    border-right: 1px solid rgba(203, 205, 211, 1);
+    border-bottom: 1px solid rgba(203, 205, 211, 1);
+}
+
+[theme="light"] #btnClose,
+[theme="light"] #btnOpenFolder {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgb(223, 223, 223);
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="light"] #btnClose:hover,
+[theme="light"] #btnOpenFolder:hover {
+    background: rgb(247, 247, 247);
+    border: 1px solid rgb(223, 223, 223);
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="light"] #btnClose:pressed,
+[theme="light"] #btnOpenFolder:pressed {
+    background: rgb(242, 243, 244);
+    border: 1px solid rgb(223, 223, 223);
+    color: rgba(0, 0, 0, 0.6);
+}
+
+[theme="light"] #lblWarn {
+    color: rgba(244, 67, 54, 1);
+}
+
+
+[theme="dark"] #frame {background: rgba(38, 38, 41, 1);}
+
+[theme="dark"] #frameTitle {
+    background: rgba(61, 62, 65, 1);
+    border-left: 1px solid rgba(97, 97, 97, 1);
+    border-right: 1px solid rgba(97, 97, 97, 1);
+    border-top: 1px solid rgba(97, 97, 97, 1);
+}
+
+[theme="dark"] #frameContent {
+    background: rgba(38, 38, 41, 1);
+    border-top: 1px solid rgba(97, 97, 97, 1);
+    border-left: 1px solid rgba(97, 97, 97, 1);
+    border-right: 1px solid rgba(97, 97, 97, 1);
+    border-bottom: 1px solid rgba(97, 97, 97, 1)
+}
+
+[theme="dark"] #frameButtons {
+    background: rgba(61, 62, 65, 1);
+    border-left: 1px solid rgba(97, 97, 97, 1);
+    border-right: 1px solid rgba(97, 97, 97, 1);
+    border-bottom: 1px solid rgba(97, 97, 97, 1);
+}
+
+[theme="dark"] #btnClose,
+[theme="dark"] #btnOpenFolder {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgb(85, 85, 85);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="dark"] #btnClose:hover,
+[theme="dark"] #btnOpenFolder:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgb(85, 85, 85);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="dark"] #btnClose:pressed,
+[theme="dark"] #btnOpenFolder:pressed {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgb(85, 85, 85);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+[theme="dark"] #lblWarn {
+    color: rgba(242, 143, 140, 1);
+}

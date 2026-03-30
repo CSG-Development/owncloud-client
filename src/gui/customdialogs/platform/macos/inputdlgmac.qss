@@ -1,0 +1,227 @@
+.helper_frame { border: none; }
+
+#frame,
+#frameContent,
+#frameButtons {border-radius: 7px;}
+
+#frameContent {
+    border-bottom: none;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+#frameButtons {
+    border-top: none;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+#btnIcon,
+#btnClose,
+#btnIconWarn {
+    border: none;
+    background: transparent;
+}
+
+#lblHeader {font-size: 20px;}
+#lblText {font-size: 14px;}
+#edText {
+    font-size: 12px;
+    border-radius: 4px;
+    padding-left: 11px;
+    padding-right: 11px;
+}
+
+#btnAccept,
+#btnReject {
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Focus frame around buttons, light theme */
+#frameAcceptBtn,
+#frameRejectBtn {
+    border-radius: 6px;
+}
+
+[theme="light"] #frameRejectBtn,
+[theme="light"] #frameAcceptBtn {
+    border-color: transparent;
+}
+
+/*[theme="light"] #frameRejectBtn[focused="false"],
+[theme="light"] #frameAcceptBtn[focused="false"] {
+    border: 2px solid transparent;
+}
+
+[theme="light"] #frameRejectBtn[focused="true"],
+[theme="light"] #frameAcceptBtn[focused="true"] {
+    border: 2px solid rgba(0, 0, 0, 0.87);
+}*/
+
+
+[theme="light"] #frame {background: #FFFFFF;}
+
+[theme="light"] #frameContent {
+    border-top: 1px solid rgb(203, 205, 211);
+    border-left: 1px solid rgb(203, 205, 211);
+    border-right: 1px solid rgb(203, 205, 211);
+    background: #FFFFFF;
+}
+
+[theme="light"] #frameButtons {
+    border-left: 1px solid rgb(203, 205, 211);
+    border-right: 1px solid rgb(203, 205, 211);
+    border-bottom: 1px solid rgb(203, 205, 211);
+    background: rgb(240, 241, 245);
+}
+
+/* Accept button */
+[theme="light"] #btnAccept {
+    border: 1px solid rgb(25, 118, 210);
+    background: rgb(25, 118, 210);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="light"] #btnAccept:hover {
+    border: 1px solid rgb(30, 136, 229);
+    background: rgb(30, 136, 229);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="light"] #btnAccept:pressed {
+    border: 1px solid rgb(20, 92, 164);
+    background: rgb(20, 92, 164);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Reject button */
+[theme="light"] #btnReject {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgb(223, 223, 223);
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="light"] #btnReject:hover {
+    background: rgb(247, 247, 247);
+    border: 1px solid rgb(223, 223, 223);
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="light"] #btnReject:pressed {
+    background: rgb(242, 243, 244);
+    border: 1px solid rgb(223, 223, 223);
+    color: rgba(0, 0, 0, 0.6);
+}
+
+/* QLineEdit */
+[theme="light"] #edText {
+    background: rgba(255, 255, 255, 0.7);
+    color: rgba(0, 0, 0, 0.87);
+    border: 1px solid rgb(203, 205, 211);
+}
+
+[theme="light"] #edText:focus {
+    background: rgba(255, 255, 255, 0.7);
+    color: rgba(0, 0, 0, 0.87);
+    border: 1px solid rgb(25, 118, 210);
+}
+
+[theme="light"] #edText:disabled {
+    background: rgb(246, 246, 246);
+    color: rgb(187, 187, 187);
+    border: 1px solid rgb(203, 205, 211);
+}
+
+
+/* Focus frame around buttons, dark theme */
+/*[theme="dark"] #frameRejectBtn,
+[theme="dark"] #frameAcceptBtn {
+    border-color: transparent;
+}
+
+[theme="dark"] #frameRejectBtn[focused="false"],
+[theme="dark"] #frameAcceptBtn[focused="false"] {
+    border: 2px solid transparent;
+}
+
+[theme="dark"] #frameRejectBtn[focused="true"],
+[theme="dark"] #frameAcceptBtn[focused="true"] {
+    border: 2px solid rgb(222, 222, 222);
+}*/
+
+/* Accept button */
+[theme="dark"] #btnAccept {
+    border: 1px solid rgba(100, 181, 246, 1);
+    background: rgb(100, 181, 246);
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="dark"] #btnAccept:hover {
+    border: 1px solid rgb(144, 202, 249);
+    background: rgb(144, 202, 249);
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="dark"] #btnAccept:pressed {
+    border: 1px solid rgb(53, 158, 243);
+    background: rgb(53, 158, 243);
+    color: rgba(0, 0, 0, 0.6);
+}
+
+/* Reject button */
+[theme="dark"] #btnReject {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgb(85, 85, 85);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="dark"] #btnReject:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgb(85, 85, 85);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="dark"] #btnReject:pressed {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgb(85, 85, 85);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* QLineEdit */
+[theme="dark"] #edText {
+    background: rgba(97, 97, 97, 0.7);
+    color: rgba(255, 255, 255, 0.87);
+    border: 1px solid rgb(97, 97, 97);
+}
+
+[theme="dark"] #edText:focus {
+    background: rgba(97, 97, 97, 0.7);
+    color: rgba(255, 255, 255, 0.87);
+    border: 1px solid rgb(100, 181, 246);
+}
+
+[theme="dark"] #edText:disabled {
+    background: rgb(246, 246, 246);
+    color: rgb(107, 108, 109);
+    border: 1px solid rgb(97, 97, 97);
+}
+
+[theme="dark"] #frame {background: #000000;}
+
+[theme="dark"] #frameContent {
+    border-top: 1px solid rgb(97, 97, 97);
+    border-left: 1px solid rgb(97, 97, 97);
+    border-right: 1px solid rgb(97, 97, 97);
+    background: rgb(38, 38, 41);
+}
+
+[theme="dark"] #frameButtons {
+    border-left: 1px solid rgb(97, 97, 97);
+    border-right: 1px solid rgb(97, 97, 97);
+    border-bottom: 1px solid rgb(97, 97, 97);
+    background: rgb(61, 61, 65);
+}
+
+[theme="dark"] #lblHeader,
+[theme="dark"] #lblText {color: rgba(255, 255, 255, 0.87);}

@@ -2,16 +2,15 @@
 #include "ui_accountconfiguredpage.h"
 
 #include "gui/application.h"
-#include "gui/guiutility.h"
 #include "gui/settingsdialog.h"
 #include "gui/customui/stylehelper.h"
+#include "gui/askexperimentalvirtualfilesfeaturemessagebox.h"
 #include "libsync/theme.h"
 
 #include "resources/resources.h"
 
 #include <QDir>
 #include <QFileDialog>
-#include <QMessageBox>
 //#include <QCheckBox>
 
 
@@ -118,31 +117,8 @@ AccountConfiguredPage::AccountConfiguredPage(
 
     if (vfsModeIsExperimental) {
         connect(_ui->useVfsRadioButton, &CRadioButton::clicked, this, [this]() {
-            auto messageBox = new QMessageBox(
-                QMessageBox::Warning,
-                tr("Enable experimental feature?"),
-                tr("When the \"virtual files\" mode is enabled no files will be downloaded initially. "
-                   "Instead, a tiny file will be created for each file that exists on the server. "
-                   "The contents can be downloaded by running these files or by using their context menu."
-                   "\n\n"
-                   "The virtual files mode is mutually exclusive with selective sync. "
-                   "Currently unselected folders will be translated to online-only folders "
-                   "and your selective sync settings will be reset."
-                   "\n\n"
-                   "Switching to this mode will abort any currently running synchronization."
-                   "\n\n"
-                   "This is a new, experimental mode. If you decide to use it, please report any "
-                   "issues that come up."),
-                QMessageBox::NoButton,
-                this);
-
-            messageBox->addButton(tr("Enable experimental placeholder mode"), QMessageBox::AcceptRole);
-            messageBox->addButton(tr("Stay safe"), QMessageBox::RejectRole);
-
-            messageBox->setAttribute(Qt::WA_DeleteOnClose);
-            StyleHelper::applyPushButtonStyle(messageBox);
-
-            connect(messageBox, &QMessageBox::rejected, this, [this]() {
+            auto messageBox = CreateExperimentalVirtualFilesFeatureMessageBox(this);
+            connect(messageBox, &MessageBox::rejected, this, [this]() {
                 // bring back to "safety"
                 _ui->syncEverythingRadioButton->setChecked(true);
             });

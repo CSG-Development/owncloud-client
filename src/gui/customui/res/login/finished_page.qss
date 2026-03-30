@@ -13,7 +13,10 @@
     font-size: 14px;
 }
 
-.button_radio { font-size: 14px; }
+.button_radio {
+    font-size: 14px;
+    padding: 0px;
+}
 
 .button_icon_tool {
     background: transparent;
@@ -21,13 +24,23 @@
     border-radius: 20px;
 }
 
+#btnVfsIcon { border: none; background: transparent; }
+
 #frameContent { border-radius: 24px; }
+
 #lblHeader { font-size: 34px; }
+#lblUseVfs, #lblConfigManually, #lblDownloadEverything { font-size: 14px; }
+
 #btnBrowse, #btnReset { border: none; }
 
-#chkAdvanced, #lblConfigDownload, #lblLocalDir {
+#chkAdvanced {
     font-size: 16px;
-    font-style: bold;
+}
+
+#lblConfigDownload,
+#lblLocalDir {
+    font-size: 16px;
+    font-weight: bold;
 }
 
 #frameErrorMessage {
@@ -53,9 +66,6 @@
 [theme="light"] #lblHeader,
 [theme="light"] #lblErrorText { color: rgba(0, 0, 0, 0.87); }
 [theme="light"] #frameContent { background-color: #FFFFFF; }
-
-[theme="light"] #btnBrowse { image: url(":/res/login/browse_light.svg"); }
-[theme="light"] #btnReset { image: url(":/res/login/reset_light.svg"); }
 [theme="light"] #lblErrorIcon { image: url(":/res/login/error_light.svg"); }
 
 [theme="light"] #frameErrorMessage { background: rgba(244,67,54,31); }
@@ -77,9 +87,6 @@
 [theme="dark"] #lblHeader,
 [theme="dark"] #lblErrorText { color: rgba(255, 255, 255, 0.87); }
 [theme="dark"] #frameContent { background-color: #262729; }
-
-[theme="dark"] #btnBrowse { image: url(":/res/login/browse_dark.svg"); }
-[theme="dark"] #btnReset { image: url(":/res/login/reset_dark.svg"); }
 [theme="dark"] #lblErrorIcon { image: url(":/res/login/error_dark.svg"); }
 
 [theme="dark"] #frameErrorMessage { background: rgba(242,143,140,61); }

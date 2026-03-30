@@ -19,9 +19,11 @@
 #include "application.h"
 #include "common/version.h"
 #include "configfile.h"
+#include "gui/customdialogs/dlgutils.h"
 #include "theme.h"
 
 #include "gui/settingsdialog.h"
+#include "gui/customdialogs/custommessagebox.h"
 
 #ifdef WITH_AUTO_UPDATER
 #include "updater/updater.h"
@@ -36,9 +38,9 @@
 
 #include "translations.h"
 #include "customui/stylehelper.h"
+#include "customdialogs/custommessagebox.h"
 
 #include <QDir>
-#include <QMessageBox>
 #include <QNetworkProxy>
 #include <QOperatingSystemVersion>
 #include <QScopedValueRollback>
@@ -84,7 +86,12 @@ GeneralSettings::GeneralSettings(QWidget *parent)
         saveMiscSettings();
 
         // warn user that a language change requires a restart to take effect
-        QMessageBox::warning(this, tr("Warning"), tr("Language changes require a restart of this application to take effect."), QMessageBox::Ok);
+        CustomMessageBox msgbox(this);
+        msgbox.setHeaderText(tr("Warning"))
+            .setMessageText(tr("Language changes require a restart of this application to take effect."))
+            .setSingleButton(true)
+            .setSingleButtonText(tr("OK"));
+        msgbox.exec();
     });
 
     /* handle the hidden file checkbox */
@@ -227,10 +234,9 @@ void GeneralSettings::slotUpdateChannelChanged([[maybe_unused]] int index)
     if (channel == ConfigFile().updateChannel())
         return;
 
-    auto msgBox = new QMessageBox(
-        QMessageBox::Warning,
-        tr("Change update channel?"),
-        tr("The update channel determines which client updates will be offered "
+    auto msgBox = new CustomMessageBox(this);
+    msgBox->setHeaderText(tr("Change update channel?"))
+        .setMessageText(tr("The update channel determines which client updates will be offered "
            "for installation. The \"stable\" channel contains only upgrades that "
            "are considered reliable, while the versions in the \"beta\" channel "
            "may contain newer features and bugfixes, but have not yet been tested "
@@ -240,14 +246,15 @@ void GeneralSettings::slotUpdateChannelChanged([[maybe_unused]] int index)
            "there are no downgrades: So going back from the beta channel to "
            "the stable channel usually cannot be done immediately and means waiting "
            "for a stable version that is newer than the currently installed beta "
-           "version."),
-        QMessageBox::NoButton,
-        this);
-    auto acceptButton = msgBox->addButton(tr("Change update channel"), QMessageBox::AcceptRole);
-    msgBox->addButton(tr("Cancel"), QMessageBox::RejectRole);
-    connect(msgBox, &QMessageBox::finished, msgBox, [this, channel, msgBox, acceptButton, index] {
+           "version."))
+        .setWide(true)
+        .setWarningIconVisible(true)
+        .setAcceptButtonText(tr("Change update channel"))
+        .setRejectButtonText(tr("Cancel"));
+
+    connect(msgBox, &CustomMessageBox::finished, msgBox, [this, channel, msgBox, index](int result) {
         msgBox->deleteLater();
-        if (msgBox->clickedButton() == acceptButton) {
+        if (result == QDialog::Accepted) {
             ConfigFile().setUpdateChannel(channel);
             if (OCUpdater *updater = qobject_cast<OCUpdater *>(Updater::instance())) {
                 updater->setUpdateUrl(Updater::updateUrl());
@@ -304,10 +311,21 @@ void GeneralSettings::slotToggleOptionalDesktopNotifications(bool enable)
 void GeneralSettings::slotIgnoreFilesEditor()
 {
     if (_ignoreEditor.isNull()) {
+#ifdef Q_OS_MACOS
+        _ignoreEditor = new IgnoreListEditor(nullptr);
+        _ignoreEditor->setAttribute(Qt::WA_MacAlwaysShowToolWindow, true);
+        _ignoreEditor->setWindowModality(Qt::ApplicationModal);
+        DlgUtils::centerDialog(ocApp()->gui()->settingsDialog(), _ignoreEditor);
+#else
         _ignoreEditor = new IgnoreListEditor(ocApp()->gui()->settingsDialog());
+#endif
         _ignoreEditor->setAttribute(Qt::WA_DeleteOnClose, true);
         ApplicationGui::raise();
+#ifdef Q_OS_MACOS
+        _ignoreEditor->show();
+#else
         _ignoreEditor->open();
+#endif
     }
 }
 
