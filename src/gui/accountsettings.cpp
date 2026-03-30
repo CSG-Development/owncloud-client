@@ -755,7 +755,7 @@ void AccountSettings::slotEnableCurrentFolder(bool terminate)
                 msgbox->setHeaderText(tr("Sync Running"))
                     .setMessageText(tr("The sync operation is running.<br/>Do you want to stop it?"))
                     .setAcceptButtonText(tr("Yes"))
-                    .setAcceptButtonText(tr("No"))
+                    .setRejectButtonText(tr("No"))
                     .setDeleteOnClose(true);
                 connect(msgbox, &CustomMessageBox::accepted, this, [this]{
                     slotEnableCurrentFolder(true);
