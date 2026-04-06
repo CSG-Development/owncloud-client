@@ -37,7 +37,7 @@ FolderWizardLocalPath::FolderWizardLocalPath(FolderWizardPrivate *parent)
 {
     _ui->setupUi(this);
 
-    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonsStyle(this);
 
     registerField(QStringLiteral("sourceFolder*"), _ui->localFolderLineEdit);
     connect(_ui->localFolderChooseBtn, &QAbstractButton::clicked, this, &FolderWizardLocalPath::slotChooseLocalFolder);

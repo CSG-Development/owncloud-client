@@ -108,7 +108,7 @@ void LogBrowserDlg::open()
     d->dlg->setAttribute(Qt::WA_MacAlwaysShowToolWindow, true);
     d->dlg->setWindowModality(Qt::ApplicationModal);
     d->dlg->setResult(0);
-    DlgUtils::centerDialog(d->parent, d->dlg);
+    //DlgUtils::centerDialog(d->parent, d->dlg);
     d->dlg->show();
 #else
     d->dlg->open();

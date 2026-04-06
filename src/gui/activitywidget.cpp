@@ -109,7 +109,7 @@ ActivityWidget::ActivityWidget(QWidget *parent)
 {
     _ui->setupUi(this);
 
-    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonsStyle(this);
     setStyleSheet(DlgUtils::loadFileToString(widget_style));
 
     _model = new ActivityListModel(this);

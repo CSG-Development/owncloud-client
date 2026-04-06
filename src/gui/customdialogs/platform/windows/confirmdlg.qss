@@ -16,7 +16,7 @@
 }
 
 #btnIcon, #btnClose, #btnIconWarn { border: none; background: transparent; }
-#lblHeader {font-size: 20px;}
+#lblHeader {font-size: 20px; font-weight: bold;}
 #lblText {font-size: 14px;}
 
 #btnAccept,
@@ -85,14 +85,14 @@
 [theme="light"] #lblText {color: rgba(0, 0, 0, 0.87);}
 
 [theme="dark"] #frame {
-    background: #000000;
+    background: rgba(38, 39, 41, 1);
 }
 
 [theme="dark"] #frameContent {
     border-top: 1px solid rgba(97, 97, 97, 1);
     border-left: 1px solid rgba(97, 97, 97, 1);
     border-right: 1px solid rgba(97, 97, 97, 1);
-    background: rgba(61, 62, 65, 1);
+    background: rgba(38, 39, 41, 1);
 }
 
 [theme="dark"] #frameButtons {

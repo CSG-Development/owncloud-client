@@ -6,6 +6,7 @@
 
 class QStyleOption;
 class QStyleOptionToolButton;
+class QPushButton;
 
 namespace APP {
 
@@ -17,7 +18,8 @@ public:
     explicit StyleHelper(QObject* parent = nullptr);
     ~StyleHelper();
 
-    static void applyPushButtonStyle(QWidget* root);
+    static void applyPushButtonsStyle(QWidget* root);
+    static void applyPushButtonStyle(QPushButton* button);
     static void setTheme(QWidget *target, bool isDark);
     
     static QIcon getIcon(const QString& name, bool isDark);

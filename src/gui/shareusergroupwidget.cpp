@@ -64,7 +64,7 @@ ShareUserGroupWidget::ShareUserGroupWidget(AccountPtr account,
 
     _ui->setupUi(this);
 
-    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonsStyle(this);
 
     //Is this a file or folder?
     _isFile = QFileInfo(localPath).isFile();
