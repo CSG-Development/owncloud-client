@@ -52,7 +52,7 @@ NetworkSettings::NetworkSettings(QWidget *parent)
     _ui->setupUi(this);
     setObjectName(QStringLiteral("CUR_NetworkSettings"));
 
-    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonsStyle(this);
 
     _ui->noProxyRadioButton->setStyle(new RadioIndicatorProxy(_ui->noProxyRadioButton));
     _ui->systemProxyRadioButton->setStyle(new RadioIndicatorProxy(_ui->systemProxyRadioButton));

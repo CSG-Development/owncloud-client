@@ -54,6 +54,7 @@ ConfirmDlg::ConfirmDlg(QWidget *parent)
     ui->btnIconWarn->setIcon(QIcon(warning_icon));
 
     new WindowDragger(ui->frameHeader, this);
+    syncUI();
 }
 
 ConfirmDlg::~ConfirmDlg()
@@ -66,6 +67,13 @@ void ConfirmDlg::syncUI()
     BaseConfirmDlg::syncUI();
 
     _widgets.btnIconWarn->setVisible(_ctrl->warningIconVisible);
+    ui->frameIconWarn->setVisible(_ctrl->warningIconVisible.value());
+    if (_ctrl->singleButton) {
+        ui->buttonSpacer->changeSize(1, 1, QSizePolicy::Expanding);
+    }
+    else {
+        ui->buttonSpacer->changeSize(0, 0, QSizePolicy::Ignored);
+    }
 
     int width = _ctrl->isWide ? wide_width : normal_width;
     // _widgets.frame->setMinimumWidth(width);

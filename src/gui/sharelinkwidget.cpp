@@ -54,7 +54,7 @@ ShareLinkWidget::ShareLinkWidget(AccountPtr account,
 {
     _ui->setupUi(this);
 
-    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonsStyle(this);
 
     _ui->radio_readOnly->setStyle(new RadioIndicatorProxy(_ui->radio_readOnly));
     _ui->radio_readWrite->setStyle(new RadioIndicatorProxy(_ui->radio_readWrite));

@@ -1,10 +1,13 @@
 #include "finishedpage.h"
 #include "ui_finishedpage.h"
+#include "gui/askexperimentalvirtualfilesfeaturemessagebox.h"
 #include "gui/customui/stylehelper.h"
 #include "gui/customui/loginpushbutton.h"
 #include "gui/customui/radioindicatorproxy.h"
 #include "gui/customdialogs/custommessagebox.h"
 #include "gui/customdialogs/dlgutils.h"
+#include "gui/application.h"
+#include "gui/settingsdialog.h"
 #include "theme.h"
 
 #include <QFileDialog>
@@ -193,25 +196,7 @@ void FinishedPage::setupPageDefaults(const QString &defaultSyncTargetDir, const 
 #if 1
     if (vfsModeIsExperimental) {
         connect(ui->rbUseVfs, &QRadioButton::clicked, this, [this]() {
-            auto messageBox = new APP::CustomMessageBox(this);
-            messageBox->setHeaderText(tr("Enable experimental feature?"))
-                .setMessageText(tr("When the \"virtual files\" mode is enabled no files will be downloaded initially. "
-                   "Instead, a tiny file will be created for each file that exists on the server. "
-                   "The contents can be downloaded by running these files or by using their context menu."
-                   "\n\n"
-                   "The virtual files mode is mutually exclusive with selective sync. "
-                   "Currently unselected folders will be translated to online-only folders "
-                   "and your selective sync settings will be reset."
-                   "\n\n"
-                   "Switching to this mode will abort any currently running synchronization."
-                   "\n\n"
-                   "This is a new, experimental mode. If you decide to use it, please report any "
-                   "issues that come up."))
-                .setAcceptButtonText(tr("Enable experimental placeholder mode"))
-                .setRejectButtonText(tr("Stay safe"))
-                .setWide(true)
-                .setWarningIconVisible(true)
-                .setDeleteOnClose(true);
+            auto messageBox = CreateExperimentalVirtualFilesFeatureMessageBox(APP::ocApp()->gui()->settingsDialog());
 
             connect(messageBox, &APP::CustomMessageBox::rejected, this, [this]() {
                 // bring back to "safety"

@@ -47,7 +47,7 @@ OAuthLoginWidget::OAuthLoginWidget(QWidget *parent)
     _ui->copyUrlToClipboardButton->setIcon(Resources::getCoreIcon(QStringLiteral("copy")));
 
     setFocusProxy(_ui->openBrowserButton);
-    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonsStyle(this);
 
     connect(_ui->retryButton, &QPushButton::clicked, this, [this]() {
         Q_EMIT retryButtonClicked();

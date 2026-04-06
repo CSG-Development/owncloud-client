@@ -10,6 +10,7 @@ class BaseInputDlg : public QDialog
 
 public:
     explicit BaseInputDlg(QWidget *parent = nullptr);
+    void setRealParent(QWidget *parent) {_realParent = parent;}
 
     BaseInputDlg& setHeaderText(const QString& headerText);
     BaseInputDlg& setPromptText(const QString& promptText);
@@ -26,6 +27,7 @@ signals:
 
 protected:
     void setupCommonLogic(const CommonDialogWidgets& widgets);
+    void showEvent(QShowEvent *event) override;
 
 protected:
     virtual void applyTheme(bool isDark);
@@ -34,4 +36,6 @@ protected:
     CommonDialogWidgets _widgets;
     InputDlgController* _ctrl = nullptr;
     std::list<QPropertyNotifier> _notifiers;
+    bool _isFirstShow = true;
+    QWidget* _realParent = nullptr;
 };

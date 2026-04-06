@@ -48,6 +48,9 @@
     font-size: 14px;
 }
 
+#lblHeaderTitle {
+    font-weight: bold;
+}
 
 [theme="light"] #frame {background: #FFFFFF;}
 [theme="light"] #frameTitle {

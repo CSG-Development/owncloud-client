@@ -28,7 +28,7 @@
     padding: 0px;
 }
 
-#lblHeader {font-size: 14px;}
+#lblHeader {font-size: 14px; font-weight: bold;}
 #lblText {font-size: 12px;}
 
 #btnAccept,

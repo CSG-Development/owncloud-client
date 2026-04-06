@@ -1,0 +1,88 @@
+.helper_frame { border: none; }
+
+#frame {border-radius: 7px;}
+#frameContent {border: none;}
+
+#btnIconTitle,
+#btnHeadClose,
+#btnIcon {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+#frameButtons {
+    border-top: none;
+    border-radius: 7px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+#frameTitle {
+    border-bottom: none;
+    border-radius: 7px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+#aboutText {
+    font-size: 14px;
+}
+
+
+[theme="light"] #frame {background: #FFFFFF;}
+[theme="light"] #frameTitle {
+    background: rgba(240, 241, 245, 1);
+    border-left: 1px solid rgba(203, 205, 211, 1);
+    border-right: 1px solid rgba(203, 205, 211, 1);
+    border-top: 1px solid rgba(203, 205, 211, 1);
+}
+
+[theme="light"] #frameContent {
+    background: #F0EEF5;
+    border-left: 1px solid rgba(203, 205, 211, 1);
+    border-right: 1px solid rgba(203, 205, 211, 1);
+}
+
+[theme="light"] #frameButtons {
+    background: rgba(240, 241, 245, 1);
+    border-left: 1px solid rgba(203, 205, 211, 1);
+    border-right: 1px solid rgba(203, 205, 211, 1);
+    border-bottom: 1px solid rgba(203, 205, 211, 1);
+}
+[theme="light"] #frameArea {
+    background: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(203, 205, 211, 1);
+}
+[theme="light"] #aboutText {
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="dark"] #frame {background: rgba(38, 38, 41, 1);}
+
+[theme="dark"] #frameTitle {
+    background: rgba(61, 62, 65, 1);
+    border-left: 1px solid rgba(97, 97, 97, 1);
+    border-right: 1px solid rgba(97, 97, 97, 1);
+    border-top: 1px solid rgba(97, 97, 97, 1);
+}
+
+[theme="dark"] #frameContent {
+    background: #3D3D41;
+    border-left: 1px solid rgba(97, 97, 97, 1);
+    border-right: 1px solid rgba(97, 97, 97, 1);
+}
+
+[theme="dark"] #frameButtons {
+    background: rgba(61, 62, 65, 1);
+    border-left: 1px solid rgba(97, 97, 97, 1);
+    border-right: 1px solid rgba(97, 97, 97, 1);
+    border-bottom: 1px solid rgba(97, 97, 97, 1);
+}
+
+[theme="dark"] #frameArea {
+    background: rgba(38, 39, 41, 1);
+    border: 1px solid rgba(97, 97, 97, 1);
+}
+
+[theme="dark"] #aboutText {
+    color: rgba(255, 255, 255, 0.87);
+}

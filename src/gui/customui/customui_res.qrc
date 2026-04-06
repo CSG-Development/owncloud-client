@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>res/Files-logo.png</file>
-        <file>res/Files-logo.png</file>
+        <file>res/Files_logo_x2.png</file>
         <file>res/accountsettings_dark.qss</file>
         <file>res/accountsettings_light.qss</file>
         <file>res/accountsettings_dark_mac.qss</file>
@@ -88,6 +88,8 @@
         <file>res/generalsettings_light.qss</file>
         <file>res/ignorelisteditor.qss</file>
         <file>res/ignorelisteditor_mac.qss</file>
+        <file>res/about.qss</file>
+        <file>res/about_mac.qss</file>
         <file>res/issuewidget.qss</file>
         <file>res/protocolwidget.qss</file>
         <file>res/activitywidget.qss</file>

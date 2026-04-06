@@ -142,7 +142,7 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     ui->_accountToolbox->setMinimumWidth(100);
     ui->_accountToolbox->setAttribute(Qt::WA_Hover, true);
 
-    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonsStyle(this);
 
     _model = new FolderStatusModel(this);
     _model->setAccountState(_accountState);
@@ -567,9 +567,9 @@ void AccountSettings::slotRemoveCurrentFolder()
 
         auto messageBox = new CustomMessageBox(ocApp()->gui()->settingsDialog());
         messageBox->setHeaderText(tr("Confirm Folder Sync Connection Removal"))
-            .setMessageText(tr("<p>Do you really want to stop syncing the folder <i>%1</i>?</p>"
+            .setMessageText(tr("<p>Do you really want to stop syncing the folder <b>%1</b>?</p>"
                                "<p><b>Note:</b> This will <b>not</b> delete any files.</p>").arg(shortGuiLocalPath))
-            .setAcceptButtonText(tr("Remove Folder Sync Connection"))
+            .setAcceptButtonText(tr("Remove connection"))
             .setRejectButtonText(tr("Cancel"))
             .setDeleteOnClose(true);
 
@@ -661,7 +661,7 @@ void AccountSettings::slotDisableVfsCurrentFolder()
         return;
 
     auto msgBox = new CustomMessageBox();
-    msgBox->setHeaderText(tr("Disable virtual file support?"))
+    msgBox->setHeaderText(tr("Disable Virtual File Support?"))
         .setMessageText(tr("This action will disable virtual file support. As a consequence contents of folders that "
            "are currently marked as 'available online only' will be downloaded."
            "\n\n"
@@ -671,7 +671,7 @@ void AccountSettings::slotDisableVfsCurrentFolder()
            "This action will abort any currently running synchronization."))
         .setAcceptButtonText(tr("Disable support"))
         .setRejectButtonText(tr("Cancel"))
-        .setWarningIconVisible(true)
+        .setWarningIconVisible(false)
         .setWide(true);
 
     connect(msgBox, &CustomMessageBox::finished, msgBox, [this, msgBox, folder](int result) {
@@ -1153,7 +1153,7 @@ void AccountSettings::slotDeleteAccount()
     // the MessageBox should be destroyed before that happens.
     auto messageBox = new CustomMessageBox(this);
     messageBox->setHeaderText(tr("Confirm Account Removal"))
-        .setMessageText(tr("<p>Do you really want to remove the connection to the account <i>%1</i>?</p>"
+        .setMessageText(tr("<p>Do you really want to remove the connection to the account <b>%1</b>?</p>"
            "<p><b>Note:</b> This will <b>not</b> delete any files.</p>").arg(_accountState->account()->displayName()))
         .setAcceptButtonText(tr("Remove connection"))
         .setRejectButtonText(tr("Cancel"));

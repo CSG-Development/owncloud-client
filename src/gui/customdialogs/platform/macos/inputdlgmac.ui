@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>352</width>
-    <height>263</height>
+    <height>231</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -44,6 +44,12 @@
       <size>
        <width>328</width>
        <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>500</width>
+       <height>16777215</height>
       </size>
      </property>
      <property name="styleSheet">
@@ -348,7 +354,7 @@ font-size: 14px;
                <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
               </property>
               <property name="wordWrap">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
              </widget>
             </item>

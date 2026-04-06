@@ -142,7 +142,7 @@ ShareDialog::ShareDialog(AccountStatePtr accountState,
     connect(job, &PropfindJob::finishedWithError, this, &ShareDialog::slotPropfindError);
     job->start();
 
-    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonsStyle(this);
 }
 
 ShareDialog::~ShareDialog()

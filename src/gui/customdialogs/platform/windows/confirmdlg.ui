@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>472</width>
+    <width>473</width>
     <height>315</height>
    </rect>
   </property>
@@ -457,7 +457,7 @@
           <number>20</number>
          </property>
          <item>
-          <spacer name="horizontalSpacer_2">
+          <spacer name="buttonSpacer">
            <property name="orientation">
             <enum>Qt::Orientation::Horizontal</enum>
            </property>

@@ -28,7 +28,7 @@
 #ifdef WITH_AUTO_UPDATER
 #include "updater/updater.h"
 #include "updater/ocupdater.h"
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 // FIXME We should unify those, but Sparkle does everything behind the scene transparently
 #include "updater/sparkleupdater.h"
 #endif
@@ -62,7 +62,7 @@ GeneralSettings::GeneralSettings(QWidget *parent)
     _ui->setupUi(this);
 
     setObjectName(QStringLiteral("CUR_GeneralSettings"));
-    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonsStyle(this);
     connect(Theme::instance(), &Theme::themeChanged, this, [this](bool isDark) {
         onThemeChanged(isDark);
         update();
@@ -89,6 +89,9 @@ GeneralSettings::GeneralSettings(QWidget *parent)
         CustomMessageBox msgbox(this);
         msgbox.setHeaderText(tr("Warning"))
             .setMessageText(tr("Language changes require a restart of this application to take effect."))
+#ifdef Q_OS_MACOS
+            .setWarningIconVisible(true)
+#endif
             .setSingleButton(true)
             .setSingleButtonText(tr("OK"));
         msgbox.exec();

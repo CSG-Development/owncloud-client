@@ -6,8 +6,9 @@
 namespace APP {
 
 CustomMessageBox* CreateExperimentalVirtualFilesFeatureMessageBox(QWidget *parent) {
+
     auto messageBox = new CustomMessageBox(parent);
-    messageBox->setHeaderText(QObject::tr("Enable experimental feature?"))
+    messageBox->setHeaderText(QObject::tr("Enable Experimental Feature?"))
         .setMessageText(QObject::tr("When the \"virtual files\" mode is enabled no files will be downloaded initially. "
                            "Instead, a tiny file will be created for each file that exists on the server. "
                            "The contents can be downloaded by running these files or by using their context menu."

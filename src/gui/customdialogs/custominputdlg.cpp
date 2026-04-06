@@ -45,6 +45,7 @@ public:
         dlg = new InputDlgMac(nullptr);
 #endif
 
+        dlg->setRealParent(parent);
         dlg->setHeaderText(headerText);
         dlg->setPromptText(promptText);
         dlg->setAcceptButtonText(acceptText);
@@ -62,7 +63,7 @@ public:
             QObject::connect(dlg, &QDialog::finished, q, &QObject::deleteLater);
         }
 
-        DlgUtils::centerDialog(parent, dlg);
+        // DlgUtils::centerDialog(parent, dlg);
     }
 
 };

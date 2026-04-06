@@ -75,7 +75,7 @@ IgnoreListEditor::IgnoreListEditor(QWidget *parent)
     ui->btnOk->setStyle(new FocusProxyStyle(ui->btnOk));
     ui->btnCancel->setStyle(new FocusProxyStyle(ui->btnCancel));
 
-    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonsStyle(this);
 
     ui->btnIconTitle->setAttribute(Qt::WA_TransparentForMouseEvents);
 #ifdef Q_OS_WIN
