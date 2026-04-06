@@ -37,6 +37,15 @@ QAbstractItemView {
     icon-size: 20px;
 }
 
+#btnOk,
+#btnCancel {
+    border-radius: 6px;
+    font-size: 14px;
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+
 [theme="light"] #frame {
     background: #FFFFFF;
     border: 1px solid rgb(203, 205, 211);
@@ -60,7 +69,46 @@ QAbstractItemView {
 [theme="light"] QTableWidget::indicator:checked:disabled {image: url(:/res/checkbox_mac/light/disabled/checked.svg);}
 [theme="light"] QTableWidget::indicator:unchecked:disabled {image: url(:/res/checkbox_mac/light/disabled/unchecked.svg);}
 
-[theme="dark"] #frame {background: #000000;}
+[theme="light"] #btnOk {
+    border: 1px solid rgb(25, 118, 210);
+    background: rgb(25, 118, 210);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="light"] #btnOk:hover {
+    border: 1px solid rgb(30, 136, 229);
+    background: rgb(30, 136, 229);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="light"] #btnOk:pressed {
+    border: 1px solid rgb(20, 92, 164);
+    background: rgb(20, 92, 164);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+[theme="light"] #btnCancel {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgb(223, 223, 223);
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="light"] #btnCancel:hover {
+    background: rgb(247, 247, 247);
+    border: 1px solid rgb(223, 223, 223);
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="light"] #btnCancel:pressed {
+    background: rgb(242, 243, 244);
+    border: 1px solid rgb(223, 223, 223);
+    color: rgba(0, 0, 0, 0.6);
+}
+
+
+[theme="dark"] #frame {
+    background: rgb(38, 38, 41);
+}
 
 [theme="dark"] #frameContent {
     background: rgb(38, 38, 41);
@@ -75,7 +123,47 @@ QAbstractItemView {
     border: 1px solid rgba(97, 97, 97, 1);
 }
 
+[theme="dark"] QTableWidget {
+    border: 1px solid rgba(97, 97, 97, 1);
+}
+
 [theme="dark"] QTableWidget::indicator:checked {image: url(:/res/checkbox_mac/dark/normal/checked.svg);}
 [theme="dark"] QTableWidget::indicator:unchecked {image: url(:/res/checkbox_mac/dark/normal/unchecked.svg);}
 [theme="dark"] QTableWidget::indicator:checked:disabled {image: url(:/res/checkbox_mac/dark/disabled/checked.svg);}
 [theme="dark"] QTableWidget::indicator:unchecked:disabled {image: url(:/res/checkbox_mac/dark/disabled/unchecked.svg);}
+
+[theme="dark"] #btnOk {
+    border: 1px solid rgba(100, 181, 246, 1);
+    background: rgb(100, 181, 246);
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="dark"] #btnOk:hover {
+    border: 1px solid rgb(144, 202, 249);
+    background: rgb(144, 202, 249);
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="dark"] #btnOk:pressed {
+    border: 1px solid rgb(53, 158, 243);
+    background: rgb(53, 158, 243);
+    color: rgba(0, 0, 0, 0.6);
+}
+
+[theme="dark"] #btnCancel {
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgb(85, 85, 85);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="dark"] #btnCancel:hover {
+    background: rgba(255, 255, 255, 0.35);
+    border: 1px solid rgb(85, 85, 85);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="dark"] #btnCancel:pressed {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgb(85, 85, 85);
+    color: rgba(255, 255, 255, 0.7);
+}
