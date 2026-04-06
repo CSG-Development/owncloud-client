@@ -90,7 +90,7 @@ AboutDialog::AboutDialog(QWidget *parent)
         ui->frame->updateGeometry();
 #ifdef Q_OS_MACOS
         ui->frameContent->setContentsMargins(frameContentMargins);
-        ui->frameButtons->setContentsMargins(frameButtonsMaggins);
+        ui->frameButtons->setContentsMargins(frameButtonsMargins);
 #else
         ui->frameContent->setContentsMargins(frameContentMargins);
 #endif
