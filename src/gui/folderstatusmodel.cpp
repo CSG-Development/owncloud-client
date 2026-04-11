@@ -1204,9 +1204,9 @@ void FolderStatusModel::slotFolderSyncStateChange(Folder *f)
     // update the icon etc. now
     slotUpdateFolderState(f);
 
-    if (f->syncResult().folderStructureWasChanged()
+    if ((f->syncResult().folderStructureWasChanged() || f->syncResult().folderSizeMayHaveChanged())
         && (state == SyncResult::Success || state == SyncResult::Problem)) {
-        // There is a new or a removed folder. reset all data
+        // There is a new or a removed folder, or displayed folder sizes may be stale. Reset all data.
         resetAndFetch(index(folderIndex));
     }
 }
