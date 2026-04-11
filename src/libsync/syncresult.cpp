@@ -109,6 +109,21 @@ void SyncResult::processCompletedItem(const SyncFileItemPtr &item)
         _folderStructureWasChanged = true;
     }
 
+    const bool successfulAppliedItem = !item->hasErrorStatus()
+                                       && item->_status != SyncFileItem::FileIgnored
+                                       && item->_status != SyncFileItem::Conflict;
+
+    const bool sizeRelevantInstruction =
+        item->instruction() == CSYNC_INSTRUCTION_NEW
+        || item->instruction() == CSYNC_INSTRUCTION_REMOVE
+        || item->instruction() == CSYNC_INSTRUCTION_SYNC
+        || item->instruction() == CSYNC_INSTRUCTION_RENAME
+        || item->instruction() == CSYNC_INSTRUCTION_TYPE_CHANGE;
+
+    if (successfulAppliedItem && sizeRelevantInstruction) {
+        _folderSizeMayHaveChanged = true;
+    }
+
     // Process the item to the gui
     if (item->_status == SyncFileItem::FatalError || item->_status == SyncFileItem::NormalError) {
         //: this displays an error string (%2) for a file %1
