@@ -62,6 +62,8 @@ InputDlgMac::InputDlgMac(QWidget *parent)
     });
 
     ui->btnClose->setVisible(false);
+    ui->btnIcon->setVisible(false);
+    ui->frameIconAligner->setVisible(false);
 
     new WindowDragger(ui->frameHeader, this);
 }

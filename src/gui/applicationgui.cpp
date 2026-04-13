@@ -1096,11 +1096,8 @@ void ApplicationGui::slotRemoveDestroyedShareDialogs()
 
 void ApplicationGui::slotAbout()
 {
-    if(!_aboutDialog) {
-        _aboutDialog = new AboutDialog(_settingsDialog);
-        _aboutDialog->setAttribute(Qt::WA_DeleteOnClose);
-        ocApp()->gui()->settingsDialog()->addModalWidget(_aboutDialog);
-    }
+    AboutDialog dlg(_settingsDialog);
+    dlg.exec();
 }
 
 

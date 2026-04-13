@@ -22,8 +22,11 @@
 #include "folderwizard.h"
 #include "folderwizard_p.h"
 
+#include "gui/application.h"
+#include "gui/settingsdialog.h"
 #include "gui/folderman.h"
 #include "gui/customui/stylehelper.h"
+#include "gui/customdialogs/custominputdlg.h"
 
 #include "libsync/theme.h"
 
@@ -43,7 +46,7 @@ FolderWizardRemotePath::FolderWizardRemotePath(FolderWizardPrivate *parent)
     _ui->setupUi(this);
     _ui->warnFrame->hide();
 
-    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonsStyle(this);
 
     _ui->folderTreeWidget->setSortingEnabled(true);
     _ui->folderTreeWidget->sortByColumn(0, Qt::AscendingOrder);
@@ -72,13 +75,18 @@ void FolderWizardRemotePath::slotAddRemoteFolder()
         parent = current->data(0, Qt::UserRole).toString();
     }
 
-    QInputDialog *dlg = new QInputDialog(this);
+    CustomInputDlg dlg(APP::ocApp()->gui()->settingsDialog());
+    dlg.setHeaderText(tr("Create Remote Folder"))
+        .setPromptText(tr("Enter the name of the new folder to be created below '%1':").arg(parent))
+        .setAcceptButtonText(tr("OK"))
+        .setRejectButtonText(tr("Cancel"));
 
-    dlg->setWindowTitle(tr("Create Remote Folder"));
-    dlg->setLabelText(tr("Enter the name of the new folder to be created below '%1':")
-                          .arg(parent));
-    dlg->open(this, SLOT(slotCreateRemoteFolder(QString)));
-    dlg->setAttribute(Qt::WA_DeleteOnClose);
+    int result = dlg.exec();
+    const auto folder = dlg.inputText();
+
+    if ((result == QDialog::Accepted) && !folder.isEmpty()) {
+        slotCreateRemoteFolder(folder);
+    }
 }
 
 void FolderWizardRemotePath::slotCreateRemoteFolder(const QString &folder)
@@ -93,7 +101,6 @@ void FolderWizardRemotePath::slotCreateRemoteFolder(const QString &folder)
     }
     // clean user input
     fullPath = QDir::cleanPath(QStringLiteral("%1/%2").arg(fullPath, folder)).replace(QRegularExpression(QStringLiteral("/+")), QStringLiteral("/"));
-
 
     MkColJob *job = new MkColJob(folderWizardPrivate()->accountState()->account(), folderWizardPrivate()->davUrl(), fullPath, {}, this);
     /* check the PersonalCloud configuration file and query the PersonalCloud */

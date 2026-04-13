@@ -147,7 +147,28 @@ void BaseConfirmDlg::setupCommonLogic(const CommonDialogWidgets& widgets)
     _widgets.btnReject->installEventFilter(this);
 }
 
-void BaseConfirmDlg::applyTheme(bool isDark)
+void BaseConfirmDlg::showEvent(QShowEvent *event)
+{
+    QDialog::showEvent(event);
+    if (_isFirstShow) {
+        _isFirstShow = false;
+        adjustSize();
+
+        if (_realParent) {
+            QPoint parentCenter = _realParent->mapToGlobal(_realParent->rect().center());
+            move(parentCenter.x() - width() / 2, parentCenter.y() - height() / 2);
+        } else {
+            QScreen *screen = QGuiApplication::primaryScreen();
+            if (screen) {
+                QRect screenGeometry = screen->geometry();
+                move(screenGeometry.center().x() - width() / 2,
+                     screenGeometry.center().y() - height() / 2);
+            }
+        }
+    }
+}
+
+void BaseConfirmDlg::applyTheme(bool /*isDark*/)
 {
 }
 

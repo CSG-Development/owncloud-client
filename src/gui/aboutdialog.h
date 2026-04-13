@@ -11,17 +11,13 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-#ifndef ABOUTDIALOG_H
-#define ABOUTDIALOG_H
+#pragma once
 
 #include <QDialog>
 
-
 namespace APP {
 
-namespace Ui {
-    class AboutDialog;
-}
+namespace Ui {class AboutDialog;}
 
 class AboutDialog : public QDialog
 {
@@ -31,13 +27,14 @@ public:
     explicit AboutDialog(QWidget *parent = nullptr);
     ~AboutDialog();
 
+    void updateTheme(bool isDark);
+
 private:
     void openBrowser(const QString &s);
     void openBrowserFromUrl(const QUrl &s);
 
 private:
-    Ui::AboutDialog *ui;
+    Ui::AboutDialog *ui = nullptr;
 };
 
-}
-#endif // ABOUTDIALOG_H
+} // namespace APP

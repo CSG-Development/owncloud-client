@@ -24,7 +24,10 @@ ConfirmWideDlgMac::ConfirmWideDlgMac(QWidget *parent)
     ui->setupUi(this);
     DlgUtils::clearStyleSheet(this);
     setStyleSheet(DlgUtils::loadFileToString(widget_style));
-    applyTheme(APP::Theme::instance()->isDarkTheme());
+
+    bool isDark = APP::Theme::instance()->isDarkTheme();
+    applyTheme(isDark);
+    ui->btnIcon->setIcon(isDark ? QIcon(warn_icon.second) : QIcon(warn_icon.first));
 
     CommonDialogWidgets widgets;
     widgets.lblHeader = ui->lblHeader;
@@ -40,9 +43,6 @@ ConfirmWideDlgMac::ConfirmWideDlgMac(QWidget *parent)
 
     new WindowDragger(ui->frameHeader, this);
     syncUI();
-    if (layout())
-        layout()->activate();
-    adjustSize();
 }
 
 ConfirmWideDlgMac::~ConfirmWideDlgMac()
@@ -54,27 +54,26 @@ void ConfirmWideDlgMac::syncUI()
 {
     BaseConfirmDlg::syncUI();
 
-    bool isDark = APP::Theme::instance()->isDarkTheme();
-    if (_ctrl->warningIconVisible.value()) {
-        ui->btnIcon->setIcon(isDark ? QIcon(warn_icon.second) : QIcon(warn_icon.first));
-    } else {
-        ui->btnIcon->setIcon(isDark ? QIcon(logo_icon.second) : QIcon(logo_icon.first));
-    }
     _widgets.frameIcon->setVisible(_ctrl->warningIconVisible);
 
     _widgets.frame->updateGeometry();
     _widgets.lblHeader->updateGeometry();
     _widgets.lblText->updateGeometry();
-    if (layout())
+    if (layout()) {
+        layout()->invalidate();
         layout()->activate();
-    adjustSize();
+    }
+    QTimer::singleShot(0, this, [this]() {
+        this->adjustSize();
+    });
 }
 
 void ConfirmWideDlgMac::applyTheme(bool isDark)
 {
     if (_ctrl->warningIconVisible.value()) {
         ui->btnIcon->setIcon(isDark ? QIcon(warn_icon.second) : QIcon(warn_icon.first));
-    } else {
-        ui->btnIcon->setIcon(isDark ? QIcon(logo_icon.second) : QIcon(logo_icon.first));
     }
+    // else {
+    //     ui->btnIcon->setIcon(isDark ? QIcon(logo_icon.second) : QIcon(logo_icon.first));
+    // }
 }

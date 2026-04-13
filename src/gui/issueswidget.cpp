@@ -192,7 +192,7 @@ IssuesWidget::IssuesWidget(QWidget *parent)
 {
     _ui->setupUi(this);
 
-    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonsStyle(this);
     setStyleSheet(DlgUtils::loadFileToString(widget_style));
 
     connect(ProgressDispatcher::instance(), &ProgressDispatcher::progressInfo,

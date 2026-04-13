@@ -66,6 +66,7 @@ public:
 
     bool foundFilesNotSynced() const { return _foundFilesNotSynced; }
     bool folderStructureWasChanged() const { return _folderStructureWasChanged; }
+    bool folderSizeMayHaveChanged() const { return _folderSizeMayHaveChanged; }
 
     int numNewItems() const { return _numNewItems; }
     int numRemovedItems() const { return _numRemovedItems; }
@@ -98,6 +99,7 @@ private:
     QStringList _errors;
     bool _foundFilesNotSynced = false;
     bool _folderStructureWasChanged = false;
+    bool _folderSizeMayHaveChanged = false;
 
     // count new, removed and updated items
     int _numNewItems = 0;

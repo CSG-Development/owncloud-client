@@ -147,7 +147,6 @@ private:
 
     // keeping a pointer on those dialogs allows us to make sure they will be shown only once
     QPointer<Wizard::SetupController> _wizardController;
-    QPointer<AboutDialog> _aboutDialog;
     bool accountWizardActive = false;
 };
 

@@ -31,6 +31,7 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QFormLayout>
+#include <QLayout>
 
 namespace {
 
@@ -75,7 +76,12 @@ IgnoreListEditor::IgnoreListEditor(QWidget *parent)
     ui->btnOk->setStyle(new FocusProxyStyle(ui->btnOk));
     ui->btnCancel->setStyle(new FocusProxyStyle(ui->btnCancel));
 
-    StyleHelper::applyPushButtonStyle(this);
+#ifdef Q_OS_WIN
+    StyleHelper::applyPushButtonsStyle(this);
+#else
+    StyleHelper::applyPushButtonStyle(ui->addPushButton);
+    StyleHelper::applyPushButtonStyle(ui->removePushButton);
+#endif
 
     ui->btnIconTitle->setAttribute(Qt::WA_TransparentForMouseEvents);
 #ifdef Q_OS_WIN
@@ -112,6 +118,20 @@ IgnoreListEditor::IgnoreListEditor(QWidget *parent)
 
     connect(Theme::instance(), &Theme::themeChanged, this, &IgnoreListEditor::updateTheme);
     updateTheme(APP::Theme::instance()->isDarkTheme());
+
+#ifdef Q_OS_MACOS
+    if (ui->frameButtons->layout()) {
+        auto l = qobject_cast<QHBoxLayout*>(ui->frameButtons->layout());
+
+        int index1 = l->indexOf(ui->btnOk);
+        int index2 = l->indexOf(ui->btnCancel);
+        l->insertWidget(index1, ui->btnCancel);
+    }
+    ui->btnOk->setMinimumHeight(24);
+    ui->btnOk->setMaximumHeight(24);
+    ui->btnCancel->setMinimumHeight(24);
+    ui->btnCancel->setMaximumHeight(24);
+#endif
 
     new WindowDragger(ui->frameTitle, this);
 }

@@ -13,6 +13,7 @@ class BaseConfirmDlg : public QDialog
 
 public:
     explicit BaseConfirmDlg(QWidget *parent = nullptr);
+    void setRealParent(QWidget *parent) {_realParent = parent;}
 
     bool eventFilter(QObject *watched, QEvent *event) override;
 
@@ -27,6 +28,7 @@ public:
 
 protected:
     void setupCommonLogic(const CommonDialogWidgets& widgets);
+    void showEvent(QShowEvent *event) override;
 
 protected:
     virtual void applyTheme(bool isDark);
@@ -35,6 +37,7 @@ protected:
     CommonDialogWidgets _widgets;
     ConfirmDlgController* _ctrl = nullptr;
     std::list<QPropertyNotifier> _notifiers;
-
+    bool _isFirstShow = true;
+    QWidget* _realParent = nullptr;
 };
 

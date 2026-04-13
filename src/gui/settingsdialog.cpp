@@ -220,7 +220,7 @@ SettingsDialog::SettingsDialog(ApplicationGui *gui, QWidget *parent)
         }
     }, Qt::QueuedConnection);
 
-    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonsStyle(this);
     _ui->toolBar->layout()->setContentsMargins(0, 0, 0, 0);
     updateToolbarTheme();
 
@@ -292,7 +292,7 @@ SettingsDialog::SettingsDialog(ApplicationGui *gui, QWidget *parent)
         box->setHeaderText(tr("Quit %1").arg(appNameGui))
             .setMessageText(tr("Are you sure you want to quit %1?").arg(appNameGui))
             .setAcceptButtonText(tr("Yes"))
-            .setRejectButtonText(tr("No"))
+            .setRejectButtonText(tr("Cancel"))
             .setDeleteOnClose(true);
         connect(box, &CustomMessageBox::accepted, qApp, &QCoreApplication::quit, Qt::QueuedConnection);
         box->open();

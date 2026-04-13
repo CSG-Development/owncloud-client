@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>352</width>
-    <height>263</height>
+    <height>231</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -44,6 +44,12 @@
       <size>
        <width>328</width>
        <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>500</width>
+       <height>16777215</height>
       </size>
      </property>
      <property name="styleSheet">
@@ -127,14 +133,17 @@ border: 1px solid rgba(0,0,0,0.2);
             <string notr="true">helper_frame</string>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout">
+            <property name="spacing">
+             <number>4</number>
+            </property>
             <property name="leftMargin">
-             <number>24</number>
+             <number>16</number>
             </property>
             <property name="topMargin">
              <number>24</number>
             </property>
             <property name="rightMargin">
-             <number>24</number>
+             <number>16</number>
             </property>
             <property name="bottomMargin">
              <number>0</number>
@@ -229,16 +238,16 @@ border: 1px solid rgba(0,0,0,0.1);
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <property name="leftMargin">
-                <number>1</number>
+                <number>0</number>
                </property>
                <property name="topMargin">
-                <number>1</number>
+                <number>0</number>
                </property>
                <property name="rightMargin">
-                <number>1</number>
+                <number>0</number>
                </property>
                <property name="bottomMargin">
-                <number>1</number>
+                <number>0</number>
                </property>
                <item>
                 <widget class="QLabel" name="lblHeader">
@@ -348,7 +357,7 @@ font-size: 14px;
                <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
               </property>
               <property name="wordWrap">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
              </widget>
             </item>

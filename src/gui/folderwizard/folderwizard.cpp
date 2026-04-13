@@ -188,7 +188,7 @@ FolderWizard::FolderWizard(const AccountStatePtr &account, QWidget *parent)
     setButtonText(QWizard::FinishButton, tr("Add Sync Connection"));
     setWizardStyle(QWizard::ModernStyle);
 
-    StyleHelper::applyPushButtonStyle(this);
+    StyleHelper::applyPushButtonsStyle(this);
 }
 
 FolderWizard::~FolderWizard()

@@ -23,7 +23,7 @@
     background: transparent;
 }
 
-#lblHeader {font-size: 20px;}
+#lblHeader {font-size: 20px;font-weight: bold;}
 #lblText {font-size: 14px;}
 #edText {
     font-size: 12px;

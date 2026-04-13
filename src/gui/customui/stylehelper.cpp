@@ -66,19 +66,24 @@ StyleHelper::~StyleHelper()
     instance_ = nullptr;
 }
 
-void StyleHelper::applyPushButtonStyle(QWidget *root)
+void StyleHelper::applyPushButtonsStyle(QWidget *root)
 {
     Q_ASSERT(root);
     const QList<QPushButton*> btns = root->findChildren<QPushButton*>();
     for (auto* t: btns) {
-        t->setStyle(StyleHelper::pushButtonStyle());
-        t->setMinimumHeight(34);
-        t->setCursor(Qt::PointingHandCursor);
-#ifdef Q_OS_MACOS
-        t->setAttribute(Qt::WA_Hover, true);
-        t->setAttribute(Qt::WA_MacShowFocusRect, false);
-#endif
+        applyPushButtonStyle(t);
     }
+}
+
+void StyleHelper::applyPushButtonStyle(QPushButton *button)
+{
+    button->setStyle(StyleHelper::pushButtonStyle());
+    button->setMinimumHeight(34);
+    button->setCursor(Qt::PointingHandCursor);
+#ifdef Q_OS_MACOS
+    button->setAttribute(Qt::WA_Hover, true);
+    button->setAttribute(Qt::WA_MacShowFocusRect, false);
+#endif
 }
 
 void StyleHelper::setTheme(QWidget* target, bool isDark)

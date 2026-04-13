@@ -1,5 +1,7 @@
 #include "custommessagebox.h"
 #include "dlgutils.h"
+#include "gui/application.h"
+#include "gui/settingsdialog.h"
 
 #include <QtGlobal>
 
@@ -16,6 +18,9 @@ public:
     CustomMessageBoxPrivate(QWidget *p)
         : parent(p)
     {
+        const auto mainParent = APP::ocApp()->gui()->settingsDialog();
+        if (mainParent)
+            parent = mainParent;
     }
 
     BaseConfirmDlg *dlg = nullptr;
@@ -48,7 +53,7 @@ public:
         if (isWide) dlg = new ConfirmWideDlgMac(nullptr);
         else        dlg = new ConfirmDlgMac(nullptr);
 #endif
-
+        dlg->setRealParent(parent);
         dlg->setHeaderText(headerText);
         dlg->setMessageText(messageText);
         dlg->setAcceptButtonText(acceptText);
@@ -94,7 +99,7 @@ void CustomMessageBox::show()
     d->dlg->setAttribute(Qt::WA_MacAlwaysShowToolWindow, true);
     d->dlg->setWindowModality(Qt::ApplicationModal);
     d->dlg->setResult(0);
-    DlgUtils::centerDialog(d->parent, d->dlg);
+    //DlgUtils::centerDialog(d->parent, d->dlg);
 #endif
     d->dlg->show();
 }
@@ -107,7 +112,7 @@ void CustomMessageBox::open()
     d->dlg->setAttribute(Qt::WA_MacAlwaysShowToolWindow, true);
     d->dlg->setWindowModality(Qt::ApplicationModal);
     d->dlg->setResult(0);
-    DlgUtils::centerDialog(d->parent, d->dlg);
+    //DlgUtils::centerDialog(d->parent, d->dlg);
     d->dlg->show();
 #else
     d->dlg->open();
