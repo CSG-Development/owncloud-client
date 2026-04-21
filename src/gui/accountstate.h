@@ -26,7 +26,9 @@
 #include <QByteArray>
 #include <QElapsedTimer>
 #include <QPointer>
+#include <QTimer>
 #include <memory>
+#include <optional>
 
 class QDialog;
 class QSettings;
@@ -172,10 +174,14 @@ private:
 
     void setState(State state);
 
-    void checkAndSwitchDevicePath();
-    bool doDevicePathSwitch();
-    void requestRAupdate();
-    std::optional<Device> accountDevice();
+    bool canStartDeviceAccessibilityUpdate(bool logReason) const;
+    void scheduleNetworkTriggeredDeviceUpdate();
+    void runNetworkTriggeredDeviceUpdate();
+    void resolveAndApplyDevicePath(const Device& device, bool allowRemoteAccessPrompt);
+    bool shouldRequestRAupdate(const Device& device, const DevicePathResolutionResult& result, bool allowRemoteAccessPrompt) const;
+    void applyResolvedDevicePath(const DevicePathResolutionResult& result);
+    void requestRAupdate(const Device& device);
+    std::optional<Device> accountDevice() const;
     void setAccountDevice(const Device& dev);
     void initializeRA();
     void setUpdateDeviceProgress(bool inProgress);
@@ -189,7 +195,7 @@ signals:
     void networkUpdateState(bool inProgress);
 
     // internal signal to be able to finish processing device path update when "Skip" code dialog pressed
-    void pathUpdateFinished(bool skippedCode, const QList<DevicePath>& paths);
+    void pathUpdateFinished(bool skippedCode, const Device& device);
 
 protected Q_SLOTS:
     void slotConnectionValidatorResult(ConnectionValidator::Status status, const QStringList &errors);
@@ -213,6 +219,9 @@ private:
     DeviceController* _deviceController = nullptr;
     std::atomic_bool _updateDeviceInProgress {false};
     bool _raInitialized = false;
+    std::optional<Device> _pendingDevicePathUpdate;
+    QTimer _networkChangeDebounceTimer;
+    QElapsedTimer _lastNetworkTriggeredDeviceUpdate;
 
     /**
      * Starts counting when the server starts being back up after 503 or

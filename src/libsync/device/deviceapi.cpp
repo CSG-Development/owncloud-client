@@ -18,17 +18,22 @@ DeviceApi::DeviceApi(QObject *parent)
     : QObject(parent)
     , _rest(new QNetworkAccessManager(this))
 {
-    _rest.networkAccessManager()->setTransferTimeout(5 * 1000);
-
     connect(_rest.networkAccessManager(), &QNetworkAccessManager::sslErrors, this, [](QNetworkReply *reply, const QList<QSslError> &/*errors*/) {
         reply->ignoreSslErrors();
     });
 }
 
-QFuture<AboutCtx> DeviceApi::query_about(const QString &url)
+int DeviceApi::aboutTimeoutForDeviceType(DeviceType deviceType)
+{
+    return deviceType == DeviceType::Local ? LocalAboutTimeoutMs : NonLocalAboutTimeoutMs;
+}
+
+QFuture<AboutCtx> DeviceApi::query_about(const QString &url, DeviceType deviceType)
 {
     _factory.setBaseUrl(QUrl(url));
-    auto reply = _rest.get(_factory.createRequest(api_dev_about));
+    auto request = _factory.createRequest(api_dev_about);
+    request.setTransferTimeout(aboutTimeoutForDeviceType(deviceType));
+    auto reply = _rest.get(request);
     qCDebug(lcDeviceApi) << "query_about request:" << reply->url();
     return execRequest<AboutCtx>(std::move(reply), [url=reply->url()](const std::optional<QJsonDocument>& doc, int status) {
         AboutCtx ctx;
@@ -54,7 +59,9 @@ QFuture<AboutCtx> DeviceApi::query_about(const QString &url)
 QFuture<StatusCtx> DeviceApi::query_status(const QString &url)
 {
     _factory.setBaseUrl(QUrl(url));
-    auto reply = _rest.get(_factory.createRequest(api_dev_status));
+    auto request = _factory.createRequest(api_dev_status);
+    request.setTransferTimeout(StatusTimeoutMs);
+    auto reply = _rest.get(request);
     qCDebug(lcDeviceApi) << "query_status request:" << reply->url();
     return execRequest<StatusCtx>(std::move(reply), [url=reply->url()](const std::optional<QJsonDocument>& doc, int status) {
         StatusCtx ctx;
@@ -97,9 +104,9 @@ QFuture<QList<DevicePath> > DeviceApi::query_status_all(QList<DevicePath> paths)
     });
 }
 
-QFuture<std::pair<AboutCtx, StatusCtx> > DeviceApi::query_about_status(const QString &url)
+QFuture<std::pair<AboutCtx, StatusCtx> > DeviceApi::query_about_status(const QString &url, DeviceType deviceType)
 {
-    auto futureAbout = query_about(url);
+    auto futureAbout = query_about(url, deviceType);
     auto futureStatus = query_status(url);
 
     return QtFuture::whenAll(futureAbout, futureStatus).then([futureAbout, futureStatus](auto &&) {
@@ -113,7 +120,7 @@ QFuture<QList<DevicePath>> DeviceApi::query_about_all(QList<DevicePath> paths)
     QList<QFuture<AboutCtx>> futures;
     for (const auto& path : paths) {
         QString url = DevHelpers::makeServerUrl(path.address, path.port, false, true);
-        futures.append(this->query_about(url));
+        futures.append(this->query_about(url, path.deviceType));
     }
 
     return QtFuture::whenAll(futures.begin(), futures.end()).then([paths](QList<QFuture<AboutCtx>> finishedFutures) {

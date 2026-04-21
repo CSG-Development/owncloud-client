@@ -32,6 +32,24 @@ const auto jkey_expiresIn    = QStringLiteral("expiresIn");
 const auto jkey_tokenType    = QStringLiteral("tokenType");
 const auto jkey_stacktrace   = QStringLiteral("stacktrace");
 const auto jkey_reason       = QStringLiteral("reason");
+
+DeviceListCtx makeDeviceListError(const TokenContext& tokenCtx)
+{
+    DeviceListCtx errCtx;
+    errCtx.res.status = tokenCtx.res.status;
+    errCtx.res.errorString = tokenCtx.res.errorString;
+    errCtx.res.errorStacktrace = tokenCtx.res.errorStacktrace;
+    return errCtx;
+}
+
+DevicePathListCtx makeDevicePathListError(const TokenContext& tokenCtx)
+{
+    DevicePathListCtx errCtx;
+    errCtx.res.status = tokenCtx.res.status;
+    errCtx.res.errorString = tokenCtx.res.errorString;
+    errCtx.res.errorStacktrace = tokenCtx.res.errorStacktrace;
+    return errCtx;
+}
 }
 
 Q_LOGGING_CATEGORY(lcDeviceApiClient, "device.apiclient", QtDebugMsg)
@@ -107,45 +125,12 @@ QFuture<DeviceListCtx> ApiClient::ra_device_list()
     qCDebug(lcDeviceApiClient) << "[ra_device_list]";
 
     return ensureAuthenticated().then(this, [this](const TokenContext& authCtx) {
-
         qCDebug(lcDeviceApiClient) << "[ra_device_list] ensureAuthenticated().then, status" << authCtx.res.status;
         if (authCtx.res.status != 200) {
-            DeviceListCtx errCtx;
-            errCtx.res.status = authCtx.res.status;
-            errCtx.res.errorString = authCtx.res.errorString;
-            return QtFuture::makeReadyValueFuture(errCtx);
+            return QtFuture::makeReadyValueFuture(makeDeviceListError(authCtx));
         }
 
-        _factory.clearQueryParameters();
-        auto req = _factory.createRequest(api_ra_devices);
-        req.setRawHeader("authorization", QStringLiteral("Bearer %1").arg(_tokenCtx.accessToken).toUtf8());
-
-        auto reply = _rest.get(req);
-
-        return execRequest<DeviceListCtx>(std::move(reply), [](const std::optional<QJsonDocument>& doc, int status) {
-            DeviceListCtx ctx;
-            ctx.res.status = status;
-
-            if (doc && !doc->isNull()) {
-                if (status == 200 && doc->isArray()) {
-                    auto arr = doc->array();
-                    for (const auto& item : doc->array()) {
-                        Device d;
-                        d.seagateDeviceID = item[jkey_seagateDeviceID].toString();
-                        d.certificateCommonName = item[jkey_certificateCommonName].toString();
-                        d.setFriendlyName(item[jkey_friendlyName].toString());
-                        d.hostname = item[jkey_hostname].toString();
-                        ctx.deviceList.addDevice(d);
-                    }
-                }
-                else {
-                    ctx.res.errorString = (*doc)[jkey_name].toString();
-                }
-                qCDebug(lcDeviceApiClient) << doc;
-            }
-            return ctx;
-        });
-
+        return executeDeviceListRequest(true);
     }).unwrap();
 }
 
@@ -159,41 +144,14 @@ QFuture<DeviceListCtx> ApiClient::ra_device_list()
 QFuture<DevicePathListCtx> ApiClient::ra_device_info(const QString& deviceId)
 {
     qCDebug(lcDeviceApiClient) << "[ra_device_info]";
-    _factory.clearQueryParameters();
 
     return ensureAuthenticated().then(this, [this,deviceId](const TokenContext& authCtx) {
-
         qCDebug(lcDeviceApiClient) << "[ra_device_info] ensureAuthenticated().then, status" << authCtx.res.status;
         if (authCtx.res.status != 200) {
-            DevicePathListCtx errCtx;
-            errCtx.res.status = authCtx.res.status;
-            errCtx.res.errorString = authCtx.res.errorString;
-            return QtFuture::makeReadyValueFuture(errCtx);
+            return QtFuture::makeReadyValueFuture(makeDevicePathListError(authCtx));
         }
 
-        auto req = _factory.createRequest(QStringLiteral("%1%2").arg(api_ra_device_info).arg(deviceId));
-        req.setRawHeader("authorization", QStringLiteral("Bearer %1").arg(_tokenCtx.accessToken).toUtf8());
-        auto reply = _rest.get(req);
-
-        return execRequest<DevicePathListCtx>(std::move(reply), [](const std::optional<QJsonDocument>& doc, int status) {
-            DevicePathListCtx ctx;
-            ctx.res.status = status;
-            if (doc && !doc->isNull()) {
-                if (status == 200) {
-                    QString devId = (*doc)[jkey_seagateDeviceID].toString();
-                    const auto& paths = (*doc)[jkey_paths].toArray();
-                    for (const auto p: paths) {
-                        DevicePath dpath(p[jkey_address].toString(), DevHelpers::strToDevType(p[jkey_type].toString()), DeviceOrigin::Remote, p[jkey_port].toInt());
-                        ctx.devicePathList.append(dpath);
-                    }
-                }
-                else {
-                    ctx.res.errorString = (*doc)[jkey_name].toString();
-                }
-            }
-            return ctx;
-        });
-
+        return executeDeviceInfoRequest(deviceId, true);
     }).unwrap();
 }
 
@@ -243,14 +201,21 @@ bool ApiClient::hasRefreshToken() const
 QFuture<TokenContext> ApiClient::ensureAuthenticated()
 {
     qCDebug(lcDeviceApiClient) << "[ensureAuth]";
-    if (isAccessTokenValid())
+    return refreshAccessToken(false);
+}
+
+QFuture<TokenContext> ApiClient::refreshAccessToken(bool forceRefresh)
+{
+    qCDebug(lcDeviceApiClient) << "[refreshAccessToken] force:" << forceRefresh;
+
+    if (!forceRefresh && isAccessTokenValid())
         return QtFuture::makeReadyValueFuture(_tokenCtx);
 
     if (_authFuture.isRunning())
         return _authFuture;
 
     if (_tokenCtx.refreshToken.isEmpty()) {
-        qCWarning(lcDeviceApiClient) << "[ensureAuth] No refresh token available";
+        qCWarning(lcDeviceApiClient) << "[refreshAccessToken] No refresh token available";
         TokenContext errCtx;
         errCtx.res.status = -2;
         errCtx.res.errorString = QStringLiteral("No refresh token available");
@@ -260,15 +225,15 @@ QFuture<TokenContext> ApiClient::ensureAuthenticated()
     auto promise = std::make_shared<QPromise<TokenContext>>();
     _authFuture = promise->future();
 
-    qCDebug(lcDeviceApiClient) << "[ensureAuth] Starting refresh token";
+    qCDebug(lcDeviceApiClient) << "[refreshAccessToken] Starting refresh token";
     ra_refresh()
         .then(this, [this, promise](const TokenContext& ctx) {
-            qCDebug(lcDeviceApiClient) << "[ensureAuth] Refresh finished" << ctx.res.status;
+            qCDebug(lcDeviceApiClient) << "[refreshAccessToken] Refresh finished" << ctx.res.status;
             _tokenCtx = ctx;
             promise->addResult(_tokenCtx);
             promise->finish();
         }).onFailed(this, [promise](const std::exception &e) {
-            qCWarning(lcDeviceApiClient) << "[ensureAuth] Transport exception:" << e.what();
+            qCWarning(lcDeviceApiClient) << "[refreshAccessToken] Transport exception:" << e.what();
             TokenContext errCtx;
             errCtx.res.status = -2;
             errCtx.res.errorString = QString::fromUtf8(e.what());
@@ -277,6 +242,89 @@ QFuture<TokenContext> ApiClient::ensureAuthenticated()
         });
 
     return _authFuture;
+}
+
+QFuture<DeviceListCtx> ApiClient::executeDeviceListRequest(bool allowReplay)
+{
+    _factory.clearQueryParameters();
+    auto req = _factory.createRequest(api_ra_devices);
+    req.setRawHeader("authorization", QStringLiteral("Bearer %1").arg(_tokenCtx.accessToken).toUtf8());
+    auto reply = _rest.get(req);
+
+    return execRequest<DeviceListCtx>(std::move(reply), [](const std::optional<QJsonDocument>& doc, int status) {
+        DeviceListCtx ctx;
+        ctx.res.status = status;
+
+        if (doc && !doc->isNull()) {
+            if (status == 200 && doc->isArray()) {
+                for (const auto& item : doc->array()) {
+                    Device d;
+                    d.seagateDeviceID = item[jkey_seagateDeviceID].toString();
+                    d.certificateCommonName = item[jkey_certificateCommonName].toString();
+                    d.setFriendlyName(item[jkey_friendlyName].toString());
+                    d.hostname = item[jkey_hostname].toString();
+                    ctx.deviceList.addDevice(d);
+                }
+            }
+            else {
+                ctx.res.errorString = (*doc)[jkey_name].toString();
+                ctx.res.errorStacktrace = (*doc)[jkey_stacktrace].toString();
+            }
+            qCDebug(lcDeviceApiClient) << doc;
+        }
+        return ctx;
+    }).then(this, [this, allowReplay](const DeviceListCtx& ctx) {
+        if (!allowReplay || (ctx.res.status != 401 && ctx.res.status != 403)) {
+            return QtFuture::makeReadyValueFuture(ctx);
+        }
+
+        qCWarning(lcDeviceApiClient) << "[ra_device_list] auth failure, trying single refresh + replay" << ctx.res.status;
+        return refreshAccessToken(true).then(this, [this](const TokenContext& refreshCtx) {
+            if (refreshCtx.res.status != 200) {
+                return QtFuture::makeReadyValueFuture(makeDeviceListError(refreshCtx));
+            }
+            return executeDeviceListRequest(false);
+        }).unwrap();
+    }).unwrap();
+}
+
+QFuture<DevicePathListCtx> ApiClient::executeDeviceInfoRequest(const QString& deviceId, bool allowReplay)
+{
+    _factory.clearQueryParameters();
+    auto req = _factory.createRequest(QStringLiteral("%1%2").arg(api_ra_device_info).arg(deviceId));
+    req.setRawHeader("authorization", QStringLiteral("Bearer %1").arg(_tokenCtx.accessToken).toUtf8());
+    auto reply = _rest.get(req);
+
+    return execRequest<DevicePathListCtx>(std::move(reply), [](const std::optional<QJsonDocument>& doc, int status) {
+        DevicePathListCtx ctx;
+        ctx.res.status = status;
+        if (doc && !doc->isNull()) {
+            if (status == 200) {
+                const auto& paths = (*doc)[jkey_paths].toArray();
+                for (const auto p: paths) {
+                    DevicePath dpath(p[jkey_address].toString(), DevHelpers::strToDevType(p[jkey_type].toString()), DeviceOrigin::Remote, p[jkey_port].toInt());
+                    ctx.devicePathList.append(dpath);
+                }
+            }
+            else {
+                ctx.res.errorString = (*doc)[jkey_name].toString();
+                ctx.res.errorStacktrace = (*doc)[jkey_stacktrace].toString();
+            }
+        }
+        return ctx;
+    }).then(this, [this, deviceId, allowReplay](const DevicePathListCtx& ctx) {
+        if (!allowReplay || (ctx.res.status != 401 && ctx.res.status != 403)) {
+            return QtFuture::makeReadyValueFuture(ctx);
+        }
+
+        qCWarning(lcDeviceApiClient) << "[ra_device_info] auth failure, trying single refresh + replay" << ctx.res.status;
+        return refreshAccessToken(true).then(this, [this, deviceId](const TokenContext& refreshCtx) {
+            if (refreshCtx.res.status != 200) {
+                return QtFuture::makeReadyValueFuture(makeDevicePathListError(refreshCtx));
+            }
+            return executeDeviceInfoRequest(deviceId, false);
+        }).unwrap();
+    }).unwrap();
 }
 
 bool ApiClient::isAccessTokenValid() const
@@ -310,4 +358,3 @@ TokenContext ApiClient::parseTokenContext(const std::optional<QJsonDocument> &do
     }
     return ctx;
 }
-
