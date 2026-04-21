@@ -94,7 +94,7 @@ protected:
 
             try {
                 promise->addResult(parser(doc, statusCode));
-            } catch (const std::exception& e) {
+            } catch (const std::exception &) {
                 T errCtx;
                 errCtx.res.status = -1;
                 promise->addResult(errCtx);
@@ -107,7 +107,10 @@ protected:
     }
 
     QFuture<TokenContext> ensureAuthenticated();
+    QFuture<TokenContext> refreshAccessToken(bool forceRefresh);
     bool isAccessTokenValid() const;
+    QFuture<DeviceListCtx> executeDeviceListRequest(bool allowReplay);
+    QFuture<DevicePathListCtx> executeDeviceInfoRequest(const QString& deviceId, bool allowReplay);
 
     TokenContext parseTokenContext(const std::optional<QJsonDocument>& doc, int status);
 

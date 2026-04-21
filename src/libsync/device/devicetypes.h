@@ -38,11 +38,14 @@ class APPLICATIONSYNC_EXPORT Device
 {
     QString _friendlyName;
 public:
+    static constexpr int RemotePathCacheTtlSeconds = 60 * 60;
+
     QString seagateDeviceID;
     QString certificateCommonName;
     QString hostname;
     bool isStatic = false;
     QList<DevicePath> paths;
+    QDateTime remotePathsFetchedAtUtc;
 
     QString friendlyName() const {return _friendlyName;}
     void setFriendlyName(const QString& fn);
@@ -63,6 +66,15 @@ public:
     std::optional<QUuid> getBestPathId();
     static std::optional<QUuid> getBestPathId(const Device& dev);
     std::optional<QUuid> getRemoteOnlyPath() const;
+    QList<DevicePath> remotePaths() const;
+    static QList<DevicePath> nonRemotePaths(const QList<DevicePath>& paths);
+    static QList<DevicePath> normalizeRemotePaths(const QList<DevicePath>& paths);
+    static QList<DevicePath> replaceRemotePaths(const QList<DevicePath>& existingPaths, const QList<DevicePath>& remotePaths);
+    void updateRemotePathCache(const QList<DevicePath>& remotePaths);
+    void updateRemotePathCache(const QList<DevicePath>& remotePaths, const QDateTime& fetchedAtUtc);
+    bool hasSameRemotePaths(const QList<DevicePath>& paths) const;
+    bool hasRemotePathCache() const;
+    bool isRemotePathCacheExpired(int ttlSeconds = RemotePathCacheTtlSeconds) const;
 
     QString toString() const;
     QString toStringShort() const;

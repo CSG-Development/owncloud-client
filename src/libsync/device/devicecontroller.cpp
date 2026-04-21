@@ -2,9 +2,11 @@
 #include "deviceaggregator.h"
 #include "configfile.h"
 #include "deviceapi.h"
+#include "devicepathresolver.h"
 #include "device/mdnsclient.h"
 
 #include <QLoggingCategory>
+#include <QtConcurrent>
 
 Q_LOGGING_CATEGORY(lcDeviceController, "device.controller", QtDebugMsg)
 
@@ -21,6 +23,16 @@ void cleanupEmptyCN(QList<DevicePath>& paths)
     paths.erase(it, paths.end());
 }
 
+QList<DevicePath> nonRemotePaths(const QList<DevicePath>& paths)
+{
+    return Device::nonRemotePaths(paths);
+}
+
+void replaceAccountRemotePaths(QList<DevicePath>& allPaths, const QList<DevicePath>& remotePaths)
+{
+    allPaths = Device::replaceRemotePaths(allPaths, remotePaths);
+}
+
 }
 
 DeviceController::DeviceController(QObject *parent)
@@ -29,11 +41,15 @@ DeviceController::DeviceController(QObject *parent)
     , _devApi(new DeviceApi(this))
     , _mdns(new MdnsClient(this))
     , _aggregator(new DeviceAggregator(this))
+    , _pathResolver(new DevicePathResolver(_devApi, [this](const QString& deviceId) {
+        return queryDeviceInfo(deviceId);
+    }, this))
 {
     qRegisterMetaType<DevicePath>("DevicePath");
     qRegisterMetaType<Device>("Device");
     qRegisterMetaType<DeviceInfoAbout>("DeviceInfoAbout");
     qRegisterMetaType<DeviceInfoStatus>("DeviceInfoStatus");
+    qRegisterMetaType<DevicePathResolutionResult>("DevicePathResolutionResult");
 
     connect(_mdns, &MdnsClient::resultsChanged, this, [this](const QList<DevicePath>& records) {
         qCDebug(lcDeviceController) << "mDNS updated, paths found:";
@@ -173,7 +189,7 @@ void DeviceController::prepareLogin(Device &dev)
             .then(this, [this,fillAbout](const DevicePathListCtx& ctx) {
                 qCDebug(lcDeviceController) << "prepareLogin, device info status code" << ctx.res.status << ctx.res.errorString;
                 if (ctx.res.status == 200) {
-                    currentDevice.paths = ctx.devicePathList;
+                    currentDevice.updateRemotePathCache(ctx.devicePathList);
                     fillAbout();
                 }
                 else {
@@ -206,9 +222,10 @@ void DeviceController::account_update_device(const Device& dev)
 {
     qCDebug(lcDeviceController) << dev;
     loadRefreshToken();
+    currentDevice = dev;
     mdns_finished.store(false);
     ra_finished.store(false);
-    // allAccountPaths.clear();
+    allAccountPaths = nonRemotePaths(currentDevice.paths);
     _mdns->start();
 
     // all ok, RA and mDNS lists are ready
@@ -235,11 +252,12 @@ void DeviceController::account_update_device(const Device& dev)
                 .then(this, [this,devCN](QList<DevicePath> ctx){
                     qCDebug(lcDeviceController) << "Path status for" << devCN << ":";
                     qCDebug(lcDeviceController) << ctx;
-                    emit account_update_device_finished(ctx);
+                    currentDevice.paths = DeviceList::mergePaths(nonRemotePaths(currentDevice.paths), ctx);
+                    emit account_update_device_finished(currentDevice);
                 });
         }
         else {
-            emit account_update_device_finished({});
+            emit account_update_device_finished(currentDevice);
         }
 
     }, Qt::SingleShotConnection);
@@ -267,16 +285,26 @@ void DeviceController::account_update_device(const Device& dev)
                 return;
             }
 
+            currentDevice.seagateDeviceID = dev_ra->seagateDeviceID;
+            if (currentDevice.friendlyName().isEmpty() && !dev_ra->friendlyName().isEmpty()) {
+                currentDevice.setFriendlyName(dev_ra->friendlyName());
+            }
+            if (currentDevice.hostname.isEmpty()) {
+                currentDevice.hostname = dev_ra->hostname;
+            }
+
             qCDebug(lcDeviceController) << "Query device info for" << dev_ra->seagateDeviceID;
             queryDeviceInfo(dev_ra->seagateDeviceID)
                 .then(this, [this, finishTask, id=dev_ra->seagateDeviceID](const DevicePathListCtx& ctx) {
                     qCDebug(lcDeviceController) << "acc update ra_device_info code" << ctx.res.status << ctx.res.errorString;
 
                     if (ctx.res.status == 200) {
-                        _devApi->query_about_all(ctx.devicePathList).then(this, [this,finishTask](const QList<DevicePath>& paths) {
+                        currentDevice.updateRemotePathCache(ctx.devicePathList);
+                        _devApi->query_about_all(currentDevice.remotePaths()).then(this, [this,finishTask](const QList<DevicePath>& paths) {
                             qCDebug(lcDeviceController) << "About updated:" << paths;
 
-                            allAccountPaths.append(paths);
+                            currentDevice.updateRemotePathCache(paths);
+                            replaceAccountRemotePaths(allAccountPaths, currentDevice.remotePaths());
                             finishTask();
                         });
                     }
@@ -309,16 +337,20 @@ void DeviceController::account_update_device_continue(std::optional<Device> dev)
         return;
     }
 
+    currentDevice = *dev;
+
     queryDeviceInfo(dev->seagateDeviceID)
         .then(this, [this](const DevicePathListCtx& ctx) {
             qCDebug(lcDeviceController) << "acc update continue ra_device_info code" << ctx.res.status << ctx.res.errorString;
             if (ctx.res.status == 200) {
+                currentDevice.updateRemotePathCache(ctx.devicePathList);
 
-                _devApi->query_about_all(ctx.devicePathList)
+                _devApi->query_about_all(currentDevice.remotePaths())
                     .then(this, [this](const QList<DevicePath>& paths) {
                         qCDebug(lcDeviceController) << "Paths added:";
                         qCDebug(lcDeviceController) << paths;
-                        allAccountPaths.append(paths);
+                        currentDevice.updateRemotePathCache(paths);
+                        replaceAccountRemotePaths(allAccountPaths, currentDevice.remotePaths());
                         ra_finished.store(true);
                         check_finished();
                     });
@@ -332,31 +364,6 @@ void DeviceController::account_update_device_continue(std::optional<Device> dev)
         });
 }
 
-
-void DeviceController::evaluateDeviceStatus(Device *dev)
-{
-    qCDebug(lcDeviceController) << "Starting device path checks";
-    if (isEvaluationRunning()) {
-        qCWarning(lcDeviceController) << "Already running";
-        emit evaluate_finished();
-    }
-
-    _isEvaluationRunning = true;
-
-    _devApi->query_status_all(dev->paths)
-        .then(this, [this,dev](const QList<DevicePath>& ctx) {
-            _isEvaluationRunning = false;
-            dev->paths = ctx;
-            qCInfo(lcDeviceController) << "Evaluating finished, paths:";
-            qCDebug(lcDeviceController) << dev->paths;
-            emit evaluate_finished();
-        });
-}
-
-bool DeviceController::isEvaluationRunning() const
-{
-    return _isEvaluationRunning;
-}
 
 void DeviceController::force_ra_account()
 {
@@ -415,6 +422,17 @@ QFuture<DevicePathListCtx> DeviceController::queryDeviceInfo(const QString &devi
     return _api->ra_device_info(deviceId);
 }
 
+QFuture<DevicePathResolutionResult> DeviceController::resolveDevicePath(const Device& device)
+{
+    if (!_pathResolver) {
+        DevicePathResolutionResult result;
+        result.device = device;
+        return QtFuture::makeReadyValueFuture(result);
+    }
+
+    return _pathResolver->resolve(device);
+}
+
 void DeviceController::initAccessCode()
 {
     qCDebug(lcDeviceController) << "initAccessCode";
@@ -452,11 +470,6 @@ void DeviceController::enterAccessCode(const QString &code, bool from_account)
                 emit accessCodeResult(AccessCodeContext::Token, ctx.res.status, ctx.res.errorString, ctx.res.errorStacktrace);
             }
         });
-}
-
-QFuture<QList<DevicePath> > DeviceController::query_status_all(const Device &dev)
-{
-    return _devApi->query_status_all(dev.paths);
 }
 
 void DeviceController::processQueryDeviceList()

@@ -2,6 +2,7 @@
 
 #include "personalcloudlib.h"
 #include "device/apiclient.h"
+#include "device/devicepathresolver.h"
 
 #include <QObject>
 #include <QReadWriteLock>
@@ -36,9 +37,6 @@ public:
     void account_update_device(const Device& dev);
     void account_update_device_continue(std::optional<Device> dev);
 
-    void evaluateDeviceStatus(Device* dev);
-    bool isEvaluationRunning() const;
-
     // When "Can't find device" command
     void force_ra_account();
 
@@ -53,11 +51,10 @@ public:
 
     QFuture<DeviceListCtx> queryDeviceList();
     QFuture<DevicePathListCtx> queryDeviceInfo(const QString& deviceId);
+    QFuture<DevicePathResolutionResult> resolveDevicePath(const Device& device);
 
     void initAccessCode();
     void enterAccessCode(const QString& code, bool from_account);
-
-    QFuture<QList<DevicePath>> query_status_all(const Device& dev);
 
 signals:
     void prepareLoginFinished(const Device& d);
@@ -66,12 +63,10 @@ signals:
     // raQueried == false if no refresh token and RA isn't queried
     void devices_updated(bool raQueried);
 
-    void evaluate_finished();
-
     void accessCodeRequest();
     void accessCodeResult(DeviceController::AccessCodeContext context, int status_code, const QString& errorString, const QString& errorStacktrace);
 
-    void account_update_device_finished(const QList<DevicePath>& paths);
+    void account_update_device_finished(const Device& device);
 
 protected:
     void processQueryDeviceList();
@@ -83,6 +78,7 @@ protected:
     DeviceApi* _devApi = nullptr;
     MdnsClient* _mdns = nullptr;
     DeviceAggregator* _aggregator = nullptr;
+    DevicePathResolver* _pathResolver = nullptr;
     QString _email;
     DeviceList _raDeviceList;
     DeviceList _mdnsDeviceList;
@@ -97,7 +93,6 @@ protected:
     std::atomic<bool> ra_finished{false};
 
     bool force_device_list_request = false;
-    bool _isEvaluationRunning = false;
 
     QList<DevicePath> allAccountPaths;
 };

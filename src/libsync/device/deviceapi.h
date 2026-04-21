@@ -31,15 +31,19 @@ class APPLICATIONSYNC_EXPORT DeviceApi: public QObject
 public:
     explicit DeviceApi(QObject* parent = nullptr);
 
-    QFuture<AboutCtx> query_about(const QString &url);
+    QFuture<AboutCtx> query_about(const QString &url, DeviceType deviceType = DeviceType::Unknown);
     QFuture<StatusCtx> query_status(const QString &url);
 
     QFuture<QList<DevicePath>> query_about_all(QList<DevicePath> paths);
     QFuture<QList<DevicePath>> query_status_all(QList<DevicePath> paths);
 
-    QFuture<std::pair<AboutCtx,StatusCtx>> query_about_status(const QString &url);
+    QFuture<std::pair<AboutCtx,StatusCtx>> query_about_status(const QString &url, DeviceType deviceType = DeviceType::Unknown);
 
 protected:
+    static int aboutTimeoutForDeviceType(DeviceType deviceType);
+    static constexpr int LocalAboutTimeoutMs = 4 * 1000;
+    static constexpr int NonLocalAboutTimeoutMs = 9 * 1000;
+    static constexpr int StatusTimeoutMs = 5 * 1000;
 
     template <typename T>
     QFuture<T> execRequest(QNetworkReply* netReply, std::function<T(const std::optional<QJsonDocument>&,int)> parser) {
@@ -59,7 +63,7 @@ protected:
 
             try {
                 promise->addResult(parser(doc, statusCode));
-            } catch (const std::exception& e) {
+            } catch (const std::exception &) {
                 //promise->setException(std::make_exception_ptr(e));
                 T errCtx;
                 errCtx.status = -1;
