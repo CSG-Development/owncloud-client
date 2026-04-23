@@ -184,6 +184,7 @@ public slots:
     void slotSetProgress(const ProgressInfo &progress, Folder *f);
 
 private slots:
+    void slotAccountUrlChanged(const QUuid &accountId);
     void slotUpdateDirectories(const QStringList &);
     void slotGatherPermissions(const QString &name, const QMap<QString, QString> &properties);
     void slotLscolFinishedWithError(QNetworkReply *r);

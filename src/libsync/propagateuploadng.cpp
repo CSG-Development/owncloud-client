@@ -229,6 +229,7 @@ void PropagateUploadFileNG::slotPropfindFinishedWithError()
 {
     auto job = qobject_cast<PropfindJob *>(sender());
     _item->_httpErrorCode = job->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    _item->_networkErrorCode = static_cast<qint32>(job->reply()->error());
     _item->_responseTimeStamp = job->responseTimestamp();
     _item->_requestId = job->requestId();
 
@@ -246,6 +247,7 @@ void PropagateUploadFileNG::slotDeleteJobFinished()
 {
     auto job = qobject_cast<DeleteJob *>(sender());
     _item->_httpErrorCode = job->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    _item->_networkErrorCode = static_cast<qint32>(job->reply()->error());
     _item->_responseTimeStamp = job->responseTimestamp();
     _item->_requestId = job->requestId();
 
@@ -307,6 +309,7 @@ void PropagateUploadFileNG::slotMkColFinished()
     propagator()->_activeJobList.removeOne(this);
     auto job = qobject_cast<MkColJob *>(sender());
     _item->_httpErrorCode = job->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    _item->_networkErrorCode = static_cast<qint32>(job->reply()->error());
     _item->_responseTimeStamp = job->responseTimestamp();
     _item->_requestId = job->requestId();
 
@@ -403,6 +406,7 @@ void PropagateUploadFileNG::slotPutFinished()
     OC_ASSERT(job);
 
     _item->_httpErrorCode = job->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    _item->_networkErrorCode = static_cast<qint32>(job->reply()->error());
     _item->_responseTimeStamp = job->responseTimestamp();
     _item->_requestId = job->requestId();
 
@@ -499,6 +503,7 @@ void PropagateUploadFileNG::slotMoveJobFinished()
     auto job = qobject_cast<MoveJob *>(sender());
     QNetworkReply::NetworkError err = job->reply()->error();
     _item->_httpErrorCode = job->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    _item->_networkErrorCode = static_cast<qint32>(err);
     _item->_responseTimeStamp = job->responseTimestamp();
     _item->_requestId = job->requestId();
 

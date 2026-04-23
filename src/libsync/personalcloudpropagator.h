@@ -28,6 +28,7 @@
 #include "common/syncjournaldb.h"
 #include "bandwidthmanager.h"
 #include "accountfwd.h"
+#include "endpointrecoveryevent.h"
 #include "syncoptions.h"
 
 namespace APP {
@@ -557,6 +558,7 @@ private slots:
 signals:
     void newItem(const SyncFileItemPtr &);
     void itemCompleted(const SyncFileItemPtr &);
+    void endpointRecoveryRequested(const EndpointRecoveryEvent &event);
     void progress(const SyncFileItem &, qint64 bytes);
     void updateFileTotal(const SyncFileItem &, qint64 newSize);
     void finished(bool success);

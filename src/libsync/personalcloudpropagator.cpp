@@ -28,6 +28,7 @@
 #include "propagateupload.h"
 #include "propagateuploadtus.h"
 #include "propagatorjobs.h"
+#include "syncendpointrecovery.h"
 
 #ifdef Q_OS_WIN
 #include "common/utility_win.h"
@@ -298,6 +299,32 @@ void PropagateItemJob::done(SyncFileItem::Status statusArg, const QString &error
         qCWarning(lcPropagator) << "Could not complete propagation of" << _item->destination() << "by" << this << "with status" << _item->_status << "and error:" << _item->_errorString;
     else
         qCInfo(lcPropagator) << "Completed propagation of" << _item->destination() << "by" << this << "with status" << _item->_status;
+
+    const auto recoveryReason = classifyEndpointRecoveryReason(
+        static_cast<QNetworkReply::NetworkError>(_item->_networkErrorCode), _item->_httpErrorCode);
+    const auto shouldEmitRecovery = shouldScheduleEndpointRecovery(recoveryReason);
+    if (_item->_networkErrorCode != 0 || _item->_httpErrorCode == 401 || _item->_httpErrorCode == 403
+        || _item->_httpErrorCode == 502 || _item->_httpErrorCode == 503 || _item->_httpErrorCode == 504) {
+        qCInfo(lcSyncEndpointRecovery).noquote()
+            << "sync_endpoint_failure"
+            << QStringLiteral("baseUrl=%1 file=%2 networkError=%3 httpStatus=%4 reason=%5 emitRecovery=%6")
+                   .arg(propagator()->webDavUrl().toString(), _item->_file, QString::number(_item->_networkErrorCode),
+                       QString::number(_item->_httpErrorCode), endpointRecoveryReasonString(recoveryReason),
+                       shouldEmitRecovery ? QStringLiteral("true") : QStringLiteral("false"));
+    }
+    if (shouldEmitRecovery) {
+        const auto account = propagator()->account();
+        const auto activePathId = account && !account->activePath().isNull()
+            ? std::optional<QUuid>(account->activePath())
+            : std::nullopt;
+        emit propagator()->endpointRecoveryRequested(makeEndpointRecoveryEvent(
+            account ? account->uuid() : QUuid(),
+            activePathId,
+            propagator()->webDavUrl(),
+            recoveryReason,
+            static_cast<QNetworkReply::NetworkError>(_item->_networkErrorCode),
+            _item->_httpErrorCode));
+    }
 
     // Will be handled in PropagateDirectory::slotSubJobsFinished at the end
     if (!_item->isDirectory() || _item->_relevantDirectoyInstruction) {

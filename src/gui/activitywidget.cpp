@@ -140,8 +140,14 @@ ActivityWidget::ActivityWidget(QWidget *parent)
     connect(_model, &ActivityListModel::activityJobStatusCode,
         this, &ActivityWidget::slotAccountActivityStatus);
 
+    for (const auto &accountState : AccountManager::instance()->accounts()) {
+        watchAccountPresentation(accountState);
+    }
+    connect(AccountManager::instance(), &AccountManager::accountAdded, this, [this](AccountStatePtr accountState) {
+        watchAccountPresentation(accountState);
+    });
     connect(AccountManager::instance(), &AccountManager::accountRemoved, this, [this](AccountStatePtr ast) {
-        if (_accountsWithoutActivities.remove(ast->account()->displayName())) {
+        if (_accountsWithoutActivities.remove(ast->account()->uuid()) > 0) {
             showLabels();
         }
 
@@ -215,9 +221,8 @@ void ActivityWidget::showLabels()
     _ui->_notifyLabel->setText(tr("Notifications"));
 
     t.clear();
-    QSetIterator<QString> i(_accountsWithoutActivities);
-    while (i.hasNext()) {
-        t.append(tr("<br/>%1 does not provide activities.").arg(i.next()));
+    for (auto it = _accountsWithoutActivities.cbegin(); it != _accountsWithoutActivities.cend(); ++it) {
+        t.append(tr("<br/>%1 does not provide activities.").arg(it.value()));
     }
     _ui->_bottomLabel->setTextFormat(Qt::RichText);
     _ui->_bottomLabel->setText(t);
@@ -229,13 +234,35 @@ void ActivityWidget::slotAccountActivityStatus(AccountStatePtr ast, int statusCo
         return;
     }
     if (statusCode == 999) {
-        _accountsWithoutActivities.insert(ast->account()->displayName());
+        _accountsWithoutActivities.insert(ast->account()->uuid(), ast->account()->displayName());
     } else {
-        _accountsWithoutActivities.remove(ast->account()->displayName());
+        _accountsWithoutActivities.remove(ast->account()->uuid());
     }
 
     checkActivityTabVisibility();
     showLabels();
+}
+
+void ActivityWidget::watchAccountPresentation(const AccountStatePtr &accountState)
+{
+    if (!(accountState && accountState->account())) {
+        return;
+    }
+
+    connect(accountState->account().data(), &Account::accountPresentationChanged, this, [this, accountState] {
+        if (!(accountState && accountState->account())) {
+            return;
+        }
+
+        const auto accountUuid = accountState->account()->uuid();
+        const auto it = _accountsWithoutActivities.find(accountUuid);
+        if (it == _accountsWithoutActivities.end()) {
+            return;
+        }
+
+        it.value() = accountState->account()->displayName();
+        showLabels();
+    });
 }
 
 void ActivityWidget::checkActivityTabVisibility()

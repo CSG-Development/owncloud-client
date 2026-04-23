@@ -47,6 +47,8 @@
 #include "common/utility_win.h"
 #endif
 
+#include <algorithm>
+
 #include <QTimer>
 #include <QUrl>
 #include <QDir>
@@ -120,6 +122,9 @@ Folder::Folder(const FolderDefinition &definition,
 
         connect(_accountState.data(), &AccountState::isConnectedChanged, this, &Folder::canSyncChanged);
         connect(_accountState.data(), &AccountState::urlChanged, this, &Folder::slotUrlChanged);
+        connect(this, &Folder::canSyncChanged, this, [this] {
+            enqueuePendingSyncAfterUrlChange();
+        });
 
         connect(_engine.data(), &SyncEngine::started, this, &Folder::slotSyncStarted, Qt::QueuedConnection);
         connect(_engine.data(), &SyncEngine::finished, this, &Folder::slotSyncFinished, Qt::QueuedConnection);
@@ -133,6 +138,11 @@ Folder::Folder(const FolderDefinition &definition,
         connect(_engine.data(), &SyncEngine::seenLockedFile, FolderMan::instance(), &FolderMan::slotSyncOnceFileUnlocks);
         connect(_engine.data(), &SyncEngine::aboutToPropagate, this, &Folder::slotLogPropagationStart);
         connect(_engine.data(), &SyncEngine::syncError, this, &Folder::slotSyncError);
+        connect(_engine.data(), &SyncEngine::endpointRecoveryRequested, this, [this](const EndpointRecoveryEvent& event) {
+            if (_accountState) {
+                _accountState->handleEndpointRecoveryRequest(event, path());
+            }
+        });
 
         connect(ProgressDispatcher::instance(), &ProgressDispatcher::folderConflicts, this, &Folder::slotFolderConflicts);
         connect(_engine.data(), &SyncEngine::excluded, this, [this](const QString &path) { Q_EMIT ProgressDispatcher::instance()->excluded(this, path); });
@@ -393,6 +403,13 @@ bool Folder::isReady() const
     return _vfsIsReady;
 }
 
+bool Folder::consumeConnectedScheduleSuppression()
+{
+    const auto shouldSuppress = _suppressConnectedScheduleAfterUrlChange;
+    _suppressConnectedScheduleAfterUrlChange = false;
+    return shouldSuppress;
+}
+
 void Folder::setSyncPaused(bool paused)
 {
     if (hasSetupError()) {
@@ -403,6 +420,10 @@ void Folder::setSyncPaused(bool paused)
     }
 
     _definition.paused = paused;
+    if (paused) {
+        _restartSyncAfterUrlChange = false;
+        _suppressConnectedScheduleAfterUrlChange = false;
+    }
     saveToSettings();
 
     emit syncPausedChanged(this, paused);
@@ -843,8 +864,10 @@ void Folder::slotTerminateSync()
 {
     if (isReady()) {
         qCInfo(lcFolder) << "folder " << path() << " Terminating!";
+        _restartSyncAfterUrlChange = false;
+        _suppressConnectedScheduleAfterUrlChange = false;
         if (_engine->isSyncRunning()) {
-            _engine->abort();
+            _engine->abort({}, SyncEngine::AbortReason::UserRequested);
             setSyncState(SyncResult::SyncAbortRequested);
         }
     }
@@ -926,6 +949,7 @@ void Folder::startSync()
         return;
     }
 
+    _restartSyncAfterUrlChange = false;
     _timeSinceLastSyncStart.start();
     setSyncState(SyncResult::SyncPrepare);
     _syncResult.reset();
@@ -1025,11 +1049,25 @@ void Folder::slotSyncFinished(bool success)
     }
     qCInfo(lcFolder) << "Client version" << Theme::instance()->aboutVersions(Theme::VersionFormat::OneLiner);
 
-    const auto errorStr = _syncResult.errorStrings();
+    const auto lastAbortReason = _engine->lastAbortReason();
+    const auto recoveryInducedAbort = lastAbortReason == SyncEngine::AbortReason::BaseUrlChange;
+    auto errorStr = _syncResult.errorStrings();
+    if (recoveryInducedAbort && !errorStr.isEmpty()) {
+        const auto abortMarker = tr("Aborted");
+        errorStr.erase(std::remove(errorStr.begin(), errorStr.end(), abortMarker), errorStr.end());
+        if (errorStr.size() != _syncResult.errorStrings().size()) {
+            _syncResult.clearErrors();
+            for (const auto &error : std::as_const(errorStr)) {
+                _syncResult.appendErrorString(error);
+            }
+        }
+    }
     qCDebug(lcFolder) << "Sync error string" << errorStr;
-    bool syncError = !errorStr.isEmpty();
+    const bool syncError = !errorStr.isEmpty();
     if (syncError) {
         qCWarning(lcFolder) << "SyncEngine finished with ERROR";
+    } else if (recoveryInducedAbort) {
+        qCInfo(lcFolder) << "SyncEngine finished after base URL change without residual sync errors";
     } else {
         qCInfo(lcFolder) << "SyncEngine finished without problem.";
     }
@@ -1039,9 +1077,12 @@ void Folder::slotSyncFinished(bool success)
     auto anotherSyncNeeded = false;
 
     auto syncStatus = SyncResult::Status::Undefined;
-
-    if (syncError) {
+    if (lastAbortReason == SyncEngine::AbortReason::UserRequested && !_definition.paused) {
+        syncStatus = SyncResult::SyncAbortRequested;
+    } else if (syncError) {
         syncStatus = SyncResult::Error;
+    } else if (recoveryInducedAbort) {
+        syncStatus = SyncResult::SyncAbortRequested;
     } else if (_syncResult.foundFilesNotSynced()) {
         syncStatus = SyncResult::Problem;
     } else if (_definition.paused) {
@@ -1053,6 +1094,8 @@ void Folder::slotSyncFinished(bool success)
 
     // Count the number of syncs that have failed in a row.
     if (syncStatus == SyncResult::Success || syncStatus == SyncResult::Problem) {
+        _consecutiveFailingSyncs = 0;
+    } else if (syncStatus == SyncResult::SyncAbortRequested || syncStatus == SyncResult::Paused) {
         _consecutiveFailingSyncs = 0;
     } else {
         _consecutiveFailingSyncs++;
@@ -1076,7 +1119,12 @@ void Folder::slotSyncFinished(bool success)
     }
 
     // syncStateChange from setSyncState needs to be emitted first
-    QTimer::singleShot(0, this, [this] { Q_EMIT syncFinished(_syncResult); });
+    QTimer::singleShot(0, this, [this, recoveryInducedAbort] {
+        Q_EMIT syncFinished(_syncResult);
+        if (recoveryInducedAbort) {
+            enqueuePendingSyncAfterUrlChange();
+        }
+    });
 
     _lastSyncDuration = std::chrono::milliseconds(_timeSinceLastSyncStart.elapsed());
     _timeSinceLastSyncDone.start();
@@ -1105,13 +1153,38 @@ void Folder::slotUrlChanged(const QUuid &accountId)
     AccountStatePtr accStatePtr = AccountManager::instance()->account(accountId);
     if (accStatePtr && accStatePtr->account()) {
         const auto newUrl = accStatePtr->account()->davUrl();
+        if (_definition.webDavUrl() == newUrl) {
+            qCDebug(lcFolder) << "Ignoring URL change notification because WebDAV URL is unchanged" << newUrl;
+            return;
+        }
         qCInfo(lcFolder) << "URL changed from" << _definition.webDavUrl() << "to" << newUrl;
         _definition.setWebDavUrl(newUrl);
+        const auto manuallyStopped = _engine->lastAbortReason() == SyncEngine::AbortReason::UserRequested
+            && _syncResult.status() == SyncResult::SyncAbortRequested;
+        const auto restartSync = !syncPaused() && !manuallyStopped;
+        _restartSyncAfterUrlChange = restartSync;
+        _suppressConnectedScheduleAfterUrlChange = restartSync;
+        if (!restartSync) {
+            qCInfo(lcFolder) << "Applying URL change without auto-restart due to paused or manually stopped sync";
+        }
         _engine->changeBaseUrl(webDavUrl());
+        if (!_engine->isSyncRunning()) {
+            enqueuePendingSyncAfterUrlChange();
+        }
     }
     else {
         qCWarning(lcFolder) << "Unable to find account" << accountId;
     }
+}
+
+void Folder::enqueuePendingSyncAfterUrlChange()
+{
+    if (!_restartSyncAfterUrlChange || isSyncRunning() || !canSync()) {
+        return;
+    }
+
+    _restartSyncAfterUrlChange = false;
+    FolderMan::instance()->scheduler()->enqueueFolder(this, SyncScheduler::Priority::High);
 }
 
 // a item is completed: count the errors and forward to the ProgressDispatcher

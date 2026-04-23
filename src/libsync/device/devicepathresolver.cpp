@@ -3,8 +3,11 @@
 #include <QtConcurrent>
 
 #include <algorithm>
+#include <QLoggingCategory>
 
 namespace {
+
+Q_LOGGING_CATEGORY(lcDevicePathResolver, "device.pathresolver", QtDebugMsg)
 
 QString pathKey(const DevicePath& path)
 {
@@ -112,24 +115,30 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::resolve(const Device& so
     Device device = sourceDevice;
     DevicePathResolutionResult result;
     result.device = device;
+    qCDebug(lcDevicePathResolver) << "Starting resolution for" << device.toStringShort();
 
     const auto cachedPriorityPaths = priorityPaths(device);
     if (cachedPriorityPaths.isEmpty() || !_deviceApi) {
+        qCDebug(lcDevicePathResolver) << "No cached priority paths available, going to RA/relay fallback";
         return resolveAfterPriorityFailure(device, {}, result);
     }
 
-    return testPriorityPaths(device, cachedPriorityPaths, result)
+    qCDebug(lcDevicePathResolver) << "Testing cached priority paths" << cachedPriorityPaths;
+    return testPriorityPaths(device, cachedPriorityPaths, result, DevicePathResolutionOutcome::ResolvedFromCachedPriority)
         .then(this, [this, cachedPriorityPaths](const DevicePathResolutionResult& testResult) {
             if (testResult.resolved()) {
+                qCDebug(lcDevicePathResolver) << "Resolved from cached priority path";
                 return QtFuture::makeReadyValueFuture(testResult);
             }
 
+            qCDebug(lcDevicePathResolver) << "Cached priority paths failed, forcing fresh RA refresh";
             return resolveAfterPriorityFailure(testResult.device, pathKeys(cachedPriorityPaths), testResult);
         })
         .unwrap();
 }
 
-QFuture<DevicePathResolutionResult> DevicePathResolver::testPriorityPaths(Device device, const QList<DevicePath>& paths, const DevicePathResolutionResult& result)
+QFuture<DevicePathResolutionResult> DevicePathResolver::testPriorityPaths(Device device, const QList<DevicePath>& paths, const DevicePathResolutionResult& result,
+    DevicePathResolutionOutcome successOutcome)
 {
     if (!_deviceApi || paths.isEmpty()) {
         return QtFuture::makeReadyValueFuture(withDevice(result, device));
@@ -169,7 +178,7 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::testPriorityPaths(Device
     for (const auto& path : paths) {
         const auto url = DevHelpers::makeServerUrl(path.address, path.port, false, true);
         _deviceApi->query_status(url)
-            .then(this, [state, path, finishWithCurrentDevice](const StatusCtx& ctx) mutable {
+            .then(this, [state, path, finishWithCurrentDevice, successOutcome](const StatusCtx& ctx) mutable {
                 if (state->finished) {
                     return;
                 }
@@ -186,6 +195,7 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::testPriorityPaths(Device
                 if (ctx.status == 200 && updatedPath.status.oobe_done) {
                     if (path.deviceType == DeviceType::Local) {
                         state->result.selectedPathId = updatedPath.id;
+                        state->result.outcome = successOutcome;
                         finishWithCurrentDevice();
                         return;
                     }
@@ -197,6 +207,7 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::testPriorityPaths(Device
 
                 if (state->localPendingCount == 0 && state->firstSuccessfulPublicPath) {
                     state->result.selectedPathId = state->firstSuccessfulPublicPath->id;
+                    state->result.outcome = successOutcome;
                     finishWithCurrentDevice();
                     return;
                 }
@@ -213,10 +224,21 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::testPriorityPaths(Device
 QFuture<DevicePathResolutionResult> DevicePathResolver::resolveAfterPriorityFailure(Device device, const QSet<QString>& testedPriorityKeys, const DevicePathResolutionResult& result)
 {
     const auto canQueryRemotePaths = static_cast<bool>(_queryDeviceInfo) && !device.seagateDeviceID.isEmpty();
-    const auto shouldFetchRemotePaths = canQueryRemotePaths && (!device.hasRemotePathCache() || device.isRemotePathCacheExpired());
+    if (!canQueryRemotePaths) {
+        qCDebug(lcDevicePathResolver) << "Fresh RA refresh is unavailable, trying relay paths only";
+        return testRelayPath(device, result)
+            .then(this, [device, canRequestPrompt = static_cast<bool>(_queryDeviceInfo)](const DevicePathResolutionResult& relayResult) {
+                if (relayResult.resolved()) {
+                    return QtFuture::makeReadyValueFuture(relayResult);
+                }
 
-    if (!shouldFetchRemotePaths) {
-        return testRelayPath(device, result);
+                auto updatedResult = relayResult;
+                if (canRequestPrompt && !device.certificateCommonName.isEmpty()) {
+                    updatedResult.outcome = DevicePathResolutionOutcome::RequiresRemoteAccessPrompt;
+                }
+                return QtFuture::makeReadyValueFuture(updatedResult);
+            })
+            .unwrap();
     }
 
     return _queryDeviceInfo(device.seagateDeviceID)
@@ -224,8 +246,13 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::resolveAfterPriorityFail
             auto updatedResult = withDevice(result, device);
             updatedResult.remoteAccessRequested = true;
             updatedResult.remoteAccessResult = ctx.res;
+            qCDebug(lcDevicePathResolver) << "Fresh RA refresh finished with status" << ctx.res.status;
 
             if (ctx.res.status != 200) {
+                if (!device.certificateCommonName.isEmpty()
+                    && (ctx.res.status == 401 || ctx.res.status == 403 || ctx.res.status == -2)) {
+                    updatedResult.outcome = DevicePathResolutionOutcome::RequiresRemoteAccessPrompt;
+                }
                 return testRelayPath(device, updatedResult);
             }
 
@@ -236,12 +263,14 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::resolveAfterPriorityFail
                 device.remotePathsFetchedAtUtc = fetchedAtUtc;
                 updatedResult.device = device;
                 updatedResult.remoteCacheTimestampRefreshed = true;
+                qCDebug(lcDevicePathResolver) << "Fresh RA refresh returned the same remote path set";
                 return testRelayPath(device, updatedResult);
             }
 
             device.updateRemotePathCache(normalizedRemotePaths, fetchedAtUtc);
             updatedResult.device = device;
             updatedResult.remoteCacheUpdated = true;
+            qCDebug(lcDevicePathResolver) << "Fresh RA refresh updated remote path cache";
 
             if (!_deviceApi) {
                 return testRelayPath(device, updatedResult);
@@ -252,12 +281,15 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::resolveAfterPriorityFail
                 return testRelayPath(device, updatedResult);
             }
 
-            return testPriorityPaths(device, freshPriorityPaths, updatedResult)
+            qCDebug(lcDevicePathResolver) << "Testing fresh priority paths" << freshPriorityPaths;
+            return testPriorityPaths(device, freshPriorityPaths, updatedResult, DevicePathResolutionOutcome::ResolvedFromFreshRemoteAccess)
                 .then(this, [this](const DevicePathResolutionResult& freshPriorityResult) {
                     if (freshPriorityResult.resolved()) {
+                        qCDebug(lcDevicePathResolver) << "Resolved from fresh RA priority path";
                         return QtFuture::makeReadyValueFuture(freshPriorityResult);
                     }
 
+                    qCDebug(lcDevicePathResolver) << "Fresh priority paths failed, falling back to relay paths";
                     return testRelayPath(freshPriorityResult.device, freshPriorityResult);
                 })
                 .unwrap();
@@ -276,6 +308,7 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::testRelayPath(Device dev
         return QtFuture::makeReadyValueFuture(result);
     }
 
+    qCDebug(lcDevicePathResolver) << "Testing relay paths" << remoteRelayPaths;
     return _deviceApi->query_status_all(remoteRelayPaths)
         .then(this, [device, result](const QList<DevicePath>& updatedPaths) mutable {
             mergeUpdatedPaths(device, updatedPaths);
@@ -286,7 +319,10 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::testRelayPath(Device dev
             });
             if (successfulRelayPath != updatedPaths.cend()) {
                 updatedResult.selectedPathId = successfulRelayPath->id;
+                updatedResult.outcome = DevicePathResolutionOutcome::ResolvedFromRemoteRelay;
                 updatedResult.usedRemoteRelay = true;
+            } else {
+                qCDebug(lcDevicePathResolver) << "Resolution exhausted without reachable paths";
             }
 
             return updatedResult;

@@ -293,8 +293,6 @@ AccountStatePtr AccountManager::addAccount(const AccountPtr &newAccount)
 
 void AccountManager::deleteAccount(AccountStatePtr account)
 {
-
-
     auto it = std::find(_accounts.begin(), _accounts.end(), account);
     if (it == _accounts.end()) {
         return;
@@ -311,6 +309,10 @@ void AccountManager::deleteAccount(AccountStatePtr account)
     settings->remove(account->account()->uuid().toString());
 
     emit accountRemoved(account);
+
+    if (account) {
+        account->deleteLater();
+    }
 }
 
 AccountPtr AccountManager::createAccount(const QUuid &uuid)

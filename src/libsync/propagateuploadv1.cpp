@@ -200,6 +200,7 @@ void PropagateUploadFileV1::slotPutFinished()
     }
 
     _item->_httpErrorCode = job->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    _item->_networkErrorCode = static_cast<qint32>(job->reply()->error());
     _item->_responseTimeStamp = job->responseTimestamp();
     _item->_requestId = job->requestId();
     QNetworkReply::NetworkError err = job->reply()->error();
