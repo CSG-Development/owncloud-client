@@ -1411,7 +1411,10 @@ void AccountState::initializeRA()
     connect(oc.get(), &OverlayController::errorRetry, this, [this,oc](ErrorDialogState state, const QUuid& id) {
         if (oc && _account && _account->uuid() == id) {
             qCDebug(lcAccountState) << "errorRetry";
-            if (state == ErrorDialogState::UnableToConnectToken) {
+            if (state == ErrorDialogState::UnableToConnectInit) {
+                _deviceController->initAccessCode();
+            }
+            else if (state == ErrorDialogState::UnableToConnectToken) {
                 oc->retryAccessCode(_account->uuid());
             }
         }
@@ -1468,6 +1471,14 @@ void AccountState::initializeRA()
                     }
                     return;
                 }
+                const auto finishSkippedUpdate = [this] {
+                    emit pathUpdateFinished(true, Device{});
+                };
+                const auto reportErrorOrFinish = [this, oc, finishSkippedUpdate](ErrorDialogState state) {
+                    if (!_account || !oc || !oc->reportError(state, _account->uuid())) {
+                        finishSkippedUpdate();
+                    }
+                };
                 if (status_code == 200) {
                     qCDebug(lcAccountState) << "accessCodeResult Accepted";
                     _pendingDevicePathUpdate->awaitingAccessCode = false;
@@ -1496,10 +1507,10 @@ void AccountState::initializeRA()
                         }
                         else if (status_code == 500) {
                             if (context == DeviceController::AccessCodeContext::Token) {
-                                oc->reportError(ErrorDialogState::UnableToConnectToken, _account->uuid());
+                                reportErrorOrFinish(ErrorDialogState::UnableToConnectToken);
                             }
                             else {
-                                emit pathUpdateFinished(true, Device{});
+                                finishSkippedUpdate();
                             }
                         }
                         else if (status_code == 429) {
@@ -1512,6 +1523,15 @@ void AccountState::initializeRA()
                                 oc->resendAccessCode(_account->uuid());
                             }
                         }
+                        else if (context == DeviceController::AccessCodeContext::Init) {
+                            reportErrorOrFinish(ErrorDialogState::UnableToConnectInit);
+                        }
+                        else if (context == DeviceController::AccessCodeContext::Token) {
+                            reportErrorOrFinish(ErrorDialogState::UnableToConnectToken);
+                        }
+                    }
+                    else {
+                        finishSkippedUpdate();
                     }
                 }
             });
