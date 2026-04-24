@@ -31,6 +31,7 @@
 #include <QFileIconProvider>
 #include <QVarLengthArray>
 
+#include <algorithm>
 #include <set>
 
 using namespace std::chrono_literals;
@@ -136,6 +137,7 @@ void FolderStatusModel::setAccountState(const AccountStatePtr &accountState)
 {
     beginResetModel();
     _dirty = false;
+    _refreshFetchedRootsWhenConnected = false;
     _folders.clear();
     if (_accountState != accountState) {
         Q_ASSERT(!_accountState);
@@ -143,6 +145,7 @@ void FolderStatusModel::setAccountState(const AccountStatePtr &accountState)
 
         connect(FolderMan::instance(), &FolderMan::folderSyncStateChange, this, &FolderStatusModel::slotFolderSyncStateChange);
         connect(accountState.data(), &AccountState::urlChanged, this, &FolderStatusModel::slotAccountUrlChanged, Qt::UniqueConnection);
+        connect(accountState.data(), &AccountState::stateChanged, this, &FolderStatusModel::slotAccountStateChanged, Qt::UniqueConnection);
 
         if (accountState->supportsSpaces()) {
             connect(accountState->account()->spacesManager(), &GraphApi::SpacesManager::updated, this, [this] {
@@ -778,17 +781,22 @@ void FolderStatusModel::slotAccountUrlChanged(const QUuid &accountId)
             return;
         }
 
-        for (int i = 0; i < _folders.count(); ++i) {
-            const auto rootIndex = index(i, 0);
-            auto *info = infoForIndex(rootIndex);
-            if (!info || !(info->_fetchingJob || info->_fetched || info->hasLabel() || !info->_subs.isEmpty())) {
-                continue;
-            }
-            resetAndFetch(rootIndex);
-        }
-
-        emit dirtyChanged();
+        refreshFetchedRoots();
     });
+}
+
+void FolderStatusModel::slotAccountStateChanged()
+{
+    if (!(_accountState && _accountState->state() == AccountState::Connected)) {
+        return;
+    }
+
+    const auto hasFolderStatusError = std::any_of(_folders.cbegin(), _folders.cend(), [](const SubFolderInfo &info) {
+        return info._hasError;
+    });
+    if (_refreshFetchedRootsWhenConnected || hasFolderStatusError) {
+        refreshFetchedRoots();
+    }
 }
 
 void FolderStatusModel::slotGatherPermissions(const QString &href, const QMap<QString, QString> &map)
@@ -1286,6 +1294,31 @@ void FolderStatusModel::slotFolderSyncStateChange(Folder *f)
         // There is a new or a removed folder, or displayed folder sizes may be stale. Reset all data.
         resetAndFetch(index(folderIndex));
     }
+}
+
+void FolderStatusModel::refreshFetchedRoots()
+{
+    if (!_accountState) {
+        return;
+    }
+
+    const auto accountConnected = _accountState->state() == AccountState::Connected;
+    _refreshFetchedRootsWhenConnected = !accountConnected;
+
+    for (int i = 0; i < _folders.count(); ++i) {
+        const auto rootIndex = index(i, 0);
+        auto *info = infoForIndex(rootIndex);
+        if (!info || !(info->_fetchingJob || info->_fetched || info->hasLabel() || !info->_subs.isEmpty())) {
+            continue;
+        }
+
+        info->resetSubs(this, rootIndex);
+        if (accountConnected) {
+            fetchMore(rootIndex);
+        }
+    }
+
+    emit dirtyChanged();
 }
 
 void FolderStatusModel::resetFolders()

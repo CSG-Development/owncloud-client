@@ -185,6 +185,7 @@ public slots:
 
 private slots:
     void slotAccountUrlChanged(const QUuid &accountId);
+    void slotAccountStateChanged();
     void slotUpdateDirectories(const QStringList &);
     void slotGatherPermissions(const QString &name, const QMap<QString, QString> &properties);
     void slotLscolFinishedWithError(QNetworkReply *r);
@@ -201,11 +202,13 @@ private:
     QSet<QString> createBlackList(const APP::FolderStatusModel::SubFolderInfo &root, const QSet<QString> &oldBlackList) const;
     void computeProgress(const ProgressInfo &progress, SubFolderInfo::Progress *pi);
     int indexOf(Folder *f) const;
+    void refreshFetchedRoots();
 
     ItemType classify(const QModelIndex &index) const;
 
     AccountStatePtr _accountState;
     bool _dirty; // If the selective sync checkboxes were changed
+    bool _refreshFetchedRootsWhenConnected = false;
     QVector<SubFolderInfo> _folders;
 
     /**
