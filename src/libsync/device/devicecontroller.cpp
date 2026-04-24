@@ -478,13 +478,25 @@ DeviceList DeviceController::getDevices() const
 QFuture<DeviceListCtx> DeviceController::queryDeviceList()
 {
     loadRefreshToken();
-    return _api->ra_device_list();
+    return _api->ra_device_list()
+        .then(this, [this](const DeviceListCtx& ctx) {
+            if (ctx.res.status == 200) {
+                saveRefreshToken();
+            }
+            return ctx;
+        });
 }
 
 QFuture<DevicePathListCtx> DeviceController::queryDeviceInfo(const QString &deviceId)
 {
     loadRefreshToken();
-    return _api->ra_device_info(deviceId);
+    return _api->ra_device_info(deviceId)
+        .then(this, [this](const DevicePathListCtx& ctx) {
+            if (ctx.res.status == 200) {
+                saveRefreshToken();
+            }
+            return ctx;
+        });
 }
 
 QFuture<DevicePathResolutionResult> DeviceController::resolveDevicePath(const Device& device, const std::optional<QUuid>& avoidPathId)
