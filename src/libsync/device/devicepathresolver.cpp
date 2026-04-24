@@ -72,6 +72,26 @@ QList<DevicePath> excludeTestedPaths(const QList<DevicePath>& paths, const QSet<
     return filtered;
 }
 
+QList<DevicePath> excludePathId(const QList<DevicePath>& paths, const std::optional<QUuid>& avoidPathId, QSet<QString>* skippedPathKeys)
+{
+    if (!avoidPathId || avoidPathId->isNull()) {
+        return paths;
+    }
+
+    QList<DevicePath> filtered;
+    for (const auto& path : paths) {
+        if (path.id == avoidPathId.value()) {
+            if (skippedPathKeys) {
+                skippedPathKeys->insert(pathKey(path));
+            }
+            continue;
+        }
+
+        filtered.append(path);
+    }
+    return filtered;
+}
+
 void mergeUpdatedPaths(Device& device, const QList<DevicePath>& updatedPaths)
 {
     for (const auto& updatedPath : updatedPaths) {
@@ -110,29 +130,36 @@ DevicePathResolver::DevicePathResolver(DeviceApi* deviceApi, QueryDeviceInfoFn q
 {
 }
 
-QFuture<DevicePathResolutionResult> DevicePathResolver::resolve(const Device& sourceDevice)
+QFuture<DevicePathResolutionResult> DevicePathResolver::resolve(const Device& sourceDevice, const std::optional<QUuid>& avoidPathId)
 {
     Device device = sourceDevice;
     DevicePathResolutionResult result;
     result.device = device;
     qCDebug(lcDevicePathResolver) << "Starting resolution for" << device.toStringShort();
 
-    const auto cachedPriorityPaths = priorityPaths(device);
+    QSet<QString> skippedPriorityKeys;
+    const auto cachedPriorityPaths = excludePathId(priorityPaths(device), avoidPathId, &skippedPriorityKeys);
     if (cachedPriorityPaths.isEmpty() || !_deviceApi) {
         qCDebug(lcDevicePathResolver) << "No cached priority paths available, going to RA/relay fallback";
-        return resolveAfterPriorityFailure(device, {}, result);
+        return resolveAfterPriorityFailure(device, skippedPriorityKeys, result);
     }
 
-    qCDebug(lcDevicePathResolver) << "Testing cached priority paths" << cachedPriorityPaths;
+    if (!skippedPriorityKeys.isEmpty()) {
+        qCDebug(lcDevicePathResolver) << "Testing cached priority paths except avoided path" << cachedPriorityPaths;
+    } else {
+        qCDebug(lcDevicePathResolver) << "Testing cached priority paths" << cachedPriorityPaths;
+    }
     return testPriorityPaths(device, cachedPriorityPaths, result, DevicePathResolutionOutcome::ResolvedFromCachedPriority)
-        .then(this, [this, cachedPriorityPaths](const DevicePathResolutionResult& testResult) {
+        .then(this, [this, cachedPriorityPaths, skippedPriorityKeys](const DevicePathResolutionResult& testResult) {
             if (testResult.resolved()) {
                 qCDebug(lcDevicePathResolver) << "Resolved from cached priority path";
                 return QtFuture::makeReadyValueFuture(testResult);
             }
 
             qCDebug(lcDevicePathResolver) << "Cached priority paths failed, forcing fresh RA refresh";
-            return resolveAfterPriorityFailure(testResult.device, pathKeys(cachedPriorityPaths), testResult);
+            auto testedPriorityKeys = pathKeys(cachedPriorityPaths);
+            testedPriorityKeys.unite(skippedPriorityKeys);
+            return resolveAfterPriorityFailure(testResult.device, testedPriorityKeys, testResult);
         })
         .unwrap();
 }

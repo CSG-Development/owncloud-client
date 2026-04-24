@@ -220,6 +220,9 @@ AccountState::AccountState(AccountPtr account)
                 // the connection might not yet be established
                 QTimer::singleShot(0, this, [this] {
                     checkConnectivity(false);
+                    if (_networkTriggeredDeviceUpdatePending) {
+                        scheduleNetworkTriggeredDeviceUpdate();
+                    }
                 });
                 break;
             case QNetworkInformation::Reachability::Disconnected:
@@ -287,6 +290,7 @@ AccountState::~AccountState()
     _startupDevicePathResolutionInProgress = false;
     _startupConnectivityCheckDeferred = false;
     _startupConnectivityCheckBlockJobs = false;
+    _networkTriggeredDeviceUpdatePending = false;
 }
 
 void AccountState::handleEndpointRecoveryRequest(const EndpointRecoveryEvent& event, const QString& folderPath)
@@ -409,6 +413,7 @@ void AccountState::setState(State state)
             _startupDevicePathResolutionInProgress = false;
             _startupConnectivityCheckDeferred = false;
             _startupConnectivityCheckBlockJobs = false;
+            _networkTriggeredDeviceUpdatePending = false;
             _syncTriggeredRecoveryCooldownTimer.stop();
             _endpointRecoveryRetryTimer.stop();
             _remoteAccessPromptRetryTimer.stop();
@@ -766,7 +771,9 @@ void AccountState::updateDeviceAccessibility()
 
     qCDebug(lcAccountState) << "Update device availability started";
     setUpdateDeviceProgress(true);
-    resolveAndApplyDevicePath(*_account->devicePtr(), true, DeviceUpdateTrigger::Default);
+    const auto activePath = _account->activePath();
+    resolveAndApplyDevicePath(*_account->devicePtr(), true, DeviceUpdateTrigger::Default,
+        activePath.isNull() ? std::nullopt : std::optional<QUuid>(activePath));
 }
 
 bool AccountState::canStartDeviceAccessibilityUpdate(bool logReason) const
@@ -1043,7 +1050,8 @@ void AccountState::triggerPendingEndpointRecovery()
                     pendingRequest.event.activePathId ? pendingRequest.event.activePathId->toString(QUuid::WithoutBraces) : QStringLiteral("<none>"),
                     pendingRequest.event.baseUrl);
     setUpdateDeviceProgress(true);
-    resolveAndApplyDevicePath(*device, true, DeviceUpdateTrigger::SyncTransportFailure);
+    resolveAndApplyDevicePath(*device, true, DeviceUpdateTrigger::SyncTransportFailure,
+        pendingRequest.event.activePathId);
 }
 
 void AccountState::scheduleNetworkTriggeredDeviceUpdate()
@@ -1053,6 +1061,13 @@ void AccountState::scheduleNetworkTriggeredDeviceUpdate()
         if (_endpointRecoveryState == EndpointRecoveryState::Deferred) {
             scheduleEndpointRecoveryRetry(0);
         }
+        return;
+    }
+
+    if (_updateDeviceInProgress || _endpointRecoveryState == EndpointRecoveryState::Resolving
+        || _endpointRecoveryState == EndpointRecoveryState::WaitingForRemoteAccessPrompt) {
+        qCDebug(lcAccountState) << "Queuing network-triggered device update because another update flow is active";
+        _networkTriggeredDeviceUpdatePending = true;
         return;
     }
 
@@ -1069,6 +1084,21 @@ void AccountState::runNetworkTriggeredDeviceUpdate()
         }
         return;
     }
+
+    if (_updateDeviceInProgress || _endpointRecoveryState == EndpointRecoveryState::Resolving
+        || _endpointRecoveryState == EndpointRecoveryState::WaitingForRemoteAccessPrompt) {
+        qCDebug(lcAccountState) << "Queuing network-triggered device update because another update flow became active";
+        _networkTriggeredDeviceUpdatePending = true;
+        return;
+    }
+
+    if (!canRunQueuedNetworkTriggeredDeviceUpdate()) {
+        qCDebug(lcAccountState) << "Keeping network-triggered device update queued until network reachability improves";
+        _networkTriggeredDeviceUpdatePending = true;
+        return;
+    }
+
+    _networkTriggeredDeviceUpdatePending = false;
 
     if (!canStartDeviceAccessibilityUpdate(true)) {
         return;
@@ -1089,7 +1119,29 @@ void AccountState::runNetworkTriggeredDeviceUpdate()
     resolveAndApplyDevicePath(*_account->devicePtr(), true, DeviceUpdateTrigger::NetworkChange);
 }
 
-void AccountState::resolveAndApplyDevicePath(const Device& device, bool allowRemoteAccessPrompt, DeviceUpdateTrigger trigger)
+bool AccountState::canRunQueuedNetworkTriggeredDeviceUpdate() const
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
+    if (auto *networkInformation = QNetworkInformation::instance()) {
+        switch (networkInformation->reachability()) {
+        case QNetworkInformation::Reachability::Online:
+            [[fallthrough]];
+        case QNetworkInformation::Reachability::Site:
+            [[fallthrough]];
+        case QNetworkInformation::Reachability::Unknown:
+            return true;
+        case QNetworkInformation::Reachability::Disconnected:
+            [[fallthrough]];
+        case QNetworkInformation::Reachability::Local:
+            return false;
+        }
+    }
+#endif
+    return true;
+}
+
+void AccountState::resolveAndApplyDevicePath(const Device& device, bool allowRemoteAccessPrompt, DeviceUpdateTrigger trigger,
+    const std::optional<QUuid>& avoidPathId)
 {
     if (!_account) {
         qCWarning(lcAccountState) << "No account for device path resolution";
@@ -1114,10 +1166,11 @@ void AccountState::resolveAndApplyDevicePath(const Device& device, bool allowRem
                            << "generation" << recoveryGeneration
                            << "resolutionGeneration" << resolutionGeneration
                            << "allowRemoteAccessPrompt" << allowRemoteAccessPrompt
+                           << "avoidPathId" << optionalUuidToString(avoidPathId)
                            << "currentActivePath" << _account->activePath()
                            << "currentDavUrl" << _account->davUrl();
 
-    _deviceController->resolveDevicePath(device)
+    _deviceController->resolveDevicePath(device, avoidPathId)
         .then(this, [this, allowRemoteAccessPrompt, trigger, resolutionGeneration](const DevicePathResolutionResult& result) {
             if (resolutionGeneration != _devicePathResolutionGeneration || !_account || isSignedOut()) {
                 qCDebug(lcAccountState) << "Ignoring stale device path resolution result"
@@ -1550,6 +1603,14 @@ void AccountState::setUpdateDeviceProgress(bool inProgress)
         _endpointRecoveryRetryTimer.stop();
         setEndpointRecoveryState(EndpointRecoveryState::Pending);
         QTimer::singleShot(0, this, &AccountState::triggerPendingEndpointRecovery);
+    }
+    if (!inProgress && _networkTriggeredDeviceUpdatePending && !_pendingEndpointRecoveryRequest) {
+        if (canRunQueuedNetworkTriggeredDeviceUpdate()) {
+            qCDebug(lcAccountState) << "Scheduling queued network-triggered device update after active update flow finished";
+            scheduleNetworkTriggeredDeviceUpdate();
+        } else {
+            qCDebug(lcAccountState) << "Keeping queued network-triggered device update until network reachability improves";
+        }
     }
     emit networkUpdateState(inProgress);
 }

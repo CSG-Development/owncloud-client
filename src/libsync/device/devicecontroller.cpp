@@ -487,7 +487,7 @@ QFuture<DevicePathListCtx> DeviceController::queryDeviceInfo(const QString &devi
     return _api->ra_device_info(deviceId);
 }
 
-QFuture<DevicePathResolutionResult> DeviceController::resolveDevicePath(const Device& device)
+QFuture<DevicePathResolutionResult> DeviceController::resolveDevicePath(const Device& device, const std::optional<QUuid>& avoidPathId)
 {
     if (!_pathResolver) {
         DevicePathResolutionResult result;
@@ -495,7 +495,7 @@ QFuture<DevicePathResolutionResult> DeviceController::resolveDevicePath(const De
         return QtFuture::makeReadyValueFuture(result);
     }
 
-    return _pathResolver->resolve(device);
+    return _pathResolver->resolve(device, avoidPathId);
 }
 
 void DeviceController::initAccessCode()

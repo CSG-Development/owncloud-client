@@ -41,7 +41,7 @@ public:
 
     explicit DevicePathResolver(DeviceApi* deviceApi, QueryDeviceInfoFn queryDeviceInfo, QObject* parent = nullptr);
 
-    QFuture<DevicePathResolutionResult> resolve(const Device& device);
+    QFuture<DevicePathResolutionResult> resolve(const Device& device, const std::optional<QUuid>& avoidPathId = std::nullopt);
 
 private:
     QFuture<DevicePathResolutionResult> testPriorityPaths(Device device, const QList<DevicePath>& paths, const DevicePathResolutionResult& result,

@@ -217,10 +217,12 @@ private:
     void triggerPendingEndpointRecovery();
     void scheduleNetworkTriggeredDeviceUpdate();
     void runNetworkTriggeredDeviceUpdate();
+    bool canRunQueuedNetworkTriggeredDeviceUpdate() const;
     bool shouldResolveStartupDevicePath() const;
     void startStartupDevicePathResolution(bool blockJobs);
     void finishStartupDevicePathResolution(bool continueConnectivity);
-    void resolveAndApplyDevicePath(const Device& device, bool allowRemoteAccessPrompt, DeviceUpdateTrigger trigger);
+    void resolveAndApplyDevicePath(const Device& device, bool allowRemoteAccessPrompt, DeviceUpdateTrigger trigger,
+        const std::optional<QUuid>& avoidPathId = std::nullopt);
     void applyResolvedDevicePath(const DevicePathResolutionResult& result, DeviceUpdateTrigger trigger);
     void requestRAupdate(const Device& device, DeviceUpdateTrigger trigger);
     void tryShowRemoteAccessPrompt();
@@ -273,6 +275,7 @@ private:
     bool _startupDevicePathResolutionInProgress = false;
     bool _startupConnectivityCheckDeferred = false;
     bool _startupConnectivityCheckBlockJobs = false;
+    bool _networkTriggeredDeviceUpdatePending = false;
     QTimer _networkChangeDebounceTimer;
     QTimer _syncTriggeredRecoveryCooldownTimer;
     QTimer _endpointRecoveryRetryTimer;
