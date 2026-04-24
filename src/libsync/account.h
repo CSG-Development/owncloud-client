@@ -134,7 +134,9 @@ public:
     QUrl url() const;
 
     void setDevice(const Device& dev);
+    void setResolvedDevice(const Device& dev, const QUuid& activePath);
     void setActivePath(const QUuid& id);
+    QUuid activePath() const { return _activePath; }
     const Device& device() const {return _device;}
     Device& device() {return _device;}
     Device* devicePtr() {return &_device;}
@@ -246,6 +248,7 @@ signals:
 
     void accountChangedAvatar();
     void accountChangedDisplayName();
+    void accountPresentationChanged();
 
     void unknownConnectionState();
 
@@ -255,11 +258,19 @@ signals:
     void appProviderErrorOccured(const QString &error);
 
 private:
+    struct PresentationState {
+        QString displayName;
+        QUrl url;
+        QUrl davUrl;
+    };
+
     // directory all newly created accounts store their various caches in
     static QString _customCommonCacheDirectory;
 
     Account(const QUuid &uuid, QObject *parent = nullptr);
     void setSharedThis(AccountPtr sharedThis);
+    PresentationState presentationState() const;
+    void emitPresentationSignalsIfChanged(const PresentationState &before);
 
     QWeakPointer<Account> _sharedThis;
     QString _id;

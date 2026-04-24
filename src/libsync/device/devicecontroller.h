@@ -51,7 +51,7 @@ public:
 
     QFuture<DeviceListCtx> queryDeviceList();
     QFuture<DevicePathListCtx> queryDeviceInfo(const QString& deviceId);
-    QFuture<DevicePathResolutionResult> resolveDevicePath(const Device& device);
+    QFuture<DevicePathResolutionResult> resolveDevicePath(const Device& device, const std::optional<QUuid>& avoidPathId = std::nullopt);
 
     void initAccessCode();
     void enterAccessCode(const QString& code, bool from_account);

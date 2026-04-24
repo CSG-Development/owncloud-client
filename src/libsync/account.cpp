@@ -116,14 +116,20 @@ AccountPtr Account::sharedFromThis()
 
 QString Account::davUser() const
 {
-    return _davUser.isEmpty() ? _credentials->user() : _davUser;
+    if (!_davUser.isEmpty()) {
+        return _davUser;
+    }
+
+    return _credentials ? _credentials->user() : QString {};
 }
 
 void Account::setDavUser(const QString &newDavUser)
 {
     if (_davUser == newDavUser)
         return;
+    const auto before = presentationState();
     _davUser = newDavUser;
+    emitPresentationSignalsIfChanged(before);
     emit wantsAccountSaved(this);
 }
 
@@ -160,8 +166,13 @@ QString Account::davDisplayName() const
 
 void Account::setDavDisplayName(const QString &newDisplayName)
 {
+    if (_displayName == newDisplayName) {
+        return;
+    }
+    const auto before = presentationState();
     _displayName = newDisplayName;
-    emit accountChangedDisplayName();
+    emitPresentationSignalsIfChanged(before);
+    emit wantsAccountSaved(this);
 }
 
 QString Account::id() const
@@ -180,15 +191,40 @@ QUrl Account::url() const
 
 void Account::setDevice(const Device &dev)
 {
+    const auto id = Device::getBestPathId(dev);
+    setResolvedDevice(dev, id.value_or(QUuid {}));
+}
+
+void Account::setResolvedDevice(const Device &dev, const QUuid &activePath)
+{
+    const auto before = presentationState();
+    const auto previousDevice = Device::toJsonStr(_device);
+    const auto nextDevice = Device::toJsonStr(dev);
+    const auto previousActivePath = _activePath;
+
     _device = dev;
-    auto id = _device.getBestPathId();
-    if (id)
-        _activePath = id.value();
+    if (!activePath.isNull()) {
+        _activePath = activePath;
+    } else {
+        auto id = _device.getBestPathId();
+        _activePath = id.value_or(QUuid {});
+    }
+
+    emitPresentationSignalsIfChanged(before);
+    if (previousDevice != nextDevice || previousActivePath != _activePath) {
+        emit wantsAccountSaved(this);
+    }
 }
 
 void Account::setActivePath(const QUuid &id)
 {
+    if (_activePath == id) {
+        return;
+    }
+    const auto before = presentationState();
     _activePath = id;
+    emitPresentationSignalsIfChanged(before);
+    emit wantsAccountSaved(this);
 }
 
 AbstractCredentials *Account::credentials() const
@@ -255,6 +291,54 @@ bool Account::replaceUrlToRemote(QUrl &urlToReplace)
         }
     }
     return false;
+}
+
+Account::PresentationState Account::presentationState() const
+{
+    QUrl effectiveUrl;
+    for (const auto &path : _device.paths) {
+        if (path.id == _activePath) {
+            effectiveUrl = QUrl(DevHelpers::makeServerUrl(path.address, path.port, true, path.origin != DeviceOrigin::MDNS));
+            break;
+        }
+    }
+
+    QString user = davDisplayName();
+    if (user.isEmpty()) {
+        user = _davUser.isEmpty() && _credentials ? _credentials->user() : _davUser;
+    }
+
+    QString effectiveDisplayName;
+    if (!user.isEmpty()) {
+        QString host;
+        if (effectiveUrl.port() == 80 || effectiveUrl.port() == 443) {
+            host = effectiveUrl.host();
+        } else {
+            host = effectiveUrl.toString();
+        }
+        effectiveDisplayName = tr("%1@%2").arg(user, host);
+    }
+
+    return {
+        effectiveDisplayName,
+        effectiveUrl,
+        Utility::concatUrlPath(effectiveUrl, davPath())
+    };
+}
+
+void Account::emitPresentationSignalsIfChanged(const PresentationState &before)
+{
+    const auto after = presentationState();
+    const auto displayNameChanged = before.displayName != after.displayName;
+    const auto presentationChanged =
+        displayNameChanged || before.url != after.url || before.davUrl != after.davUrl;
+
+    if (displayNameChanged) {
+        emit accountChangedDisplayName();
+    }
+    if (presentationChanged) {
+        emit accountPresentationChanged();
+    }
 }
 
 /**

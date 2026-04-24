@@ -480,6 +480,9 @@ void DiscoverySingleDirectoryJob::lsJobFinishedWithoutErrorSlot()
 
 void DiscoverySingleDirectoryJob::lsJobFinishedWithErrorSlot(QNetworkReply *r)
 {
+    _lastNetworkError = r ? r->error() : QNetworkReply::UnknownNetworkError;
+    _lastHttpStatusCode = r ? r->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() : 0;
+    _lastRequestTimedOut = _proFindJob && _proFindJob->timedOut();
     QString contentType = r->header(QNetworkRequest::ContentTypeHeader).toString();
     int httpCode = r->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     QString msg = r->errorString();

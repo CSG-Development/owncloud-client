@@ -451,6 +451,7 @@ void PropagateUploadFileCommon::checkResettingErrors()
 
 void PropagateUploadFileCommon::commonErrorHandling(AbstractNetworkJob *job)
 {
+    _item->_networkErrorCode = static_cast<qint32>(job->reply()->error());
     QByteArray replyContent;
     QString errorString = job->errorStringParsingBody(&replyContent);
     qCDebug(lcPropagateUpload) << replyContent; // display the XML error in the debug

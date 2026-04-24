@@ -2,6 +2,7 @@
 #include "deviceaggregator.h"
 #include "configfile.h"
 #include "deviceapi.h"
+#include "devicelogging.h"
 #include "devicepathresolver.h"
 #include "device/mdnsclient.h"
 
@@ -14,13 +15,22 @@ namespace {
 
 void cleanupEmptyCN(QList<DevicePath>& paths)
 {
+    QStringList droppedEndpoints;
     auto it = std::remove_if(paths.begin(), paths.end(), [](DevicePath& devPath) {
         if (devPath.about.certificate_common_name.isEmpty()) {
             return true;
         }
         return false;
     });
+    for (auto dropped = it; dropped != paths.end(); ++dropped) {
+        droppedEndpoints.append(QStringLiteral("%1:%2").arg(dropped->address, QString::number(dropped->port)));
+    }
     paths.erase(it, paths.end());
+    if (!droppedEndpoints.isEmpty()) {
+        qCWarning(lcDeviceData).noquote()
+            << "mdns_about dropped_records missing_cn"
+            << droppedEndpoints.join(QStringLiteral(", "));
+    }
 }
 
 QList<DevicePath> nonRemotePaths(const QList<DevicePath>& paths)
@@ -31,6 +41,43 @@ QList<DevicePath> nonRemotePaths(const QList<DevicePath>& paths)
 void replaceAccountRemotePaths(QList<DevicePath>& allPaths, const QList<DevicePath>& remotePaths)
 {
     allPaths = Device::replaceRemotePaths(allPaths, remotePaths);
+}
+
+void applyRemoteAccessIdentity(Device& targetDevice, const Device& remoteDevice)
+{
+    targetDevice.seagateDeviceID = remoteDevice.seagateDeviceID;
+    if (targetDevice.friendlyName().isEmpty() && !remoteDevice.friendlyName().isEmpty()) {
+        targetDevice.setFriendlyName(remoteDevice.friendlyName());
+    }
+    if (targetDevice.hostname.isEmpty()) {
+        targetDevice.hostname = remoteDevice.hostname;
+    }
+}
+
+void logRemoteAccessCnLookupMismatch(const char* context, const Device& localDevice, const DeviceList& remoteDevices)
+{
+    QStringList localPathCns;
+    for (const auto& path : localDevice.paths) {
+        if (!path.about.certificate_common_name.isEmpty()) {
+            localPathCns.append(path.about.certificate_common_name);
+        }
+    }
+    localPathCns.removeDuplicates();
+
+    QStringList remoteSummaries;
+    for (const auto& remoteDevice : remoteDevices.devices()) {
+        remoteSummaries.append(QStringLiteral("{cn:%1,id:%2,friendly:%3,hostname:%4}")
+            .arg(remoteDevice.certificateCommonName, remoteDevice.seagateDeviceID, remoteDevice.friendlyName(), remoteDevice.hostname));
+    }
+
+    qCWarning(lcDeviceData).noquote()
+        << context
+        << "Remote Access device merge failed by certificateCommonName."
+        << "Local device:"
+        << QStringLiteral("{cn:%1,hostname:%2,friendly:%3,pathAboutCNs:[%4]}")
+               .arg(localDevice.certificateCommonName, localDevice.hostname, localDevice.friendlyName(), localPathCns.join(QStringLiteral(", ")))
+        << "Remote Access devices:"
+        << remoteSummaries.join(QStringLiteral(", "));
 }
 
 }
@@ -278,21 +325,14 @@ void DeviceController::account_update_device(const Device& dev)
             };
 
             const auto dev_ra = ctx.deviceList.find_by_cn(d.certificateCommonName);
-
             if (!dev_ra || dev_ra->seagateDeviceID.isEmpty()) {
+                logRemoteAccessCnLookupMismatch("account_update_device:", d, ctx.deviceList);
                 qCDebug(lcDeviceController) << "Device not found or ID empty (CN lookup)";
                 finishTask();
                 return;
             }
 
-            currentDevice.seagateDeviceID = dev_ra->seagateDeviceID;
-            if (currentDevice.friendlyName().isEmpty() && !dev_ra->friendlyName().isEmpty()) {
-                currentDevice.setFriendlyName(dev_ra->friendlyName());
-            }
-            if (currentDevice.hostname.isEmpty()) {
-                currentDevice.hostname = dev_ra->hostname;
-            }
-
+            applyRemoteAccessIdentity(currentDevice, *dev_ra);
             qCDebug(lcDeviceController) << "Query device info for" << dev_ra->seagateDeviceID;
             queryDeviceInfo(dev_ra->seagateDeviceID)
                 .then(this, [this, finishTask, id=dev_ra->seagateDeviceID](const DevicePathListCtx& ctx) {
@@ -330,37 +370,62 @@ void DeviceController::account_update_device_continue(std::optional<Device> dev)
         return;
     }
 
-    if (dev->seagateDeviceID.isEmpty()) {
-        qCDebug(lcDeviceController) << "acc update continue: device has no ID";
-        ra_finished.store(true);
-        check_finished();
+    currentDevice = *dev;
+    auto continueWithResolvedDevice = [this](const Device& resolvedDevice) {
+        currentDevice = resolvedDevice;
+
+        queryDeviceInfo(resolvedDevice.seagateDeviceID)
+            .then(this, [this](const DevicePathListCtx& ctx) {
+                qCDebug(lcDeviceController) << "acc update continue ra_device_info code" << ctx.res.status << ctx.res.errorString;
+                if (ctx.res.status == 200) {
+                    currentDevice.updateRemotePathCache(ctx.devicePathList);
+
+                    _devApi->query_about_all(currentDevice.remotePaths())
+                        .then(this, [this](const QList<DevicePath>& paths) {
+                            qCDebug(lcDeviceController) << "Paths added:";
+                            qCDebug(lcDeviceController) << paths;
+                            currentDevice.updateRemotePathCache(paths);
+                            replaceAccountRemotePaths(allAccountPaths, currentDevice.remotePaths());
+                            ra_finished.store(true);
+                            check_finished();
+                        });
+
+                }
+                else {
+                    qCDebug(lcDeviceController) << "acc update continue ra_device_info fail";
+                    ra_finished.store(true);
+                    check_finished();
+                }
+            });
+    };
+
+    if (!currentDevice.seagateDeviceID.isEmpty()) {
+        continueWithResolvedDevice(currentDevice);
         return;
     }
 
-    currentDevice = *dev;
-
-    queryDeviceInfo(dev->seagateDeviceID)
-        .then(this, [this](const DevicePathListCtx& ctx) {
-            qCDebug(lcDeviceController) << "acc update continue ra_device_info code" << ctx.res.status << ctx.res.errorString;
-            if (ctx.res.status == 200) {
-                currentDevice.updateRemotePathCache(ctx.devicePathList);
-
-                _devApi->query_about_all(currentDevice.remotePaths())
-                    .then(this, [this](const QList<DevicePath>& paths) {
-                        qCDebug(lcDeviceController) << "Paths added:";
-                        qCDebug(lcDeviceController) << paths;
-                        currentDevice.updateRemotePathCache(paths);
-                        replaceAccountRemotePaths(allAccountPaths, currentDevice.remotePaths());
-                        ra_finished.store(true);
-                        check_finished();
-                    });
-
-            }
-            else {
-                qCDebug(lcDeviceController) << "acc update continue ra_device_info fail";
+    qCDebug(lcDeviceController) << "acc update continue: resolving device identity from RA list";
+    queryDeviceList()
+        .then(this, [this, continueWithResolvedDevice](const DeviceListCtx& ctx) {
+            qCDebug(lcDeviceController) << "acc update continue device list code" << ctx.res.status << ctx.res.errorString;
+            if (ctx.res.status != 200) {
                 ra_finished.store(true);
                 check_finished();
+                return;
             }
+
+            const auto resolvedDevice = ctx.deviceList.find_by_cn(currentDevice.certificateCommonName);
+            if (!resolvedDevice || resolvedDevice->seagateDeviceID.isEmpty()) {
+                logRemoteAccessCnLookupMismatch("account_update_device_continue:", currentDevice, ctx.deviceList);
+                qCDebug(lcDeviceController) << "acc update continue: device not found or ID empty (CN lookup)";
+                ra_finished.store(true);
+                check_finished();
+                return;
+            }
+
+            Device updatedDevice = currentDevice;
+            applyRemoteAccessIdentity(updatedDevice, *resolvedDevice);
+            continueWithResolvedDevice(updatedDevice);
         });
 }
 
@@ -413,16 +478,28 @@ DeviceList DeviceController::getDevices() const
 QFuture<DeviceListCtx> DeviceController::queryDeviceList()
 {
     loadRefreshToken();
-    return _api->ra_device_list();
+    return _api->ra_device_list()
+        .then(this, [this](const DeviceListCtx& ctx) {
+            if (ctx.res.status == 200) {
+                saveRefreshToken();
+            }
+            return ctx;
+        });
 }
 
 QFuture<DevicePathListCtx> DeviceController::queryDeviceInfo(const QString &deviceId)
 {
     loadRefreshToken();
-    return _api->ra_device_info(deviceId);
+    return _api->ra_device_info(deviceId)
+        .then(this, [this](const DevicePathListCtx& ctx) {
+            if (ctx.res.status == 200) {
+                saveRefreshToken();
+            }
+            return ctx;
+        });
 }
 
-QFuture<DevicePathResolutionResult> DeviceController::resolveDevicePath(const Device& device)
+QFuture<DevicePathResolutionResult> DeviceController::resolveDevicePath(const Device& device, const std::optional<QUuid>& avoidPathId)
 {
     if (!_pathResolver) {
         DevicePathResolutionResult result;
@@ -430,7 +507,7 @@ QFuture<DevicePathResolutionResult> DeviceController::resolveDevicePath(const De
         return QtFuture::makeReadyValueFuture(result);
     }
 
-    return _pathResolver->resolve(device);
+    return _pathResolver->resolve(device, avoidPathId);
 }
 
 void DeviceController::initAccessCode()

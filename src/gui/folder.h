@@ -132,6 +132,7 @@ public:
      * Returns true when the folder may sync.
      */
     bool canSync() const;
+    bool consumeConnectedScheduleSuppression();
 
     /**
      * Whether the folder is ready
@@ -358,6 +359,7 @@ private slots:
     void slotWatcherUnreliable(const QString &message);
 
 private:
+    void enqueuePendingSyncAfterUrlChange();
     void showSyncResultPopup();
 
     bool checkLocalPath();
@@ -396,6 +398,8 @@ private:
     QElapsedTimer _timeSinceLastSyncStart;
     QElapsedTimer _timeSinceLastFullLocalDiscovery;
     std::chrono::milliseconds _lastSyncDuration;
+    bool _restartSyncAfterUrlChange = false;
+    bool _suppressConnectedScheduleAfterUrlChange = false;
 
     /// The number of syncs that failed in a row.
     /// Reset when a sync is successful.

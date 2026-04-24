@@ -15,9 +15,11 @@
 #include "gui/scheduling/etagwatcher.h"
 
 #include "accountstate.h"
+#include "common/utility.h"
 #include "gui/folderman.h"
 #include "libsync/configfile.h"
 #include "libsync/graphapi/spacesmanager.h"
+#include "libsync/syncendpointrecovery.h"
 #include "libsync/syncengine.h"
 
 
@@ -25,11 +27,54 @@ using namespace std::chrono_literals;
 
 using namespace APP;
 
+Q_LOGGING_CATEGORY(lcEtagWatcher, "gui.scheduler.etagwatcher", QtInfoMsg)
+
 namespace {
 constexpr auto pollTimeoutC = 30s;
-}
 
-Q_LOGGING_CATEGORY(lcEtagWatcher, "gui.scheduler.etagwatcher", QtInfoMsg)
+void emitEndpointRecoveryForEtagFailure(Folder *folder, RequestEtagJob *job)
+{
+    if (!(folder && job)) {
+        return;
+    }
+
+    auto accountState = folder->accountState();
+    const auto account = accountState ? accountState->account() : AccountPtr {};
+    if (!(accountState && account)) {
+        return;
+    }
+
+    if (!Utility::urlEqual(folder->webDavUrl(), job->baseUrl())) {
+        qCDebug(lcEtagWatcher) << "Skipping stale etag-triggered endpoint recovery event"
+                               << "jobBaseUrl" << job->baseUrl()
+                               << "currentBaseUrl" << folder->webDavUrl();
+        return;
+    }
+
+    const auto timedOut = job->timedOut();
+    const auto networkError = timedOut ? QNetworkReply::TimeoutError : job->reply()->error();
+    const auto httpStatusCode = job->httpStatusCode();
+    const auto recoveryReason = classifyEndpointRecoveryReason(networkError, httpStatusCode, timedOut);
+    const auto shouldEmitRecovery = shouldScheduleEndpointRecovery(recoveryReason);
+    qCInfo(lcEtagWatcher).noquote()
+        << "etag_endpoint_failure"
+        << QStringLiteral("baseUrl=%1 folder=%2 networkError=%3 httpStatus=%4 timedOut=%5 reason=%6 emitRecovery=%7")
+               .arg(job->baseUrl().toString(), folder->path(), QString::number(static_cast<int>(networkError)),
+                   QString::number(httpStatusCode), timedOut ? QStringLiteral("true") : QStringLiteral("false"),
+                   endpointRecoveryReasonString(recoveryReason),
+                   shouldEmitRecovery ? QStringLiteral("true") : QStringLiteral("false"));
+    if (!shouldEmitRecovery) {
+        return;
+    }
+
+    const auto activePathId = !account->activePath().isNull()
+        ? std::optional<QUuid>(account->activePath())
+        : std::nullopt;
+    accountState->handleEndpointRecoveryRequest(
+        makeEndpointRecoveryEvent(account->uuid(), activePathId, job->baseUrl(), recoveryReason, networkError, httpStatusCode),
+        folder->path());
+}
+}
 
 ETagWatcher::ETagWatcher(FolderMan *folderMan, QObject *parent)
     : QObject(parent)
@@ -110,6 +155,8 @@ void ETagWatcher::startOC10EtagJob(Folder *f)
                     } else {
                         qCWarning(lcEtagWatcher) << "Invalid empty etag received for" << f->displayName() << f->path() << requestEtagJob;
                     }
+                } else {
+                    emitEndpointRecoveryForEtagFailure(f, requestEtagJob);
                 }
             });
             qCDebug(lcEtagWatcher) << "Starting etag check for folder" << f->displayName() << f->path();

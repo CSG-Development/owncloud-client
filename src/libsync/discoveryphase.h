@@ -27,6 +27,7 @@
 #include <deque>
 #include "syncoptions.h"
 #include "syncfileitem.h"
+#include "endpointrecoveryevent.h"
 
 class ExcludedFiles;
 
@@ -148,9 +149,15 @@ private:
     // If set, the discovery will finish with an error
     QString _error;
     QPointer<PropfindJob> _proFindJob;
+    QNetworkReply::NetworkError _lastNetworkError = QNetworkReply::NoError;
+    int _lastHttpStatusCode = 0;
+    bool _lastRequestTimedOut = false;
 
 public:
     QByteArray _dataFingerprint;
+    QNetworkReply::NetworkError lastNetworkError() const { return _lastNetworkError; }
+    int lastHttpStatusCode() const { return _lastHttpStatusCode; }
+    bool lastRequestTimedOut() const { return _lastRequestTimedOut; }
 };
 
 class DiscoveryPhase : public QObject
@@ -275,6 +282,7 @@ public:
 
 signals:
     void fatalError(const QString &errorString);
+    void endpointRecoveryRequested(const EndpointRecoveryEvent &event);
     void itemDiscovered(const SyncFileItemPtr &item);
     void finished();
 

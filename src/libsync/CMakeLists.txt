@@ -38,6 +38,9 @@ set(SOURCES
     propagateremotemove.cpp
     propagateremotemkdir.cpp
     syncengine.cpp
+    endpointrecoveryevent.h
+    syncendpointrecovery.cpp
+    syncendpointrecovery.h
     syncfileitem.cpp
     syncfilestatustracker.cpp
     localdiscoverytracker.cpp

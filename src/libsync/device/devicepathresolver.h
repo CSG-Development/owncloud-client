@@ -9,10 +9,20 @@
 #include <functional>
 #include <optional>
 
+enum class DevicePathResolutionOutcome
+{
+    ResolvedFromCachedPriority,
+    ResolvedFromFreshRemoteAccess,
+    ResolvedFromRemoteRelay,
+    RequiresRemoteAccessPrompt,
+    UnresolvedAfterFullRefresh
+};
+
 struct APPLICATIONSYNC_EXPORT DevicePathResolutionResult
 {
     Device device;
     std::optional<QUuid> selectedPathId;
+    DevicePathResolutionOutcome outcome = DevicePathResolutionOutcome::UnresolvedAfterFullRefresh;
     ResultContext remoteAccessResult;
     bool remoteAccessRequested = false;
     bool remoteCacheUpdated = false;
@@ -31,10 +41,11 @@ public:
 
     explicit DevicePathResolver(DeviceApi* deviceApi, QueryDeviceInfoFn queryDeviceInfo, QObject* parent = nullptr);
 
-    QFuture<DevicePathResolutionResult> resolve(const Device& device);
+    QFuture<DevicePathResolutionResult> resolve(const Device& device, const std::optional<QUuid>& avoidPathId = std::nullopt);
 
 private:
-    QFuture<DevicePathResolutionResult> testPriorityPaths(Device device, const QList<DevicePath>& paths, const DevicePathResolutionResult& result);
+    QFuture<DevicePathResolutionResult> testPriorityPaths(Device device, const QList<DevicePath>& paths, const DevicePathResolutionResult& result,
+        DevicePathResolutionOutcome successOutcome);
     QFuture<DevicePathResolutionResult> resolveAfterPriorityFailure(Device device, const QSet<QString>& testedPriorityKeys, const DevicePathResolutionResult& result);
     QFuture<DevicePathResolutionResult> testRelayPath(Device device, const DevicePathResolutionResult& result);
 

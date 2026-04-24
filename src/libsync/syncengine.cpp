@@ -29,6 +29,7 @@
 #include "personalcloudpropagator.h"
 #include "propagatedownload.h"
 #include "propagateremotedelete.h"
+#include "syncendpointrecovery.h"
 
 #include <chrono>
 
@@ -329,6 +330,7 @@ void SyncEngine::startSync()
     }
 
     _syncRunning = true;
+    _lastAbortReason = AbortReason::None;
     _anotherSyncNeeded = false;
 
     _hasNoneFiles = false;
@@ -450,6 +452,7 @@ void SyncEngine::startSync()
 
     connect(_discoveryPhase.get(), &DiscoveryPhase::itemDiscovered, this, &SyncEngine::slotItemDiscovered);
     connect(_discoveryPhase.get(), &DiscoveryPhase::newBigFolder, this, &SyncEngine::newBigFolder);
+    connect(_discoveryPhase.get(), &DiscoveryPhase::endpointRecoveryRequested, this, &SyncEngine::endpointRecoveryRequested);
     connect(_discoveryPhase.get(), &DiscoveryPhase::fatalError, this, [this](const QString &errorString) {
         Q_EMIT syncError(errorString);
         finalize(false);
@@ -610,6 +613,7 @@ void SyncEngine::slotDiscoveryFinished()
         connect(_propagator.data(), &PersonalCloudPropagator::updateFileTotal,
             this, &SyncEngine::updateFileTotal);
         connect(_propagator.data(), &PersonalCloudPropagator::finished, this, &SyncEngine::slotPropagationFinished, Qt::QueuedConnection);
+        connect(_propagator.data(), &PersonalCloudPropagator::endpointRecoveryRequested, this, &SyncEngine::endpointRecoveryRequested);
         connect(_propagator.data(), &PersonalCloudPropagator::seenLockedFile, this, &SyncEngine::seenLockedFile);
         connect(_propagator.data(), &PersonalCloudPropagator::insufficientLocalStorage, this, &SyncEngine::slotInsufficientLocalStorage);
         connect(_propagator.data(), &PersonalCloudPropagator::insufficientRemoteStorage, this, &SyncEngine::slotInsufficientRemoteStorage);
@@ -852,8 +856,9 @@ bool SyncEngine::shouldDiscoverLocally(const QString &path) const
     return false;
 }
 
-void SyncEngine::abort(const QString& errorMessage)
+void SyncEngine::abort(const QString& errorMessage, AbortReason reason)
 {
+    _lastAbortReason = reason;
     if (_propagator)
         qCInfo(lcEngine) << "Aborting sync, message" << errorMessage;
 
@@ -878,12 +883,15 @@ void SyncEngine::abort(const QString& errorMessage)
 
 void SyncEngine::changeBaseUrl(const QUrl &url)
 {
-    if (isSyncRunning()) {
-        abort(tr("Synchronization aborted due to IP address change"));
+    if (_baseUrl == url) {
+        qCDebug(lcEngine) << "Ignoring base URL change because URL is unchanged" << url;
+        return;
     }
 
     _baseUrl = url;
-    startSync();
+    if (isSyncRunning()) {
+        abort(tr("Synchronization aborted due to IP address change"), AbortReason::BaseUrlChange);
+    }
 }
 
 void SyncEngine::slotSummaryError(const QString &message)

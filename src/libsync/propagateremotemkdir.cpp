@@ -90,6 +90,7 @@ void PropagateRemoteMkdir::slotMkcolJobFinished()
 
     QNetworkReply::NetworkError err = _job->reply()->error();
     _item->_httpErrorCode = _job->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    _item->_networkErrorCode = static_cast<qint32>(err);
     _item->_responseTimeStamp = _job->responseTimestamp();
     _item->_requestId = _job->requestId();
 
