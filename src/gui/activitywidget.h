@@ -94,6 +94,7 @@ private slots:
 
 private:
     bool eventFilter(QObject* obj, QEvent* event) override;
+    void watchAccountPresentation(const AccountStatePtr &accountState);
 
     void onThemeChanged(bool isDark);
 
@@ -103,7 +104,7 @@ private:
     Ui::ActivityWidget *_ui;
     QPushButton *_copyBtn;
 
-    QSet<QString> _accountsWithoutActivities;
+    QHash<QUuid, QString> _accountsWithoutActivities;
     QMap<QString, NotificationWidget *> _widgetForNotifId;
     QElapsedTimer _guiLogTimer;
     QSet<QString> _guiLoggedNotifications;

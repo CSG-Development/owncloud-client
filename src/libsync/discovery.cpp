@@ -14,6 +14,7 @@
 
 #include "discovery.h"
 #include "csync.h"
+#include "account.h"
 #include "personalcloudpropagator.h"
 #include "syncfileitem.h"
 
@@ -24,6 +25,7 @@
 #include "common/syncjournaldb.h"
 
 #include "libsync/theme.h"
+#include "syncendpointrecovery.h"
 
 #include <algorithm>
 
@@ -1424,6 +1426,33 @@ DiscoverySingleDirectoryJob *ProcessDirectoryJob::startAsyncServerQuery()
         } else {
             auto code = results.error().code;
             qCWarning(lcDisco) << "Server error in directory" << _currentFolder._server << code;
+            if (serverJob->isRootPath()) {
+                const auto recoveryReason = classifyEndpointRecoveryReason(
+                    serverJob->lastNetworkError(), serverJob->lastHttpStatusCode(), serverJob->lastRequestTimedOut());
+                const auto shouldEmitRecovery = shouldScheduleEndpointRecovery(recoveryReason);
+                qCInfo(lcSyncEndpointRecovery).noquote()
+                    << "discovery_endpoint_failure"
+                    << QStringLiteral("baseUrl=%1 path=%2 networkError=%3 httpStatus=%4 timedOut=%5 reason=%6 emitRecovery=%7")
+                           .arg(_discoveryData->_baseUrl.toString(), _currentFolder._server,
+                               QString::number(static_cast<int>(serverJob->lastNetworkError())),
+                               QString::number(serverJob->lastHttpStatusCode()),
+                               serverJob->lastRequestTimedOut() ? QStringLiteral("true") : QStringLiteral("false"),
+                               endpointRecoveryReasonString(recoveryReason),
+                               shouldEmitRecovery ? QStringLiteral("true") : QStringLiteral("false"));
+                if (shouldEmitRecovery) {
+                    const auto account = _discoveryData->_account;
+                    const auto activePathId = account && !account->activePath().isNull()
+                        ? std::optional<QUuid>(account->activePath())
+                        : std::nullopt;
+                    emit _discoveryData->endpointRecoveryRequested(makeEndpointRecoveryEvent(
+                        account ? account->uuid() : QUuid(),
+                        activePathId,
+                        _discoveryData->_baseUrl,
+                        recoveryReason,
+                        serverJob->lastRequestTimedOut() ? QNetworkReply::TimeoutError : serverJob->lastNetworkError(),
+                        serverJob->lastHttpStatusCode()));
+                }
+            }
             if (serverJob->isRootPath()) {
                 if (code == 404 && _discoveryData->isSpace()) {
                     Q_EMIT _discoveryData->fatalError(tr("This Space is currently unavailable"));

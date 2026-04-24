@@ -135,7 +135,13 @@ ApplicationGui::ApplicationGui(Application *parent)
     FolderMan *folderMan = FolderMan::instance();
     connect(folderMan, &FolderMan::folderSyncStateChange, this, &ApplicationGui::slotSyncStateChange);
 
-    connect(AccountManager::instance(), &AccountManager::accountAdded, this, &ApplicationGui::updateContextMenuNeeded);
+    for (const auto &accountState : AccountManager::instance()->accounts()) {
+        watchAccountPresentation(accountState);
+    }
+    connect(AccountManager::instance(), &AccountManager::accountAdded, this, [this](AccountStatePtr accountState) {
+        watchAccountPresentation(accountState);
+        updateContextMenuNeeded();
+    });
     connect(AccountManager::instance(), &AccountManager::accountRemoved, this, &ApplicationGui::updateContextMenuNeeded);
 }
 
@@ -216,6 +222,15 @@ void ApplicationGui::slotAccountStateChanged()
 {
     updateContextMenuNeeded();
     slotComputeOverallSyncStatus();
+}
+
+void ApplicationGui::watchAccountPresentation(const AccountStatePtr &accountState)
+{
+    if (!(accountState && accountState->account())) {
+        return;
+    }
+
+    connect(accountState->account().data(), &Account::accountPresentationChanged, this, &ApplicationGui::slotAccountStateChanged, Qt::UniqueConnection);
 }
 
 void ApplicationGui::slotTrayMessageIfServerUnsupported(Account *account)

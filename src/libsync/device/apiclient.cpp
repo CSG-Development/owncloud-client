@@ -1,7 +1,9 @@
 #include "apiclient.h"
+#include "devicelogging.h"
 #include <QJsonArray>
 #include <QtConcurrent>
 #include <QLoggingCategory>
+#include <QHash>
 
 namespace {
 const auto api_ra_url         = QStringLiteral("https://hc-remote-access-env-https.eba-a2nvhpbm.us-west-2.elasticbeanstalk.com/api");
@@ -257,12 +259,49 @@ QFuture<DeviceListCtx> ApiClient::executeDeviceListRequest(bool allowReplay)
 
         if (doc && !doc->isNull()) {
             if (status == 200 && doc->isArray()) {
+                QHash<QString, QString> cnToId;
+                QHash<QString, QString> idToCn;
                 for (const auto& item : doc->array()) {
                     Device d;
                     d.seagateDeviceID = item[jkey_seagateDeviceID].toString();
                     d.certificateCommonName = item[jkey_certificateCommonName].toString();
                     d.setFriendlyName(item[jkey_friendlyName].toString());
                     d.hostname = item[jkey_hostname].toString();
+
+                    if (d.certificateCommonName.isEmpty()) {
+                        qCWarning(lcDeviceData).noquote()
+                            << "ra_device_list invalid_device missing_cn"
+                            << QStringLiteral("{id:%1,friendly:%2,hostname:%3}")
+                                   .arg(d.seagateDeviceID, d.friendlyName(), d.hostname);
+                    }
+                    if (d.seagateDeviceID.isEmpty()) {
+                        qCWarning(lcDeviceData).noquote()
+                            << "ra_device_list invalid_device missing_id"
+                            << QStringLiteral("{cn:%1,friendly:%2,hostname:%3}")
+                                   .arg(d.certificateCommonName, d.friendlyName(), d.hostname);
+                    }
+                    if (!d.certificateCommonName.isEmpty() && !d.seagateDeviceID.isEmpty()) {
+                        const auto existingId = cnToId.value(d.certificateCommonName);
+                        if (!existingId.isEmpty() && existingId != d.seagateDeviceID) {
+                            qCWarning(lcDeviceData).noquote()
+                                << "ra_device_list cn_id_conflict"
+                                << QStringLiteral("{cn:%1,firstId:%2,secondId:%3}")
+                                       .arg(d.certificateCommonName, existingId, d.seagateDeviceID);
+                        } else {
+                            cnToId.insert(d.certificateCommonName, d.seagateDeviceID);
+                        }
+
+                        const auto existingCn = idToCn.value(d.seagateDeviceID);
+                        if (!existingCn.isEmpty() && existingCn != d.certificateCommonName) {
+                            qCWarning(lcDeviceData).noquote()
+                                << "ra_device_list id_cn_conflict"
+                                << QStringLiteral("{id:%1,firstCn:%2,secondCn:%3}")
+                                       .arg(d.seagateDeviceID, existingCn, d.certificateCommonName);
+                        } else {
+                            idToCn.insert(d.seagateDeviceID, d.certificateCommonName);
+                        }
+                    }
+
                     ctx.deviceList.addDevice(d);
                 }
             }
@@ -301,8 +340,22 @@ QFuture<DevicePathListCtx> ApiClient::executeDeviceInfoRequest(const QString& de
         if (doc && !doc->isNull()) {
             if (status == 200) {
                 const auto& paths = (*doc)[jkey_paths].toArray();
+                if (paths.isEmpty()) {
+                    qCWarning(lcDeviceData) << "ra_device_info invalid_paths empty_path_list";
+                }
                 for (const auto p: paths) {
-                    DevicePath dpath(p[jkey_address].toString(), DevHelpers::strToDevType(p[jkey_type].toString()), DeviceOrigin::Remote, p[jkey_port].toInt());
+                    const auto address = p[jkey_address].toString();
+                    const auto type = p[jkey_type].toString();
+                    const auto port = p[jkey_port].toInt();
+                    const auto deviceType = DevHelpers::strToDevType(type);
+                    if (address.isEmpty() || port <= 0 || deviceType == DeviceType::Unknown) {
+                        qCWarning(lcDeviceData).noquote()
+                            << "ra_device_info invalid_path"
+                            << QStringLiteral("{address:%1,port:%2,type:%3}")
+                                   .arg(address, QString::number(port), type);
+                    }
+
+                    DevicePath dpath(address, deviceType, DeviceOrigin::Remote, port);
                     ctx.devicePathList.append(dpath);
                 }
             }

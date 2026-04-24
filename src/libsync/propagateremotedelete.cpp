@@ -75,6 +75,7 @@ void PropagateRemoteDelete::slotDeleteJobFinished()
     QNetworkReply::NetworkError err = _job->reply()->error();
     const int httpStatus = _job->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     _item->_httpErrorCode = httpStatus;
+    _item->_networkErrorCode = static_cast<qint32>(err);
     _item->_responseTimeStamp = _job->responseTimestamp();
     _item->_requestId = _job->requestId();
 

@@ -216,6 +216,7 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     ui->connectLabel->clear();
 
     connect(_accountState.data(), &AccountState::stateChanged, this, &AccountSettings::slotAccountStateChanged);
+    connect(_accountState->account().data(), &Account::accountPresentationChanged, this, &AccountSettings::slotAccountStateChanged);
     slotAccountStateChanged();
 
     connect(ui->addButton, &QPushButton::clicked, this, &AccountSettings::slotAddFolder);
@@ -818,6 +819,10 @@ void AccountSettings::slotForceSyncCurrentFolder()
 
 void AccountSettings::slotAccountStateChanged()
 {
+    if (!(_accountState && _accountState->account())) {
+        return;
+    }
+
     const AccountState::State state = _accountState->state();
     const AccountPtr account = _accountState->account();
 
@@ -1159,11 +1164,10 @@ void AccountSettings::slotDeleteAccount()
         .setRejectButtonText(tr("Cancel"));
 
     connect(messageBox, &CustomMessageBox::finished, this, [this] (int result) {
-        if (result == QDialog::Accepted) {
+        if (result == QDialog::Accepted && _accountState) {
             auto manager = AccountManager::instance();
             manager->deleteAccount(_accountState);
             manager->save();
-            delete _accountState;
         }
     });
     messageBox->open();
@@ -1171,7 +1175,7 @@ void AccountSettings::slotDeleteAccount()
 
 bool AccountSettings::event(QEvent *e)
 {
-    if (e->type() == QEvent::Hide || e->type() == QEvent::Show) {
+    if ((e->type() == QEvent::Hide || e->type() == QEvent::Show) && _accountState) {
         if (!_accountState->supportsSpaces()) {
             _accountState->quotaInfo()->setActive(isVisible());
         }

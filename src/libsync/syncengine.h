@@ -19,6 +19,7 @@
 #include "common/checksums.h"
 #include "common/utility.h"
 #include "discoveryphase.h"
+#include "endpointrecoveryevent.h"
 #include "progressdispatcher.h"
 #include "syncfileitem.h"
 #include "syncfilestatustracker.h"
@@ -51,6 +52,13 @@ class APPLICATIONSYNC_EXPORT SyncEngine : public QObject
 {
     Q_OBJECT
 public:
+    enum class AbortReason {
+        None,
+        UserRequested,
+        BaseUrlChange,
+        Other
+    };
+
     SyncEngine(AccountPtr account, const QUrl &baseUrl, const QString &localPath,
         const QString &remotePath, SyncJournalDb *journal);
     ~SyncEngine() override;
@@ -59,9 +67,10 @@ public:
     void setNetworkLimits(int upload, int download);
 
     /* Abort the sync.  Called from the main thread */
-    void abort(const QString& errorMessage = {});
+    void abort(const QString& errorMessage = {}, AbortReason reason = AbortReason::Other);
 
     bool isSyncRunning() const { return _syncRunning; }
+    AbortReason lastAbortReason() const { return _lastAbortReason; }
 
     void changeBaseUrl(const QUrl& url);
 
@@ -151,6 +160,7 @@ signals:
 
     /// We've produced a new sync error of a type.
     void syncError(const QString &message, ErrorCategory category = ErrorCategory::Normal);
+    void endpointRecoveryRequested(const EndpointRecoveryEvent &event);
     void excluded(const QString &path);
 
     void finished(bool success);
@@ -280,5 +290,6 @@ private:
     bool _goingDown = false;
 
     bool _promptRemoveAllFiles = true;
+    AbortReason _lastAbortReason = AbortReason::None;
 };
 }

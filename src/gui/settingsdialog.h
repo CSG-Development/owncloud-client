@@ -80,7 +80,7 @@ public slots:
     void showIssuesList();
     void slotSwitchPage(QAction *action);
     void slotAccountAvatarChanged();
-    void slotAccountDisplayNameChanged();
+    void slotAccountPresentationChanged();
 
     bool isOverlayBusy() const;
 

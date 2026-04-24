@@ -185,6 +185,7 @@ void PropagateUploadFileTUS::slotChunkFinished()
     qCDebug(lcPropagateUploadTUS) << propagator()->fullRemotePath(_item->_file) << HttpLogger::requestVerb(*job->reply());
 
     _item->_httpErrorCode = job->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    _item->_networkErrorCode = static_cast<qint32>(job->reply()->error());
     _item->_responseTimeStamp = job->responseTimestamp();
     _item->_requestId = job->requestId();
 

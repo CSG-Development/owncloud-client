@@ -16,6 +16,7 @@
 #include "account.h"
 #include "accountstate.h"
 #include "common/asserts.h"
+#include "common/utility.h"
 #include "folderman.h"
 #include "gui/quotainfo.h"
 #include "theme.h"
@@ -24,11 +25,13 @@
 
 #include "libsync/graphapi/space.h"
 #include "libsync/graphapi/spacesmanager.h"
+#include "libsync/syncendpointrecovery.h"
 
 #include <QDir>
 #include <QFileIconProvider>
 #include <QVarLengthArray>
 
+#include <algorithm>
 #include <set>
 
 using namespace std::chrono_literals;
@@ -78,6 +81,44 @@ namespace {
             Q_UNREACHABLE();
         }
     }
+
+    void emitEndpointRecoveryForFolderStatusFailure(const AccountStatePtr &accountState, Folder *folder, PropfindJob *job, QNetworkReply *reply)
+    {
+        if (!(accountState && folder && job && reply)) {
+            return;
+        }
+
+        if (!Utility::urlEqual(folder->webDavUrl(), job->baseUrl())) {
+            qCDebug(lcFolderStatus) << "Skipping stale folder-status endpoint recovery event"
+                                    << "jobBaseUrl" << job->baseUrl()
+                                    << "currentBaseUrl" << folder->webDavUrl();
+            return;
+        }
+
+        const auto timedOut = job->timedOut();
+        const auto networkError = timedOut ? QNetworkReply::TimeoutError : reply->error();
+        const auto httpStatusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        const auto recoveryReason = classifyEndpointRecoveryReason(networkError, httpStatusCode, timedOut);
+        const auto shouldEmitRecovery = shouldScheduleEndpointRecovery(recoveryReason);
+        qCInfo(lcFolderStatus).noquote()
+            << "folder_status_endpoint_failure"
+            << QStringLiteral("baseUrl=%1 folder=%2 networkError=%3 httpStatus=%4 timedOut=%5 reason=%6 emitRecovery=%7")
+                   .arg(job->baseUrl().toString(), folder->path(), QString::number(static_cast<int>(networkError)),
+                       QString::number(httpStatusCode), timedOut ? QStringLiteral("true") : QStringLiteral("false"),
+                       endpointRecoveryReasonString(recoveryReason),
+                       shouldEmitRecovery ? QStringLiteral("true") : QStringLiteral("false"));
+        if (!shouldEmitRecovery) {
+            return;
+        }
+
+        const auto account = accountState->account();
+        const auto activePathId = account && !account->activePath().isNull()
+            ? std::optional<QUuid>(account->activePath())
+            : std::nullopt;
+        accountState->handleEndpointRecoveryRequest(
+            makeEndpointRecoveryEvent(account ? account->uuid() : QUuid(), activePathId, job->baseUrl(), recoveryReason, networkError, httpStatusCode),
+            folder->path());
+    }
 }
 
 FolderStatusModel::FolderStatusModel(QObject *parent)
@@ -96,12 +137,15 @@ void FolderStatusModel::setAccountState(const AccountStatePtr &accountState)
 {
     beginResetModel();
     _dirty = false;
+    _refreshFetchedRootsWhenConnected = false;
     _folders.clear();
     if (_accountState != accountState) {
         Q_ASSERT(!_accountState);
         _accountState = accountState;
 
         connect(FolderMan::instance(), &FolderMan::folderSyncStateChange, this, &FolderStatusModel::slotFolderSyncStateChange);
+        connect(accountState.data(), &AccountState::urlChanged, this, &FolderStatusModel::slotAccountUrlChanged, Qt::UniqueConnection);
+        connect(accountState.data(), &AccountState::stateChanged, this, &FolderStatusModel::slotAccountStateChanged, Qt::UniqueConnection);
 
         if (accountState->supportsSpaces()) {
             connect(accountState->account()->spacesManager(), &GraphApi::SpacesManager::updated, this, [this] {
@@ -725,6 +769,36 @@ void FolderStatusModel::resetAndFetch(const QModelIndex &parent)
     }
 }
 
+void FolderStatusModel::slotAccountUrlChanged(const QUuid &accountId)
+{
+    if (!(_accountState && _accountState->account()) || _accountState->account()->uuid() != accountId) {
+        return;
+    }
+
+    qCInfo(lcFolderStatus) << "Account URL changed, refreshing folder status roots";
+    QTimer::singleShot(0, this, [this, accountId] {
+        if (!(_accountState && _accountState->account()) || _accountState->account()->uuid() != accountId) {
+            return;
+        }
+
+        refreshFetchedRoots();
+    });
+}
+
+void FolderStatusModel::slotAccountStateChanged()
+{
+    if (!(_accountState && _accountState->state() == AccountState::Connected)) {
+        return;
+    }
+
+    const auto hasFolderStatusError = std::any_of(_folders.cbegin(), _folders.cend(), [](const SubFolderInfo &info) {
+        return info._hasError;
+    });
+    if (_refreshFetchedRootsWhenConnected || hasFolderStatusError) {
+        refreshFetchedRoots();
+    }
+}
+
 void FolderStatusModel::slotGatherPermissions(const QString &href, const QMap<QString, QString> &map)
 {
     auto it = map.find(QStringLiteral("permissions"));
@@ -886,7 +960,18 @@ void FolderStatusModel::slotLscolFinishedWithError(QNetworkReply *r)
     }
     auto parentInfo = infoForIndex(idx);
     if (parentInfo) {
+        if (!Utility::urlEqual(parentInfo->_folder->webDavUrl(), job->baseUrl())) {
+            qCDebug(lcFolderStatus) << "Ignoring stale folder listing error for outdated base URL"
+                                    << "jobBaseUrl" << job->baseUrl()
+                                    << "currentBaseUrl" << parentInfo->_folder->webDavUrl()
+                                    << "error" << r->errorString();
+            return;
+        }
+
         qCDebug(lcFolderStatus) << r->errorString();
+        if (parentInfo->_path == QLatin1String("/")) {
+            emitEndpointRecoveryForFolderStatusFailure(_accountState, parentInfo->_folder, job, r);
+        }
         parentInfo->_lastErrorString = r->errorString();
         auto error = r->error();
 
@@ -1209,6 +1294,31 @@ void FolderStatusModel::slotFolderSyncStateChange(Folder *f)
         // There is a new or a removed folder, or displayed folder sizes may be stale. Reset all data.
         resetAndFetch(index(folderIndex));
     }
+}
+
+void FolderStatusModel::refreshFetchedRoots()
+{
+    if (!_accountState) {
+        return;
+    }
+
+    const auto accountConnected = _accountState->state() == AccountState::Connected;
+    _refreshFetchedRootsWhenConnected = !accountConnected;
+
+    for (int i = 0; i < _folders.count(); ++i) {
+        const auto rootIndex = index(i, 0);
+        auto *info = infoForIndex(rootIndex);
+        if (!info || !(info->_fetchingJob || info->_fetched || info->hasLabel() || !info->_subs.isEmpty())) {
+            continue;
+        }
+
+        info->resetSubs(this, rootIndex);
+        if (accountConnected) {
+            fetchMore(rootIndex);
+        }
+    }
+
+    emit dirtyChanged();
 }
 
 void FolderStatusModel::resetFolders()

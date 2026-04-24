@@ -150,6 +150,7 @@ public:
         , _isRestoration(false)
         , _isSelectiveSync(false)
         , _httpErrorCode(0)
+        , _networkErrorCode(0)
         , _affectedItems(1)
         , _modtime(0)
         , _size(0)
@@ -280,6 +281,7 @@ public:
     bool _isRestoration; // The original operation was forbidden, and this is a restoration
     bool _isSelectiveSync; // The file is removed or ignored because it is in the selective sync list
     quint16 _httpErrorCode;
+    qint32 _networkErrorCode; // Raw QNetworkReply::NetworkError for endpoint recovery classification
     RemotePermissions _remotePerm;
     QString _errorString; // Contains a string only in case of error
     QString _messageString; // Contains a string only in case of hand crafted events
