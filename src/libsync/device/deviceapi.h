@@ -23,6 +23,10 @@ struct StatusCtx {
     QString errorString;
     int status = 0;
 };
+struct ResetPasswordCtx {
+    QString errorString;
+    int status = 0;
+};
 
 class APPLICATIONSYNC_EXPORT DeviceApi: public QObject
 {
@@ -33,6 +37,7 @@ public:
 
     QFuture<AboutCtx> query_about(const QString &url, DeviceType deviceType = DeviceType::Unknown);
     QFuture<StatusCtx> query_status(const QString &url);
+    QFuture<ResetPasswordCtx> post_reset_password(const QString &url, const QString &email);
 
     QFuture<QList<DevicePath>> query_about_all(QList<DevicePath> paths);
     QFuture<QList<DevicePath>> query_status_all(QList<DevicePath> paths);

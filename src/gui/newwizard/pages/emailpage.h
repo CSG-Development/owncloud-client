@@ -1,7 +1,8 @@
 #pragma once
 
+#include "emailvalidator.h"
+
 #include <QWidget>
-#include <QRegularExpression>
 #include <QProperty>
 #include <utility>
 
@@ -33,12 +34,7 @@ public:
 
 private:
     bool isEmailValid(const QString& email_text) const {
-        if (email_text.trimmed().isEmpty())
-            return false;
-
-        const static QRegularExpression rx(QStringLiteral("^[0-9a-zA-Z]+([0-9a-zA-Z]*[-._+])*[0-9a-zA-Z]+@[0-9a-zA-Z]+([-.][0-9a-zA-Z]+)*([0-9a-zA-Z]*[.])[a-zA-Z]{2,6}$"),
-                                           QRegularExpression::CaseInsensitiveOption);
-        return rx.match(email_text).hasMatch();
+        return APP::Wizard::isValidEmailAddress(email_text);
     }
 };
 

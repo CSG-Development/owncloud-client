@@ -91,7 +91,12 @@ Account::~Account()
 
 QString Account::davPath() const
 {
-    return QLatin1String("/remote.php/dav/files/") + davUser() + QLatin1Char('/');
+    const auto user = davUser();
+    if (user.isEmpty()) {
+        return QStringLiteral("/remote.php/dav/files/");
+    }
+
+    return QStringLiteral("/remote.php/dav/files/%1/").arg(user);
 }
 
 void Account::setSharedThis(AccountPtr sharedThis)
@@ -282,7 +287,7 @@ bool Account::replaceUrlToRemote(QUrl &urlToReplace)
     if (id.has_value()) {
         auto dev = _device.findPath(id.value());
         if (dev) {
-            QUrl remote(DevHelpers::makeServerUrl(dev->address, dev->port, false, true));
+            QUrl remote(DevHelpers::makeServerUrl(dev->address, dev->port, false, true, dev->origin));
             urlToReplace.setHost(remote.host());
             if (!APP::ConfigFile::useLocalPortForApiOnly()) {
                 urlToReplace.setPort(remote.port());

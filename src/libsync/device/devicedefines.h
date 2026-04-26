@@ -88,7 +88,7 @@ public:
     static DeviceOrigin strToDevOrigin(const QString& str);
     static QString originToStr(DeviceOrigin val);
 
-    static QString makeServerUrl(const QString &url, int port, bool add_folder, bool add_port);
+    static QString makeServerUrl(const QString &url, int port, bool add_folder, bool add_port, DeviceOrigin origin = DeviceOrigin::Unknown);
     static QUrl makePhotosUrl(const QUrl& other);
 };
 

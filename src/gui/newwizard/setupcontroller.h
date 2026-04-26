@@ -31,6 +31,7 @@ enum class ChangeReason {
 Q_ENUM_NS(ChangeReason)
 
 class DeviceController;
+class DeviceApi;
 
 namespace APP {
 class DeviceListManager;
@@ -75,7 +76,14 @@ Q_SIGNALS:
     void evaluateCredentialsError(const QString& errStr, QPrivateSignal);
 
 private:
+    enum class PendingCredentialsAction {
+        None,
+        Login,
+        ResetPassword
+    };
+
     void onCredentialsAction(CredentialsAction action, std::optional<CredentialsContext> ctx = std::nullopt);
+    void onDevicePrepared(const Device& device);
 
     void onLoginEmailClicked(const QString& email);
     void onDevicesUpdated(bool raQueried);
@@ -95,6 +103,8 @@ private:
     void onCantFindDevice();
 
     void evaluateCredentialsNew(const QUuid& id);
+    void handleResetPassword();
+    void handleResetPasswordFailure(const QString& message, const QString& tooltip = QString());
     void onEvaluateCredError(const QString& errStr);
 
     void performLogin();
@@ -106,10 +116,13 @@ private:
     // QPointer<AbstractState> _currentState = nullptr;
     QString email_;
     QString password_;
+    QString resetEmail_;
     Device device_;
     DeviceList fullList;
     DeviceController* _deviceController = nullptr;
+    DeviceApi* _deviceApi = nullptr;
     RunAccountWizardReason reason_ = RunAccountWizardReason::ApplicationStartup;
     QUuid id_;
+    PendingCredentialsAction pendingCredentialsAction_ = PendingCredentialsAction::None;
 };
 }

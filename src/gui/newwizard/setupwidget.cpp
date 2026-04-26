@@ -6,6 +6,7 @@
 #include "gui/applicationgui.h"
 #include "gui/settingsdialog.h"
 #include "gui/customui/stylehelper.h"
+#include "gui/customui/toastwidget.h"
 #include "gui/customdialogs/custommessagebox.h"
 #include "pages/emailpage.h"
 #include "pages/credentialspage.h"
@@ -69,6 +70,9 @@ SetupWidget::SetupWidget(SettingsDialog *parent)
     _ui->contentWidget->addWidget(connectErrorPage_);
     connect(connectErrorPage_, &ConnectErrorPage::backClicked, this, &SetupWidget::connectErrorPageBackClicked);
     connect(connectErrorPage_, &ConnectErrorPage::retryClicked, this, &SetupWidget::connectErrorPageRetryClicked);
+
+    toastWidget_ = new ToastWidget(this);
+    toastWidget_->hide();
 
     connect(Theme::instance(), &Theme::themeChanged, this, &SetupWidget::onThemeChanged);
     onThemeChanged(APP::Theme::instance()->isDarkTheme());
@@ -153,6 +157,13 @@ void SetupWidget::setInvalidCredentialsError()
 void SetupWidget::setCredErrorMessage(const QString &error, const QString& tooltip)
 {
     credPage_->showErrorMessage(error, tooltip);
+}
+
+void SetupWidget::showToastMessage(const QString &message)
+{
+    if (toastWidget_) {
+        toastWidget_->showMessage(message);
+    }
 }
 
 void SetupWidget::showCredPageProgress(bool show)

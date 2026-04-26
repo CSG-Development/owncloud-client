@@ -180,7 +180,7 @@ QString DevHelpers::originToStr(DeviceOrigin val)
     return {};
 }
 
-QString DevHelpers::makeServerUrl(const QString &url, int port, bool add_folder, bool add_port)
+QString DevHelpers::makeServerUrl(const QString &url, int port, bool add_folder, bool add_port, DeviceOrigin origin)
 {
     QString result;
 
@@ -211,6 +211,23 @@ QString DevHelpers::makeServerUrl(const QString &url, int port, bool add_folder,
     }
 
     QUrl tmpurl(result);
+    if (origin == DeviceOrigin::Static && !add_folder) {
+        QString path = tmpurl.path();
+        if (path.endsWith(QLatin1Char('/')) && path.size() > 1) {
+            path.chop(1);
+        }
+
+        if (path.endsWith(QStringLiteral("/files"))) {
+            path.chop(QStringLiteral("/files").size());
+            if (path.isEmpty()) {
+                path = QStringLiteral("/");
+            } else if (!path.endsWith(QLatin1Char('/'))) {
+                path += QLatin1Char('/');
+            }
+            tmpurl.setPath(path);
+        }
+    }
+
     if (port > 0) {
         if (apiOnlyPort) {
             if (add_port)
