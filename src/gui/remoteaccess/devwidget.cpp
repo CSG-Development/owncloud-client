@@ -95,7 +95,7 @@ DevWidget::DevWidget(QWidget *parent)
 
         auto dev_api = new DeviceApi(this);
 
-        dev_api->query_about_status(DevHelpers::makeServerUrl(path->address, path->port, false, true))
+        dev_api->query_about_status(DevHelpers::makeServerUrl(path->address, path->port, false, true), path->deviceType)
             .then(this, [dev_api,path,this](const std::pair<AboutCtx,StatusCtx>& ctx) {
                 path->about = ctx.first.deviceAbout;
                 path->status = ctx.second.deviceStatus;

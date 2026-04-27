@@ -21,12 +21,15 @@
 #include "connectionvalidator.h"
 #include "creds/abstractcredentials.h"
 #include "device/devicecontroller.h"
+#include "libsync/endpointrecoveryevent.h"
 #include "updateurldialog.h"
 
 #include <QByteArray>
 #include <QElapsedTimer>
 #include <QPointer>
+#include <QTimer>
 #include <memory>
+#include <optional>
 
 class QDialog;
 class QSettings;
@@ -165,19 +168,67 @@ public slots:
 
     /// Triggers checks and update status for all device URLs
     void updateDeviceAccessibility();
+    void handleEndpointRecoveryRequest(const EndpointRecoveryEvent& event, const QString& folderPath);
 
 private:
+    enum class DeviceUpdateTrigger {
+        Default,
+        NetworkChange,
+        SyncTransportFailure
+    };
+
+    enum class EndpointRecoveryState {
+        Idle,
+        Pending,
+        Resolving,
+        WaitingForRemoteAccessPrompt,
+        Deferred,
+        Completed,
+        Failed
+    };
+
+    struct PendingDevicePathUpdate {
+        Device device;
+        DeviceUpdateTrigger trigger = DeviceUpdateTrigger::Default;
+        quint64 generation = 0;
+        bool awaitingAccessCode = false;
+        bool accessCodePromptDeferred = false;
+        bool clearAccessCodeOnPrompt = true;
+    };
+
+    struct PendingEndpointRecoveryRequest {
+        EndpointRecoveryEvent event;
+        QString folderPath;
+        quint64 generation = 0;
+    };
+
     /// Use the account as parent
     explicit AccountState(AccountPtr account);
 
     void setState(State state);
+    void setEndpointRecoveryState(EndpointRecoveryState state);
+    static const char *deviceUpdateTriggerString(DeviceUpdateTrigger trigger);
 
-    void checkAndSwitchDevicePath();
-    bool doDevicePathSwitch();
-    void requestRAupdate();
-    std::optional<Device> accountDevice();
-    void setAccountDevice(const Device& dev);
+    bool canStartDeviceAccessibilityUpdate(bool logReason) const;
+    bool canCoordinateEndpointRecovery(bool logReason) const;
+    void enqueueEndpointRecoveryRequest(const EndpointRecoveryEvent& event, const QString& folderPath);
+    bool shouldReplacePendingEndpointRecoveryRequest(const EndpointRecoveryEvent& event) const;
+    void scheduleEndpointRecoveryRetry(int delayMs);
+    void triggerPendingEndpointRecovery();
+    void scheduleNetworkTriggeredDeviceUpdate();
+    void runNetworkTriggeredDeviceUpdate();
+    bool canRunQueuedNetworkTriggeredDeviceUpdate() const;
+    bool shouldResolveStartupDevicePath() const;
+    void startStartupDevicePathResolution(bool blockJobs);
+    void finishStartupDevicePathResolution(bool continueConnectivity);
+    void resolveAndApplyDevicePath(const Device& device, bool allowRemoteAccessPrompt, DeviceUpdateTrigger trigger,
+        const std::optional<QUuid>& avoidPathId = std::nullopt);
+    void applyResolvedDevicePath(const DevicePathResolutionResult& result, DeviceUpdateTrigger trigger);
+    void requestRAupdate(const Device& device, DeviceUpdateTrigger trigger);
+    void tryShowRemoteAccessPrompt();
+    std::optional<Device> accountDevice() const;
     void initializeRA();
+    void resetConnectionValidator();
     void setUpdateDeviceProgress(bool inProgress);
 
 signals:
@@ -189,7 +240,7 @@ signals:
     void networkUpdateState(bool inProgress);
 
     // internal signal to be able to finish processing device path update when "Skip" code dialog pressed
-    void pathUpdateFinished(bool skippedCode, const QList<DevicePath>& paths);
+    void pathUpdateFinished(bool skippedCode, const Device& device);
 
 protected Q_SLOTS:
     void slotConnectionValidatorResult(ConnectionValidator::Status status, const QStringList &errors);
@@ -213,6 +264,24 @@ private:
     DeviceController* _deviceController = nullptr;
     std::atomic_bool _updateDeviceInProgress {false};
     bool _raInitialized = false;
+    std::optional<PendingDevicePathUpdate> _pendingDevicePathUpdate;
+    quint64 _devicePathUpdateGeneration = 0;
+    quint64 _devicePathResolutionGeneration = 0;
+    quint64 _activeAccessCodeGeneration = 0;
+    EndpointRecoveryState _endpointRecoveryState = EndpointRecoveryState::Idle;
+    std::optional<PendingEndpointRecoveryRequest> _pendingEndpointRecoveryRequest;
+    quint64 _endpointRecoveryGeneration = 0;
+    bool _startupDevicePathResolutionAttempted = false;
+    bool _startupDevicePathResolutionInProgress = false;
+    bool _startupConnectivityCheckDeferred = false;
+    bool _startupConnectivityCheckBlockJobs = false;
+    bool _networkTriggeredDeviceUpdatePending = false;
+    QTimer _networkChangeDebounceTimer;
+    QTimer _syncTriggeredRecoveryCooldownTimer;
+    QTimer _endpointRecoveryRetryTimer;
+    QTimer _remoteAccessPromptRetryTimer;
+    QElapsedTimer _lastSuccessfulNetworkTriggeredDeviceUpdate;
+    QElapsedTimer _lastSyncTriggeredRecoveryAttempt;
 
     /**
      * Starts counting when the server starts being back up after 503 or

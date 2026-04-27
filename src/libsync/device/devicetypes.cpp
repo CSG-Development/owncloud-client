@@ -1,10 +1,12 @@
 #include "devicetypes.h"
+#include "devicelogging.h"
 
 #include <QMap>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QLoggingCategory>
+#include <QSet>
 
 namespace {
 const auto certificate_common_name_C = QStringLiteral("certificate_common_name");
@@ -20,9 +22,26 @@ const auto device_id_C = QStringLiteral("device_id");
 const auto cert_common_name_C = QStringLiteral("certificate_common_name");
 const auto friendly_name_C = QStringLiteral("friendly_name");
 const auto paths_C = QStringLiteral("paths");
+const auto remote_paths_fetched_at_utc_C = QStringLiteral("remote_paths_fetched_at_utc");
+
+QString remotePathKey(const DevicePath& path)
+{
+    return QStringLiteral("%1|%2|%3")
+        .arg(path.address, QString::number(path.port), DevHelpers::devTypeToStr(path.deviceType));
+}
+
+QSet<QString> remotePathKeySet(const QList<DevicePath>& paths)
+{
+    QSet<QString> keys;
+    for (const auto& path : paths) {
+        keys.insert(remotePathKey(path));
+    }
+    return keys;
+}
 }
 
 Q_LOGGING_CATEGORY(lcDevice, "device", QtDebugMsg)
+Q_LOGGING_CATEGORY(lcDeviceData, "device.data", QtWarningMsg)
 
 DevicePath::DevicePath()
 {
@@ -50,11 +69,22 @@ QJsonObject DevicePath::toJson() const
 
 DevicePath DevicePath::fromJson(const QJsonObject& val)
 {
+    const auto address = val[address_C].toString();
+    const auto port = val[port_C].toInt();
+    const auto rawDeviceType = val[deviceType_C].toString();
+    const auto deviceType = DevHelpers::strToDevType(rawDeviceType);
+    if (address.isEmpty() || port <= 0 || deviceType == DeviceType::Unknown) {
+        qCWarning(lcDeviceData).noquote()
+            << "device_cache invalid_path"
+            << QStringLiteral("{address:%1,port:%2,type:%3}")
+                   .arg(address, QString::number(port), rawDeviceType);
+    }
+
     DevicePath dp(
-        val[address_C].toString(),
-        DevHelpers::strToDevType(val[deviceType_C].toString()),
+        address,
+        deviceType,
         DevHelpers::strToDevOrigin(val[deviceOrigin_C].toString()),
-        val[port_C].toInt());
+        port);
     return dp;
 }
 
@@ -188,6 +218,72 @@ std::optional<QUuid> Device::getRemoteOnlyPath() const
     return plist.first().id;
 }
 
+QList<DevicePath> Device::remotePaths() const
+{
+    QList<DevicePath> ret;
+    for (const auto& path: std::as_const(paths)) {
+        if (path.origin == DeviceOrigin::Remote) {
+            ret.append(path);
+        }
+    }
+    return ret;
+}
+
+QList<DevicePath> Device::nonRemotePaths(const QList<DevicePath>& paths)
+{
+    QList<DevicePath> ret;
+    for (const auto& path : paths) {
+        if (path.origin != DeviceOrigin::Remote) {
+            ret.append(path);
+        }
+    }
+    return ret;
+}
+
+QList<DevicePath> Device::normalizeRemotePaths(const QList<DevicePath>& paths)
+{
+    QList<DevicePath> ret(paths);
+    for (auto& path : ret) {
+        path.origin = DeviceOrigin::Remote;
+    }
+    return ret;
+}
+
+QList<DevicePath> Device::replaceRemotePaths(const QList<DevicePath>& existingPaths, const QList<DevicePath>& remotePaths)
+{
+    return DeviceList::mergePaths(nonRemotePaths(existingPaths), normalizeRemotePaths(remotePaths));
+}
+
+void Device::updateRemotePathCache(const QList<DevicePath>& remotePaths)
+{
+    updateRemotePathCache(remotePaths, QDateTime::currentDateTimeUtc());
+}
+
+void Device::updateRemotePathCache(const QList<DevicePath>& remotePaths, const QDateTime& fetchedAtUtc)
+{
+    paths = replaceRemotePaths(paths, remotePaths);
+    remotePathsFetchedAtUtc = fetchedAtUtc.isValid() ? fetchedAtUtc.toUTC() : QDateTime::currentDateTimeUtc();
+}
+
+bool Device::hasSameRemotePaths(const QList<DevicePath>& paths) const
+{
+    return remotePathKeySet(remotePaths()) == remotePathKeySet(normalizeRemotePaths(paths));
+}
+
+bool Device::hasRemotePathCache() const
+{
+    return !remotePaths().isEmpty() && remotePathsFetchedAtUtc.isValid();
+}
+
+bool Device::isRemotePathCacheExpired(int ttlSeconds) const
+{
+    if (!hasRemotePathCache()) {
+        return true;
+    }
+
+    return remotePathsFetchedAtUtc.secsTo(QDateTime::currentDateTimeUtc()) > ttlSeconds;
+}
+
 QString Device::toString() const
 {
     QStringList l;
@@ -197,6 +293,7 @@ QString Device::toString() const
     l << QStringLiteral("friendlyName:%1,").arg(friendlyName());
     l << QStringLiteral("hostname:%1,").arg(hostname);
     l << QStringLiteral("isStatic:%1,").arg(isStatic);
+    l << QStringLiteral("remotePathsFetchedAtUtc:%1,").arg(remotePathsFetchedAtUtc.toString(Qt::ISODate));
     for (const auto& p: paths) {
         l << p.toString();
     }
@@ -213,6 +310,7 @@ QString Device::toStringShort() const
     l << QStringLiteral("friendlyName:%1,").arg(friendlyName());
     l << QStringLiteral("hostname:%1,").arg(hostname);
     l << QStringLiteral("static:%1,").arg(isStatic);
+    l << QStringLiteral("remoteCacheAt:%1,").arg(remotePathsFetchedAtUtc.toString(Qt::ISODate));
     for (const auto& p: paths) {
         l << p.toStringShort();
     }
@@ -239,6 +337,9 @@ QJsonDocument Device::toJson(const Device& dev)
     obj[cert_common_name_C] = dev.certificateCommonName;
     obj[friendly_name_C] = dev.friendlyName();
     obj[hostname_C] = dev.hostname;
+    if (dev.remotePathsFetchedAtUtc.isValid()) {
+        obj[remote_paths_fetched_at_utc_C] = dev.remotePathsFetchedAtUtc.toUTC().toString(Qt::ISODate);
+    }
     QJsonArray arr;
     for (const auto& dev_path: std::as_const(dev.paths)) {
         arr.append(dev_path.toJson());
@@ -266,6 +367,25 @@ Device Device::fromJson(const QJsonDocument &doc)
     d.setFriendlyName(obj[friendly_name_C].toString());
     d.hostname = obj[hostname_C].toString();
     d.paths = Device::jsonToPaths(obj[paths_C].toArray());
+    const auto rawRemotePathsFetchedAtUtc = obj[remote_paths_fetched_at_utc_C].toString();
+    if (!rawRemotePathsFetchedAtUtc.isEmpty()) {
+        const auto parsed = QDateTime::fromString(rawRemotePathsFetchedAtUtc, Qt::ISODate);
+        if (parsed.isValid()) {
+            d.remotePathsFetchedAtUtc = parsed.toUTC();
+        } else {
+            qCWarning(lcDeviceData).noquote()
+                << "device_cache invalid_remote_cache_timestamp"
+                << QStringLiteral("{value:%1,cn:%2,id:%3}")
+                       .arg(rawRemotePathsFetchedAtUtc, d.certificateCommonName, d.seagateDeviceID);
+        }
+    }
+
+    if (d.seagateDeviceID.isEmpty() && !d.remotePaths().isEmpty()) {
+        qCWarning(lcDeviceData).noquote()
+            << "device_cache inconsistent_remote_state"
+            << QStringLiteral("{cn:%1,remotePathCount:%2}")
+                   .arg(d.certificateCommonName, QString::number(d.remotePaths().size()));
+    }
 
     return d;
 }
@@ -319,6 +439,12 @@ void DeviceList::addDevice(const Device &d)
     });
 
     if (it != dev_list.end()) {
+        if (!it->seagateDeviceID.isEmpty() && !d.seagateDeviceID.isEmpty() && it->seagateDeviceID != d.seagateDeviceID) {
+            qCWarning(lcDeviceData).noquote()
+                << "device_list_add cn_id_conflict"
+                << QStringLiteral("{cn:%1,firstId:%2,secondId:%3}")
+                       .arg(d.certificateCommonName, it->seagateDeviceID, d.seagateDeviceID);
+        }
         (*it).paths = mergePaths((*it).paths, d.paths);
     }
     else {
@@ -370,6 +496,13 @@ QList<DevicePath> DeviceList::mergePaths(const QList<DevicePath> &path_1, const 
         if (!uniqueMap.contains(key)) {
             uniqueMap.insert(key, path);
         } else {
+            if (uniqueMap[key].deviceType != path.deviceType) {
+                qCWarning(lcDeviceData).noquote()
+                    << "merge_paths endpoint_type_conflict"
+                    << QStringLiteral("{endpoint:%1:%2,firstType:%3,secondType:%4}")
+                           .arg(path.address, QString::number(path.port),
+                               DevHelpers::devTypeToStr(uniqueMap[key].deviceType), DevHelpers::devTypeToStr(path.deviceType));
+            }
             if (path.origin == DeviceOrigin::MDNS && uniqueMap[key].origin != DeviceOrigin::MDNS) {
                 uniqueMap[key] = path;
             }

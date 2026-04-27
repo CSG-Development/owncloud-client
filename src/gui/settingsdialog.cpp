@@ -549,7 +549,7 @@ void SettingsDialog::accountAdded(AccountStatePtr accountStatePtr)
     connect(accountSettings, &AccountSettings::folderChanged, _gui, &ApplicationGui::slotFoldersChanged);
     connect(accountSettings, &AccountSettings::showIssuesList, this, &SettingsDialog::showIssuesList);
     connect(accountStatePtr->account().data(), &Account::accountChangedAvatar, this, &SettingsDialog::slotAccountAvatarChanged);
-    connect(accountStatePtr->account().data(), &Account::accountChangedDisplayName, this, &SettingsDialog::slotAccountDisplayNameChanged);
+    connect(accountStatePtr->account().data(), &Account::accountPresentationChanged, this, &SettingsDialog::slotAccountPresentationChanged);
 
     // Refresh immediatly when getting online
     connect(accountStatePtr.data(), &AccountState::isConnectedChanged, _activitySettings,
@@ -571,7 +571,7 @@ void SettingsDialog::slotAccountAvatarChanged()
     }
 }
 
-void SettingsDialog::slotAccountDisplayNameChanged()
+void SettingsDialog::slotAccountPresentationChanged()
 {
     Account *account = static_cast<Account *>(sender());
     if (account && _actionForAccount.contains(account)) {
@@ -579,6 +579,7 @@ void SettingsDialog::slotAccountDisplayNameChanged()
         if (action) {
             QString displayName = account->displayName();
             action->setText(displayName);
+            action->setToolTip(displayName);
             action->setIconText(shortDisplayNameForSettings(account));
         }
     }

@@ -387,6 +387,14 @@ void FolderMan::slotIsConnectedChanged()
             if (f
                 && f->canSync()
                 && f->accountState() == accountState) {
+                if (f->consumeConnectedScheduleSuppression()) {
+                    qCDebug(lcFolderMan) << "Skipping connected-state scheduling after recent URL-change restart" << f->path();
+                    continue;
+                }
+                if (f->isSyncRunning()) {
+                    qCDebug(lcFolderMan) << "Skipping connected-state scheduling for folder already syncing" << f->path();
+                    continue;
+                }
                 scheduler()->enqueueFolder(f);
             }
         }

@@ -188,8 +188,13 @@ void Application::slotAccountStateAdded(AccountStatePtr accountState) const
     connect(accountState->account().data(), &Account::serverVersionChanged, FolderMan::instance(), [account = accountState->account().data()] {
         FolderMan::instance()->slotServerVersionChanged(account);
     });
-    //accountState->updateDeviceAccessibility();
-    accountState->checkConnectivity();
+    if (Application::appCreated()) {
+        accountState->checkConnectivity();
+    } else {
+        connect(AccountManager::instance(), &AccountManager::applicationHasCreated, accountState.data(), [accountState] {
+            accountState->checkConnectivity();
+        }, Qt::SingleShotConnection);
+    }
 }
 
 void Application::slotCleanup()

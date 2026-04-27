@@ -38,6 +38,9 @@ set(SOURCES
     propagateremotemove.cpp
     propagateremotemkdir.cpp
     syncengine.cpp
+    endpointrecoveryevent.h
+    syncendpointrecovery.cpp
+    syncendpointrecovery.h
     syncfileitem.cpp
     syncfilestatustracker.cpp
     localdiscoverytracker.cpp
@@ -71,6 +74,8 @@ set(SOURCES
     device/devicedefines.h
     device/deviceaggregator.cpp
     device/deviceaggregator.h
+    device/devicepathresolver.cpp
+    device/devicepathresolver.h
     device/devicecontroller.cpp
     device/devicecontroller.h
 
