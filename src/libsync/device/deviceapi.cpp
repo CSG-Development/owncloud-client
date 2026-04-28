@@ -10,6 +10,7 @@
 namespace {
 const QString api_dev_about = QStringLiteral("/api/v1/about"); // GET
 const QString api_dev_status = QStringLiteral("/api/v1/status"); // GET
+const QString api_users_reset_password = QStringLiteral("/api/v1/users/reset_password/"); // POST
 }
 
 Q_LOGGING_CATEGORY(lcDeviceApi, "device.api", QtDebugMsg)
@@ -83,11 +84,43 @@ QFuture<StatusCtx> DeviceApi::query_status(const QString &url)
     });
 }
 
+QFuture<ResetPasswordCtx> DeviceApi::post_reset_password(const QString &url, const QString &email)
+{
+    _factory.setBaseUrl(QUrl(url));
+    const auto encodedEmail = QString::fromUtf8(QUrl::toPercentEncoding(email.trimmed()));
+    auto request = _factory.createRequest(api_users_reset_password + encodedEmail);
+    request.setTransferTimeout(StatusTimeoutMs);
+    auto reply = _rest.networkAccessManager()->post(request, QByteArray());
+    qCDebug(lcDeviceApi) << "post_reset_password request:" << reply->url();
+    return execRequest<ResetPasswordCtx>(std::move(reply), [url=reply->url()](const std::optional<QJsonDocument>& doc, int status) {
+        ResetPasswordCtx ctx;
+        ctx.status = status;
+
+        if (doc && !doc->isNull()) {
+            qCDebug(lcDeviceApi) << url << "reply:" << doc;
+            const auto obj = doc->object();
+            ctx.errorString = obj.value(QStringLiteral("reason")).toString();
+            if (ctx.errorString.isEmpty()) {
+                ctx.errorString = obj.value(QStringLiteral("name")).toString();
+            }
+        }
+        else if (status != 204) {
+            qCDebug(lcDeviceApi) << url << "No reply";
+        }
+
+        if (status != 204) {
+            qCWarning(lcDeviceApi) << url << "reset password status code:" << status << ctx.errorString;
+        }
+
+        return ctx;
+    });
+}
+
 QFuture<QList<DevicePath> > DeviceApi::query_status_all(QList<DevicePath> paths)
 {
     QList<QFuture<StatusCtx>> futures;
     for (const auto& path : paths) {
-        QString url = DevHelpers::makeServerUrl(path.address, path.port, false, true);
+        QString url = DevHelpers::makeServerUrl(path.address, path.port, false, true, path.origin);
         futures.append(this->query_status(url));
     }
 
@@ -119,7 +152,7 @@ QFuture<QList<DevicePath>> DeviceApi::query_about_all(QList<DevicePath> paths)
 {
     QList<QFuture<AboutCtx>> futures;
     for (const auto& path : paths) {
-        QString url = DevHelpers::makeServerUrl(path.address, path.port, false, true);
+        QString url = DevHelpers::makeServerUrl(path.address, path.port, false, true, path.origin);
         futures.append(this->query_about(url, path.deviceType));
     }
 

@@ -1,0 +1,58 @@
+#ToastWidget {
+    background: transparent;
+}
+
+#btnClose {
+    border: none;
+    background: transparent;
+    border-radius: 16px;
+}
+
+#btnIcon {
+    border: none;
+    background: transparent;
+}
+
+#cardFrame {
+    border-radius: 12px;
+}
+
+#lblMessage {
+    background: transparent;
+    font-size: 14px;
+}
+
+[theme="light"] #cardFrame {
+    background-color: rgba(249, 252, 249, 1);
+    border: 1px solid rgba(224, 224, 224, 1);
+}
+
+[theme="light"] #lblMessage {
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="light"] #btnClose:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+[theme="light"] #btnClose:pressed {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+
+[theme="dark"] #cardFrame {
+    background-color: rgba(30, 33, 30, 1);
+    border: 1px solid rgba(97, 97, 97, 1);
+}
+
+[theme="dark"] #lblMessage {
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="dark"] #btnClose:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+}
+
+[theme="dark"] #btnClose:pressed {
+    background-color: rgba(0, 0, 0, 0.12);
+}

@@ -203,7 +203,7 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::testPriorityPaths(Device
     };
 
     for (const auto& path : paths) {
-        const auto url = DevHelpers::makeServerUrl(path.address, path.port, false, true);
+        const auto url = DevHelpers::makeServerUrl(path.address, path.port, false, true, path.origin);
         _deviceApi->query_status(url)
             .then(this, [state, path, finishWithCurrentDevice, successOutcome](const StatusCtx& ctx) mutable {
                 if (state->finished) {

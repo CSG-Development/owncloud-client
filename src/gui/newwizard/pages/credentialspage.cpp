@@ -1,5 +1,6 @@
 #include "credentialspage.h"
 #include "ui_credentialspage.h"
+#include "emailvalidator.h"
 
 #include "gui/customui/stylehelper.h"
 #include "gui/customui/focusproxy.h"
@@ -9,7 +10,6 @@
 
 #include <QLineEdit>
 #include <QComboBox>
-#include <QRegularExpression>
 #include <QHostAddress>
 #include <QToolTip>
 #include <QLoggingCategory>
@@ -80,7 +80,8 @@ CredentialsPage::CredentialsPage(QWidget *parent)
         emit actionTriggered(CredentialsAction::CantFindDeviceClicked);
     });
     connect(ui->btnResetPass, &QPushButton::clicked, this, [this] {
-        emit actionTriggered(CredentialsAction::ResetPasswordClicked);
+        CredentialsContext ctx{currentDevice(), email(), {}};
+        emit actionTriggered(CredentialsAction::ResetPasswordClicked, ctx);
     });
 
     connect(ui->btnRefresh, &QToolButton::clicked, this, [this] {
@@ -109,7 +110,7 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     ui->edPassword->setFontPixelSize(fontSize);
     ui->edPassword->setPasswordMode(true);
 
-    connect(ui->edUrl, &ComboWidget::textEdited, this, &CredentialsPage::onTextEdited);
+    connect(ui->edUrl, &ComboWidget::textChanged, this, &CredentialsPage::onTextEdited);
     connect(ui->edPassword, &InputWidget::textEdited, this, &CredentialsPage::onTextEdited);
 
     validateFormData();
@@ -160,6 +161,7 @@ void CredentialsPage::setDevicesList(const DeviceList& list)
     dev_list = list;
     dev_list.sort_by_static();
     ui->edUrl->setItems(dev_list);
+    validateFormData();
 }
 
 std::optional<Device> CredentialsPage::currentDevice() const
@@ -176,6 +178,7 @@ void CredentialsPage::setEmail(const QString &user)
 {
     ui->lblEmail->setText(user);
     loadFavDevice();
+    validateFormData();
 }
 
 QString CredentialsPage::password() const
@@ -222,12 +225,18 @@ void CredentialsPage::showProgressIndicator(bool show)
 {
     ui->edPassword->setEnabled(!show);
     ui->btnCantFindDevice->setEnabled(!show);
-    ui->btnResetPass->setEnabled(!show);
     ui->btnBack->setEnabled(!show);
     ui->edUrl->setEnabled(!show);
 
     ui->btnRefresh->setVisible(!show);
     ui->progressIndicator->setIndicatorVisible(show);
+    if (show) {
+        ui->btnLogin->setEnabled(false);
+        ui->btnResetPass->setEnabled(false);
+    }
+    else {
+        validateFormData();
+    }
     update();
     qApp->processEvents();
 }
@@ -281,8 +290,8 @@ void CredentialsPage::onTextEdited(const QString&/*txt*/)
 
 void CredentialsPage::validateFormData()
 {
-    bool valid = isAllFieldNotEmpty();
-    ui->btnLogin->setEnabled(valid);
+    ui->btnLogin->setEnabled(isAllFieldNotEmpty());
+    ui->btnResetPass->setEnabled(currentDevice().has_value() && APP::Wizard::isValidEmailAddress(email()));
 }
 
 bool CredentialsPage::isAllFieldNotEmpty()
