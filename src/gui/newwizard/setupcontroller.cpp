@@ -576,7 +576,6 @@ void SetupController::handleResetPassword()
 
             handleResetPasswordFailure(tr("Failed to send password reset email"), ctx.errorString);
         });
-
     return;
 }
 

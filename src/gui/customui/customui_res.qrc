@@ -179,6 +179,7 @@
         <file>res/toast/toast.qss</file>
         <file>res/toast/close_light.svg</file>
         <file>res/toast/close_dark.svg</file>
+        <file>res/toast/success.svg</file>
         <file>res/menu/check_dark.svg</file>
         <file>res/menu/check_light.svg</file>
     </qresource>

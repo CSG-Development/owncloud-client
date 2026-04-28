@@ -15,14 +15,11 @@ const QPair<QString, QString> closeIcon = {
     QStringLiteral(":/res/toast/close_light.svg"),
     QStringLiteral(":/res/toast/close_dark.svg")
 };
+const auto successIcon = QStringLiteral(":/res/toast/success.svg");
 
-constexpr int horizontalScreenMargin = 28;
 constexpr int bottomMargin = 28;
-constexpr int minToastWidth = 320;
-constexpr int maxToastWidth = 760;
-constexpr int minAvailableWidth = 220;
-constexpr int minLabelWidth = 140;
-constexpr int iconSize = 36;
+constexpr int iconSize = 12;
+constexpr int iconImageSize = 24;
 }
 
 ToastWidget::ToastWidget(QWidget *parent)
@@ -40,9 +37,14 @@ ToastWidget::ToastWidget(QWidget *parent)
 
     ui->btnClose->setIconSize(QSize(iconSize, iconSize));
 
+    ui->btnIcon->setIconSize(QSize(iconImageSize, iconImageSize));
+    ui->btnIcon->setIcon(QIcon(successIcon));
+    ui->btnIcon->setAttribute(Qt::WA_TransparentForMouseEvents);
+
     shadowEffect_->setXOffset(0);
-    shadowEffect_->setYOffset(16);
-    shadowEffect_->setBlurRadius(38);
+    shadowEffect_->setYOffset(0);
+    shadowEffect_->setBlurRadius(20);
+    shadowEffect_->setColor(QColor(0, 0, 0, 100));
     ui->cardFrame->setGraphicsEffect(shadowEffect_);
 
     connect(APP::Theme::instance(), &APP::Theme::themeChanged, this, &ToastWidget::updateStyles);
@@ -149,7 +151,6 @@ void ToastWidget::updateStyles(bool isDark)
     APP::StyleHelper::setTheme(this, isDark);
 
     ui->btnClose->setIcon(isDark ? QIcon(closeIcon.second) : QIcon(closeIcon.first));
-
     shadowEffect_->setColor(isDark ? QColor(0, 0, 0, 90) : QColor(0, 0, 0, 46));
 
     updateGeometryForParent();
@@ -169,26 +170,12 @@ void ToastWidget::updatePosition()
 
 void ToastWidget::updateGeometryForParent()
 {
+    adjustSize();
+
     auto *parentWidget_ = parentWidget();
     if (!parentWidget_) {
-        adjustSize();
         return;
     }
 
-    const int parentWidth = qMax(1, parentWidget_->width());
-    const int availableWidth = qMax(minAvailableWidth, parentWidth - (horizontalScreenMargin * 2));
-    const int preferredWidth = qMin(maxToastWidth, qMax(minToastWidth, availableWidth));
-    const int toastWidth = qMin(preferredWidth, qMax(minAvailableWidth, parentWidth));
-
-    const auto outerMargins = ui->verticalLayout->contentsMargins();
-    const auto cardMargins = ui->horizontalLayout->contentsMargins();
-    const int fixedWidth = outerMargins.left() + outerMargins.right() +
-                           cardMargins.left() + cardMargins.right() +
-                           ui->horizontalLayout->spacing() + ui->btnClose->sizeHint().width();
-    const int labelWidth = qMax(minLabelWidth, toastWidth - fixedWidth);
-
-    ui->lblMessage->setMaximumWidth(labelWidth);
-    setFixedWidth(toastWidth);
-    adjustSize();
     updatePosition();
 }
