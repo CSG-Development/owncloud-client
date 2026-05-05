@@ -4,9 +4,12 @@
 #include "device/devicetypes.h"
 
 #include <QObject>
-#include <QUdpSocket>
+#include <QDateTime>
+#include <QHash>
+#include <QMap>
+#include <QSet>
 #include <QTimer>
-#include <QFuture>
+#include <QUdpSocket>
 
 enum mdns_record_type {
     MDNS_RECORDTYPE_IGNORE = 0,
@@ -81,17 +84,63 @@ private slots:
     void onReadyRead();
 
 private:
-    void createSocket(const QHostAddress& addr);
-    void performScanCycle();
-    void setupSockets();
+    class ServiceState
+    {
+    public:
+        QByteArray serviceType;
+        QByteArray hostName;
+        quint16 port = 0;
+        quint32 ttlMs = 0;
+        QDateTime expiresAt;
+        QMap<QByteArray, QByteArray> attributes;
+        QList<QHostAddress> sourceAddresses;
+    };
 
-    QList<QUdpSocket*> sockets;
+    class HostState
+    {
+    public:
+        QDateTime expiresAt;
+        QList<QHostAddress> addresses;
+    };
+
+    class DiagnosticsState
+    {
+    public:
+        int parseFailures = 0;
+        int mdnsPackets = 0;
+        int mdnsRecords = 0;
+        int mdnsHttpsPtrRecords = 0;
+        int mdnsServiceCandidates = 0;
+        int notHomecloudMdnsCandidates = 0;
+        QSet<QString> allCandidateEndpoints;
+        QSet<QString> acceptedEndpoints;
+        QSet<QString> notHomecloudCandidateEndpoints;
+    };
+
+    void performScanCycle();
+    void processMessage(const Message& message, const QHostAddress& senderAddress);
+    void refreshCandidates(const QSet<QByteArray>& touchedInstances);
+    void resetDiagnostics();
+    void logDiscoverySummary(const QString& phase) const;
+    void logAllCandidateEndpoint(const QString& address, quint16 port, const QString& source);
+    void logAcceptedEndpoint(const QString& address, quint16 port, const QString& source);
+    void logNotHomecloudEndpoint(const QString& address, quint16 port, const QString& source);
+    void setupSockets();
+    bool pruneExpiredState();
+    bool updateDiscoveredRecord(const QString& address, quint16 port, int ttlMs);
+
+    QUdpSocket* multicastSocket_ = nullptr;
+    QUdpSocket* unicastSocket_ = nullptr;
+    QHash<QByteArray, ServiceState> services_;
+    QHash<QByteArray, HostState> hosts_;
     QMap<QString, DevicePath> discoveredRecords_;
     QMap<QString, QDateTime> lastSeen_;
+    QMap<QString, int> recordTtlMs_;
     QTimer scanTimer_;
     QTimer debounceTimer_;
-    QTimer notFoundTimer_;        // Emits resultChanged first time, even no records found
+    QTimer notFoundTimer_;
     QList<DevicePath> lastData_;
+    DiagnosticsState diagnostics_;
 };
 
 QString mdns_record_type_to_str(int t);
