@@ -80,6 +80,16 @@ void logRemoteAccessCnLookupMismatch(const char* context, const Device& localDev
         << remoteSummaries.join(QStringLiteral(", "));
 }
 
+bool isRemoteAccessAuthFailure(int status)
+{
+    return status == 401 || status == 403;
+}
+
+bool requiresRemoteAccessPrompt(int status)
+{
+    return status == -2 || isRemoteAccessAuthFailure(status);
+}
+
 }
 
 DeviceController::DeviceController(QObject *parent)
@@ -314,15 +324,21 @@ void DeviceController::account_update_device(const Device& dev)
         .then(this, [this, d=dev](const DeviceListCtx& ctx) {
             qCDebug(lcDeviceController) << "DeviceListCtx" << ctx.res.status;
 
-            if (ctx.res.status != 200) {
-                initAccessCode();
-                return;
-            }
-
             auto finishTask = [this]() {
                 ra_finished.store(true);
                 check_finished();
             };
+
+            if (ctx.res.status != 200) {
+                if (requiresRemoteAccessPrompt(ctx.res.status)) {
+                    initAccessCode();
+                } else {
+                    qCWarning(lcDeviceController) << "Device list request failed, finishing account update"
+                                                  << ctx.res.status << ctx.res.errorString;
+                    finishTask();
+                }
+                return;
+            }
 
             const auto dev_ra = ctx.deviceList.find_by_cn(d.certificateCommonName);
             if (!dev_ra || dev_ra->seagateDeviceID.isEmpty()) {
@@ -353,9 +369,16 @@ void DeviceController::account_update_device(const Device& dev)
                         qCDebug(lcDeviceController) << "Device not found" << id;
                         finishTask();
                     }
-                    else {
+                    else if (requiresRemoteAccessPrompt(ctx.res.status)) {
                         initAccessCode();
+                    } else {
+                        qCWarning(lcDeviceController) << "Device info request failed, finishing account update"
+                                                      << ctx.res.status << ctx.res.errorString;
+                        finishTask();
                     }
+                }).onFailed(this, [finishTask](const std::exception& e) {
+                    qCWarning(lcDeviceController) << "Device info request exception, finishing account update" << e.what();
+                    finishTask();
                 });
     });
 
