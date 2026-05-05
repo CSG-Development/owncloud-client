@@ -7,6 +7,7 @@
 #include <QNetworkRequestFactory>
 #include <QFuture>
 #include <QPromise>
+#include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QRestReply>
 #include <QJsonDocument>
@@ -66,6 +67,7 @@ public:
 
 
 protected:
+    QNetworkRequest createRequest(const QString& path);
 
     template <typename T>
     QFuture<T> execRequest(QNetworkReply* netReply, std::function<T(const std::optional<QJsonDocument>&,int)> parser) {
