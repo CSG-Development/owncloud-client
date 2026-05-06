@@ -226,6 +226,7 @@ private:
     void resolveAndApplyDevicePath(const Device& device, bool allowRemoteAccessPrompt, DeviceUpdateTrigger trigger,
         const std::optional<QUuid>& avoidPathId = std::nullopt);
     void applyResolvedDevicePath(const DevicePathResolutionResult& result, DeviceUpdateTrigger trigger);
+    void requestLocalPathDiscovery(const Device& device, DeviceUpdateTrigger trigger);
     void requestRAupdate(const Device& device, DeviceUpdateTrigger trigger);
     void deferRemoteAccessUpdateUntilNetwork(DeviceUpdateTrigger trigger);
     void tryShowRemoteAccessPrompt();

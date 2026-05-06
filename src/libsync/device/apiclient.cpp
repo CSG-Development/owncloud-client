@@ -58,6 +58,20 @@ bool shouldRequestAccessCode(int status)
 {
     return status == 401 || status == 403;
 }
+
+void setRemoteAccessError(ResultContext& result, const QJsonDocument& doc)
+{
+    if (!doc.isObject()) {
+        return;
+    }
+
+    const auto obj = doc.object();
+    result.errorString = obj.value(jkey_reason).toString();
+    if (result.errorString.isEmpty()) {
+        result.errorString = obj.value(jkey_name).toString();
+    }
+    result.errorStacktrace = obj.value(jkey_stacktrace).toString();
+}
 }
 
 Q_LOGGING_CATEGORY(lcDeviceApiClient, "device.apiclient", QtDebugMsg)
@@ -100,8 +114,7 @@ QFuture<InitContext> ApiClient::ra_initiate(const QString &email)
                 _initContext.refCode = (*doc)[jkey_reference].toString();
             }
             else {
-                ctx.res.errorString = (*doc)[jkey_name].toString();
-                ctx.res.errorStacktrace = (*doc)[jkey_stacktrace].toString();
+                setRemoteAccessError(ctx.res, *doc);
             }
         }
         return ctx;
@@ -319,8 +332,7 @@ QFuture<DeviceListCtx> ApiClient::executeDeviceListRequest(bool allowReplay)
                 }
             }
             else {
-                ctx.res.errorString = (*doc)[jkey_name].toString();
-                ctx.res.errorStacktrace = (*doc)[jkey_stacktrace].toString();
+                setRemoteAccessError(ctx.res, *doc);
             }
             qCDebug(lcDeviceApiClient) << doc;
         }
@@ -373,8 +385,7 @@ QFuture<DevicePathListCtx> ApiClient::executeDeviceInfoRequest(const QString& de
                 }
             }
             else {
-                ctx.res.errorString = (*doc)[jkey_name].toString();
-                ctx.res.errorStacktrace = (*doc)[jkey_stacktrace].toString();
+                setRemoteAccessError(ctx.res, *doc);
             }
         }
         return ctx;
@@ -414,10 +425,9 @@ TokenContext ApiClient::parseTokenContext(const std::optional<QJsonDocument> &do
                 ctx.accessTokenExpireTime = QDateTime::currentDateTime().addSecs(ctx.expiresIn);
         }
         else {
-            ctx.res.errorString = (*doc)[jkey_name].toString();
-            ctx.res.errorStacktrace = (*doc)[jkey_stacktrace].toString();
+            setRemoteAccessError(ctx.res, *doc);
             qCDebug(lcDeviceApiClient) << "error string:" << ctx.res.errorString;
-            if (ctx.res.errorString == QStringLiteral("invalid refresh token"))
+            if (ctx.res.errorString.contains(QStringLiteral("invalid refresh token"), Qt::CaseInsensitive))
                 ctx.refreshToken.clear();
         }
         _tokenCtx = ctx;

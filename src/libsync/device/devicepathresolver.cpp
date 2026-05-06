@@ -61,6 +61,13 @@ QList<DevicePath> relayPaths(const Device& device)
     return paths;
 }
 
+bool hasRemotePriorityPaths(const Device& device)
+{
+    return std::any_of(device.paths.cbegin(), device.paths.cend(), [](const DevicePath& path) {
+        return path.origin == DeviceOrigin::Remote && isPriorityPath(path);
+    });
+}
+
 QList<DevicePath> excludeTestedPaths(const QList<DevicePath>& paths, const QSet<QString>& testedPathKeys)
 {
     QList<DevicePath> filtered;
@@ -338,12 +345,16 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::resolveAfterPriorityFail
     }
 
     if (device.hasRemotePathCache()) {
-        if (!device.isRemotePathCacheExpired()) {
+        if (!device.isRemotePathCacheExpired() && hasRemotePriorityPaths(device)) {
             qCDebug(lcDevicePathResolver) << "Remote path cache is still fresh, skipping fresh RA refresh and trying relay fallback";
             return testRelayPath(device, result);
         }
 
-        qCDebug(lcDevicePathResolver) << "Remote path cache is expired, fetching fresh RA paths";
+        if (device.isRemotePathCacheExpired()) {
+            qCDebug(lcDevicePathResolver) << "Remote path cache is expired, fetching fresh RA paths";
+        } else {
+            qCDebug(lcDevicePathResolver) << "Remote path cache is fresh but has no priority paths, fetching fresh RA paths";
+        }
     } else {
         qCDebug(lcDevicePathResolver) << "Remote path cache is missing, fetching fresh RA paths";
     }

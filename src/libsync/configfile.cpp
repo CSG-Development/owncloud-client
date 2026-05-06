@@ -857,6 +857,15 @@ void ConfigFile::setRefreshTokenForEmail(const QString &token, const QString& em
     settings.endGroup();
 }
 
+void ConfigFile::removeRefreshTokenForEmail(const QString& email)
+{
+    auto settings = makeQSettings();
+    settings.beginGroup(refreshTokenC);
+    settings.remove(email.toLower());
+    settings.sync();
+    settings.endGroup();
+}
+
 std::unique_ptr<QSettings> ConfigFile::settingsWithGroup(const QString &group)
 {
     // this actually works by move magic

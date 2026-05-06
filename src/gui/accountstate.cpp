@@ -81,6 +81,38 @@ bool hasInvalidCachedPath(const Device& device)
     });
 }
 
+bool hasLocalPath(const Device& device)
+{
+    return std::any_of(device.paths.cbegin(), device.paths.cend(), [](const DevicePath& path) {
+        return path.deviceType == DeviceType::Local;
+    });
+}
+
+bool shouldDiscoverLocalPathsBeforeResolution(const Device& device, const QUuid& activePath)
+{
+    if (device.isStatic || device.certificateCommonName.isEmpty()) {
+        return false;
+    }
+
+    if (activePath.isNull()) {
+        return !device.remotePaths().isEmpty();
+    }
+
+    const auto activeDevicePath = device.findPath(activePath);
+    return !activeDevicePath || activeDevicePath->origin == DeviceOrigin::Remote
+        || (!device.remotePaths().isEmpty() && hasLocalPath(device));
+}
+
+bool canRunLocalPathDiscoveryNow()
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
+    if (auto *networkInformation = QNetworkInformation::instance()) {
+        return networkInformation->reachability() != QNetworkInformation::Reachability::Disconnected;
+    }
+#endif
+    return true;
+}
+
 bool needsRemoteAccessCacheRepair(const Device& device, QString* reason)
 {
     const auto setReason = [reason](const QString& value) {
@@ -330,6 +362,10 @@ AccountState::AccountState(AccountPtr account)
                 }
                 [[fallthrough]];
             case QNetworkInformation::Reachability::Local:
+                if (state() != State::SignedOut && _account && _deviceController
+                    && shouldDiscoverLocalPathsBeforeResolution(_account->device(), _account->activePath())) {
+                    scheduleNetworkTriggeredDeviceUpdate();
+                }
                 break;
             }
         });
@@ -806,6 +842,10 @@ bool AccountState::shouldResolveStartupDevicePath() const
         return false;
     }
 
+    if (_deviceController && shouldDiscoverLocalPathsBeforeResolution(*device, _account->activePath())) {
+        return true;
+    }
+
     return device->paths.size() > 1;
 }
 
@@ -866,6 +906,13 @@ void AccountState::startStartupDevicePathResolution(bool blockJobs)
         setState(Connecting);
     }
     setUpdateDeviceProgress(true);
+    if (_deviceController && shouldDiscoverLocalPathsBeforeResolution(*device, _account->activePath())) {
+        qCInfo(lcAccountState) << "Refreshing remote-only device cache with local discovery before startup path resolution"
+                               << "deviceCn" << device->certificateCommonName;
+        requestLocalPathDiscovery(*device, DeviceUpdateTrigger::Default);
+        return;
+    }
+
     resolveAndApplyDevicePath(*device, true, DeviceUpdateTrigger::Default);
 }
 
@@ -1254,7 +1301,9 @@ void AccountState::runNetworkTriggeredDeviceUpdate()
         return;
     }
 
-    if (!canRunQueuedNetworkTriggeredDeviceUpdate()) {
+    const auto shouldDiscoverLocalPaths = _deviceController
+        && shouldDiscoverLocalPathsBeforeResolution(*_account->devicePtr(), _account->activePath());
+    if (!canRunQueuedNetworkTriggeredDeviceUpdate() && !(shouldDiscoverLocalPaths && canRunLocalPathDiscoveryNow())) {
         qCDebug(lcAccountState) << "Keeping network-triggered device update queued until network reachability improves";
         _networkTriggeredDeviceUpdatePending = true;
         return;
@@ -1278,6 +1327,13 @@ void AccountState::runNetworkTriggeredDeviceUpdate()
 
     qCDebug(lcAccountState) << "Running network-triggered device update";
     setUpdateDeviceProgress(true);
+    if (shouldDiscoverLocalPaths) {
+        qCInfo(lcAccountState) << "Refreshing remote-only device cache with local discovery before network-triggered path resolution"
+                               << "deviceCn" << _account->device().certificateCommonName;
+        requestLocalPathDiscovery(*_account->devicePtr(), DeviceUpdateTrigger::NetworkChange);
+        return;
+    }
+
     resolveAndApplyDevicePath(*_account->devicePtr(), true, DeviceUpdateTrigger::NetworkChange);
 }
 
@@ -1497,6 +1553,47 @@ void AccountState::applyResolvedDevicePath(const DevicePathResolutionResult& res
         }
     }
     setUpdateDeviceProgress(false);
+}
+
+void AccountState::requestLocalPathDiscovery(const Device& device, DeviceUpdateTrigger trigger)
+{
+    if (device.certificateCommonName.isEmpty()) {
+        qCWarning(lcAccountState) << "[requestLocalPathDiscovery] No device for account";
+        setUpdateDeviceProgress(false);
+        finishStartupDevicePathResolution(true);
+        return;
+    }
+
+    if (!_deviceController) {
+        qCWarning(lcAccountState) << "[requestLocalPathDiscovery] No device controller";
+        setUpdateDeviceProgress(false);
+        finishStartupDevicePathResolution(true);
+        return;
+    }
+
+    _remoteAccessPromptRetryTimer.stop();
+    _activeAccessCodeGeneration = 0;
+    const auto generation = ++_devicePathUpdateGeneration;
+    _pendingDevicePathUpdate = PendingDevicePathUpdate {device, trigger, generation, false, false, true};
+    qCInfo(lcAccountState) << "Starting local account path discovery"
+                           << "generation" << generation
+                           << "trigger" << deviceUpdateTriggerString(trigger)
+                           << "deviceCn" << device.certificateCommonName;
+
+    connect(_deviceController, &DeviceController::account_update_device_finished, this, [this, generation](const Device& device) {
+        if (!_pendingDevicePathUpdate || _pendingDevicePathUpdate->generation != generation) {
+            qCDebug(lcAccountState) << "Ignoring stale local path discovery result"
+                                    << "resultGeneration" << generation
+                                    << "currentGeneration" << (_pendingDevicePathUpdate ? _pendingDevicePathUpdate->generation : 0);
+            return;
+        }
+        qCInfo(lcAccountState) << "Local account path discovery finished"
+                               << "generation" << generation
+                               << "trigger" << deviceUpdateTriggerString(_pendingDevicePathUpdate->trigger);
+        emit pathUpdateFinished(false, device);
+    }, Qt::SingleShotConnection);
+
+    _deviceController->account_update_local_paths(device);
 }
 
 void AccountState::requestRAupdate(const Device& device, DeviceUpdateTrigger trigger)

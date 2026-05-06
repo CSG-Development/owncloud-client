@@ -12,6 +12,10 @@ class DeviceApi;
 class MdnsClient;
 class DeviceAggregator;
 
+namespace APP {
+class CredentialManager;
+}
+
 class APPLICATIONSYNC_EXPORT DeviceController: public QObject
 {
     Q_OBJECT
@@ -35,6 +39,8 @@ public:
     // - accessCodeRequest
     // - accessCodeResult
     void account_update_device(const Device& dev);
+    // Query mDNS only to refresh local account paths before path resolution.
+    void account_update_local_paths(const Device& dev);
     void account_update_device_continue(std::optional<Device> dev);
 
     // When "Can't find device" command
@@ -45,7 +51,7 @@ public:
 
     bool hasRefreshToken() const;
     void saveRefreshToken();
-    void loadRefreshToken();
+    QFuture<void> loadRefreshToken();
 
     DeviceList getDevices() const;
 
@@ -73,9 +79,12 @@ protected:
     void processQueryDeviceList();
     void forceQueryDeviceList();
     void processAccountUpdateDeviceList();
+    void finishAccountUpdateWithDiscoveredPaths(const QString& devCN);
     void startMdnsDiscovery();
     void finishMdnsDiscoveryPhase(quint64 generation);
     void check_finished();
+    void saveRefreshTokenToSecureStorage(const QString& email, const QString& token);
+    void removeRefreshTokenFromSecureStorage(const QString& email);
 
 protected:
     ApiClient* _api = nullptr;
@@ -83,6 +92,7 @@ protected:
     MdnsClient* _mdns = nullptr;
     DeviceAggregator* _aggregator = nullptr;
     DevicePathResolver* _pathResolver = nullptr;
+    APP::CredentialManager* _credentialManager = nullptr;
     QString _email;
     DeviceList _raDeviceList;
     DeviceList _mdnsDeviceList;
@@ -102,10 +112,13 @@ protected:
         None,
         NewAccount,
         ForceAccount,
-        AccountUpdate
+        AccountUpdate,
+        LocalAccountUpdate
     };
     DeferredRaQuery _deferredRaQuery = DeferredRaQuery::None;
     quint64 _mdnsDiscoveryGeneration = 0;
+    quint64 _refreshTokenGeneration = 0;
+    QString _refreshTokenLoadedEmail;
 
     QList<DevicePath> allAccountPaths;
 };
