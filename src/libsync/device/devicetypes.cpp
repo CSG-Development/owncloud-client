@@ -445,6 +445,18 @@ void DeviceList::addDevice(const Device &d)
                 << QStringLiteral("{cn:%1,firstId:%2,secondId:%3}")
                        .arg(d.certificateCommonName, it->seagateDeviceID, d.seagateDeviceID);
         }
+        if (it->seagateDeviceID.isEmpty() && !d.seagateDeviceID.isEmpty()) {
+            it->seagateDeviceID = d.seagateDeviceID;
+        }
+        if (it->friendlyName().isEmpty() && !d.friendlyName().isEmpty()) {
+            it->setFriendlyName(d.friendlyName());
+        }
+        if (it->hostname.isEmpty() && !d.hostname.isEmpty()) {
+            it->hostname = d.hostname;
+        }
+        if (!it->remotePathsFetchedAtUtc.isValid() && d.remotePathsFetchedAtUtc.isValid()) {
+            it->remotePathsFetchedAtUtc = d.remotePathsFetchedAtUtc;
+        }
         (*it).paths = mergePaths((*it).paths, d.paths);
     }
     else {

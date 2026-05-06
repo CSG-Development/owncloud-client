@@ -54,6 +54,16 @@ void applyRemoteAccessIdentity(Device& targetDevice, const Device& remoteDevice)
     }
 }
 
+void logRemoteAccessIdentityApplied(const char* context, const Device& device)
+{
+    qCInfo(lcDeviceData).noquote()
+        << context
+        << "Remote Access identity applied."
+        << QStringLiteral("{cn:%1,id:%2,friendly:%3,hostname:%4,pathCount:%5,remotePathCount:%6}")
+               .arg(device.certificateCommonName, device.seagateDeviceID, device.friendlyName(), device.hostname,
+                   QString::number(device.paths.size()), QString::number(device.remotePaths().size()));
+}
+
 void logRemoteAccessCnLookupMismatch(const char* context, const Device& localDevice, const DeviceList& remoteDevices)
 {
     QStringList localPathCns;
@@ -109,19 +119,22 @@ DeviceController::DeviceController(QObject *parent)
     qRegisterMetaType<DevicePathResolutionResult>("DevicePathResolutionResult");
 
     connect(_mdns, &MdnsClient::resultsChanged, this, [this](const QList<DevicePath>& records) {
+        const auto generation = _mdnsDiscoveryGeneration;
+        qCInfo(lcDeviceController) << "mDNS discovery update"
+                                   << "generation" << generation
+                                   << "rawPathCount" << records.size();
         qCDebug(lcDeviceController) << "mDNS updated, paths found:";
         qCDebug(lcDeviceController) << records;
 
         if (records.isEmpty()) {
             qCDebug(lcDeviceController) << "mDNS records not found, finish";
             // No mDNS records found, emit empty list
-            mdns_finished.store(true);
-            check_finished();
+            finishMdnsDiscoveryPhase(generation);
             return;
         }
 
         _devApi->query_about_all(records)
-            .then(this, [this](const QList<DevicePath>& paths) {
+            .then(this, [this, generation](const QList<DevicePath>& paths) {
 
                 QList<DevicePath> devPaths(paths);
                 cleanupEmptyCN(devPaths);
@@ -141,10 +154,16 @@ DeviceController::DeviceController(QObject *parent)
 
                 allAccountPaths.append(devPaths);
 
+                qCInfo(lcDeviceController) << "mDNS discovery about completed"
+                                           << "generation" << generation
+                                           << "usablePathCount" << devPaths.size();
                 qCDebug(lcDeviceController) << "mDNS paths" << devPaths;
 
-                mdns_finished.store(true);
-                check_finished();
+                finishMdnsDiscoveryPhase(generation);
+            })
+            .onFailed(this, [this, generation](const std::exception& e) {
+                qCWarning(lcDeviceController) << "mDNS about query exception, finishing local discovery" << e.what();
+                finishMdnsDiscoveryPhase(generation);
             });
     });
 
@@ -153,6 +172,8 @@ DeviceController::DeviceController(QObject *parent)
         if (_aggregator) {
             QWriteLocker locker(&lock_);
             _mdnsDeviceList = DeviceAggregator::mergeDevices(_mdnsDeviceList, DeviceAggregator::build_devices(_aggregator->paths()));
+            qCInfo(lcDeviceController) << "mDNS device list updated"
+                                       << "deviceCount" << _mdnsDeviceList.devices().size();
         }
     });
 }
@@ -178,21 +199,22 @@ void DeviceController::start_new_account()
     _mdnsDeviceList.clear();
     _raDeviceList.clear();
     _aggregator->clearAll();
+    allAccountPaths.clear();
 
     // Delete old MDNS devices
     // cleanupMDNS(_deviceList);
-    _mdns->start();
 
     if (hasRefreshToken()) {
-        qCDebug(lcDeviceController) << "Refresh token exist, requesting RA...";
-        processQueryDeviceList();
+        qCDebug(lcDeviceController) << "Refresh token exist, RA discovery deferred until mDNS completes";
+        _deferredRaQuery = DeferredRaQuery::NewAccount;
     }
     else {
-        qCDebug(lcDeviceController) << "No refresh token available, using mDNS only...";
+        qCDebug(lcDeviceController) << "No refresh token available, using mDNS only after local discovery completes...";
         // Can't receive RA records, emit empty list
         ra_finished.store(true);
-        check_finished();
+        _deferredRaQuery = DeferredRaQuery::None;
     }
+    startMdnsDiscovery();
 }
 
 void DeviceController::prepareLogin(Device &dev)
@@ -252,6 +274,10 @@ void DeviceController::prepareLogin(Device &dev)
                 else {
                     emit prepareLoginFinished(currentDevice);
                 }
+            })
+            .onFailed(this, [this](const std::exception& e) {
+                qCWarning(lcDeviceController) << "Prepare login device info exception:" << e.what();
+                emit prepareLoginFinished(currentDevice);
             });
     }
     else {
@@ -283,7 +309,6 @@ void DeviceController::account_update_device(const Device& dev)
     mdns_finished.store(false);
     ra_finished.store(false);
     allAccountPaths = nonRemotePaths(currentDevice.paths);
-    _mdns->start();
 
     // all ok, RA and mDNS lists are ready
     connect(this, &DeviceController::devices_updated, this, [this, devCN = dev.certificateCommonName] {
@@ -311,6 +336,10 @@ void DeviceController::account_update_device(const Device& dev)
                     qCDebug(lcDeviceController) << ctx;
                     currentDevice.paths = DeviceList::mergePaths(nonRemotePaths(currentDevice.paths), ctx);
                     emit account_update_device_finished(currentDevice);
+                })
+                .onFailed(this, [this, devCN](const std::exception& e) {
+                    qCWarning(lcDeviceController) << "Path status request exception for" << devCN << e.what();
+                    emit account_update_device_finished(currentDevice);
                 });
         }
         else {
@@ -319,9 +348,16 @@ void DeviceController::account_update_device(const Device& dev)
 
     }, Qt::SingleShotConnection);
 
+    qCDebug(lcDeviceController) << "RA account update deferred until mDNS completes";
+    _deferredRaQuery = DeferredRaQuery::AccountUpdate;
+    startMdnsDiscovery();
+}
+
+void DeviceController::processAccountUpdateDeviceList()
+{
     qCDebug(lcDeviceController) << "Query device list";
     queryDeviceList()
-        .then(this, [this, d=dev](const DeviceListCtx& ctx) {
+        .then(this, [this, d=currentDevice](const DeviceListCtx& ctx) {
             qCDebug(lcDeviceController) << "DeviceListCtx" << ctx.res.status;
 
             auto finishTask = [this]() {
@@ -349,6 +385,7 @@ void DeviceController::account_update_device(const Device& dev)
             }
 
             applyRemoteAccessIdentity(currentDevice, *dev_ra);
+            logRemoteAccessIdentityApplied("account_update_device:", currentDevice);
             qCDebug(lcDeviceController) << "Query device info for" << dev_ra->seagateDeviceID;
             queryDeviceInfo(dev_ra->seagateDeviceID)
                 .then(this, [this, finishTask, id=dev_ra->seagateDeviceID](const DevicePathListCtx& ctx) {
@@ -356,13 +393,19 @@ void DeviceController::account_update_device(const Device& dev)
 
                     if (ctx.res.status == 200) {
                         currentDevice.updateRemotePathCache(ctx.devicePathList);
-                        _devApi->query_about_all(currentDevice.remotePaths()).then(this, [this,finishTask](const QList<DevicePath>& paths) {
-                            qCDebug(lcDeviceController) << "About updated:" << paths;
+                        _devApi->query_about_all(currentDevice.remotePaths())
+                            .then(this, [this,finishTask](const QList<DevicePath>& paths) {
+                                qCDebug(lcDeviceController) << "About updated:" << paths;
 
-                            currentDevice.updateRemotePathCache(paths);
-                            replaceAccountRemotePaths(allAccountPaths, currentDevice.remotePaths());
-                            finishTask();
-                        });
+                                currentDevice.updateRemotePathCache(paths);
+                                logRemoteAccessIdentityApplied("account_update_device paths_updated:", currentDevice);
+                                replaceAccountRemotePaths(allAccountPaths, currentDevice.remotePaths());
+                                finishTask();
+                            })
+                            .onFailed(this, [finishTask](const std::exception& e) {
+                                qCWarning(lcDeviceController) << "Remote path about request exception, finishing account update" << e.what();
+                                finishTask();
+                            });
                     }
                     else if (ctx.res.status == 404) {
                         // Device not found
@@ -380,8 +423,11 @@ void DeviceController::account_update_device(const Device& dev)
                     qCWarning(lcDeviceController) << "Device info request exception, finishing account update" << e.what();
                     finishTask();
                 });
+    }).onFailed(this, [this](const std::exception& e) {
+        qCWarning(lcDeviceController) << "Device list request exception, finishing account update" << e.what();
+        ra_finished.store(true);
+        check_finished();
     });
-
 }
 
 void DeviceController::account_update_device_continue(std::optional<Device> dev)
@@ -394,31 +440,43 @@ void DeviceController::account_update_device_continue(std::optional<Device> dev)
     }
 
     currentDevice = *dev;
-    auto continueWithResolvedDevice = [this](const Device& resolvedDevice) {
+    auto finishTask = [this]() {
+        ra_finished.store(true);
+        check_finished();
+    };
+
+    auto continueWithResolvedDevice = [this, finishTask](const Device& resolvedDevice) {
         currentDevice = resolvedDevice;
 
         queryDeviceInfo(resolvedDevice.seagateDeviceID)
-            .then(this, [this](const DevicePathListCtx& ctx) {
+            .then(this, [this, finishTask](const DevicePathListCtx& ctx) {
                 qCDebug(lcDeviceController) << "acc update continue ra_device_info code" << ctx.res.status << ctx.res.errorString;
                 if (ctx.res.status == 200) {
                     currentDevice.updateRemotePathCache(ctx.devicePathList);
 
                     _devApi->query_about_all(currentDevice.remotePaths())
-                        .then(this, [this](const QList<DevicePath>& paths) {
+                        .then(this, [this, finishTask](const QList<DevicePath>& paths) {
                             qCDebug(lcDeviceController) << "Paths added:";
                             qCDebug(lcDeviceController) << paths;
                             currentDevice.updateRemotePathCache(paths);
+                            logRemoteAccessIdentityApplied("account_update_device_continue paths_updated:", currentDevice);
                             replaceAccountRemotePaths(allAccountPaths, currentDevice.remotePaths());
-                            ra_finished.store(true);
-                            check_finished();
+                            finishTask();
+                        })
+                        .onFailed(this, [finishTask](const std::exception& e) {
+                            qCWarning(lcDeviceController) << "Remote path about request exception, finishing account update" << e.what();
+                            finishTask();
                         });
 
                 }
                 else {
                     qCDebug(lcDeviceController) << "acc update continue ra_device_info fail";
-                    ra_finished.store(true);
-                    check_finished();
+                    finishTask();
                 }
+            })
+            .onFailed(this, [finishTask](const std::exception& e) {
+                qCWarning(lcDeviceController) << "Device info request exception, finishing account update" << e.what();
+                finishTask();
             });
     };
 
@@ -429,11 +487,10 @@ void DeviceController::account_update_device_continue(std::optional<Device> dev)
 
     qCDebug(lcDeviceController) << "acc update continue: resolving device identity from RA list";
     queryDeviceList()
-        .then(this, [this, continueWithResolvedDevice](const DeviceListCtx& ctx) {
+        .then(this, [this, continueWithResolvedDevice, finishTask](const DeviceListCtx& ctx) {
             qCDebug(lcDeviceController) << "acc update continue device list code" << ctx.res.status << ctx.res.errorString;
             if (ctx.res.status != 200) {
-                ra_finished.store(true);
-                check_finished();
+                finishTask();
                 return;
             }
 
@@ -441,14 +498,18 @@ void DeviceController::account_update_device_continue(std::optional<Device> dev)
             if (!resolvedDevice || resolvedDevice->seagateDeviceID.isEmpty()) {
                 logRemoteAccessCnLookupMismatch("account_update_device_continue:", currentDevice, ctx.deviceList);
                 qCDebug(lcDeviceController) << "acc update continue: device not found or ID empty (CN lookup)";
-                ra_finished.store(true);
-                check_finished();
+                finishTask();
                 return;
             }
 
             Device updatedDevice = currentDevice;
             applyRemoteAccessIdentity(updatedDevice, *resolvedDevice);
+            logRemoteAccessIdentityApplied("account_update_device_continue:", updatedDevice);
             continueWithResolvedDevice(updatedDevice);
+        })
+        .onFailed(this, [finishTask](const std::exception& e) {
+            qCWarning(lcDeviceController) << "Device list request exception, finishing account update" << e.what();
+            finishTask();
         });
 }
 
@@ -458,12 +519,14 @@ void DeviceController::force_ra_account()
     mdns_finished.store(false);
     ra_finished.store(false);
 
-    _mdns->start();
     _mdnsDeviceList.clear();
     _raDeviceList.clear();
     _aggregator->clearAll();
+    allAccountPaths.clear();
     force_device_list_request = true;
-    forceQueryDeviceList();
+    _deferredRaQuery = DeferredRaQuery::ForceAccount;
+    qCDebug(lcDeviceController) << "Forced RA discovery deferred until mDNS completes";
+    startMdnsDiscovery();
 }
 
 void DeviceController::setTokenContext(TokenContext &&tokenCtx)
@@ -522,7 +585,8 @@ QFuture<DevicePathListCtx> DeviceController::queryDeviceInfo(const QString &devi
         });
 }
 
-QFuture<DevicePathResolutionResult> DeviceController::resolveDevicePath(const Device& device, const std::optional<QUuid>& avoidPathId)
+QFuture<DevicePathResolutionResult> DeviceController::resolveDevicePath(const Device& device, const std::optional<QUuid>& avoidPathId,
+    const std::optional<QUuid>& preferredPathId)
 {
     if (!_pathResolver) {
         DevicePathResolutionResult result;
@@ -530,7 +594,7 @@ QFuture<DevicePathResolutionResult> DeviceController::resolveDevicePath(const De
         return QtFuture::makeReadyValueFuture(result);
     }
 
-    return _pathResolver->resolve(device, avoidPathId);
+    return _pathResolver->resolve(device, avoidPathId, preferredPathId);
 }
 
 void DeviceController::initAccessCode()
@@ -546,6 +610,10 @@ void DeviceController::initAccessCode()
             else {
                 emit accessCodeResult(AccessCodeContext::Init, ctx.res.status, ctx.res.errorString, ctx.res.errorStacktrace);
             }
+        })
+        .onFailed(this, [this](const std::exception& e) {
+            qCWarning(lcDeviceController) << "initAccessCode exception" << e.what();
+            emit accessCodeResult(AccessCodeContext::Init, 0, QString::fromUtf8(e.what()), {});
         });
 }
 
@@ -553,22 +621,19 @@ void DeviceController::enterAccessCode(const QString &code, bool from_account)
 {
     qCDebug(lcDeviceController) << "enterAccessCode, from account:" << from_account;
     _api->ra_token(code)
-        .then(this, [this,from_account](const TokenContext& ctx) {
+        .then(this, [this](const TokenContext& ctx) {
             qCDebug(lcDeviceController) << "enterAccessCode" << ctx.res.status << ctx.res.errorString;
             if (ctx.res.status == 200) {
                 saveRefreshToken();
                 emit accessCodeResult(AccessCodeContext::Token, ctx.res.status, {}, {});
-                if (!from_account) {
-                    if (force_device_list_request) {
-                        qCDebug(lcDeviceController) << "force RA mode, queued forceQueryDeviceList call";
-                        // drop call stack
-                        QMetaObject::invokeMethod(this, &DeviceController::forceQueryDeviceList, Qt::QueuedConnection);
-                    }
-                }
             }
             else {
                 emit accessCodeResult(AccessCodeContext::Token, ctx.res.status, ctx.res.errorString, ctx.res.errorStacktrace);
             }
+        })
+        .onFailed(this, [this](const std::exception& e) {
+            qCWarning(lcDeviceController) << "enterAccessCode exception" << e.what();
+            emit accessCodeResult(AccessCodeContext::Token, 0, QString::fromUtf8(e.what()), {});
         });
 }
 
@@ -582,11 +647,19 @@ void DeviceController::processQueryDeviceList()
                 {
                     QWriteLocker locker(&lock_);
                     _raDeviceList = DeviceAggregator::mergeDevices(_raDeviceList, ctx.deviceList);
+                    qCInfo(lcDeviceController) << "RA discovery device list merged"
+                                               << "rawDeviceCount" << ctx.deviceList.devices().size()
+                                               << "mergedRaDeviceCount" << _raDeviceList.devices().size();
                 }
                 qCDebug(lcDeviceController) << "Device list:";
                 qCDebug(lcDeviceController) << ctx.deviceList;
                 saveRefreshToken();
             }
+            ra_finished.store(true);
+            check_finished();
+        })
+        .onFailed(this, [this](const std::exception& e) {
+            qCWarning(lcDeviceController) << "Device list request exception, finishing RA discovery" << e.what();
             ra_finished.store(true);
             check_finished();
         });
@@ -602,6 +675,9 @@ void DeviceController::forceQueryDeviceList()
                 {
                     QWriteLocker locker(&lock_);
                     _raDeviceList = DeviceAggregator::mergeDevices(_raDeviceList, ctx.deviceList);
+                    qCInfo(lcDeviceController) << "Forced RA discovery device list merged"
+                                               << "rawDeviceCount" << ctx.deviceList.devices().size()
+                                               << "mergedRaDeviceCount" << _raDeviceList.devices().size();
                     // _deviceList = ctx.deviceList;
                 }
 
@@ -612,9 +688,61 @@ void DeviceController::forceQueryDeviceList()
                 check_finished();
             }
             else {
-                initAccessCode();
+                if (requiresRemoteAccessPrompt(ctx.res.status)) {
+                    initAccessCode();
+                } else {
+                    qCWarning(lcDeviceController) << "Forced device list request failed, finishing RA discovery"
+                                                  << ctx.res.status << ctx.res.errorString;
+                    ra_finished.store(true);
+                    check_finished();
+                }
             }
+        })
+        .onFailed(this, [this](const std::exception& e) {
+            qCWarning(lcDeviceController) << "Forced device list request exception, finishing RA discovery" << e.what();
+            ra_finished.store(true);
+            check_finished();
         });
+}
+
+void DeviceController::startMdnsDiscovery()
+{
+    ++_mdnsDiscoveryGeneration;
+    qCDebug(lcDeviceController) << "Starting mDNS discovery generation" << _mdnsDiscoveryGeneration;
+    _mdns->start();
+}
+
+void DeviceController::finishMdnsDiscoveryPhase(quint64 generation)
+{
+    if (generation != _mdnsDiscoveryGeneration) {
+        qCDebug(lcDeviceController) << "Ignoring stale mDNS discovery result"
+                                    << "resultGeneration" << generation
+                                    << "currentGeneration" << _mdnsDiscoveryGeneration;
+        return;
+    }
+
+    mdns_finished.store(true);
+
+    const auto deferredRaQuery = _deferredRaQuery;
+    _deferredRaQuery = DeferredRaQuery::None;
+
+    switch (deferredRaQuery) {
+    case DeferredRaQuery::NewAccount:
+        qCDebug(lcDeviceController) << "mDNS completed, starting deferred RA device list request";
+        processQueryDeviceList();
+        return;
+    case DeferredRaQuery::ForceAccount:
+        qCDebug(lcDeviceController) << "mDNS completed, starting deferred forced RA device list request";
+        forceQueryDeviceList();
+        return;
+    case DeferredRaQuery::AccountUpdate:
+        qCDebug(lcDeviceController) << "mDNS completed, starting deferred RA account update request";
+        processAccountUpdateDeviceList();
+        return;
+    case DeferredRaQuery::None:
+        check_finished();
+        return;
+    }
 }
 
 void DeviceController::check_finished()
@@ -624,6 +752,20 @@ void DeviceController::check_finished()
 
     qCDebug(lcDeviceController) << "mdns finished" << m << "ra finished" << r;
     if (m && r) {
+        int mdnsDeviceCount = 0;
+        int raDeviceCount = 0;
+        int mergedDeviceCount = 0;
+        {
+            QReadLocker locker(&lock_);
+            mdnsDeviceCount = _mdnsDeviceList.devices().size();
+            raDeviceCount = _raDeviceList.devices().size();
+            mergedDeviceCount = DeviceAggregator::mergeDevices(_mdnsDeviceList, _raDeviceList).devices().size();
+        }
+        qCInfo(lcDeviceController) << "Device discovery completed"
+                                   << "mdnsDeviceCount" << mdnsDeviceCount
+                                   << "raDeviceCount" << raDeviceCount
+                                   << "mergedDeviceCount" << mergedDeviceCount
+                                   << "raAvailable" << hasRefreshToken();
         emit devices_updated(hasRefreshToken());
         force_device_list_request = false;
         mdns_finished.store(false);

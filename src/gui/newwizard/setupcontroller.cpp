@@ -25,6 +25,11 @@ namespace APP::Wizard {
 
 Q_LOGGING_CATEGORY(lcSetupWizardController, "gui.setupwizard.controller")
 
+bool isRemoteAccessTransportFailure(int status)
+{
+    return status <= 0 || status == 408 || status == 502 || status == 503 || status == 504;
+}
+
 SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason reason)
     : QObject(parent)
     , _context(new SetupContext(parent, this))
@@ -129,6 +134,17 @@ SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason 
         [this,oc](DeviceController::AccessCodeContext context, int status_code, const QString &errorString, const QString &errorStacktrace) {
             window()->displayPage(SetupPage::PageCredentials);
             window()->showCredPageProgress(false);
+            const auto reportUnableToConnect = [this, oc, context] {
+                if (!oc) {
+                    return;
+                }
+
+                if (context == DeviceController::AccessCodeContext::Init) {
+                    oc->reportError(ErrorDialogState::UnableToConnectInit, id_);
+                } else {
+                    oc->reportError(ErrorDialogState::UnableToConnectToken, id_);
+                }
+            };
             if (status_code == 200) {
                 qCDebug(lcSetupWizardController) << "accessCodeResult Accepted";
                 ocApp()->gui()->settingsDialog()->overlayController()->hideAll();
@@ -155,13 +171,11 @@ SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason 
                             }
                         }
                     }
-                    else if (status_code == 500) {
-                        if (context == DeviceController::AccessCodeContext::Init) {
-                            oc->reportError(ErrorDialogState::UnableToConnectInit, id_);
-                        }
-                        else if (context == DeviceController::AccessCodeContext::Token) {
-                            oc->reportError(ErrorDialogState::UnableToConnectToken, id_);
-                        }
+                    else if (status_code == 500 || isRemoteAccessTransportFailure(status_code)) {
+                        qCWarning(lcSetupWizardController) << "Remote Access auth transport failure"
+                                                           << (context == DeviceController::AccessCodeContext::Init ? "Init" : "Token")
+                                                           << status_code << errorString;
+                        reportUnableToConnect();
                     }
                     else if (status_code == 429) {
                         if (context == DeviceController::AccessCodeContext::Init) {
@@ -170,6 +184,9 @@ SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason 
                         else if (context == DeviceController::AccessCodeContext::Token) {
                             oc->resendAccessCode(id_);
                         }
+                    }
+                    else {
+                        reportUnableToConnect();
                     }
                 }
             }

@@ -51,7 +51,8 @@ public:
 
     QFuture<DeviceListCtx> queryDeviceList();
     QFuture<DevicePathListCtx> queryDeviceInfo(const QString& deviceId);
-    QFuture<DevicePathResolutionResult> resolveDevicePath(const Device& device, const std::optional<QUuid>& avoidPathId = std::nullopt);
+    QFuture<DevicePathResolutionResult> resolveDevicePath(const Device& device, const std::optional<QUuid>& avoidPathId = std::nullopt,
+        const std::optional<QUuid>& preferredPathId = std::nullopt);
 
     void initAccessCode();
     void enterAccessCode(const QString& code, bool from_account);
@@ -71,6 +72,9 @@ signals:
 protected:
     void processQueryDeviceList();
     void forceQueryDeviceList();
+    void processAccountUpdateDeviceList();
+    void startMdnsDiscovery();
+    void finishMdnsDiscoveryPhase(quint64 generation);
     void check_finished();
 
 protected:
@@ -93,6 +97,15 @@ protected:
     std::atomic<bool> ra_finished{false};
 
     bool force_device_list_request = false;
+
+    enum class DeferredRaQuery {
+        None,
+        NewAccount,
+        ForceAccount,
+        AccountUpdate
+    };
+    DeferredRaQuery _deferredRaQuery = DeferredRaQuery::None;
+    quint64 _mdnsDiscoveryGeneration = 0;
 
     QList<DevicePath> allAccountPaths;
 };

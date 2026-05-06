@@ -151,6 +151,7 @@ void ComboWidget::setItems(const DeviceList& list)
         qCDebug(lcDeviceComboWidget) << "Previous selected device" << selectedDevice->toStringShort();
         const auto& dev = deviceList.find_by_cn(selectedDevice->certificateCommonName);
         if (dev) {
+            selectedDevice = dev;
             if (dev->friendlyName().isEmpty())
                 setText(dev->certificateCommonName);
             else

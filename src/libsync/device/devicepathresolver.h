@@ -14,6 +14,7 @@ enum class DevicePathResolutionOutcome
     ResolvedFromCachedPriority,
     ResolvedFromFreshRemoteAccess,
     ResolvedFromRemoteRelay,
+    RequiresRemoteAccessDeviceUpdate,
     RequiresRemoteAccessPrompt,
     UnresolvedAfterFullRefresh
 };
@@ -41,7 +42,8 @@ public:
 
     explicit DevicePathResolver(DeviceApi* deviceApi, QueryDeviceInfoFn queryDeviceInfo, QObject* parent = nullptr);
 
-    QFuture<DevicePathResolutionResult> resolve(const Device& device, const std::optional<QUuid>& avoidPathId = std::nullopt);
+    QFuture<DevicePathResolutionResult> resolve(const Device& device, const std::optional<QUuid>& avoidPathId = std::nullopt,
+        const std::optional<QUuid>& preferredPathId = std::nullopt);
 
 private:
     QFuture<DevicePathResolutionResult> testPriorityPaths(Device device, const QList<DevicePath>& paths, const DevicePathResolutionResult& result,
