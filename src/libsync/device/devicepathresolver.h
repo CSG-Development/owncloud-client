@@ -4,6 +4,7 @@
 #include "deviceapi.h"
 #include "apiclient.h"
 
+#include <QtGlobal>
 #include <QSet>
 
 #include <functional>
@@ -29,6 +30,11 @@ struct APPLICATIONSYNC_EXPORT DevicePathResolutionResult
     bool remoteCacheUpdated = false;
     bool remoteCacheTimestampRefreshed = false;
     bool usedRemoteRelay = false;
+    qint64 totalElapsedMs = -1;
+    qint64 cachedPriorityFileServerMs = -1;
+    qint64 freshRemoteAccessPathsMs = -1;
+    qint64 freshPriorityFileServerMs = -1;
+    qint64 relayFileServerMs = -1;
 
     bool resolved() const { return selectedPathId.has_value(); }
 };

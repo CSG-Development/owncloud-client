@@ -4,6 +4,7 @@
 #include "device/apiclient.h"
 #include "device/devicepathresolver.h"
 
+#include <QElapsedTimer>
 #include <QObject>
 #include <QReadWriteLock>
 
@@ -83,6 +84,8 @@ protected:
     void startMdnsDiscovery();
     void finishMdnsDiscoveryPhase(quint64 generation);
     void check_finished();
+    void startRaTiming(const QString& operation);
+    void logRaTimingSummary(const QString& completionReason);
     void saveRefreshTokenToSecureStorage(const QString& email, const QString& token);
     void removeRefreshTokenFromSecureStorage(const QString& email);
 
@@ -119,6 +122,21 @@ protected:
     quint64 _mdnsDiscoveryGeneration = 0;
     quint64 _refreshTokenGeneration = 0;
     QString _refreshTokenLoadedEmail;
+    struct RaTiming {
+        bool active = false;
+        QString operation;
+        QElapsedTimer totalTimer;
+        QElapsedTimer mdnsTimer;
+        qint64 mdnsDiscoveryMs = -1;
+        qint64 mdnsAboutFileServerMs = -1;
+        qint64 remoteAccessDeviceListMs = -1;
+        qint64 remoteAccessPathsMs = -1;
+        qint64 remoteAccessInitMs = -1;
+        qint64 remoteAccessTokenMs = -1;
+        qint64 remoteAboutFileServerMs = -1;
+        qint64 pathStatusFileServerMs = -1;
+    };
+    RaTiming _raTiming;
 
     QList<DevicePath> allAccountPaths;
 };

@@ -22,6 +22,7 @@
 
 #include "libsync/creds/abstractcredentials.h"
 #include "libsync/creds/httpcredentials.h"
+#include "libsync/device/devicelogging.h"
 #include "libsync/device/networkmonitor.h"
 #include "libsync/syncendpointrecovery.h"
 
@@ -967,6 +968,37 @@ void AccountState::resetConnectionValidator()
     }
 }
 
+void AccountState::startRaSwitchingTiming(DeviceUpdateTrigger trigger)
+{
+    if (_raSwitchingTiming.active) {
+        return;
+    }
+
+    _raSwitchingTiming.active = true;
+    _raSwitchingTiming.trigger = trigger;
+    _raSwitchingTiming.recoveryGeneration = (trigger == DeviceUpdateTrigger::SyncTransportFailure && _pendingEndpointRecoveryRequest)
+        ? _pendingEndpointRecoveryRequest->generation
+        : 0;
+    _raSwitchingTiming.totalTimer.start();
+}
+
+void AccountState::logRaSwitchingTimingSummary(const QString& completionReason)
+{
+    if (!_raSwitchingTiming.active) {
+        return;
+    }
+
+    qCInfo(lcRaPerformance).noquote() << "RA switching timing summary begin";
+    qCInfo(lcRaPerformance) << "RA switching timing"
+                           << "phase" << "total"
+                           << "elapsedMs" << _raSwitchingTiming.totalTimer.elapsed()
+                           << "trigger" << deviceUpdateTriggerString(_raSwitchingTiming.trigger)
+                           << "generation" << _raSwitchingTiming.recoveryGeneration
+                           << "completionReason" << completionReason;
+    qCInfo(lcRaPerformance).noquote() << "RA switching timing summary end";
+    _raSwitchingTiming = RaSwitchingTiming {};
+}
+
 void AccountState::updateDeviceAccessibility()
 {
     if (!canStartDeviceAccessibilityUpdate(true)) {
@@ -1379,6 +1411,7 @@ void AccountState::resolveAndApplyDevicePath(const Device& device, bool allowRem
         ? _pendingEndpointRecoveryRequest->generation
         : 0;
     const auto resolutionGeneration = ++_devicePathResolutionGeneration;
+    startRaSwitchingTiming(trigger);
     qCInfo(lcAccountState) << "Starting device path resolution"
                            << "trigger" << deviceUpdateTriggerString(trigger)
                            << "generation" << recoveryGeneration
@@ -1573,6 +1606,7 @@ void AccountState::requestLocalPathDiscovery(const Device& device, DeviceUpdateT
 
     _remoteAccessPromptRetryTimer.stop();
     _activeAccessCodeGeneration = 0;
+    startRaSwitchingTiming(trigger);
     const auto generation = ++_devicePathUpdateGeneration;
     _pendingDevicePathUpdate = PendingDevicePathUpdate {device, trigger, generation, false, false, true};
     qCInfo(lcAccountState) << "Starting local account path discovery"
@@ -1631,6 +1665,7 @@ void AccountState::requestRAupdate(const Device& device, DeviceUpdateTrigger tri
     }
 
     qCDebug(lcAccountState) << "Requesting device update from RA for trigger" << deviceUpdateTriggerString(trigger);
+    startRaSwitchingTiming(trigger);
     if (trigger == DeviceUpdateTrigger::SyncTransportFailure && _pendingEndpointRecoveryRequest) {
         setEndpointRecoveryState(EndpointRecoveryState::WaitingForRemoteAccessPrompt);
     }
@@ -1937,6 +1972,9 @@ void AccountState::initializeRA()
 
 void AccountState::setUpdateDeviceProgress(bool inProgress)
 {
+    if (!inProgress) {
+        logRaSwitchingTimingSummary(QStringLiteral("device_update_flow_finished"));
+    }
     _updateDeviceInProgress = inProgress;
     qCDebug(lcAccountState) << "inProgress" << inProgress;
     if (!inProgress && _pendingEndpointRecoveryRequest && _endpointRecoveryState == EndpointRecoveryState::Deferred) {

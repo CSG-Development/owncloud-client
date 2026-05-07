@@ -42,6 +42,7 @@ QSet<QString> remotePathKeySet(const QList<DevicePath>& paths)
 
 Q_LOGGING_CATEGORY(lcDevice, "device", QtDebugMsg)
 Q_LOGGING_CATEGORY(lcDeviceData, "device.data", QtWarningMsg)
+Q_LOGGING_CATEGORY(lcRaPerformance, "ra.performance", QtInfoMsg)
 
 DevicePath::DevicePath()
 {

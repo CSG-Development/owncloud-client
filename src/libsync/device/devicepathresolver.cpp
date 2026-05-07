@@ -1,8 +1,11 @@
 #include "devicepathresolver.h"
+#include "devicelogging.h"
 
 #include <QtConcurrent>
 
 #include <algorithm>
+#include <memory>
+#include <QElapsedTimer>
 #include <QLoggingCategory>
 
 namespace {
@@ -145,6 +148,54 @@ DevicePathResolutionResult withDevice(const DevicePathResolutionResult& result, 
     return updatedResult;
 }
 
+void logTimingSummary(const DevicePathResolutionResult& result)
+{
+    auto addIfMeasured = [](qint64 total, qint64 value) {
+        return value >= 0 ? total + value : total;
+    };
+    auto timingStatus = [](qint64 value) {
+        return value >= 0 ? QStringLiteral("measured") : QStringLiteral("not_run");
+    };
+    auto timingValue = [](qint64 value) {
+        return value >= 0 ? value : 0;
+    };
+    qint64 fileServerTotalMs = 0;
+    bool fileServerMeasured = false;
+    fileServerTotalMs = addIfMeasured(fileServerTotalMs, result.cachedPriorityFileServerMs);
+    fileServerMeasured = fileServerMeasured || result.cachedPriorityFileServerMs >= 0;
+    fileServerTotalMs = addIfMeasured(fileServerTotalMs, result.freshPriorityFileServerMs);
+    fileServerMeasured = fileServerMeasured || result.freshPriorityFileServerMs >= 0;
+    fileServerTotalMs = addIfMeasured(fileServerTotalMs, result.relayFileServerMs);
+    fileServerMeasured = fileServerMeasured || result.relayFileServerMs >= 0;
+    qCInfo(lcRaPerformance).noquote() << "RA path resolution timing summary begin";
+    qCInfo(lcRaPerformance) << "RA path resolution timing"
+                                 << "phase" << "cached_priority_file_server"
+                                 << "status" << timingStatus(result.cachedPriorityFileServerMs)
+                                 << "elapsedMs" << timingValue(result.cachedPriorityFileServerMs);
+    qCInfo(lcRaPerformance) << "RA path resolution timing"
+                                 << "phase" << "fresh_remote_access_paths"
+                                 << "status" << timingStatus(result.freshRemoteAccessPathsMs)
+                                 << "elapsedMs" << timingValue(result.freshRemoteAccessPathsMs);
+    qCInfo(lcRaPerformance) << "RA path resolution timing"
+                                 << "phase" << "fresh_priority_file_server"
+                                 << "status" << timingStatus(result.freshPriorityFileServerMs)
+                                 << "elapsedMs" << timingValue(result.freshPriorityFileServerMs);
+    qCInfo(lcRaPerformance) << "RA path resolution timing"
+                                 << "phase" << "relay_file_server"
+                                 << "status" << timingStatus(result.relayFileServerMs)
+                                 << "elapsedMs" << timingValue(result.relayFileServerMs);
+    qCInfo(lcRaPerformance) << "RA path resolution timing"
+                                 << "phase" << "file_server_total"
+                                 << "status" << (fileServerMeasured ? QStringLiteral("measured") : QStringLiteral("not_run"))
+                                 << "elapsedMs" << fileServerTotalMs;
+    qCInfo(lcRaPerformance) << "RA path resolution timing"
+                                 << "phase" << "total"
+                                 << "elapsedMs" << result.totalElapsedMs
+                                 << "outcome" << static_cast<int>(result.outcome)
+                                 << "resolved" << result.resolved();
+    qCInfo(lcRaPerformance).noquote() << "RA path resolution timing summary end";
+}
+
 }
 
 DevicePathResolver::DevicePathResolver(DeviceApi* deviceApi, QueryDeviceInfoFn queryDeviceInfo, QObject* parent)
@@ -160,13 +211,22 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::resolve(const Device& so
     Device device = sourceDevice;
     DevicePathResolutionResult result;
     result.device = device;
+    auto totalTimer = std::make_shared<QElapsedTimer>();
+    totalTimer->start();
+    auto withTiming = [this, totalTimer](QFuture<DevicePathResolutionResult> future) {
+        return future.then(this, [totalTimer](DevicePathResolutionResult result) {
+            result.totalElapsedMs = totalTimer->elapsed();
+            logTimingSummary(result);
+            return result;
+        });
+    };
     qCDebug(lcDevicePathResolver) << "Starting resolution for" << device.toStringShort();
 
     QSet<QString> skippedPriorityKeys;
     const auto cachedPriorityPaths = excludePathId(priorityPaths(device), avoidPathId, &skippedPriorityKeys);
     if (cachedPriorityPaths.isEmpty() || !_deviceApi) {
         qCDebug(lcDevicePathResolver) << "No cached priority paths available, going to RA/relay fallback";
-        return resolveAfterPriorityFailure(device, skippedPriorityKeys, result);
+        return withTiming(resolveAfterPriorityFailure(device, skippedPriorityKeys, result));
     }
 
     if (!skippedPriorityKeys.isEmpty()) {
@@ -177,7 +237,7 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::resolve(const Device& so
 
     if (const auto preferredPath = findPreferredLocalPath(cachedPriorityPaths, preferredPathId)) {
         qCDebug(lcDevicePathResolver) << "Testing preferred active local path first" << preferredPath->toStringShort();
-        return testPriorityPaths(device, QList<DevicePath> { *preferredPath }, result, DevicePathResolutionOutcome::ResolvedFromCachedPriority)
+        return withTiming(testPriorityPaths(device, QList<DevicePath> { *preferredPath }, result, DevicePathResolutionOutcome::ResolvedFromCachedPriority)
             .then(this, [this, cachedPriorityPaths, skippedPriorityKeys, preferredPath](const DevicePathResolutionResult& preferredResult) {
                 if (preferredResult.resolved()) {
                     qCDebug(lcDevicePathResolver) << "Resolved from preferred active local path";
@@ -207,10 +267,10 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::resolve(const Device& so
                     })
                     .unwrap();
             })
-            .unwrap();
+            .unwrap());
     }
 
-    return testPriorityPaths(device, cachedPriorityPaths, result, DevicePathResolutionOutcome::ResolvedFromCachedPriority)
+    return withTiming(testPriorityPaths(device, cachedPriorityPaths, result, DevicePathResolutionOutcome::ResolvedFromCachedPriority)
         .then(this, [this, cachedPriorityPaths, skippedPriorityKeys](const DevicePathResolutionResult& testResult) {
             if (testResult.resolved()) {
                 qCDebug(lcDevicePathResolver) << "Resolved from cached priority path";
@@ -222,7 +282,7 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::resolve(const Device& so
             testedPriorityKeys.unite(skippedPriorityKeys);
             return resolveAfterPriorityFailure(testResult.device, testedPriorityKeys, testResult);
         })
-        .unwrap();
+        .unwrap());
 }
 
 QFuture<DevicePathResolutionResult> DevicePathResolver::testPriorityPaths(Device device, const QList<DevicePath>& paths, const DevicePathResolutionResult& result,
@@ -246,19 +306,29 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::testPriorityPaths(Device
     state->device = device;
     state->result = result;
     state->result.device = device;
+    auto timer = std::make_shared<QElapsedTimer>();
+    timer->start();
     state->pendingCount = paths.size();
     state->localPendingCount = std::count_if(paths.cbegin(), paths.cend(), [](const DevicePath& path) {
         return path.deviceType == DeviceType::Local;
     });
     state->promise = std::make_shared<QPromise<DevicePathResolutionResult>>();
 
-    auto finishWithCurrentDevice = [state]() mutable {
+    auto finishWithCurrentDevice = [state, timer, successOutcome]() mutable {
         if (state->finished) {
             return;
         }
 
         state->finished = true;
         state->result.device = state->device;
+        const auto elapsed = timer->elapsed();
+        if (successOutcome == DevicePathResolutionOutcome::ResolvedFromFreshRemoteAccess) {
+            state->result.freshPriorityFileServerMs = elapsed;
+        } else if (state->result.cachedPriorityFileServerMs < 0) {
+            state->result.cachedPriorityFileServerMs = elapsed;
+        } else {
+            state->result.cachedPriorityFileServerMs += elapsed;
+        }
         state->promise->addResult(state->result);
         state->promise->finish();
     };
@@ -359,9 +429,12 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::resolveAfterPriorityFail
         qCDebug(lcDevicePathResolver) << "Remote path cache is missing, fetching fresh RA paths";
     }
 
+    auto remoteAccessTimer = std::make_shared<QElapsedTimer>();
+    remoteAccessTimer->start();
     return _queryDeviceInfo(device.seagateDeviceID)
-        .then(this, [this, device, testedPriorityKeys, result](const DevicePathListCtx& ctx) mutable {
+        .then(this, [this, device, testedPriorityKeys, result, remoteAccessTimer](const DevicePathListCtx& ctx) mutable {
             auto updatedResult = withDevice(result, device);
+            updatedResult.freshRemoteAccessPathsMs = remoteAccessTimer->elapsed();
             updatedResult.remoteAccessRequested = true;
             updatedResult.remoteAccessResult = ctx.res;
             qCDebug(lcDevicePathResolver) << "Fresh RA refresh finished with status" << ctx.res.status;
@@ -427,11 +500,14 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::testRelayPath(Device dev
     }
 
     qCDebug(lcDevicePathResolver) << "Testing relay paths" << remoteRelayPaths;
+    auto timer = std::make_shared<QElapsedTimer>();
+    timer->start();
     return _deviceApi->query_status_all(remoteRelayPaths)
-        .then(this, [device, result](const QList<DevicePath>& updatedPaths) mutable {
+        .then(this, [device, result, timer](const QList<DevicePath>& updatedPaths) mutable {
             mergeUpdatedPaths(device, updatedPaths);
 
             auto updatedResult = withDevice(result, device);
+            updatedResult.relayFileServerMs = timer->elapsed();
             const auto successfulRelayPath = std::find_if(updatedPaths.cbegin(), updatedPaths.cend(), [](const DevicePath& path) {
                 return path.status.oobe_done;
             });
@@ -445,8 +521,10 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::testRelayPath(Device dev
 
             return updatedResult;
         })
-        .onFailed(this, [device, result](const std::exception& e) {
+        .onFailed(this, [device, result, timer](const std::exception& e) {
             qCWarning(lcDevicePathResolver) << "Relay path status request exception, treating relay paths as failed" << e.what();
-            return withDevice(result, device);
+            auto updatedResult = withDevice(result, device);
+            updatedResult.relayFileServerMs = timer->elapsed();
+            return updatedResult;
         });
 }

@@ -234,6 +234,8 @@ private:
     void initializeRA();
     void resetConnectionValidator();
     void setUpdateDeviceProgress(bool inProgress);
+    void startRaSwitchingTiming(DeviceUpdateTrigger trigger);
+    void logRaSwitchingTimingSummary(const QString& completionReason);
 
 signals:
     void stateChanged(State state);
@@ -289,6 +291,13 @@ private:
     QTimer _remoteAccessPromptRetryTimer;
     QElapsedTimer _lastSuccessfulNetworkTriggeredDeviceUpdate;
     QElapsedTimer _lastSyncTriggeredRecoveryAttempt;
+    struct RaSwitchingTiming {
+        bool active = false;
+        DeviceUpdateTrigger trigger = DeviceUpdateTrigger::Default;
+        quint64 recoveryGeneration = 0;
+        QElapsedTimer totalTimer;
+    };
+    RaSwitchingTiming _raSwitchingTiming;
 
     /**
      * Starts counting when the server starts being back up after 503 or
