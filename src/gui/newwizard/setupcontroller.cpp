@@ -9,6 +9,7 @@
 #include "jobs/resolveurljobfactory.h"
 
 #include "device/devicecontroller.h"
+#include "device/deviceapi.h"
 #include "gui/remoteaccess/overlaycontroller.h"
 
 #include "theme.h"
@@ -24,10 +25,16 @@ namespace APP::Wizard {
 
 Q_LOGGING_CATEGORY(lcSetupWizardController, "gui.setupwizard.controller")
 
+bool isRemoteAccessTransportFailure(int status)
+{
+    return status <= 0 || status == 408 || status == 502 || status == 503 || status == 504;
+}
+
 SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason reason)
     : QObject(parent)
     , _context(new SetupContext(parent, this))
     , _deviceController(new DeviceController(parent))
+    , _deviceApi(new DeviceApi(this))
     , reason_(reason)
 {
     connect(_context->window(), &SetupWidget::rejected, this, [this] {
@@ -57,20 +64,7 @@ SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason 
 
     connect(_deviceController, &DeviceController::devices_updated, this, &SetupController::onDevicesUpdated);
 
-    connect(_deviceController, &DeviceController::prepareLoginFinished, this, [this](const Device& device) {
-        device_ = device;
-
-        auto id = Device::getBestPathId(device_);
-
-        if (id.has_value()) {
-            qCWarning(lcSetupWizardController) << "Device path found, login...";
-            evaluateCredentialsNew(id.value());
-        }
-        else {
-            qCWarning(lcSetupWizardController) << "No device path found";
-            window()->displayPage(SetupPage::PageConnectError);
-        }
-    });
+    connect(_deviceController, &DeviceController::prepareLoginFinished, this, &SetupController::onDevicePrepared);
 
     QPointer<OverlayController> oc = ocApp()->gui()->settingsDialog()->overlayController();
     if (!oc) {
@@ -140,6 +134,17 @@ SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason 
         [this,oc](DeviceController::AccessCodeContext context, int status_code, const QString &errorString, const QString &errorStacktrace) {
             window()->displayPage(SetupPage::PageCredentials);
             window()->showCredPageProgress(false);
+            const auto reportUnableToConnect = [this, oc, context] {
+                if (!oc) {
+                    return;
+                }
+
+                if (context == DeviceController::AccessCodeContext::Init) {
+                    oc->reportError(ErrorDialogState::UnableToConnectInit, id_);
+                } else {
+                    oc->reportError(ErrorDialogState::UnableToConnectToken, id_);
+                }
+            };
             if (status_code == 200) {
                 qCDebug(lcSetupWizardController) << "accessCodeResult Accepted";
                 ocApp()->gui()->settingsDialog()->overlayController()->hideAll();
@@ -166,13 +171,11 @@ SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason 
                             }
                         }
                     }
-                    else if (status_code == 500) {
-                        if (context == DeviceController::AccessCodeContext::Init) {
-                            oc->reportError(ErrorDialogState::UnableToConnectInit, id_);
-                        }
-                        else if (context == DeviceController::AccessCodeContext::Token) {
-                            oc->reportError(ErrorDialogState::UnableToConnectToken, id_);
-                        }
+                    else if (status_code == 500 || isRemoteAccessTransportFailure(status_code)) {
+                        qCWarning(lcSetupWizardController) << "Remote Access auth transport failure"
+                                                           << (context == DeviceController::AccessCodeContext::Init ? "Init" : "Token")
+                                                           << status_code << errorString;
+                        reportUnableToConnect();
                     }
                     else if (status_code == 429) {
                         if (context == DeviceController::AccessCodeContext::Init) {
@@ -181,6 +184,9 @@ SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason 
                         else if (context == DeviceController::AccessCodeContext::Token) {
                             oc->resendAccessCode(id_);
                         }
+                    }
+                    else {
+                        reportUnableToConnect();
                     }
                 }
             }
@@ -260,6 +266,7 @@ void SetupController::onCredentialsAction(CredentialsAction action, std::optiona
         {
             window()->displayPage(SetupPage::PageWait);
             if (ctx) {
+                pendingCredentialsAction_ = PendingCredentialsAction::Login;
                 password_ = ctx->password;
                 if (ctx->device) {
                     device_ = ctx->device.value();
@@ -275,6 +282,14 @@ void SetupController::onCredentialsAction(CredentialsAction action, std::optiona
         break;
 
     case CredentialsAction::ResetPasswordClicked:
+        if (ctx && ctx->device) {
+            pendingCredentialsAction_ = PendingCredentialsAction::ResetPassword;
+            resetEmail_ = ctx->email.trimmed();
+            device_ = ctx->device.value();
+            window()->setCredErrorMessage({});
+            window()->showCredPageProgress(true);
+            _deviceController->prepareLogin(device_);
+        }
         break;
 
     case CredentialsAction::RefreshDevicesClicked:
@@ -308,6 +323,34 @@ void SetupController::onLoginEmailClicked(const QString& email)
     _deviceController->start_new_account();
 }
 
+void SetupController::onDevicePrepared(const Device& device)
+{
+    device_ = device;
+
+    switch (pendingCredentialsAction_) {
+    case PendingCredentialsAction::Login:
+        {
+            auto id = Device::getBestPathId(device_);
+
+            if (id.has_value()) {
+                qCWarning(lcSetupWizardController) << "Device path found, login...";
+                evaluateCredentialsNew(id.value());
+            }
+            else {
+                qCWarning(lcSetupWizardController) << "No device path found";
+                window()->displayPage(SetupPage::PageConnectError);
+                pendingCredentialsAction_ = PendingCredentialsAction::None;
+            }
+        }
+        break;
+    case PendingCredentialsAction::ResetPassword:
+        handleResetPassword();
+        break;
+    case PendingCredentialsAction::None:
+        break;
+    }
+}
+
 void SetupController::onHandleCredentialsEvaluation(SetupResult result, const QString &msg)
 {
     if (result == SetupResult::Success) {
@@ -315,6 +358,7 @@ void SetupController::onHandleCredentialsEvaluation(SetupResult result, const QS
         performLogin();
         return;
     }
+    pendingCredentialsAction_ = PendingCredentialsAction::None;
     qCWarning(lcSetupWizardController) << "Credentials evaluation failed:" << msg;
     window()->displayPage(SetupPage::PageCredentials);
     window()->setInvalidCredentialsError();
@@ -383,6 +427,7 @@ void SetupController::onConnectErrorPageRetryClicked()
 
 void SetupController::onInvalidServerUrl()
 {
+    pendingCredentialsAction_ = PendingCredentialsAction::None;
     qCWarning(lcSetupWizardController) << "Invalid server URL";
     window()->displayPage(SetupPage::PageCredentials);
     window()->setInvalidUrlError();
@@ -390,6 +435,7 @@ void SetupController::onInvalidServerUrl()
 
 void SetupController::onHandleLoginResult(SetupResult result, const QString &msg)
 {
+    pendingCredentialsAction_ = PendingCredentialsAction::None;
     if (result == SetupResult::Success) {
         qCWarning(lcSetupWizardController) << "Login successful";
         window()->displayPage(SetupPage::PageFinished);
@@ -475,6 +521,7 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
 
         connect(authTypeJob, &CoreJob::finished, authTypeJob, [this, authTypeJob, resolvedUrl]() {
             authTypeJob->deleteLater();
+            pendingCredentialsAction_ = PendingCredentialsAction::None;
 
             if (authTypeJob->result().isNull()) {
                 Q_EMIT handleCredentialsEvaluation(SetupResult::Fail, authTypeJob->errorMessage());
@@ -498,8 +545,62 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
 
 void SetupController::onEvaluateCredError(const QString &errStr)
 {
+    pendingCredentialsAction_ = PendingCredentialsAction::None;
     window()->displayPage(SetupPage::PageCredentials);
     window()->setCredErrorMessage(errStr);
+}
+
+void SetupController::handleResetPassword()
+{
+    const auto id = Device::getBestPathId(device_);
+    if (!id.has_value()) {
+        qCWarning(lcSetupWizardController) << "No device path found for reset password";
+        pendingCredentialsAction_ = PendingCredentialsAction::None;
+        window()->showCredPageProgress(false);
+        window()->displayPage(SetupPage::PageConnectError);
+        return;
+    }
+
+    const auto devPath = device_.findPath(id.value());
+    if (!devPath) {
+        pendingCredentialsAction_ = PendingCredentialsAction::None;
+        handleResetPasswordFailure(tr("Invalid URL"));
+        return;
+    }
+
+    if (!device_.isStatic && devPath->about.os_state != QStringLiteral("normal")) {
+        pendingCredentialsAction_ = PendingCredentialsAction::None;
+        handleResetPasswordFailure(tr("OS state: %1").arg(devPath->about.os_state.isEmpty() ? tr("<empty>") : devPath->about.os_state));
+        return;
+    }
+
+    if (!device_.isStatic && !devPath->status.oobe_done) {
+        pendingCredentialsAction_ = PendingCredentialsAction::None;
+        handleResetPasswordFailure(tr("OOBE is not done"));
+        return;
+    }
+
+    const auto serverUrl = DevHelpers::makeServerUrl(devPath->address, devPath->port, false, true, devPath->origin);
+    _deviceApi->post_reset_password(serverUrl, resetEmail_)
+        .then(this, [this, email = resetEmail_](const ResetPasswordCtx &ctx) {
+            pendingCredentialsAction_ = PendingCredentialsAction::None;
+            if (ctx.status == 204) {
+                window()->showCredPageProgress(false);
+                window()->displayPage(SetupPage::PageCredentials);
+                window()->showToastMessage(tr("Password reset email sent to %1").arg(email));
+                return;
+            }
+
+            handleResetPasswordFailure(tr("Failed to send password reset email"), ctx.errorString);
+        });
+    return;
+}
+
+void SetupController::handleResetPasswordFailure(const QString &message, const QString &tooltip)
+{
+    window()->showCredPageProgress(false);
+    window()->displayPage(SetupPage::PageCredentials);
+    window()->setCredErrorMessage(message, tooltip);
 }
 
 void SetupController::performLogin()

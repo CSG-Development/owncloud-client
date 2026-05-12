@@ -48,6 +48,9 @@ add_library(${LIBRARY_NAME} STATIC
     tooltip_manager.h
     custom_tooltip.cpp
     custom_tooltip.h
+    toastwidget.cpp
+    toastwidget.h
+    toastwidget.ui
 )
 
 target_link_libraries(${LIBRARY_NAME} PUBLIC 

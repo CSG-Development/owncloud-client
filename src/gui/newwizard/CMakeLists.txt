@@ -22,6 +22,7 @@ add_library(newwizard STATIC
     pages/credentialspage.ui
     pages/emailpage.cpp
     pages/emailpage.h
+    pages/emailvalidator.h
     pages/emailpage.ui
     pages/waitpage.cpp
     pages/waitpage.h

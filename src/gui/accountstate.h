@@ -218,18 +218,24 @@ private:
     void scheduleNetworkTriggeredDeviceUpdate();
     void runNetworkTriggeredDeviceUpdate();
     bool canRunQueuedNetworkTriggeredDeviceUpdate() const;
+    bool shouldRepairStartupDeviceCache() const;
     bool shouldResolveStartupDevicePath() const;
+    void startStartupDeviceCacheRepair(bool blockJobs);
     void startStartupDevicePathResolution(bool blockJobs);
     void finishStartupDevicePathResolution(bool continueConnectivity);
     void resolveAndApplyDevicePath(const Device& device, bool allowRemoteAccessPrompt, DeviceUpdateTrigger trigger,
         const std::optional<QUuid>& avoidPathId = std::nullopt);
     void applyResolvedDevicePath(const DevicePathResolutionResult& result, DeviceUpdateTrigger trigger);
+    void requestLocalPathDiscovery(const Device& device, DeviceUpdateTrigger trigger);
     void requestRAupdate(const Device& device, DeviceUpdateTrigger trigger);
+    void deferRemoteAccessUpdateUntilNetwork(DeviceUpdateTrigger trigger);
     void tryShowRemoteAccessPrompt();
     std::optional<Device> accountDevice() const;
     void initializeRA();
     void resetConnectionValidator();
     void setUpdateDeviceProgress(bool inProgress);
+    void startRaSwitchingTiming(DeviceUpdateTrigger trigger);
+    void logRaSwitchingTimingSummary(const QString& completionReason);
 
 signals:
     void stateChanged(State state);
@@ -275,6 +281,9 @@ private:
     bool _startupDevicePathResolutionInProgress = false;
     bool _startupConnectivityCheckDeferred = false;
     bool _startupConnectivityCheckBlockJobs = false;
+    mutable bool _startupDeviceCacheValidationReported = false;
+    bool _initialNetworkReachabilityPending = false;
+    int _initialNetworkReachability = -1;
     bool _networkTriggeredDeviceUpdatePending = false;
     QTimer _networkChangeDebounceTimer;
     QTimer _syncTriggeredRecoveryCooldownTimer;
@@ -282,6 +291,13 @@ private:
     QTimer _remoteAccessPromptRetryTimer;
     QElapsedTimer _lastSuccessfulNetworkTriggeredDeviceUpdate;
     QElapsedTimer _lastSyncTriggeredRecoveryAttempt;
+    struct RaSwitchingTiming {
+        bool active = false;
+        DeviceUpdateTrigger trigger = DeviceUpdateTrigger::Default;
+        quint64 recoveryGeneration = 0;
+        QElapsedTimer totalTimer;
+    };
+    RaSwitchingTiming _raSwitchingTiming;
 
     /**
      * Starts counting when the server starts being back up after 503 or

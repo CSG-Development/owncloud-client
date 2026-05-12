@@ -12,6 +12,7 @@ const auto api_ra_refresh     = QStringLiteral("/client/v1/auth/refresh");    //
 const auto api_ra_token       = QStringLiteral("/client/v1/auth/token");      // POST
 const auto api_ra_devices     = QStringLiteral("/client/v1/devices");         // GET
 const auto api_ra_device_info = QStringLiteral("/client/v1/devices/");        // GET
+constexpr int RemoteAccessRequestTimeoutMs = 15 * 1000;
 
 // JSON keys
 const auto jkey_name      = QStringLiteral("name");
@@ -52,6 +53,25 @@ DevicePathListCtx makeDevicePathListError(const TokenContext& tokenCtx)
     errCtx.res.errorStacktrace = tokenCtx.res.errorStacktrace;
     return errCtx;
 }
+
+bool shouldRequestAccessCode(int status)
+{
+    return status == 401 || status == 403;
+}
+
+void setRemoteAccessError(ResultContext& result, const QJsonDocument& doc)
+{
+    if (!doc.isObject()) {
+        return;
+    }
+
+    const auto obj = doc.object();
+    result.errorString = obj.value(jkey_reason).toString();
+    if (result.errorString.isEmpty()) {
+        result.errorString = obj.value(jkey_name).toString();
+    }
+    result.errorStacktrace = obj.value(jkey_stacktrace).toString();
+}
 }
 
 Q_LOGGING_CATEGORY(lcDeviceApiClient, "device.apiclient", QtDebugMsg)
@@ -70,6 +90,13 @@ ApiClient::ApiClient(QObject *parent)
     });
 }
 
+QNetworkRequest ApiClient::createRequest(const QString& path)
+{
+    auto req = _factory.createRequest(path);
+    req.setTransferTimeout(RemoteAccessRequestTimeoutMs);
+    return req;
+}
+
 QFuture<InitContext> ApiClient::ra_initiate(const QString &email)
 {
     QJsonObject payload;
@@ -78,7 +105,7 @@ QFuture<InitContext> ApiClient::ra_initiate(const QString &email)
     payload[jkey_clientFriendlyName] = QStringLiteral("Desktop client");
 
     _factory.setQueryParameters({qMakePair(QStringLiteral("type"), QStringLiteral("email"))});
-    auto reply = _rest.post(_factory.createRequest(api_ra_initiate), QJsonDocument(payload));
+    auto reply = _rest.post(createRequest(api_ra_initiate), QJsonDocument(payload));
     return execRequest<InitContext>(std::move(reply), [this](const std::optional<QJsonDocument>& doc, int status) {
         InitContext ctx;
         ctx.res.status = status;
@@ -87,8 +114,7 @@ QFuture<InitContext> ApiClient::ra_initiate(const QString &email)
                 _initContext.refCode = (*doc)[jkey_reference].toString();
             }
             else {
-                ctx.res.errorString = (*doc)[jkey_name].toString();
-                ctx.res.errorStacktrace = (*doc)[jkey_stacktrace].toString();
+                setRemoteAccessError(ctx.res, *doc);
             }
         }
         return ctx;
@@ -109,7 +135,7 @@ QFuture<TokenContext> ApiClient::ra_token(const QString &code)
     payload[jkey_clientId] = _clientId;
 
     _factory.setQueryParameters({qMakePair(QStringLiteral("type"), QStringLiteral("email"))});
-    auto reply = _rest.post(_factory.createRequest(api_ra_token), QJsonDocument(payload));
+    auto reply = _rest.post(createRequest(api_ra_token), QJsonDocument(payload));
 
     return execRequest<TokenContext>(std::move(reply), [this](const std::optional<QJsonDocument>& doc, int status) {
         return parseTokenContext(doc, status);
@@ -174,7 +200,7 @@ QFuture<TokenContext> ApiClient::ra_refresh()
 
     //_factory.clearQueryParameters();
     _factory.setQueryParameters({qMakePair(QStringLiteral("refresh_token"), _tokenCtx.refreshToken)});
-    auto reply = _rest.post(_factory.createRequest(api_ra_refresh), QJsonDocument(payload));
+    auto reply = _rest.post(createRequest(api_ra_refresh), QJsonDocument(payload));
     return execRequest<TokenContext>(std::move(reply), [this](const std::optional<QJsonDocument>& doc, int status) {
         return parseTokenContext(doc, status);
     });
@@ -249,7 +275,7 @@ QFuture<TokenContext> ApiClient::refreshAccessToken(bool forceRefresh)
 QFuture<DeviceListCtx> ApiClient::executeDeviceListRequest(bool allowReplay)
 {
     _factory.clearQueryParameters();
-    auto req = _factory.createRequest(api_ra_devices);
+    auto req = createRequest(api_ra_devices);
     req.setRawHeader("authorization", QStringLiteral("Bearer %1").arg(_tokenCtx.accessToken).toUtf8());
     auto reply = _rest.get(req);
 
@@ -306,14 +332,13 @@ QFuture<DeviceListCtx> ApiClient::executeDeviceListRequest(bool allowReplay)
                 }
             }
             else {
-                ctx.res.errorString = (*doc)[jkey_name].toString();
-                ctx.res.errorStacktrace = (*doc)[jkey_stacktrace].toString();
+                setRemoteAccessError(ctx.res, *doc);
             }
             qCDebug(lcDeviceApiClient) << doc;
         }
         return ctx;
     }).then(this, [this, allowReplay](const DeviceListCtx& ctx) {
-        if (!allowReplay || (ctx.res.status != 401 && ctx.res.status != 403)) {
+        if (!allowReplay || !shouldRequestAccessCode(ctx.res.status)) {
             return QtFuture::makeReadyValueFuture(ctx);
         }
 
@@ -330,7 +355,7 @@ QFuture<DeviceListCtx> ApiClient::executeDeviceListRequest(bool allowReplay)
 QFuture<DevicePathListCtx> ApiClient::executeDeviceInfoRequest(const QString& deviceId, bool allowReplay)
 {
     _factory.clearQueryParameters();
-    auto req = _factory.createRequest(QStringLiteral("%1%2").arg(api_ra_device_info).arg(deviceId));
+    auto req = createRequest(QStringLiteral("%1%2").arg(api_ra_device_info).arg(deviceId));
     req.setRawHeader("authorization", QStringLiteral("Bearer %1").arg(_tokenCtx.accessToken).toUtf8());
     auto reply = _rest.get(req);
 
@@ -360,13 +385,12 @@ QFuture<DevicePathListCtx> ApiClient::executeDeviceInfoRequest(const QString& de
                 }
             }
             else {
-                ctx.res.errorString = (*doc)[jkey_name].toString();
-                ctx.res.errorStacktrace = (*doc)[jkey_stacktrace].toString();
+                setRemoteAccessError(ctx.res, *doc);
             }
         }
         return ctx;
     }).then(this, [this, deviceId, allowReplay](const DevicePathListCtx& ctx) {
-        if (!allowReplay || (ctx.res.status != 401 && ctx.res.status != 403)) {
+        if (!allowReplay || !shouldRequestAccessCode(ctx.res.status)) {
             return QtFuture::makeReadyValueFuture(ctx);
         }
 
@@ -401,10 +425,9 @@ TokenContext ApiClient::parseTokenContext(const std::optional<QJsonDocument> &do
                 ctx.accessTokenExpireTime = QDateTime::currentDateTime().addSecs(ctx.expiresIn);
         }
         else {
-            ctx.res.errorString = (*doc)[jkey_name].toString();
-            ctx.res.errorStacktrace = (*doc)[jkey_stacktrace].toString();
+            setRemoteAccessError(ctx.res, *doc);
             qCDebug(lcDeviceApiClient) << "error string:" << ctx.res.errorString;
-            if (ctx.res.errorString == QStringLiteral("invalid refresh token"))
+            if (ctx.res.errorString.contains(QStringLiteral("invalid refresh token"), Qt::CaseInsensitive))
                 ctx.refreshToken.clear();
         }
         _tokenCtx = ctx;

@@ -13,6 +13,7 @@ class WaitPage;
 class FinishedPage;
 class EmailPage;
 class ConnectErrorPage;
+class ToastWidget;
 
 namespace APP {enum class RemoteRequest;}
 
@@ -53,6 +54,7 @@ public:
     void setInvalidUrlError();
     void setInvalidCredentialsError();
     void setCredErrorMessage(const QString& error, const QString& tooltip = QStringLiteral(""));
+    void showToastMessage(const QString& message);
 
     void showCredPageProgress(bool show);
 
@@ -86,6 +88,7 @@ private:
     WaitPage* waitPage_ = nullptr;
     FinishedPage* finishPage_ = nullptr;
     ConnectErrorPage* connectErrorPage_ = nullptr;
+    ToastWidget* toastWidget_ = nullptr;
 
     SetupPage currentPage_ = SetupPage::PageNone;
     SetupPage previousPage = SetupPage::PageNone;

@@ -57,6 +57,15 @@ DeviceList DeviceAggregator::mergeDevices(const DeviceList& dev_1, const DeviceL
             if (existingDevice.seagateDeviceID.isEmpty() && !device.seagateDeviceID.isEmpty()) {
                 existingDevice.seagateDeviceID = device.seagateDeviceID;
             }
+            if (existingDevice.friendlyName().isEmpty() && !device.friendlyName().isEmpty()) {
+                existingDevice.setFriendlyName(device.friendlyName());
+            }
+            if (existingDevice.hostname.isEmpty() && !device.hostname.isEmpty()) {
+                existingDevice.hostname = device.hostname;
+            }
+            if (!existingDevice.remotePathsFetchedAtUtc.isValid() && device.remotePathsFetchedAtUtc.isValid()) {
+                existingDevice.remotePathsFetchedAtUtc = device.remotePathsFetchedAtUtc;
+            }
 
             // paths join
             for (const auto &newPath : device.paths) {
@@ -124,6 +133,7 @@ DeviceList DeviceAggregator::build_devices(const QList<DevicePath> &records)
         if (!deviceMap.contains(cn)) {
             Device newDevice;
             newDevice.certificateCommonName = cn;
+            newDevice.hostname = record.about.hostname;
             if (!record.friendlyName.isEmpty()) {
                 newDevice.setFriendlyName(record.friendlyName);
             }
