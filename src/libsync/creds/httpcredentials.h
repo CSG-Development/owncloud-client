@@ -74,9 +74,11 @@ public:
 
     // Whether we are using OAuth
     bool isUsingOAuth() const { return _authType == DetermineAuthTypeJob::AuthType::OAuth; }
+    bool hasKnownAuthType() const { return _hasKnownAuthType; }
 protected:
     HttpCredentials() = default;
 
+    void setAuthType(DetermineAuthTypeJob::AuthType authType);
     void slotAuthentication(QNetworkReply *reply, QAuthenticator *authenticator);
     void fetchFromKeychainHelper();
 
@@ -90,6 +92,7 @@ protected:
     QPointer<AccountBasedOAuth> _oAuthJob;
 
     DetermineAuthTypeJob::AuthType _authType = DetermineAuthTypeJob::AuthType::Unknown;
+    bool _hasKnownAuthType = false;
 
 private:
     bool refreshAccessTokenInternal(int tokenRefreshRetriesCount);

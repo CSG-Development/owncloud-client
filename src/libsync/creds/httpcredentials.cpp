@@ -108,6 +108,7 @@ HttpCredentials::HttpCredentials(DetermineAuthTypeJob::AuthType authType, const 
     , _password(password)
     , _ready(true)
     , _authType(authType)
+    , _hasKnownAuthType(authType != DetermineAuthTypeJob::AuthType::Unknown)
 {
 }
 
@@ -129,8 +130,14 @@ void HttpCredentials::setAccount(Account *account)
     }
     const auto isOauth = account->credentialSetting(isOAuthC());
     if (isOauth.isValid()) {
-        _authType = isOauth.toBool() ? DetermineAuthTypeJob::AuthType::OAuth : DetermineAuthTypeJob::AuthType::Basic;
+        setAuthType(isOauth.toBool() ? DetermineAuthTypeJob::AuthType::OAuth : DetermineAuthTypeJob::AuthType::Basic);
     }
+}
+
+void HttpCredentials::setAuthType(DetermineAuthTypeJob::AuthType authType)
+{
+    _authType = authType;
+    _hasKnownAuthType = authType != DetermineAuthTypeJob::AuthType::Unknown;
 }
 
 AccessManager *HttpCredentials::createAM() const
