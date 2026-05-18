@@ -487,7 +487,7 @@ std::unique_ptr<AccountState> AccountState::loadFromSettings(AccountPtr account,
     const bool userExplicitlySignedOut = settings.value(userExplicitlySignedOutC(), false).toBool();
     if (userExplicitlySignedOut) {
         // see writeToSettings below
-        accountState->setState(SignedOut);
+        accountState->_state = SignedOut;
     }
     accountState->_supportsSpaces = settings.value(supportsSpacesC(), false).toBool();
     return accountState;
