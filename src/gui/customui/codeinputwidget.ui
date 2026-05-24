@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>260</width>
+    <width>392</width>
     <height>56</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -29,6 +29,19 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
+   <item>
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item>
     <widget class="QFrame" name="frame">
      <property name="sizePolicy">
@@ -57,13 +70,13 @@
        <widget class="QLineEdit" name="ed1">
         <property name="minimumSize">
          <size>
-          <width>40</width>
+          <width>56</width>
           <height>56</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>40</width>
+          <width>56</width>
           <height>56</height>
          </size>
         </property>
@@ -84,13 +97,13 @@
        <widget class="QLineEdit" name="ed2">
         <property name="minimumSize">
          <size>
-          <width>40</width>
+          <width>56</width>
           <height>56</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>40</width>
+          <width>56</width>
           <height>56</height>
          </size>
         </property>
@@ -106,13 +119,13 @@
        <widget class="QLineEdit" name="ed3">
         <property name="minimumSize">
          <size>
-          <width>40</width>
+          <width>56</width>
           <height>56</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>40</width>
+          <width>56</width>
           <height>56</height>
          </size>
         </property>
@@ -128,13 +141,13 @@
        <widget class="QLineEdit" name="ed4">
         <property name="minimumSize">
          <size>
-          <width>40</width>
+          <width>56</width>
           <height>56</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>40</width>
+          <width>56</width>
           <height>56</height>
          </size>
         </property>
@@ -150,13 +163,13 @@
        <widget class="QLineEdit" name="ed5">
         <property name="minimumSize">
          <size>
-          <width>40</width>
+          <width>56</width>
           <height>56</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>40</width>
+          <width>56</width>
           <height>56</height>
          </size>
         </property>
@@ -172,13 +185,13 @@
        <widget class="QLineEdit" name="ed6">
         <property name="minimumSize">
          <size>
-          <width>40</width>
+          <width>56</width>
           <height>56</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>40</width>
+          <width>56</width>
           <height>56</height>
          </size>
         </property>
@@ -192,6 +205,19 @@
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

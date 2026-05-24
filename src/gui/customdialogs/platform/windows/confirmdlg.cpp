@@ -1,15 +1,16 @@
 #include "confirmdlg.h"
-#include "ui_confirmdlg.h"
+#include "dlgutils.h"
 #include "platform/common/confirmdlgcontroller.h"
 #include "platform/common/windowdragger.h"
-#include "dlgutils.h"
+#include "platform/windows/ui_confirmdlg.h"
 #include "theme.h"
+#include "ui_confirmdlg.h"
 
 namespace {
 const auto normal_width = 448;
 const auto wide_width = 620;
 const auto widget_style = QStringLiteral(":/platform/windows/confirmdlg.qss");
-const auto logo_icon = QStringLiteral(":/res/Files-logo.png");
+const auto logo_icon = QStringLiteral(":/res/Files-app-icon-round.svg");
 const auto warning_icon = QStringLiteral(":/res/warning_1_export.svg");
 const std::pair<QString,QString> close_icon = {
     QStringLiteral(":/res/close_light.svg"),

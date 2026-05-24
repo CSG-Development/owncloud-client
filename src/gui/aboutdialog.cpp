@@ -24,7 +24,7 @@
 #include <QTabBar>
 
 namespace {
-const auto logo_icon = QStringLiteral(":/res/Files-logo.png");
+const auto logo_icon = QStringLiteral(":/res/Files-app-icon-round.svg");
 const std::pair<QString,QString> widgetStyle = {
     QStringLiteral(":/res/about.qss"),
     QStringLiteral(":/res/about_mac.qss")

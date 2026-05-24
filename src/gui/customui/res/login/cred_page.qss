@@ -2,14 +2,10 @@
 
 #frameContent { border-radius: 24px; }
 
-#lblImage { background-image: url(":/res/Files-logo.png"); }
-
-#lblAppName,
-#lblFiles {
-    font-size: 34px;
-}
-
-#lblAppName { color: #6EBD49; }
+#lblImage { background-image: url(":/res/Files-app-icon-gradient.svg"); }
+#btnImage { border: none; background: transparent; }
+#btnLogo { border: none; background: transparent; }
+#lblAppName { font-size: 34px; }
 #lblEmail { font-size: 16px; }
 #showPasswordButton { border: none; }
 #frameErrorMessageInternal { border: 1px solid transparent; border-radius: 12px; }
@@ -19,12 +15,14 @@
     border-width: 1px;
     border-radius: 20px;
     font-size: 14px;
+    font-weight: bold;
 }
 
 .button_normal {
     background: transparent;
     border-radius: 20px;
     font-size: 14px;
+    font-weight: bold;
 }
 
 .text_button {
@@ -72,6 +70,7 @@
 [theme="light"] #frameErrorMessageInternal { background: rgba(244,67,54,31); }
 [theme="light"] #lblErrorIcon { image: url(":/res/login/error_light.svg"); }
 [theme="light"] #lblErrorText { color: rgba(0,0,0,222); }
+[theme="light"] #lblAppName { color: rgba(0, 0, 0, 0.87); }
 
 
 /*** Dark theme */
@@ -104,4 +103,4 @@
 [theme="dark"] #frameErrorMessageInternal { background: rgba(242,143,140,61); }
 [theme="dark"] #lblErrorIcon { image: url(":/res/login/error_dark.svg"); }
 [theme="dark"] #lblErrorText { color: rgba(255,255,255,222); }
-
+[theme="dark"] #lblAppName { color: rgba(255, 255, 255, 0.87); }

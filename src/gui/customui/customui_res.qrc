@@ -1,7 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>res/Files-logo.png</file>
-        <file>res/Files_logo_x2.png</file>
+        <file>res/Files-app-icon-gradient.svg</file>
+        <file>res/login_logo_dark.svg</file>
+        <file>res/login_logo_light.svg</file>
         <file>res/accountsettings_dark.qss</file>
         <file>res/accountsettings_light.qss</file>
         <file>res/accountsettings_dark_mac.qss</file>
