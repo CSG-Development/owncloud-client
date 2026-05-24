@@ -24,6 +24,7 @@ std::pair<QString,QString> backIcon = {
     QStringLiteral(":/res/login/arrow_back_btn_light.svg"),
     QStringLiteral(":/res/login/arrow_back_btn_dark.svg")
 };
+const QString logo_image = QStringLiteral(":/res/Files-app-icon-gradient.svg");
 constexpr int code_expire_seconds = 10 * 60;     // 10 min
 const auto widget_style = QStringLiteral(":/res/login/cred_page.qss");
 }
@@ -52,6 +53,9 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     ui->btnResetPass->setStyle(new FocusProxyStyle(ui->btnResetPass));
     ui->btnCantFindDevice->setStyle(new FocusProxyStyle(ui->btnCantFindDevice));
 
+    ui->btnImage->setAttribute(Qt::WA_TransparentForMouseEvents);
+    ui->btnImage->setIcon(QIcon(logo_image));
+
     setAttribute(Qt::WA_TranslucentBackground, true);
 
     connect(ui->btnLogin, &QPushButton::clicked, this, [this] {
@@ -61,19 +65,6 @@ CredentialsPage::CredentialsPage(QWidget *parent)
 
     connect(ui->btnCancel, &QPushButton::clicked, this, [this] {
         emit actionTriggered(CredentialsAction::CancelClicked);
-    });
-    connect(ui->btnSettings, &QToolButton::clicked, this, [this] {
-        // showDevicesInfo(true);
-        // emit actionTriggered(CredentialsAction::SettingsClicked);
-        // static bool visible = false;
-        // if (!visible) {
-        //     showErrorMessage(tr("Some error message"));
-        //     visible = true;
-        // }
-        // else {
-        //     showErrorMessage({});
-        //     visible = false;
-        // }
     });
 
     connect(ui->btnCantFindDevice, &QPushButton::clicked, this, [this] {
@@ -97,7 +88,6 @@ CredentialsPage::CredentialsPage(QWidget *parent)
     // MacOS hover enable
     ui->btnLogin->setAttribute(Qt::WA_Hover, true);
     ui->btnCancel->setAttribute(Qt::WA_Hover, true);
-    ui->btnSettings->setAttribute(Qt::WA_Hover, true);
     ui->btnRefresh->setAttribute(Qt::WA_Hover, true);
     ui->btnBack->setAttribute(Qt::WA_Hover, true);
 
@@ -117,8 +107,6 @@ CredentialsPage::CredentialsPage(QWidget *parent)
 
     ui->btnLogin->installEventFilter(this);
     ui->btnLogin->setToolTip(tr("Enter a valid email address and password"));
-
-    ui->btnSettings->setVisible(false);
 
     showProgressIndicator(false);
 

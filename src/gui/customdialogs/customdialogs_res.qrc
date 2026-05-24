@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file>res/Files-app-icon-round.svg</file>
         <file>platform/windows/confirmdlg.qss</file>
         <file>platform/windows/inputdlg.qss</file>
         <file>platform/windows/logbrowser.qss</file>
@@ -7,14 +8,12 @@
         <file>platform/macos/confirmwidedlgmac.qss</file>
         <file>platform/macos/inputdlgmac.qss</file>
         <file>platform/macos/logbrowsermac.qss</file>
-        <file>res/Files-logo.png</file>
+        <file>res/Files-app-icon-round.svg</file>
         <file>res/close_light.svg</file>
         <file>res/close_dark.svg</file>
         <file>res/warn_light.png</file>
         <file>res/warn_light.svg</file>
         <file>res/warning_1_export.svg</file>
-        <file>res/logo_mac_dark.png</file>
-        <file>res/logo_mac_light.png</file>
         <file>res/clear_button_dark.svg</file>
         <file>res/clear_button_light.svg</file>
         <file>res/warn_sign.png</file>

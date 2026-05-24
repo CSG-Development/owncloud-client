@@ -6,7 +6,7 @@
 
 namespace {
 const auto widget_style = QStringLiteral(":/platform/windows/inputdlg.qss");
-const auto logo_icon = QStringLiteral(":/res/Files-logo.png");
+const auto logo_icon = QStringLiteral(":/res/Files-app-icon-round.svg");
 const std::pair<QString,QString> close_icon = {
     QStringLiteral(":/res/close_light.svg"),
     QStringLiteral(":/res/close_dark.svg")

@@ -7,8 +7,8 @@
 
 namespace {
 const std::pair<QString,QString> logo_icon = {
-    QStringLiteral(":/res/logo_mac_light.png"),
-    QStringLiteral(":/res/logo_mac_dark.png")
+    QStringLiteral(":/res/Files-app-icon-round.svg"),
+    QStringLiteral(":/res/Files-app-icon-round.svg")
 };
 const std::pair<QString,QString> warn_icon = {
     QStringLiteral(":/res/warn_mac_light.png"),

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>356</width>
-    <height>443</height>
+    <width>611</width>
+    <height>325</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,20 +48,23 @@
        <widget class="QFrame" name="frame">
         <property name="minimumSize">
          <size>
-          <width>312</width>
-          <height>408</height>
+          <width>600</width>
+          <height>312</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>312</width>
-          <height>408</height>
+          <width>600</width>
+          <height>312</height>
          </size>
         </property>
         <property name="frameShape">
          <enum>QFrame::Shape::Box</enum>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>12</number>
+         </property>
          <property name="leftMargin">
           <number>24</number>
          </property>
