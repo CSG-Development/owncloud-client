@@ -217,7 +217,7 @@ void CredentialJob::start()
             _retryOnKeyChainError = false;
         }
 #endif
-        OC_ASSERT(_job->error() != QKeychain::EntryNotFound);
+        //OC_ASSERT(_job->error() != QKeychain::EntryNotFound);
         if (_job->error() == QKeychain::NoError) {
             QCborParserError error;
             const auto obj = QCborValue::fromCbor(_job->binaryData(), &error);

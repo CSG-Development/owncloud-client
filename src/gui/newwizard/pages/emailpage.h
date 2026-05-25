@@ -62,7 +62,6 @@ public:
 Q_SIGNALS:
     void loginClicked(const QString& user);
     void cancelClicked();
-    void settingsClicked();
 
     void emailChanged();
 

@@ -58,13 +58,15 @@ void HttpCredentialsGui::askFromUser()
 
 void HttpCredentialsGui::askFromUserAsync()
 {
-    if (isUsingOAuth()) {
+    if (hasKnownAuthType() && isUsingOAuth()) {
         restartOAuth();
+    } else if (hasKnownAuthType()) {
+        showDialog();
     } else {
         // First, we will check what kind of auth we need.
         auto job = new DetermineAuthTypeJob(_account->sharedFromThis(), this);
         QObject::connect(job, &DetermineAuthTypeJob::authType, this, [this](DetermineAuthTypeJob::AuthType type) {
-            _authType = type;
+            setAuthType(type);
             if (type == DetermineAuthTypeJob::AuthType::OAuth) {
                 restartOAuth();
             } else if (type == DetermineAuthTypeJob::AuthType::Basic) {

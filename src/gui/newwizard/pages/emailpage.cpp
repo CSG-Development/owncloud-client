@@ -16,6 +16,11 @@ QPair<QString,QString> settingsIcon = {
     QStringLiteral(":/res/login/gear_dark.svg")
 };
 const QString loginBtnTooltip = QObject::tr("Enter a valid email address");
+const QString logo_image = QStringLiteral(":/res/Files-app-icon-gradient.svg");
+const std::pair<QString,QString> header_icon = {
+    QStringLiteral(":/res/login_logo_light.svg"),
+    QStringLiteral(":/res/login_logo_dark.svg")
+};
 }
 
 Q_LOGGING_CATEGORY(lcEmailPage, "gui.emailpage")
@@ -70,6 +75,10 @@ EmailPage::EmailPage(QWidget *parent)
     setObjectName("emailPage");
     setMouseTracking(true);
 
+    ui->btnImage->setAttribute(Qt::WA_TransparentForMouseEvents);
+    ui->btnLogo->setAttribute(Qt::WA_TransparentForMouseEvents);
+    ui->btnImage->setIcon(QIcon(logo_image));
+
     auto syncUI = [this]() {
         ui->btnLogin->setToolTip(controller_->buttonTooltip.value());
         ui->btnLogin->setEnabled(controller_->canLogin.value());
@@ -94,13 +103,11 @@ EmailPage::EmailPage(QWidget *parent)
 
     ui->btnLogin->setStyle(new FocusProxyStyle(ui->btnLogin));
     ui->btnCancel->setStyle(new FocusProxyStyle(ui->btnCancel));
-    ui->btnSettings->setIconSize({20, 20});
 
     setAttribute(Qt::WA_TranslucentBackground, true);
 
     connect(ui->btnLogin, &QPushButton::clicked, this, [this] { emit loginClicked(email()); });
     connect(ui->btnCancel, &QPushButton::clicked, this, &EmailPage::cancelClicked);
-    connect(ui->btnSettings, &QPushButton::clicked, this, &EmailPage::settingsClicked);
 
     ui->edEmail->setPlaceholderText(tr("Email"));
     ui->edEmail->setFontPixelSize(fontSize);
@@ -119,11 +126,9 @@ EmailPage::EmailPage(QWidget *parent)
     // MacOS hover enable
     ui->btnLogin->setAttribute(Qt::WA_Hover, true);
     ui->btnCancel->setAttribute(Qt::WA_Hover, true);
-    ui->btnSettings->setAttribute(Qt::WA_Hover, true);
 
     updateThemeFunc();
     syncUI();
-    ui->btnSettings->setVisible(false);
 }
 
 EmailPage::~EmailPage()
@@ -138,7 +143,7 @@ void EmailPage::updateTheme()
     APP::StyleHelper::invoke_setDarkTheme_recursive(this);
 
     // QToolButton "icon" property does not supported in qss
-    ui->btnSettings->setIcon(controller_->darkTheme.value() ? QIcon(settingsIcon.second) : QIcon(settingsIcon.first));
+    ui->btnLogo->setIcon(controller_->darkTheme.value() ? QIcon(header_icon.second) : QIcon(header_icon.first));
     APP::StyleHelper::setTheme(this, controller_->darkTheme.value());
 
     update();

@@ -19,6 +19,8 @@ public:
 
     QBindable<bool> bindableDarkTheme() {return &darkTheme_;}
 
+    void updateTheme();
+
 private:
     Ui::WaitPage* ui = nullptr;
     QPropertyNotifier themeNotifier;

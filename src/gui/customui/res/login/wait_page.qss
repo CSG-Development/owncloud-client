@@ -1,29 +1,19 @@
 .helper_frame { border: none; }
+#btnLogo, #btnImage { border: none; background: transparent; }
 
 #frameContent {
     border-radius: 24px;
     background-color: #262729;
 }
 
-#lblImage {
-    background-image: url(":/res/Files-logo.png");
-}
-
-#lblAppName,
-#lblFiles {
-    font-size: 34px;
-}
-
-#lblAppName {
-    color: #6EBD49;
-}
+#lblAppName { font-size: 34px; }
 
 /*** Light theme */
 
 [theme="light"] #frameContent { background-color: #FFFFFF; }
-[theme="light"] #lblAppName { color: #6EBD49; }
+[theme="light"] #lblAppName { color: rgba(0, 0, 0, 0.87); }
 
 /*** Dark theme */
 
 [theme="dark"] #frameContent { background-color: #262729; }
-[theme="dark"] #lblAppName { color: #6EBD49; }
+[theme="dark"] #lblAppName { color: rgba(255, 255, 255, 0.87); }

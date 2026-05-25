@@ -200,8 +200,8 @@
                   <string/>
                  </property>
                  <property name="icon">
-                  <iconset>
-                   <normaloff>:/res/Files_logo_x2.png</normaloff>:/res/Files_logo_x2.png</iconset>
+                  <iconset resource="customui/customui_res.qrc">
+                   <normaloff>:/res/Files-app-icon-gradient.svg</normaloff>:/res/Files-app-icon-gradient.svg</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -312,6 +312,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="customui/customui_res.qrc"/>
+ </resources>
  <connections/>
 </ui>

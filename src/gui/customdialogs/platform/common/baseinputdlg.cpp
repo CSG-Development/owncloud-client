@@ -12,7 +12,7 @@
 #include <QLineEdit>
 
 namespace {
-const auto logo_icon = QStringLiteral(":/res/Files-logo.png");
+const auto logo_icon = QStringLiteral(":/res/Files-app-icon-round.svg");
 }
 
 BaseInputDlg::BaseInputDlg(QWidget *parent)

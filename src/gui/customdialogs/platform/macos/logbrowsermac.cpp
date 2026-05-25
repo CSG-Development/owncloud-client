@@ -8,7 +8,7 @@
 
 namespace {
 const auto widget_style = QStringLiteral(":/platform/macos/logbrowsermac.qss");
-const auto logo_icon = QStringLiteral(":/res/Files-logo.png");
+const auto logo_icon = QStringLiteral(":/res/Files-app-icon-round.svg");
 const auto warn_icon = QStringLiteral(":/res/warn_sign.png");
 const std::pair<FrameData,FrameData> frame_data = {
     {6, 2, QColor(0, 0, 0, 222), QColor(0, 0, 0, 0), 0},

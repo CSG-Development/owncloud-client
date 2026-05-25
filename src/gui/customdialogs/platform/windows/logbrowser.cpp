@@ -7,7 +7,7 @@
 
 namespace {
 const auto widget_style = QStringLiteral(":/platform/windows/logbrowser.qss");
-const auto logo_icon = QStringLiteral(":/res/Files-logo.png");
+const auto logo_icon = QStringLiteral(":/res/Files-app-icon-round.svg");
 const auto warn_icon = QStringLiteral(":/res/warn_sign.png");
 const std::pair<QString,QString> close_icon = {
     QStringLiteral(":/res/close_light.svg"),
