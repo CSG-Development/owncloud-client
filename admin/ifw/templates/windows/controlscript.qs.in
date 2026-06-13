@@ -16,6 +16,7 @@ function Controller()
     if (systemInfo.productType === "windows") {
         installer.uninstallationStarted.connect(this, Controller.prototype.handleUninstallationStarted);
         installer.uninstallationFinished.connect(this, Controller.prototype.handleUninstallationFinished);
+        installer.installationStarted.connect(this, Controller.prototype.handlePcfReinstallCleanup);
 
         installer.setValue("PcfUninstallRegistryKey", @WINDOWS_UNINSTALL_REGISTRY_KEY_JS@);
         installer.setValue("PcfProcessName", @WINDOWS_PROCESS_NAME_JS@);
@@ -124,6 +125,29 @@ Controller.prototype.handleUninstallationFinished = function()
     if (installerSucceeded()) {
         removeWindowsUserData();
     }
+}
+
+Controller.prototype.handlePcfReinstallCleanup = function()
+{
+    if (systemInfo.productType !== "windows" || installer.value("PcfReinstallMode") === "") {
+        return;
+    }
+
+    var processName = installer.value("PcfProcessName");
+    var targetDir = installer.value("TargetDir");
+
+    installer.gainAdminRights();
+
+    installer.execute("powershell.exe", [
+        "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command",
+        "$ErrorActionPreference = 'SilentlyContinue'; Stop-Process -Name '" + processName + "' -Force; exit 0"
+    ]);
+
+    installer.execute("powershell.exe", [
+        "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command",
+        "$ErrorActionPreference = 'SilentlyContinue'; $d = '" + targetDir + "'; " +
+        "if (Test-Path -LiteralPath $d) { Get-ChildItem -LiteralPath $d -Force | Remove-Item -Recurse -Force }; exit 0"
+    ]);
 }
 
 function stopWindowsApplication()

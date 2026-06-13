@@ -8,7 +8,6 @@ Component.prototype.createOperations = function()
 {
     component.createOperations();
 
-    // Preview mode (IFW_PREVIEW): registrar helper is absent, skip registration.
     if (installer.environmentVariable("IFW_PREVIEW") !== "") {
         return;
     }

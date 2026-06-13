@@ -23,4 +23,5 @@
     <RunProgram>@TargetDir@/@WINDOWS_EXECUTABLE@</RunProgram>
     <RunProgramDescription>@WINDOWS_RUN_PROGRAM_DESCRIPTION@</RunProgramDescription>
     <MaintenanceToolName>@MAINTENANCE_TOOL_NAME@</MaintenanceToolName>
+    <DisableAuthorizationFallback>true</DisableAuthorizationFallback>
 </Installer>

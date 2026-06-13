@@ -14,8 +14,6 @@ function Component()
 
 Component.prototype.createOperations = function()
 {
-    addReinstallCleanupOperations();
-
     component.createOperations();
 
     if (isPreviewMode()) {
@@ -28,51 +26,22 @@ Component.prototype.createOperations = function()
     addMacOSUninstallShortcutOperations();
 }
 
-function addReinstallCleanupOperations()
-{
-    if (systemInfo.productType !== "windows") {
-        return;
-    }
-    if (installer.value("PcfReinstallMode") === "") {
-        return;
-    }
-
-    var processName = installer.value("PcfProcessName");
-    var targetDir = installer.value("TargetDir");
-
-    // stop the app (best-effort; exit 0 so the op never fails)
-    component.addElevatedOperation("Execute",
-        "powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command",
-        "$ErrorActionPreference='SilentlyContinue'; Stop-Process -Name '" + processName + "' -Force; exit 0");
-
-    // wipe install dir contents (exit 0 on locked files; extract overwrites)
-    component.addElevatedOperation("Execute",
-        "powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command",
-        "$ErrorActionPreference='SilentlyContinue'; $d='" + targetDir + "'; " +
-        "if (Test-Path -LiteralPath $d) { Get-ChildItem -LiteralPath $d -Force | Remove-Item -Recurse -Force }; exit 0");
-}
-
-// Preview/design helpers (test-only, gated by IFW_PREVIEW).
-
 function isPreviewMode()
 {
     return installer.environmentVariable("IFW_PREVIEW") !== "";
 }
 
-// IFW_PREVIEW may be set to a step count; otherwise default to 15 (~1s/step).
 function previewDelaySteps()
 {
     var n = parseInt(installer.environmentVariable("IFW_PREVIEW"), 10);
     return (isNaN(n) || n < 1) ? 15 : n;
 }
 
-// Each Execute advances the progress bar ~1s so the install page can be reviewed.
 function addPreviewDelayOperations()
 {
     var steps = previewDelaySteps();
     for (var i = 0; i < steps; ++i) {
         if (systemInfo.productType === "windows") {
-            // ping loopback twice => ~1s wait; returns 0, no extra window.
             component.addOperation("Execute", "ping", "-n", "2", "127.0.0.1");
         } else {
             component.addOperation("Execute", "/bin/sleep", "1");

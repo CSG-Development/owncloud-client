@@ -108,6 +108,13 @@ function(app_deploy_runtime target)
             )
             if(_sqlite_dlls)
                 install(FILES ${_sqlite_dlls} DESTINATION bin)
+            else()
+                # sqlite3.lib is an import lib -> the app needs sqlite3.dll at runtime.
+                # Warn at configure rather than ship a package that crashes on launch
+                # with "sqlite3.dll was not found".
+                message(WARNING "app_deploy_runtime: sqlite3 runtime DLL not found at "
+                    "${_sqlite_lib_dir}/../bin/${_sqlite_lib_name}.dll. The installed app will "
+                    "fail to start (sqlite3.dll missing). Put sqlite3.dll in the deps bin/ dir.")
             endif()
         endif()
 
