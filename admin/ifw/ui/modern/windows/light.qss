@@ -1,0 +1,11 @@
+#ReadyForInstallationPage,
+#ReadyForInstallationPage QWidget,
+#ReadyForInstallationPage QLabel,
+#ReadyForInstallationPage QFrame,
+#ReadyForInstallationPage QAbstractScrollArea,
+#ReadyForInstallationPage QAbstractScrollArea QWidget,
+#ReadyForInstallationPage QAbstractScrollArea::viewport,
+#ReadyForInstallationPage QAbstractItemView,
+#ReadyForInstallationPage QAbstractItemView::viewport {
+    background-color: #f0f0f0;
+}

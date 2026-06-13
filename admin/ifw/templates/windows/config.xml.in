@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>@APP_DISPLAY_NAME@</Name>
+    <Version>@APP_VERSION@</Version>
+    <Title>@WINDOWS_INSTALLER_TITLE@</Title>
+    <Publisher>@APP_PUBLISHER@</Publisher>
+    <InstallerApplicationIcon>@WINDOWS_INSTALLER_APPLICATION_ICON@</InstallerApplicationIcon>
+    <InstallerWindowIcon>@WINDOWS_INSTALLER_WINDOW_ICON@</InstallerWindowIcon>
+    <ControlScript>controlscript.qs</ControlScript>
+    <WizardStyle>@WINDOWS_WIZARD_STYLE@</WizardStyle>
+    <WizardShowPageList>@WINDOWS_WIZARD_SHOW_PAGE_LIST@</WizardShowPageList>
+    <WizardDefaultWidth>790</WizardDefaultWidth>
+    <WizardDefaultHeight>620</WizardDefaultHeight>
+    <WizardMinimumWidth>790</WizardMinimumWidth>
+    <WizardMinimumHeight>620</WizardMinimumHeight>
+@WINDOWS_WATERMARK_ELEMENT@
+@WINDOWS_BANNER_ELEMENT@
+@WINDOWS_LOGO_ELEMENT@
+@WINDOWS_STYLESHEET_ELEMENT@
+    <StartMenuDir>@APP_DISPLAY_NAME@</StartMenuDir>
+    <TargetDir>@ApplicationsDirX64@/@WINDOWS_INSTALL_DIR@</TargetDir>
+    <AdminTargetDir>@ApplicationsDirX64@/@WINDOWS_INSTALL_DIR@</AdminTargetDir>
+    <RunProgram>@TargetDir@/@WINDOWS_EXECUTABLE@</RunProgram>
+    <RunProgramDescription>@WINDOWS_RUN_PROGRAM_DESCRIPTION@</RunProgramDescription>
+    <MaintenanceToolName>@MAINTENANCE_TOOL_NAME@</MaintenanceToolName>
+</Installer>

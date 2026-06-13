@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>@APP_DISPLAY_NAME@</Name>
+    <Version>@APP_VERSION@</Version>
+    <Title>@MACOS_INSTALLER_TITLE@</Title>
+    <Publisher>@APP_PUBLISHER@</Publisher>
+    <ControlScript>controlscript.qs</ControlScript>
+    <PageListPixmap>@MACOS_PAGE_LIST_PIXMAP@</PageListPixmap>
+    <TargetDir>/Applications/@MACOS_INSTALL_DIR@</TargetDir>
+    <AdminTargetDir>/Applications/@MACOS_INSTALL_DIR@</AdminTargetDir>
+    <RunProgram>@TargetDir@/@MACOS_BUNDLE_NAME@/Contents/MacOS/@MACOS_BUNDLE_EXECUTABLE@</RunProgram>
+    <RunProgramDescription>@MACOS_RUN_PROGRAM_DESCRIPTION@</RunProgramDescription>
+    <MaintenanceToolName>@MAINTENANCE_TOOL_NAME@</MaintenanceToolName>
+</Installer>

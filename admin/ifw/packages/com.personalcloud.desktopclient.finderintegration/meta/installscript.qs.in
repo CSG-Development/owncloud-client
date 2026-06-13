@@ -1,0 +1,31 @@
+var MACOS_BUNDLE_NAME = "@MACOS_BUNDLE_NAME@";
+var MACOS_FINDER_SYNC_EXTENSION_ID = @MACOS_FINDER_SYNC_EXTENSION_ID_JS@;
+
+function Component()
+{
+}
+
+Component.prototype.createOperations = function()
+{
+    component.createOperations();
+    component.addOperation("Delete", "@TargetDir@/.finder-integration-component", "UNDOOPERATION", "");
+
+    if (systemInfo.kernelType !== "darwin") {
+        return;
+    }
+
+    var extensionPath = "@TargetDir@/" + MACOS_BUNDLE_NAME + "/Contents/PlugIns/FinderSyncExt.appex";
+    component.addOperation("Execute", "/usr/bin/pluginkit", "-a", extensionPath);
+    component.addOperation("Execute",
+        "/usr/bin/pluginkit",
+        "-e",
+        "use",
+        "-i",
+        MACOS_FINDER_SYNC_EXTENSION_ID,
+        "UNDOEXECUTE",
+        "/usr/bin/pluginkit",
+        "-e",
+        "ignore",
+        "-i",
+        MACOS_FINDER_SYNC_EXTENSION_ID);
+}

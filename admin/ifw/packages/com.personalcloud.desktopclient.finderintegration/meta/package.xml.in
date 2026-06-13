@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>Integration for Finder</DisplayName>
+    <Description>Enables Finder sync status icons and context menu integration.</Description>
+    <Version>@APP_VERSION@</Version>
+    <ReleaseDate>@APP_RELEASE_DATE@</ReleaseDate>
+    <Default>true</Default>
+    <Dependencies>@COMPONENT_MAIN_ID@</Dependencies>
+    <SortingPriority>70</SortingPriority>
+    <Script>installscript.qs</Script>
+</Package>

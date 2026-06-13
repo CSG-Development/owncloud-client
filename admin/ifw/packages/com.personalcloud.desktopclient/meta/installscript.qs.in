@@ -1,0 +1,153 @@
+var WINDOWS_EXECUTABLE = @WINDOWS_EXECUTABLE_JS@;
+var WINDOWS_INSTALLER_META_FILE = @WINDOWS_INSTALLER_META_FILE_JS@;
+var APP_DISPLAY_NAME = @APP_DISPLAY_NAME_JS@;
+var MAINTENANCE_TOOL_NAME = @MAINTENANCE_TOOL_NAME_JS@;
+var WINDOWS_APP_REGISTRAR_RELATIVE_PATH = "/InstallerTools/WindowsAppRegistrar.exe";
+var INSTALLER_META_FILE = "@TargetDir@/" + WINDOWS_INSTALLER_META_FILE;
+
+function Component()
+{
+    if (systemInfo.productType === "windows") {
+        component.addStopProcessForUpdateRequest(WINDOWS_EXECUTABLE);
+    }
+}
+
+Component.prototype.createOperations = function()
+{
+    addReinstallCleanupOperations();
+
+    component.createOperations();
+
+    if (isPreviewMode()) {
+        addPreviewDelayOperations();
+        return;
+    }
+
+    addInstallationMarkerOperations();
+    addWindowsAppRegistrationOperations();
+    addMacOSUninstallShortcutOperations();
+}
+
+function addReinstallCleanupOperations()
+{
+    if (systemInfo.productType !== "windows") {
+        return;
+    }
+    if (installer.value("PcfReinstallMode") === "") {
+        return;
+    }
+
+    var processName = installer.value("PcfProcessName");
+    var targetDir = installer.value("TargetDir");
+
+    // stop the app (best-effort; exit 0 so the op never fails)
+    component.addElevatedOperation("Execute",
+        "powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command",
+        "$ErrorActionPreference='SilentlyContinue'; Stop-Process -Name '" + processName + "' -Force; exit 0");
+
+    // wipe install dir contents (exit 0 on locked files; extract overwrites)
+    component.addElevatedOperation("Execute",
+        "powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command",
+        "$ErrorActionPreference='SilentlyContinue'; $d='" + targetDir + "'; " +
+        "if (Test-Path -LiteralPath $d) { Get-ChildItem -LiteralPath $d -Force | Remove-Item -Recurse -Force }; exit 0");
+}
+
+// Preview/design helpers (test-only, gated by IFW_PREVIEW).
+
+function isPreviewMode()
+{
+    return installer.environmentVariable("IFW_PREVIEW") !== "";
+}
+
+// IFW_PREVIEW may be set to a step count; otherwise default to 15 (~1s/step).
+function previewDelaySteps()
+{
+    var n = parseInt(installer.environmentVariable("IFW_PREVIEW"), 10);
+    return (isNaN(n) || n < 1) ? 15 : n;
+}
+
+// Each Execute advances the progress bar ~1s so the install page can be reviewed.
+function addPreviewDelayOperations()
+{
+    var steps = previewDelaySteps();
+    for (var i = 0; i < steps; ++i) {
+        if (systemInfo.productType === "windows") {
+            // ping loopback twice => ~1s wait; returns 0, no extra window.
+            component.addOperation("Execute", "ping", "-n", "2", "127.0.0.1");
+        } else {
+            component.addOperation("Execute", "/bin/sleep", "1");
+        }
+    }
+}
+
+function addInstallationMarkerOperations()
+{
+    var installationMode = component.installed || component.updateRequested() ? "update" : "install";
+    var onboardingRequired = installationMode === "install" ? "true" : "false";
+
+    component.addOperation("Settings",
+        "path=" + INSTALLER_META_FILE,
+        "method=set",
+        "key=installation_mode",
+        "value=" + installationMode);
+    component.addOperation("Settings",
+        "path=" + INSTALLER_META_FILE,
+        "method=set",
+        "key=onboarding_required",
+        "value=" + onboardingRequired);
+}
+
+function addWindowsAppRegistrationOperations()
+{
+    if (systemInfo.productType !== "windows") {
+        return;
+    }
+
+    var targetDir = installer.toNativeSeparators(installer.value("TargetDir"));
+    var helperPath = installer.toNativeSeparators(installer.value("TargetDir") + WINDOWS_APP_REGISTRAR_RELATIVE_PATH);
+    var productVersion = installer.value("ProductVersion");
+
+    component.addElevatedOperation("Execute",
+        helperPath,
+        "apply",
+        targetDir,
+        productVersion,
+        "UNDOEXECUTE",
+        helperPath,
+        "remove",
+        targetDir);
+}
+
+function addMacOSUninstallShortcutOperations()
+{
+    if (systemInfo.kernelType !== "darwin") {
+        return;
+    }
+
+    var targetDir = "@TargetDir@";
+    var shortcutPath = targetDir + "/Uninstall " + APP_DISPLAY_NAME + ".command";
+    var script =
+        "#!/bin/sh\n" +
+        "DIR=\"$(cd \"$(dirname \"$0\")\" && pwd)\"\n" +
+        "for tool in \\\n" +
+        "  \"$DIR/" + MAINTENANCE_TOOL_NAME + "\" \\\n" +
+        "  \"$DIR/" + MAINTENANCE_TOOL_NAME + ".app/Contents/MacOS/" + MAINTENANCE_TOOL_NAME + "\" \\\n" +
+        "  \"$DIR/\"*Maintenance*Tool*.app/Contents/MacOS/* \\\n" +
+        "  \"$DIR/\"*Maintenance-Tool*.app/Contents/MacOS/*; do\n" +
+        "  if [ -f \"$tool\" ] && [ -x \"$tool\" ]; then\n" +
+        "    exec \"$tool\" --start-uninstaller\n" +
+        "  fi\n" +
+        "done\n" +
+        "osascript -e 'display dialog \"Maintenance tool was not found in the installation directory.\" buttons {\"OK\"} default button \"OK\" with icon stop'\n" +
+        "exit 1\n";
+
+    component.addOperation("AppendFile", shortcutPath, script);
+    component.addOperation("Execute",
+        "/bin/chmod",
+        "+x",
+        shortcutPath,
+        "UNDOEXECUTE",
+        "/bin/rm",
+        "-f",
+        shortcutPath);
+}

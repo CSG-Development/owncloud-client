@@ -63,4 +63,4 @@ target_link_libraries(${LIBRARY_NAME} PUBLIC
 set_target_properties(${LIBRARY_NAME} PROPERTIES AUTOUIC ON AUTORCC ON)
 target_include_directories(${LIBRARY_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
-apply_common_target_settings(${LIBRARY_NAME})
+app_apply_common_target_settings(${LIBRARY_NAME})

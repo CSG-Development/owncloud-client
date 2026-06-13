@@ -18,7 +18,6 @@ __TODO__:
 * [ ] DEV: Check [dependencies](https://confluence.owncloud.com/display/OG/Dependencies) for updates
 * [ ] DEV: Update [SBOM](https://cloud.owncloud.com/f/6072843)
 * [ ] DEV: For a major release create `X` version branch
-  * [ ] QA: In drone adjust the branch for nightly [GUI tests](https://confluence.owncloud.com/display/OG/Squish+Testing#SquishTesting-Prerequisite) @individual-it
 * [ ] DEV: Create a tag 
 * [ ] DEV: bump VERSION.cmake in master to say 3.(x+1).x unless already done.
 
@@ -65,7 +64,6 @@ __TODO__:
 * [ ] DEV: Create final release tag (e.g., `v4.5.6`)
 * [ ] DEV: Create [builds](https://confluence.owncloud.com/display/OG/Build+and+Tags#BuildandTags-Tags) for themes 'ownCloud' and 'testpilotcloud' for final release tag
 * [ ] DEV: Update version for future builds
-* [ ] QA: Check [squish tests](https://confluence.owncloud.com/display/OG/Squish+Testing#SquishTesting-Finalreleasestep) running successfuly on [drone](https://drone.owncloud.com/owncloud/client) for the final tag v3.X.x
 * [ ] QA: Create a new release issue for a branded release if needed [Branded Client Release Template](https://github.com/owncloud/enterprise/blob/master/internal_release_templates/internal_client_release_template.md)
 
 ### Final Steps

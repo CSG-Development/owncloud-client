@@ -30,7 +30,6 @@ Major/Minor release template. Enter here, when we have three estimated dates:
 * [ ] QA: Adjust [Linux Templates](https://handbook.owncloud.com/release_processes/client/branch.html#linux-templates) - @HanaGemela @jnweiger
 * [ ] QA: Adjust [ownBrander](https://handbook.owncloud.com/release_processes/client/branch.html#ownbrander) - @HanaGemela @jnweiger
 * [ ] QA: Adjust [AppVeyor](https://handbook.owncloud.com/release_processes/client/branch.html#appveyor) - @HanaGemela @jnweiger
-* [ ] QA: Adjust [drone](https://handbook.owncloud.com/release_processes/client/branch.html#drone) - @HanaGemela @jnweiger
 * [ ] QA: Adjust [translation jobs](https://handbook.owncloud.com/release_processes/client/branch.html#translations) - @HanaGemela @jnweiger
 * [ ] QA: Use `obs-copyprj.sh` to backup the desktop project to `desktop:client-2.6.x` (unless already done) - @HanaGemela @jnweiger
 * [ ] QA: Adjust branch of Cron Job `nightly-2-x` to the next release branch @HanaGemela @individual-it
@@ -69,7 +68,6 @@ Major/Minor release template. Enter here, when we have three estimated dates:
 ### One Day Before the Final Release:
 * [ ] Check [crash reporter](https://handbook.owncloud.com/release_processes/client/desktop.html#crash-reporter) for bad crashes of this RC (same crash happening to many users) @guruz @hvonreth
 * [ ] Check the translations coming from transifex: All synchronized? TODO: (20181109jw: where? how?)
-* [ ] Review drone results: `make test` TODO: Mac, [Lin](https://drone.owncloud.services/client/build-linux), Win? 
 * [ ] Run smashbox (20180719 jw: FIXME: add details, how?) (ask @dschmidt, put link to smashbox results here)
 * [ ] Inform product management and marketing and #general channel in rocker chat that we are 1 day out
 

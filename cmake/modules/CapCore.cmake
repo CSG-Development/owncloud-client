@@ -4,7 +4,7 @@ else()
     message(FATAL_ERROR "CAPCORE_DIR is not defined")
 endif()
 
-include_directories(
+set(CAPCORE_INCLUDE_DIRS
     ${CAPCORE_DIR}
     ${CAPCORE_DIR}/external/jsoncpp-amalgamated
     ${CAPCORE_DIR}/external/curl/include
@@ -16,14 +16,14 @@ include_directories(
     ${CAPCORE_DIR}/db
 )
 
-add_definitions(-DUSE_CAPCORE)
+set(CAPCORE_COMPILE_DEFINITIONS USE_CAPCORE)
+set(CAPCORE_COMPILE_OPTIONS)
+set(CAPCORE_LINK_DIRECTORIES)
 
 if (APPLE)
 
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
-    link_directories(
-        "${CAPCORE_DIR}/lib"
-    )
+    list(APPEND CAPCORE_COMPILE_OPTIONS -fexceptions)
+    list(APPEND CAPCORE_LINK_DIRECTORIES "${CAPCORE_DIR}/lib")
     set(CURL_LIB curl)
     set(CAPCORE_LIB telemetry_core_staticlib)
     # Ensure static libraries linked
@@ -44,10 +44,8 @@ if (APPLE)
 
 elseif (WIN32)
 
-    add_definitions(-DCURL_STATICLIB)
-    link_directories(
-        ${CAPCORE_DIR}/platforms/x64/prebuilt/lib
-    )
+    list(APPEND CAPCORE_COMPILE_DEFINITIONS CURL_STATICLIB)
+    list(APPEND CAPCORE_LINK_DIRECTORIES ${CAPCORE_DIR}/platforms/x64/prebuilt/lib)
     if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         set(CURL_LIB libcurl-d)
         set(CAPCORE_LIB telemetry_cored)

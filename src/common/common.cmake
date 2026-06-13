@@ -31,10 +31,6 @@ elseif(APPLE)
     list(APPEND common_SOURCES
         ${CMAKE_CURRENT_LIST_DIR}/utility_mac.mm
     )
-elseif(UNIX AND NOT APPLE)
-    list(APPEND common_SOURCES
-        ${CMAKE_CURRENT_LIST_DIR}/utility_unix.cpp
-    )
 endif()
 
 configure_file(${CMAKE_CURRENT_LIST_DIR}/vfspluginmetadata.json.in ${CMAKE_CURRENT_BINARY_DIR}/vfspluginmetadata.json)

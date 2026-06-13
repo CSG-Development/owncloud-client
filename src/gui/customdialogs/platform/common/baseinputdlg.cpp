@@ -164,7 +164,7 @@ void BaseInputDlg::showEvent(QShowEvent *event)
     }
 }
 
-void BaseInputDlg::applyTheme(bool isDark)
+void BaseInputDlg::applyTheme(bool /*isDark*/)
 {
 }
 

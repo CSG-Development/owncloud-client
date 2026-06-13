@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>Start Menu Shortcut</DisplayName>
+    <Description>Creates a Start Menu shortcut for @APP_DISPLAY_NAME@.</Description>
+    <Version>@APP_VERSION@</Version>
+    <ReleaseDate>@APP_SHORTCUT_RELEASE_DATE@</ReleaseDate>
+    <Default>true</Default>
+    <Dependencies>@COMPONENT_MAIN_ID@</Dependencies>
+    <SortingPriority>60</SortingPriority>
+    <Script>installscript.qs</Script>
+</Package>

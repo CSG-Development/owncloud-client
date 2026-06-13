@@ -147,7 +147,7 @@ ActivityWidget::ActivityWidget(QWidget *parent)
         watchAccountPresentation(accountState);
     });
     connect(AccountManager::instance(), &AccountManager::accountRemoved, this, [this](AccountStatePtr ast) {
-        if (_accountsWithoutActivities.remove(ast->account()->uuid()) > 0) {
+        if (_accountsWithoutActivities.remove(ast->account()->uuid())) {
             showLabels();
         }
 

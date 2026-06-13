@@ -1,0 +1,222 @@
+var APP_NAME = @APP_DISPLAY_NAME_JS@;
+var WINDOWS_PROCESS_NAME = @WINDOWS_PROCESS_NAME_JS@;
+var WINDOWS_RUN_PROGRAM_DESCRIPTION = @WINDOWS_RUN_PROGRAM_DESCRIPTION_JS@;
+var WINDOWS_USER_DATA_DIR = @WINDOWS_USER_DATA_DIR_JS@;
+
+var USE_CUSTOM_STYLESHEET = @WINDOWS_USE_CUSTOM_STYLESHEET_JS@;
+var LIGHT_STYLESHEET = @WINDOWS_LIGHT_STYLESHEET_JS@;
+var DARK_STYLESHEET = @WINDOWS_DARK_STYLESHEET_JS@;
+
+function Controller()
+{
+    initializeStartMenuDir();
+    installer.setDefaultPageVisible(QInstaller.TargetDirectory, false);
+    installer.setDefaultPageVisible(QInstaller.StartMenuSelection, false);
+
+    if (systemInfo.productType === "windows") {
+        installer.uninstallationStarted.connect(this, Controller.prototype.handleUninstallationStarted);
+        installer.uninstallationFinished.connect(this, Controller.prototype.handleUninstallationFinished);
+
+        installer.setValue("PcfUninstallRegistryKey", @WINDOWS_UNINSTALL_REGISTRY_KEY_JS@);
+        installer.setValue("PcfProcessName", @WINDOWS_PROCESS_NAME_JS@);
+    }
+
+    setupPageListTitles();
+}
+
+Controller.prototype.onGuiElementsReady = function()
+{
+    var wizard = wizardWidget();
+    if (wizard != null) {
+        wizard.setMinimumSize(790, 620);
+        wizard.setMaximumSize(790, 620);
+        wizard.resize(790, 620);
+        if (USE_CUSTOM_STYLESHEET) {
+            wizard.setStyleSheet(isDarkTheme() ? DARK_STYLESHEET : LIGHT_STYLESHEET);
+        }
+    }
+}
+
+function setupPageListTitles()
+{
+    var titles = [
+        [QInstaller.Introduction,         "Welcome"],
+        [QInstaller.ComponentSelection,   "Select Components"],
+        [QInstaller.LicenseCheck,         "License Agreement"],
+        [QInstaller.ReadyForInstallation, "Summary"],
+        [QInstaller.PerformInstallation,  "Installing"],
+        [QInstaller.InstallationFinished, "Finished"]
+    ];
+    for (var i = 0; i < titles.length; ++i) {
+        var page = gui.pageById(titles[i][0]);
+        if (page == null)
+            continue;
+        try {
+            page.setPageListTitle(titles[i][1]);
+        } catch (e) {
+            console.log("setupPageListTitles: " + titles[i][1] + " -> " + e);
+        }
+    }
+}
+
+Controller.prototype.IntroductionPageCallback = function()
+{
+    var page = gui.currentPageWidget();
+    if (page != null) {
+        page.title = "Welcome to the " + APP_NAME;
+        page.MessageLabel.setText("The Setup Wizard will install " + APP_NAME + " on your computer. Click Next to continue or Cancel to exit the Setup Wizard.");
+    }
+}
+
+Controller.prototype.LicenseAgreementPageCallback = function()
+{
+    var page = gui.currentPageWidget();
+    if (page != null) {
+        page.title = "End-User License Agreement";
+        page.subTitle = "Please read the following license agreement. You must accept the terms contained in this agreement before continuing with the installation.";
+        page.LicenseInfoLabel.setText("");
+        page.AcceptLicenseLabel.setText("I accept the terms of the License Agreement");
+    }
+}
+
+Controller.prototype.ComponentSelectionPageCallback = function()
+{
+    var page = gui.currentPageWidget();
+    if (page != null) {
+        page.title = "Custom Setup";
+        page.subTitle = "Please select the components you want to install.";
+    }
+}
+
+Controller.prototype.ReadyForInstallationPageCallback = function()
+{
+    var page = gui.currentPageWidget();
+    if (page != null) {
+        page.title = "Ready to install " + APP_NAME;
+    }
+    gui.setWizardPageButtonText(QInstaller.ReadyForInstallation, buttons.CommitButton, installer.isUninstaller() ? "Uninstall" : "Install");
+}
+
+Controller.prototype.PerformInstallationPageCallback = function()
+{
+    var page = gui.currentPageWidget();
+    if (page != null) {
+        page.title = "Installing " + APP_NAME;
+    }
+}
+
+Controller.prototype.FinishedPageCallback = function()
+{
+    var page = gui.currentPageWidget();
+    if (page != null) {
+        page.title = "Completed the " + APP_NAME;
+        page.RunItCheckBox.setText(WINDOWS_RUN_PROGRAM_DESCRIPTION);
+    }
+}
+
+Controller.prototype.handleUninstallationStarted = function()
+{
+    stopWindowsApplication();
+}
+
+Controller.prototype.handleUninstallationFinished = function()
+{
+    if (installerSucceeded()) {
+        removeWindowsUserData();
+    }
+}
+
+function stopWindowsApplication()
+{
+    if (systemInfo.productType !== "windows" || !installer.isUninstaller()) {
+        return;
+    }
+
+    installer.execute("powershell.exe", [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "$ErrorActionPreference = 'SilentlyContinue'; Stop-Process -Name '" + WINDOWS_PROCESS_NAME + "' -Force; exit 0"
+    ]);
+}
+
+function removeWindowsUserData()
+{
+    if (systemInfo.productType !== "windows" || !installer.isUninstaller()) {
+        return;
+    }
+
+    var cleanupScript =
+        "$ErrorActionPreference = 'SilentlyContinue'; " +
+        "Stop-Process -Name '" + WINDOWS_PROCESS_NAME + "' -Force; " +
+        "$userRoot = Join-Path $env:SystemDrive 'Users'; " +
+        "$paths = @((Join-Path $env:APPDATA '" + WINDOWS_USER_DATA_DIR + "')); " +
+        "if (Test-Path -LiteralPath $userRoot) { " +
+        "$paths += Get-ChildItem -LiteralPath $userRoot -Directory -Force | ForEach-Object { Join-Path $_.FullName 'AppData\\Roaming\\" + WINDOWS_USER_DATA_DIR + "' } " +
+        "}; " +
+        "$paths = $paths | Where-Object { $_ } | Select-Object -Unique; " +
+        "foreach ($path in $paths) { if (Test-Path -LiteralPath $path) { Remove-Item -LiteralPath $path -Recurse -Force } }; " +
+        "exit 0";
+
+    installer.execute("powershell.exe", [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        cleanupScript
+    ]);
+}
+
+function installerSucceeded()
+{
+    var status = installer.status;
+    if (typeof status === "function") {
+        status = installer.status();
+    }
+
+    return status === QInstaller.Success;
+}
+
+function initializeStartMenuDir()
+{
+    if (systemInfo.productType !== "windows" || !isStartMenuSelectionHidden()) {
+        return;
+    }
+
+    var programData = installer.environmentVariable("ProgramData");
+    if (programData === "") {
+        return;
+    }
+
+    installer.setValue("StartMenuDir", installer.toNativeSeparators(programData + "/Microsoft/Windows/Start Menu/Programs/" + APP_NAME));
+}
+
+function isStartMenuSelectionHidden()
+{
+    return true;
+}
+
+function isDarkTheme()
+{
+    if (systemInfo.productType !== "windows") {
+        return false;
+    }
+
+    var key = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize/AppsUseLightTheme";
+    return installer.value(key, "1") === "0";
+}
+
+function wizardWidget()
+{
+    var page = gui.pageById(QInstaller.Introduction);
+    if (page == null) {
+        page = gui.currentPageWidget();
+    }
+
+    while (page != null && page.parentWidget() != null) {
+        page = page.parentWidget();
+    }
+
+    return page;
+}

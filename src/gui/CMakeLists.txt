@@ -1,5 +1,3 @@
-include(ECMAddAppIcon)
-
 find_package(KDSingleApplication-qt6 1.0.0 REQUIRED)
 
 set(client_SRCS
@@ -170,12 +168,7 @@ target_link_libraries(PersonalCloudCore PUBLIC
     Qt6Keychain::Qt6Keychain
 )
 
-if(APPLE)
-    string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    add_compile_options(-fexceptions)
-endif()
-
-apply_common_target_settings(PersonalCloudCore)
+app_apply_common_target_settings(PersonalCloudCore)
 
 add_subdirectory(spaces)
 add_subdirectory(socketapi)
@@ -198,15 +191,6 @@ elseif( WIN32 )
     target_sources(PersonalCloudCore PRIVATE
         guiutility_win.cpp
         folderwatcher_win.cpp)
-elseif(UNIX AND NOT APPLE)
-    ## handle DBUS for Fdo notifications
-    if (TARGET Qt::DBus)
-        target_link_libraries(PersonalCloudCore PUBLIC Qt::DBus)
-        target_compile_definitions(PersonalCloudCore PUBLIC "USE_FDO_NOTIFICATIONS")
-    endif()
-    target_sources(PersonalCloudCore PRIVATE
-        folderwatcher_linux.cpp
-        guiutility_unix.cpp)
 endif()
 
 if(WITH_AUTO_UPDATER)
@@ -220,7 +204,7 @@ set_target_properties(PersonalCloud PROPERTIES
     AUTOUIC ON
     AUTORCC ON
 )
-apply_common_target_settings(PersonalCloud)
+app_apply_common_target_settings(PersonalCloud)
 target_link_libraries(PersonalCloud
     PersonalCloudCore
     PersonalCloudResources
@@ -230,20 +214,11 @@ target_link_libraries(PersonalCloud
 
 MESSAGE(STATUS "APPLICATION_SIDEBAR_ICONS: ${APPLICATION_ICON_NAME}: ${APPLICATION_SIDEBAR_ICONS}")
 
-ecm_add_app_icon(appIcons ICONS "${APPLICATION_ICONS}" SIDEBAR_ICONS "${APPLICATION_SIDEBAR_ICONS}" OUTFILE_BASENAME "${APPLICATION_ICON_NAME}")
+add_application_icon(appIcons)
 target_sources(PersonalCloud PRIVATE ${appIcons})
 
-if(NOT APPLE)
-    if(WIN32)
-        target_sources(PersonalCloud PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/PersonalCloud.exe.manifest)
-    else()
-        file(GLOB _icons "${OEM_THEME_DIR}/theme/colored/*-${APPLICATION_ICON_NAME}-icon.png")
-        foreach(_file ${_icons})
-            string(REPLACE "${OEM_THEME_DIR}/theme/colored/" "" _res ${_file})
-            string(REPLACE "-${APPLICATION_ICON_NAME}-icon.png" "" _res ${_res})
-            install(FILES ${_file} RENAME ${APPLICATION_ICON_NAME}.png DESTINATION ${KDE_INSTALL_DATADIR}/icons/hicolor/${_res}x${_res}/apps)
-        endforeach(_file)
-    endif()
+if(WIN32)
+    target_sources(PersonalCloud PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/PersonalCloud.exe.manifest)
 
     # we may not add MACOSX_BUNDLE here, if not building one
 else()
@@ -255,21 +230,13 @@ else()
       MACOSX_PACKAGE_LOCATION Resources
       )
 
-  set_target_properties(PersonalCloud PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/MacOSXBundleInfo.plist)
+  # Build a real .app bundle on macOS so install/deploy/IFW packaging produce
+  # PersonalCloud.app (the MACOSX_BUNDLE_* properties below are only honored when
+  # MACOSX_BUNDLE is TRUE). app_install_target installs it via BUNDLE DESTINATION ".".
+  set_target_properties(PersonalCloud PROPERTIES
+      MACOSX_BUNDLE TRUE
+      MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/MacOSXBundleInfo.plist)
 endif()
 
-install(TARGETS PersonalCloud ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-
-if(UNIX AND NOT APPLE)
-    configure_file(${CMAKE_SOURCE_DIR}/PersonalCloud.desktop.in
-                   ${CMAKE_CURRENT_BINARY_DIR}/${APPLICATION_EXECUTABLE}.desktop)
-    install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/${APPLICATION_EXECUTABLE}.desktop DESTINATION ${KDE_INSTALL_DATADIR}/applications )
-
-    configure_file(PersonalCloud.xml.in ${APPLICATION_EXECUTABLE}.xml)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${APPLICATION_EXECUTABLE}.xml DESTINATION ${KDE_INSTALL_DATADIR}/mime/packages )
-
-    find_package(SharedMimeInfo)
-    if(SharedMimeInfo_FOUND)
-        update_xdg_mimetypes( ${KDE_INSTALL_DATADIR}/mime/packages )
-    endif(SharedMimeInfo_FOUND)
-endif()
+app_install_target(PersonalCloud)
+app_deploy_runtime(PersonalCloud)
