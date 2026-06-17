@@ -1,15 +1,10 @@
-# Qt Installer Framework packaging. Included only when BUILD_INSTALLER=ON.
-
 set(QTIFW_VERSION "4.11" CACHE STRING "Qt Installer Framework version used for the automatic probe path")
 
-# QTIFW_ROOT may point at the IFW dir or its bin/; otherwise probe next to Qt.
 find_program(IFW_BINARYCREATOR
     NAMES binarycreator
     HINTS
         "${QTIFW_ROOT}/bin"
-        "${QTIFW_ROOT}"
         "$ENV{QTIFW_ROOT}/bin"
-        "$ENV{QTIFW_ROOT}"
         "${QT_ROOT}/../../Tools/QtInstallerFramework/${QTIFW_VERSION}/bin"
         "$ENV{QT_ROOT}/../../Tools/QtInstallerFramework/${QTIFW_VERSION}/bin"
     DOC "Qt Installer Framework binarycreator"
@@ -20,17 +15,16 @@ if(NOT IFW_BINARYCREATOR)
 endif()
 message(STATUS "IFW binarycreator: ${IFW_BINARYCREATOR}")
 
-# app_ifw_var(NAME VALUE): define NAME, NAME_JS (JS literal), NAME_WCPP (C++ wide
-# literal) for @ONLY templates. Directory scope only. No newlines/tabs/bare @...@.
 function(app_ifw_var name value)
     set(${name} "${value}" PARENT_SCOPE)
+
     string(REPLACE "\\" "\\\\" _js "${value}")
     string(REPLACE "\"" "\\\"" _js "${_js}")
     set(${name}_JS "\"${_js}\"" PARENT_SCOPE)
+
     set(${name}_WCPP "L\"${_js}\"" PARENT_SCOPE)
 endfunction()
 
-# IFW runtime tokens: round-trip them through configure_file untouched.
 set(TargetDir "@TargetDir@")
 set(ApplicationsDirX64 "@ApplicationsDirX64@")
 set(StartMenuDir "@StartMenuDir@")
@@ -50,14 +44,12 @@ app_ifw_var(COMPONENT_DESKTOP_ID     "com.personalcloud.desktopclient.desktopsho
 app_ifw_var(COMPONENT_FINDER_ID      "com.personalcloud.desktopclient.finderintegration")
 app_ifw_var(COMPONENT_MAINTENANCE_ID "com.personalcloud.maintenancetool")
 
-# Release date: -DAPP_RELEASE_DATE=YYYY-MM-DD from CI; default to version year.
 if(NOT DEFINED APP_RELEASE_DATE)
     set(APP_RELEASE_DATE "${MIRALL_VERSION_YEAR}-01-01")
 endif()
 app_ifw_var(APP_RELEASE_DATE          "${APP_RELEASE_DATE}")
 app_ifw_var(APP_SHORTCUT_RELEASE_DATE "${APP_RELEASE_DATE}")
 
-# Windows product vars
 app_ifw_var(WINDOWS_INSTALLER_TITLE            "Personal Cloud Files Setup Wizard")
 app_ifw_var(WINDOWS_WIZARD_STYLE               "Modern")
 app_ifw_var(WINDOWS_RUN_PROGRAM_DESCRIPTION    "Launch Personal Cloud Files after finish")
@@ -69,20 +61,15 @@ app_ifw_var(WINDOWS_INSTALL_DIR                "${APPLICATION_VENDOR}/${APPLICAT
 app_ifw_var(WINDOWS_USER_DATA_DIR              "${APPLICATION_SHORTNAME}")
 app_ifw_var(WINDOWS_PROTOCOL_SCHEME            "oc")
 app_ifw_var(WINDOWS_UNINSTALL_REGISTRY_KEY     "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\PersonalCloudFiles")
-# "personalcloud" = installer icon asset, NOT the app icon (pcf). Do not unify.
 app_ifw_var(WINDOWS_INSTALLER_APPLICATION_ICON "personalcloud")
-# Window icon = multi-res personalcloud.ico; needs the qico plugin
-app_ifw_var(WINDOWS_INSTALLER_WINDOW_ICON      "personalcloud.ico")
+app_ifw_var(WINDOWS_INSTALLER_WINDOW_ICON      "windowicon.png")
 app_ifw_var(WINDOWS_SHORTCUT_ICON              "personalcloud.ico")
 app_ifw_var(WINDOWS_WATERMARK                  "")
-# Banner MUST stay empty: a Banner fixes the header width (window can't widen);
-# the right-anchored Logo expands instead.
-app_ifw_var(WINDOWS_BANNER                     "")
-app_ifw_var(WINDOWS_LOGO                       "header_logo.png")
+app_ifw_var(WINDOWS_BANNER                     "banner.png")
+app_ifw_var(WINDOWS_LOGO                       "")
 
 app_ifw_var(WINDOWS_WIZARD_SHOW_PAGE_LIST "true")
 
-# Emit each header pixmap element only when its image is set (omit otherwise).
 if(WINDOWS_WATERMARK STREQUAL "")
     set(WINDOWS_WATERMARK_ELEMENT "")
 else()
@@ -99,11 +86,10 @@ else()
     set(WINDOWS_LOGO_ELEMENT "    <Logo>${WINDOWS_LOGO}</Logo>")
 endif()
 set(WINDOWS_STYLESHEET_ELEMENT "")
-app_ifw_var(WINDOWS_USE_CUSTOM_STYLESHEET "")
+app_ifw_var(WINDOWS_USE_CUSTOM_STYLESHEET "false")
 app_ifw_var(WINDOWS_LIGHT_STYLESHEET       "")
 app_ifw_var(WINDOWS_DARK_STYLESHEET        "")
 
-# macOS product vars
 app_ifw_var(MACOS_INSTALLER_TITLE         "Personal Cloud Files Installer")
 app_ifw_var(MACOS_RUN_PROGRAM_DESCRIPTION "Launch Personal Cloud Files after installation")
 app_ifw_var(MACOS_SIDEBAR_IMAGE           "sidebar.png")
@@ -113,7 +99,7 @@ app_ifw_var(MACOS_BUNDLE_EXECUTABLE       "${APPLICATION_EXECUTABLE}")
 app_ifw_var(MACOS_USER_DATA_DIR           "${APPLICATION_SHORTNAME}")
 app_ifw_var(MACOS_FINDER_SYNC_EXTENSION_ID "com.seagate.personalcloud.stxfiles.macos.FinderSyncExt")
 
-set(IFW_SRC "${CMAKE_CURRENT_SOURCE_DIR}/ifw")   # module is included from admin/
+set(IFW_SRC "${CMAKE_CURRENT_SOURCE_DIR}/ifw")
 set(IFW_OUT "${CMAKE_BINARY_DIR}/ifw")
 
 if(WIN32)
@@ -130,7 +116,6 @@ file(MAKE_DIRECTORY "${IFW_OUT}/config")
 configure_file("${IFW_SRC}/templates/${IFW_OS}/config.xml.in"       "${IFW_OUT}/config/config.xml"       @ONLY)
 configure_file("${IFW_SRC}/templates/${IFW_OS}/controlscript.qs.in" "${IFW_OUT}/config/controlscript.qs" @ONLY)
 
-# Static config assets (icons, logo, pagelist) copied verbatim.
 file(GLOB _ifw_cfg_assets "${IFW_SRC}/config/${IFW_OS}/*")
 file(COPY ${_ifw_cfg_assets} DESTINATION "${IFW_OUT}/config")
 
@@ -138,7 +123,6 @@ if(WIN32)
     file(COPY "${IFW_SRC}/ui" DESTINATION "${IFW_OUT}/config")
 endif()
 
-# Each package: meta/*.in -> configured; meta/* non-.in -> copied; data/ created empty.
 set(IFW_PACKAGES
     com.personalcloud.desktopclient
 )
@@ -186,8 +170,6 @@ if(WIN32)
         "${IFW_SRC}/tools/windows-shellextreg/ShellExtensionRegistrar.cpp")
     target_link_libraries(ShellExtensionRegistrar PRIVATE shlwapi shell32 advapi32 ole32)
 
-    # Stage the exes OUTSIDE package data/ (which gets wiped). Pin all per-config
-    # output dirs to one path so multi-config generators don't append /Release etc.
     foreach(_t WindowsAppRegistrar ShellExtensionRegistrar)
         set_target_properties(${_t} PROPERTIES
             EXCLUDE_FROM_ALL ON
@@ -199,7 +181,6 @@ if(WIN32)
     endforeach()
 endif()
 
-# macOS code-signing + notarization (APPLE + MACOS_SIGN only; Windows unaffected).
 if(APPLE)
     option(MACOS_SIGN "codesign + notarize the macOS installer" OFF)
     set(MACOS_APP_CERT       "Developer ID Application: Noveo Inc. (HVE639V94N)" CACHE STRING "codesign Developer ID Application identity")
@@ -224,8 +205,6 @@ else()
     set(_installer_output "${CMAKE_BINARY_DIR}/${_installer_name}")
 endif()
 
-# installer target (NOT in ALL): install -> IFW_STAGE, wipe + repopulate main
-# package data/, copy helper tools (Windows), then run binarycreator.
 set(_installer_cmds
     COMMAND "${CMAKE_COMMAND}" -E rm -rf "${IFW_STAGE}"
     COMMAND "${CMAKE_COMMAND}" --install "${CMAKE_BINARY_DIR}" --prefix "${IFW_STAGE}" --config $<CONFIG>
@@ -237,7 +216,7 @@ if(WIN32)
     )
 elseif(APPLE)
     list(APPEND _installer_cmds
-        COMMAND "${CMAKE_COMMAND}" -E copy_directory
+        COMMAND ditto
                 "${IFW_STAGE}/${APPLICATION_EXECUTABLE}.app"
                 "${_main_data}/${APPLICATION_EXECUTABLE}.app"
     )
@@ -246,31 +225,6 @@ if(WIN32)
     list(APPEND _installer_cmds
         COMMAND "${CMAKE_COMMAND}" -E copy_directory
                 "${CMAKE_BINARY_DIR}/ifw_tools/InstallerTools" "${_main_data}/InstallerTools"
-    )
-endif()
-
-# Shell-ext DLLs ship in InstallerTools/ShellExtensionsPayload/, NOT the install
-# root: ShellExtensionRegistrar deploys+registers them with locked-DLL reboot
-# handling. Move them out of data/ root (else `apply` exits 1).
-if(WIN32)
-    list(APPEND _installer_cmds
-        COMMAND "${CMAKE_COMMAND}" -E make_directory
-                "${_main_data}/InstallerTools/ShellExtensionsPayload"
-        COMMAND "${CMAKE_COMMAND}" -E copy
-                "${IFW_STAGE}/bin/CUContextMenu.dll" "${IFW_STAGE}/bin/CUOverlays.dll"
-                "${_main_data}/InstallerTools/ShellExtensionsPayload/"
-        COMMAND "${CMAKE_COMMAND}" -E rm -f
-                "${_main_data}/CUContextMenu.dll" "${_main_data}/CUOverlays.dll"
-    )
-endif()
-
-# Ship the shortcut icon into the install dir (shortcuts reference
-# @TargetDir@/personalcloud.ico, which is not part of the app payload).
-if(WIN32)
-    list(APPEND _installer_cmds
-        COMMAND "${CMAKE_COMMAND}" -E copy
-                "${IFW_SRC}/config/${IFW_OS}/${WINDOWS_SHORTCUT_ICON}"
-                "${_main_data}/${WINDOWS_SHORTCUT_ICON}"
     )
 endif()
 
@@ -324,7 +278,6 @@ elseif(APPLE)
         COMMENT "Ad-hoc signing macOS installer (unsigned local build)")
 endif()
 
-# Publish a versioned (optionally build-numbered) installer + PDBs + build_success.
 set(INSTALLER_OUTPUT_DIR "${CMAKE_BINARY_DIR}" CACHE PATH
     "Directory to publish the named installer artifact, debug symbols and build_success marker")
 
