@@ -5,7 +5,7 @@
     <Title>@MACOS_INSTALLER_TITLE@</Title>
     <Publisher>@APP_PUBLISHER@</Publisher>
     <ControlScript>controlscript.qs</ControlScript>
-    <PageListPixmap>@MACOS_PAGE_LIST_PIXMAP@</PageListPixmap>
+    <Watermark>@MACOS_SIDEBAR_IMAGE@</Watermark>
     <TargetDir>/Applications/@MACOS_INSTALL_DIR@</TargetDir>
     <AdminTargetDir>/Applications/@MACOS_INSTALL_DIR@</AdminTargetDir>
     <RunProgram>@TargetDir@/@MACOS_BUNDLE_NAME@/Contents/MacOS/@MACOS_BUNDLE_EXECUTABLE@</RunProgram>

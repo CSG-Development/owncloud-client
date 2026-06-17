@@ -1,3 +1,4 @@
+var APP_NAME = @APP_DISPLAY_NAME_JS@;
 var MACOS_BUNDLE_EXECUTABLE = @MACOS_BUNDLE_EXECUTABLE_JS@;
 var MACOS_USER_DATA_DIR = @MACOS_USER_DATA_DIR_JS@;
 
@@ -6,6 +7,43 @@ function Controller()
     if (systemInfo.kernelType === "darwin") {
         connectSignal(installer.uninstallationStarted, this, Controller.prototype.handleUninstallationStarted);
         connectSignal(installer.uninstallationFinished, this, Controller.prototype.handleUninstallationFinished);
+    }
+
+    setupPageListTitles();
+}
+
+function setupPageListTitles()
+{
+    var titles = [
+        [QInstaller.Introduction,         "Welcome"],
+        [QInstaller.ComponentSelection,   "Select Components"],
+        [QInstaller.LicenseCheck,         "License Agreement"],
+        [QInstaller.ReadyForInstallation, "Summary"],
+        [QInstaller.PerformInstallation,  "Installing"],
+        [QInstaller.InstallationFinished, "Finished"]
+    ];
+    for (var i = 0; i < titles.length; ++i) {
+        var page = gui.pageById(titles[i][0]);
+        if (page == null)
+            continue;
+        try {
+            page.setPageListTitle(titles[i][1]);
+        } catch (e) {
+            console.log("setupPageListTitles: " + titles[i][1] + " -> " + e);
+        }
+    }
+}
+
+Controller.prototype.IntroductionPageCallback = function()
+{
+    var page = gui.currentPageWidget();
+    if (page != null) {
+        page.title = "Welcome to " + APP_NAME;
+        if (page.MessageLabel != null) {
+            page.MessageLabel.setText(
+                "The Setup Wizard will install " + APP_NAME + " on your computer. " +
+                "You will be guided through the steps necessary to install this software.");
+        }
     }
 }
 

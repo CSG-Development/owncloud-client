@@ -20,6 +20,7 @@ function Controller()
 
         installer.setValue("PcfUninstallRegistryKey", @WINDOWS_UNINSTALL_REGISTRY_KEY_JS@);
         installer.setValue("PcfProcessName", @WINDOWS_PROCESS_NAME_JS@);
+        installer.setValue("PcfSkipBuiltinUninstallEntry", "1");
     }
 
     setupPageListTitles();

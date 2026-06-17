@@ -106,7 +106,7 @@ app_ifw_var(WINDOWS_DARK_STYLESHEET        "")
 # macOS product vars
 app_ifw_var(MACOS_INSTALLER_TITLE         "Personal Cloud Files Installer")
 app_ifw_var(MACOS_RUN_PROGRAM_DESCRIPTION "Launch Personal Cloud Files after installation")
-app_ifw_var(MACOS_PAGE_LIST_PIXMAP        "pagelist.png")
+app_ifw_var(MACOS_SIDEBAR_IMAGE           "sidebar.png")
 app_ifw_var(MACOS_INSTALL_DIR             "Personal Cloud Files")
 app_ifw_var(MACOS_BUNDLE_NAME             "${APPLICATION_EXECUTABLE}.app")
 app_ifw_var(MACOS_BUNDLE_EXECUTABLE       "${APPLICATION_EXECUTABLE}")
@@ -141,12 +141,19 @@ endif()
 # Each package: meta/*.in -> configured; meta/* non-.in -> copied; data/ created empty.
 set(IFW_PACKAGES
     com.personalcloud.desktopclient
-    com.personalcloud.desktopclient.shellintegration
-    com.personalcloud.desktopclient.startmenushortcut
-    com.personalcloud.desktopclient.desktopshortcut
-    com.personalcloud.desktopclient.finderintegration
-    com.personalcloud.maintenancetool
 )
+if(WIN32)
+    list(APPEND IFW_PACKAGES
+        com.personalcloud.desktopclient.shellintegration
+        com.personalcloud.desktopclient.startmenushortcut
+        com.personalcloud.desktopclient.desktopshortcut
+    )
+elseif(APPLE)
+    list(APPEND IFW_PACKAGES
+        com.personalcloud.desktopclient.finderintegration
+    )
+endif()
+list(APPEND IFW_PACKAGES com.personalcloud.maintenancetool)
 
 foreach(pkg ${IFW_PACKAGES})
     set(_src_meta "${IFW_SRC}/packages/${pkg}/meta")
@@ -211,6 +218,12 @@ else()
     set(_installer_deps "")
 endif()
 
+if(APPLE)
+    set(_installer_output "${CMAKE_BINARY_DIR}/${_installer_name}.app")
+else()
+    set(_installer_output "${CMAKE_BINARY_DIR}/${_installer_name}")
+endif()
+
 # installer target (NOT in ALL): install -> IFW_STAGE, wipe + repopulate main
 # package data/, copy helper tools (Windows), then run binarycreator.
 set(_installer_cmds
@@ -261,14 +274,28 @@ if(WIN32)
     )
 endif()
 
-# Sign the payload app bundle BEFORE binarycreator packs it (so the installed app
-# is signed). --deep does NOT apply the FinderSync .appex entitlements: validate on
-# the mac node and switch to per-item + --entitlements signing if the appex fails.
 if(APPLE AND MACOS_SIGN)
+    set(_appex_entitlements "${IFW_OUT}/FinderSyncExt.entitlements")
+    file(WRITE "${_appex_entitlements}"
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>${SOCKETAPI_TEAM_IDENTIFIER_PREFIX}${APPLICATION_REV_DOMAIN}</string>
+	</array>
+</dict>
+</plist>
+")
     list(APPEND _installer_cmds
-        COMMAND codesign --force --deep --options runtime --timestamp
-                --sign "${MACOS_APP_CERT}"
-                "${_main_data}/${APPLICATION_EXECUTABLE}.app"
+        COMMAND "${CMAKE_COMMAND}"
+                "-DAPP=${_main_data}/${APPLICATION_EXECUTABLE}.app"
+                "-DCERT=${MACOS_APP_CERT}"
+                "-DENTITLEMENTS=${_appex_entitlements}"
+                -P "${PROJECT_SOURCE_DIR}/cmake/scripts/SignMacApp.cmake"
     )
 endif()
 
@@ -284,17 +311,17 @@ add_custom_target(installer
     VERBATIM
 )
 
-# Sign + notarize the installer binary after binarycreator (mac node: notarytool
-# needs a configured keychain profile; stapler may need the binary wrapped first).
 if(APPLE AND MACOS_SIGN)
     add_custom_command(TARGET installer POST_BUILD
         COMMAND codesign --force --options runtime --timestamp
-                --sign "${MACOS_APP_CERT}" "${CMAKE_BINARY_DIR}/${_installer_name}"
-        COMMAND xcrun notarytool submit "${CMAKE_BINARY_DIR}/${_installer_name}"
-                --keychain-profile "${MACOS_NOTARY_PROFILE}" --wait
-        COMMAND xcrun stapler staple "${CMAKE_BINARY_DIR}/${_installer_name}"
+                --sign "${MACOS_APP_CERT}" "${_installer_output}"
         VERBATIM
-        COMMENT "Signing + notarizing macOS installer")
+        COMMENT "Signing macOS installer .app (Developer ID Application)")
+elseif(APPLE)
+    add_custom_command(TARGET installer POST_BUILD
+        COMMAND codesign --force --deep --sign - "${_installer_output}"
+        VERBATIM
+        COMMENT "Ad-hoc signing macOS installer (unsigned local build)")
 endif()
 
 # Publish a versioned (optionally build-numbered) installer + PDBs + build_success.
@@ -310,16 +337,37 @@ endif()
 if(WIN32)
     set(_artifact_name "${_artifact_base}.exe")
     set(_dbg_kind win)
+elseif(APPLE AND MACOS_SIGN)
+    set(_artifact_name "${_artifact_base}.dmg")
+    set(_dbg_kind mac)
+elseif(APPLE)
+    set(_artifact_name "${_artifact_base}.app")
+    set(_dbg_kind mac)
 else()
     set(_artifact_name "${_artifact_base}")
     set(_dbg_kind mac)
 endif()
 
+set(_dst "${INSTALLER_OUTPUT_DIR}/${_artifact_name}")
+if(APPLE AND MACOS_SIGN)
+    set(_publish_artifact
+        COMMAND hdiutil create -volname "${_artifact_base}"
+                -srcfolder "${_installer_output}" -ov -format UDZO "${_dst}"
+        COMMAND codesign --force --timestamp --sign "${MACOS_APP_CERT}" "${_dst}"
+        COMMAND xcrun notarytool submit "${_dst}"
+                --keychain-profile "${MACOS_NOTARY_PROFILE}" --wait
+        COMMAND xcrun stapler staple "${_dst}")
+elseif(APPLE)
+    set(_publish_artifact COMMAND "${CMAKE_COMMAND}" -E copy_directory
+            "${_installer_output}" "${_dst}")
+else()
+    set(_publish_artifact COMMAND "${CMAKE_COMMAND}" -E copy
+            "${_installer_output}" "${_dst}")
+endif()
+
 add_custom_command(TARGET installer POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E make_directory "${INSTALLER_OUTPUT_DIR}"
-    COMMAND "${CMAKE_COMMAND}" -E copy
-            "${CMAKE_BINARY_DIR}/${_installer_name}"
-            "${INSTALLER_OUTPUT_DIR}/${_artifact_name}"
+    ${_publish_artifact}
     COMMAND "${CMAKE_COMMAND}"
             -DKIND=${_dbg_kind}
             "-DBUILD_DIR=${CMAKE_BINARY_DIR}"
