@@ -236,6 +236,11 @@ else()
   set_target_properties(PersonalCloud PROPERTIES
       MACOSX_BUNDLE TRUE
       MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/MacOSXBundleInfo.plist)
+
+  if(APPLE)
+      set_target_properties(PersonalCloud PROPERTIES
+          INSTALL_RPATH "@executable_path/../Frameworks")
+  endif()
 endif()
 
 app_install_target(PersonalCloud)
