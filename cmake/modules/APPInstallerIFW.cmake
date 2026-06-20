@@ -228,6 +228,26 @@ if(WIN32)
     )
 endif()
 
+if(WIN32)
+    list(APPEND _installer_cmds
+        COMMAND "${CMAKE_COMMAND}" -E make_directory
+                "${_main_data}/InstallerTools/ShellExtensionsPayload"
+        COMMAND "${CMAKE_COMMAND}" -E copy
+                "${IFW_STAGE}/bin/CUContextMenu.dll" "${IFW_STAGE}/bin/CUOverlays.dll"
+                "${_main_data}/InstallerTools/ShellExtensionsPayload/"
+        COMMAND "${CMAKE_COMMAND}" -E rm -f
+                "${_main_data}/CUContextMenu.dll" "${_main_data}/CUOverlays.dll"
+    )
+endif()
+
+if(WIN32)
+    list(APPEND _installer_cmds
+        COMMAND "${CMAKE_COMMAND}" -E copy
+                "${IFW_SRC}/config/${IFW_OS}/${WINDOWS_SHORTCUT_ICON}"
+                "${_main_data}/${WINDOWS_SHORTCUT_ICON}"
+    )
+endif()
+
 if(APPLE AND MACOS_SIGN)
     set(_appex_entitlements "${IFW_OUT}/FinderSyncExt.entitlements")
     file(WRITE "${_appex_entitlements}"
