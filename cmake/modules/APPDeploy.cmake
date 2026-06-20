@@ -203,6 +203,12 @@ function(app_deploy_runtime target)
                 message(STATUS \"macOS deploy: DEPS_ROOT/lib not found (\${_deps_lib}); extra dylibs skipped\")
             endif()
 
+            message(STATUS \"macOS deploy: ensuring @executable_path/../Frameworks rpath on the executable\")
+            execute_process(
+                COMMAND install_name_tool -add_rpath \"@executable_path/../Frameworks\"
+                        \"\${_bundle}/Contents/MacOS/${APPLICATION_EXECUTABLE}\"
+            )
+
             # 4. Copy Qt base translations and update qt.conf.
             set(_trans_src \"${_qt_root}/translations\")
             set(_trans_dst \"\${_bundle}/Contents/Resources/Translations\")
