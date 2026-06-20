@@ -159,6 +159,13 @@ function(app_deploy_runtime target)
         endif()
         set(_qt_root   "$ENV{QT_ROOT}")
 
+        # Directory of the zlib CMake actually resolved (ZLIB::ZLIB). The deps
+        # libz ships with an @executable_path/../Frameworks install id, so
+        # macdeployqt treats it as already-bundled and skips it — we must copy
+        # it ourselves. Derive from ZLIB_LIBRARY (not DEPS_ROOT/lib) so this
+        # works regardless of where the resolved zlib lives.
+        get_filename_component(_zlib_dir "${ZLIB_LIBRARY}" DIRECTORY)
+
         # ------------------------------------------------------------------
         # All steps run at cmake --install time via install(CODE).
         # The bundle is installed to the prefix root (BUNDLE DESTINATION ".").
@@ -201,6 +208,20 @@ function(app_deploy_runtime target)
                 endforeach()
             else()
                 message(STATUS \"macOS deploy: DEPS_ROOT/lib not found (\${_deps_lib}); extra dylibs skipped\")
+            endif()
+
+            # 3b. Copy the resolved zlib (libz*.dylib). macdeployqt skips it
+            #     because its install id is @executable_path/../Frameworks/...
+            #     so without this the app aborts at launch (libz... not found).
+            if(IS_DIRECTORY \"${_zlib_dir}\")
+                file(GLOB _z_dylibs \"${_zlib_dir}/libz*.dylib\")
+                foreach(_dylib IN LISTS _z_dylibs)
+                    get_filename_component(_dname \"\${_dylib}\" NAME)
+                    message(STATUS \"macOS deploy: copying \${_dname}\")
+                    file(COPY \"\${_dylib}\" DESTINATION \"\${_fw_dst}\")
+                endforeach()
+            else()
+                message(WARNING \"macOS deploy: zlib dir not found (${_zlib_dir}); libz will be missing from the bundle\")
             endif()
 
             message(STATUS \"macOS deploy: ensuring @executable_path/../Frameworks rpath on the executable\")
