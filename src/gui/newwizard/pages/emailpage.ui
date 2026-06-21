@@ -736,7 +736,7 @@
                   <cursorShape>PointingHandCursor</cursorShape>
                  </property>
                  <property name="text">
-                  <string>Login</string>
+                  <string>Next</string>
                  </property>
                  <property name="class" stdset="0">
                   <string notr="true">button_accent</string>
