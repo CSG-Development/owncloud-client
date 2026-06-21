@@ -14,34 +14,42 @@
 
 #include "clientproxy.h"
 
+#include "accountmanager.h"
+#include "accountstate.h"
 #include "configfile.h"
-#include <QLoggingCategory>
-#include <QUrl>
-#include <QThreadPool>
+#include "folderman.h"
 
-namespace APP {
+#include <QLoggingCategory>
+#include <QThreadPool>
+#include <QUrl>
+
+namespace APP
+{
 
 Q_LOGGING_CATEGORY(lcClientProxy, "sync.clientproxy", QtInfoMsg)
 
-namespace {
+namespace
+{
 
-    QNetworkProxy proxyFromConfig(const QString &password, const ConfigFile &cfg)
-    {
-        QNetworkProxy proxy;
+quint64 s_proxyGeneration = 0;
 
-        if (cfg.proxyHostName().isEmpty())
-            return QNetworkProxy();
+QNetworkProxy proxyFromConfig(const QString &password, const ConfigFile &cfg)
+{
+    QNetworkProxy proxy;
 
-        proxy.setHostName(cfg.proxyHostName());
-        proxy.setPort(cfg.proxyPort());
-        if (cfg.proxyNeedsAuth()) {
-            proxy.setUser(cfg.proxyUser());
-            proxy.setPassword(password);
-        }
-        return proxy;
+    if (cfg.proxyHostName().isEmpty())
+        return QNetworkProxy();
+
+    proxy.setHostName(cfg.proxyHostName());
+    proxy.setPort(cfg.proxyPort());
+    if (cfg.proxyNeedsAuth()) {
+        proxy.setUser(cfg.proxyUser());
+        proxy.setPassword(password);
     }
-
+    return proxy;
 }
+
+}   // namespace
 
 QString ClientProxy::printQNetworkProxy(const QNetworkProxy &proxy)
 {
@@ -60,7 +68,7 @@ bool ClientProxy::isUsingSystemDefault()
     return false;
 }
 
-void ClientProxy::setupQtProxyFromConfig(const QString &password)
+void ClientProxy::applyProxy(const QString &password)
 {
     APP::ConfigFile cfg;
     int proxyType = QNetworkProxy::DefaultProxy;
@@ -73,29 +81,49 @@ void ClientProxy::setupQtProxyFromConfig(const QString &password)
     }
 
     switch (proxyType) {
-    case QNetworkProxy::NoProxy:
-        qCInfo(lcClientProxy) << "Set proxy configuration to use NO proxy";
-        QNetworkProxyFactory::setUseSystemConfiguration(false);
-        QNetworkProxy::setApplicationProxy(QNetworkProxy::NoProxy);
-        break;
-    case QNetworkProxy::DefaultProxy:
-        qCInfo(lcClientProxy) << "Set proxy configuration to use system configuration";
-        QNetworkProxyFactory::setUseSystemConfiguration(true);
-        break;
-    case QNetworkProxy::Socks5Proxy:
-        proxy.setType(QNetworkProxy::Socks5Proxy);
-        qCInfo(lcClientProxy) << "Set proxy configuration to SOCKS5" << printQNetworkProxy(proxy);
-        QNetworkProxyFactory::setUseSystemConfiguration(false);
-        QNetworkProxy::setApplicationProxy(proxy);
-        break;
-    case QNetworkProxy::HttpProxy:
-        proxy.setType(QNetworkProxy::HttpProxy);
-        qCInfo(lcClientProxy) << "Set proxy configuration to HTTP" << printQNetworkProxy(proxy);
-        QNetworkProxyFactory::setUseSystemConfiguration(false);
-        QNetworkProxy::setApplicationProxy(proxy);
-        break;
-    default:
-        break;
+        case QNetworkProxy::NoProxy:
+            qCInfo(lcClientProxy) << "Set proxy configuration to use NO proxy";
+            QNetworkProxyFactory::setUseSystemConfiguration(false);
+            QNetworkProxy::setApplicationProxy(QNetworkProxy::NoProxy);
+            break;
+        case QNetworkProxy::DefaultProxy:
+            qCInfo(lcClientProxy) << "Set proxy configuration to use system configuration";
+            QNetworkProxyFactory::setUseSystemConfiguration(true);
+            break;
+        case QNetworkProxy::Socks5Proxy:
+            proxy.setType(QNetworkProxy::Socks5Proxy);
+            qCInfo(lcClientProxy) << "Set proxy configuration to SOCKS5" << printQNetworkProxy(proxy);
+            QNetworkProxyFactory::setUseSystemConfiguration(false);
+            QNetworkProxy::setApplicationProxy(proxy);
+            break;
+        case QNetworkProxy::HttpProxy:
+            proxy.setType(QNetworkProxy::HttpProxy);
+            qCInfo(lcClientProxy) << "Set proxy configuration to HTTP" << printQNetworkProxy(proxy);
+            QNetworkProxyFactory::setUseSystemConfiguration(false);
+            QNetworkProxy::setApplicationProxy(proxy);
+            break;
+        default:
+            break;
+    }
+}
+
+quint64 ClientProxy::bumpProxyGeneration()
+{
+    return ++s_proxyGeneration;
+}
+
+quint64 ClientProxy::proxyGeneration()
+{
+    return s_proxyGeneration;
+}
+
+void ClientProxy::applyProxyAndRefresh(const QString &password)
+{
+    applyProxy(password);
+
+    FolderMan::instance()->setDirtyProxy();
+    for (const auto &account : AccountManager::instance()->accounts()) {
+        account->freshConnectionAttempt();
     }
 }
 
@@ -103,7 +131,7 @@ void ClientProxy::lookupSystemProxyAsync(const QUrl &url, QObject *dst, const ch
 {
     SystemProxyRunnable *runnable = new SystemProxyRunnable(url);
     QObject::connect(runnable, SIGNAL(systemProxyLookedUp(QNetworkProxy)), dst, slot);
-    QThreadPool::globalInstance()->start(runnable); // takes ownership and deletes
+    QThreadPool::globalInstance()->start(runnable);   // takes ownership and deletes
 }
 
 SystemProxyRunnable::SystemProxyRunnable(const QUrl &url)
@@ -120,9 +148,10 @@ void SystemProxyRunnable::run()
 
     if (proxies.isEmpty()) {
         emit systemProxyLookedUp(QNetworkProxy(QNetworkProxy::NoProxy));
-    } else {
+    }
+    else {
         emit systemProxyLookedUp(proxies.first());
         // FIXME Would we really ever return more?
     }
 }
-}
+}   // namespace APP

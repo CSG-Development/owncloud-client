@@ -1,62 +1,150 @@
-# Copyright (C) 2016 Olivier Goffart <ogoffart@woboq.com>
+# This is for clang-format >= 5.0.
 #
-# You may use this file under the terms of the 3-clause BSD license.
-# See the file LICENSE from this package for details.
-
-# This is the clang-format configuration style to be used by Qt,
-# based on the rules from https://wiki.qt.io/Qt_Coding_Style and
-# https://wiki.qt.io/Coding_Conventions
-
+# The configuration below follows the Qt Creator Coding Rules [1] as closely as
+# possible. For documentation of the options, see [2].
+#
+# Use ../../tests/manual/clang-format-for-qtc/test.cpp for documenting problems
+# or testing changes.
+#
+# [1] https://doc-snapshots.qt.io/qtcreator-extending/coding-style.html
+# [2] https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+#
 ---
-# Webkit style was loosely based on the Qt style
-BasedOnStyle: WebKit
-
-Standard: c++17
-ColumnLimit: 160
-
-# Disable reflow of qdoc comments: indentation rules are different.
-# Translation comments are also excluded
-CommentPragmas: "^!|^:"
-
-# We want a space between the type and the star for pointer types
-PointerBindsToType: false
-
-# We want to break before the operators, but not before a '='
-BreakBeforeBinaryOperators: NonAssignment
-
-# Braces are usually attached, but not after functions or classes declaration
-BreakBeforeBraces: Custom
-BraceWrapping:
-    AfterClass: true
-    AfterControlStatement: false
-    AfterEnum: false
-    AfterFunction: true
-    AfterNamespace: false
-    AfterObjCDeclaration: false
-    AfterStruct: true
-    AfterUnion: false
-    BeforeCatch: false
-    BeforeElse: false
-    IndentBraces: false
-
-# The coding style does not specify the following, but this is what gives
-# results closest to the existing code.
-AlignAfterOpenBracket: DontAlign
+Language:        Cpp
+AccessModifierOffset: -4
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignEscapedNewlines: Right
+AlignOperands:   true
+AllowShortFunctionsOnASingleLine: Empty
+AlignTrailingComments: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortBlocksOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: true
-
-# Ideally we should also allow less short function in a single line, but
-# clang-format does not handle that
-AllowShortFunctionsOnASingleLine: Inline
-
-SortIncludes: true
-
-# macros for which the opening brace stays attached
-ForEachMacros:   [ foreach, Q_FOREACH, BOOST_FOREACH, forever, Q_FOREVER, QBENCHMARK, QBENCHMARK_ONCE ]
-
-# Allow two empty lines for structuring
-MaxEmptyLinesToKeep: 2
-KeepEmptyLinesAtTheStartOfBlocks: false
-
-# Properly format c++11 initializer
-SpaceBeforeCpp11BracedList: false
+BinPackArguments: false
+BinPackParameters: false
+BraceWrapping:
+  AfterClass:      true
+  AfterControlStatement: false
+  AfterEnum:       true
+  AfterFunction:   true
+  AfterNamespace:  true
+  AfterObjCDeclaration: false
+  AfterStruct:     true
+  AfterUnion:      true
+  BeforeCatch:     true
+  BeforeElse:      true
+  IndentBraces:    false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+BreakBeforeBinaryOperators: All
+BreakBeforeBraces: Custom
+BreakBeforeInheritanceComma: false
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializers: BeforeComma
+BreakAfterJavaFieldAnnotations: false
+BreakStringLiterals: false
+IndentPPDirectives: AfterHash
+ColumnLimit:    0
+CommentPragmas:  '^ IWYU pragma:'
+CompactNamespaces: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
 Cpp11BracedListStyle: true
+DerivePointerAlignment: false
+DisableFormat:   false
+ExperimentalAutoDetectBinPacking: false
+FixNamespaceComments: true
+ForEachMacros:
+  - forever # avoids { wrapped to next line
+  - foreach
+  - Q_FOREACH
+  - BOOST_FOREACH
+IncludeBlocks: Regroup
+IncludeCategories:
+  # precompiled
+  - Regex:           '^".*-pch.hpp'
+    Priority:        -1
+
+  # Headers in "" with extension from the current directory.
+  - Regex:           '"([A-Za-z0-9.\Q-_\E])+"'
+    Priority:        1
+
+  # Headers in "" with extension.
+  - Regex:           '"([A-Za-z0-9.\Q/-_\E])+"'
+    Priority:        2
+ 
+ # Frameworks
+  - Regex:           '^<boost/'
+    Priority:        50
+  - Regex:           '^<Q.*'
+    Priority:        51
+  - Regex:           '^<google.*'
+    Priority:        52
+  - Regex:           '^<(gmock|gtest)/'
+    Priority:        60
+
+  # cpp library & stl
+  - Regex:           '^<(algorithm|any|array|atomic|barrier|bit|bitset|charconv|chrono|codecvt|compare|complex|concepts|condition_variable|coroutine|deque|exception|execution|filesystem|format|forward_list|fstream|functional|future|initializer_list|iomanip|ios|iosfwd|iostream|istream|iterator|latch|limits|list|locale|map|memory|memory_resource|mutex|new|numbers|numeric|optional|ostream|queue|random|ranges|ratio|regex|scoped_allocator|semaphore|set|shared_mutex|source_location|span|sstream|stack|stdexcept|stop_token|streambuf|string|string_view|strstream|syncstream|system_error|thread|tuple|typeindex|typeinfo|type_traits|unordered_map|unordered_set|utility|valarray|variant|vector|version)>'
+    Priority:        70
+  - Regex:           '^<(assert|complex|ctype|errno|fenv|float|inttypes|iso646|limits|locale|math|setjmp|signal|stdalign|stdarg|stdatomic|stdbool|stddef|stdint|stdio|stdlib|stdnoreturn|string|tgmath|threads|time|uchar|wchar|wctype)>'
+    Priority:        71
+
+  # standard c library (according to https://en.cppreference.com/w/cpp/header on 12/07/2019)
+  - Regex:           '^<(cassert|cctype|cerrno|cfenv|cfloat|cinttypes|climits|clocale|cmath|csetjmp|csignal|cstdarg|cstddef|cstdint|cstdio|cstdlib|cstring|ctime|cuchar|cwchar|cwctype)>'
+    Priority:        80
+
+  # LRM component's API and libraries not listed above
+  - Regex:           '<([A-Za-z0-9.\Q/-_\E])+.hpp>'
+    Priority:        5
+
+  # Other
+  - Regex:           '.*'
+    Priority:        90
+IndentCaseLabels: true
+IndentWidth:     4
+IndentWrappedFunctionNames: false
+JavaScriptQuotes: Leave
+JavaScriptWrapImports: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+# Do not add QT_BEGIN_NAMESPACE/QT_END_NAMESPACE as this will indent lines in between.
+MacroBlockBegin: ""
+MacroBlockEnd:   ""
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: None
+ObjCBlockIndentWidth: 4
+ObjCSpaceAfterProperty: false
+ObjCSpaceBeforeProtocolList: true
+PenaltyBreakAssignment: 150
+PenaltyBreakBeforeFirstCallParameter: 300
+PenaltyBreakComment: 500
+PenaltyBreakFirstLessLess: 400
+PenaltyBreakString: 600
+PenaltyExcessCharacter: 50
+PenaltyReturnTypeOnItsOwnLine: 300
+PointerAlignment: Right
+ReflowComments:  false
+SortIncludes:    true
+SortUsingDeclarations: true
+SpaceAfterCStyleCast: true
+SpaceAfterTemplateKeyword: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 3
+SpacesInAngles:  false
+SpacesInContainerLiterals: false
+SpacesInCStyleCastParentheses: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+Standard:        Cpp11
+TabWidth:        4
+UseTab:          Never
