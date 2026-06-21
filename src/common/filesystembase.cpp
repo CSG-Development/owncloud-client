@@ -653,6 +653,29 @@ QString FileSystem::createPortableFileName(const QString &path, const QString &f
     return QDir::cleanPath(path + QLatin1Char('/') + tmp);
 }
 
+QString FileSystem::defaultInvalidFilenameRegex()
+{
+    QString characters;
+    for (const auto c : IllegalFilenameCharsWindows) {
+        if (c == QLatin1Char('\\')) {
+            characters += QLatin1String("\\\\");
+        } else {
+            characters += c;
+        }
+    }
+    return QLatin1Char('[') + characters + QLatin1Char(']');
+}
+
+QChar FileSystem::illegalFilenameCharacter(const QString &name)
+{
+    for (const auto illegal : IllegalFilenameCharsWindows) {
+        if (name.contains(illegal)) {
+            return illegal;
+        }
+    }
+    return {};
+}
+
 QString FileSystem::pathEscape(const QString &s)
 {
     QString tmp = s;
