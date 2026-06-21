@@ -220,6 +220,8 @@ target_sources(PersonalCloud PRIVATE ${appIcons})
 if(WIN32)
     target_sources(PersonalCloud PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/PersonalCloud.exe.manifest)
 
+    set_target_properties(PersonalCloud PROPERTIES WIN32_EXECUTABLE TRUE)
+
     # we may not add MACOSX_BUNDLE here, if not building one
 else()
     target_sources(PersonalCloud PRIVATE ${APPLICATION_BUNDLED_RESOURCES})
