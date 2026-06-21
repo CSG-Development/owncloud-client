@@ -19,12 +19,12 @@
 
 #include "accountstate.h"
 #include "common/syncjournaldb.h"
+#include "folderdefinition.h"
 #include "graphapi/space.h"
 #include "networkjobs.h"
 #include "progressdispatcher.h"
 #include "syncoptions.h"
 #include "syncresult.h"
-#include "folderdefinition.h"
 
 #include <QDateTime>
 #include <QObject>
@@ -56,10 +56,7 @@ class Folder : public QObject
     Q_OBJECT
 
 public:
-    enum class ChangeReason {
-        Other,
-        UnLock
-    };
+    enum class ChangeReason { Other, UnLock };
     Q_ENUM(ChangeReason)
 
     static void prepareFolder(const QString &path);
@@ -139,10 +136,7 @@ public:
      */
     bool isReady() const;
 
-    bool hasSetupError() const
-    {
-        return _syncResult.status() == SyncResult::SetupError;
-    }
+    bool hasSetupError() const { return _syncResult.status() == SyncResult::SetupError; }
 
     void prepareToSync();
 
@@ -155,12 +149,12 @@ public:
     SyncResult syncResult() const;
 
     /**
-      * This is called when the sync folder definition is removed. Do cleanups here.
-      *
-      * It removes the database, among other things.
-      *
-      * The folder is not in a valid state afterwards!
-      */
+     * This is called when the sync folder definition is removed. Do cleanups here.
+     *
+     * It removes the database, among other things.
+     *
+     * The folder is not in a valid state afterwards!
+     */
     virtual void wipeForRemoval();
 
     void setSyncState(SyncResult::Status state);
@@ -168,22 +162,16 @@ public:
     void setDirtyNetworkLimits();
 
     /**
-      * Ignore syncing of hidden files or not. This is defined in the
-      * folder definition
-      */
+     * Ignore syncing of hidden files or not. This is defined in the
+     * folder definition
+     */
     bool ignoreHiddenFiles();
     void setIgnoreHiddenFiles(bool ignore);
 
     // TODO: don't expose
-    SyncJournalDb *journalDb()
-    {
-        return &_journal;
-    }
+    SyncJournalDb *journalDb() { return &_journal; }
     // TODO: don't expose
-    SyncEngine &syncEngine()
-    {
-        return *_engine;
-    }
+    SyncEngine &syncEngine() { return *_engine; }
     Vfs &vfs()
     {
         OC_ENFORCE(_vfs);
@@ -203,13 +191,13 @@ public:
     void removeFromSettings() const;
 
     /**
-      * Returns whether a file inside this folder should be excluded.
-      */
+     * Returns whether a file inside this folder should be excluded.
+     */
     bool isFileExcludedAbsolute(const QString &fullPath) const;
 
     /**
-      * Returns whether a file inside this folder should be excluded.
-      */
+     * Returns whether a file inside this folder should be excluded.
+     */
     bool isFileExcludedRelative(const QString &relativePath) const;
 
     /** virtual files of some kind are enabled
@@ -242,15 +230,9 @@ public:
      */
     bool isDeployed() const;
 
-    auto priority()
-    {
-        return _definition.priority();
-    }
+    auto priority() { return _definition.priority(); }
 
-    void setPriority(uint32_t p)
-    {
-        return _definition.setPriority(p);
-    }
+    void setPriority(uint32_t p) { return _definition.setPriority(p); }
 
     static Result<void, QString> checkPathLength(const QString &path);
 
@@ -273,18 +255,18 @@ signals:
 
 public slots:
     /**
-       * terminate the current sync run
-       */
+     * terminate the current sync run
+     */
     void slotTerminateSync();
 
     // connected to the corresponding signals in the SyncEngine
     void slotAboutToRemoveAllFiles(SyncFileItem::Direction);
 
     /**
-      * Starts a sync operation
-      *
-      * If the list of changed files is known, it is passed.
-      */
+     * Starts a sync operation
+     *
+     * If the list of changed files is known, it is passed.
+     */
     void startSync();
 
     int slotDiscardDownloadProgress();
@@ -293,10 +275,10 @@ public slots:
     int errorBlackListEntryCount();
 
     /**
-       * Triggered by the folder watcher when a file/dir in this folder
-       * changes. Needs to check whether this change should trigger a new
-       * sync run to be scheduled.
-       */
+     * Triggered by the folder watcher when a file/dir in this folder
+     * changes. Needs to check whether this change should trigger a new
+     * sync run to be scheduled.
+     */
     void slotWatchedPathsChanged(const QSet<QString> &paths, ChangeReason reason);
 
     /**
@@ -334,7 +316,7 @@ private slots:
     void slotSyncStarted();
     void slotSyncFinished(bool);
 
-    void slotUrlChanged(const QUuid& accountId);
+    void slotUrlChanged(const QUuid &accountId);
     /** Adds a error message that's not tied to a specific item.
      */
     void slotSyncError(const QString &message, ErrorCategory category = ErrorCategory::Normal);
@@ -380,11 +362,11 @@ private:
         LogStatusNew,
         LogStatusError,
         LogStatusConflict,
-        LogStatusUpdated
+        LogStatusUpdated,
+        LogStatusFileNameReserved
     };
 
-    void createGuiLog(const QString &filename, LogStatus status, int count,
-        const QString &renameTarget = QString());
+    void createGuiLog(const QString &filename, LogStatus status, int count, const QString &renameTarget = QString());
 
     void startVfs();
 

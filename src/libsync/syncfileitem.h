@@ -15,11 +15,11 @@
 #ifndef SYNCFILEITEM_H
 #define SYNCFILEITEM_H
 
-#include <QVector>
-#include <QString>
 #include <QDateTime>
 #include <QMetaType>
 #include <QSharedPointer>
+#include <QString>
+#include <QVector>
 
 #include <set>
 
@@ -43,11 +43,7 @@ class APPLICATIONSYNC_EXPORT SyncFileItem
 {
     Q_GADGET
 public:
-    enum Direction : uint8_t {
-        None = 0,
-        Up,
-        Down
-    };
+    enum Direction : uint8_t { None = 0, Up, Down };
     Q_ENUM(Direction)
 
     enum Status : uint8_t { // stored in 4 bits
@@ -161,10 +157,7 @@ public:
     {
     }
 
-    friend bool operator==(const SyncFileItem &item1, const SyncFileItem &item2)
-    {
-        return item1._originalFile == item2._originalFile;
-    }
+    friend bool operator==(const SyncFileItem &item1, const SyncFileItem &item2) { return item1._originalFile == item2._originalFile; }
 
     friend bool operator<(const SyncFileItem &item1, const SyncFileItem &item2)
     {
@@ -208,34 +201,22 @@ public:
         return _file;
     }
 
-    bool isEmpty() const
-    {
-        return _file.isEmpty();
-    }
+    bool isEmpty() const { return _file.isEmpty(); }
 
-    bool isDirectory() const
-    {
-        return _type == ItemTypeDirectory;
-    }
+    bool isDirectory() const { return _type == ItemTypeDirectory; }
 
     /**
      * True if the item had any kind of error.
      */
     bool hasErrorStatus() const
     {
-        return _status == SyncFileItem::SoftError
-            || _status == SyncFileItem::NormalError
-            || _status == SyncFileItem::FatalError
-            || !_errorString.isEmpty();
+        return _status == SyncFileItem::SoftError || _status == SyncFileItem::NormalError || _status == SyncFileItem::FatalError || !_errorString.isEmpty();
     }
 
     /**
      * Whether this item should appear on the issues tab.
      */
-    bool showInIssuesTab() const
-    {
-        return hasErrorStatus() || _status == SyncFileItem::Conflict;
-    }
+    bool showInIssuesTab() const { return hasErrorStatus() || _status == SyncFileItem::Conflict || _status == SyncFileItem::FilenameReserved; }
 
     /**
      * Whether this item should appear on the protocol tab.
