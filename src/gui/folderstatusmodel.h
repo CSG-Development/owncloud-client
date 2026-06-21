@@ -19,10 +19,10 @@
 #include "progressdispatcher.h"
 
 #include <QAbstractItemModel>
-#include <QLoggingCategory>
-#include <QVector>
 #include <QElapsedTimer>
+#include <QLoggingCategory>
 #include <QPointer>
+#include <QVector>
 
 class QNetworkReply;
 namespace APP {
@@ -47,6 +47,7 @@ public:
         FolderConflictMsg,
         FolderErrorMsg,
         FolderInfoMsg,
+        FolderWarningMsg,
         FolderSyncPaused,
         FolderStatusIconRole,
         FolderAccountConnected,
@@ -136,10 +137,7 @@ public:
                 , _overallPercent(0)
             {
             }
-            bool isNull() const
-            {
-                return _progressString.isEmpty() && _warningCount == 0 && _overallSyncString.isEmpty();
-            }
+            bool isNull() const { return _progressString.isEmpty() && _warningCount == 0 && _overallSyncString.isEmpty(); }
             QString _progressString;
             QString _overallSyncString;
             int _warningCount;
@@ -157,11 +155,7 @@ public:
     };
 
 
-    enum ItemType {
-        RootFolder,
-        SubFolder,
-        FetchLabel
-    };
+    enum ItemType { RootFolder, SubFolder, FetchLabel };
     Q_ENUM(ItemType);
 
     SubFolderInfo *infoForIndex(const QModelIndex &index) const;

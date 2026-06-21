@@ -15,9 +15,9 @@
 #ifndef MIRALL_SYNCRESULT_H
 #define MIRALL_SYNCRESULT_H
 
-#include <QStringList>
-#include <QHash>
 #include <QDateTime>
+#include <QHash>
+#include <QStringList>
 
 #include "common/utility.h"
 #include "personalcloudlib.h"
@@ -60,6 +60,9 @@ public:
     QStringList errorStrings() const;
     void clearErrors();
 
+    void appendWarningString(const QString &);
+    QStringList warningStrings() const;
+
     void setStatus(Status);
     Status status() const;
     QDateTime syncTime() const;
@@ -76,6 +79,7 @@ public:
     int numOldConflictItems() const { return _numOldConflictItems; }
     void setNumOldConflictItems(int n) { _numOldConflictItems = n; }
     int numErrorItems() const { return _numErrorItems; }
+    int numFileNameReservedItems() const { return _numFileNameReservedItems; }
     bool hasUnresolvedConflicts() const { return _numNewConflictItems + _numOldConflictItems > 0; }
 
     const SyncFileItemPtr &firstItemNew() const { return _firstItemNew; }
@@ -84,6 +88,7 @@ public:
     const SyncFileItemPtr &firstItemRenamed() const { return _firstItemRenamed; }
     const SyncFileItemPtr &firstNewConflictItem() const { return _firstNewConflictItem; }
     const SyncFileItemPtr &firstItemError() const { return _firstItemError; }
+    const SyncFileItemPtr &firstFileNameReservedItem() const { return _firstFileNameReservedItem; }
 
     void processCompletedItem(const SyncFileItemPtr &item);
 
@@ -97,6 +102,7 @@ private:
      * when the sync tool support this...
      */
     QStringList _errors;
+    QStringList _warnings;
     bool _foundFilesNotSynced = false;
     bool _folderStructureWasChanged = false;
     bool _folderSizeMayHaveChanged = false;
@@ -110,6 +116,7 @@ private:
     int _numNewConflictItems = 0;
     int _numOldConflictItems = 0;
     int _numErrorItems = 0;
+    int _numFileNameReservedItems = 0;
 
     SyncFileItemPtr _firstItemNew;
     SyncFileItemPtr _firstItemDeleted;
@@ -117,6 +124,7 @@ private:
     SyncFileItemPtr _firstItemRenamed;
     SyncFileItemPtr _firstNewConflictItem;
     SyncFileItemPtr _firstItemError;
+    SyncFileItemPtr _firstFileNameReservedItem;
 
     friend class TrayOverallStatusResult;
 };

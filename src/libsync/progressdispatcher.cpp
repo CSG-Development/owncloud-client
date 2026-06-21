@@ -14,9 +14,9 @@
 
 #include "progressdispatcher.h"
 
-#include <QObject>
-#include <QMetaType>
 #include <QCoreApplication>
+#include <QMetaType>
+#include <QObject>
 
 namespace APP {
 
@@ -86,10 +86,9 @@ QString Progress::asActionString(const SyncFileItem &item)
 
 bool Progress::isWarningKind(SyncFileItem::Status kind)
 {
-    return kind == SyncFileItem::SoftError || kind == SyncFileItem::NormalError
-        || kind == SyncFileItem::FatalError || kind == SyncFileItem::FileIgnored
-        || kind == SyncFileItem::Conflict || kind == SyncFileItem::Restoration
-        || kind == SyncFileItem::DetailError || kind == SyncFileItem::BlacklistedError;
+    return kind == SyncFileItem::SoftError || kind == SyncFileItem::NormalError || kind == SyncFileItem::FatalError || kind == SyncFileItem::FileIgnored
+        || kind == SyncFileItem::Conflict || kind == SyncFileItem::Restoration || kind == SyncFileItem::DetailError || kind == SyncFileItem::BlacklistedError
+        || kind == SyncFileItem::FilenameReserved;
 }
 
 bool Progress::isIgnoredKind(SyncFileItem::Status kind)
@@ -110,9 +109,7 @@ ProgressDispatcher::ProgressDispatcher(QObject *parent)
 {
 }
 
-ProgressDispatcher::~ProgressDispatcher()
-{
-}
+ProgressDispatcher::~ProgressDispatcher() { }
 
 ProgressInfo::ProgressInfo()
 {
@@ -291,23 +288,17 @@ ProgressInfo::Estimates ProgressInfo::totalProgress() const
     double fps = _fileProgress._progressPerSec;
     double fpsL = 0.5;
     double fpsU = 0.8;
-    double nearMaxFps =
-        qBound(0.0,
-            (fps - fpsL * _maxFilesPerSecond) / ((fpsU - fpsL) * _maxFilesPerSecond),
-            1.0);
+    double nearMaxFps = qBound(0.0, (fps - fpsL * _maxFilesPerSecond) / ((fpsU - fpsL) * _maxFilesPerSecond), 1.0);
 
     // Compute a value that is 0 when transfer is >= U*max and
     // 1 when transfer is <= L*max
     double trans = _sizeProgress._progressPerSec;
     double transU = 0.1;
     double transL = 0.01;
-    double slowTransfer = 1.0 - qBound(0.0,
-                                    (trans - transL * _maxBytesPerSecond) / ((transU - transL) * _maxBytesPerSecond),
-                                    1.0);
+    double slowTransfer = 1.0 - qBound(0.0, (trans - transL * _maxBytesPerSecond) / ((transU - transL) * _maxBytesPerSecond), 1.0);
 
     double beOptimistic = nearMaxFps * slowTransfer;
-    size.estimatedEta = quint64((1.0 - beOptimistic) * size.estimatedEta
-        + beOptimistic * optimisticEta());
+    size.estimatedEta = quint64((1.0 - beOptimistic) * size.estimatedEta + beOptimistic * optimisticEta());
 
     return size;
 }
@@ -318,8 +309,7 @@ quint64 ProgressInfo::optimisticEta() const
     // *but* note that maxPerSecond could be serious underestimate
     // (if we never got to fully excercise transfer or files/second)
 
-    return _fileProgress.remaining() / _maxFilesPerSecond * 1000
-        + _sizeProgress.remaining() / _maxBytesPerSecond * 1000;
+    return _fileProgress.remaining() / _maxFilesPerSecond * 1000 + _sizeProgress.remaining() / _maxBytesPerSecond * 1000;
 }
 
 bool ProgressInfo::trustEta() const
@@ -344,10 +334,8 @@ void ProgressInfo::updateEstimates()
         it.value()._progress.update();
     }
 
-    _maxFilesPerSecond = qMax(_fileProgress._progressPerSec,
-        _maxFilesPerSecond);
-    _maxBytesPerSecond = qMax(_sizeProgress._progressPerSec,
-        _maxBytesPerSecond);
+    _maxFilesPerSecond = qMax(_fileProgress._progressPerSec, _maxFilesPerSecond);
+    _maxBytesPerSecond = qMax(_sizeProgress._progressPerSec, _maxBytesPerSecond);
 }
 
 void ProgressInfo::recomputeCompletedSize()

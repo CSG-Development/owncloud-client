@@ -34,7 +34,7 @@ public:
     void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
     QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const override;
 
-    bool editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index) override;
+    bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) override;
 
     /**
      * return the position of the option button within the item
@@ -44,20 +44,26 @@ public:
     QRectF errorsListRect(QRectF within, const QModelIndex &) const;
     qreal rootFolderHeightWithoutErrors() const;
 
-    void setModel(FolderStatusModel* model) {model_ = model;}
-    void resetButtonState() { hoveredRow_ = -1; pressedRow_ = -1; }
+    void setModel(FolderStatusModel *model) { model_ = model; }
+    void resetButtonState()
+    {
+        hoveredRow_ = -1;
+        pressedRow_ = -1;
+    }
 
 protected:
     void initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const override;
 
 private:
-    struct ItemData {
+    struct ItemData
+    {
         QString statusIconName;
         QString aliasText;
         QString syncText;
         QStringList conflictTexts;
         QStringList errorTexts;
         QStringList infoTexts;
+        QStringList warningTexts;
         QIcon spaceImage;
         int overallPercent = 0;
         QString overallString;
@@ -69,7 +75,8 @@ private:
         int64_t usedQuota = 0;
     };
 
-    struct ItemLayout {
+    struct ItemLayout
+    {
         QRectF statusRect;
         QRectF iconRect;
         QRectF aliasRect;
@@ -103,7 +110,7 @@ private:
     mutable bool _ready = false;
     int hoveredRow_ = -1;
     int pressedRow_ = -1;
-    FolderStatusModel* model_ = nullptr;
+    FolderStatusModel *model_ = nullptr;
     QRect checkboxRect;
 };
 
