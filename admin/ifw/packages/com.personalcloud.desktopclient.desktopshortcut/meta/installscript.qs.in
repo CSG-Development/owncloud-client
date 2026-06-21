@@ -1,0 +1,27 @@
+var APP_NAME = @APP_DISPLAY_NAME_JS@;
+var WINDOWS_EXECUTABLE = @WINDOWS_EXECUTABLE_JS@;
+var SHORTCUT_ICON = "@TargetDir@/" + @WINDOWS_SHORTCUT_ICON_JS@;
+
+function Component()
+{
+}
+
+Component.prototype.createOperations = function()
+{
+    component.createOperations();
+    component.addOperation("Delete", "@TargetDir@/.desktop-shortcut-component", "UNDOOPERATION", "");
+
+    if (systemInfo.productType !== "windows") {
+        return;
+    }
+
+    var executablePath = "@TargetDir@/" + WINDOWS_EXECUTABLE;
+    component.addOperation("CreateShortcut",
+        executablePath,
+        "@DesktopDir@/" + APP_NAME + ".lnk",
+        "--showsettings",
+        "workingDirectory=@TargetDir@",
+        "iconPath=" + SHORTCUT_ICON,
+        "iconId=0",
+        "description=" + APP_NAME);
+}

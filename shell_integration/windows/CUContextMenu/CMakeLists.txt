@@ -14,9 +14,9 @@ target_link_libraries(CUContextMenu
                       nlohmann_json::nlohmann_json
 )
 target_compile_definitions(CUContextMenu PRIVATE JSON_NOEXCEPTION)
-add_windows_version_info(CUContextMenu)
+app_add_windows_version_info(CUContextMenu)
 
 install(TARGETS CUContextMenu
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}
+    RUNTIME DESTINATION "${APP_INSTALL_BINDIR}"
+    LIBRARY DESTINATION "${APP_INSTALL_BINDIR}"
 )

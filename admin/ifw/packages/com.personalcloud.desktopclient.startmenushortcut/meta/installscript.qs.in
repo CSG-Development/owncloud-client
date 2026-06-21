@@ -1,0 +1,37 @@
+var APP_NAME = @APP_DISPLAY_NAME_JS@;
+var WINDOWS_EXECUTABLE = @WINDOWS_EXECUTABLE_JS@;
+var WINDOWS_MAINTENANCE_TOOL = @WINDOWS_MAINTENANCE_TOOL_EXECUTABLE_JS@;
+var SHORTCUT_ICON = "@TargetDir@/" + @WINDOWS_SHORTCUT_ICON_JS@;
+
+function Component()
+{
+}
+
+Component.prototype.createOperations = function()
+{
+    component.createOperations();
+    component.addOperation("Delete", "@TargetDir@/.startmenu-shortcut-component", "UNDOOPERATION", "");
+
+    if (systemInfo.productType !== "windows") {
+        return;
+    }
+
+    var executablePath = "@TargetDir@/" + WINDOWS_EXECUTABLE;
+    component.addOperation("CreateShortcut",
+        executablePath,
+        "@StartMenuDir@/" + APP_NAME + ".lnk",
+        "--showsettings",
+        "workingDirectory=@TargetDir@",
+        "iconPath=" + SHORTCUT_ICON,
+        "iconId=0",
+        "description=" + APP_NAME);
+
+    component.addOperation("CreateShortcut",
+        "@TargetDir@/" + WINDOWS_MAINTENANCE_TOOL,
+        "@StartMenuDir@/Uninstall " + APP_NAME + ".lnk",
+        "--start-uninstaller",
+        "workingDirectory=@TargetDir@",
+        "iconPath=@TargetDir@/" + WINDOWS_MAINTENANCE_TOOL,
+        "iconId=0",
+        "description=Uninstall " + APP_NAME);
+}

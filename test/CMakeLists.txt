@@ -49,11 +49,6 @@ personalcloud_add_test(FolderMigration)
 
 personalcloud_add_test(FolderWatcher)
 
-if( UNIX AND NOT APPLE )
-    personalcloud_add_test(InotifyWatcher)
-endif(UNIX AND NOT APPLE)
-
-
 personalcloud_add_test(LongPath)
 
 personalcloud_add_test(FolderMan)

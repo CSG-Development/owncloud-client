@@ -22,3 +22,10 @@ target_link_libraries(${LIB_NAME} PUBLIC
     ${CURL_LIB}
     ${CAPCORE_LIB}
 )
+
+if(WITH_CAP_CORE)
+    target_include_directories(${LIB_NAME} PRIVATE ${CAPCORE_INCLUDE_DIRS})
+    target_compile_definitions(${LIB_NAME} PRIVATE ${CAPCORE_COMPILE_DEFINITIONS})
+    target_compile_options(${LIB_NAME} PRIVATE ${CAPCORE_COMPILE_OPTIONS})
+    target_link_directories(${LIB_NAME} PUBLIC ${CAPCORE_LINK_DIRECTORIES})
+endif()

@@ -2,7 +2,7 @@
 # that create directories for the build.
 
 
-include(CUAddVfsPlugin)
+include(APPAddVfsPlugin)
 
 foreach(vfsPlugin ${VIRTUAL_FILE_SYSTEM_PLUGINS})
     set(vfsPluginPath ${vfsPlugin})
