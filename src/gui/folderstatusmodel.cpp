@@ -1004,6 +1004,43 @@ QSet<QString> FolderStatusModel::createBlackList(const FolderStatusModel::SubFol
     return result;
 }
 
+FolderStatusModel::SelectiveSyncChange FolderStatusModel::pendingSelectiveSyncChange() const
+{
+    bool hasRemoval = false;
+    bool hasAddition = false;
+
+    for (const auto &folderInfo : std::as_const(_folders)) {
+        if (!folderInfo._fetched || !folderInfo._folder) {
+            continue;
+        }
+
+        bool ok = false;
+        const auto oldBlackListSet = folderInfo._folder->journalDb()->getSelectiveSyncList(SyncJournalDb::SelectiveSyncBlackList, &ok);
+        if (!ok) {
+            continue;
+        }
+        const auto newBlackListSet = createBlackList(folderInfo, oldBlackListSet);
+
+        if (!(newBlackListSet - oldBlackListSet).isEmpty()) {
+            hasRemoval = true;
+        }
+        if (!(oldBlackListSet - newBlackListSet).isEmpty()) {
+            hasAddition = true;
+        }
+    }
+
+    if (hasRemoval && hasAddition) {
+        return SelectiveSyncChange::Mixed;
+    }
+    if (hasRemoval) {
+        return SelectiveSyncChange::Removal;
+    }
+    if (hasAddition) {
+        return SelectiveSyncChange::Addition;
+    }
+    return SelectiveSyncChange::None;
+}
+
 void FolderStatusModel::slotUpdateFolderState(Folder *folder)
 {
     if (!folder)
