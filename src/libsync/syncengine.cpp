@@ -942,6 +942,7 @@ void SyncEngine::clearManualExcludes()
 
 bool SyncEngine::reloadExcludes()
 {
+    ConfigFile::setupDefaultExcludeFilePaths(*_excludedFiles);
     return _excludedFiles->reloadExcludeFiles();
 }
 
