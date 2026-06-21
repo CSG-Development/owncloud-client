@@ -168,26 +168,15 @@ public slots:
 
     /// Triggers checks and update status for all device URLs
     void updateDeviceAccessibility();
-    void handleEndpointRecoveryRequest(const EndpointRecoveryEvent& event, const QString& folderPath);
+    void handleEndpointRecoveryRequest(const EndpointRecoveryEvent &event, const QString &folderPath);
 
 private:
-    enum class DeviceUpdateTrigger {
-        Default,
-        NetworkChange,
-        SyncTransportFailure
-    };
+    enum class DeviceUpdateTrigger { Default, NetworkChange, SyncTransportFailure };
 
-    enum class EndpointRecoveryState {
-        Idle,
-        Pending,
-        Resolving,
-        WaitingForRemoteAccessPrompt,
-        Deferred,
-        Completed,
-        Failed
-    };
+    enum class EndpointRecoveryState { Idle, Pending, Resolving, WaitingForRemoteAccessPrompt, Deferred, Completed, Failed };
 
-    struct PendingDevicePathUpdate {
+    struct PendingDevicePathUpdate
+    {
         Device device;
         DeviceUpdateTrigger trigger = DeviceUpdateTrigger::Default;
         quint64 generation = 0;
@@ -196,7 +185,8 @@ private:
         bool clearAccessCodeOnPrompt = true;
     };
 
-    struct PendingEndpointRecoveryRequest {
+    struct PendingEndpointRecoveryRequest
+    {
         EndpointRecoveryEvent event;
         QString folderPath;
         quint64 generation = 0;
@@ -211,8 +201,8 @@ private:
 
     bool canStartDeviceAccessibilityUpdate(bool logReason) const;
     bool canCoordinateEndpointRecovery(bool logReason) const;
-    void enqueueEndpointRecoveryRequest(const EndpointRecoveryEvent& event, const QString& folderPath);
-    bool shouldReplacePendingEndpointRecoveryRequest(const EndpointRecoveryEvent& event) const;
+    void enqueueEndpointRecoveryRequest(const EndpointRecoveryEvent &event, const QString &folderPath);
+    bool shouldReplacePendingEndpointRecoveryRequest(const EndpointRecoveryEvent &event) const;
     void scheduleEndpointRecoveryRetry(int delayMs);
     void triggerPendingEndpointRecovery();
     void scheduleNetworkTriggeredDeviceUpdate();
@@ -223,30 +213,32 @@ private:
     void startStartupDeviceCacheRepair(bool blockJobs);
     void startStartupDevicePathResolution(bool blockJobs);
     void finishStartupDevicePathResolution(bool continueConnectivity);
-    void resolveAndApplyDevicePath(const Device& device, bool allowRemoteAccessPrompt, DeviceUpdateTrigger trigger,
-        const std::optional<QUuid>& avoidPathId = std::nullopt);
-    void applyResolvedDevicePath(const DevicePathResolutionResult& result, DeviceUpdateTrigger trigger);
-    void requestLocalPathDiscovery(const Device& device, DeviceUpdateTrigger trigger);
-    void requestRAupdate(const Device& device, DeviceUpdateTrigger trigger);
+    void resolveAndApplyDevicePath(
+        const Device &device, bool allowRemoteAccessPrompt, DeviceUpdateTrigger trigger, const std::optional<QUuid> &avoidPathId = std::nullopt);
+    void applyResolvedDevicePath(const DevicePathResolutionResult &result, DeviceUpdateTrigger trigger);
+    void requestLocalPathDiscovery(const Device &device, DeviceUpdateTrigger trigger);
+    void requestRAupdate(const Device &device, DeviceUpdateTrigger trigger);
     void deferRemoteAccessUpdateUntilNetwork(DeviceUpdateTrigger trigger);
     void tryShowRemoteAccessPrompt();
     std::optional<Device> accountDevice() const;
     void initializeRA();
     void resetConnectionValidator();
+    [[nodiscard]] bool isPathResolutionPending() const;
+    State maskTransientFailureState(State fallback);
     void setUpdateDeviceProgress(bool inProgress);
     void startRaSwitchingTiming(DeviceUpdateTrigger trigger);
-    void logRaSwitchingTimingSummary(const QString& completionReason);
+    void logRaSwitchingTimingSummary(const QString &completionReason);
 
 signals:
     void stateChanged(State state);
     void isConnectedChanged();
     void urlUpdated();
-    void urlChanged(const QUuid& id);
+    void urlChanged(const QUuid &id);
     void isSettingUpChanged();
     void networkUpdateState(bool inProgress);
 
     // internal signal to be able to finish processing device path update when "Skip" code dialog pressed
-    void pathUpdateFinished(bool skippedCode, const Device& device);
+    void pathUpdateFinished(bool skippedCode, const Device &device);
 
 protected Q_SLOTS:
     void slotConnectionValidatorResult(ConnectionValidator::Status status, const QStringList &errors);
@@ -267,8 +259,8 @@ private:
     QPointer<TlsErrorDialog> _tlsDialog;
     bool _supportsSpaces = true;
     bool _settingUp = false;
-    DeviceController* _deviceController = nullptr;
-    std::atomic_bool _updateDeviceInProgress {false};
+    DeviceController *_deviceController = nullptr;
+    std::atomic_bool _updateDeviceInProgress{false};
     bool _raInitialized = false;
     std::optional<PendingDevicePathUpdate> _pendingDevicePathUpdate;
     quint64 _devicePathUpdateGeneration = 0;
@@ -291,7 +283,9 @@ private:
     QTimer _remoteAccessPromptRetryTimer;
     QElapsedTimer _lastSuccessfulNetworkTriggeredDeviceUpdate;
     QElapsedTimer _lastSyncTriggeredRecoveryAttempt;
-    struct RaSwitchingTiming {
+    QElapsedTimer _transientFailureMaskTimer;
+    struct RaSwitchingTiming
+    {
         bool active = false;
         DeviceUpdateTrigger trigger = DeviceUpdateTrigger::Default;
         quint64 recoveryGeneration = 0;
@@ -322,4 +316,4 @@ private:
 Q_DECLARE_METATYPE(APP::AccountState *)
 Q_DECLARE_METATYPE(APP::AccountStatePtr)
 
-#endif //ACCOUNTINFO_H
+#endif // ACCOUNTINFO_H
