@@ -21,14 +21,14 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QPainter>
+#include <QPainterPath>
 #include <QSslCipher>
 #include <QSslConfiguration>
 #include <QStack>
 #include <QStringList>
 #include <QTimer>
 #include <QXmlStreamReader>
-#include <QPainter>
-#include <QPainterPath>
 
 #include "creds/httpcredentials.h"
 
@@ -49,7 +49,7 @@ Q_LOGGING_CATEGORY(lcDetermineAuthTypeJob, "sync.networkjob.determineauthtype", 
 RequestEtagJob::RequestEtagJob(AccountPtr account, const QUrl &rootUrl, const QString &path, QObject *parent)
     : PropfindJob(account, rootUrl, path, PropfindJob::Depth::Zero, parent)
 {
-    setProperties({ QByteArrayLiteral("getetag") });
+    setProperties({QByteArrayLiteral("getetag")});
     connect(this, &PropfindJob::directoryListingIterated, this, [this](const QString &, const QMap<QString, QString> &value) {
         if (reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() != 207) {
             Q_EMIT finishedWithError(reply());
@@ -69,8 +69,7 @@ const QString &RequestEtagJob::etag() const
 }
 /*********************************************************************************************/
 
-MkColJob::MkColJob(AccountPtr account, const QUrl &url, const QString &path,
-    const QMap<QByteArray, QByteArray> &extraHeaders, QObject *parent)
+MkColJob::MkColJob(AccountPtr account, const QUrl &url, const QString &path, const QMap<QByteArray, QByteArray> &extraHeaders, QObject *parent)
     : AbstractNetworkJob(account, url, path, parent)
     , _extraHeaders(extraHeaders)
 {
@@ -92,8 +91,7 @@ void MkColJob::start()
 
 void MkColJob::finished()
 {
-    qCInfo(lcMkColJob) << "MKCOL of" << reply()->request().url() << "FINISHED WITH STATUS"
-                       << replyStatusString();
+    qCInfo(lcMkColJob) << "MKCOL of" << reply()->request().url() << "FINISHED WITH STATUS" << replyStatusString();
 
     if (reply()->error() != QNetworkReply::NoError) {
         Q_EMIT finishedWithError(reply());
@@ -128,9 +126,7 @@ static QString readContentsAsString(QXmlStreamReader &reader)
 }
 
 
-LsColXMLParser::LsColXMLParser()
-{
-}
+LsColXMLParser::LsColXMLParser() { }
 
 bool LsColXMLParser::parse(const QByteArray &xml, QHash<QString, qint64> *sizes, const QString &expectedPath)
 {
@@ -295,31 +291,27 @@ void PropfindJob::start()
 // not all in one big blob at the end.
 void PropfindJob::finished()
 {
-    qCInfo(lcPropfindJob) << "LSCOL of" << reply()->request().url() << "FINISHED WITH STATUS"
-                          << replyStatusString();
+    qCInfo(lcPropfindJob) << "LSCOL of" << reply()->request().url() << "FINISHED WITH STATUS" << replyStatusString();
 
     QString contentType = reply()->header(QNetworkRequest::ContentTypeHeader).toString();
     int httpCode = reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if (httpCode == 207 && contentType.contains(QLatin1String("application/xml; charset=utf-8"))) {
         LsColXMLParser parser;
-        connect(&parser, &LsColXMLParser::directoryListingSubfolders,
-            this, &PropfindJob::directoryListingSubfolders);
-        connect(&parser, &LsColXMLParser::directoryListingIterated,
-            this, &PropfindJob::directoryListingIterated);
-        connect(&parser, &LsColXMLParser::finishedWithError,
-            this, &PropfindJob::finishedWithError);
-        connect(&parser, &LsColXMLParser::finishedWithoutError,
-            this, &PropfindJob::finishedWithoutError);
+        connect(&parser, &LsColXMLParser::directoryListingSubfolders, this, &PropfindJob::directoryListingSubfolders);
+        connect(&parser, &LsColXMLParser::directoryListingIterated, this, &PropfindJob::directoryListingIterated);
+        connect(&parser, &LsColXMLParser::finishedWithError, this, &PropfindJob::finishedWithError);
+        connect(&parser, &LsColXMLParser::finishedWithoutError, this, &PropfindJob::finishedWithoutError);
         if (_depth == Depth::Zero) {
-            connect(&parser, &LsColXMLParser::directoryListingIterated, [&parser, counter = 0, this](const QString &name, const QMap<QString, QString> &) mutable {
-                counter++;
-                // With a depths of 0 we must receive only one listing
-                if (OC_ENSURE(counter == 1)) {
-                    disconnect(&parser, &LsColXMLParser::directoryListingIterated, this, &PropfindJob::directoryListingIterated);
-                } else {
-                    qCCritical(lcPropfindJob) << "Received superfluous directory listing for depth 0 propfind" << counter << "Path:" << name;
-                }
-            });
+            connect(
+                &parser, &LsColXMLParser::directoryListingIterated, [&parser, counter = 0, this](const QString &name, const QMap<QString, QString> &) mutable {
+                    counter++;
+                    // With a depths of 0 we must receive only one listing
+                    if (OC_ENSURE(counter == 1)) {
+                        disconnect(&parser, &LsColXMLParser::directoryListingIterated, this, &PropfindJob::directoryListingIterated);
+                    } else {
+                        qCCritical(lcPropfindJob) << "Received superfluous directory listing for depth 0 propfind" << counter << "Path:" << name;
+                    }
+                });
         }
 
         QString expectedPath = reply()->request().url().path(); // something like "/owncloud/remote.php/webdav/folder"
@@ -446,25 +438,25 @@ void DetermineAuthTypeJob::finished()
     emit this->authType(result);
 }
 
-SimpleNetworkJob::SimpleNetworkJob(AccountPtr account, const QUrl &rootUrl, const QString &path, const QByteArray &verb, const QNetworkRequest &req, QObject *parent)
+SimpleNetworkJob::SimpleNetworkJob(
+    AccountPtr account, const QUrl &rootUrl, const QString &path, const QByteArray &verb, const QNetworkRequest &req, QObject *parent)
     : AbstractNetworkJob(account, rootUrl, path, parent)
     , _request(req)
     , _verb(verb)
 {
 }
 
-SimpleNetworkJob::SimpleNetworkJob(AccountPtr account, const QUrl &rootUrl, const QString &path, const QByteArray &verb, const UrlQuery &arguments, const QNetworkRequest &req, QObject *parent)
+SimpleNetworkJob::SimpleNetworkJob(AccountPtr account, const QUrl &rootUrl, const QString &path, const QByteArray &verb, const UrlQuery &arguments,
+    const QNetworkRequest &req, QObject *parent)
     : SimpleNetworkJob(account, rootUrl, path, verb, req, parent)
 {
-    Q_ASSERT((QList<QByteArray> { "GET", "PUT", "POST", "DELETE", "HEAD", "PATCH" }.contains(verb)));
+    Q_ASSERT((QList<QByteArray>{"GET", "PUT", "POST", "DELETE", "HEAD", "PATCH"}.contains(verb)));
     if (!arguments.isEmpty()) {
         QUrlQuery args;
         // ensure everything is percent encoded
         // this is especially important for parameters that contain spaces or +
         for (const auto &item : arguments) {
-            args.addQueryItem(
-                QString::fromUtf8(QUrl::toPercentEncoding(item.first)),
-                QString::fromUtf8(QUrl::toPercentEncoding(item.second)));
+            args.addQueryItem(QString::fromUtf8(QUrl::toPercentEncoding(item.first)), QString::fromUtf8(QUrl::toPercentEncoding(item.second)));
         }
         if (verb == QByteArrayLiteral("POST") || verb == QByteArrayLiteral("PUT") || verb == QByteArrayLiteral("PATCH")) {
             _request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/x-www-form-urlencoded; charset=UTF-8"));
@@ -476,27 +468,28 @@ SimpleNetworkJob::SimpleNetworkJob(AccountPtr account, const QUrl &rootUrl, cons
     }
 }
 
-SimpleNetworkJob::SimpleNetworkJob(AccountPtr account, const QUrl &rootUrl, const QString &path, const QByteArray &verb, const QJsonObject &arguments, const QNetworkRequest &req, QObject *parent)
+SimpleNetworkJob::SimpleNetworkJob(AccountPtr account, const QUrl &rootUrl, const QString &path, const QByteArray &verb, const QJsonObject &arguments,
+    const QNetworkRequest &req, QObject *parent)
     : SimpleNetworkJob(account, rootUrl, path, verb, QJsonDocument(arguments).toJson(), req, parent)
 {
     _request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/json"));
 }
 
-SimpleNetworkJob::SimpleNetworkJob(AccountPtr account, const QUrl &rootUrl, const QString &path, const QByteArray &verb, QIODevice *requestBody, const QNetworkRequest &req, QObject *parent)
+SimpleNetworkJob::SimpleNetworkJob(
+    AccountPtr account, const QUrl &rootUrl, const QString &path, const QByteArray &verb, QIODevice *requestBody, const QNetworkRequest &req, QObject *parent)
     : SimpleNetworkJob(account, rootUrl, path, verb, req, parent)
 {
     _device = requestBody;
 }
 
-SimpleNetworkJob::SimpleNetworkJob(AccountPtr account, const QUrl &rootUrl, const QString &path, const QByteArray &verb, QByteArray &&requestBody, const QNetworkRequest &req, QObject *parent)
+SimpleNetworkJob::SimpleNetworkJob(
+    AccountPtr account, const QUrl &rootUrl, const QString &path, const QByteArray &verb, QByteArray &&requestBody, const QNetworkRequest &req, QObject *parent)
     : SimpleNetworkJob(account, rootUrl, path, verb, new QBuffer(&_body), req, parent)
 {
     _body = std::move(requestBody);
 }
 
-SimpleNetworkJob::~SimpleNetworkJob()
-{
-}
+SimpleNetworkJob::~SimpleNetworkJob() { }
 void SimpleNetworkJob::start()
 {
     Q_ASSERT(!_verb.isEmpty());
@@ -524,18 +517,20 @@ void SimpleNetworkJob::newReplyHook(QNetworkReply *reply)
     }
 }
 
-void fetchPrivateLinkUrl(AccountPtr account, const QUrl &baseUrl, const QString &remotePath, QObject *target,
-    const std::function<void(const QUrl &url)> &targetFun)
+void fetchPrivateLinkUrl(
+    AccountPtr account, const QUrl &baseUrl, const QString &remotePath, QObject *target, const std::function<void(const QUrl &url)> &targetFun)
 {
     if (account->capabilities().privateLinkPropertyAvailable()) {
         // Retrieve the new link by PROPFIND
         auto *job = new PropfindJob(account, baseUrl, remotePath, PropfindJob::Depth::Zero, target);
-        job->setProperties({ QByteArrayLiteral("http://owncloud.org/ns:privatelink") });
+        job->setProperties({QByteArrayLiteral("http://owncloud.org/ns:privatelink")});
         job->setTimeout(10s);
         QObject::connect(job, &PropfindJob::directoryListingIterated, target, [=](const QString &, const QMap<QString, QString> &result) {
             auto privateLinkUrl = result[QStringLiteral("privatelink")];
             if (!privateLinkUrl.isEmpty()) {
-                targetFun(QUrl(privateLinkUrl));
+                QUrl url(privateLinkUrl);
+                account->replaceUrlToRemote(url);
+                targetFun(url);
             }
         });
         job->start();
