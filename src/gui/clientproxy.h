@@ -15,29 +15,37 @@
 #ifndef CLIENTPROXY_H
 #define CLIENTPROXY_H
 
-#include <QObject>
+#include "csync.h"
+
+#include "common/utility.h"
+
 #include <QNetworkProxy>
+#include <QObject>
 #include <QRunnable>
 #include <QUrl>
 
-#include "common/utility.h"
-#include "csync.h"
-
-namespace APP {
+namespace APP
+{
 
 class ConfigFile;
 
 /**
  * @brief The ClientProxy class
- * @ingroup libsync
+ * @ingroup gui
  */
-namespace ClientProxy {
-    bool isUsingSystemDefault();
-    void lookupSystemProxyAsync(const QUrl &url, QObject *dst, const char *slot);
-    void setupQtProxyFromConfig(const QString &password);
+namespace ClientProxy
+{
+bool isUsingSystemDefault();
+void lookupSystemProxyAsync(const QUrl &url, QObject *dst, const char *slot);
 
-    QString printQNetworkProxy(const QNetworkProxy &proxy);
-};
+void applyProxy(const QString &password);
+void applyProxyAndRefresh(const QString &password);
+
+quint64 bumpProxyGeneration();
+quint64 proxyGeneration();
+
+QString printQNetworkProxy(const QNetworkProxy &proxy);
+};   // namespace ClientProxy
 
 class SystemProxyRunnable : public QObject, public QRunnable
 {
@@ -51,6 +59,6 @@ signals:
 private:
     QUrl _url;
 };
-}
+}   // namespace APP
 
-#endif // CLIENTPROXY_H
+#endif   // CLIENTPROXY_H

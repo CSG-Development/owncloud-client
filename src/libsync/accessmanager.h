@@ -16,12 +16,14 @@
 #define MIRALL_ACCESS_MANAGER_H
 
 #include "personalcloudlib.h"
+
 #include <QNetworkAccessManager>
 
 class QByteArray;
 class QUrl;
 
-namespace APP {
+namespace APP
+{
 class CookieJar;
 
 /**
@@ -60,8 +62,9 @@ protected:
 
 private:
     QSet<QSslCertificate> _customTrustedCaCertificates;
+    QSet<QString> _rejectedProxyPasswords;
 };
 
-} // namespace APP
+}   // namespace APP
 
 #endif

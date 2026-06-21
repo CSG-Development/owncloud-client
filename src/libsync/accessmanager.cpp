@@ -12,6 +12,13 @@
  * for more details.
  */
 
+#include "accessmanager.h"
+
+#include "cookiejar.h"
+#include "httplogger.h"
+
+#include "common/utility.h"
+
 #include <QAuthenticator>
 #include <QLoggingCategory>
 #include <QNetworkCookie>
@@ -22,14 +29,10 @@
 #include <QSslConfiguration>
 #include <QUuid>
 
-#include "accessmanager.h"
-#include "common/utility.h"
-#include "cookiejar.h"
-#include "httplogger.h"
-
 #include <algorithm>
 
-namespace APP {
+namespace APP
+{
 
 Q_LOGGING_CATEGORY(lcAccessManager, "sync.accessmanager", QtInfoMsg)
 
@@ -44,8 +47,26 @@ AccessManager::AccessManager(QObject *parent)
                            filtered.begin(), filtered.end(), [this](const QSslError &e) {
                                return !_customTrustedCaCertificates.contains(e.certificate());
                            }),
-            filtered.end());
+                       filtered.end());
         reply->ignoreSslErrors(filtered);
+    });
+
+    connect(this, &AccessManager::proxyAuthenticationRequired, this, [this](const QNetworkProxy &proxy, QAuthenticator *authenticator) {
+        if (proxy.user().isEmpty()) {
+            return;
+        }
+        if (_rejectedProxyPasswords.contains(proxy.password())) {
+            qCWarning(lcAccessManager) << "Proxy authentication credentials were rejected, not retrying";
+            return;
+        }
+        if (authenticator->user().isEmpty()) {
+            authenticator->setUser(proxy.user());
+            authenticator->setPassword(proxy.password());
+        }
+        else {
+            _rejectedProxyPasswords.insert(proxy.password());
+            qCWarning(lcAccessManager) << "Proxy authentication failed for user" << proxy.user();
+        }
     });
 }
 
@@ -86,7 +107,7 @@ QNetworkReply *AccessManager::createRequest(QNetworkAccessManager::Operation op,
         newRequest.setRawHeader(originalIdKey, requestId);
     }
 
-    if (newRequest.url().scheme() == QLatin1String("https")) { // Not for "http": QTBUG-61397
+    if (newRequest.url().scheme() == QLatin1String("https")) {   // Not for "http": QTBUG-61397
         // http2 seems to cause issues, as with our recommended server setup we don't support http2, disable it by default for now
         static const bool http2EnabledEnv = qEnvironmentVariableIntValue("PERSONALCLOUD_HTTP2_ENABLED") == 1;
 
@@ -104,7 +125,7 @@ QNetworkReply *AccessManager::createRequest(QNetworkAccessManager::Operation op,
     if (!_customTrustedCaCertificates.isEmpty()) {
         // for some reason, passing an empty list causes the default chain to be removed
         // this behavior does not match the documentation
-        sslConfiguration.addCaCertificates({ _customTrustedCaCertificates.begin(), _customTrustedCaCertificates.end() });
+        sslConfiguration.addCaCertificates({_customTrustedCaCertificates.begin(), _customTrustedCaCertificates.end()});
     }
     newRequest.setSslConfiguration(sslConfiguration);
 
@@ -127,7 +148,7 @@ void AccessManager::setCustomTrustedCaCertificates(const QSet<QSslCertificate> &
 
 void AccessManager::addCustomTrustedCaCertificates(const QList<QSslCertificate> &certificates)
 {
-    _customTrustedCaCertificates.unite({ certificates.begin(), certificates.end() });
+    _customTrustedCaCertificates.unite({certificates.begin(), certificates.end()});
 
     // we have to terminate the existing (cached) connection to make the access manager re-evaluate the certificate sent by the server
     clearConnectionCache();
@@ -147,8 +168,8 @@ QList<QSslError> AccessManager::filterSslErrors(const QList<QSslError> &errors) 
                        filtered.begin(), filtered.end(), [this](const QSslError &e) {
                            return _customTrustedCaCertificates.contains(e.certificate());
                        }),
-        filtered.end());
+                   filtered.end());
     return filtered;
 }
 
-} // namespace APP
+}   // namespace APP

@@ -48,6 +48,7 @@ set(SOURCES
     syncoptions.cpp
     theme.cpp
     creds/credentialmanager.cpp
+    creds/proxycredentials.cpp
     creds/abstractcredentials.cpp
     creds/oauth.cpp
     creds/webfinger.cpp
