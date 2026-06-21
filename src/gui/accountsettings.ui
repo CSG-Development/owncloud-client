@@ -245,7 +245,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Unchecked folders will be &lt;b&gt;removed&lt;/b&gt; from your local file system and will not be synchronized to this computer anymore</string>
+               <string/>
               </property>
               <property name="textFormat">
                <enum>Qt::TextFormat::RichText</enum>

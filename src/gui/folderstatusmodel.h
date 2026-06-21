@@ -163,6 +163,12 @@ public:
     // If the selective sync check boxes were changed
     bool isDirty() { return _dirty; }
 
+    enum class SelectiveSyncChange { None, Removal, Addition, Mixed };
+    Q_ENUM(SelectiveSyncChange);
+
+    // Describes the nature of the pending (not yet applied) selective sync changes
+    SelectiveSyncChange pendingSelectiveSyncChange() const;
+
     /**
      * return a QModelIndex for the given path within the given folder.
      * Note: this method returns an invalid index if the path was not fetched from the server before
