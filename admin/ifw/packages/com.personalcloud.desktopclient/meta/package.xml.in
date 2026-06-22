@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>@APP_DISPLAY_NAME@</DisplayName>
+    <Description>@APP_DESCRIPTION@</Description>
+    <Version>@APP_VERSION@</Version>
+    <ReleaseDate>@APP_RELEASE_DATE@</ReleaseDate>
+    <ForcedInstallation>true</ForcedInstallation>
+    <Licenses>
+        <License name="License Agreement" file="license.txt"/>
+    </Licenses>
+    <Script>installscript.qs</Script>
+</Package>

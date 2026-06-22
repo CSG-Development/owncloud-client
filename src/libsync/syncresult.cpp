@@ -97,6 +97,16 @@ void SyncResult::clearErrors()
     _errors.clear();
 }
 
+QStringList SyncResult::warningStrings() const
+{
+    return _warnings;
+}
+
+void SyncResult::appendWarningString(const QString &warn)
+{
+    _warnings.append(warn);
+}
+
 void SyncResult::processCompletedItem(const SyncFileItemPtr &item)
 {
     if (Progress::isWarningKind(item->_status)) {
@@ -109,15 +119,10 @@ void SyncResult::processCompletedItem(const SyncFileItemPtr &item)
         _folderStructureWasChanged = true;
     }
 
-    const bool successfulAppliedItem = !item->hasErrorStatus()
-                                       && item->_status != SyncFileItem::FileIgnored
-                                       && item->_status != SyncFileItem::Conflict;
+    const bool successfulAppliedItem = !item->hasErrorStatus() && item->_status != SyncFileItem::FileIgnored && item->_status != SyncFileItem::Conflict;
 
-    const bool sizeRelevantInstruction =
-        item->instruction() == CSYNC_INSTRUCTION_NEW
-        || item->instruction() == CSYNC_INSTRUCTION_REMOVE
-        || item->instruction() == CSYNC_INSTRUCTION_SYNC
-        || item->instruction() == CSYNC_INSTRUCTION_RENAME
+    const bool sizeRelevantInstruction = item->instruction() == CSYNC_INSTRUCTION_NEW || item->instruction() == CSYNC_INSTRUCTION_REMOVE
+        || item->instruction() == CSYNC_INSTRUCTION_SYNC || item->instruction() == CSYNC_INSTRUCTION_RENAME
         || item->instruction() == CSYNC_INSTRUCTION_TYPE_CHANGE;
 
     if (successfulAppliedItem && sizeRelevantInstruction) {
@@ -140,6 +145,13 @@ void SyncResult::processCompletedItem(const SyncFileItemPtr &item)
             }
         } else {
             _numOldConflictItems++;
+        }
+    } else if (item->_status == SyncFileItem::FilenameReserved) {
+        //: this displays a warning string (%2) for a file %1
+        appendWarningString(QObject::tr("%1: %2").arg(item->_file, item->_errorString));
+        _numFileNameReservedItems++;
+        if (!_firstFileNameReservedItem) {
+            _firstFileNameReservedItem = item;
         }
     } else {
         if (!item->hasErrorStatus() && item->_status != SyncFileItem::FileIgnored && item->_direction == SyncFileItem::Down) {

@@ -74,11 +74,9 @@ bool DiscoveryPhase::isInSelectiveSyncBlackList(const QString &path) const
     return false;
 }
 
-void DiscoveryPhase::checkSelectiveSyncNewFolder(const QString &path, RemotePermissions remotePerm,
-    const std::function<void(bool)> &callback)
+void DiscoveryPhase::checkSelectiveSyncNewFolder(const QString &path, RemotePermissions remotePerm, const std::function<void(bool)> &callback)
 {
-    if (_syncOptions._confirmExternalStorage && _syncOptions._vfs->mode() == Vfs::Off
-        && remotePerm.hasPermission(RemotePermissions::IsMounted)) {
+    if (_syncOptions._confirmExternalStorage && remotePerm.hasPermission(RemotePermissions::IsMounted)) {
         // external storage.
 
         /* Note: DiscoverySingleDirectoryJob::directoryListingIteratedSlot make sure that only the
@@ -100,7 +98,7 @@ void DiscoveryPhase::checkSelectiveSyncNewFolder(const QString &path, RemotePerm
     }
 
     auto limit = _syncOptions._newBigFolderSizeLimit;
-    if (limit < 0 || _syncOptions._vfs->mode() != Vfs::Off) {
+    if (limit < 0) {
         // no limit, everything is allowed;
         return callback(false);
     }
@@ -109,8 +107,7 @@ void DiscoveryPhase::checkSelectiveSyncNewFolder(const QString &path, RemotePerm
     auto propfindJob = new PropfindJob(_account, _baseUrl, _remoteFolder + path, PropfindJob::Depth::Zero, this);
     propfindJob->setProperties(QList<QByteArray>() << "resourcetype"
                                                    << "http://owncloud.org/ns:size");
-    QObject::connect(propfindJob, &PropfindJob::finishedWithError,
-        this, [=] { return callback(false); });
+    QObject::connect(propfindJob, &PropfindJob::finishedWithError, this, [=] { return callback(false); });
     QObject::connect(propfindJob, &PropfindJob::directoryListingIterated, this, [=](const QString, const QMap<QString, QString> &values) {
         auto result = values.value(QStringLiteral("size")).toLongLong();
         if (result >= limit) {
@@ -123,9 +120,7 @@ void DiscoveryPhase::checkSelectiveSyncNewFolder(const QString &path, RemotePerm
             auto p = path;
             if (!p.endsWith(QLatin1Char('/')))
                 p += QLatin1Char('/');
-            _selectiveSyncWhiteList.insert(
-                std::upper_bound(_selectiveSyncWhiteList.begin(), _selectiveSyncWhiteList.end(), p),
-                p);
+            _selectiveSyncWhiteList.insert(std::upper_bound(_selectiveSyncWhiteList.begin(), _selectiveSyncWhiteList.end(), p), p);
             return callback(false);
         }
     });
@@ -198,7 +193,7 @@ QPair<bool, QString> DiscoveryPhase::findAndCancelDeletedJob(const QString &orig
         delete otherJob;
         result = true;
     }
-    return { result, oldEtag };
+    return {result, oldEtag};
 }
 
 void DiscoveryPhase::startJob(ProcessDirectoryJob *job)
@@ -254,11 +249,12 @@ DiscoverySingleLocalDirectoryJob::DiscoverySingleLocalDirectoryJob(const Account
     , _account(account)
     , _vfs(vfs)
 {
-    qRegisterMetaType<QVector<LocalInfo> >("QVector<LocalInfo>");
+    qRegisterMetaType<QVector<LocalInfo>>("QVector<LocalInfo>");
 }
 
 // Use as QRunnable
-void DiscoverySingleLocalDirectoryJob::run() {
+void DiscoverySingleLocalDirectoryJob::run()
+{
     QString localPath = _localPath;
     if (localPath.endsWith(QLatin1Char('/'))) // Happens if _currentFolder._local.isEmpty()
         localPath.chop(1);
@@ -336,18 +332,8 @@ void DiscoverySingleDirectoryJob::start()
     // Start the actual HTTP job
     _proFindJob = new PropfindJob(_account, _baseUrl, _subPath, PropfindJob::Depth::One, this);
 
-    QList<QByteArray> props {
-        "resourcetype",
-        "getlastmodified",
-        "getcontentlength",
-        "getetag",
-        "http://owncloud.org/ns:id",
-        "http://owncloud.org/ns:downloadURL",
-        "http://owncloud.org/ns:dDC",
-        "http://owncloud.org/ns:permissions",
-        "http://owncloud.org/ns:checksums",
-        "http://owncloud.org/ns:share-types"
-    };
+    QList<QByteArray> props{"resourcetype", "getlastmodified", "getcontentlength", "getetag", "http://owncloud.org/ns:id", "http://owncloud.org/ns:downloadURL",
+        "http://owncloud.org/ns:dDC", "http://owncloud.org/ns:permissions", "http://owncloud.org/ns:checksums", "http://owncloud.org/ns:share-types"};
     if (_isRootPath) {
         props << "http://owncloud.org/ns:data-fingerprint";
     }
@@ -355,8 +341,7 @@ void DiscoverySingleDirectoryJob::start()
 
     _proFindJob->setProperties(props);
 
-    QObject::connect(_proFindJob, &PropfindJob::directoryListingIterated,
-        this, &DiscoverySingleDirectoryJob::directoryListingIteratedSlot);
+    QObject::connect(_proFindJob, &PropfindJob::directoryListingIterated, this, &DiscoverySingleDirectoryJob::directoryListingIteratedSlot);
     QObject::connect(_proFindJob, &PropfindJob::finishedWithError, this, &DiscoverySingleDirectoryJob::lsJobFinishedWithErrorSlot);
     QObject::connect(_proFindJob, &PropfindJob::finishedWithoutError, this, &DiscoverySingleDirectoryJob::lsJobFinishedWithoutErrorSlot);
     _proFindJob->start();
@@ -433,7 +418,6 @@ void DiscoverySingleDirectoryJob::directoryListingIteratedSlot(const QString &fi
             }
         }
     } else {
-
         RemoteInfo result;
         int slash = file.lastIndexOf(QLatin1Char('/'));
         result.name = file.mid(slash + 1);
@@ -452,7 +436,7 @@ void DiscoverySingleDirectoryJob::directoryListingIteratedSlot(const QString &fi
         _results.push_back(std::move(result));
     }
 
-    //This works in concerto with the RequestEtagJob and the Folder object to check if the remote folder changed.
+    // This works in concerto with the RequestEtagJob and the Folder object to check if the remote folder changed.
     if (_firstEtag.isEmpty()) {
         if (auto it = Utility::optionalFind(map, QStringLiteral("getetag"))) {
             _firstEtag = Utility::normalizeEtag(it->value()); // for directory itself
@@ -465,11 +449,11 @@ void DiscoverySingleDirectoryJob::lsJobFinishedWithoutErrorSlot()
     if (!_ignoredFirst) {
         // This is a sanity check, if we haven't _ignoredFirst then it means we never received any directoryListingIteratedSlot
         // which means somehow the server XML was bogus
-        emit finished(HttpError{ 0, tr("Server error: PROPFIND reply is not XML formatted!") });
+        emit finished(HttpError{0, tr("Server error: PROPFIND reply is not XML formatted!")});
         deleteLater();
         return;
     } else if (!_error.isEmpty()) {
-        emit finished(HttpError{ 0, _error });
+        emit finished(HttpError{0, _error});
         deleteLater();
         return;
     }
@@ -487,14 +471,13 @@ void DiscoverySingleDirectoryJob::lsJobFinishedWithErrorSlot(QNetworkReply *r)
     int httpCode = r->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     QString msg = r->errorString();
     qCWarning(lcDiscovery) << "LSCOL job error" << r->errorString() << httpCode << r->error();
-    if (r->error() == QNetworkReply::NoError
-        && !contentType.contains(QLatin1String("application/xml; charset=utf-8"))) {
+    if (r->error() == QNetworkReply::NoError && !contentType.contains(QLatin1String("application/xml; charset=utf-8"))) {
         msg = tr("Server error: PROPFIND reply is not XML formatted!");
 
     } else if (_proFindJob->timedOut()) {
         msg = tr("Connection timed out");
     }
-    emit finished(HttpError{ httpCode, msg });
+    emit finished(HttpError{httpCode, msg});
     deleteLater();
 }
 }

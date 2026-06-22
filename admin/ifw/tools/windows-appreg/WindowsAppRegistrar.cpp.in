@@ -1,0 +1,183 @@
+#include <windows.h>
+
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
+namespace {
+
+constexpr wchar_t kAppName[] = @APP_DISPLAY_NAME_WCPP@;
+constexpr wchar_t kPublisher[] = @APP_PUBLISHER_WCPP@;
+constexpr wchar_t kExecutableName[] = @WINDOWS_EXECUTABLE_WCPP@;
+constexpr wchar_t kMaintenanceToolName[] = @WINDOWS_MAINTENANCE_TOOL_EXECUTABLE_WCPP@;
+constexpr wchar_t kProtocolScheme[] = @WINDOWS_PROTOCOL_SCHEME_WCPP@;
+constexpr wchar_t kUninstallKey[] = @WINDOWS_UNINSTALL_REGISTRY_KEY_WCPP@;
+constexpr wchar_t kClassesRoot[] = L"Software\\Classes\\";
+
+[[noreturn]] void Fail(const std::wstring &message)
+{
+    const int size = WideCharToMultiByte(CP_UTF8, 0, message.c_str(), -1, nullptr, 0, nullptr, nullptr);
+    if (size <= 0) {
+        throw std::runtime_error("Windows app registration failed");
+    }
+
+    std::string utf8(size, '\0');
+    WideCharToMultiByte(CP_UTF8, 0, message.c_str(), -1, utf8.data(), size, nullptr, nullptr);
+    if (!utf8.empty()) {
+        utf8.pop_back();
+    }
+
+    throw std::runtime_error(utf8);
+}
+
+std::wstring JoinPath(const std::wstring &left, const std::wstring &right)
+{
+    if (left.empty()) {
+        return right;
+    }
+
+    if (left.back() == L'\\' || left.back() == L'/') {
+        return left + right;
+    }
+
+    return left + L"\\" + right;
+}
+
+std::wstring Win32ErrorMessage(DWORD errorCode)
+{
+    LPWSTR buffer = nullptr;
+    const DWORD flags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
+    const DWORD size = FormatMessageW(flags, nullptr, errorCode, 0, reinterpret_cast<LPWSTR>(&buffer), 0, nullptr);
+    std::wstring message = size > 0 ? std::wstring(buffer, size) : L"Unknown error";
+    if (buffer != nullptr) {
+        LocalFree(buffer);
+    }
+
+    while (!message.empty() && (message.back() == L'\r' || message.back() == L'\n')) {
+        message.pop_back();
+    }
+
+    return message;
+}
+
+void FailRegistry(const std::wstring &context, LONG errorCode)
+{
+    Fail(context + L": " + Win32ErrorMessage(static_cast<DWORD>(errorCode)));
+}
+
+void SetRegistryString(HKEY root, const std::wstring &subKey, const wchar_t *valueName, const std::wstring &value)
+{
+    HKEY key = nullptr;
+    const LONG createResult = RegCreateKeyExW(root, subKey.c_str(), 0, nullptr, 0, KEY_SET_VALUE | KEY_WOW64_64KEY, nullptr, &key, nullptr);
+    if (createResult != ERROR_SUCCESS) {
+        FailRegistry(L"Failed to create registry key " + subKey, createResult);
+    }
+
+    const BYTE *data = reinterpret_cast<const BYTE *>(value.c_str());
+    const DWORD dataSize = static_cast<DWORD>((value.size() + 1) * sizeof(wchar_t));
+    const LONG setResult = RegSetValueExW(key, valueName, 0, REG_SZ, data, dataSize);
+    RegCloseKey(key);
+
+    if (setResult != ERROR_SUCCESS) {
+        FailRegistry(L"Failed to set registry value for " + subKey, setResult);
+    }
+}
+
+void SetRegistryDword(HKEY root, const std::wstring &subKey, const wchar_t *valueName, DWORD value)
+{
+    HKEY key = nullptr;
+    const LONG createResult = RegCreateKeyExW(root, subKey.c_str(), 0, nullptr, 0, KEY_SET_VALUE | KEY_WOW64_64KEY, nullptr, &key, nullptr);
+    if (createResult != ERROR_SUCCESS) {
+        FailRegistry(L"Failed to create registry key " + subKey, createResult);
+    }
+
+    const LONG setResult = RegSetValueExW(key, valueName, 0, REG_DWORD, reinterpret_cast<const BYTE *>(&value), sizeof(value));
+    RegCloseKey(key);
+
+    if (setResult != ERROR_SUCCESS) {
+        FailRegistry(L"Failed to set registry value for " + subKey, setResult);
+    }
+}
+
+void DeleteRegistryTree(HKEY root, const std::wstring &subKey)
+{
+    const LONG deleteResult = RegDeleteTreeW(root, subKey.c_str());
+    if (deleteResult == ERROR_SUCCESS || deleteResult == ERROR_FILE_NOT_FOUND || deleteResult == ERROR_PATH_NOT_FOUND) {
+        return;
+    }
+
+    FailRegistry(L"Failed to delete registry key " + subKey, deleteResult);
+}
+
+void ApplyRegistration(const std::wstring &targetDir, const std::wstring &version)
+{
+    const std::wstring executablePath = JoinPath(targetDir, kExecutableName);
+    const std::wstring maintenanceToolPath = JoinPath(targetDir, kMaintenanceToolName);
+    const std::wstring protocolRoot = std::wstring(kClassesRoot) + kProtocolScheme;
+    const std::wstring protocolCommand = L"\"" + executablePath + L"\" \"%1\"";
+    const std::wstring uninstallCommand = L"\"" + maintenanceToolPath + L"\" --start-uninstaller";
+    const std::wstring quietUninstallCommand = L"\"" + maintenanceToolPath + L"\" --confirm-command purge";
+
+    SetRegistryString(HKEY_LOCAL_MACHINE, protocolRoot, nullptr, std::wstring(L"URL:") + kAppName + L" Protocol");
+    SetRegistryString(HKEY_LOCAL_MACHINE, protocolRoot, L"URL Protocol", L"");
+    SetRegistryString(HKEY_LOCAL_MACHINE, protocolRoot + L"\\DefaultIcon", nullptr, executablePath);
+    SetRegistryString(HKEY_LOCAL_MACHINE, protocolRoot + L"\\shell\\open\\command", nullptr, protocolCommand);
+
+    SetRegistryString(HKEY_LOCAL_MACHINE, kUninstallKey, L"DisplayName", kAppName);
+    SetRegistryString(HKEY_LOCAL_MACHINE, kUninstallKey, L"Publisher", kPublisher);
+    SetRegistryString(HKEY_LOCAL_MACHINE, kUninstallKey, L"DisplayVersion", version);
+    SetRegistryString(HKEY_LOCAL_MACHINE, kUninstallKey, L"InstallLocation", targetDir);
+    SetRegistryString(HKEY_LOCAL_MACHINE, kUninstallKey, L"DisplayIcon", executablePath);
+    SetRegistryString(HKEY_LOCAL_MACHINE, kUninstallKey, L"UninstallString", uninstallCommand);
+    SetRegistryString(HKEY_LOCAL_MACHINE, kUninstallKey, L"QuietUninstallString", quietUninstallCommand);
+    SetRegistryDword(HKEY_LOCAL_MACHINE, kUninstallKey, L"NoModify", 1);
+    SetRegistryDword(HKEY_LOCAL_MACHINE, kUninstallKey, L"NoRepair", 1);
+}
+
+void RemoveRegistration()
+{
+    DeleteRegistryTree(HKEY_LOCAL_MACHINE, std::wstring(kClassesRoot) + kProtocolScheme);
+    DeleteRegistryTree(HKEY_LOCAL_MACHINE, kUninstallKey);
+}
+
+void PrintUsage()
+{
+    std::wcerr << L"Usage: WindowsAppRegistrar.exe <apply|remove> <target-dir> [version]" << std::endl;
+}
+
+} // namespace
+
+int wmain(int argc, wchar_t *argv[])
+{
+    try {
+        if (argc < 3 || argc > 4) {
+            PrintUsage();
+            return 2;
+        }
+
+        const std::wstring command = argv[1];
+        const std::wstring targetDir = argv[2];
+
+        if (command == L"apply") {
+            if (argc != 4) {
+                PrintUsage();
+                return 2;
+            }
+
+            ApplyRegistration(targetDir, argv[3]);
+            return 0;
+        }
+
+        if (command == L"remove") {
+            RemoveRegistration();
+            return 0;
+        }
+
+        PrintUsage();
+        return 2;
+    }
+    catch (const std::exception &error) {
+        std::cerr << error.what() << std::endl;
+        return 1;
+    }
+}

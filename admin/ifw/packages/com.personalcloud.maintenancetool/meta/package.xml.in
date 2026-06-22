@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>Maintenance Tool</DisplayName>
+    <Description>Installs the signed maintenance tool used to update and uninstall the application.</Description>
+    <Version>@APP_VERSION@</Version>
+    <ReleaseDate>@APP_RELEASE_DATE@</ReleaseDate>
+    <ForcedInstallation>true</ForcedInstallation>
+    <Virtual>true</Virtual>
+    <Essential>true</Essential>
+    <SortingPriority>10</SortingPriority>
+    <Script>installscript.qs</Script>
+</Package>

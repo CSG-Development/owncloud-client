@@ -15,15 +15,14 @@
 #ifndef MIRALL_NETWORKSETTINGS_H
 #define MIRALL_NETWORKSETTINGS_H
 
-#include "libsync/creds/credentialmanager.h"
-
 #include <QWidget>
 
+namespace APP
+{
 
-namespace APP {
-
-namespace Ui {
-    class NetworkSettings;
+namespace Ui
+{
+class NetworkSettings;
 }
 
 /**
@@ -54,12 +53,9 @@ private:
     void onThemeChanged();
     void loadProxySettings();
     void loadBWLimitSettings();
-    CredentialManager *_credentialManager;
-
 
     Ui::NetworkSettings *_ui;
 };
 
-
-} // namespace APP
-#endif // MIRALL_NETWORKSETTINGS_H
+}   // namespace APP
+#endif   // MIRALL_NETWORKSETTINGS_H

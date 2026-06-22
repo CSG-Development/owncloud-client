@@ -1,0 +1,10 @@
+QWizard { background-color: #171b21; color: #eef2f6; font-family: "Segoe UI"; font-size: 9pt; }
+QWizardPage { background: #1f252d; }
+QLabel { color: #eef2f6; }
+QPushButton { min-width: 94px; min-height: 30px; padding: 5px 16px; color: #eef2f6; background: #2a313b; border: 1px solid #43505f; border-radius: 4px; }
+QPushButton:hover { border-color: #4fa5f5; }
+QPushButton:pressed { background: #36414d; }
+QPushButton:disabled { color: #8b98a8; background: #232931; border-color: #343d48; }
+QLineEdit, QTextEdit, QPlainTextEdit, QTreeView, QListView, QComboBox, QTextBrowser { background: #151a20; color: #eef2f6; border: 1px solid #43505f; border-radius: 4px; selection-background-color: #1f6fb8; selection-color: #ffffff; }
+QHeaderView::section { background: #262d36; color: #d7e0ea; border: 0; border-bottom: 1px solid #3a4653; padding: 6px 8px; }
+QCheckBox, QRadioButton { spacing: 8px; color: #eef2f6; }

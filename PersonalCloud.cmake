@@ -9,8 +9,6 @@ set( APPLICATION_ICON_NAME  "pcf" )
 set( APPLICATION_VIRTUALFILE_SUFFIX "PersonalCloud" CACHE STRING "Virtual file suffix (not including the .)")
 set( APPLICATION_BUNDLE_NAME "Personal Cloud" )
 
-set( LINUX_PACKAGE_SHORTNAME "PersonalCloud" )
-
 set( THEME_CLASS            "ApplicationTheme" )
 set( APPLICATION_REV_DOMAIN "com.seagate.personalcloud.stxfiles.macos" )
 set( WIN_SETUP_BITMAP_PATH  "${CMAKE_SOURCE_DIR}/admin/win/nsi" )

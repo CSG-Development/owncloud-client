@@ -1,0 +1,13 @@
+#ReadyForInstallationPage QWidget {
+    background-color: #ffffff;
+}
+
+#ReadyForInstallationPage QAbstractScrollArea,
+#ReadyForInstallationPage QAbstractScrollArea::viewport,
+#ReadyForInstallationPage QAbstractItemView,
+#ReadyForInstallationPage QAbstractItemView::viewport,
+#ReadyForInstallationPage QTextEdit,
+#ReadyForInstallationPage QTextBrowser {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+}

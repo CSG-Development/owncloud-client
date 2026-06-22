@@ -70,7 +70,7 @@ namespace {
         return {};
     }
 
-    int64_t getQuotaOc10(const AccountStatePtr &accountState, const QUrl &/*davUrl*/, FolderStatusModel::Columns type)
+    int64_t getQuotaOc10(const AccountStatePtr &accountState, const QUrl & /*davUrl*/, FolderStatusModel::Columns type)
     {
         switch (type) {
         case FolderStatusModel::Columns::QuotaTotal:
@@ -90,8 +90,7 @@ namespace {
 
         if (!Utility::urlEqual(folder->webDavUrl(), job->baseUrl())) {
             qCDebug(lcFolderStatus) << "Skipping stale folder-status endpoint recovery event"
-                                    << "jobBaseUrl" << job->baseUrl()
-                                    << "currentBaseUrl" << folder->webDavUrl();
+                                    << "jobBaseUrl" << job->baseUrl() << "currentBaseUrl" << folder->webDavUrl();
             return;
         }
 
@@ -100,21 +99,18 @@ namespace {
         const auto httpStatusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         const auto recoveryReason = classifyEndpointRecoveryReason(networkError, httpStatusCode, timedOut);
         const auto shouldEmitRecovery = shouldScheduleEndpointRecovery(recoveryReason);
-        qCInfo(lcFolderStatus).noquote()
-            << "folder_status_endpoint_failure"
-            << QStringLiteral("baseUrl=%1 folder=%2 networkError=%3 httpStatus=%4 timedOut=%5 reason=%6 emitRecovery=%7")
-                   .arg(job->baseUrl().toString(), folder->path(), QString::number(static_cast<int>(networkError)),
-                       QString::number(httpStatusCode), timedOut ? QStringLiteral("true") : QStringLiteral("false"),
-                       endpointRecoveryReasonString(recoveryReason),
-                       shouldEmitRecovery ? QStringLiteral("true") : QStringLiteral("false"));
+        qCInfo(lcFolderStatus).noquote() << "folder_status_endpoint_failure"
+                                         << QStringLiteral("baseUrl=%1 folder=%2 networkError=%3 httpStatus=%4 timedOut=%5 reason=%6 emitRecovery=%7")
+                                                .arg(job->baseUrl().toString(), folder->path(), QString::number(static_cast<int>(networkError)),
+                                                    QString::number(httpStatusCode), timedOut ? QStringLiteral("true") : QStringLiteral("false"),
+                                                    endpointRecoveryReasonString(recoveryReason),
+                                                    shouldEmitRecovery ? QStringLiteral("true") : QStringLiteral("false"));
         if (!shouldEmitRecovery) {
             return;
         }
 
         const auto account = accountState->account();
-        const auto activePathId = account && !account->activePath().isNull()
-            ? std::optional<QUuid>(account->activePath())
-            : std::nullopt;
+        const auto activePathId = account && !account->activePath().isNull() ? std::optional<QUuid>(account->activePath()) : std::nullopt;
         accountState->handleEndpointRecoveryRequest(
             makeEndpointRecoveryEvent(account ? account->uuid() : QUuid(), activePathId, job->baseUrl(), recoveryReason, networkError, httpStatusCode),
             folder->path());
@@ -129,9 +125,7 @@ FolderStatusModel::FolderStatusModel(QObject *parent)
     connect(this, &FolderStatusModel::rowsInserted, this, &FolderStatusModel::dirtyChanged);
 }
 
-FolderStatusModel::~FolderStatusModel()
-{
-}
+FolderStatusModel::~FolderStatusModel() { }
 
 void FolderStatusModel::setAccountState(const AccountStatePtr &accountState)
 {
@@ -236,7 +230,7 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
 
         switch (role) {
         case Qt::SizeHintRole:
-            return QSize(26,26);
+            return QSize(26, 26);
 
         case Qt::DisplayRole:
             switch (column) {
@@ -258,7 +252,9 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
             }
 
         case Qt::ToolTipRole:
-            return QString(QLatin1String("<qt>") + Utility::escape(x._size < 0 ? x._name : tr("%1 (%2)", "filename (size)").arg(x._name, Utility::octetsToString(x._size))) + QLatin1String("</qt>"));
+            return QString(QLatin1String("<qt>")
+                + Utility::escape(x._size < 0 ? x._name : tr("%1 (%2)", "filename (size)").arg(x._name, Utility::octetsToString(x._size)))
+                + QLatin1String("</qt>"));
 
         case Qt::CheckStateRole:
             return x._checked;
@@ -276,15 +272,14 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
             break;
         }
     }
-    return QVariant();
+        return QVariant();
 
     case FetchLabel: {
         const auto x = static_cast<SubFolderInfo *>(index.internalPointer());
         switch (role) {
         case Qt::DisplayRole:
             if (x->_hasError) {
-                return QVariant(tr("Error while loading the list of folders from the server.")
-                    + QStringLiteral("\n") + x->_lastErrorString);
+                return QVariant(tr("Error while loading the list of folders from the server.") + QStringLiteral("\n") + x->_lastErrorString);
             } else {
                 return tr("Fetching folder list from server...");
             }
@@ -324,9 +319,7 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
             return f->remotePath();
 
         case Columns::FolderConflictMsg:
-            return (f->syncResult().hasUnresolvedConflicts())
-                ? QStringList(tr("There are unresolved conflicts. Click for details."))
-                : QStringList();
+            return (f->syncResult().hasUnresolvedConflicts()) ? QStringList(tr("There are unresolved conflicts. Click for details.")) : QStringList();
 
         case Columns::FolderErrorMsg: {
             auto errors = f->syncResult().errorStrings();
@@ -341,6 +334,9 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
         case Columns::FolderInfoMsg:
             return f->isReady() && f->virtualFilesEnabled() && f->vfs().mode() != Vfs::Mode::WindowsCfApi ? QStringList(tr("Virtual file support is enabled."))
                                                                                                           : QStringList();
+
+        case Columns::FolderWarningMsg:
+            return f->syncResult().warningStrings();
 
         case Columns::SyncRunning:
             return f->syncResult().status() == SyncResult::SyncRunning;
@@ -511,7 +507,7 @@ bool FolderStatusModel::setData(const QModelIndex &index, const QVariant &value,
         }
         _dirty = true;
         emit dirtyChanged();
-        emit dataChanged(index, index, { role });
+        emit dataChanged(index, index, {role});
         return true;
     }
     return QAbstractItemModel::setData(index, value, role);
@@ -636,8 +632,7 @@ QModelIndex FolderStatusModel::index(int row, int column, const QModelIndex &par
         if (pinfo->_subs.count() <= parent.row())
             return QModelIndex(); // should not happen
         auto &info = pinfo->_subs[parent.row()];
-        if (!info.hasLabel()
-            && info._subs.count() <= row)
+        if (!info.hasLabel() && info._subs.count() <= row)
             return QModelIndex(); // should not happen
         return createIndex(row, column, &info);
     }
@@ -742,14 +737,12 @@ void FolderStatusModel::fetchMore(const QModelIndex &parent)
     }
     PropfindJob *job = new PropfindJob(_accountState->account(), info->_folder->webDavUrl(), path, PropfindJob::Depth::One, this);
     info->_fetchingJob = job;
-    job->setProperties({ QByteArrayLiteral("resourcetype"), QByteArrayLiteral("http://owncloud.org/ns:size"), QByteArrayLiteral("http://owncloud.org/ns:permissions") });
+    job->setProperties(
+        {QByteArrayLiteral("resourcetype"), QByteArrayLiteral("http://owncloud.org/ns:size"), QByteArrayLiteral("http://owncloud.org/ns:permissions")});
     job->setTimeout(60s);
-    connect(job, &PropfindJob::directoryListingSubfolders,
-        this, &FolderStatusModel::slotUpdateDirectories);
-    connect(job, &PropfindJob::finishedWithError,
-        this, &FolderStatusModel::slotLscolFinishedWithError);
-    connect(job, &PropfindJob::directoryListingIterated,
-        this, &FolderStatusModel::slotGatherPermissions);
+    connect(job, &PropfindJob::directoryListingSubfolders, this, &FolderStatusModel::slotUpdateDirectories);
+    connect(job, &PropfindJob::finishedWithError, this, &FolderStatusModel::slotLscolFinishedWithError);
+    connect(job, &PropfindJob::directoryListingIterated, this, &FolderStatusModel::slotGatherPermissions);
 
     job->start();
 
@@ -791,9 +784,7 @@ void FolderStatusModel::slotAccountStateChanged()
         return;
     }
 
-    const auto hasFolderStatusError = std::any_of(_folders.cbegin(), _folders.cend(), [](const SubFolderInfo &info) {
-        return info._hasError;
-    });
+    const auto hasFolderStatusError = std::any_of(_folders.cbegin(), _folders.cend(), [](const SubFolderInfo &info) { return info._hasError; });
     if (_refreshFetchedRootsWhenConnected || hasFolderStatusError) {
         refreshFetchedRoots();
     }
@@ -939,8 +930,8 @@ void FolderStatusModel::slotUpdateDirectories(const QStringList &list)
         Q_EMIT suggestExpand(index(*it, 0, idx));
     }
     /* Try to remove the the undecided lists the items that are not on the server. */
-    auto it = std::remove_if(selectiveSyncUndecidedList.begin(), selectiveSyncUndecidedList.end(),
-        [&](const QString &s) { return selectiveSyncUndecidedSet.count(s); });
+    auto it = std::remove_if(
+        selectiveSyncUndecidedList.begin(), selectiveSyncUndecidedList.end(), [&](const QString &s) { return selectiveSyncUndecidedSet.count(s); });
     if (it != selectiveSyncUndecidedList.end()) {
         selectiveSyncUndecidedList.erase(it, selectiveSyncUndecidedList.end());
 
@@ -962,9 +953,7 @@ void FolderStatusModel::slotLscolFinishedWithError(QNetworkReply *r)
     if (parentInfo) {
         if (!Utility::urlEqual(parentInfo->_folder->webDavUrl(), job->baseUrl())) {
             qCDebug(lcFolderStatus) << "Ignoring stale folder listing error for outdated base URL"
-                                    << "jobBaseUrl" << job->baseUrl()
-                                    << "currentBaseUrl" << parentInfo->_folder->webDavUrl()
-                                    << "error" << r->errorString();
+                                    << "jobBaseUrl" << job->baseUrl() << "currentBaseUrl" << parentInfo->_folder->webDavUrl() << "error" << r->errorString();
             return;
         }
 
@@ -1013,6 +1002,43 @@ QSet<QString> FolderStatusModel::createBlackList(const FolderStatusModel::SubFol
         }
     }
     return result;
+}
+
+FolderStatusModel::SelectiveSyncChange FolderStatusModel::pendingSelectiveSyncChange() const
+{
+    bool hasRemoval = false;
+    bool hasAddition = false;
+
+    for (const auto &folderInfo : std::as_const(_folders)) {
+        if (!folderInfo._fetched || !folderInfo._folder) {
+            continue;
+        }
+
+        bool ok = false;
+        const auto oldBlackListSet = folderInfo._folder->journalDb()->getSelectiveSyncList(SyncJournalDb::SelectiveSyncBlackList, &ok);
+        if (!ok) {
+            continue;
+        }
+        const auto newBlackListSet = createBlackList(folderInfo, oldBlackListSet);
+
+        if (!(newBlackListSet - oldBlackListSet).isEmpty()) {
+            hasRemoval = true;
+        }
+        if (!(oldBlackListSet - newBlackListSet).isEmpty()) {
+            hasAddition = true;
+        }
+    }
+
+    if (hasRemoval && hasAddition) {
+        return SelectiveSyncChange::Mixed;
+    }
+    if (hasRemoval) {
+        return SelectiveSyncChange::Removal;
+    }
+    if (hasAddition) {
+        return SelectiveSyncChange::Addition;
+    }
+    return SelectiveSyncChange::None;
 }
 
 void FolderStatusModel::slotUpdateFolderState(Folder *folder)
@@ -1066,8 +1092,8 @@ void FolderStatusModel::slotApplySelectiveSync()
             if (folder->isSyncRunning()) {
                 folder->slotTerminateSync();
             }
-            //The part that changed should not be read from the DB on next sync because there might be new folders
-            // (the ones that are no longer in the blacklist)
+            // The part that changed should not be read from the DB on next sync because there might be new folders
+            //  (the ones that are no longer in the blacklist)
             for (const auto &it : changes) {
                 folder->journalDb()->schedulePathForRemoteDiscovery(it);
                 folder->schedulePathForLocalDiscovery(it);
@@ -1095,8 +1121,7 @@ void FolderStatusModel::slotSetProgress(const ProgressInfo &progress, Folder *f)
 
     auto *pi = &folder._progress;
 
-    if (progress.status() == ProgressInfo::Done && !progress._lastCompletedItem.isEmpty()
-        && Progress::isWarningKind(progress._lastCompletedItem._status)) {
+    if (progress.status() == ProgressInfo::Done && !progress._lastCompletedItem.isEmpty() && Progress::isWarningKind(progress._lastCompletedItem._status)) {
         pi->_warningCount++;
     }
     // depending on the use of virtual files or small files this slot might be called very often.
@@ -1139,8 +1164,7 @@ void FolderStatusModel::computeProgress(const ProgressInfo &progress, SubFolderI
     quint64 estimatedDownBw = 0;
     QStringList allFilenames;
     for (const auto &citm : progress._currentItems) {
-        if (curItemProgress == -1 || (ProgressInfo::isSizeDependent(citm._item)
-                                         && biggerItemSize < citm._item._size)) {
+        if (curItemProgress == -1 || (ProgressInfo::isSizeDependent(citm._item) && biggerItemSize < citm._item._size)) {
             curItemProgress = citm._progress.completed();
             curItem = citm._item;
             biggerItemSize = citm._item._size;
@@ -1162,7 +1186,7 @@ void FolderStatusModel::computeProgress(const ProgressInfo &progress, SubFolderI
 
     QString fileProgressString;
     if (ProgressInfo::isSizeDependent(curItem)) {
-        //quint64 estimatedBw = progress.fileProgress(curItem).estimatedBandwidth;
+        // quint64 estimatedBw = progress.fileProgress(curItem).estimatedBandwidth;
         if (estimatedUpBw || estimatedDownBw) {
             /*
             //: Example text: "uploading foobar.png (1MB of 2MB) time left 2 minutes at a rate of 24Kb/s"
@@ -1180,8 +1204,7 @@ void FolderStatusModel::computeProgress(const ProgressInfo &progress, SubFolderI
                 //: Example text: "download 24Kb/s"   (%1 is replaced by 24Kb (translated))
                 fileProgressString.append(tr("download %1/s").arg(Utility::octetsToString(estimatedDownBw)));
 #else
-                fileProgressString.append(tr("\u2193 %1/s")
-                                              .arg(Utility::octetsToString(estimatedDownBw)));
+                fileProgressString.append(tr("\u2193 %1/s").arg(Utility::octetsToString(estimatedDownBw)));
 #endif
             }
             if (estimatedUpBw > 0) {
@@ -1190,13 +1213,13 @@ void FolderStatusModel::computeProgress(const ProgressInfo &progress, SubFolderI
                 //: Example text: "upload 24Kb/s"   (%1 is replaced by 24Kb (translated))
                 fileProgressString.append(tr("upload %1/s").arg(Utility::octetsToString(estimatedUpBw)));
 #else
-                fileProgressString.append(tr("\u2191 %1/s")
-                                              .arg(Utility::octetsToString(estimatedUpBw)));
+                fileProgressString.append(tr("\u2191 %1/s").arg(Utility::octetsToString(estimatedUpBw)));
 #endif
             }
         } else {
             //: Example text: "uploading foobar.png (2MB of 2MB)"
-            fileProgressString = tr("%1 %2 (%3 of %4)").arg(kindString, itemFileName, Utility::octetsToString(curItemProgress), Utility::octetsToString(curItem._size));
+            fileProgressString =
+                tr("%1 %2 (%3 of %4)").arg(kindString, itemFileName, Utility::octetsToString(curItemProgress), Utility::octetsToString(curItem._size));
         }
     } else if (!kindString.isEmpty()) {
         //: Example text: "uploading foobar.png"
@@ -1225,10 +1248,7 @@ void FolderStatusModel::computeProgress(const ProgressInfo &progress, SubFolderI
 
         } else {
             //: Example text: "12 MB of 345 MB, file 6 of 7"
-            overallSyncString = tr("%1 of %2, file %3 of %4")
-                                    .arg(s1, s2)
-                                    .arg(currentFile)
-                                    .arg(totalFileCount);
+            overallSyncString = tr("%1 of %2, file %3 of %4").arg(s1, s2).arg(currentFile).arg(totalFileCount);
         }
     } else if (totalFileCount > 0) {
         // Don't attempt to estimate the time left if there is no kb to transfer.
@@ -1247,9 +1267,7 @@ void FolderStatusModel::computeProgress(const ProgressInfo &progress, SubFolderI
 
 int FolderStatusModel::indexOf(Folder *f) const
 {
-    const auto it = std::find_if(_folders.cbegin(), _folders.cend(), [f](auto &it) {
-        return it._folder == f;
-    });
+    const auto it = std::find_if(_folders.cbegin(), _folders.cend(), [f](auto &it) { return it._folder == f; });
     if (it == _folders.cend()) {
         return -1;
     }

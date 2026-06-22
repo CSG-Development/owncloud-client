@@ -48,6 +48,7 @@ set(SOURCES
     syncoptions.cpp
     theme.cpp
     creds/credentialmanager.cpp
+    creds/proxycredentials.cpp
     creds/abstractcredentials.cpp
     creds/oauth.cpp
     creds/webfinger.cpp
@@ -91,17 +92,8 @@ set(SOURCES
 
 if(WIN32)
     list(APPEND SOURCES platform_win.cpp)
-elseif(UNIX)
-    if (APPLE)
-        list(APPEND SOURCES platform_mac.mm platform_mac_deprecated.mm)
-    else()
-        list(APPEND SOURCES platform_unix.cpp)
-    endif()
-endif()
-
-if(APPLE)
-    string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    add_compile_options(-fexceptions)
+elseif(APPLE)
+    list(APPEND SOURCES platform_mac.mm platform_mac_deprecated.mm)
 endif()
 
 # These headers are installed for libpersonalcloudsync to be used by 3rd party apps
@@ -110,7 +102,7 @@ INSTALL(
         ${CMAKE_CURRENT_BINARY_DIR}/personalcloudlib.h
         logger.h
         accessmanager.h
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/${APPLICATION_SHORTNAME}/libsync
+    DESTINATION ${APP_INSTALL_INCLUDEDIR}/libsync
 )
 
 add_library(${TARGET} SHARED ${SOURCES})
@@ -131,7 +123,7 @@ target_link_libraries(${TARGET}
         Qt6Keychain::Qt6Keychain
 )
 
-apply_common_target_settings(${TARGET})
+app_apply_common_target_settings(${TARGET})
 
 set_source_files_properties(configfile.cpp
     PROPERTIES
@@ -148,11 +140,6 @@ if ( APPLE )
          /System/Library/Frameworks/AppKit.framework
          /System/Library/Frameworks/IOKit.framework
     )
-endif()
-
-if(Inotify_FOUND)
-    target_include_directories(${TARGET} PRIVATE ${Inotify_INCLUDE_DIRS})
-    target_link_libraries(${TARGET} PUBLIC ${Inotify_LIBRARIES})
 endif()
 
 if(NO_MSG_HANDLER)
@@ -174,12 +161,7 @@ set_target_properties(${TARGET} PROPERTIES
 if(WITH_CRASHREPORTER)
     set_source_files_properties(platform.cpp PROPERTIES COMPILE_DEFINITIONS CRASHREPORTER_EXECUTABLE="${CRASHREPORTER_EXECUTABLE}")
     target_link_libraries(${TARGET} PRIVATE CrashReporterQt::Handler)
-
-    if(UNIX AND NOT MAC)
-        find_package(Threads REQUIRED)
-        target_link_libraries(${TARGET} PUBLIC Threads::Threads)
-    endif()
 endif()
 
 
-install(TARGETS ${TARGET} EXPORT ${APPLICATION_SHORTNAME}Config ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+app_install_target(${TARGET} EXPORT ${APPLICATION_SHORTNAME}Config)

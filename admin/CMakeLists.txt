@@ -1,2 +1,2 @@
-# traverse into osx subdirectory to install and patch the create-pack script
-add_subdirectory(osx)
+# IFW installer wiring (guarded by BUILD_INSTALLER from the root).
+include(APPInstallerIFW)

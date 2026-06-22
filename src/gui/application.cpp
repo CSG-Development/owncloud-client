@@ -16,34 +16,37 @@
 
 #include "application.h"
 
-#include <random>
-
 #include "account.h"
 #include "accountmanager.h"
 #include "accountstate.h"
-#include "common/asserts.h"
-#include "common/version.h"
-#include "common/vfs.h"
+#include "clientproxy.h"
 #include "configfile.h"
 #include "folder.h"
 #include "folderman.h"
 #include "settingsdialog.h"
 #include "sharedialog.h"
-#include "socketapi/socketapi.h"
 #include "theme.h"
 #include "translations.h"
+
+#include "common/asserts.h"
+#include "common/version.h"
+#include "common/vfs.h"
+#include "libsync/creds/proxycredentials.h"
+#include "socketapi/socketapi.h"
 #include "telemetry/ProviderNull.h"
 
+#include <random>
+
 #ifdef USE_CAPCORE
-#include "telemetry/ProviderCapcore.h"
+#    include "telemetry/ProviderCapcore.h"
 #endif
 
 #ifdef WITH_AUTO_UPDATER
-#include "updater/ocupdater.h"
+#    include "updater/ocupdater.h"
 #endif
 
 #if defined(Q_OS_WIN)
-#include <qt_windows.h>
+#    include <qt_windows.h>
 #endif
 
 #include <QApplication>
@@ -55,10 +58,11 @@
 #include <QTranslator>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
-#include <QNetworkInformation>
+#    include <QNetworkInformation>
 #endif
 
-namespace APP {
+namespace APP
+{
 
 Q_LOGGING_CATEGORY(lcApplication, "gui.application", QtInfoMsg)
 
@@ -102,6 +106,20 @@ Application::Application(Platform *platform, bool debugMode)
         AbstractNetworkJob::httpTimeout = cfg.timeout();
     }
 
+    if (!cfg.exists() || !cfg.proxyNeedsAuth()) {
+        ProxyCredentials::removeLegacyPassword();
+        ClientProxy::applyProxy(QString());
+    }
+    else {
+        const auto proxyGeneration = ClientProxy::proxyGeneration();
+        ProxyCredentials::load(this, [proxyGeneration](const QString &password) {
+            if (proxyGeneration != ClientProxy::proxyGeneration()) {
+                return;
+            }
+            ClientProxy::applyProxyAndRefresh(password);
+        });
+    }
+
     // Check vfs plugins
     if (Theme::instance()->showVirtualFilesOption() && VfsPluginManager::instance().bestAvailableVfsMode() == Vfs::Off) {
         qCWarning(lcApplication) << "Theme wants to show vfs mode, but no vfs plugins are available";
@@ -131,8 +149,7 @@ Application::Application(Platform *platform, bool debugMode)
 #ifdef WITH_AUTO_UPDATER
     // Update checks
     UpdaterScheduler *updaterScheduler = new UpdaterScheduler(this);
-    connect(updaterScheduler, &UpdaterScheduler::updaterAnnouncement, _gui.data(),
-        [this](const QString &title, const QString &msg) { _gui->slotShowTrayMessage(title, msg); });
+    connect(updaterScheduler, &UpdaterScheduler::updaterAnnouncement, _gui.data(), [this](const QString &title, const QString &msg) { _gui->slotShowTrayMessage(title, msg); });
     connect(updaterScheduler, &UpdaterScheduler::requestRestart, FolderMan::instance(), &FolderMan::slotScheduleAppRestart);
 #endif
 
@@ -143,7 +160,8 @@ Application::Application(Platform *platform, bool debugMode)
 #if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
     if (!QNetworkInformation::loadDefaultBackend()) {
         qCWarning(lcApplication) << "Failed to load QNetworkInformation";
-    } else {
+    }
+    else {
         connect(QNetworkInformation::instance(), &QNetworkInformation::reachabilityChanged, this, [this](QNetworkInformation::Reachability reachability) {
             qCInfo(lcApplication) << "Connection Status changed to:" << reachability;
         });
@@ -190,10 +208,9 @@ void Application::slotAccountStateAdded(AccountStatePtr accountState) const
     });
     if (Application::appCreated()) {
         accountState->checkConnectivity();
-    } else {
-        connect(AccountManager::instance(), &AccountManager::applicationHasCreated, accountState.data(), [accountState] {
-            accountState->checkConnectivity();
-        }, Qt::SingleShotConnection);
+    }
+    else {
+        connect(AccountManager::instance(), &AccountManager::applicationHasCreated, accountState.data(), [accountState] { accountState->checkConnectivity(); }, Qt::SingleShotConnection);
     }
 }
 
@@ -223,7 +240,6 @@ void Application::slotCrashEnforce()
     OC_ENFORCE(1 == 0);
 }
 
-
 void Application::slotCrashFatal()
 {
     qFatal("la Qt fatale");
@@ -241,7 +257,7 @@ AccountStatePtr Application::addNewAccount(AccountPtr newAccount)
 #ifdef Q_OS_MAC
     // Don't auto start when not being 'installed'
     shouldSetAutoStart = shouldSetAutoStart
-        && QCoreApplication::applicationDirPath().startsWith(QLatin1String("/Applications/"));
+                         && QCoreApplication::applicationDirPath().startsWith(QLatin1String("/Applications/"));
 #endif
     if (shouldSetAutoStart) {
         Utility::setLaunchOnStartup(Theme::instance()->appName(), Theme::instance()->appNameGUI(), true);
@@ -259,7 +275,7 @@ void Application::createTelemetry()
     _telemetry.reset(new Telemetry({std::make_unique<ProviderCapcore>()}));
 #else
     _telemetry.reset(new Telemetry({std::make_unique<ProviderNull>()}));
-#endif // USE_CAPCORE
+#endif   // USE_CAPCORE
 }
 
 void Application::slotUseMonoIconsChanged(bool)
@@ -319,7 +335,7 @@ void Application::setupTranslations()
     QTranslator *qtkeychainTranslator = new QTranslator(this);
 
     for (QString lang : std::as_const(uiLanguages)) {
-        lang.replace(QLatin1Char('-'), QLatin1Char('_')); // work around QTBUG-25973
+        lang.replace(QLatin1Char('-'), QLatin1Char('_'));   // work around QTBUG-25973
         lang = substLang(lang);
         const QString trFile = Translations::translationsFilePrefix() + lang;
         if (translator->load(trFile, trPath) || lang.startsWith(QLatin1String("en"))) {
@@ -434,4 +450,4 @@ std::unique_ptr<Application> Application::createInstance(Platform *platform, boo
     return std::unique_ptr<Application>(_instance);
 }
 
-} // namespace APP
+}   // namespace APP

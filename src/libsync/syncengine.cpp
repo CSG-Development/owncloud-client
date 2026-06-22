@@ -141,9 +141,7 @@ bool SyncEngine::checkErrorBlacklisting(SyncFileItem &item)
     }
 
     int waitSeconds = entry._lastTryTime + entry._ignoreDuration - now;
-    qCInfo(lcEngine) << "Item is on blacklist: " << entry._file
-                     << "retries:" << entry._retryCount
-                     << "for another" << waitSeconds << "s";
+    qCInfo(lcEngine) << "Item is on blacklist: " << entry._file << "retries:" << entry._retryCount << "for another" << waitSeconds << "s";
     // We need to indicate that we skip this file due to blacklisting
     // for reporting and for making sure we don't update the blacklist
     // entry yet.
@@ -167,9 +165,7 @@ bool SyncEngine::checkErrorBlacklisting(SyncFileItem &item)
 
 static bool isFileTransferInstruction(SyncInstructions instruction)
 {
-    return instruction == CSYNC_INSTRUCTION_CONFLICT
-        || instruction == CSYNC_INSTRUCTION_NEW
-        || instruction == CSYNC_INSTRUCTION_SYNC
+    return instruction == CSYNC_INSTRUCTION_CONFLICT || instruction == CSYNC_INSTRUCTION_NEW || instruction == CSYNC_INSTRUCTION_SYNC
         || instruction == CSYNC_INSTRUCTION_TYPE_CHANGE;
 }
 
@@ -184,8 +180,7 @@ void SyncEngine::deleteStaleDownloadInfos(const SyncFileItemSet &syncItems)
     }
 
     // Delete from journal and from filesystem.
-    const QVector<SyncJournalDb::DownloadInfo> deleted_infos =
-        _journal->getAndDeleteStaleDownloadInfos(download_file_paths);
+    const QVector<SyncJournalDb::DownloadInfo> deleted_infos = _journal->getAndDeleteStaleDownloadInfos(download_file_paths);
     for (const auto &deleted_info : deleted_infos) {
         const QString tmppath = _propagator->fullLocalPath(deleted_info._tmpfile);
         qCInfo(lcEngine) << "Deleting stale temporary file: " << tmppath;
@@ -211,7 +206,9 @@ void SyncEngine::deleteStaleUploadInfos(const SyncFileItemSet &syncItems)
         for (auto transferId : ids) {
             if (!transferId)
                 continue; // Was not a chunked upload
-            (new DeleteJob(account(), account()->url(), QLatin1String("remote.php/dav/uploads/") + account()->davUser() + QLatin1Char('/') + QString::number(transferId), this))->start();
+            (new DeleteJob(account(), account()->url(),
+                 QLatin1String("remote.php/dav/uploads/") + account()->davUser() + QLatin1Char('/') + QString::number(transferId), this))
+                ->start();
         }
     }
 }
@@ -353,11 +350,9 @@ void SyncEngine::startSync()
         if (freeBytes < minFree) {
             qCWarning(lcEngine()) << "Too little space available at" << _localPath << ". Have" << freeBytes << "bytes and require at least" << minFree
                                   << "bytes";
-            Q_EMIT syncError(tr("Only %1 are available, need at least %2 to start",
-                "Placeholders are postfixed with file sizes using Utility::octetsToString()")
-                                 .arg(
-                                     Utility::octetsToString(freeBytes),
-                                     Utility::octetsToString(minFree)));
+            Q_EMIT syncError(
+                tr("Only %1 are available, need at least %2 to start", "Placeholders are postfixed with file sizes using Utility::octetsToString()")
+                    .arg(Utility::octetsToString(freeBytes), Utility::octetsToString(minFree)));
             finalize(false);
             return;
         } else {
@@ -417,8 +412,7 @@ void SyncEngine::startSync()
     _stopWatch.start();
 
     qCInfo(lcEngine) << "#### Discovery start ####################################################";
-    qCInfo(lcEngine) << "Server" << account()->capabilities().status().versionString()
-                     << (account()->isHttp2Supported() ? "Using HTTP/2" : "");
+    qCInfo(lcEngine) << "Server" << account()->capabilities().status().versionString() << (account()->isHttp2Supported() ? "Using HTTP/2" : "");
     _progressInfo->_status = ProgressInfo::Discovery;
     emit transmissionProgress(*_progressInfo);
 
@@ -429,10 +423,10 @@ void SyncEngine::startSync()
     _discoveryPhase->_statedb = _journal;
     _discoveryPhase->_localDir = _localPath;
     if (!_discoveryPhase->_localDir.endsWith(QLatin1Char('/')))
-        _discoveryPhase->_localDir+=QLatin1Char('/');
+        _discoveryPhase->_localDir += QLatin1Char('/');
     _discoveryPhase->_remoteFolder = _remotePath;
     if (!_discoveryPhase->_remoteFolder.endsWith(QLatin1Char('/')))
-        _discoveryPhase->_remoteFolder+=QLatin1Char('/');
+        _discoveryPhase->_remoteFolder += QLatin1Char('/');
     _discoveryPhase->_shouldDiscoverLocaly = [this](const QString &s) { return shouldDiscoverLocally(s); };
     _discoveryPhase->setSelectiveSyncBlackList(selectiveSyncBlackList);
     _discoveryPhase->setSelectiveSyncWhiteList(_journal->getSelectiveSyncList(SyncJournalDb::SelectiveSyncWhiteList, &ok));
@@ -443,10 +437,11 @@ void SyncEngine::startSync()
         return;
     }
 
-    const QString invalidFilenamePattern = _account->capabilities().invalidFilenameRegex();
-    if (!invalidFilenamePattern.isEmpty()) {
-        _discoveryPhase->_invalidFilenameRx = QRegularExpression(invalidFilenamePattern);
+    QString invalidFilenamePattern = _account->capabilities().invalidFilenameRegex();
+    if (invalidFilenamePattern.isEmpty()) {
+        invalidFilenamePattern = FileSystem::defaultInvalidFilenameRegex();
     }
+    _discoveryPhase->_invalidFilenameRx = QRegularExpression(invalidFilenamePattern);
     _discoveryPhase->_serverBlacklistedFiles = _account->capabilities().blacklistedFiles();
     _discoveryPhase->_ignoreHiddenFiles = ignoreHiddenFiles();
 
@@ -509,7 +504,8 @@ void SyncEngine::slotDiscoveryFinished()
         return;
     }
 
-    qCInfo(lcEngine) << "#### Discovery end #################################################### " << _stopWatch.addLapTime(QStringLiteral("Discovery Finished")) << "ms";
+    qCInfo(lcEngine) << "#### Discovery end #################################################### "
+                     << _stopWatch.addLapTime(QStringLiteral("Discovery Finished")) << "ms";
 
     // Sanity check
     if (!_journal->open()) {
@@ -528,14 +524,11 @@ void SyncEngine::slotDiscoveryFinished()
     emit transmissionProgress(*_progressInfo);
 
     //    qCInfo(lcEngine) << "Permissions of the root folder: " << _csync_ctx->remote.root_perms.toString();
-    auto finish = [this]{
-
-
+    auto finish = [this] {
         auto databaseFingerprint = _journal->dataFingerprint();
         // If databaseFingerprint is empty, this means that there was no information in the database
         // (for example, upgrading from a previous version, or first sync, or server not supporting fingerprint)
-        if (!databaseFingerprint.isEmpty() && _discoveryPhase
-            && _discoveryPhase->_dataFingerprint != databaseFingerprint) {
+        if (!databaseFingerprint.isEmpty() && _discoveryPhase && _discoveryPhase->_dataFingerprint != databaseFingerprint) {
             qCInfo(lcEngine) << "data fingerprint changed, assume restore from backup" << databaseFingerprint << _discoveryPhase->_dataFingerprint;
             restoreOldFiles(_syncItems);
         }
@@ -560,8 +553,8 @@ void SyncEngine::slotDiscoveryFinished()
                     } while (index > 0);
                 }
             }
-            //std::erase_if c++20
-            // https://en.cppreference.com/w/cpp/container/set/erase_if
+            // std::erase_if c++20
+            //  https://en.cppreference.com/w/cpp/container/set/erase_if
             const auto erase_if = [](auto &c, const auto &pred) {
                 auto old_size = c.size();
                 for (auto i = c.begin(), last = c.end(); i != last;) {
@@ -576,14 +569,16 @@ void SyncEngine::slotDiscoveryFinished()
             erase_if(_syncItems, [&names](const SyncFileItemPtr &i) { return !names.contains(QStringView{i->_file}); });
         }
 
-        qCInfo(lcEngine) << "#### Reconcile (aboutToPropagate) #################################################### " << _stopWatch.addLapTime(QStringLiteral("Reconcile (aboutToPropagate)")) << "ms";
+        qCInfo(lcEngine) << "#### Reconcile (aboutToPropagate) #################################################### "
+                         << _stopWatch.addLapTime(QStringLiteral("Reconcile (aboutToPropagate)")) << "ms";
 
         _localDiscoveryPaths.clear();
 
         // To announce the beginning of the sync
         emit aboutToPropagate(_syncItems);
 
-        qCInfo(lcEngine) << "#### Reconcile (aboutToPropagate OK) #################################################### "<< _stopWatch.addLapTime(QStringLiteral("Reconcile (aboutToPropagate OK)")) << "ms";
+        qCInfo(lcEngine) << "#### Reconcile (aboutToPropagate OK) #################################################### "
+                         << _stopWatch.addLapTime(QStringLiteral("Reconcile (aboutToPropagate OK)")) << "ms";
 
         // it's important to do this before ProgressInfo::start(), to announce start of new sync
         _progressInfo->_status = ProgressInfo::Propagation;
@@ -606,12 +601,9 @@ void SyncEngine::slotDiscoveryFinished()
         _journal->commit(QStringLiteral("post treewalk"));
 
         _propagator = QSharedPointer<PersonalCloudPropagator>::create(_account, syncOptions(), _baseUrl, _localPath, _remotePath, _journal);
-        connect(_propagator.data(), &PersonalCloudPropagator::itemCompleted,
-            this, &SyncEngine::slotItemCompleted);
-        connect(_propagator.data(), &PersonalCloudPropagator::progress,
-            this, &SyncEngine::slotProgress);
-        connect(_propagator.data(), &PersonalCloudPropagator::updateFileTotal,
-            this, &SyncEngine::updateFileTotal);
+        connect(_propagator.data(), &PersonalCloudPropagator::itemCompleted, this, &SyncEngine::slotItemCompleted);
+        connect(_propagator.data(), &PersonalCloudPropagator::progress, this, &SyncEngine::slotProgress);
+        connect(_propagator.data(), &PersonalCloudPropagator::updateFileTotal, this, &SyncEngine::updateFileTotal);
         connect(_propagator.data(), &PersonalCloudPropagator::finished, this, &SyncEngine::slotPropagationFinished, Qt::QueuedConnection);
         connect(_propagator.data(), &PersonalCloudPropagator::endpointRecoveryRequested, this, &SyncEngine::endpointRecoveryRequested);
         connect(_propagator.data(), &PersonalCloudPropagator::seenLockedFile, this, &SyncEngine::seenLockedFile);
@@ -633,7 +625,8 @@ void SyncEngine::slotDiscoveryFinished()
 
         _propagator->start(std::move(_syncItems));
 
-        qCInfo(lcEngine) << "#### Post-Reconcile end #################################################### " << _stopWatch.addLapTime(QStringLiteral("Post-Reconcile Finished")) << "ms";
+        qCInfo(lcEngine) << "#### Post-Reconcile end #################################################### "
+                         << _stopWatch.addLapTime(QStringLiteral("Post-Reconcile Finished")) << "ms";
     };
 
     if (!_hasNoneFiles && _hasRemoveFile) {
@@ -807,7 +800,7 @@ void SyncEngine::setLocalDiscoveryOptions(LocalDiscoveryStyle style, std::set<QS
     // This invariant is used in SyncEngine::shouldDiscoverLocally
     QString prev;
     auto it = _localDiscoveryPaths.begin();
-    while(it != _localDiscoveryPaths.end()) {
+    while (it != _localDiscoveryPaths.end()) {
         if (!prev.isNull() && it->startsWith(prev) && (prev.endsWith(QLatin1Char('/')) || *it == prev || it->at(prev.size()) <= QLatin1Char('/'))) {
             it = _localDiscoveryPaths.erase(it);
         } else {
@@ -856,7 +849,7 @@ bool SyncEngine::shouldDiscoverLocally(const QString &path) const
     return false;
 }
 
-void SyncEngine::abort(const QString& errorMessage, AbortReason reason)
+void SyncEngine::abort(const QString &errorMessage, AbortReason reason)
 {
     _lastAbortReason = reason;
     if (_propagator)
@@ -905,9 +898,8 @@ void SyncEngine::slotSummaryError(const QString &message)
 
 void SyncEngine::slotInsufficientLocalStorage()
 {
-    slotSummaryError(
-        tr("Disk space is low: Downloads that would reduce free space "
-           "below %1 were skipped.")
+    slotSummaryError(tr("Disk space is low: Downloads that would reduce free space "
+                        "below %1 were skipped.")
             .arg(Utility::octetsToString(freeSpaceLimit())));
 }
 
@@ -950,6 +942,7 @@ void SyncEngine::clearManualExcludes()
 
 bool SyncEngine::reloadExcludes()
 {
+    ConfigFile::setupDefaultExcludeFilePaths(*_excludedFiles);
     return _excludedFiles->reloadExcludeFiles();
 }
 

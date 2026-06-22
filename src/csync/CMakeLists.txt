@@ -35,13 +35,13 @@ target_include_directories(csync
         $<INSTALL_INTERFACE:include>
 )
 
-apply_common_target_settings(csync)
+app_apply_common_target_settings(csync)
 
 if(NO_MSG_HANDLER)
     target_compile_definitions(csync PUBLIC -DNO_MSG_HANDLER=1)
 endif()
 
-if(MINGWS)
+if(MINGW)
     target_compile_definitions(csync PUBLIC __USE_MINGW_ANSI_STDIO=1)
 endif()
 
@@ -85,10 +85,10 @@ INSTALL(
         ../common/filesystembase.h
         ../common/utility.h
     DESTINATION
-        ${KDE_INSTALL_INCLUDEDIR}/${APPLICATION_SHORTNAME}/common
+        ${APP_INSTALL_INCLUDEDIR}/common
 )
 
-INSTALL(TARGETS csync EXPORT ${APPLICATION_SHORTNAME}Config ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+app_install_target(csync EXPORT ${APPLICATION_SHORTNAME}Config)
 
 configure_file(config_csync.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_csync.h)
 

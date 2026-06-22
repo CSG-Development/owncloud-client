@@ -19,13 +19,13 @@
 #include "utility_win.h"
 #include "utility.h"
 
+#include <Shlwapi.h>
 #include <comdef.h>
+#include <knownfolders.h>
 #include <qt_windows.h>
 #include <shlguid.h>
 #include <shlobj.h>
-#include <knownfolders.h>
-#include <Shlwapi.h>
-#include <atlbase.h>
+#include <wrl/client.h>
 
 #include <QCoreApplication>
 #include <QDir>
@@ -40,11 +40,13 @@ extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
 Q_LOGGING_CATEGORY(lcUtilityWin, "gui.utility.win", QtDebugMsg)
 
 namespace {
-const QString systemRunPathC() {
+const QString systemRunPathC()
+{
     return QStringLiteral("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Run");
 }
 
-const QString runPathC() {
+const QString runPathC()
+{
     return QStringLiteral("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run");
 }
 
@@ -53,7 +55,7 @@ const QString systemThemesC()
     return QStringLiteral("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize");
 }
 
-HRESULT GetShellLibraryItem(LPWSTR pwszLibraryName, IShellItem2** ppShellItem)
+HRESULT GetShellLibraryItem(LPWSTR pwszLibraryName, IShellItem2 **ppShellItem)
 {
     *ppShellItem = nullptr;
 
@@ -64,19 +66,19 @@ HRESULT GetShellLibraryItem(LPWSTR pwszLibraryName, IShellItem2** ppShellItem)
     return SHCreateItemInKnownFolder(FOLDERID_UsersLibraries, KF_FLAG_DEFAULT_PATH | KF_FLAG_NO_ALIAS, wszRealLibraryName, IID_PPV_ARGS(ppShellItem));
 }
 
-HRESULT OpenShellLibrary(LPWSTR pwszLibraryName, IShellLibrary** ppShellLib)
+HRESULT OpenShellLibrary(LPWSTR pwszLibraryName, IShellLibrary **ppShellLib)
 {
     *ppShellLib = nullptr;
 
-    CComPtr<IShellItem2> pShellItem;
-    HRESULT hr = GetShellLibraryItem(pwszLibraryName, &pShellItem);
+    Microsoft::WRL::ComPtr<IShellItem2> pShellItem;
+    HRESULT hr = GetShellLibraryItem(pwszLibraryName, pShellItem.GetAddressOf());
     if (FAILED(hr)) {
         qCWarning(lcUtilityWin) << "GetShellLibraryItem" << std::system_category().message(hr);
         return hr;
     }
 
     // Get the shell library object from the shell item with a read and write permissions
-    hr = SHLoadLibraryFromItem(pShellItem, STGM_READWRITE, IID_PPV_ARGS(ppShellLib));
+    hr = SHLoadLibraryFromItem(pShellItem.Get(), STGM_READWRITE, IID_PPV_ARGS(ppShellLib));
     if (FAILED(hr)) {
         qCWarning(lcUtilityWin) << "SHLoadLibraryFromItem" << std::system_category().message(hr);
     }
@@ -84,7 +86,7 @@ HRESULT OpenShellLibrary(LPWSTR pwszLibraryName, IShellLibrary** ppShellLib)
     return hr;
 }
 
-void AddRemoveLib(bool add, const QString& folderPath, bool createLib)
+void AddRemoveLib(bool add, const QString &folderPath, bool createLib)
 {
     const auto normalizedPath = QDir::toNativeSeparators(folderPath);
     QDir d(normalizedPath);
@@ -98,10 +100,9 @@ void AddRemoveLib(bool add, const QString& folderPath, bool createLib)
         return;
     }
 
-    CComPtr<IShellLibrary> pLibrary;
-    hr = OpenShellLibrary(const_cast<LPWSTR>(L"PersonalCloud Files"), &pLibrary);
-    if (FAILED(hr))
-    {
+    Microsoft::WRL::ComPtr<IShellLibrary> pLibrary;
+    hr = OpenShellLibrary(const_cast<LPWSTR>(L"PersonalCloud Files"), pLibrary.GetAddressOf());
+    if (FAILED(hr)) {
         qCWarning(lcUtilityWin) << "OpenShellLibrary error:" << std::system_category().message(hr);
 
         if (!createLib) {
@@ -109,15 +110,15 @@ void AddRemoveLib(bool add, const QString& folderPath, bool createLib)
             return;
         }
 
-        hr = SHCreateLibrary(IID_PPV_ARGS(&pLibrary));
+        hr = SHCreateLibrary(IID_PPV_ARGS(pLibrary.ReleaseAndGetAddressOf()));
         if (FAILED(hr)) {
             qCWarning(lcUtilityWin) << "SHCreateLibrary error: " << std::system_category().message(hr);
             return;
         }
 
         // Save the new library under the user's Libraries folder.
-        CComPtr<IShellItem> pSavedTo;
-        hr = pLibrary->SaveInKnownFolder(FOLDERID_UsersLibraries, L"PersonalCloud Files", LSF_OVERRIDEEXISTING, &pSavedTo);
+        Microsoft::WRL::ComPtr<IShellItem> pSavedTo;
+        hr = pLibrary->SaveInKnownFolder(FOLDERID_UsersLibraries, L"PersonalCloud Files", LSF_OVERRIDEEXISTING, pSavedTo.GetAddressOf());
         if (FAILED(hr)) {
             qCWarning(lcUtilityWin) << "SaveInKnownFolder error:" << std::system_category().message(hr);
             return;
@@ -125,20 +126,18 @@ void AddRemoveLib(bool add, const QString& folderPath, bool createLib)
     }
 
     if (add) {
-        hr = SHAddFolderPathToLibrary(pLibrary, normalizedPath.toStdWString().c_str());
+        hr = SHAddFolderPathToLibrary(pLibrary.Get(), normalizedPath.toStdWString().c_str());
         if (FAILED(hr)) {
             qCWarning(lcUtilityWin) << "SHAddFolderPathToLibrary error:" << std::system_category().message(hr);
         }
-    }
-    else {
-        SHRemoveFolderPathFromLibrary(pLibrary, normalizedPath.toStdWString().c_str());
+    } else {
+        SHRemoveFolderPathFromLibrary(pLibrary.Get(), normalizedPath.toStdWString().c_str());
         if (FAILED(hr)) {
             qCWarning(lcUtilityWin) << "SHRemoveFolderPathFromLibrary error:" << std::system_category().message(hr);
         }
     }
 
-    if (SUCCEEDED(pLibrary->SetFolderType(FOLDERTYPEID_Documents)))
-    {
+    if (SUCCEEDED(pLibrary->SetFolderType(FOLDERTYPEID_Documents))) {
         hr = pLibrary->Commit();
         if (FAILED(hr)) {
             qCWarning(lcUtilityWin) << "Library commit error:" << std::system_category().message(hr);
@@ -153,15 +152,13 @@ void AddRemoveLib(bool add, const QString& folderPath, bool createLib)
 
 namespace APP {
 
-void Utility::setupFavLink(const QString& localDir)
+void Utility::setupFavLink(const QString &localDir)
 {
     qCInfo(lcUtilityWin) << "Creating Library item" << localDir;
     AddRemoveLib(true, localDir, true);
 }
 
-void Utility::removeFavLink(const QString& /*localDir*/)
-{
-}
+void Utility::removeFavLink(const QString & /*localDir*/) { }
 
 bool Utility::hasSystemLaunchOnStartup(const QString &appName)
 {
@@ -195,8 +192,8 @@ bool Utility::hasDarkSystray()
 void Utility::UnixTimeToFiletime(time_t t, FILETIME *filetime)
 {
     LONGLONG ll = Int32x32To64(t, 10000000) + 116444736000000000;
-    filetime->dwLowDateTime = (DWORD) ll;
-    filetime->dwHighDateTime = ll >>32;
+    filetime->dwLowDateTime = (DWORD)ll;
+    filetime->dwHighDateTime = ll >> 32;
 }
 
 void Utility::FiletimeToLargeIntegerFiletime(FILETIME *filetime, LARGE_INTEGER *hundredNSecs)
@@ -208,8 +205,8 @@ void Utility::FiletimeToLargeIntegerFiletime(FILETIME *filetime, LARGE_INTEGER *
 void Utility::UnixTimeToLargeIntegerFiletime(time_t t, LARGE_INTEGER *hundredNSecs)
 {
     LONGLONG ll = Int32x32To64(t, 10000000) + 116444736000000000;
-    hundredNSecs->LowPart = (DWORD) ll;
-    hundredNSecs->HighPart = ll >>32;
+    hundredNSecs->LowPart = (DWORD)ll;
+    hundredNSecs->HighPart = ll >> 32;
 }
 
 

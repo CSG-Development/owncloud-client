@@ -25,31 +25,3 @@ if(SPARKLE_FOUND)
     )
     target_link_libraries(PersonalCloudCore PRIVATE ${SPARKLE_LIBRARY})
 endif()
-
-if(WITH_APPIMAGEUPDATER)
-    message(STATUS "Including built-in libappimageupdate based updater")
-
-    set(appimageupdater_sources
-        ${CMAKE_CURRENT_SOURCE_DIR}/appimageupdateavailabledialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/appimageupdateavailabledialog.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/appimageupdateavailabledialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/appimageupdater.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/appimageupdater.h
-    )
-
-    target_sources(PersonalCloudCore PRIVATE ${appimageupdater_sources})
-
-    # as libappimageupdate uses exceptions, we define a shim that catches all incoming exceptions
-    # and handles them in a suitable way
-    # we have to enable exceptions for this one compilation unit
-    set_source_files_properties(${appimageupdater_sources}
-        TARGET_DIRECTORY PersonalCloudCore
-        PROPERTIES COMPILE_OPTIONS "-fexceptions"
-    )
-
-    target_compile_definitions(PersonalCloudCore PRIVATE WITH_APPIMAGEUPDATER)
-    target_link_libraries(PersonalCloudCore PRIVATE libappimageupdate)
-
-    find_package(Threads REQUIRED)
-    target_link_libraries(PersonalCloudCore PUBLIC ${CMAKE_THREAD_LIBS_INIT})
-endif()

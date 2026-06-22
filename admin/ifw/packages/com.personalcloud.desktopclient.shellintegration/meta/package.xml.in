@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>Integration for Windows Explorer</DisplayName>
+    <Description>Registers Windows Explorer context menu and overlay shell extensions. Update or uninstall can require Explorer restart or system reboot.</Description>
+    <Version>@APP_VERSION@</Version>
+    <ReleaseDate>@APP_RELEASE_DATE@</ReleaseDate>
+    <Default>true</Default>
+    <Dependencies>@COMPONENT_MAIN_ID@</Dependencies>
+    <SortingPriority>70</SortingPriority>
+    <Script>installscript.qs</Script>
+</Package>
