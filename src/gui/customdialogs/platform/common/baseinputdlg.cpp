@@ -1,17 +1,20 @@
 #include "baseinputdlg.h"
-#include "windowdragger.h"
+
 #include "dlgutils.h"
 #include "prophelper.h"
-#include "theme.h"
 #include "pushbuttonstyle.h"
+#include "theme.h"
+#include "windowdragger.h"
+
 #include "gui/customui/focusproxy.h"
 
-#include <QPushButton>
-#include <QToolButton>
 #include <QLabel>
 #include <QLineEdit>
+#include <QPushButton>
+#include <QToolButton>
 
-namespace {
+namespace
+{
 const auto logo_icon = QStringLiteral(":/res/Files-app-icon-round.svg");
 }
 
@@ -41,10 +44,14 @@ BaseInputDlg &BaseInputDlg::setRejectButtonText(const QString &rejectText)
 
 BaseInputDlg &BaseInputDlg::setDefaultButton(DialogCode code)
 {
+    if (!_widgets.btnAccept || !_widgets.btnReject)
+        return *this;
+
     if (code == QDialog::Accepted) {
         _widgets.btnAccept->setDefault(true);
         _widgets.btnReject->setDefault(false);
-    } else {
+    }
+    else {
         _widgets.btnAccept->setDefault(false);
         _widgets.btnReject->setDefault(true);
     }
@@ -153,7 +160,8 @@ void BaseInputDlg::showEvent(QShowEvent *event)
         if (_realParent) {
             QPoint parentCenter = _realParent->mapToGlobal(_realParent->rect().center());
             move(parentCenter.x() - width() / 2, parentCenter.y() - height() / 2);
-        } else {
+        }
+        else {
             QScreen *screen = QGuiApplication::primaryScreen();
             if (screen) {
                 QRect screenGeometry = screen->geometry();
