@@ -1,16 +1,20 @@
 #include "logbrowserdlg.h"
-#include "gui/customdialogs/platform/common/prophelper.h"
-#include "gui/customdialogs/dlgutils.h"
+
 #include "configfile.h"
 #include "logger.h"
+
+#include "gui/customdialogs/dlgutils.h"
+#include "gui/customdialogs/platform/common/prophelper.h"
+
 #include <QDesktopServices>
 #include <QDir>
+#include <QPointer>
 
 #ifdef Q_OS_WIN
-#include "platform/windows/logbrowser.h"
+#    include "platform/windows/logbrowser.h"
 
 #elif defined(Q_OS_MAC)
-#include "platform/macos/logbrowsermac.h"
+#    include "platform/macos/logbrowsermac.h"
 #endif
 
 class LogBrowserDlgPrivate
@@ -21,7 +25,12 @@ public:
     {
     }
 
-    QDialog *dlg = nullptr;
+    ~LogBrowserDlgPrivate()
+    {
+        delete dlg;
+    }
+
+    QPointer<QDialog> dlg;
     QWidget *parent = nullptr;
     bool deleteOnClose = false;
     QDialog::DialogCode defaultCode = QDialog::Accepted;
@@ -30,7 +39,7 @@ public:
     bool logHttpEnabled = false;
     int filesToKeep = 5;
 
-    void ensureCreated(APP::LogBrowserDlg* q)
+    void ensureCreated(APP::LogBrowserDlg *q)
     {
         static bool resourcesLoaded = []() {
             Q_INIT_RESOURCE(customdialogs_res);
@@ -42,32 +51,42 @@ public:
 
 #ifdef Q_OS_WIN
         dlg = new LogBrowser(parent);
-        QObject::connect(qobject_cast<LogBrowser*>(dlg), &LogBrowser::openLocation, [q] {
-            if (q) q->openLocation();
+        QObject::connect(qobject_cast<LogBrowser *>(dlg), &LogBrowser::openLocation, [q] {
+            if (q)
+                q->openLocation();
         });
-        QObject::connect(qobject_cast<LogBrowser*>(dlg), &LogBrowser::logEnableChanged, [q](bool enable) {
-            if (q) q->logEnable(enable);
+        QObject::connect(qobject_cast<LogBrowser *>(dlg), &LogBrowser::logEnableChanged, [q](bool enable) {
+            if (q)
+                q->logEnable(enable);
         });
-        QObject::connect(qobject_cast<LogBrowser*>(dlg), &LogBrowser::logHttpEnableChanged, [q](bool enable) {
-            if (q) q->logHttpEnable(enable);
+        QObject::connect(qobject_cast<LogBrowser *>(dlg), &LogBrowser::logHttpEnableChanged, [q](bool enable) {
+            if (q)
+                q->logHttpEnable(enable);
         });
-        QObject::connect(qobject_cast<LogBrowser*>(dlg), &LogBrowser::filesToKeepChanged, [q](int count) {
-            if (q) q->filesToKeep(count);
+        QObject::connect(qobject_cast<LogBrowser *>(dlg), &LogBrowser::filesToKeepChanged, [q](int count) {
+            if (q)
+                q->filesToKeep(count);
         });
 #elif defined(Q_OS_MAC)
         dlg = new LogBrowserMac(nullptr);
-        QObject::connect(qobject_cast<LogBrowserMac*>(dlg), &LogBrowserMac::openLocation, [q] {
-            if (q) q->openLocation();
+        QObject::connect(qobject_cast<LogBrowserMac *>(dlg), &LogBrowserMac::openLocation, [q] {
+            if (q)
+                q->openLocation();
         });
-        QObject::connect(qobject_cast<LogBrowserMac*>(dlg), &LogBrowserMac::logEnableChanged, [q](bool enable) {
-            if (q) q->logEnable(enable);
+        QObject::connect(qobject_cast<LogBrowserMac *>(dlg), &LogBrowserMac::logEnableChanged, [q](bool enable) {
+            if (q)
+                q->logEnable(enable);
         });
-        QObject::connect(qobject_cast<LogBrowserMac*>(dlg), &LogBrowserMac::logHttpEnableChanged, [q](bool enable) {
-            if (q) q->logHttpEnable(enable);
+        QObject::connect(qobject_cast<LogBrowserMac *>(dlg), &LogBrowserMac::logHttpEnableChanged, [q](bool enable) {
+            if (q)
+                q->logHttpEnable(enable);
         });
-        QObject::connect(qobject_cast<LogBrowserMac*>(dlg), &LogBrowserMac::filesToKeepChanged, [q](int count) {
-            if (q) q->filesToKeep(count);
+        QObject::connect(qobject_cast<LogBrowserMac *>(dlg), &LogBrowserMac::filesToKeepChanged, [q](int count) {
+            if (q)
+                q->filesToKeep(count);
         });
+#else
+#    error "LogBrowserDlg: unsupported platform (only Windows and macOS are supported)"
 #endif
 
         QObject::connect(dlg, &QDialog::accepted, q, &APP::LogBrowserDlg::accepted);
@@ -85,7 +104,8 @@ public:
     }
 };
 
-namespace APP {
+namespace APP
+{
 
 LogBrowserDlg::LogBrowserDlg(QWidget *parent)
     : d_ptr(new LogBrowserDlgPrivate(parent))
@@ -118,12 +138,16 @@ void LogBrowserDlg::open()
 void LogBrowserDlg::accept()
 {
     Q_D(LogBrowserDlg);
+    if (!d->dlg)
+        return;
     d->dlg->accept();
 }
 
 void LogBrowserDlg::reject()
 {
     Q_D(const LogBrowserDlg);
+    if (!d->dlg)
+        return;
     d->dlg->reject();
 }
 
@@ -159,7 +183,8 @@ LogBrowserDlg &LogBrowserDlg::setDeleteOnClose(bool on)
     if (d->dlg) {
         if (on) {
             connect(d->dlg, &QDialog::finished, this, &QObject::deleteLater);
-        } else {
+        }
+        else {
             disconnect(d->dlg, &QDialog::finished, this, &QObject::deleteLater);
         }
     }
@@ -206,9 +231,10 @@ void LogBrowserDlg::setupLoggingFromConfig()
 
         logger->setupTemporaryFolderLogDir();
         Logger::instance()->setMaxLogFiles(config.automaticDeleteOldLogs());
-    } else {
+    }
+    else {
         logger->disableTemporaryFolderLogDir();
     }
 }
 
-} // namespace APP
+}   // namespace APP

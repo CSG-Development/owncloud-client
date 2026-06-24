@@ -1,15 +1,18 @@
 #include "custommessagebox.h"
+
 #include "dlgutils.h"
+
 #include "gui/application.h"
 #include "gui/settingsdialog.h"
 
+#include <QPointer>
 #include <QtGlobal>
 
 #ifdef Q_OS_WIN
-    #include "platform/windows/confirmdlg.h"
+#    include "platform/windows/confirmdlg.h"
 #elif defined(Q_OS_MAC)
-    #include "platform/macos/confirmdlgmac.h"
-    #include "platform/macos/confirmwidedlgmac.h"
+#    include "platform/macos/confirmdlgmac.h"
+#    include "platform/macos/confirmwidedlgmac.h"
 #endif
 
 class CustomMessageBoxPrivate
@@ -23,7 +26,12 @@ public:
             parent = mainParent;
     }
 
-    BaseConfirmDlg *dlg = nullptr;
+    ~CustomMessageBoxPrivate()
+    {
+        delete dlg;
+    }
+
+    QPointer<BaseConfirmDlg> dlg;
 
     QString headerText;
     QString messageText;
@@ -36,22 +44,27 @@ public:
     bool singleButton = false;
     QDialog::DialogCode defaultCode = QDialog::Accepted;
 
-    void ensureCreated(APP::CustomMessageBox* q)
+    void ensureCreated(APP::CustomMessageBox *q)
     {
         static bool resourcesLoaded = []() {
             Q_INIT_RESOURCE(customdialogs_res);
             return true;
         }();
 
-        if (dlg) return;
+        if (dlg)
+            return;
 
 #ifdef Q_OS_WIN
         auto winDlg = new ConfirmDlg(parent);
         winDlg->setWide(isWide);
         dlg = winDlg;
 #elif defined(Q_OS_MAC)
-        if (isWide) dlg = new ConfirmWideDlgMac(nullptr);
-        else        dlg = new ConfirmDlgMac(nullptr);
+        if (isWide)
+            dlg = new ConfirmWideDlgMac(nullptr);
+        else
+            dlg = new ConfirmDlgMac(nullptr);
+#else
+#    error "CustomMessageBox: unsupported platform (only Windows and macOS are supported)"
 #endif
         dlg->setRealParent(parent);
         dlg->setHeaderText(headerText);
@@ -72,8 +85,8 @@ public:
     }
 };
 
-
-namespace APP {
+namespace APP
+{
 
 CustomMessageBox::CustomMessageBox(QWidget *parent)
     : d_ptr(new CustomMessageBoxPrivate(parent))
@@ -189,7 +202,8 @@ CustomMessageBox &CustomMessageBox::setDeleteOnClose(bool on)
     if (d->dlg) {
         if (on) {
             connect(d->dlg, &QDialog::finished, this, &QObject::deleteLater);
-        } else {
+        }
+        else {
             disconnect(d->dlg, &QDialog::finished, this, &QObject::deleteLater);
         }
     }
@@ -199,20 +213,23 @@ CustomMessageBox &CustomMessageBox::setDeleteOnClose(bool on)
 QWidget *CustomMessageBox::widgetPtr() const
 {
     Q_D(const CustomMessageBox);
-    return d->dlg;
+    return d->dlg.data();
 }
 
 void CustomMessageBox::accept()
 {
     Q_D(const CustomMessageBox);
+    if (!d->dlg)
+        return;
     d->dlg->accept();
 }
 
 void CustomMessageBox::reject()
 {
     Q_D(const CustomMessageBox);
+    if (!d->dlg)
+        return;
     d->dlg->reject();
 }
 
-
-} // namespace APP
+}   // namespace APP

@@ -1,16 +1,18 @@
 #include "baseconfirmdlg.h"
-#include "pushbuttonstyle.h"
-#include "dlgutils.h"
-#include "windowdragger.h"
-#include "prophelper.h"
-#include "gui/customui/focusproxy.h"
-#include "theme.h"
 
-#include <QPushButton>
-#include <QToolButton>
+#include "dlgutils.h"
+#include "prophelper.h"
+#include "pushbuttonstyle.h"
+#include "theme.h"
+#include "windowdragger.h"
+
+#include "gui/customui/focusproxy.h"
+
 #include <QLabel>
 #include <QLayout>
+#include <QPushButton>
 #include <QTimer>
+#include <QToolButton>
 
 BaseConfirmDlg::BaseConfirmDlg(QWidget *parent)
     : QDialog(parent)
@@ -87,10 +89,14 @@ BaseConfirmDlg &BaseConfirmDlg::setWide(bool wide)
 
 BaseConfirmDlg &BaseConfirmDlg::setDefaultButton(DialogCode code)
 {
+    if (!_widgets.btnAccept || !_widgets.btnReject)
+        return *this;
+
     if (code == QDialog::Accepted) {
         _widgets.btnAccept->setDefault(true);
         _widgets.btnReject->setDefault(false);
-    } else {
+    }
+    else {
         _widgets.btnAccept->setDefault(false);
         _widgets.btnReject->setDefault(true);
     }
@@ -103,7 +109,7 @@ BaseConfirmDlg &BaseConfirmDlg::setSingleButton(bool val)
     return *this;
 }
 
-void BaseConfirmDlg::setupCommonLogic(const CommonDialogWidgets& widgets)
+void BaseConfirmDlg::setupCommonLogic(const CommonDialogWidgets &widgets)
 {
     _widgets = widgets;
 
@@ -157,7 +163,8 @@ void BaseConfirmDlg::showEvent(QShowEvent *event)
         if (_realParent) {
             QPoint parentCenter = _realParent->mapToGlobal(_realParent->rect().center());
             move(parentCenter.x() - width() / 2, parentCenter.y() - height() / 2);
-        } else {
+        }
+        else {
             QScreen *screen = QGuiApplication::primaryScreen();
             if (screen) {
                 QRect screenGeometry = screen->geometry();
@@ -181,5 +188,4 @@ void BaseConfirmDlg::syncUI()
     _widgets.lblText->setText(_ctrl->messageText);
     _widgets.btnAccept->setText(_ctrl->acceptButtonText);
     _widgets.btnReject->setText(_ctrl->rejectButtonText);
-
 }
