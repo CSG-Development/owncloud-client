@@ -23,6 +23,8 @@ public:
     DeviceInfoAbout about;      // Not saved in config, runtime only
     DeviceInfoStatus status;    // Not saved in config, runtime only
     QString friendlyName;       // Not saved in config, runtime only
+    int aboutHttpStatus = 0;    // Not saved in config, runtime only
+    int statusHttpStatus = 0;   // Not saved in config, runtime only
 
     QJsonObject toJson() const;
     static DevicePath fromJson(const QJsonObject &val);

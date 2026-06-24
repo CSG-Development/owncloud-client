@@ -23,6 +23,7 @@ const auto cert_common_name_C = QStringLiteral("certificate_common_name");
 const auto friendly_name_C = QStringLiteral("friendly_name");
 const auto paths_C = QStringLiteral("paths");
 const auto remote_paths_fetched_at_utc_C = QStringLiteral("remote_paths_fetched_at_utc");
+constexpr int DefaultHttpsPort = 443;
 
 QString remotePathKey(const DevicePath& path)
 {
@@ -71,14 +72,15 @@ QJsonObject DevicePath::toJson() const
 DevicePath DevicePath::fromJson(const QJsonObject& val)
 {
     const auto address = val[address_C].toString();
-    const auto port = val[port_C].toInt();
+    const auto rawPort = val[port_C].toInt();
+    const auto port = rawPort > 0 ? rawPort : DefaultHttpsPort;
     const auto rawDeviceType = val[deviceType_C].toString();
     const auto deviceType = DevHelpers::strToDevType(rawDeviceType);
-    if (address.isEmpty() || port <= 0 || deviceType == DeviceType::Unknown) {
+    if (address.isEmpty() || deviceType == DeviceType::Unknown) {
         qCWarning(lcDeviceData).noquote()
             << "device_cache invalid_path"
             << QStringLiteral("{address:%1,port:%2,type:%3}")
-                   .arg(address, QString::number(port), rawDeviceType);
+                   .arg(address, QString::number(rawPort), rawDeviceType);
     }
 
     DevicePath dp(

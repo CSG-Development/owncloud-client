@@ -126,11 +126,13 @@ private:
     void logAcceptedEndpoint(const QString& address, quint16 port, const QString& source);
     void logNotHomecloudEndpoint(const QString& address, quint16 port, const QString& source);
     void setupSockets();
+    void joinMulticastGroups();
     bool pruneExpiredState();
     bool updateDiscoveredRecord(const QString& address, quint16 port, int ttlMs);
 
     QUdpSocket* multicastSocket_ = nullptr;
     QUdpSocket* unicastSocket_ = nullptr;
+    QSet<QString> joinedMulticastIfaces_;
     QHash<QByteArray, ServiceState> services_;
     QHash<QByteArray, HostState> hosts_;
     QMap<QString, DevicePath> discoveredRecords_;

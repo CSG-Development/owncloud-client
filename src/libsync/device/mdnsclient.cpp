@@ -368,21 +368,7 @@ void MdnsClient::setupSockets()
     multicastSocket_ = new QUdpSocket(this);
     if (multicastSocket_->bind(QHostAddress::AnyIPv4, MdnsPort, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint)) {
         connect(multicastSocket_, &QUdpSocket::readyRead, this, &MdnsClient::onReadyRead);
-
-        for (const auto& iface : QNetworkInterface::allInterfaces()) {
-            if (!iface.isValid() || !iface.flags().testFlag(QNetworkInterface::IsUp)
-                || !iface.flags().testFlag(QNetworkInterface::IsRunning)
-                || iface.flags().testFlag(QNetworkInterface::IsLoopBack)
-                || !iface.flags().testFlag(QNetworkInterface::CanMulticast)) {
-                continue;
-            }
-
-            if (multicastSocket_->joinMulticastGroup(MdnsGroupAddress, iface)) {
-                qCDebug(lcMdnsDevice) << "Joined mDNS multicast group on" << iface.humanReadableName();
-            } else {
-                qCDebug(lcMdnsDevice) << "Failed to join mDNS multicast group on" << iface.humanReadableName();
-            }
-        }
+        joinMulticastGroups();
     } else {
         qCDebug(lcMdnsDevice) << "Failed bind multicast socket";
         multicastSocket_->deleteLater();
@@ -400,10 +386,39 @@ void MdnsClient::setupSockets()
     }
 }
 
+void MdnsClient::joinMulticastGroups()
+{
+    if (!multicastSocket_) {
+        return;
+    }
+
+    for (const auto& iface : QNetworkInterface::allInterfaces()) {
+        if (!iface.isValid() || !iface.flags().testFlag(QNetworkInterface::IsUp)
+            || !iface.flags().testFlag(QNetworkInterface::IsRunning)
+            || iface.flags().testFlag(QNetworkInterface::IsLoopBack)
+            || !iface.flags().testFlag(QNetworkInterface::CanMulticast)) {
+            continue;
+        }
+
+        if (joinedMulticastIfaces_.contains(iface.name())) {
+            continue;
+        }
+
+        if (multicastSocket_->joinMulticastGroup(MdnsGroupAddress, iface)) {
+            joinedMulticastIfaces_.insert(iface.name());
+            qCDebug(lcMdnsDevice) << "Joined mDNS multicast group on" << iface.humanReadableName();
+        } else {
+            qCDebug(lcMdnsDevice) << "Failed to join mDNS multicast group on" << iface.humanReadableName();
+        }
+    }
+}
+
 void MdnsClient::start()
 {
     stop();
     resetDiagnostics();
+
+    joinMulticastGroups();
 
     services_.clear();
     hosts_.clear();
