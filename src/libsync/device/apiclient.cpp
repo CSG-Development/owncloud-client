@@ -13,6 +13,7 @@ const auto api_ra_token       = QStringLiteral("/client/v1/auth/token");      //
 const auto api_ra_devices     = QStringLiteral("/client/v1/devices");         // GET
 const auto api_ra_device_info = QStringLiteral("/client/v1/devices/");        // GET
 constexpr int RemoteAccessRequestTimeoutMs = 15 * 1000;
+constexpr int DefaultHttpsPort = 443;
 
 // JSON keys
 const auto jkey_name      = QStringLiteral("name");
@@ -371,13 +372,15 @@ QFuture<DevicePathListCtx> ApiClient::executeDeviceInfoRequest(const QString& de
                 for (const auto p: paths) {
                     const auto address = p[jkey_address].toString();
                     const auto type = p[jkey_type].toString();
-                    const auto port = p[jkey_port].toInt();
+                    const auto rawPort = p[jkey_port].toInt();
+                    const auto port = rawPort > 0 ? rawPort : DefaultHttpsPort;
                     const auto deviceType = DevHelpers::strToDevType(type);
-                    if (address.isEmpty() || port <= 0 || deviceType == DeviceType::Unknown) {
+                    if (address.isEmpty() || deviceType == DeviceType::Unknown) {
                         qCWarning(lcDeviceData).noquote()
                             << "ra_device_info invalid_path"
                             << QStringLiteral("{address:%1,port:%2,type:%3}")
-                                   .arg(address, QString::number(port), type);
+                                   .arg(address, QString::number(rawPort), type);
+                        continue;
                     }
 
                     DevicePath dpath(address, deviceType, DeviceOrigin::Remote, port);
