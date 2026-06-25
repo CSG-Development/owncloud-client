@@ -1394,7 +1394,7 @@ void Folder::slotAboutToRemoveAllFiles(SyncFileItem::Direction direction)
     setSyncPaused(true);
 
     connect(_removeAllFilesDialog, &APP::CustomMessageBox::finished, this, [this](int result) {
-        if (result == QDialog::Accepted) {
+        if (result == QDialog::Rejected) {
             // reset the db upload all local files or download all remote files
             FileSystem::setFolderMinimumPermissions(path());
             // will remove all dehydrated placeholders
