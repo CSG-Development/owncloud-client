@@ -1,13 +1,15 @@
 #include "mdnsclient.h"
 
-#include <algorithm>
 #include <QLoggingCategory>
 #include <QNetworkInterface>
 #include <QStringList>
 
+#include <algorithm>
+
 Q_LOGGING_CATEGORY(lcMdnsDevice, "mdns.device", QtDebugMsg)
 
-namespace {
+namespace
+{
 
 constexpr int MinRecordTtlMs = 2 * 1000;
 constexpr int MaxRecordTtlMs = 60 * 1000;
@@ -53,18 +55,18 @@ QByteArray buildQueryPacket(bool preferUnicastResponse)
 }
 
 template<class T>
-bool parseInt(const QByteArray& packet, quint16& offset, T& value)
+bool parseInt(const QByteArray &packet, quint16 &offset, T &value)
 {
     if (offset + sizeof(T) > static_cast<unsigned int>(packet.length())) {
         return false;
     }
 
-    value = qFromBigEndian<T>(reinterpret_cast<const uchar*>(packet.constData() + offset));
+    value = qFromBigEndian<T>(reinterpret_cast<const uchar *>(packet.constData() + offset));
     offset += sizeof(T);
     return true;
 }
 
-bool parseName(const QByteArray& packet, quint16& offset, QByteArray& name)
+bool parseName(const QByteArray &packet, quint16 &offset, QByteArray &name)
 {
     quint16 offsetEnd = 0;
     quint16 offsetPtr = offset;
@@ -80,39 +82,39 @@ bool parseName(const QByteArray& packet, quint16& offset, QByteArray& name)
         }
 
         switch (bytesCount & 0xc0) {
-        case 0x00:
-            if (offset + bytesCount > packet.length()) {
+            case 0x00:
+                if (offset + bytesCount > packet.length()) {
+                    return false;
+                }
+
+                name.append(packet.mid(offset, bytesCount));
+                name.append('.');
+                offset += bytesCount;
+                break;
+
+            case 0xc0: {
+                quint8 bytesCount2 = 0;
+                quint16 newOffset = 0;
+                if (!parseInt<quint8>(packet, offset, bytesCount2)) {
+                    return false;
+                }
+
+                newOffset = ((bytesCount & ~0xc0) << 8) | bytesCount2;
+                if (newOffset >= offsetPtr) {
+                    return false;
+                }
+
+                offsetPtr = newOffset;
+                if (!offsetEnd) {
+                    offsetEnd = offset;
+                }
+
+                offset = newOffset;
+                break;
+            }
+
+            default:
                 return false;
-            }
-
-            name.append(packet.mid(offset, bytesCount));
-            name.append('.');
-            offset += bytesCount;
-            break;
-
-        case 0xc0: {
-            quint8 bytesCount2 = 0;
-            quint16 newOffset = 0;
-            if (!parseInt<quint8>(packet, offset, bytesCount2)) {
-                return false;
-            }
-
-            newOffset = ((bytesCount & ~0xc0) << 8) | bytesCount2;
-            if (newOffset >= offsetPtr) {
-                return false;
-            }
-
-            offsetPtr = newOffset;
-            if (!offsetEnd) {
-                offsetEnd = offset;
-            }
-
-            offset = newOffset;
-            break;
-        }
-
-        default:
-            return false;
         }
     }
 
@@ -123,7 +125,7 @@ bool parseName(const QByteArray& packet, quint16& offset, QByteArray& name)
     return true;
 }
 
-bool parseRecord(const QByteArray& packet, quint16& offset, DnsRecord& record)
+bool parseRecord(const QByteArray &packet, quint16 &offset, DnsRecord &record)
 {
     QByteArray name;
     quint16 type = 0;
@@ -145,95 +147,96 @@ bool parseRecord(const QByteArray& packet, quint16& offset, DnsRecord& record)
     record.ttl = ttl;
 
     switch (type) {
-    case MDNS_RECORDTYPE_A: {
-        quint32 ipv4Addr = 0;
-        if (!parseInt<quint32>(packet, offset, ipv4Addr)) {
-            return false;
-        }
-
-        record.address = QHostAddress(ipv4Addr);
-        break;
-    }
-    case MDNS_RECORDTYPE_AAAA:
-        if (offset + 16 > packet.length()) {
-            return false;
-        }
-        offset += 16;
-        break;
-    case MDNS_RECORDTYPE_NSEC: {
-        QByteArray nextDomainName;
-        quint8 number = 0;
-        quint8 length = 0;
-        if (!parseName(packet, offset, nextDomainName)
-            || !parseInt<quint8>(packet, offset, number)
-            || !parseInt<quint8>(packet, offset, length)
-            || number != 0
-            || offset + length > packet.length()) {
-            return false;
-        }
-
-        offset += length;
-        break;
-    }
-    case MDNS_RECORDTYPE_PTR: {
-        QByteArray target;
-        if (!parseName(packet, offset, target)) {
-            return false;
-        }
-
-        record.target = target;
-        break;
-    }
-    case MDNS_RECORDTYPE_SRV: {
-        quint16 priority = 0;
-        quint16 weight = 0;
-        quint16 port = 0;
-        QByteArray target;
-        if (!parseInt<quint16>(packet, offset, priority)
-            || !parseInt<quint16>(packet, offset, weight)
-            || !parseInt<quint16>(packet, offset, port)
-            || !parseName(packet, offset, target)) {
-            return false;
-        }
-
-        record.priority = priority;
-        record.weight = weight;
-        record.port = port;
-        record.target = target;
-        break;
-    }
-    case MDNS_RECORDTYPE_TXT: {
-        const auto start = offset;
-        while (offset < start + dataLen) {
-            quint8 bytes = 0;
-            if (!parseInt<quint8>(packet, offset, bytes) || offset + bytes > packet.length()) {
+        case MDNS_RECORDTYPE_A: {
+            quint32 ipv4Addr = 0;
+            if (!parseInt<quint32>(packet, offset, ipv4Addr)) {
                 return false;
             }
 
-            if (bytes == 0) {
-                break;
+            record.address = QHostAddress(ipv4Addr);
+            break;
+        }
+        case MDNS_RECORDTYPE_AAAA:
+            if (offset + 16 > packet.length()) {
+                return false;
+            }
+            offset += 16;
+            break;
+        case MDNS_RECORDTYPE_NSEC: {
+            QByteArray nextDomainName;
+            quint8 number = 0;
+            quint8 length = 0;
+            if (!parseName(packet, offset, nextDomainName)
+                || !parseInt<quint8>(packet, offset, number)
+                || !parseInt<quint8>(packet, offset, length)
+                || number != 0
+                || offset + length > packet.length()) {
+                return false;
             }
 
-            const QByteArray attr(packet.constData() + offset, bytes);
-            offset += bytes;
-            const auto splitIndex = attr.indexOf('=');
-            if (splitIndex == -1) {
-                record.attributes.insert(attr, QByteArray());
-            } else {
-                record.attributes.insert(attr.left(splitIndex), attr.mid(splitIndex + 1));
-            }
+            offset += length;
+            break;
         }
-        break;
-    }
-    default:
-        offset += dataLen;
-        break;
+        case MDNS_RECORDTYPE_PTR: {
+            QByteArray target;
+            if (!parseName(packet, offset, target)) {
+                return false;
+            }
+
+            record.target = target;
+            break;
+        }
+        case MDNS_RECORDTYPE_SRV: {
+            quint16 priority = 0;
+            quint16 weight = 0;
+            quint16 port = 0;
+            QByteArray target;
+            if (!parseInt<quint16>(packet, offset, priority)
+                || !parseInt<quint16>(packet, offset, weight)
+                || !parseInt<quint16>(packet, offset, port)
+                || !parseName(packet, offset, target)) {
+                return false;
+            }
+
+            record.priority = priority;
+            record.weight = weight;
+            record.port = port;
+            record.target = target;
+            break;
+        }
+        case MDNS_RECORDTYPE_TXT: {
+            const auto start = offset;
+            while (offset < start + dataLen) {
+                quint8 bytes = 0;
+                if (!parseInt<quint8>(packet, offset, bytes) || offset + bytes > packet.length()) {
+                    return false;
+                }
+
+                if (bytes == 0) {
+                    break;
+                }
+
+                const QByteArray attr(packet.constData() + offset, bytes);
+                offset += bytes;
+                const auto splitIndex = attr.indexOf('=');
+                if (splitIndex == -1) {
+                    record.attributes.insert(attr, QByteArray());
+                }
+                else {
+                    record.attributes.insert(attr.left(splitIndex), attr.mid(splitIndex + 1));
+                }
+            }
+            break;
+        }
+        default:
+            offset += dataLen;
+            break;
     }
 
     return true;
 }
 
-bool fromPacket(const QByteArray& packet, Message& message)
+bool fromPacket(const QByteArray &packet, Message &message)
 {
     quint16 offset = 0;
     quint16 transactionId = 0;
@@ -289,7 +292,7 @@ int ttlToMs(quint32 ttlSeconds)
     return std::clamp(ttlMs, MinRecordTtlMs, MaxRecordTtlMs);
 }
 
-void appendUniqueAddress(QList<QHostAddress>& addresses, const QHostAddress& address)
+void appendUniqueAddress(QList<QHostAddress> &addresses, const QHostAddress &address)
 {
     if (address.isNull()) {
         return;
@@ -300,7 +303,7 @@ void appendUniqueAddress(QList<QHostAddress>& addresses, const QHostAddress& add
     }
 }
 
-bool isUsableIpv4Entry(const QNetworkInterface& iface, const QNetworkAddressEntry& entry)
+bool isUsableIpv4Entry(const QNetworkInterface &iface, const QNetworkAddressEntry &entry)
 {
     if (!iface.isValid() || !iface.flags().testFlag(QNetworkInterface::IsUp)
         || !iface.flags().testFlag(QNetworkInterface::IsRunning)
@@ -314,14 +317,26 @@ bool isUsableIpv4Entry(const QNetworkInterface& iface, const QNetworkAddressEntr
     return true;
 }
 
-bool isHttpsServiceInstanceName(const QByteArray& name)
+bool isHttpsServiceInstanceName(const QByteArray &name)
 {
     return name.endsWith(QByteArrayLiteral("._https._tcp.local."));
 }
 
-} // namespace
+bool hasTxtAttribute(const QMap<QByteArray, QByteArray> &attributes, const QByteArray &key, const QByteArray &value)
+{
+    for (auto it = attributes.cbegin(); it != attributes.cend(); ++it) {
+        if (it.key().compare(key, Qt::CaseInsensitive) == 0
+            && it.value().compare(value, Qt::CaseInsensitive) == 0) {
+            return true;
+        }
+    }
 
-MdnsClient::MdnsClient(QObject* parent)
+    return false;
+}
+
+}   // namespace
+
+MdnsClient::MdnsClient(QObject *parent)
     : QObject(parent)
 {
     setupSockets();
@@ -345,7 +360,7 @@ MdnsClient::MdnsClient(QObject* parent)
         emit resultsChanged(lastData_);
     });
 
-    connect(this, &MdnsClient::resultsChanged_internal, this, [this](const QList<DevicePath>& records) {
+    connect(this, &MdnsClient::resultsChanged_internal, this, [this](const QList<DevicePath> &records) {
         lastData_ = records;
         debounceTimer_.start();
     });
@@ -369,7 +384,8 @@ void MdnsClient::setupSockets()
     if (multicastSocket_->bind(QHostAddress::AnyIPv4, MdnsPort, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint)) {
         connect(multicastSocket_, &QUdpSocket::readyRead, this, &MdnsClient::onReadyRead);
         joinMulticastGroups();
-    } else {
+    }
+    else {
         qCDebug(lcMdnsDevice) << "Failed bind multicast socket";
         multicastSocket_->deleteLater();
         multicastSocket_ = nullptr;
@@ -379,7 +395,8 @@ void MdnsClient::setupSockets()
     if (unicastSocket_->bind(QHostAddress::AnyIPv4, 0, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint)) {
         connect(unicastSocket_, &QUdpSocket::readyRead, this, &MdnsClient::onReadyRead);
         qCDebug(lcMdnsDevice) << "Socket binded to" << unicastSocket_->localAddress() << unicastSocket_->localPort();
-    } else {
+    }
+    else {
         qCDebug(lcMdnsDevice) << "Failed bind unicast socket";
         unicastSocket_->deleteLater();
         unicastSocket_ = nullptr;
@@ -392,7 +409,7 @@ void MdnsClient::joinMulticastGroups()
         return;
     }
 
-    for (const auto& iface : QNetworkInterface::allInterfaces()) {
+    for (const auto &iface : QNetworkInterface::allInterfaces()) {
         if (!iface.isValid() || !iface.flags().testFlag(QNetworkInterface::IsUp)
             || !iface.flags().testFlag(QNetworkInterface::IsRunning)
             || iface.flags().testFlag(QNetworkInterface::IsLoopBack)
@@ -407,7 +424,8 @@ void MdnsClient::joinMulticastGroups()
         if (multicastSocket_->joinMulticastGroup(MdnsGroupAddress, iface)) {
             joinedMulticastIfaces_.insert(iface.name());
             qCDebug(lcMdnsDevice) << "Joined mDNS multicast group on" << iface.humanReadableName();
-        } else {
+        }
+        else {
             qCDebug(lcMdnsDevice) << "Failed to join mDNS multicast group on" << iface.humanReadableName();
         }
     }
@@ -438,7 +456,7 @@ void MdnsClient::resetDiagnostics()
     diagnostics_ = {};
 }
 
-void MdnsClient::logDiscoverySummary(const QString& phase) const
+void MdnsClient::logDiscoverySummary(const QString &phase) const
 {
     QStringList parts;
     parts.append(QStringLiteral("phase:%1").arg(phase));
@@ -456,7 +474,7 @@ void MdnsClient::logDiscoverySummary(const QString& phase) const
         << QStringLiteral("{%1}").arg(parts.join(QStringLiteral(",")));
 }
 
-void MdnsClient::logAllCandidateEndpoint(const QString& address, quint16 port, const QString& source)
+void MdnsClient::logAllCandidateEndpoint(const QString &address, quint16 port, const QString &source)
 {
     const auto key = QStringLiteral("%1:%2").arg(address, QString::number(port));
     if (diagnostics_.allCandidateEndpoints.contains(key)) {
@@ -474,7 +492,7 @@ void MdnsClient::logAllCandidateEndpoint(const QString& address, quint16 port, c
         << QStringLiteral("{%1}").arg(parts.join(QStringLiteral(",")));
 }
 
-void MdnsClient::logAcceptedEndpoint(const QString& address, quint16 port, const QString& source)
+void MdnsClient::logAcceptedEndpoint(const QString &address, quint16 port, const QString &source)
 {
     const auto key = QStringLiteral("%1:%2").arg(address, QString::number(port));
     if (diagnostics_.acceptedEndpoints.contains(key)) {
@@ -492,7 +510,7 @@ void MdnsClient::logAcceptedEndpoint(const QString& address, quint16 port, const
         << QStringLiteral("{%1}").arg(parts.join(QStringLiteral(",")));
 }
 
-void MdnsClient::logNotHomecloudEndpoint(const QString& address, quint16 port, const QString& source)
+void MdnsClient::logNotHomecloudEndpoint(const QString &address, quint16 port, const QString &source)
 {
     const auto key = QStringLiteral("%1:%2").arg(address, QString::number(port));
     if (diagnostics_.notHomecloudCandidateEndpoints.contains(key)) {
@@ -527,9 +545,9 @@ void MdnsClient::performScanCycle()
     const auto multicastQuery = buildQueryPacket(false);
     const auto unicastQuery = buildQueryPacket(true);
     const auto interfaces = QNetworkInterface::allInterfaces();
-    for (const auto& iface : interfaces) {
+    for (const auto &iface : interfaces) {
         bool hasUsableIpv4 = false;
-        for (const auto& entry : iface.addressEntries()) {
+        for (const auto &entry : iface.addressEntries()) {
             if (isUsableIpv4Entry(iface, entry)) {
                 hasUsableIpv4 = true;
                 break;
@@ -563,7 +581,8 @@ bool MdnsClient::pruneExpiredState()
             recordTtlMs_.remove(it.key());
             it = lastSeen_.erase(it);
             changed = true;
-        } else {
+        }
+        else {
             ++it;
         }
     }
@@ -571,7 +590,8 @@ bool MdnsClient::pruneExpiredState()
     for (auto it = services_.begin(); it != services_.end();) {
         if (it->expiresAt.isValid() && it->expiresAt <= now) {
             it = services_.erase(it);
-        } else {
+        }
+        else {
             ++it;
         }
     }
@@ -579,7 +599,8 @@ bool MdnsClient::pruneExpiredState()
     for (auto it = hosts_.begin(); it != hosts_.end();) {
         if (it->expiresAt.isValid() && it->expiresAt <= now) {
             it = hosts_.erase(it);
-        } else {
+        }
+        else {
             ++it;
         }
     }
@@ -589,7 +610,7 @@ bool MdnsClient::pruneExpiredState()
 
 void MdnsClient::onReadyRead()
 {
-    auto* socket = qobject_cast<QUdpSocket*>(sender());
+    auto *socket = qobject_cast<QUdpSocket *>(sender());
     if (!socket) {
         return;
     }
@@ -614,68 +635,68 @@ void MdnsClient::onReadyRead()
     }
 }
 
-void MdnsClient::processMessage(const Message& message, const QHostAddress& senderAddress)
+void MdnsClient::processMessage(const Message &message, const QHostAddress &senderAddress)
 {
     const auto now = QDateTime::currentDateTimeUtc();
     QSet<QByteArray> touchedInstances;
 
-    for (const auto& record : message.records) {
+    for (const auto &record : message.records) {
         const auto expiresAt = now.addMSecs(ttlToMs(record.ttl));
         switch (record.type) {
-        case MDNS_RECORDTYPE_PTR:
-            if (record.name == ServiceTypeHttps && !record.target.isEmpty()) {
-                ++diagnostics_.mdnsHttpsPtrRecords;
-                auto& state = services_[record.target];
-                state.serviceType = record.name;
+            case MDNS_RECORDTYPE_PTR:
+                if (record.name == ServiceTypeHttps && !record.target.isEmpty()) {
+                    ++diagnostics_.mdnsHttpsPtrRecords;
+                    auto &state = services_[record.target];
+                    state.serviceType = record.name;
+                    state.expiresAt = expiresAt;
+                    state.ttlMs = ttlToMs(record.ttl);
+                    appendUniqueAddress(state.sourceAddresses, senderAddress);
+                    touchedInstances.insert(record.target);
+                }
+                break;
+
+            case MDNS_RECORDTYPE_SRV: {
+                if (!isHttpsServiceInstanceName(record.name)) {
+                    break;
+                }
+                auto &state = services_[record.name];
+                if (state.serviceType.isEmpty()) {
+                    state.serviceType = ServiceTypeHttps;
+                }
+                state.hostName = record.target;
+                state.port = record.port;
                 state.expiresAt = expiresAt;
                 state.ttlMs = ttlToMs(record.ttl);
                 appendUniqueAddress(state.sourceAddresses, senderAddress);
-                touchedInstances.insert(record.target);
-            }
-            break;
-
-        case MDNS_RECORDTYPE_SRV: {
-            if (!isHttpsServiceInstanceName(record.name)) {
+                touchedInstances.insert(record.name);
                 break;
             }
-            auto& state = services_[record.name];
-            if (state.serviceType.isEmpty()) {
-                state.serviceType = ServiceTypeHttps;
-            }
-            state.hostName = record.target;
-            state.port = record.port;
-            state.expiresAt = expiresAt;
-            state.ttlMs = ttlToMs(record.ttl);
-            appendUniqueAddress(state.sourceAddresses, senderAddress);
-            touchedInstances.insert(record.name);
-            break;
-        }
 
-        case MDNS_RECORDTYPE_TXT: {
-            if (!isHttpsServiceInstanceName(record.name)) {
+            case MDNS_RECORDTYPE_TXT: {
+                if (!isHttpsServiceInstanceName(record.name)) {
+                    break;
+                }
+                auto &state = services_[record.name];
+                if (state.serviceType.isEmpty()) {
+                    state.serviceType = ServiceTypeHttps;
+                }
+                state.attributes = record.attributes;
+                state.expiresAt = expiresAt;
+                state.ttlMs = ttlToMs(record.ttl);
+                appendUniqueAddress(state.sourceAddresses, senderAddress);
+                touchedInstances.insert(record.name);
                 break;
             }
-            auto& state = services_[record.name];
-            if (state.serviceType.isEmpty()) {
-                state.serviceType = ServiceTypeHttps;
+
+            case MDNS_RECORDTYPE_A: {
+                auto &host = hosts_[record.name];
+                host.expiresAt = expiresAt;
+                appendUniqueAddress(host.addresses, record.address);
+                break;
             }
-            state.attributes = record.attributes;
-            state.expiresAt = expiresAt;
-            state.ttlMs = ttlToMs(record.ttl);
-            appendUniqueAddress(state.sourceAddresses, senderAddress);
-            touchedInstances.insert(record.name);
-            break;
-        }
 
-        case MDNS_RECORDTYPE_A: {
-            auto& host = hosts_[record.name];
-            host.expiresAt = expiresAt;
-            appendUniqueAddress(host.addresses, record.address);
-            break;
-        }
-
-        default:
-            break;
+            default:
+                break;
         }
     }
 
@@ -684,15 +705,15 @@ void MdnsClient::processMessage(const Message& message, const QHostAddress& send
     }
 }
 
-void MdnsClient::refreshCandidates(const QSet<QByteArray>& touchedInstances)
+void MdnsClient::refreshCandidates(const QSet<QByteArray> &touchedInstances)
 {
-    for (const auto& instanceName : touchedInstances) {
+    for (const auto &instanceName : touchedInstances) {
         const auto serviceIt = services_.constFind(instanceName);
         if (serviceIt == services_.cend()) {
             continue;
         }
 
-        const auto& service = serviceIt.value();
+        const auto &service = serviceIt.value();
         if (service.serviceType != ServiceTypeHttps || service.port <= 0) {
             continue;
         }
@@ -705,7 +726,7 @@ void MdnsClient::refreshCandidates(const QSet<QByteArray>& touchedInstances)
             }
         }
 
-        for (const auto& address : service.sourceAddresses) {
+        for (const auto &address : service.sourceAddresses) {
             appendUniqueAddress(addresses, address);
         }
 
@@ -713,10 +734,10 @@ void MdnsClient::refreshCandidates(const QSet<QByteArray>& touchedInstances)
             continue;
         }
 
-        const bool isHomecloud = service.attributes.value(TxtKeySeagate) == TxtValueHomecloud;
+        const bool isHomecloud = hasTxtAttribute(service.attributes, TxtKeySeagate, TxtValueHomecloud);
         const auto ttlMs = service.ttlMs > 0 ? static_cast<int>(service.ttlMs) : MinRecordTtlMs;
 
-        for (const auto& address : addresses) {
+        for (const auto &address : addresses) {
             if (address.protocol() != QAbstractSocket::IPv4Protocol) {
                 continue;
             }
@@ -729,17 +750,18 @@ void MdnsClient::refreshCandidates(const QSet<QByteArray>& touchedInstances)
                     logAcceptedEndpoint(address.toString(), service.port, QStringLiteral("mdns"));
                     emit resultsChanged_internal(discoveredRecords_.values());
                 }
-            } else {
+            }
+            else {
                 logNotHomecloudEndpoint(address.toString(), service.port, QStringLiteral("mdns"));
             }
         }
     }
 }
 
-bool MdnsClient::updateDiscoveredRecord(const QString& address, quint16 port, int ttlMs)
+bool MdnsClient::updateDiscoveredRecord(const QString &address, quint16 port, int ttlMs)
 {
     const auto key = QStringLiteral("%1:%2").arg(address, QString::number(port));
-    auto& record = discoveredRecords_[key];
+    auto &record = discoveredRecords_[key];
     bool changed = false;
 
     if (record.address != address) {
@@ -767,19 +789,19 @@ bool MdnsClient::updateDiscoveredRecord(const QString& address, quint16 port, in
 QString mdns_record_type_to_str(int t)
 {
     switch (t) {
-    case MDNS_RECORDTYPE_A:
-        return QStringLiteral("A");
-    case MDNS_RECORDTYPE_PTR:
-        return QStringLiteral("PTR");
-    case MDNS_RECORDTYPE_TXT:
-        return QStringLiteral("TXT");
-    case MDNS_RECORDTYPE_AAAA:
-        return QStringLiteral("AAAA");
-    case MDNS_RECORDTYPE_SRV:
-        return QStringLiteral("SRV");
-    case MDNS_RECORDTYPE_NSEC:
-        return QStringLiteral("NSEC");
-    default:
-        return QStringLiteral("UNKNOWN");
+        case MDNS_RECORDTYPE_A:
+            return QStringLiteral("A");
+        case MDNS_RECORDTYPE_PTR:
+            return QStringLiteral("PTR");
+        case MDNS_RECORDTYPE_TXT:
+            return QStringLiteral("TXT");
+        case MDNS_RECORDTYPE_AAAA:
+            return QStringLiteral("AAAA");
+        case MDNS_RECORDTYPE_SRV:
+            return QStringLiteral("SRV");
+        case MDNS_RECORDTYPE_NSEC:
+            return QStringLiteral("NSEC");
+        default:
+            return QStringLiteral("UNKNOWN");
     }
 }
