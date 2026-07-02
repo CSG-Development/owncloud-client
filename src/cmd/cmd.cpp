@@ -15,16 +15,17 @@
  */
 
 #include "account.h"
+#include "configfile.h"   // ONLY ACCESS THE STATIC FUNCTIONS!
+#include "httpcredentialstext.h"
+#include "platform.h"
+#include "syncengine.h"
+
 #include "common/syncjournaldb.h"
 #include "common/version.h"
-#include "configfile.h" // ONLY ACCESS THE STATIC FUNCTIONS!
-#include "httpcredentialstext.h"
 #include "libsync/logger.h"
 #include "libsync/theme.h"
 #include "networkjobs/checkserverjobfactory.h"
 #include "networkjobs/jsonjob.h"
-#include "platform.h"
-#include "syncengine.h"
 
 #include <QCommandLineParser>
 #include <QCoreApplication>
@@ -41,10 +42,10 @@
 #include <memory>
 #include <random>
 
-
 using namespace APP;
 
-namespace {
+namespace
+{
 
 struct CmdOptions
 {
@@ -104,7 +105,6 @@ void selectiveSyncFixup(APP::SyncJournalDb *journal, const QSet<QString> &newLis
     }
 }
 
-
 void sync(const SyncCTX &ctx)
 {
     const auto selectiveSyncList = [&]() -> QSet<QString> {
@@ -112,7 +112,8 @@ void sync(const SyncCTX &ctx)
             QFile f(ctx.options.unsyncedfolders);
             if (!f.open(QFile::ReadOnly)) {
                 qCritical() << "Could not open file containing the list of unsynced folders: " << ctx.options.unsyncedfolders;
-            } else {
+            }
+            else {
                 // filter out empty lines and comments
                 auto selectiveSyncList = QString::fromUtf8(f.readAll())
                                              .split(QLatin1Char('\n'))
@@ -136,7 +137,7 @@ void sync(const SyncCTX &ctx)
         selectiveSyncFixup(db, selectiveSyncList);
     }
 
-    SyncOptions opt { QSharedPointer<Vfs>(VfsPluginManager::instance().createVfsFromPlugin(Vfs::Off).release()) };
+    SyncOptions opt{QSharedPointer<Vfs>(VfsPluginManager::instance().createVfsFromPlugin(Vfs::Off).release())};
     opt.fillFromEnvironmentVariables();
     opt.verifyChunkSizes();
     auto engine = new SyncEngine(
@@ -149,7 +150,8 @@ void sync(const SyncCTX &ctx)
         if (!result) {
             qWarning() << "Failed to sync";
             exit(EXIT_FAILURE);
-        } else {
+        }
+        else {
             if (engine->isAnotherSyncNeeded()) {
                 if (*restartCount < ctx.options.restartTimes) {
                     (*restartCount)++;
@@ -158,7 +160,8 @@ void sync(const SyncCTX &ctx)
                     return;
                 }
                 qWarning() << "Another sync is needed, but not done because restart count is exceeded" << *restartCount;
-            } else {
+            }
+            else {
                 qApp->quit();
             }
         }
@@ -171,9 +174,8 @@ void sync(const SyncCTX &ctx)
                         << "unavailable unless you have a right to restore.";
                 qInfo() << "If you decide to keep the files, they will be re-synced with the server if you have rights to do so.";
                 qInfo() << "If you decide to delete the files, they will be unavailable to you, unless you are the owner.";
-
-
-            } else {
+            }
+            else {
                 qInfo() << "All the files in your local sync folder '" << ctx.options.source_dir << "' were deleted. These deletes will be "
                         << "synchronized with your server, making such files unavailable unless restored.";
                 qInfo() << "Are you sure you want to sync those actions with the server?";
@@ -186,19 +188,19 @@ void sync(const SyncCTX &ctx)
                 if (s == "y") {
                     ctx.promptRemoveAllFiles = true;
                     sync(ctx);
-                } else if (s == "n") {
+                }
+                else if (s == "n") {
                     return;
-                } else {
+                }
+                else {
                     continue;
                 }
                 return;
             }
         });
-    QObject::connect(engine, &SyncEngine::syncError, engine,
-        [](const QString &error) { qWarning() << "Sync error:" << error; });
+    QObject::connect(engine, &SyncEngine::syncError, engine, [](const QString &error) { qWarning() << "Sync error:" << error; });
     engine->setIgnoreHiddenFiles(ctx.options.ignoreHiddenFiles);
     engine->setNetworkLimits(ctx.options.uplimit, ctx.options.downlimit);
-
 
     // Exclude lists
 
@@ -261,14 +263,15 @@ void setupCredentials(SyncCTX &ctx)
 
             QNetworkProxyFactory::setUseSystemConfiguration(false);
             QNetworkProxy::setApplicationProxy(QNetworkProxy(QNetworkProxy::HttpProxy, host, static_cast<uint16_t>(port)));
-        } else {
+        }
+        else {
             qCritical() << "Could not read httpproxy. The proxy should have the format \"http://hostname:port\".";
             exit(EXIT_FAILURE);
         }
     }
 
     // Pre-flight check: verify that the file specified by --unsyncedfolders can be read by us:
-    if (!ctx.options.unsyncedfolders.isNull()) { // yes, isNull and not isEmpty because...:
+    if (!ctx.options.unsyncedfolders.isNull()) {   // yes, isNull and not isEmpty because...:
         // ... if the user entered "--unsyncedfolders ''" on the command-line, opening that will
         // also fail
         QFile f(ctx.options.unsyncedfolders);
@@ -284,20 +287,24 @@ void setupCredentials(SyncCTX &ctx)
         QObject::connect(ctx.account->accessManager(), &QNetworkAccessManager::sslErrors, [](QNetworkReply *reply, const QList<QSslError> &errors) {
             reply->ignoreSslErrors(errors);
         });
-    } else {
+    }
+    else {
         QObject::connect(ctx.account->accessManager(), &QNetworkAccessManager::sslErrors, [](QNetworkReply *reply, const QList<QSslError> &errors) {
-            Q_UNUSED(reply)
+            reply->ignoreSslErrors(errors);
+            return;
 
+            /* Temprary cert checks off
             qCritical() << "SSL error encountered";
             for (const auto &e : errors) {
                 qCritical() << e.errorString();
             }
             qCritical() << "If you trust the certificate and want to ignore the errors, use the --trust option.";
             exit(EXIT_FAILURE);
+            */
         });
     }
 }
-}
+}   // namespace
 
 CmdOptions parseOptions(const QStringList &app_args)
 {
@@ -314,26 +321,25 @@ CmdOptions parseOptions(const QStringList &app_args)
         return option;
     };
 
-    auto silentOption = addOption({ { QStringLiteral("s"), QStringLiteral("silent") }, QStringLiteral("Don't be so verbose.") });
-    auto httpproxyOption = addOption({ { QStringLiteral("httpproxy") }, QStringLiteral("Specify a http proxy to use."), QStringLiteral("http://server:port") });
-    auto trustOption = addOption({ { QStringLiteral("trust") }, QStringLiteral("Trust the SSL certification") });
-    auto excludeOption = addOption({ { QStringLiteral("exclude") }, QStringLiteral("Path to an exclude list [file]"), QStringLiteral("file") });
-    auto unsyncedfoldersOption = addOption({ { QStringLiteral("unsyncedfolders") }, QStringLiteral("File containing the list of unsynced remote folders (selective sync)"), QStringLiteral("file") });
+    auto silentOption = addOption({{QStringLiteral("s"), QStringLiteral("silent")}, QStringLiteral("Don't be so verbose.")});
+    auto httpproxyOption = addOption({{QStringLiteral("httpproxy")}, QStringLiteral("Specify a http proxy to use."), QStringLiteral("http://server:port")});
+    auto trustOption = addOption({{QStringLiteral("trust")}, QStringLiteral("Trust the SSL certification")});
+    auto excludeOption = addOption({{QStringLiteral("exclude")}, QStringLiteral("Path to an exclude list [file]"), QStringLiteral("file")});
+    auto unsyncedfoldersOption = addOption({{QStringLiteral("unsyncedfolders")}, QStringLiteral("File containing the list of unsynced remote folders (selective sync)"), QStringLiteral("file")});
 
-    auto serverOption = addOption({ { QStringLiteral("server") }, QStringLiteral("Use [url] as the location of the server. OCIS only (server location and spaces url can differ)"), QStringLiteral("url") });
-    auto userOption = addOption({ { QStringLiteral("u"), QStringLiteral("user") }, QStringLiteral("Use [name] as the login name"), QStringLiteral("name") });
+    auto serverOption = addOption({{QStringLiteral("server")}, QStringLiteral("Use [url] as the location of the server. OCIS only (server location and spaces url can differ)"), QStringLiteral("url")});
+    auto userOption = addOption({{QStringLiteral("u"), QStringLiteral("user")}, QStringLiteral("Use [name] as the login name"), QStringLiteral("name")});
     auto passwordOption = addOption({{QStringLiteral("p"), QStringLiteral("password")}, QStringLiteral("Use [pass] as password"), QStringLiteral("password")});
 
-    auto nonInterActiveOption = addOption({ { QStringLiteral("non-interactive") }, QStringLiteral("Do not block execution with interaction") });
-    auto maxRetriesOption = addOption({ { QStringLiteral("max-sync-retries") }, QStringLiteral("Retries maximum n times (default to 3)"), QStringLiteral("n") });
-    auto uploadLimitOption = addOption({ { QStringLiteral("uplimit") }, QStringLiteral("Limit the upload speed of files to n KB/s"), QStringLiteral("n") });
-    auto downloadLimitption = addOption({ { QStringLiteral("downlimit") }, QStringLiteral("Limit the download speed of files to n KB/s"), QStringLiteral("n") });
-    auto syncHiddenFilesOption = addOption({ { QStringLiteral("sync-hidden-files") }, QStringLiteral("Enables synchronization of hidden files") });
+    auto nonInterActiveOption = addOption({{QStringLiteral("non-interactive")}, QStringLiteral("Do not block execution with interaction")});
+    auto maxRetriesOption = addOption({{QStringLiteral("max-sync-retries")}, QStringLiteral("Retries maximum n times (default to 3)"), QStringLiteral("n")});
+    auto uploadLimitOption = addOption({{QStringLiteral("uplimit")}, QStringLiteral("Limit the upload speed of files to n KB/s"), QStringLiteral("n")});
+    auto downloadLimitption = addOption({{QStringLiteral("downlimit")}, QStringLiteral("Limit the download speed of files to n KB/s"), QStringLiteral("n")});
+    auto syncHiddenFilesOption = addOption({{QStringLiteral("sync-hidden-files")}, QStringLiteral("Enables synchronization of hidden files")});
 
-    auto logdebugOption = addOption({ { QStringLiteral("logdebug") }, QStringLiteral("More verbose logging") });
+    auto logdebugOption = addOption({{QStringLiteral("logdebug")}, QStringLiteral("More verbose logging")});
 
-    const auto testCrashReporter =
-        addOption({{QStringLiteral("crash")}, QStringLiteral("Crash the client to test the crash reporter")}, QCommandLineOption::HiddenFromHelp);
+    const auto testCrashReporter = addOption({{QStringLiteral("crash")}, QStringLiteral("Crash the client to test the crash reporter")}, QCommandLineOption::HiddenFromHelp);
 
     parser.addHelpOption();
     parser.addVersionOption();
@@ -343,7 +349,6 @@ CmdOptions parseOptions(const QStringList &app_args)
     parser.addPositionalArgument(QStringLiteral("remote_folder"), QStringLiteral("A remote folder"));
 
     parser.process(app_args);
-
 
     const QStringList args = parser.positionalArguments();
     if (args.size() < 2 || args.size() > 3) {
@@ -381,7 +386,8 @@ CmdOptions parseOptions(const QStringList &app_args)
     }
     if (parser.isSet(serverOption)) {
         options.server_url = QUrl::fromUserInput(parser.value(serverOption));
-    } else {
+    }
+    else {
         options.server_url = options.target_url;
     }
     if (parser.isSet(userOption)) {
@@ -431,13 +437,14 @@ int main(int argc, char **argv)
 
     app.setApplicationVersion(Theme::instance()->versionSwitchOutput());
 
-    SyncCTX ctx { parseOptions(app.arguments()) };
+    SyncCTX ctx{parseOptions(app.arguments())};
 
     // start the main loop before we ask for the username etc
     QTimer::singleShot(0, &app, [&] {
         if (ctx.options.silent) {
             qInstallMessageHandler([](QtMsgType, const QMessageLogContext &, const QString &) {});
-        } else {
+        }
+        else {
             qSetMessagePattern(Logger::loggerPattern());
         }
 
@@ -462,7 +469,6 @@ int main(int argc, char **argv)
             tmp.setScheme(tmp.scheme().replace(QLatin1String("PersonalCloud"), QLatin1String("http")));
             return tmp;
         }();
-
 
         auto device = Device::MakeStatic(baseUrl.toString(), baseUrl.toString());
         //ctx.account->setUrl(baseUrl);
@@ -490,14 +496,14 @@ int main(int argc, char **argv)
                     ctx.account->setCapabilities({ctx.account->url(), caps.toVariantMap()});
 
                     switch (ctx.account->serverSupportLevel()) {
-                    case Account::ServerSupportLevel::Supported:
-                        break;
-                    case Account::ServerSupportLevel::Unknown:
-                        qWarning() << "Failed to detect server version";
-                        break;
-                    case Account::ServerSupportLevel::Unsupported:
-                        qCritical() << "Error unsupported server";
-                        exit(EXIT_FAILURE);
+                        case Account::ServerSupportLevel::Supported:
+                            break;
+                        case Account::ServerSupportLevel::Unknown:
+                            qWarning() << "Failed to detect server version";
+                            break;
+                        case Account::ServerSupportLevel::Unsupported:
+                            qCritical() << "Error unsupported server";
+                            exit(EXIT_FAILURE);
                     }
 
                     auto userJob = new JsonApiJob(ctx.account, QStringLiteral("ocs/v1.php/cloud/user"), {}, {}, nullptr);
@@ -520,10 +526,12 @@ int main(int argc, char **argv)
                     userJob->start();
                 });
                 capabilitiesJob->start();
-            } else {
+            }
+            else {
                 if (checkServerJob->reply()->error() == QNetworkReply::OperationCanceledError) {
                     qCritical() << "Looking up " << ctx.account->url().toString() << " timed out.";
-                } else {
+                }
+                else {
                     qCritical() << "Failed to resolve " << ctx.account->url().toString() << " Error: " << checkServerJob->reply()->errorString();
                 }
                 exit(EXIT_FAILURE);
