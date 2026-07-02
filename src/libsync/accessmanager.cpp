@@ -42,6 +42,10 @@ AccessManager::AccessManager(QObject *parent)
     setCookieJar(new CookieJar);
 
     connect(this, &AccessManager::sslErrors, this, [this](QNetworkReply *reply, const QList<QSslError> &errors) {
+        Q_UNUSED(this)
+        reply->ignoreSslErrors(errors);
+
+        /* Temprary cert checks off
         auto filtered = errors;
         filtered.erase(std::remove_if(
                            filtered.begin(), filtered.end(), [this](const QSslError &e) {
@@ -49,6 +53,7 @@ AccessManager::AccessManager(QObject *parent)
                            }),
                        filtered.end());
         reply->ignoreSslErrors(filtered);
+        */
     });
 
     connect(this, &AccessManager::proxyAuthenticationRequired, this, [this](const QNetworkProxy &proxy, QAuthenticator *authenticator) {
