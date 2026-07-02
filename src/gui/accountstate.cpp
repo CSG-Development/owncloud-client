@@ -13,43 +13,44 @@
  */
 
 #include "accountstate.h"
+
 #include "account.h"
 #include "accountmanager.h"
 #include "application.h"
-#include "certificates/certificatevalidator.h"
 #include "configfile.h"
 #include "fetchserversettings.h"
+#include "settingsdialog.h"
+#include "theme.h"
 
-#include "libsync/creds/abstractcredentials.h"
-#include "libsync/creds/httpcredentials.h"
-#include "libsync/device/devicelogging.h"
-#include "libsync/device/networkmonitor.h"
-#include "libsync/syncendpointrecovery.h"
-
+#include "certificates/certificatevalidator.h"
 #include "gui/customdialogs/custommessagebox.h"
 #include "gui/quotainfo.h"
 #include "gui/remoteaccess/overlaycontroller.h"
 #include "gui/settingsdialog.h"
 #include "gui/spacemigration.h"
 #include "gui/tlserrordialog.h"
-
-#include "settingsdialog.h"
+#include "libsync/creds/abstractcredentials.h"
+#include "libsync/creds/httpcredentials.h"
+#include "libsync/device/devicelogging.h"
+#include "libsync/device/networkmonitor.h"
+#include "libsync/syncendpointrecovery.h"
 #include "socketapi/socketapi.h"
-#include "theme.h"
 
 #include <QFontMetrics>
 #include <QRandomGenerator>
 #include <QSettings>
 #include <QTimer>
+
 #include <algorithm>
 #if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
-#include <QNetworkInformation>
+#    include <QNetworkInformation>
 #endif
 
 using namespace std::chrono;
 using namespace std::chrono_literals;
 
-namespace {
+namespace
+{
 
 inline const QLatin1String userExplicitlySignedOutC()
 {
@@ -76,8 +77,7 @@ bool looksLikeUrl(const QString &value)
 
 bool hasInvalidCachedPath(const Device &device)
 {
-    return std::any_of(device.paths.cbegin(), device.paths.cend(),
-        [](const DevicePath &path) { return path.address.isEmpty() || path.deviceType == DeviceType::Unknown || path.port <= 0; });
+    return std::any_of(device.paths.cbegin(), device.paths.cend(), [](const DevicePath &path) { return path.address.isEmpty() || path.deviceType == DeviceType::Unknown || path.port <= 0; });
 }
 
 bool hasLocalPath(const Device &device)
@@ -162,18 +162,18 @@ QString optionalUuidToString(const std::optional<QUuid> &value)
 const char *devicePathResolutionOutcomeString(DevicePathResolutionOutcome outcome)
 {
     switch (outcome) {
-    case DevicePathResolutionOutcome::ResolvedFromCachedPriority:
-        return "resolved_cached_priority";
-    case DevicePathResolutionOutcome::ResolvedFromFreshRemoteAccess:
-        return "resolved_fresh_remote_access";
-    case DevicePathResolutionOutcome::ResolvedFromRemoteRelay:
-        return "resolved_remote_relay";
-    case DevicePathResolutionOutcome::RequiresRemoteAccessDeviceUpdate:
-        return "requires_remote_access_device_update";
-    case DevicePathResolutionOutcome::RequiresRemoteAccessPrompt:
-        return "requires_remote_access_prompt";
-    case DevicePathResolutionOutcome::UnresolvedAfterFullRefresh:
-        return "unresolved_after_full_refresh";
+        case DevicePathResolutionOutcome::ResolvedFromCachedPriority:
+            return "resolved_cached_priority";
+        case DevicePathResolutionOutcome::ResolvedFromFreshRemoteAccess:
+            return "resolved_fresh_remote_access";
+        case DevicePathResolutionOutcome::ResolvedFromRemoteRelay:
+            return "resolved_remote_relay";
+        case DevicePathResolutionOutcome::RequiresRemoteAccessDeviceUpdate:
+            return "requires_remote_access_device_update";
+        case DevicePathResolutionOutcome::RequiresRemoteAccessPrompt:
+            return "requires_remote_access_prompt";
+        case DevicePathResolutionOutcome::UnresolvedAfterFullRefresh:
+            return "unresolved_after_full_refresh";
     }
 
     return "unknown";
@@ -183,16 +183,16 @@ const char *devicePathResolutionOutcomeString(DevicePathResolutionOutcome outcom
 const char *networkReachabilityString(QNetworkInformation::Reachability reachability)
 {
     switch (reachability) {
-    case QNetworkInformation::Reachability::Unknown:
-        return "unknown";
-    case QNetworkInformation::Reachability::Disconnected:
-        return "disconnected";
-    case QNetworkInformation::Reachability::Local:
-        return "local";
-    case QNetworkInformation::Reachability::Site:
-        return "site";
-    case QNetworkInformation::Reachability::Online:
-        return "online";
+        case QNetworkInformation::Reachability::Unknown:
+            return "unknown";
+        case QNetworkInformation::Reachability::Disconnected:
+            return "disconnected";
+        case QNetworkInformation::Reachability::Local:
+            return "local";
+        case QNetworkInformation::Reachability::Site:
+            return "site";
+        case QNetworkInformation::Reachability::Online:
+            return "online";
     }
 
     return "unknown";
@@ -202,35 +202,36 @@ const char *networkReachabilityString(QNetworkInformation::Reachability reachabi
 int endpointRecoveryReasonPriority(APP::EndpointRecoveryReason reason)
 {
     switch (reason) {
-    case APP::EndpointRecoveryReason::Unauthorized:
-        return 100;
-    case APP::EndpointRecoveryReason::TlsHandshakeFailed:
-        return 90;
-    case APP::EndpointRecoveryReason::ServerUnavailable:
-        return 80;
-    case APP::EndpointRecoveryReason::ConnectionRefused:
-        [[fallthrough]];
-    case APP::EndpointRecoveryReason::HostResolutionFailed:
-        [[fallthrough]];
-    case APP::EndpointRecoveryReason::Timeout:
-        [[fallthrough]];
-    case APP::EndpointRecoveryReason::TemporaryNetworkFailure:
-        [[fallthrough]];
-    case APP::EndpointRecoveryReason::RemoteHostClosed:
-        [[fallthrough]];
-    case APP::EndpointRecoveryReason::TransportUnreachable:
-        return 70;
-    case APP::EndpointRecoveryReason::PathSemanticallyInvalid:
-        return 10;
-    case APP::EndpointRecoveryReason::NonRecoverableSyncError:
-        return 0;
+        case APP::EndpointRecoveryReason::Unauthorized:
+            return 100;
+        case APP::EndpointRecoveryReason::TlsHandshakeFailed:
+            return 90;
+        case APP::EndpointRecoveryReason::ServerUnavailable:
+            return 80;
+        case APP::EndpointRecoveryReason::ConnectionRefused:
+            [[fallthrough]];
+        case APP::EndpointRecoveryReason::HostResolutionFailed:
+            [[fallthrough]];
+        case APP::EndpointRecoveryReason::Timeout:
+            [[fallthrough]];
+        case APP::EndpointRecoveryReason::TemporaryNetworkFailure:
+            [[fallthrough]];
+        case APP::EndpointRecoveryReason::RemoteHostClosed:
+            [[fallthrough]];
+        case APP::EndpointRecoveryReason::TransportUnreachable:
+            return 70;
+        case APP::EndpointRecoveryReason::PathSemanticallyInvalid:
+            return 10;
+        case APP::EndpointRecoveryReason::NonRecoverableSyncError:
+            return 0;
     }
 
     return 0;
 }
-} // anonymous namespace
+}   // anonymous namespace
 
-namespace APP {
+namespace APP
+{
 
 Q_LOGGING_CATEGORY(lcAccountState, "gui.account.state", QtInfoMsg)
 
@@ -265,7 +266,7 @@ AccountState::AccountState(AccountPtr account)
     , _state(AccountState::Disconnected)
     , _connectionStatus(ConnectionValidator::Undefined)
     , _waitingForNewCredentials(false)
-    , _maintenanceToConnectedDelay(1min + minutes(QRandomGenerator::global()->generate() % 4)) // 1-5min delay
+    , _maintenanceToConnectedDelay(1min + minutes(QRandomGenerator::global()->generate() % 4))   // 1-5min delay
 {
     qRegisterMetaType<AccountState *>("AccountState*");
     qRegisterMetaType<EndpointRecoveryEvent>("EndpointRecoveryEvent");
@@ -330,39 +331,40 @@ AccountState::AccountState(AccountPtr account)
 
             qCDebug(lcAccountState) << "Network reachability changed" << networkReachabilityString(reachability);
             switch (reachability) {
-            case QNetworkInformation::Reachability::Online:
-                [[fallthrough]];
-            case QNetworkInformation::Reachability::Site:
-                [[fallthrough]];
-            case QNetworkInformation::Reachability::Unknown:
-                // the connection might not yet be established
-                QTimer::singleShot(0, this, [this] {
-                    checkConnectivity(false);
-                    if (_networkTriggeredDeviceUpdatePending) {
+                case QNetworkInformation::Reachability::Online:
+                    [[fallthrough]];
+                case QNetworkInformation::Reachability::Site:
+                    [[fallthrough]];
+                case QNetworkInformation::Reachability::Unknown:
+                    // the connection might not yet be established
+                    QTimer::singleShot(0, this, [this] {
+                        checkConnectivity(false);
+                        if (_networkTriggeredDeviceUpdatePending) {
+                            scheduleNetworkTriggeredDeviceUpdate();
+                        }
+                    });
+                    break;
+                case QNetworkInformation::Reachability::Disconnected:
+                    // invalidate the last ETag check so the next checkConnectivity does a full revalidation
+                    // and triggers a local discover, without flashing a Disconnected state while a working
+                    // path may still be re-established
+                    if (state() != State::SignedOut) {
+                        _timeOfLastETagCheck = {};
+                        if (state() == State::Connected) {
+                            setState(State::Connecting);
+                        }
+                    }
+                    [[fallthrough]];
+                case QNetworkInformation::Reachability::Local:
+                    if (state() != State::SignedOut && _account && _deviceController
+                        && shouldDiscoverLocalPathsBeforeResolution(_account->device(), _account->activePath())) {
                         scheduleNetworkTriggeredDeviceUpdate();
                     }
-                });
-                break;
-            case QNetworkInformation::Reachability::Disconnected:
-                // invalidate the last ETag check so the next checkConnectivity does a full revalidation
-                // and triggers a local discover, without flashing a Disconnected state while a working
-                // path may still be re-established
-                if (state() != State::SignedOut) {
-                    _timeOfLastETagCheck = {};
-                    if (state() == State::Connected) {
-                        setState(State::Connecting);
-                    }
-                }
-                [[fallthrough]];
-            case QNetworkInformation::Reachability::Local:
-                if (state() != State::SignedOut && _account && _deviceController
-                    && shouldDiscoverLocalPathsBeforeResolution(_account->device(), _account->activePath())) {
-                    scheduleNetworkTriggeredDeviceUpdate();
-                }
-                break;
+                    break;
             }
         });
-    } else {
+    }
+    else {
         qCWarning(lcAccountState) << "Failed to load QNetworkInformation";
     }
 #endif
@@ -422,9 +424,7 @@ void AccountState::handleEndpointRecoveryRequest(const EndpointRecoveryEvent &ev
 
     qCInfo(lcAccountState).noquote() << "endpointRecoveryRequested"
                                      << QStringLiteral("folder=%1 baseUrl=%2 reason=%3 activePathId=%4 networkError=%5 httpStatus=%6")
-                                            .arg(folderPath, event.baseUrl, endpointRecoveryReasonString(event.reason),
-                                                event.activePathId ? event.activePathId->toString(QUuid::WithoutBraces) : QStringLiteral("<none>"),
-                                                QString::number(event.networkError), QString::number(event.httpStatus));
+                                            .arg(folderPath, event.baseUrl, endpointRecoveryReasonString(event.reason), event.activePathId ? event.activePathId->toString(QUuid::WithoutBraces) : QStringLiteral("<none>"), QString::number(event.networkError), QString::number(event.httpStatus));
 
     if (!shouldScheduleEndpointRecovery(event.reason)) {
         qCDebug(lcAccountState) << "Ignoring endpoint recovery request because reason is not recoverable"
@@ -535,21 +535,25 @@ void AccountState::setState(State state)
                 }
             }
             setEndpointRecoveryState(EndpointRecoveryState::Idle);
-        } else if (oldState == SignedOut && _state == Disconnected) {
+        }
+        else if (oldState == SignedOut && _state == Disconnected) {
             // If we stop being voluntarily signed-out, try to connect and
             // auth right now!
             checkConnectivity();
-        } else if (_state == ServiceUnavailable) {
+        }
+        else if (_state == ServiceUnavailable) {
             // Check if we are actually down for maintenance.
             // To do this we must clear the connection validator that just
             // produced the 503. It's finished anyway and will delete itself.
             _connectionValidator->deleteLater();
             _connectionValidator.clear();
             checkConnectivity();
-        } else if (_state == NetworkError) {
+        }
+        else if (_state == NetworkError) {
             // Find another URL
             updateDeviceAccessibility();
-        } else if (_state == Connected) {
+        }
+        else if (_state == Connected) {
             _transientFailureMaskTimer.invalidate();
         }
     }
@@ -581,20 +585,20 @@ void AccountState::setEndpointRecoveryState(EndpointRecoveryState state)
 {
     const auto stateString = [](EndpointRecoveryState currentState) {
         switch (currentState) {
-        case EndpointRecoveryState::Idle:
-            return "idle";
-        case EndpointRecoveryState::Pending:
-            return "pending";
-        case EndpointRecoveryState::Resolving:
-            return "resolving";
-        case EndpointRecoveryState::WaitingForRemoteAccessPrompt:
-            return "waiting_ra_prompt";
-        case EndpointRecoveryState::Deferred:
-            return "deferred";
-        case EndpointRecoveryState::Completed:
-            return "completed";
-        case EndpointRecoveryState::Failed:
-            return "failed";
+            case EndpointRecoveryState::Idle:
+                return "idle";
+            case EndpointRecoveryState::Pending:
+                return "pending";
+            case EndpointRecoveryState::Resolving:
+                return "resolving";
+            case EndpointRecoveryState::WaitingForRemoteAccessPrompt:
+                return "waiting_ra_prompt";
+            case EndpointRecoveryState::Deferred:
+                return "deferred";
+            case EndpointRecoveryState::Completed:
+                return "completed";
+            case EndpointRecoveryState::Failed:
+                return "failed";
         }
 
         return "unknown";
@@ -611,12 +615,12 @@ void AccountState::setEndpointRecoveryState(EndpointRecoveryState state)
 const char *AccountState::deviceUpdateTriggerString(DeviceUpdateTrigger trigger)
 {
     switch (trigger) {
-    case DeviceUpdateTrigger::Default:
-        return "default";
-    case DeviceUpdateTrigger::NetworkChange:
-        return "network_change";
-    case DeviceUpdateTrigger::SyncTransportFailure:
-        return "sync_transport_failure";
+        case DeviceUpdateTrigger::Default:
+            return "default";
+        case DeviceUpdateTrigger::NetworkChange:
+            return "network_change";
+        case DeviceUpdateTrigger::SyncTransportFailure:
+            return "sync_transport_failure";
     }
 
     return "unknown";
@@ -732,6 +736,11 @@ void AccountState::checkConnectivity(bool blockJobs)
     _connectionValidator = new ConnectionValidator(_account, this);
     connect(_connectionValidator, &ConnectionValidator::connectionResult, this, &AccountState::slotConnectionValidatorResult);
     connect(_connectionValidator, &ConnectionValidator::sslErrors, this, [blockJobs, this](const QList<QSslError> &errors) {
+        Q_UNUSED(blockJobs)
+        Q_UNUSED(errors)
+        return;
+
+        /* Temprary cert checks off
         if (_tlsDialog)
             return;
 
@@ -775,6 +784,7 @@ void AccountState::checkConnectivity(bool blockJobs)
             ApplicationGui::raise();
             _tlsDialog->open();
         }
+        */
     });
 
     ConnectionValidator::ValidationMode mode = ConnectionValidator::ValidationMode::ValidateAuthAndUpdate;
@@ -784,14 +794,17 @@ void AccountState::checkConnectivity(bool blockJobs)
         if (blockJobs) {
             _connectionValidator->setClearCookies(true);
             mode = ConnectionValidator::ValidationMode::ValidateAuth;
-        } else {
+        }
+        else {
             mode = ConnectionValidator::ValidationMode::ValidateAuthAndUpdate;
         }
-    } else {
+    }
+    else {
         // Check the server and then the auth.
         if (_waitingForNewCredentials) {
             mode = ConnectionValidator::ValidationMode::ValidateServer;
-        } else {
+        }
+        else {
             _connectionValidator->setClearCookies(true);
             mode = ConnectionValidator::ValidationMode::ValidateAuthAndUpdate;
         }
@@ -935,7 +948,7 @@ void AccountState::resetConnectionValidator()
 bool AccountState::isPathResolutionPending() const
 {
     return _updateDeviceInProgress || _startupDevicePathResolutionInProgress || _networkChangeDebounceTimer.isActive() || _networkTriggeredDeviceUpdatePending
-        || _pendingEndpointRecoveryRequest.has_value();
+           || _pendingEndpointRecoveryRequest.has_value();
 }
 
 AccountState::State AccountState::maskTransientFailureState(State fallback)
@@ -948,7 +961,8 @@ AccountState::State AccountState::maskTransientFailureState(State fallback)
     constexpr auto transientFailureMaskDeadline = duration_cast<milliseconds>(2 * ConnectionValidator::DefaultCallingInterval);
     if (!_transientFailureMaskTimer.isValid()) {
         _transientFailureMaskTimer.start();
-    } else if (_transientFailureMaskTimer.hasExpired(transientFailureMaskDeadline.count())) {
+    }
+    else if (_transientFailureMaskTimer.hasExpired(transientFailureMaskDeadline.count())) {
         qCWarning(lcAccountState) << "Transient failure mask deadline exceeded, surfacing failure instead of Connecting"
                                   << "validatorStatus" << _connectionStatus << "fallbackState" << fallback << "elapsedMs"
                                   << _transientFailureMaskTimer.elapsed();
@@ -972,8 +986,7 @@ void AccountState::startRaSwitchingTiming(DeviceUpdateTrigger trigger)
 
     _raSwitchingTiming.active = true;
     _raSwitchingTiming.trigger = trigger;
-    _raSwitchingTiming.recoveryGeneration =
-        (trigger == DeviceUpdateTrigger::SyncTransportFailure && _pendingEndpointRecoveryRequest) ? _pendingEndpointRecoveryRequest->generation : 0;
+    _raSwitchingTiming.recoveryGeneration = (trigger == DeviceUpdateTrigger::SyncTransportFailure && _pendingEndpointRecoveryRequest) ? _pendingEndpointRecoveryRequest->generation : 0;
     _raSwitchingTiming.totalTimer.start();
 }
 
@@ -1158,7 +1171,7 @@ bool AccountState::shouldReplacePendingEndpointRecoveryRequest(const EndpointRec
     }
 
     return event.activePathId != _pendingEndpointRecoveryRequest->event.activePathId || event.baseUrl != _pendingEndpointRecoveryRequest->event.baseUrl
-        || event.networkError != _pendingEndpointRecoveryRequest->event.networkError || event.httpStatus != _pendingEndpointRecoveryRequest->event.httpStatus;
+           || event.networkError != _pendingEndpointRecoveryRequest->event.networkError || event.httpStatus != _pendingEndpointRecoveryRequest->event.httpStatus;
 }
 
 void AccountState::triggerPendingEndpointRecovery()
@@ -1261,11 +1274,7 @@ void AccountState::triggerPendingEndpointRecovery()
     setEndpointRecoveryState(EndpointRecoveryState::Resolving);
     qCInfo(lcAccountState).noquote() << "Starting immediate endpoint recovery"
                                      << QStringLiteral("generation=%1 folder=%2 reason=%3 activePathId=%4 baseUrl=%5")
-                                            .arg(QString::number(pendingRequest.generation), pendingRequest.folderPath,
-                                                endpointRecoveryReasonString(pendingRequest.event.reason),
-                                                pendingRequest.event.activePathId ? pendingRequest.event.activePathId->toString(QUuid::WithoutBraces)
-                                                                                  : QStringLiteral("<none>"),
-                                                pendingRequest.event.baseUrl);
+                                            .arg(QString::number(pendingRequest.generation), pendingRequest.folderPath, endpointRecoveryReasonString(pendingRequest.event.reason), pendingRequest.event.activePathId ? pendingRequest.event.activePathId->toString(QUuid::WithoutBraces) : QStringLiteral("<none>"), pendingRequest.event.baseUrl);
     setUpdateDeviceProgress(true);
     resolveAndApplyDevicePath(*device, true, DeviceUpdateTrigger::SyncTransportFailure, pendingRequest.event.activePathId);
 }
@@ -1348,16 +1357,16 @@ bool AccountState::canRunQueuedNetworkTriggeredDeviceUpdate() const
 #if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
     if (auto *networkInformation = QNetworkInformation::instance()) {
         switch (networkInformation->reachability()) {
-        case QNetworkInformation::Reachability::Online:
-            [[fallthrough]];
-        case QNetworkInformation::Reachability::Site:
-            [[fallthrough]];
-        case QNetworkInformation::Reachability::Unknown:
-            return true;
-        case QNetworkInformation::Reachability::Disconnected:
-            [[fallthrough]];
-        case QNetworkInformation::Reachability::Local:
-            return false;
+            case QNetworkInformation::Reachability::Online:
+                [[fallthrough]];
+            case QNetworkInformation::Reachability::Site:
+                [[fallthrough]];
+            case QNetworkInformation::Reachability::Unknown:
+                return true;
+            case QNetworkInformation::Reachability::Disconnected:
+                [[fallthrough]];
+            case QNetworkInformation::Reachability::Local:
+                return false;
         }
     }
 #endif
@@ -1381,8 +1390,7 @@ void AccountState::resolveAndApplyDevicePath(
         return;
     }
 
-    const auto recoveryGeneration =
-        (trigger == DeviceUpdateTrigger::SyncTransportFailure && _pendingEndpointRecoveryRequest) ? _pendingEndpointRecoveryRequest->generation : 0;
+    const auto recoveryGeneration = (trigger == DeviceUpdateTrigger::SyncTransportFailure && _pendingEndpointRecoveryRequest) ? _pendingEndpointRecoveryRequest->generation : 0;
     const auto resolutionGeneration = ++_devicePathResolutionGeneration;
     startRaSwitchingTiming(trigger);
     qCInfo(lcAccountState) << "Starting device path resolution"
@@ -1394,37 +1402,36 @@ void AccountState::resolveAndApplyDevicePath(
     const auto preferredPathId = activePath.isNull() ? std::optional<QUuid>{} : std::optional<QUuid>{activePath};
     _deviceController->resolveDevicePath(device, avoidPathId, preferredPathId)
         .then(this,
-            [this, allowRemoteAccessPrompt, trigger, resolutionGeneration](const DevicePathResolutionResult &result) {
-                if (resolutionGeneration != _devicePathResolutionGeneration || !_account || isSignedOut()) {
-                    qCDebug(lcAccountState) << "Ignoring stale device path resolution result"
-                                            << "trigger" << deviceUpdateTriggerString(trigger) << "resultResolutionGeneration" << resolutionGeneration
-                                            << "currentResolutionGeneration" << _devicePathResolutionGeneration;
-                    return;
-                }
-                const auto recoveryGeneration =
-                    (trigger == DeviceUpdateTrigger::SyncTransportFailure && _pendingEndpointRecoveryRequest) ? _pendingEndpointRecoveryRequest->generation : 0;
-                qCInfo(lcAccountState) << "Device path resolution finished"
-                                       << "trigger" << deviceUpdateTriggerString(trigger) << "generation" << recoveryGeneration << "resolutionGeneration"
-                                       << resolutionGeneration << "outcome" << devicePathResolutionOutcomeString(result.outcome) << "resolved"
-                                       << result.resolved() << "selectedPathId" << optionalUuidToString(result.selectedPathId) << "remoteAccessRequested"
-                                       << result.remoteAccessRequested << "remoteCacheUpdated" << result.remoteCacheUpdated << "remoteCacheTimestampRefreshed"
-                                       << result.remoteCacheTimestampRefreshed << "usedRemoteRelay" << result.usedRemoteRelay;
-                if (allowRemoteAccessPrompt && result.outcome == DevicePathResolutionOutcome::RequiresRemoteAccessDeviceUpdate) {
-                    qCInfo(lcAccountState) << "Device path resolution requires Remote Access device update"
-                                           << "trigger" << deviceUpdateTriggerString(trigger) << "generation" << recoveryGeneration;
-                    requestRAupdate(result.device, trigger);
-                    return;
-                }
+              [this, allowRemoteAccessPrompt, trigger, resolutionGeneration](const DevicePathResolutionResult &result) {
+                  if (resolutionGeneration != _devicePathResolutionGeneration || !_account || isSignedOut()) {
+                      qCDebug(lcAccountState) << "Ignoring stale device path resolution result"
+                                              << "trigger" << deviceUpdateTriggerString(trigger) << "resultResolutionGeneration" << resolutionGeneration
+                                              << "currentResolutionGeneration" << _devicePathResolutionGeneration;
+                      return;
+                  }
+                  const auto recoveryGeneration = (trigger == DeviceUpdateTrigger::SyncTransportFailure && _pendingEndpointRecoveryRequest) ? _pendingEndpointRecoveryRequest->generation : 0;
+                  qCInfo(lcAccountState) << "Device path resolution finished"
+                                         << "trigger" << deviceUpdateTriggerString(trigger) << "generation" << recoveryGeneration << "resolutionGeneration"
+                                         << resolutionGeneration << "outcome" << devicePathResolutionOutcomeString(result.outcome) << "resolved"
+                                         << result.resolved() << "selectedPathId" << optionalUuidToString(result.selectedPathId) << "remoteAccessRequested"
+                                         << result.remoteAccessRequested << "remoteCacheUpdated" << result.remoteCacheUpdated << "remoteCacheTimestampRefreshed"
+                                         << result.remoteCacheTimestampRefreshed << "usedRemoteRelay" << result.usedRemoteRelay;
+                  if (allowRemoteAccessPrompt && result.outcome == DevicePathResolutionOutcome::RequiresRemoteAccessDeviceUpdate) {
+                      qCInfo(lcAccountState) << "Device path resolution requires Remote Access device update"
+                                             << "trigger" << deviceUpdateTriggerString(trigger) << "generation" << recoveryGeneration;
+                      requestRAupdate(result.device, trigger);
+                      return;
+                  }
 
-                if (allowRemoteAccessPrompt && result.outcome == DevicePathResolutionOutcome::RequiresRemoteAccessPrompt) {
-                    qCInfo(lcAccountState) << "Device path resolution requires Remote Access prompt"
-                                           << "trigger" << deviceUpdateTriggerString(trigger) << "generation" << recoveryGeneration;
-                    requestRAupdate(result.device, trigger);
-                    return;
-                }
+                  if (allowRemoteAccessPrompt && result.outcome == DevicePathResolutionOutcome::RequiresRemoteAccessPrompt) {
+                      qCInfo(lcAccountState) << "Device path resolution requires Remote Access prompt"
+                                             << "trigger" << deviceUpdateTriggerString(trigger) << "generation" << recoveryGeneration;
+                      requestRAupdate(result.device, trigger);
+                      return;
+                  }
 
-                applyResolvedDevicePath(result, trigger);
-            })
+                  applyResolvedDevicePath(result, trigger);
+              })
         .onFailed(this, [this, trigger, resolutionGeneration](const std::exception &e) {
             if (resolutionGeneration != _devicePathResolutionGeneration || !_account || isSignedOut()) {
                 qCDebug(lcAccountState) << "Ignoring stale device path resolution exception"
@@ -1433,8 +1440,7 @@ void AccountState::resolveAndApplyDevicePath(
                 return;
             }
 
-            const auto recoveryGeneration =
-                (trigger == DeviceUpdateTrigger::SyncTransportFailure && _pendingEndpointRecoveryRequest) ? _pendingEndpointRecoveryRequest->generation : 0;
+            const auto recoveryGeneration = (trigger == DeviceUpdateTrigger::SyncTransportFailure && _pendingEndpointRecoveryRequest) ? _pendingEndpointRecoveryRequest->generation : 0;
             qCWarning(lcAccountState) << "Device path resolution exception, finishing update flow"
                                       << "trigger" << deviceUpdateTriggerString(trigger) << "generation" << recoveryGeneration << e.what();
             if (trigger == DeviceUpdateTrigger::SyncTransportFailure && _pendingEndpointRecoveryRequest) {
@@ -1451,8 +1457,7 @@ void AccountState::applyResolvedDevicePath(const DevicePathResolutionResult &res
 {
     const auto previousActivePathId = _account ? _account->activePath() : QUuid{};
     const auto previousDavUrl = _account ? _account->davUrl() : QUrl{};
-    const auto recoveryGeneration =
-        (trigger == DeviceUpdateTrigger::SyncTransportFailure && _pendingEndpointRecoveryRequest) ? _pendingEndpointRecoveryRequest->generation : 0;
+    const auto recoveryGeneration = (trigger == DeviceUpdateTrigger::SyncTransportFailure && _pendingEndpointRecoveryRequest) ? _pendingEndpointRecoveryRequest->generation : 0;
     if (!result.resolved()) {
         qCWarning(lcAccountState) << "Device path resolution completed without reachable path"
                                   << "trigger" << deviceUpdateTriggerString(trigger) << "generation" << recoveryGeneration << "outcome"
@@ -1460,15 +1465,15 @@ void AccountState::applyResolvedDevicePath(const DevicePathResolutionResult &res
                                   << "remoteCacheUpdated" << result.remoteCacheUpdated << "remoteCacheTimestampRefreshed"
                                   << result.remoteCacheTimestampRefreshed << "usedRemoteRelay" << result.usedRemoteRelay;
         if (result.remoteCacheUpdated || result.remoteCacheTimestampRefreshed) {
-            const auto activePathStillExists = std::any_of(result.device.paths.cbegin(), result.device.paths.cend(),
-                [previousActivePathId](const DevicePath &path) { return path.id == previousActivePathId; });
+            const auto activePathStillExists = std::any_of(result.device.paths.cbegin(), result.device.paths.cend(), [previousActivePathId](const DevicePath &path) { return path.id == previousActivePathId; });
             if (!previousActivePathId.isNull() && activePathStillExists) {
                 qCInfo(lcAccountState) << "Persisting refreshed device cache without reachable path"
                                        << "trigger" << deviceUpdateTriggerString(trigger) << "generation" << recoveryGeneration << "activePathId"
                                        << previousActivePathId << "remoteCacheUpdated" << result.remoteCacheUpdated << "remoteCacheTimestampRefreshed"
                                        << result.remoteCacheTimestampRefreshed;
                 _account->setResolvedDevice(result.device, previousActivePathId);
-            } else {
+            }
+            else {
                 qCWarning(lcAccountState) << "Skipping refreshed device cache persistence because active path is unavailable"
                                           << "trigger" << deviceUpdateTriggerString(trigger) << "generation" << recoveryGeneration << "activePathId"
                                           << previousActivePathId;
@@ -1513,7 +1518,8 @@ void AccountState::applyResolvedDevicePath(const DevicePathResolutionResult &res
         }
         emit urlChanged(_account->uuid());
         QTimer::singleShot(0, this, [this] { checkConnectivity(false); });
-    } else {
+    }
+    else {
         qCDebug(lcAccountState) << "Resolved device path keeps the same URL"
                                 << "trigger" << deviceUpdateTriggerString(trigger) << "generation" << recoveryGeneration << "selectedPathId"
                                 << result.selectedPathId.value();
@@ -1552,8 +1558,7 @@ void AccountState::requestLocalPathDiscovery(const Device &device, DeviceUpdateT
                            << "generation" << generation << "trigger" << deviceUpdateTriggerString(trigger) << "deviceCn" << device.certificateCommonName;
 
     connect(
-        _deviceController, &DeviceController::account_update_device_finished, this,
-        [this, generation](const Device &device) {
+        _deviceController, &DeviceController::account_update_device_finished, this, [this, generation](const Device &device) {
             if (!_pendingDevicePathUpdate || _pendingDevicePathUpdate->generation != generation) {
                 qCDebug(lcAccountState) << "Ignoring stale local path discovery result"
                                         << "resultGeneration" << generation << "currentGeneration"
@@ -1615,8 +1620,7 @@ void AccountState::requestRAupdate(const Device &device, DeviceUpdateTrigger tri
                            << "generation" << generation << "trigger" << deviceUpdateTriggerString(trigger) << "deviceCn" << device.certificateCommonName;
 
     connect(
-        _deviceController, &DeviceController::account_update_device_finished, this,
-        [this, generation](const Device &device) {
+        _deviceController, &DeviceController::account_update_device_finished, this, [this, generation](const Device &device) {
             if (!_pendingDevicePathUpdate || _pendingDevicePathUpdate->generation != generation) {
                 qCDebug(lcAccountState) << "Ignoring stale device update result after RA flow was cancelled"
                                         << "resultGeneration" << generation << "currentGeneration"
@@ -1749,7 +1753,8 @@ void AccountState::initializeRA()
         if (_account && _account->uuid() == id && _pendingDevicePathUpdate && _pendingDevicePathUpdate->generation == _activeAccessCodeGeneration) {
             qCDebug(lcAccountState) << "codeEntered";
             _deviceController->enterAccessCode(code, false);
-        } else {
+        }
+        else {
             qCDebug(lcAccountState) << "codeEntered id isn't match";
         }
     });
@@ -1758,7 +1763,8 @@ void AccountState::initializeRA()
         if (_account && _account->uuid() == id) {
             qCDebug(lcAccountState) << "resendRequested";
             _deviceController->initAccessCode();
-        } else {
+        }
+        else {
             qCDebug(lcAccountState) << "resendRequested id isn't match";
         }
     });
@@ -1768,7 +1774,8 @@ void AccountState::initializeRA()
             qCDebug(lcAccountState) << "processSkipped";
             oc->hideAll();
             emit pathUpdateFinished(true, Device{});
-        } else {
+        }
+        else {
             qCDebug(lcAccountState) << "processSkipped id isn't match" << _account->uuid() << id;
         }
     });
@@ -1778,10 +1785,12 @@ void AccountState::initializeRA()
             qCDebug(lcAccountState) << "errorRetry";
             if (state == ErrorDialogState::UnableToConnectInit) {
                 _deviceController->initAccessCode();
-            } else if (state == ErrorDialogState::UnableToConnectToken) {
+            }
+            else if (state == ErrorDialogState::UnableToConnectToken) {
                 oc->retryAccessCode(_account->uuid());
             }
-        } else {
+        }
+        else {
             qCDebug(lcAccountState) << "errorRetry id isn't match";
         }
     });
@@ -1795,10 +1804,12 @@ void AccountState::initializeRA()
                     _pendingDevicePathUpdate->clearAccessCodeOnPrompt = false;
                     tryShowRemoteAccessPrompt();
                 }
-            } else {
+            }
+            else {
                 emit pathUpdateFinished(true, Device{});
             }
-        } else {
+        }
+        else {
             qCDebug(lcAccountState) << "errorCancel id isn't match";
         }
     });
@@ -1807,7 +1818,8 @@ void AccountState::initializeRA()
         if (_account && _account->uuid() == id) {
             qCDebug(lcAccountState) << "errorOk";
             emit pathUpdateFinished(true, Device{});
-        } else {
+        }
+        else {
             qCDebug(lcAccountState) << "errorOk id isn't match";
         }
     });
@@ -1819,81 +1831,91 @@ void AccountState::initializeRA()
             _pendingDevicePathUpdate->awaitingAccessCode = true;
             _pendingDevicePathUpdate->clearAccessCodeOnPrompt = true;
             tryShowRemoteAccessPrompt();
-        } else {
+        }
+        else {
             qCDebug(lcAccountState) << "overlay controller was destroyed or invalid account ptr";
         }
     });
 
-    connect(_deviceController, &DeviceController::accessCodeResult, this,
-        [this, oc](DeviceController::AccessCodeContext context, int status_code, const QString &errorString, const QString &errorStacktrace) {
-            if (isSignedOut() || !_pendingDevicePathUpdate || _pendingDevicePathUpdate->generation != _activeAccessCodeGeneration) {
-                qCDebug(lcAccountState) << "Ignoring stale accessCodeResult after recovery flow was cancelled"
-                                        << "pendingGeneration" << (_pendingDevicePathUpdate ? _pendingDevicePathUpdate->generation : 0) << "activeGeneration"
-                                        << _activeAccessCodeGeneration;
-                if (oc && _account) {
-                    oc->hideAll();
-                }
+    connect(_deviceController, &DeviceController::accessCodeResult, this, [this, oc](DeviceController::AccessCodeContext context, int status_code, const QString &errorString, const QString &errorStacktrace) {
+        if (isSignedOut() || !_pendingDevicePathUpdate || _pendingDevicePathUpdate->generation != _activeAccessCodeGeneration) {
+            qCDebug(lcAccountState) << "Ignoring stale accessCodeResult after recovery flow was cancelled"
+                                    << "pendingGeneration" << (_pendingDevicePathUpdate ? _pendingDevicePathUpdate->generation : 0) << "activeGeneration"
+                                    << _activeAccessCodeGeneration;
+            if (oc && _account) {
+                oc->hideAll();
+            }
+            return;
+        }
+        const auto finishSkippedUpdate = [this] { emit pathUpdateFinished(true, Device{}); };
+        const auto reportErrorOrFinish = [this, oc, finishSkippedUpdate](ErrorDialogState state) {
+            if (!_account || !oc || !oc->reportError(state, _account->uuid())) {
+                finishSkippedUpdate();
+            }
+        };
+        if (status_code == 200) {
+            qCDebug(lcAccountState) << "accessCodeResult Accepted";
+            _pendingDevicePathUpdate->awaitingAccessCode = false;
+            _pendingDevicePathUpdate->accessCodePromptDeferred = false;
+            _deviceController->account_update_device_continue(
+                _pendingDevicePathUpdate ? std::optional<Device>(_pendingDevicePathUpdate->device) : accountDevice());
+            oc->hideAll();
+        }
+        else {
+            qCDebug(lcAccountState) << "accessCodeResult Error" << (context == DeviceController::AccessCodeContext::Init ? "Init" : "Token") << status_code
+                                    << errorString << errorStacktrace;
+            if (context == DeviceController::AccessCodeContext::Init && isRemoteAccessTransportFailure(status_code)) {
+                qCWarning(lcAccountState) << "Remote Access init failed before code flow could start, finishing pending path update" << status_code
+                                          << errorString;
+                finishSkippedUpdate();
                 return;
             }
-            const auto finishSkippedUpdate = [this] { emit pathUpdateFinished(true, Device{}); };
-            const auto reportErrorOrFinish = [this, oc, finishSkippedUpdate](ErrorDialogState state) {
-                if (!_account || !oc || !oc->reportError(state, _account->uuid())) {
-                    finishSkippedUpdate();
+            if (oc && _account) {
+                if (status_code == 401) {
+                    // from /init - then incorrect email
+                    // from /token - then invalid code
+                    if (context == DeviceController::AccessCodeContext::Init) {
+                        emit pathUpdateFinished(true, Device{});
+                    }
+                    else if (context == DeviceController::AccessCodeContext::Token) {
+                        if (errorString.contains(QStringLiteral("expired"))) {
+                            oc->expiredAccessCode(_account->uuid());
+                        }
+                        else {
+                            oc->invalidAccessCode(_account->uuid());
+                        }
+                    }
                 }
-            };
-            if (status_code == 200) {
-                qCDebug(lcAccountState) << "accessCodeResult Accepted";
-                _pendingDevicePathUpdate->awaitingAccessCode = false;
-                _pendingDevicePathUpdate->accessCodePromptDeferred = false;
-                _deviceController->account_update_device_continue(
-                    _pendingDevicePathUpdate ? std::optional<Device>(_pendingDevicePathUpdate->device) : accountDevice());
-                oc->hideAll();
-            } else {
-                qCDebug(lcAccountState) << "accessCodeResult Error" << (context == DeviceController::AccessCodeContext::Init ? "Init" : "Token") << status_code
-                                        << errorString << errorStacktrace;
-                if (context == DeviceController::AccessCodeContext::Init && isRemoteAccessTransportFailure(status_code)) {
-                    qCWarning(lcAccountState) << "Remote Access init failed before code flow could start, finishing pending path update" << status_code
-                                              << errorString;
-                    finishSkippedUpdate();
-                    return;
-                }
-                if (oc && _account) {
-                    if (status_code == 401) {
-                        // from /init - then incorrect email
-                        // from /token - then invalid code
-                        if (context == DeviceController::AccessCodeContext::Init) {
-                            emit pathUpdateFinished(true, Device{});
-                        } else if (context == DeviceController::AccessCodeContext::Token) {
-                            if (errorString.contains(QStringLiteral("expired"))) {
-                                oc->expiredAccessCode(_account->uuid());
-                            } else {
-                                oc->invalidAccessCode(_account->uuid());
-                            }
-                        }
-                    } else if (status_code == 500) {
-                        if (context == DeviceController::AccessCodeContext::Token) {
-                            reportErrorOrFinish(ErrorDialogState::UnableToConnectToken);
-                        } else {
-                            finishSkippedUpdate();
-                        }
-                    } else if (status_code == 429) {
-                        if (context == DeviceController::AccessCodeContext::Init) {
-                            // oc->reportError(ErrorDialogState::TooManyAttempts, _account->uuid());
-                            oc->hideAll();
-                            emit pathUpdateFinished(true, Device{});
-                        } else if (context == DeviceController::AccessCodeContext::Token) {
-                            oc->resendAccessCode(_account->uuid());
-                        }
-                    } else if (context == DeviceController::AccessCodeContext::Init) {
-                        reportErrorOrFinish(ErrorDialogState::UnableToConnectInit);
-                    } else if (context == DeviceController::AccessCodeContext::Token) {
+                else if (status_code == 500) {
+                    if (context == DeviceController::AccessCodeContext::Token) {
                         reportErrorOrFinish(ErrorDialogState::UnableToConnectToken);
                     }
-                } else {
-                    finishSkippedUpdate();
+                    else {
+                        finishSkippedUpdate();
+                    }
+                }
+                else if (status_code == 429) {
+                    if (context == DeviceController::AccessCodeContext::Init) {
+                        // oc->reportError(ErrorDialogState::TooManyAttempts, _account->uuid());
+                        oc->hideAll();
+                        emit pathUpdateFinished(true, Device{});
+                    }
+                    else if (context == DeviceController::AccessCodeContext::Token) {
+                        oc->resendAccessCode(_account->uuid());
+                    }
+                }
+                else if (context == DeviceController::AccessCodeContext::Init) {
+                    reportErrorOrFinish(ErrorDialogState::UnableToConnectInit);
+                }
+                else if (context == DeviceController::AccessCodeContext::Token) {
+                    reportErrorOrFinish(ErrorDialogState::UnableToConnectToken);
                 }
             }
-        });
+            else {
+                finishSkippedUpdate();
+            }
+        }
+    });
 
     _raInitialized = true;
 }
@@ -1917,7 +1939,8 @@ void AccountState::setUpdateDeviceProgress(bool inProgress)
         if (canRunQueuedNetworkTriggeredDeviceUpdate()) {
             qCDebug(lcAccountState) << "Scheduling queued network-triggered device update after active update flow finished";
             scheduleNetworkTriggeredDeviceUpdate();
-        } else {
+        }
+        else {
             qCDebug(lcAccountState) << "Keeping queued network-triggered device update until network reachability improves";
         }
     }
@@ -1954,7 +1977,8 @@ void AccountState::slotConnectionValidatorResult(ConnectionValidator::Status sta
             _timeSinceMaintenanceOver.start();
             QTimer::singleShot(_maintenanceToConnectedDelay + 100ms, this, [this] { AccountState::checkConnectivity(false); });
             return;
-        } else if (_timeSinceMaintenanceOver.elapsed() < _maintenanceToConnectedDelay.count()) {
+        }
+        else if (_timeSinceMaintenanceOver.elapsed() < _maintenanceToConnectedDelay.count()) {
             qCInfo(lcAccountState) << "AccountState reconnection: only" << _timeSinceMaintenanceOver.elapsed() << "ms have passed";
             return;
         }
@@ -1982,42 +2006,42 @@ void AccountState::slotConnectionValidatorResult(ConnectionValidator::Status sta
         }
     }
     switch (status) {
-    case ConnectionValidator::Connected:
-        setState(Connected);
-        break;
-    case ConnectionValidator::Undefined:
-    case ConnectionValidator::NotConfigured:
-        setState(maskTransientFailureState(Disconnected));
-        break;
-    case ConnectionValidator::ClientUnsupported:
-        [[fallthrough]];
-    case ConnectionValidator::ServerVersionMismatch:
-        setState(ConfigurationError);
-        break;
-    case ConnectionValidator::StatusNotFound:
-        // This can happen either because the server does not exist
-        // or because we are having network issues. The latter one is
-        // much more likely, so keep trying to connect.
-        setState(maskTransientFailureState(NetworkError));
-        break;
-    case ConnectionValidator::CredentialsWrong:
-    case ConnectionValidator::CredentialsNotReady:
-        slotInvalidCredentials();
-        break;
-    case ConnectionValidator::SslError:
-        // handled with the tlsDialog
-        break;
-    case ConnectionValidator::ServiceUnavailable:
-        _timeSinceMaintenanceOver.invalidate();
-        setState(ServiceUnavailable);
-        break;
-    case ConnectionValidator::MaintenanceMode:
-        _timeSinceMaintenanceOver.invalidate();
-        setState(MaintenanceMode);
-        break;
-    case ConnectionValidator::Timeout:
-        setState(maskTransientFailureState(NetworkError));
-        break;
+        case ConnectionValidator::Connected:
+            setState(Connected);
+            break;
+        case ConnectionValidator::Undefined:
+        case ConnectionValidator::NotConfigured:
+            setState(maskTransientFailureState(Disconnected));
+            break;
+        case ConnectionValidator::ClientUnsupported:
+            [[fallthrough]];
+        case ConnectionValidator::ServerVersionMismatch:
+            setState(ConfigurationError);
+            break;
+        case ConnectionValidator::StatusNotFound:
+            // This can happen either because the server does not exist
+            // or because we are having network issues. The latter one is
+            // much more likely, so keep trying to connect.
+            setState(maskTransientFailureState(NetworkError));
+            break;
+        case ConnectionValidator::CredentialsWrong:
+        case ConnectionValidator::CredentialsNotReady:
+            slotInvalidCredentials();
+            break;
+        case ConnectionValidator::SslError:
+            // handled with the tlsDialog
+            break;
+        case ConnectionValidator::ServiceUnavailable:
+            _timeSinceMaintenanceOver.invalidate();
+            setState(ServiceUnavailable);
+            break;
+        case ConnectionValidator::MaintenanceMode:
+            _timeSinceMaintenanceOver.invalidate();
+            setState(MaintenanceMode);
+            break;
+        case ConnectionValidator::Timeout:
+            setState(maskTransientFailureState(NetworkError));
+            break;
     }
     resetConnectionValidator();
 }
@@ -2131,4 +2155,4 @@ bool AccountState::readyForSync() const
     return !_fetchCapabilitiesJob && isConnected();
 }
 
-} // namespace APP
+}   // namespace APP

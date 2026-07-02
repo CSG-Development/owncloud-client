@@ -20,46 +20,47 @@
 #include "accountmanager.h"
 #include "accountstate.h"
 #include "application.h"
+#include "configfile.h"
+#include "filesystem.h"
+#include "folderman.h"
+#include "folderwatcher.h"
+#include "localdiscoverytracker.h"
+#include "settingsdialog.h"
+#include "syncengine.h"
+#include "syncresult.h"
+#include "syncrunfilelog.h"
+#include "theme.h"
+
 #include "common/checksums.h"
 #include "common/depreaction.h"
 #include "common/filesystembase.h"
 #include "common/syncjournalfilerecord.h"
 #include "common/version.h"
 #include "common/vfs.h"
-#include "configfile.h"
-#include "filesystem.h"
-#include "folderman.h"
-#include "folderwatcher.h"
 #include "gui/accountsettings.h"
 #include "gui/customdialogs/custommessagebox.h"
 #include "gui/customui/stylehelper.h"
 #include "libsync/graphapi/spacesmanager.h"
-#include "localdiscoverytracker.h"
 #include "scheduling/syncscheduler.h"
-#include "settingsdialog.h"
 #include "socketapi/socketapi.h"
-#include "syncengine.h"
-#include "syncresult.h"
-#include "syncrunfilelog.h"
-#include "theme.h"
 
 #ifdef Q_OS_WIN
-#include "common/utility_win.h"
+#    include "common/utility_win.h"
 #endif
 
-#include <algorithm>
-
+#include <QApplication>
 #include <QDir>
+#include <QPushButton>
 #include <QSettings>
 #include <QTimer>
 #include <QUrl>
 
-#include <QApplication>
-#include <QPushButton>
+#include <algorithm>
 
 using namespace std::chrono_literals;
 
-namespace {
+namespace
+{
 
 /*
  * [Accounts]
@@ -78,9 +79,10 @@ auto priorityC = QStringLiteral("priority");
  * Either due to _engine->isAnotherSyncNeeded or a sync error
  */
 constexpr int retrySyncLimitC = 3;
-}
+}   // namespace
 
-namespace APP {
+namespace APP
+{
 
 using namespace FileSystem::SizeLiterals;
 
@@ -126,8 +128,7 @@ Folder::Folder(const FolderDefinition &definition, const AccountStatePtr &accoun
         connect(_engine.data(), &SyncEngine::finished, this, &Folder::slotSyncFinished, Qt::QueuedConnection);
 
         connect(_engine.data(), &SyncEngine::aboutToRemoveAllFiles, this, &Folder::slotAboutToRemoveAllFiles);
-        connect(_engine.data(), &SyncEngine::transmissionProgress, this,
-            [this](const ProgressInfo &pi) { emit ProgressDispatcher::instance() -> progressInfo(this, pi); });
+        connect(_engine.data(), &SyncEngine::transmissionProgress, this, [this](const ProgressInfo &pi) { emit ProgressDispatcher::instance() -> progressInfo(this, pi); });
         connect(_engine.data(), &SyncEngine::itemCompleted, this, &Folder::slotItemCompleted);
         connect(_engine.data(), &SyncEngine::newBigFolder, this, &Folder::slotNewBigFolderDiscovered);
         connect(_engine.data(), &SyncEngine::seenLockedFile, FolderMan::instance(), &FolderMan::slotSyncOnceFileUnlocks);
@@ -197,7 +198,8 @@ bool Folder::checkLocalPath()
     if (_canonicalLocalPath.isEmpty()) {
         qCWarning(lcFolder) << "Broken symlink:" << _definition.localPath();
         _canonicalLocalPath = _definition.localPath();
-    } else if (!_canonicalLocalPath.endsWith(QLatin1Char('/'))) {
+    }
+    else if (!_canonicalLocalPath.endsWith(QLatin1Char('/'))) {
         _canonicalLocalPath.append(QLatin1Char('/'));
     }
 
@@ -214,15 +216,19 @@ bool Folder::checkLocalPath()
                 error = tr("%1 failed to open the database.").arg(_definition.localPath());
             }
         }
-    } else {
+    }
+    else {
         // Check directory again
         if (!FileSystem::fileExists(_definition.localPath(), fi)) {
             error = tr("Local folder %1 does not exist.").arg(_definition.localPath());
-        } else if (!fi.isDir()) {
+        }
+        else if (!fi.isDir()) {
             error = tr("%1 should be a folder but is not.").arg(_definition.localPath());
-        } else if (!fi.isReadable()) {
+        }
+        else if (!fi.isReadable()) {
             error = tr("%1 is not readable.").arg(_definition.localPath());
-        } else if (!fi.isWritable()) {
+        }
+        else if (!fi.isWritable()) {
             error = tr("%1 is not writable.").arg(_definition.localPath());
         }
     }
@@ -241,7 +247,7 @@ SyncOptions Folder::loadSyncOptions()
     ConfigFile cfgFile;
 
     auto newFolderLimit = cfgFile.newBigFolderSizeLimit();
-    opt._newBigFolderSizeLimit = newFolderLimit.first ? newFolderLimit.second * 1000LL * 1000LL : -1; // convert from MB to B
+    opt._newBigFolderSizeLimit = newFolderLimit.first ? newFolderLimit.second * 1000LL * 1000LL : -1;   // convert from MB to B
     opt._confirmExternalStorage = cfgFile.confirmExternalStorage();
     opt._moveFilesToTrash = cfgFile.moveToTrash();
     opt._vfs = _vfs;
@@ -269,7 +275,8 @@ void Folder::prepareFolder(const QString &path)
             qCInfo(lcFolder) << "Creating" << desktopIni.fileName() << "to set a folder icon in Explorer.";
             desktopIni.setValue(QStringLiteral(".ShellClassInfo/IconResource"), QDir::toNativeSeparators(qApp->applicationFilePath()));
             desktopIni.setValue(updateIconKey, true);
-        } else {
+        }
+        else {
             qCInfo(lcFolder) << "Skip icon update for" << desktopIni.fileName() << "," << updateIconKey << "is disabled";
         }
 
@@ -325,7 +332,6 @@ QString Folder::shortGuiLocalPath() const
     }
     return QDir::toNativeSeparators(p);
 }
-
 
 bool Folder::ignoreHiddenFiles()
 {
@@ -424,7 +430,8 @@ void Folder::setSyncPaused(bool paused)
     emit syncPausedChanged(this, paused);
     if (!paused) {
         setSyncState(SyncResult::NotYetStarted);
-    } else {
+    }
+    else {
         setSyncState(SyncResult::Paused);
     }
     emit canSyncChanged();
@@ -491,62 +498,70 @@ void Folder::createGuiLog(const QString &filename, LogStatus status, int count, 
         QString text;
 
         switch (status) {
-        case LogStatusRemove:
-            if (count > 1) {
-                text = tr("%1 and %n other file(s) have been removed.", "", count - 1).arg(file);
-            } else {
-                text = tr("%1 has been removed.", "%1 names a file.").arg(file);
-            }
-            break;
-        case LogStatusNew:
-            if (count > 1) {
-                text = tr("%1 and %n other file(s) have been added.", "", count - 1).arg(file);
-            } else {
-                text = tr("%1 has been added.", "%1 names a file.").arg(file);
-            }
-            break;
-        case LogStatusUpdated:
-            if (count > 1) {
-                text = tr("%1 and %n other file(s) have been updated.", "", count - 1).arg(file);
-            } else {
-                text = tr("%1 has been updated.", "%1 names a file.").arg(file);
-            }
-            break;
-        case LogStatusRename:
-            if (count > 1) {
-                text = tr("%1 has been renamed to %2 and %n other file(s) have been renamed.", "", count - 1).arg(file, renameTarget);
-            } else {
-                text = tr("%1 has been renamed to %2.", "%1 and %2 name files.").arg(file, renameTarget);
-            }
-            break;
-        case LogStatusMove:
-            if (count > 1) {
-                text = tr("%1 has been moved to %2 and %n other file(s) have been moved.", "", count - 1).arg(file, renameTarget);
-            } else {
-                text = tr("%1 has been moved to %2.").arg(file, renameTarget);
-            }
-            break;
-        case LogStatusConflict:
-            if (count > 1) {
-                text = tr("%1 has and %n other file(s) have sync conflicts.", "", count - 1).arg(file);
-            } else {
-                text = tr("%1 has a sync conflict. Please check the conflict file!").arg(file);
-            }
-            break;
-        case LogStatusError:
-            if (count > 1) {
-                text = tr("%1 and %n other file(s) could not be synced due to errors. See the log for details.", "", count - 1).arg(file);
-            } else {
-                text = tr("%1 could not be synced due to an error. See the log for details.").arg(file);
-            }
-            break;
-        case LogStatusFileNameReserved:
-            if (count > 1) {
-                text = tr("%1 and %n other file(s) could not be synced because their names are reserved by the operating system.", "", count - 1).arg(file);
-            } else {
-                text = tr("%1 could not be synced because its name is reserved by the operating system.").arg(file);
-            }
-            break;
+            case LogStatusRemove:
+                if (count > 1) {
+                    text = tr("%1 and %n other file(s) have been removed.", "", count - 1).arg(file);
+                }
+                else {
+                    text = tr("%1 has been removed.", "%1 names a file.").arg(file);
+                }
+                break;
+            case LogStatusNew:
+                if (count > 1) {
+                    text = tr("%1 and %n other file(s) have been added.", "", count - 1).arg(file);
+                }
+                else {
+                    text = tr("%1 has been added.", "%1 names a file.").arg(file);
+                }
+                break;
+            case LogStatusUpdated:
+                if (count > 1) {
+                    text = tr("%1 and %n other file(s) have been updated.", "", count - 1).arg(file);
+                }
+                else {
+                    text = tr("%1 has been updated.", "%1 names a file.").arg(file);
+                }
+                break;
+            case LogStatusRename:
+                if (count > 1) {
+                    text = tr("%1 has been renamed to %2 and %n other file(s) have been renamed.", "", count - 1).arg(file, renameTarget);
+                }
+                else {
+                    text = tr("%1 has been renamed to %2.", "%1 and %2 name files.").arg(file, renameTarget);
+                }
+                break;
+            case LogStatusMove:
+                if (count > 1) {
+                    text = tr("%1 has been moved to %2 and %n other file(s) have been moved.", "", count - 1).arg(file, renameTarget);
+                }
+                else {
+                    text = tr("%1 has been moved to %2.").arg(file, renameTarget);
+                }
+                break;
+            case LogStatusConflict:
+                if (count > 1) {
+                    text = tr("%1 has and %n other file(s) have sync conflicts.", "", count - 1).arg(file);
+                }
+                else {
+                    text = tr("%1 has a sync conflict. Please check the conflict file!").arg(file);
+                }
+                break;
+            case LogStatusError:
+                if (count > 1) {
+                    text = tr("%1 and %n other file(s) could not be synced due to errors. See the log for details.", "", count - 1).arg(file);
+                }
+                else {
+                    text = tr("%1 could not be synced due to an error. See the log for details.").arg(file);
+                }
+                break;
+            case LogStatusFileNameReserved:
+                if (count > 1) {
+                    text = tr("%1 and %n other file(s) could not be synced because their names are reserved by the operating system.", "", count - 1).arg(file);
+                }
+                else {
+                    text = tr("%1 could not be synced because its name is reserved by the operating system.").arg(file);
+                }
+                break;
         }
 
         if (!text.isEmpty()) {
@@ -580,7 +595,6 @@ void Folder::startVfs()
     vfsParams.multipleAccountsRegistered = AccountManager::instance()->accounts().size() > 1;
 
     connect(&_engine->syncFileStatusTracker(), &SyncFileStatusTracker::fileStatusChanged, _vfs.data(), &Vfs::fileStatusChanged);
-
 
     connect(_vfs.data(), &Vfs::started, this, [this] {
         // Immediately mark the sqlite temporaries as excluded. They get recreated
@@ -716,7 +730,7 @@ void Folder::slotWatchedPathsChanged(const QSet<QString> &paths, ChangeReason re
                     return true;
                 }());
 
-                continue; // probably a spurious notification
+                continue;   // probably a spurious notification
             }
         }
         warnOnNewExcludedItem(record, relativePath);
@@ -764,7 +778,8 @@ void Folder::setVirtualFilesEnabled(bool enabled)
     Vfs::Mode newMode = _definition.virtualFilesMode;
     if (enabled && _definition.virtualFilesMode == Vfs::Off) {
         newMode = VfsPluginManager::instance().bestAvailableVfsMode();
-    } else if (!enabled && _definition.virtualFilesMode != Vfs::Off) {
+    }
+    else if (!enabled && _definition.virtualFilesMode != Vfs::Off) {
         newMode = Vfs::Off;
     }
 
@@ -892,7 +907,7 @@ void Folder::wipeForRemoval()
 
     // Unregister the socket API so it does not keep the .sync_journal file open
     FolderMan::instance()->socketApi()->slotUnregisterPath(this);
-    _journal.close(); // close the sync journal
+    _journal.close();   // close the sync journal
 
     // Remove db and temporaries
     const QString stateDbFile = _engine->journal()->databaseFilePath();
@@ -901,10 +916,12 @@ void Folder::wipeForRemoval()
     if (file.exists()) {
         if (!file.remove()) {
             qCCritical(lcFolder) << "Failed to remove existing csync StateDB " << stateDbFile;
-        } else {
+        }
+        else {
             qCInfo(lcFolder) << "wipe: Removed csync StateDB " << stateDbFile;
         }
-    } else {
+    }
+    else {
         qCWarning(lcFolder) << "statedb is empty, can not remove.";
     }
 
@@ -916,7 +933,7 @@ void Folder::wipeForRemoval()
 
     _vfs->stop();
     _vfs->unregisterFolder();
-    _vfs.reset(nullptr); // warning: folder now in an invalid state
+    _vfs.reset(nullptr);   // warning: folder now in an invalid state
 }
 
 bool Folder::reloadExcludes()
@@ -970,13 +987,13 @@ void Folder::startSync()
     const std::chrono::milliseconds fullLocalDiscoveryInterval = ConfigFile().fullLocalDiscoveryInterval();
     const bool hasDoneFullLocalDiscovery = _timeSinceLastFullLocalDiscovery.isValid();
     // negative fullLocalDiscoveryInterval means we don't require periodic full runs
-    const bool periodicFullLocalDiscoveryNow =
-        fullLocalDiscoveryInterval.count() >= 0 && _timeSinceLastFullLocalDiscovery.hasExpired(fullLocalDiscoveryInterval.count());
+    const bool periodicFullLocalDiscoveryNow = fullLocalDiscoveryInterval.count() >= 0 && _timeSinceLastFullLocalDiscovery.hasExpired(fullLocalDiscoveryInterval.count());
     if (_folderWatcher && _folderWatcher->isReliable() && hasDoneFullLocalDiscovery && !periodicFullLocalDiscoveryNow) {
         qCInfo(lcFolder) << "Allowing local discovery to read from the database";
         _engine->setLocalDiscoveryOptions(LocalDiscoveryStyle::DatabaseAndFilesystem, _localDiscoveryTracker->localDiscoveryPaths());
         _localDiscoveryTracker->startSyncPartialDiscovery();
-    } else {
+    }
+    else {
         qCInfo(lcFolder) << "Forbidding local discovery to read from the database";
         _engine->setLocalDiscoveryOptions(LocalDiscoveryStyle::FilesystemOnly);
         _localDiscoveryTracker->startSyncFullDiscovery();
@@ -986,7 +1003,8 @@ void Folder::startSync()
     if (_allowRemoveAllOnce) {
         _engine->setPromtRemoveAllFiles(false);
         _allowRemoveAllOnce = false;
-    } else {
+    }
+    else {
         _engine->setPromtRemoveAllFiles(ConfigFile().promptDeleteFiles());
     }
 
@@ -1004,19 +1022,21 @@ void Folder::setDirtyNetworkLimits()
     }
 
     ConfigFile cfg;
-    int downloadLimit = -75; // 75%
+    int downloadLimit = -75;   // 75%
     int useDownLimit = cfg.useDownloadLimit();
     if (useDownLimit >= 1) {
         downloadLimit = cfg.downloadLimit() * 1000;
-    } else if (useDownLimit == 0) {
+    }
+    else if (useDownLimit == 0) {
         downloadLimit = 0;
     }
 
-    int uploadLimit = -75; // 75%
+    int uploadLimit = -75;   // 75%
     int useUpLimit = cfg.useUploadLimit();
     if (useUpLimit >= 1) {
         uploadLimit = cfg.uploadLimit() * 1000;
-    } else if (useUpLimit == 0) {
+    }
+    else if (useUpLimit == 0) {
         uploadLimit = 0;
     }
 
@@ -1061,9 +1081,11 @@ void Folder::slotSyncFinished(bool success)
     const bool syncError = !errorStr.isEmpty();
     if (syncError) {
         qCWarning(lcFolder) << "SyncEngine finished with ERROR";
-    } else if (recoveryInducedAbort) {
+    }
+    else if (recoveryInducedAbort) {
         qCInfo(lcFolder) << "SyncEngine finished after base URL change without residual sync errors";
-    } else {
+    }
+    else {
         qCInfo(lcFolder) << "SyncEngine finished without problem.";
     }
     _fileLog->finish();
@@ -1074,25 +1096,32 @@ void Folder::slotSyncFinished(bool success)
     auto syncStatus = SyncResult::Status::Undefined;
     if (lastAbortReason == SyncEngine::AbortReason::UserRequested && !_definition.paused) {
         syncStatus = SyncResult::SyncAbortRequested;
-    } else if (syncError) {
+    }
+    else if (syncError) {
         syncStatus = SyncResult::Error;
-    } else if (recoveryInducedAbort) {
+    }
+    else if (recoveryInducedAbort) {
         syncStatus = SyncResult::SyncAbortRequested;
-    } else if (_syncResult.foundFilesNotSynced()) {
+    }
+    else if (_syncResult.foundFilesNotSynced()) {
         syncStatus = SyncResult::Problem;
-    } else if (_definition.paused) {
+    }
+    else if (_definition.paused) {
         // Maybe the sync was terminated because the user paused the folder
         syncStatus = SyncResult::Paused;
-    } else {
+    }
+    else {
         syncStatus = SyncResult::Success;
     }
 
     // Count the number of syncs that have failed in a row.
     if (syncStatus == SyncResult::Success || syncStatus == SyncResult::Problem) {
         _consecutiveFailingSyncs = 0;
-    } else if (syncStatus == SyncResult::SyncAbortRequested || syncStatus == SyncResult::Paused) {
+    }
+    else if (syncStatus == SyncResult::SyncAbortRequested || syncStatus == SyncResult::Paused) {
         _consecutiveFailingSyncs = 0;
-    } else {
+    }
+    else {
         _consecutiveFailingSyncs++;
         anotherSyncNeeded |= _consecutiveFailingSyncs <= retrySyncLimitC;
         qCInfo(lcFolder) << "the last" << _consecutiveFailingSyncs << "syncs failed";
@@ -1130,7 +1159,8 @@ void Folder::slotSyncFinished(bool success)
         anotherSyncNeeded |= _consecutiveFollowUpSyncs <= retrySyncLimitC;
         qCInfo(lcFolder) << "another sync was requested by the finished sync, this has"
                          << "happened" << _consecutiveFollowUpSyncs << "times";
-    } else {
+    }
+    else {
         _consecutiveFollowUpSyncs = 0;
     }
 
@@ -1154,8 +1184,7 @@ void Folder::slotUrlChanged(const QUuid &accountId)
         }
         qCInfo(lcFolder) << "URL changed from" << _definition.webDavUrl() << "to" << newUrl;
         _definition.setWebDavUrl(newUrl);
-        const auto manuallyStopped =
-            _engine->lastAbortReason() == SyncEngine::AbortReason::UserRequested && _syncResult.status() == SyncResult::SyncAbortRequested;
+        const auto manuallyStopped = _engine->lastAbortReason() == SyncEngine::AbortReason::UserRequested && _syncResult.status() == SyncResult::SyncAbortRequested;
         const auto restartSync = !syncPaused() && !manuallyStopped;
         _restartSyncAfterUrlChange = restartSync;
         _suppressConnectedScheduleAfterUrlChange = restartSync;
@@ -1166,7 +1195,8 @@ void Folder::slotUrlChanged(const QUuid &accountId)
         if (!_engine->isSyncRunning()) {
             enqueuePendingSyncAfterUrlChange();
         }
-    } else {
+    }
+    else {
         qCWarning(lcFolder) << "Unable to find account" << accountId;
     }
 }
@@ -1298,7 +1328,7 @@ void Folder::slotWatcherUnreliable(const QString &message)
                            "occasionally (every two hours by default).\n"
                            "\n"
                            "%1")
-                .arg(message))
+                            .arg(message))
         .setDeleteOnClose(true)
         .setSingleButton(true)
         .setWide(true)
@@ -1316,8 +1346,7 @@ void Folder::registerFolderWatcher()
     }
 
     _folderWatcher.reset(new FolderWatcher(this));
-    connect(_folderWatcher.data(), &FolderWatcher::pathChanged, this,
-        [this](const QSet<QString> &paths) { slotWatchedPathsChanged(paths, Folder::ChangeReason::Other); });
+    connect(_folderWatcher.data(), &FolderWatcher::pathChanged, this, [this](const QSet<QString> &paths) { slotWatchedPathsChanged(paths, Folder::ChangeReason::Other); });
     connect(_folderWatcher.data(), &FolderWatcher::lostChanges, this, &Folder::slotNextSyncFullLocalDiscovery);
     connect(_folderWatcher.data(), &FolderWatcher::becameUnreliable, this, &Folder::slotWatcherUnreliable);
     _folderWatcher->init(path());
@@ -1342,7 +1371,8 @@ void Folder::slotAboutToRemoveAllFiles(SyncFileItem::Direction direction)
                       "unavailable unless you have a right to restore. \n"
                       "If you decide to keep the files, they will be re-synced with the server if you have rights to do so.\n"
                       "If you decide to delete the files, they will be unavailable to you, unless you are the owner.");
-        } else {
+        }
+        else {
             return tr("All the files in your local sync folder '%1' were deleted. These deletes will be "
                       "synchronized with your server, making such files unavailable unless restored.\n"
                       "Are you sure you want to sync those actions with the server?\n"
@@ -1364,7 +1394,7 @@ void Folder::slotAboutToRemoveAllFiles(SyncFileItem::Direction direction)
     setSyncPaused(true);
 
     connect(_removeAllFilesDialog, &APP::CustomMessageBox::finished, this, [this](int result) {
-        if (result == QDialog::Accepted) {
+        if (result == QDialog::Rejected) {
             // reset the db upload all local files or download all remote files
             FileSystem::setFolderMinimumPermissions(path());
             // will remove all dehydrated placeholders
@@ -1382,11 +1412,8 @@ void Folder::slotAboutToRemoveAllFiles(SyncFileItem::Direction direction)
         }
     });
     connect(this, &Folder::destroyed, _removeAllFilesDialog, &CustomMessageBox::deleteLater);
-    ocApp()
-        ->gui()
-        ->settingsDialog()
-        ->accountSettings(_accountState->account().get())
-        ->addModalWidget(_removeAllFilesDialog->widgetPtr(), AccountSettings::ModalWidgetSizePolicy::Minimum);
+    ApplicationGui::raise();
+    _removeAllFilesDialog->open();
 }
 
 FolderDefinition::FolderDefinition(const QByteArray &id, const QUrl &davUrl, const QString &spaceId, const QString &displayName)
@@ -1444,13 +1471,15 @@ FolderDefinition FolderDefinition::load(QSettings &settings, const QByteArray &i
     if (!vfsModeString.isEmpty()) {
         if (auto mode = Vfs::modeFromString(vfsModeString)) {
             folder.virtualFilesMode = *mode;
-        } else {
+        }
+        else {
             qCWarning(lcFolder) << "Unknown virtualFilesMode:" << vfsModeString << "assuming 'off'";
         }
-    } else {
+    }
+    else {
         if (settings.value(QStringLiteral("usePlaceholders")).toBool()) {
             folder.virtualFilesMode = Vfs::WithSuffix;
-            folder.upgradeVfsMode = true; // maybe winvfs is available?
+            folder.upgradeVfsMode = true;   // maybe winvfs is available?
         }
     }
     return folder;
@@ -1493,7 +1522,8 @@ QString FolderDefinition::displayName() const
                 a = a.remove(0, 1);
             }
             return a;
-        } else {
+        }
+        else {
             return Theme::instance()->appNameGUI();
         }
     }
@@ -1517,4 +1547,4 @@ QString Folder::spaceId() const
     return _definition.spaceId();
 }
 
-} // namespace APP
+}   // namespace APP

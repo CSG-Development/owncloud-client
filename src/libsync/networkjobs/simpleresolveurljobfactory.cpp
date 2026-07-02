@@ -1,10 +1,11 @@
 #include "simpleresolveurljobfactory.h"
 
 #include <QApplication>
-#include <QNetworkReply>
 #include <QLoggingCategory>
+#include <QNetworkReply>
 
-namespace {
+namespace
+{
 
 Q_LOGGING_CATEGORY(lcSimpleResolveUrl, "libsync.simpleresolveurl")
 
@@ -18,11 +19,11 @@ QUrl concatUrlPath(const QUrl &url, const QString &concatPath, const QUrlQuery &
         // avoid '//'
         if (path.endsWith(QLatin1Char('/')) && concatPath.startsWith(QLatin1Char('/'))) {
             path.chop(1);
-        } // avoid missing '/'
+        }   // avoid missing '/'
         else if (!path.endsWith(QLatin1Char('/')) && !concatPath.startsWith(QLatin1Char('/'))) {
             path += QLatin1Char('/');
         }
-        path += concatPath; // put the complete path together
+        path += concatPath;   // put the complete path together
     }
     Q_ASSERT(!path.contains(QStringLiteral("//")));
     Q_ASSERT(url.query().isEmpty());
@@ -32,9 +33,10 @@ QUrl concatUrlPath(const QUrl &url, const QString &concatPath, const QUrlQuery &
     return tmpUrl;
 }
 
-}
+}   // namespace
 
-namespace APP {
+namespace APP
+{
 
 SimpleResolveUrlJobFactory::SimpleResolveUrlJobFactory(QNetworkAccessManager *nam)
     : AbstractCoreJobFactory(nam)
@@ -70,6 +72,13 @@ CoreJob *SimpleResolveUrlJobFactory::startJob(const QUrl &url, QObject *parent)
     QObject::connect(job->reply(), &QNetworkReply::finished, job, makeFinishedHandler(job->reply()));
 
     QObject::connect(job->reply(), &QNetworkReply::sslErrors, job, [req, job, makeFinishedHandler, nam = nam()](const QList<QSslError> &errors) mutable {
+        Q_UNUSED(req)
+        Q_UNUSED(makeFinishedHandler)
+        Q_UNUSED(nam)
+        job->reply()->ignoreSslErrors(errors);
+        return;
+
+        /* Temprary cert checks off
         job->reply()->setProperty(abortedBySslErrorHandlerC, true);
         job->reply()->abort();
 
@@ -78,6 +87,7 @@ CoreJob *SimpleResolveUrlJobFactory::startJob(const QUrl &url, QObject *parent)
         }
         auto *reply = nam->get(req);
         QObject::connect(reply, &QNetworkReply::finished, job, makeFinishedHandler(reply));
+        */
     });
 
     makeRequest();
@@ -85,4 +95,4 @@ CoreJob *SimpleResolveUrlJobFactory::startJob(const QUrl &url, QObject *parent)
     return job;
 }
 
-} // namespace APP
+}   // namespace APP

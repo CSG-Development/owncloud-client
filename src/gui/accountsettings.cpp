@@ -12,20 +12,14 @@
  * for more details.
  */
 
-
 #include "accountsettings.h"
-#include "scheduling/syncscheduler.h"
-#include "ui_accountsettings.h"
 
 #include "account.h"
 #include "accountmanager.h"
 #include "accountstate.h"
 #include "application.h"
-#include "common/utility.h"
 #include "commonstrings.h"
 #include "configfile.h"
-#include "creds/httpcredentialsgui.h"
-#include "customui/stylehelper.h"
 #include "folderman.h"
 #include "folderstatusdelegate.h"
 #include "folderstatusmodel.h"
@@ -34,15 +28,25 @@
 #include "settingsdialog.h"
 #include "theme.h"
 #include "tooltipupdater.h"
+#include "ui_accountsettings.h"
+
+#include "common/utility.h"
+#include "creds/httpcredentialsgui.h"
+#include "customui/stylehelper.h"
+#include "scheduling/syncscheduler.h"
 #ifdef Q_OS_WIN
-#include "customui/progressindicator.h"
+#    include "customui/progressindicator.h"
 #endif
+#include "askexperimentalvirtualfilesfeaturemessagebox.h"
+#include "devwidget.h"
+#include "loginrequireddialog.h"
+#include "oauthloginwidget.h"
+
 #include "customdialogs/custommessagebox.h"
 #include "device/devicedefines.h"
-#include "devwidget.h"
-#include "socketapi/socketapi.h"
-
 #include "folderwizard/folderwizard.h"
+#include "gui/models/models.h"
+#include "socketapi/socketapi.h"
 
 #include <QAction>
 #include <QClipboard>
@@ -57,12 +61,8 @@
 #include <QToolTip>
 #include <QTreeView>
 
-#include "askexperimentalvirtualfilesfeaturemessagebox.h"
-#include "gui/models/models.h"
-#include "loginrequireddialog.h"
-#include "oauthloginwidget.h"
-
-namespace {
+namespace
+{
 
 #ifdef Q_OS_MACOS
 QPair<QString, QString> widgetStyle = {QStringLiteral(":/res/accountsettings_light_mac.qss"), QStringLiteral(":/res/accountsettings_dark_mac.qss")};
@@ -73,9 +73,10 @@ QPair<QString, QString> widgetStyle = {QStringLiteral(":/res/accountsettings_lig
 // constexpr auto modalWidgetStretchedMarginC = 50;
 constexpr auto modalWidgetStretchedMarginC = 4;
 
-}
+}   // namespace
 
-namespace APP {
+namespace APP
+{
 
 Q_LOGGING_CATEGORY(lcAccountSettings, "gui.account.settings", QtInfoMsg)
 
@@ -215,7 +216,8 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
 
     if (_accountState->supportsSpaces()) {
         ui->addButton->setText(tr("Add Space"));
-    } else {
+    }
+    else {
         ui->addButton->setText(tr("Add Folder"));
     }
 
@@ -238,7 +240,8 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
             ui->spinner->startAnimation();
 #endif
             ui->stackedWidget->setCurrentWidget(ui->loadingPage);
-        } else {
+        }
+        else {
 #ifdef Q_OS_WIN
             _winSpinner->setIndicatorVisible(false);
 #else
@@ -259,7 +262,6 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     onThemeChanged(Theme::instance()->isDarkTheme());
 }
 
-
 void AccountSettings::createAccountToolbox()
 {
     _accountToolboxMenu = new QMenu(ui->_accountToolbox);
@@ -279,7 +281,8 @@ void AccountSettings::createAccountToolbox()
                 devWidget->setAccout(_accountState->account().data());
                 devWidget->show();
                 devWidget->activateWindow();
-            } else {
+            }
+            else {
                 devWidget = new DevWidget;
                 devWidget->setAccout(_accountState->account().data());
                 devWidget->show();
@@ -315,7 +318,8 @@ void AccountSettings::slotToggleSignInState()
 {
     if (_accountState->isSignedOut()) {
         _accountState->signIn();
-    } else {
+    }
+    else {
         _accountState->signOutByUi();
     }
 }
@@ -372,7 +376,8 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
     if (classification == FolderStatusModel::SubFolder) {
         const QString fileName = index.siblingAtColumn(static_cast<int>(FolderStatusModel::Columns::FolderPathRole)).data().toString();
         folderUrl = QUrl::fromLocalFile(fileName);
-    } else {
+    }
+    else {
         // the root folder
         if (auto *folder = selectedFolder()) {
             folderUrl = QUrl::fromLocalFile(folder->path());
@@ -405,7 +410,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
                 fetchPrivateLinkUrl(_accountState->account(), davUrl, path, this, [](const QUrl &url) { Utility::openBrowser(url, nullptr); });
             });
             menu->addAction(CommonStrings::showPhotosInWebBrowser(),
-                [path, accUrl = info->_folder->accountState()->account()->url()] { Utility::openBrowser(DevHelpers::makePhotosUrl(accUrl), nullptr); });
+                            [path, accUrl = info->_folder->accountState()->account()->url()] { Utility::openBrowser(DevHelpers::makePhotosUrl(accUrl), nullptr); });
 
             if (APP::ConfigFile::shareFromUi()) {
                 menu->addAction(tr("Open share page"), [localpath = info->_folder->path(), path] {
@@ -464,7 +469,8 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
                     if (!Theme::instance()->forceVirtualFilesOption()) {
                         menu->addAction(tr("Disable virtual file support..."), this, &AccountSettings::slotDisableVfsCurrentFolder);
                     }
-                } else {
+                }
+                else {
                     const auto mode = VfsPluginManager::instance().bestAvailableVfsMode();
                     if (FolderMan::instance()->checkVfsAvailability(folder->path(), mode)) {
                         if (mode == Vfs::WindowsCfApi || (Theme::instance()->enableExperimentalFeatures() && mode != Vfs::Off)) {
@@ -480,7 +486,8 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
             ui->_folderList->viewport()->update();
         });
         menu->popup(QCursor::pos());
-    } else {
+    }
+    else {
         menu->deleteLater();
     }
 }
@@ -512,7 +519,7 @@ void AccountSettings::slotFolderListClicked(const QModelIndex &indx)
 
 void AccountSettings::slotAddFolder()
 {
-    FolderMan::instance()->setSyncEnabled(false); // do not start more syncs.
+    FolderMan::instance()->setSyncEnabled(false);   // do not start more syncs.
 
     FolderWizard *folderWizard = new FolderWizard(_accountState, this);
     folderWizard->setAttribute(Qt::WA_DeleteOnClose);
@@ -525,7 +532,6 @@ void AccountSettings::slotAddFolder()
 
     addModalWidget(folderWizard, AccountSettings::ModalWidgetSizePolicy::Expanding);
 }
-
 
 void AccountSettings::slotFolderWizardAccepted()
 {
@@ -561,7 +567,7 @@ void AccountSettings::slotRemoveCurrentFolder()
         messageBox->setHeaderText(tr("Confirm Folder Sync Connection Removal"))
             .setMessageText(tr("<p>Do you really want to stop syncing the folder <b>%1</b>?</p>"
                                "<p><b>Note:</b> This will <b>not</b> delete any files.</p>")
-                    .arg(shortGuiLocalPath))
+                                .arg(shortGuiLocalPath))
             .setAcceptButtonText(tr("Remove connection"))
             .setRejectButtonText(tr("Cancel"))
             .setDeleteOnClose(true);
@@ -627,7 +633,8 @@ void AccountSettings::slotEnableVfsCurrentFolder()
             folder->setVfsOnOffSwitchPending(true);
             folder->slotTerminateSync();
             ui->_folderList->doItemsLayout();
-        } else {
+        }
+        else {
             switchVfsOn();
         }
     });
@@ -636,7 +643,8 @@ void AccountSettings::slotEnableVfsCurrentFolder()
     // as a little shortcut, we just re-use the message box's accept handler
     if (VfsPluginManager::instance().bestAvailableVfsMode() == Vfs::WindowsCfApi) {
         Q_EMIT messageBox->accepted();
-    } else {
+    }
+    else {
         ApplicationGui::raise();
 #ifdef Q_OS_MACOS
         messageBox->show();
@@ -693,7 +701,8 @@ void AccountSettings::slotDisableVfsCurrentFolder()
             folder->setVfsOnOffSwitchPending(true);
             folder->slotTerminateSync();
             ui->_folderList->doItemsLayout();
-        } else {
+        }
+        else {
             switchVfsOff();
         }
     });
@@ -715,12 +724,13 @@ void AccountSettings::refreshConnectionLabel()
     // Replace href-only anchors with colored ones
     const QString colored = QString(_connectionMessage)
                                 .replace(QRegularExpression(QStringLiteral("<a href=\"([^\"]+)\">")),
-                                    QStringLiteral("<a href=\"\\1\" style=\"color: ") + linkColor + QLatin1String(";\">"));
+                                         QStringLiteral("<a href=\"\\1\" style=\"color: ") + linkColor + QLatin1String(";\">"));
 
     if (_connectionErrors.isEmpty()) {
         ui->connectLabel->setText(colored);
         ui->connectLabel->setToolTip(QString());
-    } else {
+    }
+    else {
         QStringList parts = _connectionErrors;
         parts.prepend(colored);
         ui->connectLabel->setText(parts.join(QLatin1Char('\n')));
@@ -742,7 +752,7 @@ void AccountSettings::slotEnableCurrentFolder(bool terminate)
         currentlyPaused = folder->syncPaused();
         if (!currentlyPaused && !terminate) {
             // check if a sync is still running and if so, ask if we should terminate.
-            if (folder->isSyncRunning()) { // its still running
+            if (folder->isSyncRunning()) {   // its still running
                 auto msgbox = new CustomMessageBox(this);
                 msgbox->setHeaderText(tr("Sync Running"))
                     .setMessageText(tr("The sync operation is running.<br/>Do you want to stop it?"))
@@ -760,7 +770,7 @@ void AccountSettings::slotEnableCurrentFolder(bool terminate)
         if (folder->isSyncRunning() && terminate) {
             folder->slotTerminateSync();
         }
-        folder->slotNextSyncFullLocalDiscovery(); // ensure we don't forget about local errors
+        folder->slotNextSyncFullLocalDiscovery();   // ensure we don't forget about local errors
         folder->setSyncPaused(!currentlyPaused);
 
         // keep state for the icon setting.
@@ -799,8 +809,8 @@ void AccountSettings::slotForceSyncCurrentFolder()
             }
         }
 
-        selectedFolder->slotWipeErrorBlacklist(); // issue #6757
-        selectedFolder->slotNextSyncFullLocalDiscovery(); // ensure we don't forget about local errors
+        selectedFolder->slotWipeErrorBlacklist();           // issue #6757
+        selectedFolder->slotNextSyncFullLocalDiscovery();   // ensure we don't forget about local errors
         // Insert the selected folder at the front of the queue
         FolderMan::instance()->scheduler()->enqueueFolder(selectedFolder, SyncScheduler::Priority::High);
     }
@@ -826,98 +836,98 @@ void AccountSettings::slotAccountStateChanged()
     const QString server = QStringLiteral("<a href=\"%1\">%1</a>").arg(Utility::escape(safeUrl.toString()));
 
     switch (state) {
-    case AccountState::Connected: {
-        QStringList errors;
-        if (account->serverSupportLevel() != Account::ServerSupportLevel::Supported) {
-            errors << tr("The server version %1 is unsupported! Proceed at your own risk.").arg(account->capabilities().status().versionString());
-        }
-        showConnectionLabel(tr("Connected to %1.").arg(server), errors);
-        if (_askForOAuthLoginDialog != nullptr) {
-            _askForOAuthLoginDialog->accept();
-        }
-        break;
-    }
-    case AccountState::ServiceUnavailable:
-        showConnectionLabel(tr("Server %1 is temporarily unavailable.").arg(server));
-        break;
-    case AccountState::MaintenanceMode:
-        showConnectionLabel(tr("Server %1 is currently in maintenance mode.").arg(server));
-        break;
-    case AccountState::SignedOut:
-        showConnectionLabel(tr("Signed out from %1.").arg(server));
-        break;
-
-    case AccountState::AskingCredentials: {
-        auto cred = qobject_cast<HttpCredentialsGui *>(account->credentials());
-        if (cred && cred->isUsingOAuth()) {
-            if (_askForOAuthLoginDialog != nullptr) {
-                qCDebug(lcAccountSettings) << "ask for OAuth login dialog is shown already";
-                return;
+        case AccountState::Connected: {
+            QStringList errors;
+            if (account->serverSupportLevel() != Account::ServerSupportLevel::Supported) {
+                errors << tr("The server version %1 is unsupported! Proceed at your own risk.").arg(account->capabilities().status().versionString());
             }
+            showConnectionLabel(tr("Connected to %1.").arg(server), errors);
+            if (_askForOAuthLoginDialog != nullptr) {
+                _askForOAuthLoginDialog->accept();
+            }
+            break;
+        }
+        case AccountState::ServiceUnavailable:
+            showConnectionLabel(tr("Server %1 is temporarily unavailable.").arg(server));
+            break;
+        case AccountState::MaintenanceMode:
+            showConnectionLabel(tr("Server %1 is currently in maintenance mode.").arg(server));
+            break;
+        case AccountState::SignedOut:
+            showConnectionLabel(tr("Signed out from %1.").arg(server));
+            break;
 
-            qCDebug(lcAccountSettings) << "showing modal dialog asking user to log in again via OAuth2";
+        case AccountState::AskingCredentials: {
+            auto cred = qobject_cast<HttpCredentialsGui *>(account->credentials());
+            if (cred && cred->isUsingOAuth()) {
+                if (_askForOAuthLoginDialog != nullptr) {
+                    qCDebug(lcAccountSettings) << "ask for OAuth login dialog is shown already";
+                    return;
+                }
 
-            _askForOAuthLoginDialog = new LoginRequiredDialog(LoginRequiredDialog::Mode::OAuth, ocApp()->gui()->settingsDialog());
+                qCDebug(lcAccountSettings) << "showing modal dialog asking user to log in again via OAuth2";
 
-            // make sure it's cleaned up since it's not owned by the account settings (also prevents memory leaks)
-            _askForOAuthLoginDialog->setAttribute(Qt::WA_DeleteOnClose);
+                _askForOAuthLoginDialog = new LoginRequiredDialog(LoginRequiredDialog::Mode::OAuth, ocApp()->gui()->settingsDialog());
 
-            _askForOAuthLoginDialog->setTopLabelText(
-                tr("The account %1 is currently logged out.\n\nPlease authenticate using your browser.").arg(account->displayName()));
+                // make sure it's cleaned up since it's not owned by the account settings (also prevents memory leaks)
+                _askForOAuthLoginDialog->setAttribute(Qt::WA_DeleteOnClose);
 
-            auto *contentWidget = qobject_cast<OAuthLoginWidget *>(_askForOAuthLoginDialog->contentWidget());
+                _askForOAuthLoginDialog->setTopLabelText(
+                    tr("The account %1 is currently logged out.\n\nPlease authenticate using your browser.").arg(account->displayName()));
 
-            connect(cred, &HttpCredentialsGui::authorisationLinkChanged, contentWidget,
-                [cred, contentWidget] { contentWidget->setUrl(cred->authorisationLink()); });
+                auto *contentWidget = qobject_cast<OAuthLoginWidget *>(_askForOAuthLoginDialog->contentWidget());
 
-            connect(contentWidget, &OAuthLoginWidget::copyUrlToClipboardButtonClicked, _askForOAuthLoginDialog, [](const QUrl &url) {
-                // TODO: use authorisationLinkAsync
-                qApp->clipboard()->setText(url.toString());
-            });
+                connect(cred, &HttpCredentialsGui::authorisationLinkChanged, contentWidget, [cred, contentWidget] { contentWidget->setUrl(cred->authorisationLink()); });
 
-            connect(contentWidget, &OAuthLoginWidget::openBrowserButtonClicked, cred, &HttpCredentialsGui::openBrowser);
+                connect(contentWidget, &OAuthLoginWidget::copyUrlToClipboardButtonClicked, _askForOAuthLoginDialog, [](const QUrl &url) {
+                    // TODO: use authorisationLinkAsync
+                    qApp->clipboard()->setText(url.toString());
+                });
 
-            connect(_askForOAuthLoginDialog, &LoginRequiredDialog::rejected, this, [this]() {
-                // if a user dismisses the dialog, we have no choice but signing them out
-                _accountState->signOutByUi();
-            });
+                connect(contentWidget, &OAuthLoginWidget::openBrowserButtonClicked, cred, &HttpCredentialsGui::openBrowser);
 
-            connect(contentWidget, &OAuthLoginWidget::retryButtonClicked, _askForOAuthLoginDialog, [contentWidget, accountPtr = account]() {
-                auto creds = qobject_cast<HttpCredentialsGui *>(accountPtr->credentials());
-                creds->restartOAuth();
-                contentWidget->hideRetryFrame();
-            });
+                connect(_askForOAuthLoginDialog, &LoginRequiredDialog::rejected, this, [this]() {
+                    // if a user dismisses the dialog, we have no choice but signing them out
+                    _accountState->signOutByUi();
+                });
 
-            connect(cred, &HttpCredentialsGui::oAuthErrorOccurred, _askForOAuthLoginDialog, [loginDialog = _askForOAuthLoginDialog, contentWidget, cred]() {
-                Q_ASSERT(!cred->ready());
+                connect(contentWidget, &OAuthLoginWidget::retryButtonClicked, _askForOAuthLoginDialog, [contentWidget, accountPtr = account]() {
+                    auto creds = qobject_cast<HttpCredentialsGui *>(accountPtr->credentials());
+                    creds->restartOAuth();
+                    contentWidget->hideRetryFrame();
+                });
+
+                connect(cred, &HttpCredentialsGui::oAuthErrorOccurred, _askForOAuthLoginDialog, [loginDialog = _askForOAuthLoginDialog, contentWidget, cred]() {
+                    Q_ASSERT(!cred->ready());
+
+                    ApplicationGui::raise();
+                    contentWidget->showRetryFrame();
+                });
+
+                showConnectionLabel(tr("Reauthorization required."));
 
                 ApplicationGui::raise();
-                contentWidget->showRetryFrame();
-            });
+                _askForOAuthLoginDialog->open();
 
-            showConnectionLabel(tr("Reauthorization required."));
-
-            ApplicationGui::raise();
-            _askForOAuthLoginDialog->open();
-
-            QTimer::singleShot(0, [contentWidget]() { contentWidget->setFocus(Qt::OtherFocusReason); });
-        } else {
-            showConnectionLabel(tr("Connecting to %1...").arg(server));
+                QTimer::singleShot(0, [contentWidget]() { contentWidget->setFocus(Qt::OtherFocusReason); });
+            }
+            else {
+                showConnectionLabel(tr("Connecting to %1...").arg(server));
+            }
+            break;
         }
-        break;
-    }
-    case AccountState::Connecting:
-        showConnectionLabel(tr("Connecting to: %1.").arg(server));
-        break;
-    case AccountState::ConfigurationError:
-        showConnectionLabel(tr("Server configuration error: %1.").arg(server), _accountState->connectionErrors());
-        break;
-    case AccountState::NetworkError:
-        // don't display the error to the user, https://github.com/owncloud/client/issues/9790
-        [[fallthrough]];
-    case AccountState::Disconnected:
-        showConnectionLabel(tr("Disconnected from: %1.").arg(server));
-        break;
+        case AccountState::Connecting:
+            showConnectionLabel(tr("Connecting to: %1.").arg(server));
+            break;
+        case AccountState::ConfigurationError:
+            showConnectionLabel(tr("Server configuration error: %1.").arg(server), _accountState->connectionErrors());
+            break;
+        case AccountState::NetworkError:
+            // don't display the error to the user, https://github.com/owncloud/client/issues/9790
+            [[fallthrough]];
+        case AccountState::Disconnected:
+            showConnectionLabel(tr("Disconnected from: %1.").arg(server));
+            break;
     }
 
     // Disabling expansion of folders might require hiding the selective
@@ -928,7 +938,8 @@ void AccountSettings::slotAccountStateChanged()
     // set the correct label for the Account toolbox button
     if (_accountState->isSignedOut()) {
         _toggleSignInOutAction->setText(tr("Log in"));
-    } else {
+    }
+    else {
         _toggleSignInOutAction->setText(tr("Log out"));
     }
 
@@ -939,18 +950,21 @@ void AccountSettings::slotAccountStateChanged()
         if (_accountState->supportsSpaces()) {
             ui->addButton->setText(tr("Add Space"));
             ui->addButton->setToolTip(tr("Click this button to add a Space."));
-        } else {
+        }
+        else {
             ui->addButton->setText(tr("Add Folder"));
             ui->addButton->setToolTip(tr("Click this button to add a folder to synchronize."));
         }
-    } else {
+    }
+    else {
         ui->_folderList->setItemsExpandable(false);
         ui->addButton->setEnabled(false);
 
         if (_accountState->supportsSpaces()) {
             ui->addButton->setText(tr("Add Space"));
             ui->addButton->setToolTip(tr("You need to be connected to add a Space."));
-        } else {
+        }
+        else {
             ui->addButton->setText(tr("Add Folder"));
             ui->addButton->setToolTip(tr("You need to be connected to add a folder."));
         }
@@ -990,7 +1004,8 @@ void AccountSettings::slotLinkActivated(const QString &link)
                 ui->_folderList->setSelectionMode(QAbstractItemView::SingleSelection);
                 ui->_folderList->setCurrentIndex(indx);
                 ui->_folderList->scrollTo(indx);
-            } else {
+            }
+            else {
                 qCWarning(lcAccountSettings) << "Unable to find a valid index for " << myFolder;
             }
         }
@@ -1021,24 +1036,29 @@ AccountSettings::~AccountSettings()
 
 void AccountSettings::addModalWidget(QWidget *widget, ModalWidgetSizePolicy sizePolicy)
 {
+    if (!widget) {
+        qCWarning(lcAccountSettings) << "addModalWidget called with null widget, ignoring";
+        return;
+    }
+
     auto *outerWidget = new QWidget;
     auto *groupBox = new QGroupBox;
 
     switch (sizePolicy) {
-    case ModalWidgetSizePolicy::Expanding: {
-        auto *outerLayout = new QHBoxLayout(outerWidget);
-        outerLayout->setContentsMargins(modalWidgetStretchedMarginC, modalWidgetStretchedMarginC, modalWidgetStretchedMarginC, modalWidgetStretchedMarginC);
-        outerLayout->addWidget(groupBox);
-        auto *layout = new QHBoxLayout(groupBox);
-        layout->setContentsMargins(modalWidgetStretchedMarginC, modalWidgetStretchedMarginC, modalWidgetStretchedMarginC, modalWidgetStretchedMarginC);
-        layout->addWidget(widget);
-    } break;
-    case ModalWidgetSizePolicy::Minimum: {
-        auto *outerLayout = new QGridLayout(outerWidget);
-        outerLayout->addWidget(groupBox, 0, 0, Qt::AlignCenter);
-        auto *layout = new QHBoxLayout(groupBox);
-        layout->addWidget(widget);
-    } break;
+        case ModalWidgetSizePolicy::Expanding: {
+            auto *outerLayout = new QHBoxLayout(outerWidget);
+            outerLayout->setContentsMargins(modalWidgetStretchedMarginC, modalWidgetStretchedMarginC, modalWidgetStretchedMarginC, modalWidgetStretchedMarginC);
+            outerLayout->addWidget(groupBox);
+            auto *layout = new QHBoxLayout(groupBox);
+            layout->setContentsMargins(modalWidgetStretchedMarginC, modalWidgetStretchedMarginC, modalWidgetStretchedMarginC, modalWidgetStretchedMarginC);
+            layout->addWidget(widget);
+        } break;
+        case ModalWidgetSizePolicy::Minimum: {
+            auto *outerLayout = new QGridLayout(outerWidget);
+            outerLayout->addWidget(groupBox, 0, 0, Qt::AlignCenter);
+            auto *layout = new QHBoxLayout(groupBox);
+            layout->addWidget(widget);
+        } break;
     }
     groupBox->setTitle(widget->windowTitle());
 
@@ -1080,8 +1100,9 @@ void AccountSettings::refreshSelectiveSyncStatus()
             if (theIndx.isValid()) {
                 msg += QStringLiteral("<a href=\"%1?folder=%2\">%1</a>")
                            .arg(Utility::escape(myFolder), QString::fromUtf8(QUrl::toPercentEncoding(QString::fromUtf8(folder->id()))));
-            } else {
-                msg += myFolder; // no link because we do not know the index yet.
+            }
+            else {
+                msg += myFolder;   // no link because we do not know the index yet.
             }
         }
     }
@@ -1096,32 +1117,33 @@ void AccountSettings::refreshSelectiveSyncStatus()
         shouldBeVisible = change != FolderStatusModel::SelectiveSyncChange::None && _accountState->isConnected();
 
         switch (change) {
-        case FolderStatusModel::SelectiveSyncChange::Addition:
-            ui->selectiveSyncLabel->setText(tr("Checked folders will be synchronized to this computer."));
-            break;
-        case FolderStatusModel::SelectiveSyncChange::Mixed:
-            ui->selectiveSyncLabel->setText(tr("Checked folders will be synchronized to this computer, and unchecked folders will be "
-                                               "<b>removed</b> from your local file system and will not be synchronized to this computer anymore."));
-            break;
-        case FolderStatusModel::SelectiveSyncChange::Removal:
-            ui->selectiveSyncLabel->setText(tr("Unchecked folders will be <b>removed</b> from your local file system and will not be "
-                                               "synchronized to this computer anymore."));
-            break;
-        case FolderStatusModel::SelectiveSyncChange::None:
-            break;
+            case FolderStatusModel::SelectiveSyncChange::Addition:
+                ui->selectiveSyncLabel->setText(tr("Checked folders will be synchronized to this computer."));
+                break;
+            case FolderStatusModel::SelectiveSyncChange::Mixed:
+                ui->selectiveSyncLabel->setText(tr("Checked folders will be synchronized to this computer, and unchecked folders will be "
+                                                   "<b>removed</b> from your local file system and will not be synchronized to this computer anymore."));
+                break;
+            case FolderStatusModel::SelectiveSyncChange::Removal:
+                ui->selectiveSyncLabel->setText(tr("Unchecked folders will be <b>removed</b> from your local file system and will not be "
+                                                   "synchronized to this computer anymore."));
+                break;
+            case FolderStatusModel::SelectiveSyncChange::None:
+                break;
         }
 
         ui->selectiveSyncButtons->setVisible(true);
         ui->bigFolderUi->setVisible(false);
         ui->selectiveSyncApply->setEnabled(change != FolderStatusModel::SelectiveSyncChange::None);
-    } else {
+    }
+    else {
         // There's a reason the big folder ui should be shown
         shouldBeVisible = _accountState->isConnected();
 
         ConfigFile cfg;
-        QString info = !cfg.confirmExternalStorage() ? tr("There are folders that were not synchronized because they are too big: ")
-            : !cfg.newBigFolderSizeLimit().first     ? tr("There are folders that were not synchronized because they are external storages: ")
-                                                     : tr("There are folders that were not synchronized because they are too big or external storages: ");
+        QString info = !cfg.confirmExternalStorage()        ? tr("There are folders that were not synchronized because they are too big: ")
+                       : !cfg.newBigFolderSizeLimit().first ? tr("There are folders that were not synchronized because they are external storages: ")
+                                                            : tr("There are folders that were not synchronized because they are too big or external storages: ");
 
         ui->selectiveSyncNotification->setText(info + msg);
         ui->selectiveSyncButtons->setVisible(false);
@@ -1160,7 +1182,7 @@ void AccountSettings::slotDeleteAccount()
     messageBox->setHeaderText(tr("Confirm Account Removal"))
         .setMessageText(tr("<p>Do you really want to remove the connection to the account <b>%1</b>?</p>"
                            "<p><b>Note:</b> This will <b>not</b> delete any files.</p>")
-                .arg(_accountState->account()->displayName()))
+                            .arg(_accountState->account()->displayName()))
         .setAcceptButtonText(tr("Remove connection"))
         .setRejectButtonText(tr("Cancel"));
 
@@ -1191,6 +1213,6 @@ bool AccountSettings::event(QEvent *e)
     return QWidget::event(e);
 }
 
-} // namespace APP
+}   // namespace APP
 
 #include "accountsettings.moc"

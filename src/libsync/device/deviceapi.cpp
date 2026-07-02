@@ -129,6 +129,7 @@ QFuture<QList<DevicePath> > DeviceApi::query_status_all(QList<DevicePath> paths)
         for (int i = 0; i < finishedFutures.size(); ++i) {
             auto ctx = finishedFutures[i].result();
             updatedPaths[i].status = ctx.deviceStatus;
+            updatedPaths[i].statusHttpStatus = ctx.status;
             if (ctx.status != 200) {
                 qCWarning(lcDeviceApi) << "status API returned error status:" << ctx.status;
             }
@@ -160,6 +161,7 @@ QFuture<QList<DevicePath>> DeviceApi::query_about_all(QList<DevicePath> paths)
         QList<DevicePath> updatedPaths = paths;
         for (int i = 0; i < finishedFutures.size(); ++i) {
             auto ctx = finishedFutures[i].result();
+            updatedPaths[i].aboutHttpStatus = ctx.status;
             if (ctx.status == 200) {
                 updatedPaths[i].about = ctx.deviceAbout;
             }

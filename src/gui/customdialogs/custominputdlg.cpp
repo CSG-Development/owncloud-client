@@ -1,11 +1,15 @@
 #include "custominputdlg.h"
+
 #include "dlgutils.h"
+
 #include "platform/common/baseinputdlg.h"
 
+#include <QPointer>
+
 #ifdef Q_OS_WIN
-#include "platform/windows/inputdlg.h"
+#    include "platform/windows/inputdlg.h"
 #elif defined(Q_OS_MAC)
-#include "platform/macos/inputdlgmac.h"
+#    include "platform/macos/inputdlgmac.h"
 #endif
 
 class CustomInputDlgPrivate
@@ -16,7 +20,12 @@ public:
     {
     }
 
-    BaseInputDlg *dlg = nullptr;
+    ~CustomInputDlgPrivate()
+    {
+        delete dlg;
+    }
+
+    QPointer<BaseInputDlg> dlg;
 
     QString headerText;
     QString promptText;
@@ -29,7 +38,7 @@ public:
 
     QDialog::DialogCode defaultCode = QDialog::Accepted;
 
-    void ensureCreated(APP::CustomInputDlg* q)
+    void ensureCreated(APP::CustomInputDlg *q)
     {
         static bool resourcesLoaded = []() {
             Q_INIT_RESOURCE(customdialogs_res);
@@ -43,6 +52,8 @@ public:
         dlg = new InputDlg(parent);
 #elif defined(Q_OS_MAC)
         dlg = new InputDlgMac(nullptr);
+#else
+#    error "CustomInputDlg: unsupported platform (only Windows and macOS are supported)"
 #endif
 
         dlg->setRealParent(parent);
@@ -55,7 +66,7 @@ public:
         QObject::connect(dlg, &BaseInputDlg::accepted, q, &APP::CustomInputDlg::accepted);
         QObject::connect(dlg, &BaseInputDlg::rejected, q, &APP::CustomInputDlg::rejected);
         QObject::connect(dlg, &BaseInputDlg::finished, q, &APP::CustomInputDlg::finished);
-        QObject::connect(dlg, &BaseInputDlg::inputTextChanged, [this](const QString& text) {
+        QObject::connect(dlg, &BaseInputDlg::inputTextChanged, [this](const QString &text) {
             inputText = text;
         });
 
@@ -65,16 +76,14 @@ public:
 
         // DlgUtils::centerDialog(parent, dlg);
     }
-
 };
 
-
-namespace APP {
+namespace APP
+{
 
 CustomInputDlg::CustomInputDlg(QWidget *parent)
     : d_ptr(new CustomInputDlgPrivate(parent))
 {
-
 }
 
 CustomInputDlg::~CustomInputDlg()
@@ -125,12 +134,14 @@ QString CustomInputDlg::inputText() const
 QWidget *CustomInputDlg::widgetPtr() const
 {
     Q_D(const CustomInputDlg);
-    return d->dlg;
+    return d->dlg.data();
 }
 
 void CustomInputDlg::accept()
 {
     Q_D(CustomInputDlg);
+    if (!d->dlg)
+        return;
     d->inputText = d->dlg->inputText();
     d->dlg->accept();
 }
@@ -138,7 +149,9 @@ void CustomInputDlg::accept()
 void CustomInputDlg::reject()
 {
     Q_D(const CustomInputDlg);
+    if (!d->dlg)
+        return;
     d->dlg->reject();
 }
 
-} // namespace APP
+}   // namespace APP

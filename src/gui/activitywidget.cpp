@@ -12,16 +12,12 @@
  * for more details.
  */
 
-#include <QtGui>
-#include <QtWidgets>
-#include <tooltip_manager.h>
+#include "activitywidget.h"
 
 #include "QProgressIndicator.h"
-
 #include "account.h"
 #include "accountmanager.h"
 #include "accountstate.h"
-#include "activitywidget.h"
 #include "commonstrings.h"
 #include "issueswidget.h"
 #include "notificationconfirmjob.h"
@@ -31,16 +27,20 @@
 #include "servernotificationhandler.h"
 #include "syncresult.h"
 #include "theme.h"
+#include "ui_activitywidget.h"
 
+#include "gui/customdialogs/dlgutils.h"
+#include "gui/customui/stylehelper.h"
 #include "models/activitylistmodel.h"
 #include "models/expandingheaderview.h"
 #include "models/models.h"
-#include "gui/customui/stylehelper.h"
-#include "gui/customdialogs/dlgutils.h"
 
-#include "ui_activitywidget.h"
+#include <QtGui>
+#include <QtWidgets>
 
 #include <climits>
+
+#include <tooltip_manager.h>
 
 using namespace std::chrono;
 using namespace std::chrono_literals;
@@ -49,58 +49,51 @@ using namespace std::chrono_literals;
 // refreshes of the notifications
 #define NOTIFICATION_REQUEST_FREE_PERIOD 15000
 
-namespace {
+namespace
+{
 #ifdef Q_OS_MACOS
-QPair<QString,QString> widgetStyle = {
+QPair<QString, QString> widgetStyle = {
     QStringLiteral(":/res/activitypage/activitysettings_light_mac.qss"),
-    QStringLiteral(":/res/activitypage/activitysettings_dark_mac.qss")
-};
+    QStringLiteral(":/res/activitypage/activitysettings_dark_mac.qss")};
 #else
-QPair<QString,QString> widgetStyle = {
+QPair<QString, QString> widgetStyle = {
     QStringLiteral(":/res/activitypage/activitysettings_light.qss"),
-    QStringLiteral(":/res/activitypage/activitysettings_dark.qss")
-};
+    QStringLiteral(":/res/activitypage/activitysettings_dark.qss")};
 #endif
 
-QPair<QString,QString> activityIcon = {
+QPair<QString, QString> activityIcon = {
     QStringLiteral(":/res/activitypage/activity_tab_light.svg"),
-    QStringLiteral(":/res/activitypage/activity_tab_dark.svg")
-};
+    QStringLiteral(":/res/activitypage/activity_tab_dark.svg")};
 #ifdef Q_OS_MACOS
-QPair<QString,QString> activityIconSelected = {
+QPair<QString, QString> activityIconSelected = {
     QStringLiteral(":/res/activitypage/activity_tab_selected_light.svg"),
-    QStringLiteral(":/res/activitypage/activity_tab_selected_dark.svg")
-};
+    QStringLiteral(":/res/activitypage/activity_tab_selected_dark.svg")};
 #endif
 
-QPair<QString,QString> protocolIcon = {
+QPair<QString, QString> protocolIcon = {
     QStringLiteral(":/res/activitypage/protocol_tab_light.svg"),
-    QStringLiteral(":/res/activitypage/protocol_tab_dark.svg")
-};
+    QStringLiteral(":/res/activitypage/protocol_tab_dark.svg")};
 #ifdef Q_OS_MACOS
-QPair<QString,QString> protocolIconSelected = {
+QPair<QString, QString> protocolIconSelected = {
     QStringLiteral(":/res/activitypage/protocol_tab_selected_light.svg"),
-    QStringLiteral(":/res/activitypage/protocol_tab_selected_dark.svg")
-};
+    QStringLiteral(":/res/activitypage/protocol_tab_selected_dark.svg")};
 #endif
 
-QPair<QString,QString> issuesIcon = {
+QPair<QString, QString> issuesIcon = {
     QStringLiteral(":/res/activitypage/issues_tab_light.svg"),
-    QStringLiteral(":/res/activitypage/issues_tab_dark.svg")
-};
+    QStringLiteral(":/res/activitypage/issues_tab_dark.svg")};
 #ifdef Q_OS_MACOS
-QPair<QString,QString> issuesIconSelected = {
+QPair<QString, QString> issuesIconSelected = {
     QStringLiteral(":/res/activitypage/issues_tab_selected_light.svg"),
-    QStringLiteral(":/res/activitypage/issues_tab_selected_dark.svg")
-};
+    QStringLiteral(":/res/activitypage/issues_tab_selected_dark.svg")};
 #endif
 
 const auto widget_style = QStringLiteral(":/res/activitywidget.qss");
 
-} // namespace
+}   // namespace
 
-
-namespace APP {
+namespace APP
+{
 
 ActivityWidget::ActivityWidget(QWidget *parent)
     : QWidget(parent)
@@ -137,8 +130,7 @@ ActivityWidget::ActivityWidget(QWidget *parent)
 
     showLabels();
 
-    connect(_model, &ActivityListModel::activityJobStatusCode,
-        this, &ActivityWidget::slotAccountActivityStatus);
+    connect(_model, &ActivityListModel::activityJobStatusCode, this, &ActivityWidget::slotAccountActivityStatus);
 
     for (const auto &accountState : AccountManager::instance()->accounts()) {
         watchAccountPresentation(accountState);
@@ -172,8 +164,7 @@ ActivityWidget::ActivityWidget(QWidget *parent)
     connect(_ui->_filterButton, &QAbstractButton::clicked, this, [this] {
         ProtocolWidget::showFilterMenu(_ui->_filterButton, _sortModel, static_cast<int>(ActivityListModel::ActivityRole::Account), tr("Account"));
     });
-    connect(_sortModel, &Models::SignalledQSortFilterProxyModel::filterChanged, this,
-        [this]() { _ui->_filterButton->setText(CommonStrings::filterButtonText(_sortModel->filterRegularExpression().pattern().isEmpty() ? 0 : 1)); });
+    connect(_sortModel, &Models::SignalledQSortFilterProxyModel::filterChanged, this, [this]() { _ui->_filterButton->setText(CommonStrings::filterButtonText(_sortModel->filterRegularExpression().pattern().isEmpty() ? 0 : 1)); });
 
     connect(&_removeTimer, &QTimer::timeout, this, &ActivityWidget::slotCheckToCleanWidgets);
     _removeTimer.setInterval(1000);
@@ -198,11 +189,11 @@ void ActivityWidget::slotRefreshNotifications(const AccountStatePtr &ptr)
     // are running
     if (_notificationRequestsRunning == 0) {
         ServerNotificationHandler *snh = new ServerNotificationHandler;
-        connect(snh, &ServerNotificationHandler::newNotificationList,
-            this, &ActivityWidget::slotBuildNotificationDisplay);
+        connect(snh, &ServerNotificationHandler::newNotificationList, this, &ActivityWidget::slotBuildNotificationDisplay);
 
         snh->slotFetchNotifications(ptr);
-    } else {
+    }
+    else {
         qCWarning(lcActivity) << "Notification request counter not zero.";
     }
 }
@@ -235,7 +226,8 @@ void ActivityWidget::slotAccountActivityStatus(AccountStatePtr ast, int statusCo
     }
     if (statusCode == 999) {
         _accountsWithoutActivities.insert(ast->account()->uuid(), ast->account()->displayName());
-    } else {
+    }
+    else {
         _accountsWithoutActivities.remove(ast->account()->uuid());
     }
 
@@ -268,8 +260,7 @@ void ActivityWidget::watchAccountPresentation(const AccountStatePtr &accountStat
 void ActivityWidget::checkActivityTabVisibility()
 {
     int accountCount = AccountManager::instance()->accounts().count();
-    bool hasAccountsWithActivity =
-        _accountsWithoutActivities.count() != accountCount;
+    bool hasAccountsWithActivity = _accountsWithoutActivities.count() != accountCount;
     bool hasNotifications = !_widgetForNotifId.isEmpty();
 
     _ui->_headerLabel->setVisible(hasAccountsWithActivity);
@@ -277,8 +268,6 @@ void ActivityWidget::checkActivityTabVisibility()
 
     _ui->_notifyLabel->setVisible(hasNotifications);
     _ui->_notifyScroll->setVisible(hasNotifications);
-
-    emit hideActivityTab(!hasAccountsWithActivity && !hasNotifications);
 }
 
 // GUI: Display the notifications.
@@ -306,12 +295,11 @@ void ActivityWidget::slotBuildNotificationDisplay(const ActivityList &list)
 
         if (_widgetForNotifId.contains(activity.id())) {
             widget = _widgetForNotifId[activity.id()];
-        } else {
+        }
+        else {
             widget = new NotificationWidget(this);
-            connect(widget, &NotificationWidget::sendNotificationRequest,
-                this, &ActivityWidget::slotSendNotificationRequest);
-            connect(widget, &NotificationWidget::requestCleanupAndBlacklist,
-                this, &ActivityWidget::slotRequestCleanupAndBlacklist);
+            connect(widget, &NotificationWidget::sendNotificationRequest, this, &ActivityWidget::slotSendNotificationRequest);
+            connect(widget, &NotificationWidget::requestCleanupAndBlacklist, this, &ActivityWidget::slotRequestCleanupAndBlacklist);
 
             _notificationsLayout->addWidget(widget);
             // _ui->_notifyScroll->setMinimumHeight( widget->height());
@@ -383,13 +371,15 @@ void ActivityWidget::slotBuildNotificationDisplay(const ActivityList &list)
         QString msg;
         if (newGuiLogCount == 1) {
             msg = tr("%n notifications(s) for %1.", "", accNotified.begin().value()).arg(accNotified.begin().key());
-        } else if (newGuiLogCount >= 2) {
+        }
+        else if (newGuiLogCount >= 2) {
             const auto acc1 = accNotified.begin();
             const auto acc2 = ++accNotified.begin();
             if (newGuiLogCount == 2) {
                 const int notiCount = acc1.value() + acc2.value();
                 msg = tr("%n notifications(s) for %1 and %2.", "", notiCount).arg(acc1.key(), acc2.key());
-            } else {
+            }
+            else {
                 msg = tr("New notifications for %1, %2 and other accounts.").arg(acc1.key(), acc2.key());
             }
         }
@@ -411,39 +401,39 @@ void ActivityWidget::slotSendNotificationRequest(const QString &accountName, con
         QByteArrayLiteral("GET"),
         QByteArrayLiteral("PUT"),
         QByteArrayLiteral("POST"),
-        QByteArrayLiteral("DELETE")
-    };
+        QByteArrayLiteral("DELETE")};
 
     if (validVerbs.contains(verb)) {
         if (auto acc = AccountManager::instance()->account(accountName)) {
             // TODO: host validation?
             auto *job = new NotificationConfirmJob(acc->account(), QUrl(link), verb, this);
             job->setWidget(theSender);
-            connect(job, &NotificationConfirmJob::finishedSignal,
-                this, [job, this] {
-                    if (job->reply()->error() == QNetworkReply::NoError) {
-                        endNotificationRequest(job->widget(), job->ocsSuccess());
-                        qCInfo(lcActivity) << "Server Notification reply code" << job->ocsStatus();
+            connect(job, &NotificationConfirmJob::finishedSignal, this, [job, this] {
+                if (job->reply()->error() == QNetworkReply::NoError) {
+                    endNotificationRequest(job->widget(), job->ocsSuccess());
+                    qCInfo(lcActivity) << "Server Notification reply code" << job->ocsStatus();
 
-                        // if the notification was successful start a timer that triggers
-                        // removal of the done widgets in a few seconds
-                        // Add 200 millisecs to the predefined value to make sure that the timer in
-                        // widget's method readyToClose() has elapsed.
-                        if (job->ocsSuccess()) {
-                            scheduleWidgetToRemove(job->widget());
-                        }
-                    } else {
-                        endNotificationRequest(job->widget(), job->ocsSuccess());
-                        qCWarning(lcActivity) << "Server notify job failed with code " << job->ocsStatus();
+                    // if the notification was successful start a timer that triggers
+                    // removal of the done widgets in a few seconds
+                    // Add 200 millisecs to the predefined value to make sure that the timer in
+                    // widget's method readyToClose() has elapsed.
+                    if (job->ocsSuccess()) {
+                        scheduleWidgetToRemove(job->widget());
                     }
-                });
+                }
+                else {
+                    endNotificationRequest(job->widget(), job->ocsSuccess());
+                    qCWarning(lcActivity) << "Server notify job failed with code " << job->ocsStatus();
+                }
+            });
             job->start();
 
             // count the number of running notification requests. If this member var
             // is larger than zero, no new fetching of notifications is started
             _notificationRequestsRunning++;
         }
-    } else {
+    }
+    else {
         qCWarning(lcActivity) << "Notification Links: Invalid verb:" << verb;
     }
 }
@@ -498,7 +488,8 @@ void ActivityWidget::slotCheckToCleanWidgets()
             _widgetForNotifId.remove(widget->activity().id());
             widget->deleteLater();
             it = _widgetsToRemove.erase(it);
-        } else {
+        }
+        else {
             ++it;
         }
     }
@@ -514,7 +505,7 @@ void ActivityWidget::slotCheckToCleanWidgets()
     }
 }
 
-bool ActivityWidget::eventFilter(QObject */*obj*/, QEvent *event)
+bool ActivityWidget::eventFilter(QObject * /*obj*/, QEvent *event)
 {
     if (event->type() == QEvent::ToolTip) {
         QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
@@ -559,7 +550,6 @@ void ActivityWidget::slotItemContextMenu()
     menu->popup(QCursor::pos());
 }
 
-
 /* ==================================================================== */
 
 ActivitySettings::ActivitySettings(QWidget *parent)
@@ -575,7 +565,6 @@ ActivitySettings::ActivitySettings(QWidget *parent)
     hbox->addWidget(_tab);
     _activityWidget = new ActivityWidget(this);
     _activityTabId = _tab->addTab(_activityWidget, QIcon(activityIcon.first), tr("Server Activity"));
-    connect(_activityWidget, &ActivityWidget::hideActivityTab, this, &ActivitySettings::setActivityTabHidden);
     connect(_activityWidget, &ActivityWidget::guiLog, this, &ActivitySettings::guiLog);
     connect(_activityWidget, &ActivityWidget::newNotification, this, &ActivitySettings::slotShowActivityTab);
 
@@ -584,16 +573,14 @@ ActivitySettings::ActivitySettings(QWidget *parent)
 
     _issuesWidget = new IssuesWidget(this);
     _syncIssueTabId = _tab->addTab(_issuesWidget, QIcon(issuesIcon.first), QString());
-    slotShowIssueItemCount(0); // to display the label.
-    connect(_issuesWidget, &IssuesWidget::issueCountUpdated,
-        this, &ActivitySettings::slotShowIssueItemCount);
+    slotShowIssueItemCount(0);   // to display the label.
+    connect(_issuesWidget, &IssuesWidget::issueCountUpdated, this, &ActivitySettings::slotShowIssueItemCount);
 
     // Add a progress indicator to spin if the acitivity list is updated.
     _progressIndicator = new QProgressIndicator(this);
     _tab->setCornerWidget(_progressIndicator);
 
-    connect(&_notificationCheckTimer, &QTimer::timeout,
-        this, &ActivitySettings::slotRegularNotificationCheck);
+    connect(&_notificationCheckTimer, &QTimer::timeout, this, &ActivitySettings::slotRegularNotificationCheck);
 
     // connect a model signal to stop the animation.
     connect(_activityWidget, &ActivityWidget::dataChanged, _progressIndicator, &QProgressIndicator::stopAnimation);
@@ -603,8 +590,7 @@ ActivitySettings::ActivitySettings(QWidget *parent)
     // We want the protocol be the default
     _tab->setCurrentIndex(1);
 
-    connect(AccountManager::instance(), &AccountManager::accountRemoved, this,
-        [this](const AccountStatePtr &accountStatePtr) { _timeSinceLastCheck.take(accountStatePtr); });
+    connect(AccountManager::instance(), &AccountManager::accountRemoved, this, [this](const AccountStatePtr &accountStatePtr) { _timeSinceLastCheck.take(accountStatePtr); });
 
     connect(Theme::instance(), &Theme::themeChanged, this, &ActivitySettings::onThemeChanged);
     onThemeChanged(Theme::instance()->isDarkTheme());
@@ -614,22 +600,6 @@ void ActivitySettings::setNotificationRefreshInterval(std::chrono::milliseconds 
 {
     qCDebug(lcActivity) << "Starting Notification refresh timer with " << interval.count() / 1000 << " sec interval";
     _notificationCheckTimer.start(interval.count());
-}
-
-void ActivitySettings::setActivityTabHidden(bool hidden)
-{
-    if (hidden && _activityTabId > -1) {
-        _tab->removeTab(_activityTabId);
-        _activityTabId = -1;
-        _protocolTabId -= 1;
-        _syncIssueTabId -= 1;
-    }
-
-    if (!hidden && _activityTabId == -1) {
-        _activityTabId = _tab->insertTab(0, _activityWidget, Theme::instance()->applicationIcon(), tr("Server Activity"));
-        _protocolTabId += 1;
-        _syncIssueTabId += 1;
-    }
 }
 
 void ActivitySettings::slotShowIssueItemCount(int cnt)
@@ -738,4 +708,4 @@ bool ActivitySettings::event(QEvent *e)
 ActivitySettings::~ActivitySettings()
 {
 }
-}
+}   // namespace APP

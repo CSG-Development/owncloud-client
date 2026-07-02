@@ -477,6 +477,13 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
         return;
     }
 
+    if (!device_.isStatic && (dev_path->aboutHttpStatus == 0 || dev_path->statusHttpStatus == 0)) {
+        qCWarning(lcSetupWizardController) << "Device not reachable, no reply from" << dev_path->address
+            << "about status" << dev_path->aboutHttpStatus << "device status" << dev_path->statusHttpStatus;
+        Q_EMIT evaluateCredentialsError(tr("Device is not reachable at %1").arg(dev_path->address), QPrivateSignal());
+        return;
+    }
+
     if (!device_.isStatic && dev_path->about.os_state != QStringLiteral("normal")) {
         QString stateStr = tr("OS state: %1").arg(dev_path->about.os_state.isEmpty() ? tr("<empty>") : dev_path->about.os_state);
         qCDebug(lcSetupWizardController) << stateStr;
@@ -565,6 +572,12 @@ void SetupController::handleResetPassword()
     if (!devPath) {
         pendingCredentialsAction_ = PendingCredentialsAction::None;
         handleResetPasswordFailure(tr("Invalid URL"));
+        return;
+    }
+
+    if (!device_.isStatic && (devPath->aboutHttpStatus == 0 || devPath->statusHttpStatus == 0)) {
+        pendingCredentialsAction_ = PendingCredentialsAction::None;
+        handleResetPasswordFailure(tr("Device is not reachable at %1").arg(devPath->address));
         return;
     }
 

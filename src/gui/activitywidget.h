@@ -15,25 +15,27 @@
 #ifndef ACTIVITYWIDGET_H
 #define ACTIVITYWIDGET_H
 
-#include <QDialog>
-#include <QDateTime>
-#include <QLocale>
-#include <QAbstractListModel>
-#include <chrono>
-
-#include "progressdispatcher.h"
-#include "applicationgui.h"
 #include "account.h"
 #include "activitydata.h"
+#include "applicationgui.h"
+#include "progressdispatcher.h"
 
 #include "models/models.h"
+
+#include <QAbstractListModel>
+#include <QDateTime>
+#include <QDialog>
+#include <QLocale>
+
+#include <chrono>
 
 class QPushButton;
 class QProgressIndicator;
 class QTabWidget;
 class QVBoxLayout;
 
-namespace APP {
+namespace APP
+{
 
 class Account;
 class AccountStatusPtr;
@@ -43,8 +45,9 @@ class JsonApiJob;
 class NotificationWidget;
 class ActivityListModel;
 
-namespace Ui {
-    class ActivityWidget;
+namespace Ui
+{
+class ActivityWidget;
 }
 class Application;
 
@@ -82,7 +85,6 @@ public slots:
 signals:
     void guiLog(const QString &, const QString &);
     void dataChanged();
-    void hideActivityTab(bool);
     void newNotification();
 
 private slots:
@@ -93,7 +95,7 @@ private slots:
     void slotCheckToCleanWidgets();
 
 private:
-    bool eventFilter(QObject* obj, QEvent* event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
     void watchAccountPresentation(const AccountStatePtr &accountState);
 
     void onThemeChanged(bool isDark);
@@ -122,7 +124,6 @@ private:
     QVBoxLayout *_notificationsLayout;
 };
 
-
 /**
  * @brief The ActivitySettings class
  * @ingroup gui
@@ -146,7 +147,6 @@ public slots:
     void slotShowIssuesTab();
 
 private slots:
-    void setActivityTabHidden(bool hidden);
     void slotRegularNotificationCheck();
     void slotShowIssueItemCount(int cnt);
     void slotShowActivityTab();
@@ -171,5 +171,5 @@ private:
     QTimer _notificationCheckTimer;
     QHash<AccountState *, QElapsedTimer> _timeSinceLastCheck;
 };
-}
-#endif // ActivityWIDGET_H
+}   // namespace APP
+#endif   // ActivityWIDGET_H

@@ -4,7 +4,9 @@ find_program(IFW_BINARYCREATOR
     NAMES binarycreator
     HINTS
         "${QTIFW_ROOT}/bin"
+        "${QTIFW_ROOT}"
         "$ENV{QTIFW_ROOT}/bin"
+        "$ENV{QTIFW_ROOT}"
         "${QT_ROOT}/../../Tools/QtInstallerFramework/${QTIFW_VERSION}/bin"
         "$ENV{QT_ROOT}/../../Tools/QtInstallerFramework/${QTIFW_VERSION}/bin"
     DOC "Qt Installer Framework binarycreator"
@@ -62,11 +64,11 @@ app_ifw_var(WINDOWS_USER_DATA_DIR              "${APPLICATION_SHORTNAME}")
 app_ifw_var(WINDOWS_PROTOCOL_SCHEME            "oc")
 app_ifw_var(WINDOWS_UNINSTALL_REGISTRY_KEY     "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\PersonalCloudFiles")
 app_ifw_var(WINDOWS_INSTALLER_APPLICATION_ICON "personalcloud")
-app_ifw_var(WINDOWS_INSTALLER_WINDOW_ICON      "windowicon.png")
+app_ifw_var(WINDOWS_INSTALLER_WINDOW_ICON      "personalcloud.ico")
 app_ifw_var(WINDOWS_SHORTCUT_ICON              "personalcloud.ico")
 app_ifw_var(WINDOWS_WATERMARK                  "")
-app_ifw_var(WINDOWS_BANNER                     "banner.png")
-app_ifw_var(WINDOWS_LOGO                       "")
+app_ifw_var(WINDOWS_BANNER                     "")
+app_ifw_var(WINDOWS_LOGO                       "header_logo.png")
 
 app_ifw_var(WINDOWS_WIZARD_SHOW_PAGE_LIST "true")
 
@@ -86,7 +88,7 @@ else()
     set(WINDOWS_LOGO_ELEMENT "    <Logo>${WINDOWS_LOGO}</Logo>")
 endif()
 set(WINDOWS_STYLESHEET_ELEMENT "")
-app_ifw_var(WINDOWS_USE_CUSTOM_STYLESHEET "false")
+app_ifw_var(WINDOWS_USE_CUSTOM_STYLESHEET "")
 app_ifw_var(WINDOWS_LIGHT_STYLESHEET       "")
 app_ifw_var(WINDOWS_DARK_STYLESHEET        "")
 

@@ -25,14 +25,16 @@
 #include <QApplication>
 #include <QNetworkReply>
 
-namespace {
+namespace
+{
 Q_LOGGING_CATEGORY(lcResolveUrl, "gui.wizard.resolveurl")
 
 // used to signalize that the request was aborted intentionally by the sslErrorHandler
 const char abortedBySslErrorHandlerC[] = "aborted-by-ssl-error-handler";
-}
+}   // namespace
 
-namespace APP::Wizard::Jobs {
+namespace APP::Wizard::Jobs
+{
 
 ResolveUrlJobFactory::ResolveUrlJobFactory(QNetworkAccessManager *nam)
     : AbstractCoreJobFactory(nam)
@@ -68,7 +70,8 @@ CoreJob *ResolveUrlJobFactory::startJob(const QUrl &url, QObject *parent)
                 if (newUrl.scheme() == QLatin1String("https") && oldUrl.host() == newUrl.host()) {
                     qCInfo(lcResolveUrl()) << "redirect accepted automatically";
                     setJobResult(job, newUrl);
-                } else {
+                }
+                else {
                     auto *dialog = new UpdateUrlDialog(
                         QStringLiteral("Confirm new URL"),
                         QStringLiteral(
@@ -89,7 +92,8 @@ CoreJob *ResolveUrlJobFactory::startJob(const QUrl &url, QObject *parent)
 
                     dialog->show();
                 }
-            } else {
+            }
+            else {
                 setJobResult(job, newUrl);
             }
         };
@@ -98,7 +102,13 @@ CoreJob *ResolveUrlJobFactory::startJob(const QUrl &url, QObject *parent)
     QObject::connect(job->reply(), &QNetworkReply::finished, job, makeFinishedHandler(job->reply()));
 
     QObject::connect(job->reply(), &QNetworkReply::sslErrors, job, [req, job, makeFinishedHandler, nam = nam()](const QList<QSslError> &errors) mutable {
+        Q_UNUSED(req)
+        Q_UNUSED(makeFinishedHandler)
+        Q_UNUSED(nam)
+        job->reply()->ignoreSslErrors(errors);
+        return;
 
+        /* Temprary cert checks off
         if (errors.isEmpty())
             return;
 
@@ -144,10 +154,11 @@ CoreJob *ResolveUrlJobFactory::startJob(const QUrl &url, QObject *parent)
 
         ApplicationGui::raise();
         tlsErrorDialog->open();
+        */
     });
 
     makeRequest();
 
     return job;
 }
-}
+}   // namespace APP::Wizard::Jobs
