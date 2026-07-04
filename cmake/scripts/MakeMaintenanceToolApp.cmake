@@ -16,33 +16,31 @@ endif()
 file(REMOVE_RECURSE "${APP_OUT}")
 file(MAKE_DIRECTORY "${DATA_DIR}")
 
+message(STATUS "MakeMaintenanceToolApp: creating maintenance tool")
+execute_process(
+    COMMAND "${BINARYCREATOR}" --config "${CONFIG}" --create-maintenancetool
+    WORKING_DIRECTORY "${DATA_DIR}"
+    RESULT_VARIABLE _rc)
+if(NOT _rc EQUAL 0)
+    message(FATAL_ERROR "MakeMaintenanceToolApp: binarycreator --create-maintenancetool failed (rc=${_rc})")
+endif()
+if(NOT EXISTS "${APP_OUT}")
+    message(FATAL_ERROR "MakeMaintenanceToolApp: expected ${APP_OUT} was not produced")
+endif()
+
 if(CERT STREQUAL "-")
-    message(STATUS "MakeMaintenanceToolApp: creating maintenance tool (ad-hoc)")
-    execute_process(
-        COMMAND "${BINARYCREATOR}" --config "${CONFIG}" --create-maintenancetool
-        WORKING_DIRECTORY "${DATA_DIR}"
-        RESULT_VARIABLE _rc)
-    if(NOT _rc EQUAL 0)
-        message(FATAL_ERROR "MakeMaintenanceToolApp: binarycreator failed (rc=${_rc})")
-    endif()
-    if(NOT EXISTS "${APP_OUT}")
-        message(FATAL_ERROR "MakeMaintenanceToolApp: expected ${APP_OUT} was not produced")
-    endif()
+    message(STATUS "MakeMaintenanceToolApp: ad-hoc signing ${APP_OUT}")
     execute_process(COMMAND codesign --force --deep --sign - "${APP_OUT}" RESULT_VARIABLE _rc)
     if(NOT _rc EQUAL 0)
         message(FATAL_ERROR "MakeMaintenanceToolApp: ad-hoc codesign failed (rc=${_rc})")
     endif()
 else()
-    message(STATUS "MakeMaintenanceToolApp: creating + signing maintenance tool with '${CERT}'")
+    message(STATUS "MakeMaintenanceToolApp: signing ${APP_OUT} with '${CERT}' (hardened runtime)")
     execute_process(
-        COMMAND "${BINARYCREATOR}" --config "${CONFIG}" --create-maintenancetool --sign "${CERT}"
-        WORKING_DIRECTORY "${DATA_DIR}"
+        COMMAND codesign --force --options runtime --timestamp --sign "${CERT}" "${APP_OUT}"
         RESULT_VARIABLE _rc)
     if(NOT _rc EQUAL 0)
-        message(FATAL_ERROR "MakeMaintenanceToolApp: binarycreator --create-maintenancetool failed (rc=${_rc})")
-    endif()
-    if(NOT EXISTS "${APP_OUT}")
-        message(FATAL_ERROR "MakeMaintenanceToolApp: expected ${APP_OUT} was not produced")
+        message(FATAL_ERROR "MakeMaintenanceToolApp: codesign failed (rc=${_rc})")
     endif()
 endif()
 
@@ -65,14 +63,31 @@ if(NOTARIZE AND NOT CERT STREQUAL "-")
     if(NOT _rc EQUAL 0)
         message(FATAL_ERROR "MakeMaintenanceToolApp: ditto zip failed (rc=${_rc})")
     endif()
+
     message(STATUS "MakeMaintenanceToolApp: notarizing ${_zip}")
     execute_process(
         COMMAND xcrun notarytool submit "${_zip}"
                 --keychain-profile "${NOTARY_PROFILE}" --wait
+        OUTPUT_VARIABLE _nout
+        ERROR_VARIABLE  _nerr
         RESULT_VARIABLE _rc)
-    if(NOT _rc EQUAL 0)
-        message(FATAL_ERROR "MakeMaintenanceToolApp: notarytool submit failed (rc=${_rc})")
+    message(STATUS "notarytool:\n${_nout}${_nerr}")
+
+    string(REGEX MATCH "id: ([0-9a-fA-F-]+)" _idmatch "${_nout}")
+    set(_sub_id "${CMAKE_MATCH_1}")
+
+    if(NOT _rc EQUAL 0 OR NOT _nout MATCHES "status: Accepted")
+        if(_sub_id)
+            message(STATUS "MakeMaintenanceToolApp: fetching notarization log for ${_sub_id}")
+            execute_process(
+                COMMAND xcrun notarytool log "${_sub_id}"
+                        --keychain-profile "${NOTARY_PROFILE}"
+                OUTPUT_VARIABLE _log ERROR_VARIABLE _logerr)
+            message(STATUS "notarytool log:\n${_log}${_logerr}")
+        endif()
+        message(FATAL_ERROR "MakeMaintenanceToolApp: notarization did not succeed (see log above)")
     endif()
+
     execute_process(COMMAND xcrun stapler staple "${APP_OUT}" RESULT_VARIABLE _rc)
     if(NOT _rc EQUAL 0)
         message(FATAL_ERROR "MakeMaintenanceToolApp: stapler staple failed (rc=${_rc})")
