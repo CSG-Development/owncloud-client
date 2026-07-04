@@ -276,7 +276,6 @@ if(APPLE AND MACOS_SIGN)
 endif()
 
 if(APPLE)
-    get_filename_component(_ifw_bin_dir "${IFW_BINARYCREATOR}" DIRECTORY)
     set(_maint_data "${IFW_OUT}/packages/${COMPONENT_MAINTENANCE_ID}/data")
     if(MACOS_SIGN)
         set(_mt_cert "${MACOS_APP_CERT}")
@@ -287,13 +286,10 @@ if(APPLE)
     endif()
     list(APPEND _installer_cmds
         COMMAND "${CMAKE_COMMAND}"
-                "-DINSTALLERBASE=${_ifw_bin_dir}/installerbase"
+                "-DBINARYCREATOR=${IFW_BINARYCREATOR}"
+                "-DCONFIG=${IFW_OUT}/config/config.xml"
+                "-DDATA_DIR=${_maint_data}"
                 "-DAPP_OUT=${_maint_data}/${_maint_name}.app"
-                "-DTOOL_NAME=${_maint_name}"
-                "-DBUNDLE_ID=${COMPONENT_MAINTENANCE_ID}"
-                "-DVERSION=${MIRALL_VERSION_FULL}"
-                "-DDEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}"
-                "-DICNS=${APP_APPLICATION_ICON_ICNS}"
                 "-DCERT=${_mt_cert}"
                 "-DNOTARIZE=${_mt_notarize}"
                 "-DNOTARY_PROFILE=${MACOS_NOTARY_PROFILE}"
