@@ -275,6 +275,32 @@ if(APPLE AND MACOS_SIGN)
     )
 endif()
 
+if(APPLE)
+    get_filename_component(_ifw_bin_dir "${IFW_BINARYCREATOR}" DIRECTORY)
+    set(_maint_data "${IFW_OUT}/packages/${COMPONENT_MAINTENANCE_ID}/data")
+    if(MACOS_SIGN)
+        set(_mt_cert "${MACOS_APP_CERT}")
+        set(_mt_notarize ON)
+    else()
+        set(_mt_cert "-")
+        set(_mt_notarize OFF)
+    endif()
+    list(APPEND _installer_cmds
+        COMMAND "${CMAKE_COMMAND}"
+                "-DINSTALLERBASE=${_ifw_bin_dir}/installerbase"
+                "-DAPP_OUT=${_maint_data}/${_maint_name}.app"
+                "-DTOOL_NAME=${_maint_name}"
+                "-DBUNDLE_ID=${COMPONENT_MAINTENANCE_ID}"
+                "-DVERSION=${MIRALL_VERSION_FULL}"
+                "-DDEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}"
+                "-DICNS=${APP_APPLICATION_ICON_ICNS}"
+                "-DCERT=${_mt_cert}"
+                "-DNOTARIZE=${_mt_notarize}"
+                "-DNOTARY_PROFILE=${MACOS_NOTARY_PROFILE}"
+                -P "${PROJECT_SOURCE_DIR}/cmake/scripts/MakeMaintenanceToolApp.cmake"
+    )
+endif()
+
 add_custom_target(installer
     ${_installer_cmds}
     COMMAND "${IFW_BINARYCREATOR}"
