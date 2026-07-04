@@ -1,0 +1,149 @@
+QDialog#OnboardingDlg {
+    background: transparent;
+}
+
+#frameRoot {
+    border: none;
+    border-radius: 6px;
+}
+
+#frameTitle {
+    border: none;
+}
+
+#lblHeaderTitle {
+    background: transparent;
+    font-size: 13px;
+}
+
+#btnIconTitle {
+    background: transparent;
+    border: none;
+}
+
+#frameCarousel,
+#stackedWidget {
+    border: none;
+}
+
+#frameCarousel QLabel {
+    background: transparent;
+}
+
+#frameButtons {
+    border: none;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+#frameLeft,
+#frameRight {
+    background: transparent;
+    border: none;
+}
+
+#btnSkip,
+#btnBack,
+#btnNext {
+    min-width: 96px;
+    max-width: 96px;
+    min-height: 32px;
+    max-height: 32px;
+    padding: 0px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+[theme="light"] #frameRoot {
+    background-color: #ffffff;
+}
+
+[theme="light"] #lblHeaderTitle,
+[theme="light"] #frameCarousel QLabel#label_2 {
+    color: #202124;
+}
+
+[theme="light"] #frameCarousel,
+[theme="light"] #stackedWidget,
+[theme="light"] #frameCarousel QWidget {
+    background-color: #ffffff;
+}
+
+[theme="light"] #frameCarousel QLabel,
+[theme="light"] #frameCarousel QLabel#label_3 {
+    color: #333333;
+}
+
+[theme="light"] #frameButtons {
+    background-color: #f4f5f7;
+    border-top: 1px solid #d7d9dd;
+}
+
+[theme="light"] #btnSkip,
+[theme="light"] #btnBack,
+[theme="light"] #btnNext {
+    color: #202124;
+    background-color: #ffffff;
+    border: 1px solid #b7bcc4;
+}
+
+[theme="light"] #btnSkip:hover,
+[theme="light"] #btnBack:hover,
+[theme="light"] #btnNext:hover {
+    background-color: #f7f8fa;
+}
+
+[theme="light"] #btnSkip:disabled,
+[theme="light"] #btnBack:disabled,
+[theme="light"] #btnNext:disabled {
+    color: #a0a4ad;
+    background-color: #edf0f3;
+    border-color: #edf0f3;
+}
+
+[theme="dark"] #frameRoot {
+    background-color: #1d1e21;
+}
+
+[theme="dark"] #lblHeaderTitle,
+[theme="dark"] #frameCarousel QLabel#label_2 {
+    color: #f1f1f1;
+}
+
+[theme="dark"] #frameCarousel,
+[theme="dark"] #stackedWidget,
+[theme="dark"] #frameCarousel QWidget {
+    background-color: #1d1e21;
+}
+
+[theme="dark"] #frameCarousel QLabel,
+[theme="dark"] #frameCarousel QLabel#label_3 {
+    color: #d7d7d7;
+}
+
+[theme="dark"] #frameButtons {
+    background-color: #3f4042;
+    border-top: 1px solid #505155;
+}
+
+[theme="dark"] #btnSkip,
+[theme="dark"] #btnBack,
+[theme="dark"] #btnNext {
+    color: #f1f1f1;
+    background-color: #4a4b4f;
+    border: 1px solid #6b6c70;
+}
+
+[theme="dark"] #btnSkip:hover,
+[theme="dark"] #btnBack:hover,
+[theme="dark"] #btnNext:hover {
+    background-color: #55565a;
+}
+
+[theme="dark"] #btnSkip:disabled,
+[theme="dark"] #btnBack:disabled,
+[theme="dark"] #btnNext:disabled {
+    color: #8d8f94;
+    background-color: #343538;
+    border-color: #343538;
+}

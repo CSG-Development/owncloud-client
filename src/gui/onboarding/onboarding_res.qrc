@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/onboarding_1.png</file>
+        <file>res/onboarding_1@x2.png</file>
+        <file>res/onboarding_2.png</file>
+        <file>res/onboarding_2@x2.png</file>
+        <file>res/onboarding_3.png</file>
+        <file>res/onboarding_3@x2.png</file>
+        <file>res/onboarding_4.png</file>
+        <file>res/onboarding_4@x2.png</file>
+        <file>res/onboarding_5.png</file>
+        <file>res/onboarding_5@x2.png</file>
+        <file>platform/windows/onboardingdlg.qss</file>
+        <file>platform/macos/onboardingdlg.qss</file>
+    </qresource>
+</RCC>
