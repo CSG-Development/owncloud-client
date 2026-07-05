@@ -25,6 +25,8 @@
 #include <QSize>
 #include <QTimer>
 
+namespace APP { class OnboardingController; }
+
 namespace APP {
 
 namespace Wizard {class SetupController;}
@@ -120,9 +122,11 @@ private:
     void setPauseOnAllFoldersHelper(const QList<AccountStatePtr> &accounts, bool pause);
     void setupActions();
     void addAccountContextMenu(AccountStatePtr accountState, QMenu *menu);
+    void maybeShowOnboarding();
 
     Systray *_tray = nullptr;
     SettingsDialog *_settingsDialog = nullptr;
+    OnboardingController *_onboardingController = nullptr;
     // tray's menu
     QScopedPointer<QMenu> _contextMenu;
 

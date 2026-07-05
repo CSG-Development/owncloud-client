@@ -52,18 +52,19 @@ function addPreviewDelayOperations()
 function addInstallationMarkerOperations()
 {
     var installationMode = component.installed || component.updateRequested() ? "update" : "install";
-    var onboardingRequired = installationMode === "install" ? "true" : "false";
 
     component.addOperation("Settings",
         "path=" + INSTALLER_META_FILE,
         "method=set",
         "key=installation_mode",
         "value=" + installationMode);
-    component.addOperation("Settings",
-        "path=" + INSTALLER_META_FILE,
-        "method=set",
-        "key=onboarding_required",
-        "value=" + onboardingRequired);
+    if (installationMode === "install") {
+        component.addOperation("Settings",
+            "path=" + INSTALLER_META_FILE,
+            "method=set",
+            "key=onboarding_required",
+            "value=true");
+    }
 }
 
 function addWindowsAppRegistrationOperations()
