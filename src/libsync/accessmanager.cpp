@@ -134,6 +134,16 @@ QNetworkReply *AccessManager::createRequest(QNetworkAccessManager::Operation op,
     }
     newRequest.setSslConfiguration(sslConfiguration);
 
+    // OSP Web Server (device front proxy) returns 503 for body-capable methods
+    // that lack a Content-Length header. Qt omits Content-Length when there is no
+    // request body, so add an explicit zero-length for non-GET/HEAD requests.
+    if (!outgoingData
+        && op != QNetworkAccessManager::GetOperation
+        && op != QNetworkAccessManager::HeadOperation
+        && !newRequest.hasRawHeader(QByteArrayLiteral("Content-Length"))) {
+        newRequest.setRawHeader(QByteArrayLiteral("Content-Length"), QByteArrayLiteral("0"));
+    }
+
     const auto reply = QNetworkAccessManager::createRequest(op, newRequest, outgoingData);
     HttpLogger::logRequest(reply, op, outgoingData);
     return reply;
