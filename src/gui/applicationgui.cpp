@@ -30,6 +30,7 @@
 #include "libsync/theme.h"
 #include "gui/customdialogs/logbrowserdlg.h"
 #include "logger.h"
+#include "onboardingcontroller.h"
 #include "openfilemanager.h"
 #include "progressdispatcher.h"
 #include "settingsdialog.h"
@@ -116,6 +117,7 @@ ApplicationGui::ApplicationGui(Application *parent)
     : QObject(parent)
     , _tray(new Systray(this))
     , _settingsDialog(new SettingsDialog(this))
+    , _onboardingController(new OnboardingController(this))
     , _recentActionsMenu(nullptr)
     , _app(parent)
 {
@@ -142,7 +144,14 @@ ApplicationGui::ApplicationGui(Application *parent)
         watchAccountPresentation(accountState);
         updateContextMenuNeeded();
     });
-    connect(AccountManager::instance(), &AccountManager::accountRemoved, this, &ApplicationGui::updateContextMenuNeeded);
+    connect(AccountManager::instance(), &AccountManager::accountRemoved, this, [this](AccountStatePtr) {
+        updateContextMenuNeeded();
+        if (AccountManager::instance()->accounts().isEmpty()) {
+            _onboardingController->dismissPermanently();
+        }
+    });
+
+    QTimer::singleShot(0, this, &ApplicationGui::maybeShowOnboarding);
 }
 
 ApplicationGui::~ApplicationGui()
@@ -231,6 +240,11 @@ void ApplicationGui::watchAccountPresentation(const AccountStatePtr &accountStat
     }
 
     connect(accountState->account().data(), &Account::accountPresentationChanged, this, &ApplicationGui::slotAccountStateChanged, Qt::UniqueConnection);
+    connect(accountState.data(), &AccountState::stateChanged, this, [this](AccountState::State state) {
+        if (state == AccountState::SignedOut && _onboardingController) {
+            _onboardingController->dismissPermanently();
+        }
+    });
 }
 
 void ApplicationGui::slotTrayMessageIfServerUnsupported(Account *account)
@@ -894,6 +908,7 @@ void ApplicationGui::runNewAccountWizard(RunAccountWizardReason reason)
                                     bool useVfs = syncMode == Wizard::SyncMode::UseVfs;
                                     setUpInitialSyncFolder(accountStatePtr, useVfs);
                                     accountStatePtr->setSettingUp(false);
+                                    maybeShowOnboarding();
                                     break;
                                 }
                                 case Wizard::SyncMode::ConfigureUsingFolderWizard: {
@@ -904,7 +919,7 @@ void ApplicationGui::runNewAccountWizard(RunAccountWizardReason reason)
 
                                            // TODO: duplication of AccountSettings
                                            // adapted from AccountSettings::slotFolderWizardAccepted()
-                                    connect(folderWizard, &QDialog::accepted, [accountStatePtr, folderWizard]() {
+                                    connect(folderWizard, &QDialog::accepted, [accountStatePtr, folderWizard, this]() {
                                         FolderMan *folderMan = FolderMan::instance();
 
                                         qCInfo(lcApplication) << "Folder wizard completed";
@@ -922,12 +937,14 @@ void ApplicationGui::runNewAccountWizard(RunAccountWizardReason reason)
                                         folderMan->setSyncEnabled(true);
                                         folderMan->scheduleAllFolders();
                                         accountStatePtr->setSettingUp(false);
+                                        maybeShowOnboarding();
                                     });
 
-                                    connect(folderWizard, &QDialog::rejected, [accountStatePtr]() {
+                                    connect(folderWizard, &QDialog::rejected, [accountStatePtr, this]() {
                                         qCInfo(lcApplication) << "Folder wizard cancelled";
                                         FolderMan::instance()->setSyncEnabled(true);
                                         accountStatePtr->setSettingUp(false);
+                                        maybeShowOnboarding();
                                     });
 
                                     ocApp()
@@ -962,6 +979,32 @@ void ApplicationGui::runNewAccountWizard(RunAccountWizardReason reason)
         ocApp()->gui()->settingsDialog()->addModalWidget(_wizardController->window());
     }
 
+}
+
+void ApplicationGui::maybeShowOnboarding()
+{
+    if (accountWizardActive || !_onboardingController) {
+        return;
+    }
+
+    const auto accounts = AccountManager::instance()->accounts();
+    if (accounts.isEmpty()) {
+        return;
+    }
+
+    bool allAccountsSignedOut = true;
+    for (const auto &accountState : accounts) {
+        if (!accountState->isSignedOut()) {
+            allAccountsSignedOut = false;
+            break;
+        }
+    }
+    if (allAccountsSignedOut) {
+        _onboardingController->dismissPermanently();
+        return;
+    }
+
+    _onboardingController->maybeShow(_settingsDialog);
 }
 
 void ApplicationGui::setPauseOnAllFoldersHelper(const QList<AccountStatePtr> &accounts, bool pause)

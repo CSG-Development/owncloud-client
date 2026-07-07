@@ -148,6 +148,7 @@ add_subdirectory(loginrequireddialog)
 add_subdirectory(customui)
 add_subdirectory(customdialogs)
 add_subdirectory(remoteaccess)
+add_subdirectory(onboarding)
 
 add_library(PersonalCloudCore STATIC ${final_src})
 set_target_properties(PersonalCloudCore PROPERTIES AUTOUIC ON AUTORCC ON)
@@ -166,6 +167,7 @@ target_link_libraries(PersonalCloudCore PUBLIC
     libsync
 #   telemetry
     Qt6Keychain::Qt6Keychain
+    onboarding
 )
 
 app_apply_common_target_settings(PersonalCloudCore)

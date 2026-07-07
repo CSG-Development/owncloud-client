@@ -275,6 +275,28 @@ if(APPLE AND MACOS_SIGN)
     )
 endif()
 
+if(APPLE)
+    set(_maint_data "${IFW_OUT}/packages/${COMPONENT_MAINTENANCE_ID}/data")
+    if(MACOS_SIGN)
+        set(_mt_cert "${MACOS_APP_CERT}")
+        set(_mt_notarize ON)
+    else()
+        set(_mt_cert "-")
+        set(_mt_notarize OFF)
+    endif()
+    list(APPEND _installer_cmds
+        COMMAND "${CMAKE_COMMAND}"
+                "-DBINARYCREATOR=${IFW_BINARYCREATOR}"
+                "-DCONFIG=${IFW_OUT}/config/config.xml"
+                "-DDATA_DIR=${_maint_data}"
+                "-DAPP_OUT=${_maint_data}/${_maint_name}.app"
+                "-DCERT=${_mt_cert}"
+                "-DNOTARIZE=${_mt_notarize}"
+                "-DNOTARY_PROFILE=${MACOS_NOTARY_PROFILE}"
+                -P "${PROJECT_SOURCE_DIR}/cmake/scripts/MakeMaintenanceToolApp.cmake"
+    )
+endif()
+
 add_custom_target(installer
     ${_installer_cmds}
     COMMAND "${IFW_BINARYCREATOR}"
