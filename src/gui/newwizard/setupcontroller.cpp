@@ -18,6 +18,7 @@
 #include <QClipboard>
 #include <QTimer>
 #include <QDir>
+#include <QNetworkReply>
 
 using namespace std::chrono_literals;
 
@@ -28,6 +29,15 @@ Q_LOGGING_CATEGORY(lcSetupWizardController, "gui.setupwizard.controller")
 bool isRemoteAccessTransportFailure(int status)
 {
     return status <= 0 || status == 408 || status == 502 || status == 503 || status == 504;
+}
+
+CredentialsErrorKind credentialsErrorKindForReply(QNetworkReply *reply)
+{
+    if (!reply) {
+        return CredentialsErrorKind::Generic;
+    }
+    const int httpStatus = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    return isRemoteAccessTransportFailure(httpStatus) ? CredentialsErrorKind::ServerUnreachable : CredentialsErrorKind::Generic;
 }
 
 SetupController::SetupController(SettingsDialog *parent, RunAccountWizardReason reason)
@@ -351,7 +361,7 @@ void SetupController::onDevicePrepared(const Device& device)
     }
 }
 
-void SetupController::onHandleCredentialsEvaluation(SetupResult result, const QString &msg)
+void SetupController::onHandleCredentialsEvaluation(SetupResult result, const QString &msg, CredentialsErrorKind kind)
 {
     if (result == SetupResult::Success) {
         qCWarning(lcSetupWizardController) << "Credentials evaluation successful";
@@ -361,7 +371,18 @@ void SetupController::onHandleCredentialsEvaluation(SetupResult result, const QS
     pendingCredentialsAction_ = PendingCredentialsAction::None;
     qCWarning(lcSetupWizardController) << "Credentials evaluation failed:" << msg;
     window()->displayPage(SetupPage::PageCredentials);
-    window()->setInvalidCredentialsError();
+
+    switch (kind) {
+    case CredentialsErrorKind::InvalidPassword:
+        window()->setInvalidCredentialsError();
+        break;
+    case CredentialsErrorKind::ServerUnreachable:
+        window()->setCredErrorMessage(tr("Server is not reachable"), msg);
+        break;
+    case CredentialsErrorKind::Generic:
+        window()->setCredErrorMessage(msg);
+        break;
+    }
 }
 
 void SetupController::onDevicesUpdated(bool raQueried)
@@ -477,10 +498,10 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
         return;
     }
 
-    if (!device_.isStatic && (dev_path->aboutHttpStatus == 0 || dev_path->statusHttpStatus == 0)) {
-        qCWarning(lcSetupWizardController) << "Device not reachable, no reply from" << dev_path->address
+    if (!device_.isStatic && (dev_path->aboutHttpStatus != 200 || dev_path->statusHttpStatus != 200)) {
+        qCWarning(lcSetupWizardController) << "Server not reachable, unexpected reply from" << dev_path->address
             << "about status" << dev_path->aboutHttpStatus << "device status" << dev_path->statusHttpStatus;
-        Q_EMIT evaluateCredentialsError(tr("Device is not reachable at %1").arg(dev_path->address), QPrivateSignal());
+        Q_EMIT evaluateCredentialsError(tr("Server is not reachable"), QPrivateSignal());
         return;
     }
 
@@ -517,7 +538,7 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
         resolveJob->deleteLater();
 
         if (!resolveJob->success()) {
-            Q_EMIT handleCredentialsEvaluation(SetupResult::Fail, resolveJob->errorMessage());
+            Q_EMIT handleCredentialsEvaluation(SetupResult::Fail, resolveJob->errorMessage(), credentialsErrorKindForReply(resolveJob->reply()));
             return;
         }
 
@@ -531,7 +552,7 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
             pendingCredentialsAction_ = PendingCredentialsAction::None;
 
             if (authTypeJob->result().isNull()) {
-                Q_EMIT handleCredentialsEvaluation(SetupResult::Fail, authTypeJob->errorMessage());
+                Q_EMIT handleCredentialsEvaluation(SetupResult::Fail, authTypeJob->errorMessage(), credentialsErrorKindForReply(authTypeJob->reply()));
                 return;
             }
 
@@ -640,10 +661,10 @@ void SetupController::performLogin()
             Q_EMIT handleLoginResult(SetupResult::Success);
         }
         else if (fetchUserInfoJob->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 401) {
-            Q_EMIT handleCredentialsEvaluation(SetupResult::Fail, tr("Invalid credentials"));
+            Q_EMIT handleCredentialsEvaluation(SetupResult::Fail, tr("Invalid credentials"), CredentialsErrorKind::InvalidPassword);
         }
         else {
-            Q_EMIT handleCredentialsEvaluation(SetupResult::Fail, tr("Failed to retrieve user information from server"));
+            Q_EMIT handleCredentialsEvaluation(SetupResult::Fail, tr("Failed to retrieve user information from server"), credentialsErrorKindForReply(fetchUserInfoJob->reply()));
         }
     });
 
