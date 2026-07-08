@@ -45,6 +45,12 @@ enum class SetupResult {
     Fail
 };
 
+enum class CredentialsErrorKind {
+    Generic,
+    InvalidPassword,
+    ServerUnreachable
+};
+
 /**
  * This class is the backbone of the new setup wizard. It instantiates the required UI elements and fills them with the correct data. It also provides the public API for the settings UI.
  *
@@ -68,7 +74,7 @@ Q_SIGNALS:
     void invalidServerUrl();
 
     // private, internal use
-    void handleCredentialsEvaluation(APP::Wizard::SetupResult result, const QString& msg = QString());
+    void handleCredentialsEvaluation(APP::Wizard::SetupResult result, const QString& msg = QString(), APP::Wizard::CredentialsErrorKind kind = APP::Wizard::CredentialsErrorKind::Generic);
     void handleLoginResult(APP::Wizard::SetupResult result, const QString& msg = QString());
     void handleFinishResult(APP::Wizard::SetupResult result, const QString &msg = QString(), APP::Wizard::SyncMode mode = SyncMode::Invalid);
 
@@ -96,7 +102,7 @@ private:
 
     void onInvalidServerUrl();
 
-    void onHandleCredentialsEvaluation(SetupResult result, const QString& msg = QString());
+    void onHandleCredentialsEvaluation(SetupResult result, const QString& msg = QString(), CredentialsErrorKind kind = CredentialsErrorKind::Generic);
     void onHandleLoginResult(SetupResult result, const QString& msg = QString());
     void onHandleFinishResult(SetupResult result, const QString &msg = QString(), SyncMode mode = SyncMode::Invalid);
 
