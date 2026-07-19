@@ -18,6 +18,9 @@ const auto completedC = QStringLiteral("completed");
 const auto dismissedC = QStringLiteral("dismissed");
 const auto installerMetaFileNameC = QStringLiteral("PersonalCloud.installer-meta.ini");
 const auto onboardingRequiredC = QStringLiteral("onboarding_required");
+#ifdef Q_OS_MACOS
+const auto macOSInstallerMetaDirC = QStringLiteral("Library/Application Support/Personal Cloud Files");
+#endif
 
 std::unique_ptr<QSettings> onboardingSettings()
 {
@@ -27,10 +30,14 @@ std::unique_ptr<QSettings> onboardingSettings()
 QString installerMetaFilePath()
 {
     const QDir appDir(QCoreApplication::applicationDirPath());
-    const QStringList candidates {
+    QStringList candidates {
         appDir.filePath(installerMetaFileNameC),
         appDir.filePath(QStringLiteral("../../../") + installerMetaFileNameC),
     };
+#ifdef Q_OS_MACOS
+    candidates << QDir(QDir::homePath()).filePath(
+        macOSInstallerMetaDirC + QLatin1Char('/') + installerMetaFileNameC);
+#endif
 
     for (const auto &candidate : candidates) {
         const QFileInfo fileInfo(candidate);

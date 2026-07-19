@@ -28,6 +28,7 @@ function(app_ifw_var name value)
 endfunction()
 
 set(TargetDir "@TargetDir@")
+set(HomeDir "@HomeDir@")
 set(ApplicationsDirX64 "@ApplicationsDirX64@")
 set(StartMenuDir "@StartMenuDir@")
 set(DesktopDir "@DesktopDir@")
@@ -100,6 +101,8 @@ app_ifw_var(MACOS_BUNDLE_NAME             "${APPLICATION_EXECUTABLE}.app")
 app_ifw_var(MACOS_BUNDLE_EXECUTABLE       "${APPLICATION_EXECUTABLE}")
 app_ifw_var(MACOS_USER_DATA_DIR           "${APPLICATION_SHORTNAME}")
 app_ifw_var(MACOS_FINDER_SYNC_EXTENSION_ID "com.seagate.personalcloud.stxfiles.macos.FinderSyncExt")
+app_ifw_var(MACOS_APP_BUNDLE_ID           "${APPLICATION_REV_DOMAIN}")
+app_ifw_var(MACOS_GROUP_CONTAINER_ID      "${SOCKETAPI_TEAM_IDENTIFIER_PREFIX}${APPLICATION_REV_DOMAIN}")
 
 set(IFW_SRC "${CMAKE_CURRENT_SOURCE_DIR}/ifw")
 set(IFW_OUT "${CMAKE_BINARY_DIR}/ifw")
@@ -272,6 +275,13 @@ if(APPLE AND MACOS_SIGN)
                 "-DCERT=${MACOS_APP_CERT}"
                 "-DENTITLEMENTS=${_appex_entitlements}"
                 -P "${PROJECT_SOURCE_DIR}/cmake/scripts/SignMacApp.cmake"
+    )
+
+    list(APPEND _installer_cmds
+        COMMAND "${CMAKE_COMMAND}"
+                "-DAPP=${_main_data}/${APPLICATION_EXECUTABLE}.app"
+                "-DNOTARY_PROFILE=${MACOS_NOTARY_PROFILE}"
+                -P "${PROJECT_SOURCE_DIR}/cmake/scripts/NotarizeMacApp.cmake"
     )
 endif()
 
