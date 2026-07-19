@@ -14,7 +14,7 @@ Component.prototype.createOperations = function()
         return;
     }
 
-    var extensionPath = "@TargetDir@/" + MACOS_BUNDLE_NAME + "/Contents/PlugIns/FinderSyncExt.appex";
+    var extensionPath = "/Applications/" + MACOS_BUNDLE_NAME + "/Contents/PlugIns/FinderSyncExt.appex";
     component.addOperation("Execute", "/usr/bin/pluginkit", "-a", extensionPath);
     component.addOperation("Execute",
         "/usr/bin/pluginkit",

@@ -1,6 +1,9 @@
 var APP_NAME = @APP_DISPLAY_NAME_JS@;
 var MACOS_BUNDLE_EXECUTABLE = @MACOS_BUNDLE_EXECUTABLE_JS@;
 var MACOS_USER_DATA_DIR = @MACOS_USER_DATA_DIR_JS@;
+var MACOS_APP_BUNDLE_ID = @MACOS_APP_BUNDLE_ID_JS@;
+var MACOS_FINDER_SYNC_EXTENSION_ID = @MACOS_FINDER_SYNC_EXTENSION_ID_JS@;
+var MACOS_GROUP_CONTAINER_ID = @MACOS_GROUP_CONTAINER_ID_JS@;
 
 function Controller()
 {
@@ -77,14 +80,26 @@ function removeMacOSUserData()
         return;
     }
 
+    var userDataDir = shellSingleQuote(MACOS_USER_DATA_DIR);
+    var appId       = shellSingleQuote(MACOS_APP_BUNDLE_ID);
+    var extId       = shellSingleQuote(MACOS_FINDER_SYNC_EXTENSION_ID);
+    var groupId     = shellSingleQuote(MACOS_GROUP_CONTAINER_ID);
+
     var cleanupScript =
         "set +e; " +
         "killall " + shellSingleQuote(MACOS_BUNDLE_EXECUTABLE) + " >/dev/null 2>&1; " +
         "for home in /Users/*; do " +
-        "[ -d \"$home\" ] || continue; " +
+        "[ -d \"$home/Library\" ] || continue; " +
         "case \"$(basename \"$home\")\" in Shared) continue ;; esac; " +
-        "path=\"$home/Library/Preferences/\"" + shellSingleQuote(MACOS_USER_DATA_DIR) + "; " +
-        "if [ -d \"$path\" ]; then rm -rf \"$path\"; fi; " +
+        "L=\"$home/Library\"; " +
+        "rm -rf " +
+            "\"$L/Preferences/\"" + userDataDir + " " +
+            "\"$L/Caches/\"" + userDataDir + " " +
+            "\"$L/Preferences/\"" + appId + "\".plist\" " +
+            "\"$L/Containers/\"" + appId + " " +
+            "\"$L/Containers/\"" + extId + " " +
+            "\"$L/Group Containers/\"" + groupId + " " +
+            "\"$L/Group Containers/\"" + appId + "; " +
         "done; " +
         "exit 0";
 

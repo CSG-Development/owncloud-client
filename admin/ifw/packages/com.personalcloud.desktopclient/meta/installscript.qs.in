@@ -12,6 +12,15 @@ function Component()
     }
 }
 
+Component.prototype.createOperationsForArchive = function(archive)
+{
+    if (systemInfo.kernelType === "darwin") {
+        component.addOperation("Extract", archive, "/Applications");
+    } else {
+        component.addOperation("Extract", archive, "@TargetDir@");
+    }
+}
+
 Component.prototype.createOperations = function()
 {
     component.createOperations();
@@ -21,9 +30,30 @@ Component.prototype.createOperations = function()
         return;
     }
 
+    addMacOSLegacyCleanupOperations();
     addInstallationMarkerOperations();
     addWindowsAppRegistrationOperations();
     addMacOSUninstallShortcutOperations();
+    addMacOSUninstallAppOperations();
+}
+
+function addMacOSLegacyCleanupOperations()
+{
+    if (systemInfo.kernelType !== "darwin") {
+        return;
+    }
+
+    var script =
+        "set +e; " +
+        "LEGACY='/Applications/@MACOS_INSTALL_DIR@'; " +
+        "[ -d \"$LEGACY\" ] || exit 0; " +
+        "killall '@MACOS_BUNDLE_EXECUTABLE@' >/dev/null 2>&1; " +
+        "LSREG='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'; " +
+        "[ -x \"$LSREG\" ] && \"$LSREG\" -u \"$LEGACY/@MACOS_BUNDLE_NAME@\" >/dev/null 2>&1; " +
+        "rm -rf \"$LEGACY\"; " +
+        "exit 0";
+
+    component.addOperation("Execute", "/bin/sh", "-c", script);
 }
 
 function isPreviewMode()
@@ -120,4 +150,36 @@ function addMacOSUninstallShortcutOperations()
         "/bin/rm",
         "-f",
         shortcutPath);
+}
+
+function addMacOSUninstallAppOperations()
+{
+    if (systemInfo.kernelType !== "darwin") {
+        return;
+    }
+
+    var appPath = "/Applications/Uninstall @APP_DISPLAY_NAME@.app";
+
+    var build =
+        "APP=\"" + appPath + "\"; " +
+        "SRC=\"$(mktemp -t pcfuninstall)\"; " +
+        "cat > \"$SRC\" <<'PCF_AS'\n" +
+        "set toolBinary to (POSIX path of (path to home folder)) & \"Library/Application Support/@MACOS_INSTALL_DIR@/@MAINTENANCE_TOOL_NAME@.app/Contents/MacOS/@MAINTENANCE_TOOL_NAME@\"\n" +
+        "do shell script (quoted form of toolBinary) & \" --start-uninstaller > /dev/null 2>&1 &\"\n" +
+        "PCF_AS\n" +
+        "rm -rf \"$APP\" || true; " +
+        "osacompile -o \"$APP\" \"$SRC\" || true; " +
+        "rm -f \"$SRC\"; " +
+        "/usr/libexec/PlistBuddy -c 'Add :CFBundleIdentifier string com.personalcloud.desktopclient.uninstaller' \"$APP/Contents/Info.plist\" >/dev/null 2>&1 || true; " +
+        "codesign --force --sign - \"$APP\" >/dev/null 2>&1 || true; " +
+        "ICON=$(ls \"/Applications/@MACOS_BUNDLE_NAME@/Contents/Resources/\"*.icns 2>/dev/null | head -1); " +
+        "if [ -n \"$ICON\" ]; then " +
+        "osascript -l JavaScript -e 'function run(argv){ObjC.import(\"AppKit\"); var m=$.NSImage.alloc.initWithContentsOfFile(argv[1]); $.NSWorkspace.sharedWorkspace.setIconForFileOptions(m,argv[0],0);}' \"$APP\" \"$ICON\" >/dev/null 2>&1; " +
+        "fi; " +
+        "touch \"$APP\"; " +
+        "exit 0";
+
+    component.addOperation("Execute",
+        "/bin/sh", "-c", build,
+        "UNDOEXECUTE", "/bin/rm", "-rf", appPath);
 }
