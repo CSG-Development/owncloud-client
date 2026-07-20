@@ -113,7 +113,7 @@ EmailPage::EmailPage(QWidget *parent)
     ui->edEmail->setFontPixelSize(fontSize);
 
     connect(ui->edEmail, &InputWidget::textEdited, this, [this](const QString &txt) {
-        controller_->email.setValue(txt);
+        controller_->email.setValue(txt.trimmed());
     });
 
     connect(ui->edEmail, &InputWidget::focusChanged, this, [this](bool focused) {
