@@ -56,6 +56,12 @@ void OverlayController::setCodeError(CodeErrorState errorState)
         _codeDlg->setError(errorState);
 }
 
+void OverlayController::focusAccessCodeInput()
+{
+    if (_codeDlg->isVisible())
+        _codeDlg->focusCodeInput();
+}
+
 bool OverlayController::reportError(ErrorDialogState state, const QUuid &id)
 {
     bool transitionAllowed = _codeDlg->isVisible() || !isBusy();
@@ -79,6 +85,16 @@ bool OverlayController::isBusy() const
     return _codeDlg->isVisible() || _errorDlg->isVisible();
 }
 
+bool OverlayController::ownsCodeDialog(const QUuid &id) const
+{
+    return _codeDlg->isVisible() && !id.isNull() && id_ == id;
+}
+
+bool OverlayController::ownsOverlay(const QUuid &id) const
+{
+    return isBusy() && !id.isNull() && id_ == id;
+}
+
 void OverlayController::onCodeAction(CodeAction action, const QString &code)
 {
     switch (action) {
@@ -99,20 +115,22 @@ void OverlayController::onCodeAction(CodeAction action, const QString &code)
 
 void OverlayController::onErrorAction(ErrorAction action, ErrorDialogState state)
 {
+    const QUuid id = id_;
+
     switch (action) {
     case ErrorAction::Retry:
         hideAll();
-        emit errorRetry(state, id_);
+        emit errorRetry(state, id);
         break;
 
     case ErrorAction::Ok:
         hideAll();
-        emit errorOk(state, id_);
+        emit errorOk(state, id);
         break;
 
     case ErrorAction::Cancel:
         hideAll();
-        emit errorCancel(state, id_);
+        emit errorCancel(state, id);
         break;
     }
 }

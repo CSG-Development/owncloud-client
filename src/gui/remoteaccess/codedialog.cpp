@@ -192,6 +192,11 @@ void CodeDialog::clearCode()
     controller_->codeString.setValue(QString());
 }
 
+void CodeDialog::focusCodeInput()
+{
+    ui->codeInputWidget->focusFirstCell();
+}
+
 void CodeDialog::keyPressEvent(QKeyEvent *event)
 {
     // Disable close on ESC key pressed

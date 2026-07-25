@@ -66,6 +66,7 @@ public:
 
     QString getCode() const;
     void clearCode();
+    void focusCodeInput();
 
     bool isDarkTheme() const { return controller_->darkTheme.value(); }
     void setDarkTheme(bool v) { controller_->darkTheme.setValue(v); }

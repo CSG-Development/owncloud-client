@@ -20,11 +20,15 @@ public:
     void retryAccessCode(const QUuid& id);
 
     void setCodeError(CodeErrorState errorState);
+    void focusAccessCodeInput();
 
     bool reportError(ErrorDialogState state, const QUuid& id);
     void hideAll();
 
     bool isBusy() const;
+
+    bool ownsCodeDialog(const QUuid& id) const;
+    bool ownsOverlay(const QUuid& id) const;
 
 signals:
     void codeEntered(const QString &code, const QUuid& id);

@@ -18,6 +18,7 @@ public:
 
     QString codeStr() const;
     void clearCode();
+    void focusFirstCell();
 
     void setErrorState(bool enable);
 
