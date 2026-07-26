@@ -295,6 +295,14 @@ AccountState::AccountState(AccountPtr account)
                 _pendingEndpointRecoveryRequest.reset();
                 setEndpointRecoveryState(EndpointRecoveryState::Failed);
             }
+            if (_account) {
+                if (auto *settingsDialog = ocApp()->gui()->settingsDialog()) {
+                    auto overlay = settingsDialog->overlayController();
+                    if (overlay && overlay->ownsOverlay(_account->uuid())) {
+                        overlay->hideAll();
+                    }
+                }
+            }
             setUpdateDeviceProgress(false);
             finishStartupDevicePathResolution(true);
             qCDebug(lcAccountState) << "Code skipped, no path update";
@@ -1703,7 +1711,9 @@ void AccountState::tryShowRemoteAccessPrompt()
         return;
     }
 
-    if (overlay->isBusy()) {
+    const bool codeDialogAlreadyShown = overlay->ownsCodeDialog(_account->uuid());
+
+    if (overlay->isBusy() && !codeDialogAlreadyShown) {
         qCDebug(lcAccountState) << "Deferring RA prompt because overlay controller is busy"
                                 << "generation" << _pendingDevicePathUpdate->generation << "trigger"
                                 << deviceUpdateTriggerString(_pendingDevicePathUpdate->trigger);
@@ -1720,8 +1730,14 @@ void AccountState::tryShowRemoteAccessPrompt()
     _remoteAccessPromptRetryTimer.stop();
     _pendingDevicePathUpdate->awaitingAccessCode = false;
     _pendingDevicePathUpdate->accessCodePromptDeferred = false;
-    ApplicationGui::raise();
-    overlay->requestAccessCode(_account->uuid(), _pendingDevicePathUpdate->clearAccessCodeOnPrompt);
+    if (!codeDialogAlreadyShown) {
+        ApplicationGui::raise();
+    }
+    const bool clearAccessCode = _pendingDevicePathUpdate->clearAccessCodeOnPrompt;
+    overlay->requestAccessCode(_account->uuid(), clearAccessCode);
+    if (clearAccessCode) {
+        overlay->focusAccessCodeInput();
+    }
     if (_pendingDevicePathUpdate->trigger == DeviceUpdateTrigger::SyncTransportFailure && _pendingEndpointRecoveryRequest) {
         setEndpointRecoveryState(EndpointRecoveryState::WaitingForRemoteAccessPrompt);
     }
@@ -1750,18 +1766,27 @@ void AccountState::initializeRA()
     }
 
     connect(oc.get(), &OverlayController::codeEntered, this, [this](const QString &code, const QUuid &id) {
-        if (_account && _account->uuid() == id && _pendingDevicePathUpdate && _pendingDevicePathUpdate->generation == _activeAccessCodeGeneration) {
+        if (!_account || _account->uuid() != id) {
+            qCDebug(lcAccountState) << "codeEntered id isn't match";
+            return;
+        }
+        if (_pendingDevicePathUpdate && _pendingDevicePathUpdate->generation == _activeAccessCodeGeneration) {
             qCDebug(lcAccountState) << "codeEntered";
             _deviceController->enterAccessCode(code, false);
+            return;
         }
-        else {
-            qCDebug(lcAccountState) << "codeEntered id isn't match";
-        }
+        qCInfo(lcAccountState) << "codeEntered for a stale generation, finishing pending path update"
+                               << "pendingGeneration" << (_pendingDevicePathUpdate ? _pendingDevicePathUpdate->generation : 0) << "activeGeneration"
+                               << _activeAccessCodeGeneration;
+        emit pathUpdateFinished(true, Device{});
     });
 
     connect(oc.get(), &OverlayController::resendRequested, this, [this](const QUuid &id) {
         if (_account && _account->uuid() == id) {
             qCDebug(lcAccountState) << "resendRequested";
+            if (_pendingDevicePathUpdate) {
+                _pendingDevicePathUpdate->userRequestedAccessCodeInit = true;
+            }
             _deviceController->initAccessCode();
         }
         else {
@@ -1784,6 +1809,9 @@ void AccountState::initializeRA()
         if (oc && _account && _account->uuid() == id) {
             qCDebug(lcAccountState) << "errorRetry";
             if (state == ErrorDialogState::UnableToConnectInit) {
+                if (_pendingDevicePathUpdate) {
+                    _pendingDevicePathUpdate->userRequestedAccessCodeInit = true;
+                }
                 _deviceController->initAccessCode();
             }
             else if (state == ErrorDialogState::UnableToConnectToken) {
@@ -1833,7 +1861,10 @@ void AccountState::initializeRA()
             tryShowRemoteAccessPrompt();
         }
         else {
-            qCDebug(lcAccountState) << "overlay controller was destroyed or invalid account ptr";
+            qCInfo(lcAccountState) << "accessCodeRequest without a pending path update, releasing stale code dialog";
+            if (oc && _account && oc->ownsCodeDialog(_account->uuid())) {
+                oc->hideAll();
+            }
         }
     });
 
@@ -1842,14 +1873,19 @@ void AccountState::initializeRA()
             qCDebug(lcAccountState) << "Ignoring stale accessCodeResult after recovery flow was cancelled"
                                     << "pendingGeneration" << (_pendingDevicePathUpdate ? _pendingDevicePathUpdate->generation : 0) << "activeGeneration"
                                     << _activeAccessCodeGeneration;
-            if (oc && _account) {
+            if (oc && _account && oc->ownsOverlay(_account->uuid())) {
                 oc->hideAll();
             }
             return;
         }
         const auto finishSkippedUpdate = [this] { emit pathUpdateFinished(true, Device{}); };
+        const bool userRequestedInit = _pendingDevicePathUpdate && _pendingDevicePathUpdate->userRequestedAccessCodeInit;
         const auto reportErrorOrFinish = [this, oc, finishSkippedUpdate](ErrorDialogState state) {
             if (!_account || !oc || !oc->reportError(state, _account->uuid())) {
+                finishSkippedUpdate();
+                return;
+            }
+            if (!oc->isBusy()) {
                 finishSkippedUpdate();
             }
         };
@@ -1865,9 +1901,14 @@ void AccountState::initializeRA()
             qCDebug(lcAccountState) << "accessCodeResult Error" << (context == DeviceController::AccessCodeContext::Init ? "Init" : "Token") << status_code
                                     << errorString << errorStacktrace;
             if (context == DeviceController::AccessCodeContext::Init && isRemoteAccessTransportFailure(status_code)) {
-                qCWarning(lcAccountState) << "Remote Access init failed before code flow could start, finishing pending path update" << status_code
-                                          << errorString;
-                finishSkippedUpdate();
+                qCWarning(lcAccountState) << "Remote Access init transport failure" << status_code << errorString << "userRequested"
+                                          << userRequestedInit;
+                if (userRequestedInit) {
+                    reportErrorOrFinish(ErrorDialogState::UnableToConnectInit);
+                }
+                else {
+                    finishSkippedUpdate();
+                }
                 return;
             }
             if (oc && _account) {
@@ -1875,7 +1916,12 @@ void AccountState::initializeRA()
                     // from /init - then incorrect email
                     // from /token - then invalid code
                     if (context == DeviceController::AccessCodeContext::Init) {
-                        emit pathUpdateFinished(true, Device{});
+                        if (userRequestedInit) {
+                            reportErrorOrFinish(ErrorDialogState::EmailNotRegistered);
+                        }
+                        else {
+                            emit pathUpdateFinished(true, Device{});
+                        }
                     }
                     else if (context == DeviceController::AccessCodeContext::Token) {
                         if (errorString.contains(QStringLiteral("expired"))) {
@@ -1889,6 +1935,9 @@ void AccountState::initializeRA()
                 else if (status_code == 500) {
                     if (context == DeviceController::AccessCodeContext::Token) {
                         reportErrorOrFinish(ErrorDialogState::UnableToConnectToken);
+                    }
+                    else if (userRequestedInit) {
+                        reportErrorOrFinish(ErrorDialogState::UnableToConnectInit);
                     }
                     else {
                         finishSkippedUpdate();

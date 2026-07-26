@@ -87,6 +87,11 @@ void CodeInputWidget::clearCode()
     code_.clear();
 }
 
+void CodeInputWidget::focusFirstCell()
+{
+    edPtrs[0]->setFocus();
+}
+
 void CodeInputWidget::setErrorState(bool enable)
 {
     errorState = enable;

@@ -183,6 +183,7 @@ private:
         bool awaitingAccessCode = false;
         bool accessCodePromptDeferred = false;
         bool clearAccessCodeOnPrompt = true;
+        bool userRequestedAccessCodeInit = false;
     };
 
     struct PendingEndpointRecoveryRequest
