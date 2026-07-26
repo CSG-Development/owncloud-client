@@ -62,6 +62,7 @@ app_ifw_var(WINDOWS_MAINTENANCE_TOOL_EXECUTABLE "${_maint_name}.exe")
 app_ifw_var(WINDOWS_INSTALLER_META_FILE        "PersonalCloud.installer-meta.ini")
 app_ifw_var(WINDOWS_INSTALL_DIR                "${APPLICATION_VENDOR}/${APPLICATION_NAME}")
 app_ifw_var(WINDOWS_USER_DATA_DIR              "${APPLICATION_SHORTNAME}")
+app_ifw_var(WINDOWS_AUTOSTART_VALUE_NAME       "${APPLICATION_SHORTNAME}")
 app_ifw_var(WINDOWS_PROTOCOL_SCHEME            "oc")
 app_ifw_var(WINDOWS_UNINSTALL_REGISTRY_KEY     "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\PersonalCloudFiles")
 app_ifw_var(WINDOWS_INSTALLER_APPLICATION_ICON "personalcloud")
@@ -300,6 +301,10 @@ if(APPLE)
                 "-DCONFIG=${IFW_OUT}/config/config.xml"
                 "-DDATA_DIR=${_maint_data}"
                 "-DAPP_OUT=${_maint_data}/${_maint_name}.app"
+                "-DBUNDLE_NAME=${_maint_name}"
+                "-DBUNDLE_ID=${COMPONENT_MAINTENANCE_ID}"
+                "-DDATA_DIRECTORY=/Library/Application Support/${MACOS_INSTALL_DIR}"
+                "-DICON_SOURCE_APP=${_main_data}/${APPLICATION_EXECUTABLE}.app"
                 "-DCERT=${_mt_cert}"
                 "-DNOTARIZE=${_mt_notarize}"
                 "-DNOTARY_PROFILE=${MACOS_NOTARY_PROFILE}"

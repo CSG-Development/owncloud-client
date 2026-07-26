@@ -1,7 +1,18 @@
+var MAINTENANCE_TOOL_BUNDLE = "/Applications/@MAINTENANCE_TOOL_NAME@.app";
+
 function Component()
 {
     component.ifwVersion = installer.value("FrameworkVersion");
     installer.installationStarted.connect(this, Component.prototype.onInstallationStarted);
+}
+
+Component.prototype.createOperationsForArchive = function(archive)
+{
+    if (installer.value("os") === "mac") {
+        component.addOperation("Extract", archive, "/Applications");
+    } else {
+        component.addOperation("Extract", archive, "@TargetDir@");
+    }
 }
 
 Component.prototype.onInstallationStarted = function()
@@ -14,6 +25,6 @@ Component.prototype.onInstallationStarted = function()
         return;
     }
 
-    component.installerbaseBinaryPath = "@TargetDir@/PersonalCloudMaintenanceTool.app";
+    component.installerbaseBinaryPath = MAINTENANCE_TOOL_BUNDLE;
     installer.setInstallerBaseBinary(component.installerbaseBinaryPath);
 }
