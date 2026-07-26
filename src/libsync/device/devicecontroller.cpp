@@ -584,7 +584,10 @@ void DeviceController::finishAccountUpdateWithDiscoveredPaths(const QString& dev
                 _raTiming.pathStatusFileServerMs = statusTimer->elapsed();
                 qCDebug(lcDeviceController) << "Path status for" << devCN << ":";
                 qCDebug(lcDeviceController) << ctx;
-                currentDevice.paths = DeviceList::mergePaths(nonRemotePaths(currentDevice.paths), ctx);
+                const auto cachedRemotePaths = currentDevice.remotePaths();
+                currentDevice.paths = DeviceList::mergePaths(
+                    DeviceList::mergePaths(nonRemotePaths(currentDevice.paths), ctx),
+                    cachedRemotePaths);
                 logRaTimingSummary(QStringLiteral("account_update_device_finished"));
                 emit account_update_device_finished(currentDevice);
             })
