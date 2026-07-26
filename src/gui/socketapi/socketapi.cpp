@@ -600,7 +600,7 @@ private:
             emit done(url.toString());
         } else {
             qCWarning(lcPublicLink) << "Can't get remote url for" << link;
-            emit done({});
+            emit error(tr("Could not determine the remote address for the public link."));
         }
         deleteLater();
     }

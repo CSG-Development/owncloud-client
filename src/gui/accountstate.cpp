@@ -151,6 +151,11 @@ bool needsRemoteAccessCacheRepair(const Device &device, QString *reason)
         return true;
     }
 
+    if (device.remotePathsFetchedAtUtc.isValid() && device.remotePaths().isEmpty()) {
+        setReason(QStringLiteral("missing_remote_paths"));
+        return true;
+    }
+
     return false;
 }
 
