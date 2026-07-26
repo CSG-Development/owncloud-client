@@ -2,10 +2,13 @@ var APP_NAME = @APP_DISPLAY_NAME_JS@;
 var WINDOWS_PROCESS_NAME = @WINDOWS_PROCESS_NAME_JS@;
 var WINDOWS_RUN_PROGRAM_DESCRIPTION = @WINDOWS_RUN_PROGRAM_DESCRIPTION_JS@;
 var WINDOWS_USER_DATA_DIR = @WINDOWS_USER_DATA_DIR_JS@;
+var WINDOWS_AUTOSTART_VALUE_NAME = @WINDOWS_AUTOSTART_VALUE_NAME_JS@;
 
 var USE_CUSTOM_STYLESHEET = @WINDOWS_USE_CUSTOM_STYLESHEET_JS@;
 var LIGHT_STYLESHEET = @WINDOWS_LIGHT_STYLESHEET_JS@;
 var DARK_STYLESHEET = @WINDOWS_DARK_STYLESHEET_JS@;
+
+var invokingUserContext = null;
 
 function Controller()
 {
@@ -14,6 +17,8 @@ function Controller()
     installer.setDefaultPageVisible(QInstaller.StartMenuSelection, false);
 
     if (systemInfo.productType === "windows") {
+        invokingUserContext = collectInvokingUserContext();
+
         installer.uninstallationStarted.connect(this, Controller.prototype.handleUninstallationStarted);
         installer.uninstallationFinished.connect(this, Controller.prototype.handleUninstallationFinished);
         installer.installationStarted.connect(this, Controller.prototype.handlePcfReinstallCleanup);
@@ -166,34 +171,72 @@ function stopWindowsApplication()
     ]);
 }
 
+function collectInvokingUserContext()
+{
+    var temp = installer.environmentVariable("TEMP");
+    if (temp === "") {
+        temp = installer.environmentVariable("TMP");
+    }
+
+    return {
+        roaming: installer.environmentVariable("APPDATA"),
+        local: installer.environmentVariable("LOCALAPPDATA"),
+        temp: temp
+    };
+}
+
+function resolveInvokingUserScript()
+{
+    return "$sessionId = (Get-Process -Id $PID).SessionId; " +
+        "$shell = Get-CimInstance Win32_Process | " +
+            "Where-Object { $_.Name -eq 'explorer.exe' -and $_.SessionId -eq $sessionId } | " +
+            "Select-Object -First 1; " +
+        "if ($shell) { " +
+            "$sid = (Invoke-CimMethod -InputObject $shell -MethodName GetOwnerSid).Sid; " +
+            "$current = [Security.Principal.WindowsIdentity]::GetCurrent().User.Value; " +
+            "if ($sid -and $sid -ne $current) { " +
+                "$profileKey = 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\' + $sid; " +
+                "$profilePath = (Get-ItemProperty -LiteralPath $profileKey -Name ProfileImagePath).ProfileImagePath; " +
+                "if ($profilePath) { $profilePath = [Environment]::ExpandEnvironmentVariables($profilePath) }; " +
+                "if ($profilePath -and (Test-Path -LiteralPath $profilePath)) { " +
+                    "$roaming = Join-Path $profilePath 'AppData\\Roaming'; " +
+                    "$local = Join-Path $profilePath 'AppData\\Local'; " +
+                    "$temp = Join-Path $local 'Temp'; " +
+                    "$runKeyRoot = 'Registry::HKEY_USERS\\' + $sid; " +
+                "} " +
+            "} " +
+        "}; ";
+}
+
 function removeWindowsUserData()
 {
     if (systemInfo.productType !== "windows" || !installer.isUninstaller()) {
         return;
     }
 
+    if (invokingUserContext === null) {
+        return;
+    }
+
     var cleanupScript =
         "$ErrorActionPreference = 'SilentlyContinue'; " +
-        "Stop-Process -Name '" + WINDOWS_PROCESS_NAME + "' -Force; " +
-        "$dataDir = '" + WINDOWS_USER_DATA_DIR + "'; " +
-        "$logDir = $dataDir + '-logdir'; " +
-        "$crashLog = $dataDir + '-crash.log'; " +
+        "$dataDir = " + powerShellSingleQuote(WINDOWS_USER_DATA_DIR) + "; " +
+        "$autoStartValue = " + powerShellSingleQuote(WINDOWS_AUTOSTART_VALUE_NAME) + "; " +
+        "$roaming = " + powerShellSingleQuote(invokingUserContext.roaming) + "; " +
+        "$local = " + powerShellSingleQuote(invokingUserContext.local) + "; " +
+        "$temp = " + powerShellSingleQuote(invokingUserContext.temp) + "; " +
+        "$runKeyRoot = 'HKCU:'; " +
+        resolveInvokingUserScript() +
+        "Stop-Process -Name " + powerShellSingleQuote(WINDOWS_PROCESS_NAME) + " -Force; " +
+        "$runKey = Join-Path $runKeyRoot 'Software\\Microsoft\\Windows\\CurrentVersion\\Run'; " +
+        "if (Test-Path -LiteralPath $runKey) { Remove-ItemProperty -LiteralPath $runKey -Name $autoStartValue -Force }; " +
         "$paths = @(); " +
-        "if ($env:APPDATA) { $paths += (Join-Path $env:APPDATA $dataDir) }; " +
-        "if ($env:LOCALAPPDATA) { $paths += (Join-Path $env:LOCALAPPDATA $dataDir) }; " +
-        "if ($env:TEMP) { $paths += (Join-Path $env:TEMP $logDir); $paths += (Join-Path $env:TEMP $crashLog) }; " +
-        "$userRoot = Join-Path $env:SystemDrive 'Users'; " +
-        "if (Test-Path -LiteralPath $userRoot) { " +
-        "Get-ChildItem -LiteralPath $userRoot -Directory -Force | ForEach-Object { " +
-        "$local = Join-Path $_.FullName 'AppData\\Local'; " +
-        "$temp = Join-Path $local 'Temp'; " +
-        "$paths += (Join-Path $_.FullName ('AppData\\Roaming\\' + $dataDir)); " +
-        "$paths += (Join-Path $local $dataDir); " +
-        "$paths += (Join-Path $temp $logDir); " +
-        "$paths += (Join-Path $temp $crashLog) " +
-        "} " +
+        "if ($roaming) { $paths += (Join-Path $roaming $dataDir) }; " +
+        "if ($local) { $paths += (Join-Path $local $dataDir) }; " +
+        "if ($temp) { " +
+            "$paths += (Join-Path $temp ($dataDir + '-logdir')); " +
+            "$paths += (Join-Path $temp ($dataDir + '-crash.log')); " +
         "}; " +
-        "$paths = $paths | Where-Object { $_ } | Select-Object -Unique; " +
         "foreach ($path in $paths) { if (Test-Path -LiteralPath $path) { Remove-Item -LiteralPath $path -Recurse -Force } }; " +
         "exit 0";
 
@@ -204,6 +247,11 @@ function removeWindowsUserData()
         "-Command",
         cleanupScript
     ]);
+}
+
+function powerShellSingleQuote(value)
+{
+    return "'" + String(value).replace(/'/g, "''") + "'";
 }
 
 function installerSucceeded()

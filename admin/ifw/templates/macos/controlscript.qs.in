@@ -5,9 +5,15 @@ var MACOS_APP_BUNDLE_ID = @MACOS_APP_BUNDLE_ID_JS@;
 var MACOS_FINDER_SYNC_EXTENSION_ID = @MACOS_FINDER_SYNC_EXTENSION_ID_JS@;
 var MACOS_GROUP_CONTAINER_ID = @MACOS_GROUP_CONTAINER_ID_JS@;
 
+var invokingUserHome = "";
+
 function Controller()
 {
+    installer.setDefaultPageVisible(QInstaller.TargetDirectory, false);
+
     if (systemInfo.kernelType === "darwin") {
+        invokingUserHome = installer.environmentVariable("HOME");
+
         connectSignal(installer.uninstallationStarted, this, Controller.prototype.handleUninstallationStarted);
         connectSignal(installer.uninstallationFinished, this, Controller.prototype.handleUninstallationFinished);
     }
@@ -50,6 +56,18 @@ Controller.prototype.IntroductionPageCallback = function()
     }
 }
 
+Controller.prototype.FinishedPageCallback = function()
+{
+    if (systemInfo.kernelType !== "darwin" || isUninstaller() || !installerSucceeded()) {
+        return;
+    }
+
+    var page = gui.currentPageWidget();
+    if (page != null && page.LocationLabel != null) {
+        page.LocationLabel.setText("/Applications");
+    }
+}
+
 Controller.prototype.handleUninstallationStarted = function()
 {
     stopMacOSApplication();
@@ -80,6 +98,11 @@ function removeMacOSUserData()
         return;
     }
 
+    if (invokingUserHome === "") {
+        return;
+    }
+
+    var home        = shellSingleQuote(invokingUserHome);
     var userDataDir = shellSingleQuote(MACOS_USER_DATA_DIR);
     var appId       = shellSingleQuote(MACOS_APP_BUNDLE_ID);
     var extId       = shellSingleQuote(MACOS_FINDER_SYNC_EXTENSION_ID);
@@ -87,12 +110,11 @@ function removeMacOSUserData()
 
     var cleanupScript =
         "set +e; " +
-        "killall " + shellSingleQuote(MACOS_BUNDLE_EXECUTABLE) + " >/dev/null 2>&1; " +
-        "for home in /Users/*; do " +
-        "[ -d \"$home/Library\" ] || continue; " +
-        "case \"$(basename \"$home\")\" in Shared) continue ;; esac; " +
-        "L=\"$home/Library\"; " +
+        "L=" + home + "\"/Library\"; " +
+        "UID_OF_HOME=$(stat -f%u " + home + " 2>/dev/null); " +
+        "[ -n \"$UID_OF_HOME\" ] && launchctl bootout \"gui/$UID_OF_HOME/\"" + appId + " >/dev/null 2>&1; " +
         "rm -rf " +
+            "\"$L/LaunchAgents/\"" + appId + "\".plist\" " +
             "\"$L/Preferences/\"" + userDataDir + " " +
             "\"$L/Caches/\"" + userDataDir + " " +
             "\"$L/Preferences/\"" + appId + "\".plist\" " +
@@ -100,7 +122,6 @@ function removeMacOSUserData()
             "\"$L/Containers/\"" + extId + " " +
             "\"$L/Group Containers/\"" + groupId + " " +
             "\"$L/Group Containers/\"" + appId + "; " +
-        "done; " +
         "exit 0";
 
     installer.execute("/bin/sh", ["-c", cleanupScript]);

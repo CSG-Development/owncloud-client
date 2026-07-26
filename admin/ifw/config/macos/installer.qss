@@ -1,3 +1,7 @@
+QPushButton:default:enabled {
+    color: #ffffff;
+}
+
 #ReadyForInstallationPage QWidget {
     background-color: #ffffff;
 }
