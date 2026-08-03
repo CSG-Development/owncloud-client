@@ -102,8 +102,6 @@ set(client_SRCS
     spacemigration.h
     syncrunfilelog.cpp
     syncrunfilelog.h
-    systray.cpp
-    systray.h
     thumbnailjob.cpp
     thumbnailjob.h
     tlserrordialog.cpp
@@ -184,7 +182,6 @@ target_include_directories(PersonalCloudCore PUBLIC
 
 IF( APPLE )
     target_sources(PersonalCloudCore PRIVATE
-        systray.mm
         settingsdialog_mac.mm
         guiutility_mac.mm
         folderwatcher_mac.cpp)

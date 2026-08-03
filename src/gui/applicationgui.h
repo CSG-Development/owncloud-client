@@ -16,13 +16,13 @@
 
 #include "account.h"
 #include "progressdispatcher.h"
-#include "systray.h"
 
 #include <QObject>
 #include <QPointer>
 #include <QAction>
 #include <QMenu>
 #include <QSize>
+#include <QSystemTrayIcon>
 #include <QTimer>
 
 namespace APP { class OnboardingController; }
@@ -123,8 +123,9 @@ private:
     void setupActions();
     void addAccountContextMenu(AccountStatePtr accountState, QMenu *menu);
     void maybeShowOnboarding();
+    void setToolTip(const QString &tip) const;
 
-    Systray *_tray = nullptr;
+    QSystemTrayIcon *_tray = nullptr;
     SettingsDialog *_settingsDialog = nullptr;
     OnboardingController *_onboardingController = nullptr;
     // tray's menu

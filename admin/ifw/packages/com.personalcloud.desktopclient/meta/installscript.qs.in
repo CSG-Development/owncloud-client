@@ -1,6 +1,5 @@
 var WINDOWS_EXECUTABLE = @WINDOWS_EXECUTABLE_JS@;
 var WINDOWS_INSTALLER_META_FILE = @WINDOWS_INSTALLER_META_FILE_JS@;
-var APP_DISPLAY_NAME = @APP_DISPLAY_NAME_JS@;
 var MAINTENANCE_TOOL_NAME = @MAINTENANCE_TOOL_NAME_JS@;
 var WINDOWS_APP_REGISTRAR_RELATIVE_PATH = "/InstallerTools/WindowsAppRegistrar.exe";
 var INSTALLER_META_FILE = "@TargetDir@/" + WINDOWS_INSTALLER_META_FILE;
@@ -30,30 +29,9 @@ Component.prototype.createOperations = function()
         return;
     }
 
-    addMacOSLegacyCleanupOperations();
     addInstallationMarkerOperations();
     addWindowsAppRegistrationOperations();
-    addMacOSUninstallShortcutOperations();
-    addMacOSUninstallAppOperations();
-}
-
-function addMacOSLegacyCleanupOperations()
-{
-    if (systemInfo.kernelType !== "darwin") {
-        return;
-    }
-
-    var script =
-        "set +e; " +
-        "LEGACY='/Applications/@MACOS_INSTALL_DIR@'; " +
-        "[ -d \"$LEGACY\" ] || exit 0; " +
-        "killall '@MACOS_BUNDLE_EXECUTABLE@' >/dev/null 2>&1; " +
-        "LSREG='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'; " +
-        "[ -x \"$LSREG\" ] && \"$LSREG\" -u \"$LEGACY/@MACOS_BUNDLE_NAME@\" >/dev/null 2>&1; " +
-        "rm -rf \"$LEGACY\"; " +
-        "exit 0";
-
-    component.addOperation("Execute", "/bin/sh", "-c", script);
+    addMacOSSystemCleanupOperations();
 }
 
 function isPreviewMode()
@@ -95,6 +73,11 @@ function addInstallationMarkerOperations()
             "key=onboarding_required",
             "value=true");
     }
+
+    if (systemInfo.kernelType === "darwin") {
+        component.addElevatedOperation("Execute",
+            "/bin/chmod", "644", INSTALLER_META_FILE);
+    }
 }
 
 function addWindowsAppRegistrationOperations()
@@ -118,68 +101,28 @@ function addWindowsAppRegistrationOperations()
         targetDir);
 }
 
-function addMacOSUninstallShortcutOperations()
+function addMacOSSystemCleanupOperations()
 {
     if (systemInfo.kernelType !== "darwin") {
         return;
     }
 
-    var targetDir = "@TargetDir@";
-    var shortcutPath = targetDir + "/Uninstall " + APP_DISPLAY_NAME + ".command";
-    var script =
-        "#!/bin/sh\n" +
-        "DIR=\"$(cd \"$(dirname \"$0\")\" && pwd)\"\n" +
-        "for tool in \\\n" +
-        "  \"$DIR/" + MAINTENANCE_TOOL_NAME + "\" \\\n" +
-        "  \"$DIR/" + MAINTENANCE_TOOL_NAME + ".app/Contents/MacOS/" + MAINTENANCE_TOOL_NAME + "\" \\\n" +
-        "  \"$DIR/\"*Maintenance*Tool*.app/Contents/MacOS/* \\\n" +
-        "  \"$DIR/\"*Maintenance-Tool*.app/Contents/MacOS/*; do\n" +
-        "  if [ -f \"$tool\" ] && [ -x \"$tool\" ]; then\n" +
-        "    exec \"$tool\" --start-uninstaller\n" +
-        "  fi\n" +
-        "done\n" +
-        "osascript -e 'display dialog \"Maintenance tool was not found in the installation directory.\" buttons {\"OK\"} default button \"OK\" with icon stop'\n" +
-        "exit 1\n";
+    var appBundle  = "/Applications/@MACOS_BUNDLE_NAME@";
+    var toolBundle = "/Applications/" + MAINTENANCE_TOOL_NAME + ".app";
 
-    component.addOperation("AppendFile", shortcutPath, script);
-    component.addOperation("Execute",
-        "/bin/chmod",
-        "+x",
-        shortcutPath,
-        "UNDOEXECUTE",
-        "/bin/rm",
-        "-f",
-        shortcutPath);
-}
-
-function addMacOSUninstallAppOperations()
-{
-    if (systemInfo.kernelType !== "darwin") {
-        return;
-    }
-
-    var appPath = "/Applications/Uninstall @APP_DISPLAY_NAME@.app";
-
-    var build =
-        "APP=\"" + appPath + "\"; " +
-        "SRC=\"$(mktemp -t pcfuninstall)\"; " +
-        "cat > \"$SRC\" <<'PCF_AS'\n" +
-        "set toolBinary to (POSIX path of (path to home folder)) & \"Library/Application Support/@MACOS_INSTALL_DIR@/@MAINTENANCE_TOOL_NAME@.app/Contents/MacOS/@MAINTENANCE_TOOL_NAME@\"\n" +
-        "do shell script (quoted form of toolBinary) & \" --start-uninstaller > /dev/null 2>&1 &\"\n" +
-        "PCF_AS\n" +
-        "rm -rf \"$APP\" || true; " +
-        "osacompile -o \"$APP\" \"$SRC\" || true; " +
-        "rm -f \"$SRC\"; " +
-        "/usr/libexec/PlistBuddy -c 'Add :CFBundleIdentifier string com.personalcloud.desktopclient.uninstaller' \"$APP/Contents/Info.plist\" >/dev/null 2>&1 || true; " +
-        "codesign --force --sign - \"$APP\" >/dev/null 2>&1 || true; " +
-        "ICON=$(ls \"/Applications/@MACOS_BUNDLE_NAME@/Contents/Resources/\"*.icns 2>/dev/null | head -1); " +
-        "if [ -n \"$ICON\" ]; then " +
-        "osascript -l JavaScript -e 'function run(argv){ObjC.import(\"AppKit\"); var m=$.NSImage.alloc.initWithContentsOfFile(argv[1]); $.NSWorkspace.sharedWorkspace.setIconForFileOptions(m,argv[0],0);}' \"$APP\" \"$ICON\" >/dev/null 2>&1; " +
+    var undoScript =
+        "set +e; " +
+        "killall '@MACOS_BUNDLE_EXECUTABLE@' >/dev/null 2>&1; " +
+        "LSREG='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'; " +
+        "if [ -x \"$LSREG\" ]; then " +
+            "\"$LSREG\" -u '" + appBundle + "' >/dev/null 2>&1; " +
+            "\"$LSREG\" -u '" + toolBundle + "' >/dev/null 2>&1; " +
         "fi; " +
-        "touch \"$APP\"; " +
+        "/bin/rm -rf '" + appBundle + "'; " +
         "exit 0";
 
-    component.addOperation("Execute",
-        "/bin/sh", "-c", build,
-        "UNDOEXECUTE", "/bin/rm", "-rf", appPath);
+    component.addElevatedOperation("Execute",
+        "/usr/bin/true",
+        "UNDOEXECUTE",
+        "/bin/sh", "-c", undoScript);
 }

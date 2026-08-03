@@ -636,16 +636,29 @@ void ShareLinkWidget::slotLinkContextMenuActionTriggered(QAction *action)
 
     if (action == _deleteLinkAction) {
         confirmAndDeleteShare(share);
-    } else if (action == _copyLinkAction) {
-        QApplication::clipboard()->setText(share->getLink().toString());
-    } else if (action == _copyDirectLinkAction) {
-        QApplication::clipboard()->setText(share->getDirectDownloadLink().toString());
-    } else if (action == _emailLinkAction) {
-        emailShareLink(share->getLink());
-    } else if (action == _emailDirectLinkAction) {
-        emailShareLink(share->getDirectDownloadLink());
-    } else if (action == _openLinkAction) {
-        openShareLink(share->getLink());
+        return;
+    }
+
+    QUrl url;
+    if (action == _copyLinkAction || action == _emailLinkAction || action == _openLinkAction) {
+        url = share->getLink();
+    } else if (action == _copyDirectLinkAction || action == _emailDirectLinkAction) {
+        url = share->getDirectDownloadLink();
+    } else {
+        return;
+    }
+
+    if (url.isEmpty()) {
+        displayError(tr("The public link is not available because the remote address is unknown."));
+        return;
+    }
+
+    if (action == _copyLinkAction || action == _copyDirectLinkAction) {
+        QApplication::clipboard()->setText(url.toString());
+    } else if (action == _emailLinkAction || action == _emailDirectLinkAction) {
+        emailShareLink(url);
+    } else {
+        openShareLink(url);
     }
 }
 

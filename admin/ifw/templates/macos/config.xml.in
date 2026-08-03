@@ -7,9 +7,11 @@
     <ControlScript>controlscript.qs</ControlScript>
     <StyleSheet>installer.qss</StyleSheet>
     <Watermark>@MACOS_SIDEBAR_IMAGE@</Watermark>
-    <TargetDir>@HomeDir@/Library/Application Support/@MACOS_INSTALL_DIR@</TargetDir>
-    <AdminTargetDir>@HomeDir@/Library/Application Support/@MACOS_INSTALL_DIR@</AdminTargetDir>
+    <TargetDir>/Library/Application Support/@MACOS_INSTALL_DIR@</TargetDir>
+    <AdminTargetDir>/Library/Application Support/@MACOS_INSTALL_DIR@</AdminTargetDir>
     <RunProgram>/Applications/@MACOS_BUNDLE_NAME@/Contents/MacOS/@MACOS_BUNDLE_EXECUTABLE@</RunProgram>
     <RunProgramDescription>@MACOS_RUN_PROGRAM_DESCRIPTION@</RunProgramDescription>
     <MaintenanceToolName>@MAINTENANCE_TOOL_NAME@</MaintenanceToolName>
+    <DisableAuthorizationFallback>true</DisableAuthorizationFallback>
+    <AllowTargetDirectorySelection>false</AllowTargetDirectorySelection>
 </Installer>

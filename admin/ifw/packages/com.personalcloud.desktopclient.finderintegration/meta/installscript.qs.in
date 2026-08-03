@@ -15,17 +15,31 @@ Component.prototype.createOperations = function()
     }
 
     var extensionPath = "/Applications/" + MACOS_BUNDLE_NAME + "/Contents/PlugIns/FinderSyncExt.appex";
-    component.addOperation("Execute", "/usr/bin/pluginkit", "-a", extensionPath);
+
     component.addOperation("Execute",
-        "/usr/bin/pluginkit",
-        "-e",
-        "use",
-        "-i",
-        MACOS_FINDER_SYNC_EXTENSION_ID,
+        "/bin/sh", "-c", asConsoleUser(
+            "/usr/bin/pluginkit -a " + shellSingleQuote(extensionPath) + "; " +
+            "/usr/bin/pluginkit -e use -i " + shellSingleQuote(MACOS_FINDER_SYNC_EXTENSION_ID)),
         "UNDOEXECUTE",
-        "/usr/bin/pluginkit",
-        "-e",
-        "ignore",
-        "-i",
-        MACOS_FINDER_SYNC_EXTENSION_ID);
+        "/bin/sh", "-c", asConsoleUser(
+            "/usr/bin/pluginkit -e ignore -i " + shellSingleQuote(MACOS_FINDER_SYNC_EXTENSION_ID)));
+}
+
+function asConsoleUser(command)
+{
+    return "set +e; " +
+        "CONSOLE_UID=$(stat -f%u /dev/console 2>/dev/null); " +
+        "if [ \"$(id -u)\" != \"0\" ] || [ -z \"$CONSOLE_UID\" ] || [ \"$CONSOLE_UID\" = \"0\" ]; then " +
+            command + "; " +
+        "else " +
+            "CONSOLE_USER=$(id -un \"$CONSOLE_UID\" 2>/dev/null); " +
+            "launchctl asuser \"$CONSOLE_UID\" sudo -u \"$CONSOLE_USER\" /bin/sh -c " +
+                shellSingleQuote(command) + "; " +
+        "fi; " +
+        "exit 0";
+}
+
+function shellSingleQuote(value)
+{
+    return "'" + String(value).replace(/'/g, "'\\''") + "'";
 }
