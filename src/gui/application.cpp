@@ -35,6 +35,8 @@
 #include "socketapi/socketapi.h"
 #include "telemetry/ProviderNull.h"
 
+#include <QNetworkProxy>
+
 #include <random>
 
 #ifdef USE_CAPCORE
@@ -106,7 +108,10 @@ Application::Application(Platform *platform, bool debugMode)
         AbstractNetworkJob::httpTimeout = cfg.timeout();
     }
 
-    if (!cfg.exists() || !cfg.proxyNeedsAuth()) {
+    const int proxyType = cfg.proxyType();
+    const bool manualProxy = proxyType == QNetworkProxy::HttpProxy || proxyType == QNetworkProxy::Socks5Proxy;
+
+    if (!cfg.exists() || !manualProxy || !cfg.proxyNeedsAuth()) {
         ProxyCredentials::removeLegacyPassword();
         ClientProxy::applyProxy(QString());
     }
