@@ -651,8 +651,8 @@ bool Theme::isDarkTheme() const
 {
 #ifdef Q_OS_WIN
     QSettings registry(QStringLiteral("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"), QSettings::Registry64Format);
-    auto lightTheme = registry.value("AppsUseLightTheme").toInt();
-    return !lightTheme;
+    const auto lightTheme = registry.value(QStringLiteral("AppsUseLightTheme"), 1).toInt();
+    return lightTheme == 0;
 #elif defined Q_OS_MACOS
     auto sh = QGuiApplication::styleHints();
     return sh->colorScheme() == Qt::ColorScheme::Dark;
