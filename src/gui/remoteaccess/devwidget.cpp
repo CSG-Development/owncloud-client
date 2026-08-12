@@ -91,7 +91,7 @@ DevWidget::DevWidget(QWidget *parent)
             return;
 
         ui->btnQueryAbout->setEnabled(false);
-        qApp->processEvents();
+        ui->btnQueryAbout->repaint();
 
         auto dev_api = new DeviceApi(this);
 
@@ -102,7 +102,7 @@ DevWidget::DevWidget(QWidget *parent)
                 dev_api->deleteLater();
                 showPathInfoText();
                 ui->btnQueryAbout->setEnabled(true);
-                qApp->processEvents();
+                ui->btnQueryAbout->repaint();
             });
 
     });
