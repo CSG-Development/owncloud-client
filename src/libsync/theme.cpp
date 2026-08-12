@@ -644,7 +644,16 @@ bool Theme::withCrashReporter() const
 
 void Theme::systemThemeChanged()
 {
-    Q_EMIT themeChanged(isDarkTheme());
+    emit_theme_change();
+}
+
+void Theme::emit_theme_change()
+{
+    const bool isDark = isDarkTheme();
+#ifdef Q_OS_WIN
+    QGuiApplication::styleHints()->setColorScheme(isDark ? Qt::ColorScheme::Dark : Qt::ColorScheme::Light);
+#endif
+    Q_EMIT themeChanged(isDark);
 }
 
 bool Theme::isDarkTheme() const

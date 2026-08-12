@@ -1,6 +1,8 @@
 #_folderList {
     /*show-decoration-selected: 1;*/
     border: 1px solid rgba(203, 205, 211, 1);
+    background-color: #FFFFFF;
+    color: rgba(0, 0, 0, 0.87);
 }
 
 #_folderList::indicator {
