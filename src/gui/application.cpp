@@ -111,13 +111,18 @@ Application::Application(Platform *platform, bool debugMode)
         ClientProxy::applyProxy(QString());
     }
     else {
-        const auto proxyGeneration = ClientProxy::proxyGeneration();
-        ProxyCredentials::load(this, [proxyGeneration](const QString &password) {
-            if (proxyGeneration != ClientProxy::proxyGeneration()) {
-                return;
-            }
-            ClientProxy::applyProxyAndRefresh(password);
-        });
+        connect(
+            AccountManager::instance(), &AccountManager::applicationHasCreated, this,
+            [this] {
+                const auto proxyGeneration = ClientProxy::proxyGeneration();
+                ProxyCredentials::load(this, [proxyGeneration](const QString &password) {
+                    if (proxyGeneration != ClientProxy::proxyGeneration()) {
+                        return;
+                    }
+                    ClientProxy::applyProxyAndRefresh(password);
+                });
+            },
+            Qt::SingleShotConnection);
     }
 
     // Check vfs plugins
