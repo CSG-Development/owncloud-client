@@ -225,8 +225,7 @@ void CredentialsPage::showProgressIndicator(bool show)
     else {
         validateFormData();
     }
-    update();
-    qApp->processEvents();
+    repaint();
 }
 
 void CredentialsPage::showDevicesInfo(bool show)

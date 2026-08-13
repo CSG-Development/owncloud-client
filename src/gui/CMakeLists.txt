@@ -102,6 +102,8 @@ set(client_SRCS
     spacemigration.h
     syncrunfilelog.cpp
     syncrunfilelog.h
+    systemsleepmonitor.cpp
+    systemsleepmonitor.h
     thumbnailjob.cpp
     thumbnailjob.h
     tlserrordialog.cpp

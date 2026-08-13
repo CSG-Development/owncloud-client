@@ -1038,6 +1038,12 @@ void AccountState::updateDeviceAccessibility()
 
 bool AccountState::canStartDeviceAccessibilityUpdate(bool logReason) const
 {
+    if (!Application::appCreated()) {
+        if (logReason)
+            qCDebug(lcAccountState) << "Skip device availability check, the application is not created yet";
+        return false;
+    }
+
     if (!_account) {
         if (logReason)
             qCWarning(lcAccountState) << "No account for device availability check";

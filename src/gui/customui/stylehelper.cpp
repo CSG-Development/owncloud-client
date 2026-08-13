@@ -163,14 +163,20 @@ void StyleHelper::invoke_setDarkTheme_recursive(QWidget *w)
 {
     Q_ASSERT(w);
 
-    bool isDark = APP::Theme::instance()->isDarkTheme();
+    const bool isDark = APP::Theme::instance()->isDarkTheme();
     const auto& childrenList = w->findChildren<QWidget*>();
     for (auto* widget: childrenList) {
         if (widget->metaObject()->indexOfProperty("darkTheme") != -1) {
             widget->setProperty("darkTheme", isDark);
-            qApp->processEvents();
         }
     }
+    for (auto* widget: childrenList) {
+        if (widget->metaObject()->indexOfProperty("darkTheme") != -1) {
+            widget->style()->unpolish(widget);
+            widget->style()->polish(widget);
+        }
+    }
+    w->update();
 }
 
 StyleHelper *StyleHelper::getInstance()

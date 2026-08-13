@@ -35,6 +35,8 @@
 #include "socketapi/socketapi.h"
 #include "telemetry/ProviderNull.h"
 
+#include <QNetworkProxy>
+
 #include <random>
 
 #ifdef USE_CAPCORE
@@ -106,18 +108,26 @@ Application::Application(Platform *platform, bool debugMode)
         AbstractNetworkJob::httpTimeout = cfg.timeout();
     }
 
-    if (!cfg.exists() || !cfg.proxyNeedsAuth()) {
+    const int proxyType = cfg.proxyType();
+    const bool manualProxy = proxyType == QNetworkProxy::HttpProxy || proxyType == QNetworkProxy::Socks5Proxy;
+
+    if (!cfg.exists() || !manualProxy || !cfg.proxyNeedsAuth()) {
         ProxyCredentials::removeLegacyPassword();
         ClientProxy::applyProxy(QString());
     }
     else {
-        const auto proxyGeneration = ClientProxy::proxyGeneration();
-        ProxyCredentials::load(this, [proxyGeneration](const QString &password) {
-            if (proxyGeneration != ClientProxy::proxyGeneration()) {
-                return;
-            }
-            ClientProxy::applyProxyAndRefresh(password);
-        });
+        connect(
+            AccountManager::instance(), &AccountManager::applicationHasCreated, this,
+            [this] {
+                const auto proxyGeneration = ClientProxy::proxyGeneration();
+                ProxyCredentials::load(this, [proxyGeneration](const QString &password) {
+                    if (proxyGeneration != ClientProxy::proxyGeneration()) {
+                        return;
+                    }
+                    ClientProxy::applyProxyAndRefresh(password);
+                });
+            },
+            Qt::SingleShotConnection);
     }
 
     // Check vfs plugins

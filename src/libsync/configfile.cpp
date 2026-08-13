@@ -588,6 +588,10 @@ void ConfigFile::setProxyType(QNetworkProxy::ProxyType proxyType, const QString 
         settings.setValue(proxyNeedsAuthC, needsAuth);
         settings.setValue(proxyUserC, user);
     }
+    else {
+        settings.remove(proxyNeedsAuthC);
+        settings.remove(proxyUserC);
+    }
     settings.sync();
 }
 
