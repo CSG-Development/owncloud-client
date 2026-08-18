@@ -15,12 +15,18 @@
 #include <QtGlobal>
 
 #include "accountmanager.h"
+#include "accountstate.h"
 #include "common/utility.h"
+#include "folder.h"
+#include "folderman.h"
 #include "gui/application.h"
 #include "gui/customdialogs/logbrowserdlg.h"
+#include "libsync/accessmanager.h"
+#include "libsync/account.h"
 #include "libsync/configfile.h"
 #include "libsync/platform.h"
 #include "libsync/theme.h"
+#include "systemsleepmonitor.h"
 #include "resources/loadresources.h"
 #include "resources/resources.h"
 #include "gui/customui/stylehelper.h"
@@ -456,6 +462,36 @@ int main(int argc, char **argv)
     AccountManager::instance()->applicationCreated();
 
     QObject::connect(platform.get(), &Platform::requestAttention, ocApp->gui(), &ApplicationGui::slotShowSettings);
+
+    auto *sleepMonitor = new SystemSleepMonitor(APP::ocApp());
+    QObject::connect(sleepMonitor, &SystemSleepMonitor::processResumed, APP::ocApp(), [](qint64 gapSeconds) {
+        qCInfo(lcMain) << "Recovering after a gap of" << gapSeconds << "seconds";
+
+        for (auto *folder : FolderMan::instance()->folders()) {
+            if (folder && folder->isSyncRunning()) {
+                qCInfo(lcMain) << "Terminating a sync that was interrupted by the gap" << folder->path();
+                folder->slotTerminateSync();
+            }
+        }
+
+        for (const auto &accountState : AccountManager::instance()->accounts()) {
+            if (!accountState) {
+                continue;
+            }
+            accountState->account()->accessManager()->clearConnectionCache();
+            accountState->tagLastSuccessfullETagRequest({});
+        }
+
+        QTimer::singleShot(5000, qApp, [] {
+            qCInfo(lcMain) << "Recovery guard elapsed, revalidating connectivity";
+            for (const auto &accountState : AccountManager::instance()->accounts()) {
+                if (accountState) {
+                    accountState->checkConnectivity();
+                }
+            }
+            FolderMan::instance()->scheduleAllFolders();
+        });
+    });
 
     QObject::connect(&singleApplication, &KDSingleApplication::messageReceived, APP::ocApp(), [](const QByteArray &message) {
         const QString msg = QString::fromUtf8(message);

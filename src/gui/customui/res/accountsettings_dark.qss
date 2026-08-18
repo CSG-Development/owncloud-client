@@ -1,5 +1,7 @@
 #_folderList {
     border: 1px solid rgba(97, 97, 97, 1);
+    background-color: #2D2D2D;
+    color: rgba(255, 255, 255, 0.87);
 }
 
 #_folderList::indicator {

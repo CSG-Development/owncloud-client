@@ -1016,6 +1016,7 @@ void AccountSettings::onThemeChanged(bool isDark)
 {
     setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
     ui->_folderList->setSelectionColor(isDark ? QColor(100, 181, 246, 61) : QColor(25, 118, 210, 61));
+    ui->_folderList->viewport()->update();
 
     refreshConnectionLabel();
 
