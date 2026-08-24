@@ -32,6 +32,7 @@
 
 #include "common/utility.h"
 #include "creds/httpcredentialsgui.h"
+#include "customui/deviceunreachablebanner.h"
 #include "customui/stylehelper.h"
 #include "scheduling/syncscheduler.h"
 #ifdef Q_OS_WIN
@@ -61,6 +62,8 @@
 #include <QToolTip>
 #include <QTreeView>
 
+#include <chrono>
+
 namespace
 {
 
@@ -72,6 +75,8 @@ QPair<QString, QString> widgetStyle = {QStringLiteral(":/res/accountsettings_lig
 
 // constexpr auto modalWidgetStretchedMarginC = 50;
 constexpr auto modalWidgetStretchedMarginC = 4;
+
+constexpr std::chrono::milliseconds deviceUnreachableRetryIntervalC{30000};
 
 }   // namespace
 
@@ -173,6 +178,35 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
     ui->_folderList->setMouseTracking(true);
     ui->_folderList->setAttribute(Qt::WA_Hover, true);
     ui->_folderList->installEventFilter(mouseCursorChanger);
+
+    _deviceUnreachableBanner = new DeviceUnreachableBanner(ui->_folderList);
+    _deviceUnreachableBanner->setVisible(_accountState->isDeviceUnreachable());
+
+    _deviceUnreachableRetryTimer.setInterval(deviceUnreachableRetryIntervalC);
+    connect(&_deviceUnreachableRetryTimer, &QTimer::timeout, this, [this] {
+        if (isVisible()) {
+            _accountState->refreshDeviceReachabilitySilently();
+        }
+    });
+    if (_accountState->isDeviceUnreachable() && isVisible()) {
+        _deviceUnreachableRetryTimer.start();
+    }
+
+    connect(_accountState.data(), &AccountState::deviceUnreachableChanged, this, [this](bool unreachable) {
+        _deviceUnreachableBanner->setVisible(unreachable);
+        if (unreachable) {
+            if (isVisible()) {
+                _deviceUnreachableRetryTimer.start();
+            }
+        } else {
+            _deviceUnreachableRetryTimer.stop();
+        }
+    });
+
+    connect(_deviceUnreachableBanner, &DeviceUnreachableBanner::retryClicked, this, [this] {
+        _deviceUnreachableBanner->hide();
+        _accountState->updateDeviceAccessibility();
+    });
 
     ui->selectiveSyncStatus->hide();
 
@@ -1204,11 +1238,18 @@ bool AccountSettings::event(QEvent *e)
             _accountState->quotaInfo()->setActive(isVisible());
         }
     }
+    if (e->type() == QEvent::Hide) {
+        _deviceUnreachableRetryTimer.stop();
+    }
     if (e->type() == QEvent::Show) {
         // Expand the folder automatically only if there's only one, see #4283
         // The 2 is 1 folder + 1 'add folder' button
         if (_sortModel->rowCount() <= 2) {
             ui->_folderList->setExpanded(_sortModel->index(0, 0), true);
+        }
+        if (_accountState->isDeviceUnreachable()) {
+            _deviceUnreachableRetryTimer.start();
+            _accountState->refreshDeviceReachabilitySilently();
         }
     }
     return QWidget::event(e);

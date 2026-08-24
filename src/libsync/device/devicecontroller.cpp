@@ -866,6 +866,11 @@ QFuture<DeviceListCtx> DeviceController::queryDeviceList()
         .unwrap();
 }
 
+QFuture<AboutCtx> DeviceController::queryDeviceAbout(const QString& url, DeviceType deviceType)
+{
+    return _devApi->query_about(url, deviceType);
+}
+
 QFuture<DevicePathListCtx> DeviceController::queryDeviceInfo(const QString &deviceId)
 {
     const auto requestEmail = normalizedEmail(_email);

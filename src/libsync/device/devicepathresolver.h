@@ -12,7 +12,7 @@
 
 enum class DevicePathResolutionOutcome
 {
-    ResolvedFromCachedPriority,
+    ResolvedFromKnownPriorityPath,
     ResolvedFromFreshRemoteAccess,
     ResolvedFromRemoteRelay,
     RequiresRemoteAccessDeviceUpdate,

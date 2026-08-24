@@ -28,6 +28,7 @@
 #include <QElapsedTimer>
 #include <QPointer>
 #include <QTimer>
+#include <functional>
 #include <memory>
 #include <optional>
 
@@ -160,6 +161,8 @@ public:
 
     void createDeviceController();
 
+    bool isDeviceUnreachable() const { return _deviceUnreachable; }
+
 public slots:
     /// Triggers a ping to the server to update state and
     /// connection status and errors.
@@ -168,6 +171,7 @@ public slots:
 
     /// Triggers checks and update status for all device URLs
     void updateDeviceAccessibility();
+    void refreshDeviceReachabilitySilently();
     void handleEndpointRecoveryRequest(const EndpointRecoveryEvent &event, const QString &folderPath);
 
 private:
@@ -197,6 +201,10 @@ private:
     explicit AccountState(AccountPtr account);
 
     void setState(State state);
+    void setDeviceUnreachable(bool unreachable);
+    void updateDeviceAccessibilityInternal(bool allowRemoteAccessPrompt);
+    void confirmDeviceAboutReachable(const DevicePathResolutionResult &result, quint64 resolutionGeneration);
+    void probeDeviceAboutReachability(const DevicePath &path, std::function<bool()> isStale);
     void setEndpointRecoveryState(EndpointRecoveryState state);
     static const char *deviceUpdateTriggerString(DeviceUpdateTrigger trigger);
 
@@ -216,7 +224,7 @@ private:
     void finishStartupDevicePathResolution(bool continueConnectivity);
     void resolveAndApplyDevicePath(
         const Device &device, bool allowRemoteAccessPrompt, DeviceUpdateTrigger trigger, const std::optional<QUuid> &avoidPathId = std::nullopt);
-    void applyResolvedDevicePath(const DevicePathResolutionResult &result, DeviceUpdateTrigger trigger);
+    void applyResolvedDevicePath(const DevicePathResolutionResult &result, DeviceUpdateTrigger trigger, quint64 resolutionGeneration);
     void requestLocalPathDiscovery(const Device &device, DeviceUpdateTrigger trigger);
     void requestRAupdate(const Device &device, DeviceUpdateTrigger trigger);
     void deferRemoteAccessUpdateUntilNetwork(DeviceUpdateTrigger trigger);
@@ -237,6 +245,7 @@ signals:
     void urlChanged(const QUuid &id);
     void isSettingUpChanged();
     void networkUpdateState(bool inProgress);
+    void deviceUnreachableChanged(bool unreachable);
 
     // internal signal to be able to finish processing device path update when "Skip" code dialog pressed
     void pathUpdateFinished(bool skippedCode, const Device &device);
@@ -263,6 +272,8 @@ private:
     DeviceController *_deviceController = nullptr;
     std::atomic_bool _updateDeviceInProgress{false};
     bool _raInitialized = false;
+    bool _deviceUnreachable = false;
+    quint64 _deviceUnreachableProbeGeneration = 0;
     std::optional<PendingDevicePathUpdate> _pendingDevicePathUpdate;
     quint64 _devicePathUpdateGeneration = 0;
     quint64 _devicePathResolutionGeneration = 0;

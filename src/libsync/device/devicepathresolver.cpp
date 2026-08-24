@@ -237,7 +237,7 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::resolve(const Device& so
 
     if (const auto preferredPath = findPreferredLocalPath(cachedPriorityPaths, preferredPathId)) {
         qCDebug(lcDevicePathResolver) << "Testing preferred active local path first" << preferredPath->toStringShort();
-        return withTiming(testPriorityPaths(device, QList<DevicePath> { *preferredPath }, result, DevicePathResolutionOutcome::ResolvedFromCachedPriority)
+        return withTiming(testPriorityPaths(device, QList<DevicePath> { *preferredPath }, result, DevicePathResolutionOutcome::ResolvedFromKnownPriorityPath)
             .then(this, [this, cachedPriorityPaths, skippedPriorityKeys, preferredPath](const DevicePathResolutionResult& preferredResult) {
                 if (preferredResult.resolved()) {
                     qCDebug(lcDevicePathResolver) << "Resolved from preferred active local path";
@@ -253,7 +253,7 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::resolve(const Device& so
                 }
 
                 qCDebug(lcDevicePathResolver) << "Preferred active local path failed, testing remaining cached priority paths" << remainingPriorityPaths;
-                return testPriorityPaths(preferredResult.device, remainingPriorityPaths, preferredResult, DevicePathResolutionOutcome::ResolvedFromCachedPriority)
+                return testPriorityPaths(preferredResult.device, remainingPriorityPaths, preferredResult, DevicePathResolutionOutcome::ResolvedFromKnownPriorityPath)
                     .then(this, [this, remainingPriorityPaths, testedPriorityKeys](const DevicePathResolutionResult& testResult) {
                         if (testResult.resolved()) {
                             qCDebug(lcDevicePathResolver) << "Resolved from cached priority path";
@@ -270,7 +270,7 @@ QFuture<DevicePathResolutionResult> DevicePathResolver::resolve(const Device& so
             .unwrap());
     }
 
-    return withTiming(testPriorityPaths(device, cachedPriorityPaths, result, DevicePathResolutionOutcome::ResolvedFromCachedPriority)
+    return withTiming(testPriorityPaths(device, cachedPriorityPaths, result, DevicePathResolutionOutcome::ResolvedFromKnownPriorityPath)
         .then(this, [this, cachedPriorityPaths, skippedPriorityKeys](const DevicePathResolutionResult& testResult) {
             if (testResult.resolved()) {
                 qCDebug(lcDevicePathResolver) << "Resolved from cached priority path";
