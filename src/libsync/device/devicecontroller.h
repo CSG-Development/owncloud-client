@@ -58,6 +58,7 @@ public:
 
     QFuture<DeviceListCtx> queryDeviceList();
     QFuture<DevicePathListCtx> queryDeviceInfo(const QString& deviceId);
+    QFuture<AboutCtx> queryDeviceAbout(const QString& url, DeviceType deviceType);
     QFuture<DevicePathResolutionResult> resolveDevicePath(const Device& device, const std::optional<QUuid>& avoidPathId = std::nullopt,
         const std::optional<QUuid>& preferredPathId = std::nullopt);
 

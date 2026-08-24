@@ -1,0 +1,58 @@
+#DeviceUnreachableBanner {
+    background: transparent;
+}
+
+#btnIcon {
+    border: none;
+    background: transparent;
+}
+
+#cardFrame {
+    border-radius: 12px;
+}
+
+#lblTitle {
+    background: transparent;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#lblSubtitle {
+    background: transparent;
+    font-size: 14px;
+}
+
+#btnRetry {
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+[theme="light"] #cardFrame {
+    background-color: rgba(255, 243, 224, 1);
+    border: 1px solid rgba(224, 224, 224, 1);
+}
+
+[theme="light"] #lblTitle,
+[theme="light"] #lblSubtitle {
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="light"] #btnRetry {
+    color: rgba(25, 118, 210, 1);
+}
+
+[theme="dark"] #cardFrame {
+    background-color: rgba(90, 66, 31, 1);
+    border: 1px solid rgba(97, 97, 97, 1);
+}
+
+[theme="dark"] #lblTitle,
+[theme="dark"] #lblSubtitle {
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="dark"] #btnRetry {
+    color: rgba(100, 181, 246, 1);
+}

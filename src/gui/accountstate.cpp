@@ -167,8 +167,8 @@ QString optionalUuidToString(const std::optional<QUuid> &value)
 const char *devicePathResolutionOutcomeString(DevicePathResolutionOutcome outcome)
 {
     switch (outcome) {
-        case DevicePathResolutionOutcome::ResolvedFromCachedPriority:
-            return "resolved_cached_priority";
+        case DevicePathResolutionOutcome::ResolvedFromKnownPriorityPath:
+            return "resolved_known_priority_path";
         case DevicePathResolutionOutcome::ResolvedFromFreshRemoteAccess:
             return "resolved_fresh_remote_access";
         case DevicePathResolutionOutcome::ResolvedFromRemoteRelay:
@@ -542,6 +542,7 @@ void AccountState::setState(State state)
             _lastSyncTriggeredRecoveryAttempt.invalidate();
             _transientFailureMaskTimer.invalidate();
             setUpdateDeviceProgress(false);
+            setDeviceUnreachable(false);
             if (auto *settingsDialog = ocApp()->gui()->settingsDialog()) {
                 if (auto overlay = settingsDialog->overlayController()) {
                     overlay->hideAll();
@@ -1020,6 +1021,38 @@ void AccountState::logRaSwitchingTimingSummary(const QString &completionReason)
 
 void AccountState::updateDeviceAccessibility()
 {
+    updateDeviceAccessibilityInternal(/*allowRemoteAccessPrompt=*/true);
+}
+
+void AccountState::refreshDeviceReachabilitySilently()
+{
+    if (!_account || isSignedOut() || _updateDeviceInProgress) {
+        return;
+    }
+
+    if (!canRunLocalPathDiscoveryNow()) {
+        setDeviceUnreachable(false);
+        return;
+    }
+
+    const auto activePathId = _account->activePath();
+    if (activePathId.isNull()) {
+        return;
+    }
+
+    const auto resolvedPath = _account->device().findPath(activePathId);
+    if (!resolvedPath) {
+        return;
+    }
+
+    const auto probeGeneration = ++_deviceUnreachableProbeGeneration;
+    probeDeviceAboutReachability(*resolvedPath, [this, probeGeneration] {
+        return probeGeneration != _deviceUnreachableProbeGeneration;
+    });
+}
+
+void AccountState::updateDeviceAccessibilityInternal(bool allowRemoteAccessPrompt)
+{
     if (!canStartDeviceAccessibilityUpdate(true)) {
         return;
     }
@@ -1029,11 +1062,11 @@ void AccountState::updateDeviceAccessibility()
         return;
     }
 
-    qCDebug(lcAccountState) << "Update device availability started";
+    qCDebug(lcAccountState) << "Update device availability started" << "allowRemoteAccessPrompt" << allowRemoteAccessPrompt;
     setUpdateDeviceProgress(true);
     const auto activePath = _account->activePath();
     resolveAndApplyDevicePath(
-        *_account->devicePtr(), true, DeviceUpdateTrigger::Default, activePath.isNull() ? std::nullopt : std::optional<QUuid>(activePath));
+        *_account->devicePtr(), allowRemoteAccessPrompt, DeviceUpdateTrigger::Default, activePath.isNull() ? std::nullopt : std::optional<QUuid>(activePath));
 }
 
 bool AccountState::canStartDeviceAccessibilityUpdate(bool logReason) const
@@ -1395,6 +1428,8 @@ bool AccountState::canRunQueuedNetworkTriggeredDeviceUpdate() const
 void AccountState::resolveAndApplyDevicePath(
     const Device &device, bool allowRemoteAccessPrompt, DeviceUpdateTrigger trigger, const std::optional<QUuid> &avoidPathId)
 {
+    ++_deviceUnreachableProbeGeneration;
+
     if (!_account) {
         qCWarning(lcAccountState) << "No account for device path resolution";
         setUpdateDeviceProgress(false);
@@ -1449,7 +1484,7 @@ void AccountState::resolveAndApplyDevicePath(
                       return;
                   }
 
-                  applyResolvedDevicePath(result, trigger);
+                  applyResolvedDevicePath(result, trigger, resolutionGeneration);
               })
         .onFailed(this, [this, trigger, resolutionGeneration](const std::exception &e) {
             if (resolutionGeneration != _devicePathResolutionGeneration || !_account || isSignedOut()) {
@@ -1472,7 +1507,7 @@ void AccountState::resolveAndApplyDevicePath(
         });
 }
 
-void AccountState::applyResolvedDevicePath(const DevicePathResolutionResult &result, DeviceUpdateTrigger trigger)
+void AccountState::applyResolvedDevicePath(const DevicePathResolutionResult &result, DeviceUpdateTrigger trigger, quint64 resolutionGeneration)
 {
     const auto previousActivePathId = _account ? _account->activePath() : QUuid{};
     const auto previousDavUrl = _account ? _account->davUrl() : QUrl{};
@@ -1483,6 +1518,16 @@ void AccountState::applyResolvedDevicePath(const DevicePathResolutionResult &res
                                   << devicePathResolutionOutcomeString(result.outcome) << "remoteAccessRequested" << result.remoteAccessRequested
                                   << "remoteCacheUpdated" << result.remoteCacheUpdated << "remoteCacheTimestampRefreshed"
                                   << result.remoteCacheTimestampRefreshed << "usedRemoteRelay" << result.usedRemoteRelay;
+        if (result.outcome == DevicePathResolutionOutcome::UnresolvedAfterFullRefresh) {
+            const auto candidatePath = previousActivePathId.isNull() ? std::nullopt : result.device.findPath(previousActivePathId);
+            if (candidatePath) {
+                probeDeviceAboutReachability(*candidatePath, [this, resolutionGeneration] {
+                    return resolutionGeneration != _devicePathResolutionGeneration;
+                });
+            } else {
+                setDeviceUnreachable(canRunLocalPathDiscoveryNow());
+            }
+        }
         if (result.remoteCacheUpdated || result.remoteCacheTimestampRefreshed) {
             const auto activePathStillExists = std::any_of(result.device.paths.cbegin(), result.device.paths.cend(), [previousActivePathId](const DevicePath &path) { return path.id == previousActivePathId; });
             if (!previousActivePathId.isNull() && activePathStillExists) {
@@ -1550,6 +1595,7 @@ void AccountState::applyResolvedDevicePath(const DevicePathResolutionResult &res
         }
     }
     setUpdateDeviceProgress(false);
+    confirmDeviceAboutReachable(result, resolutionGeneration);
 }
 
 void AccountState::requestLocalPathDiscovery(const Device &device, DeviceUpdateTrigger trigger)
@@ -1978,6 +2024,55 @@ void AccountState::initializeRA()
     });
 
     _raInitialized = true;
+}
+
+void AccountState::setDeviceUnreachable(bool unreachable)
+{
+    if (_deviceUnreachable != unreachable) {
+        _deviceUnreachable = unreachable;
+        qCInfo(lcAccountState) << "Device unreachable state changed" << unreachable;
+    }
+
+    emit deviceUnreachableChanged(unreachable);
+}
+
+void AccountState::confirmDeviceAboutReachable(const DevicePathResolutionResult &result, quint64 resolutionGeneration)
+{
+    const auto resolvedPath = result.device.findPath(result.selectedPathId.value());
+    if (!resolvedPath) {
+        return;
+    }
+
+    probeDeviceAboutReachability(*resolvedPath, [this, resolutionGeneration] {
+        return resolutionGeneration != _devicePathResolutionGeneration;
+    });
+}
+
+void AccountState::probeDeviceAboutReachability(const DevicePath &path, std::function<bool()> isStale)
+{
+    if (!_deviceController) {
+        return;
+    }
+
+    const auto url = DevHelpers::makeServerUrl(path.address, path.port, false, true, path.origin);
+    _deviceController->queryDeviceAbout(url, path.deviceType)
+        .then(this, [this, isStale](const AboutCtx &ctx) {
+            if (isStale() || isSignedOut()) {
+                return;
+            }
+            if (ctx.status == 200) {
+                setDeviceUnreachable(false);
+                return;
+            }
+            setDeviceUnreachable(canRunLocalPathDiscoveryNow());
+        })
+        .onFailed(this, [this, isStale](const std::exception &e) {
+            if (isStale() || isSignedOut()) {
+                return;
+            }
+            qCWarning(lcAccountState) << "Device /about reachability probe failed" << e.what();
+            setDeviceUnreachable(canRunLocalPathDiscoveryNow());
+        });
 }
 
 void AccountState::setUpdateDeviceProgress(bool inProgress)
