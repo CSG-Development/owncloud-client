@@ -45,8 +45,17 @@ public:
     std::chrono::nanoseconds duration() const;
 
 private:
+#if defined(_MSC_VER)
+// _start/_end are private and never exposed by reference/value across the DLL boundary
+// (duration() returns a plain std::chrono::nanoseconds), so the missing dll-interface is safe.
+#pragma warning(push)
+#pragma warning(disable : 4251)
+#endif
     std::chrono::steady_clock::time_point _start = {};
     std::chrono::steady_clock::time_point _end = {};
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 };
 
 }
