@@ -501,20 +501,21 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
     if (!device_.isStatic && (dev_path->aboutHttpStatus != 200 || dev_path->statusHttpStatus != 200)) {
         qCWarning(lcSetupWizardController) << "Server not reachable, unexpected reply from" << dev_path->address
             << "about status" << dev_path->aboutHttpStatus << "device status" << dev_path->statusHttpStatus;
-        Q_EMIT evaluateCredentialsError(tr("Server is not reachable"), QPrivateSignal());
+        Q_EMIT evaluateCredentialsError(tr("Server is not reachable"), QString(), QPrivateSignal());
         return;
     }
 
     if (!device_.isStatic && dev_path->about.os_state != QStringLiteral("normal")) {
-        QString stateStr = tr("OS state: %1").arg(dev_path->about.os_state.isEmpty() ? tr("<empty>") : dev_path->about.os_state);
-        qCDebug(lcSetupWizardController) << stateStr;
-        Q_EMIT evaluateCredentialsError(stateStr, QPrivateSignal());
+        const QString rawState = dev_path->about.os_state.isEmpty() ? QStringLiteral("<empty>") : dev_path->about.os_state;
+        qCWarning(lcSetupWizardController) << "Device OS state is not 'normal', blocking login. address:" << dev_path->address
+            << "os_state:" << rawState << "aboutHttpStatus:" << dev_path->aboutHttpStatus << "statusHttpStatus:" << dev_path->statusHttpStatus;
+        Q_EMIT evaluateCredentialsError(tr("Device is not ready. Please try again later."), rawState, QPrivateSignal());
         return;
     }
 
     if (!device_.isStatic && !dev_path->status.oobe_done) {
         qCDebug(lcSetupWizardController) << "OOBE done" << dev_path->status.oobe_done;
-        Q_EMIT evaluateCredentialsError(tr("OOBE is not done"), QPrivateSignal());
+        Q_EMIT evaluateCredentialsError(tr("OOBE is not done"), QString(), QPrivateSignal());
         return;
     }
 
@@ -571,11 +572,11 @@ void SetupController::evaluateCredentialsNew(const QUuid& id)
     }, Qt::DirectConnection);
 }
 
-void SetupController::onEvaluateCredError(const QString &errStr)
+void SetupController::onEvaluateCredError(const QString &errStr, const QString &tooltip)
 {
     pendingCredentialsAction_ = PendingCredentialsAction::None;
     window()->displayPage(SetupPage::PageCredentials);
-    window()->setCredErrorMessage(errStr);
+    window()->setCredErrorMessage(errStr, tooltip);
 }
 
 void SetupController::handleResetPassword()
@@ -604,7 +605,10 @@ void SetupController::handleResetPassword()
 
     if (!device_.isStatic && devPath->about.os_state != QStringLiteral("normal")) {
         pendingCredentialsAction_ = PendingCredentialsAction::None;
-        handleResetPasswordFailure(tr("OS state: %1").arg(devPath->about.os_state.isEmpty() ? tr("<empty>") : devPath->about.os_state));
+        const QString rawState = devPath->about.os_state.isEmpty() ? QStringLiteral("<empty>") : devPath->about.os_state;
+        qCWarning(lcSetupWizardController) << "Device OS state is not 'normal', blocking reset password. address:" << devPath->address
+            << "os_state:" << rawState << "aboutHttpStatus:" << devPath->aboutHttpStatus << "statusHttpStatus:" << devPath->statusHttpStatus;
+        handleResetPasswordFailure(tr("Device is not ready. Please try again later."), rawState);
         return;
     }
 
