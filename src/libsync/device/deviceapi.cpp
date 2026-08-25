@@ -38,8 +38,8 @@ QFuture<AboutCtx> DeviceApi::query_about(const QString &url, DeviceType deviceTy
     qCDebug(lcDeviceApi) << "query_about request:" << reply->url();
     return execRequest<AboutCtx>(std::move(reply), [url=reply->url()](const std::optional<QJsonDocument>& doc, int status) {
         AboutCtx ctx;
-        ctx.status = status;
         if (doc && !doc->isNull()) {
+            ctx.status = status;
             qCDebug(lcDeviceApi) << url << "reply:" << doc;
             if (status == 200) {
                 ctx.deviceAbout = DeviceInfoAbout::fromJson(doc.value());
@@ -51,7 +51,11 @@ QFuture<AboutCtx> DeviceApi::query_about(const QString &url, DeviceType deviceTy
             }
         }
         else {
-            qCDebug(lcDeviceApi) << url << "No reply";
+            // A proxy (e.g. OSP remote-access) can answer with HTTP 200 but an empty/non-JSON body
+            // instead of propagating the real 5xx; treat a missing body as unreachable regardless
+            // of the transport-level status so callers relying on aboutHttpStatus don't see "200".
+            qCDebug(lcDeviceApi) << url << "No reply" << "(transport status was" << status << ")";
+            ctx.status = 0;
         }
         return ctx;
     });
@@ -66,8 +70,8 @@ QFuture<StatusCtx> DeviceApi::query_status(const QString &url)
     qCDebug(lcDeviceApi) << "query_status request:" << reply->url();
     return execRequest<StatusCtx>(std::move(reply), [url=reply->url()](const std::optional<QJsonDocument>& doc, int status) {
         StatusCtx ctx;
-        ctx.status = status;
         if (doc && !doc->isNull()) {
+            ctx.status = status;
             qCDebug(lcDeviceApi) << url << "reply:" << doc;
             if (status == 200) {
                 ctx.deviceStatus = DeviceInfoStatus::fromJson(doc.value());
@@ -78,7 +82,10 @@ QFuture<StatusCtx> DeviceApi::query_status(const QString &url)
             }
         }
         else {
-            qCDebug(lcDeviceApi) << url << "No reply";
+            // Same proxy quirk as query_about(): an empty/non-JSON body must count as unreachable
+            // even if the transport layer reported HTTP 200.
+            qCDebug(lcDeviceApi) << url << "No reply" << "(transport status was" << status << ")";
+            ctx.status = 0;
         }
         return ctx;
     });
