@@ -36,19 +36,23 @@
 #include <QImage>
 #include <QLabel>
 #include <QLayout>
+#include <QMoveEvent>
 #include <QPainter>
 #include <QPixmap>
 #include <QPushButton>
+#include <QResizeEvent>
 #include <QScreen>
 #include <QSettings>
 #include <QShortcut>
 #include <QStackedWidget>
 #include <QStandardItemModel>
+#include <QTimer>
 #include <QToolBar>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWidgetAction>
 #include <QWindow>
+#include <QWindowStateChangeEvent>
 
 #ifdef Q_OS_MACOS
 #include "settingsdialog_mac.h"
@@ -328,6 +332,19 @@ SettingsDialog::SettingsDialog(ApplicationGui *gui, QWidget *parent)
     onThemeChanged();
 
     cfg.restoreGeometry(this);
+    _normalGeometry = normalGeometry();
+    if (windowState().testFlag(Qt::WindowMaximized)) {
+        const auto screen = windowHandle() ? windowHandle()->screen() : QApplication::screenAt(QCursor::pos());
+        if (screen) {
+            const auto available = screen->availableGeometry();
+            const bool looksLikeStaleMaximizedGeometry = qAbs(available.width() - _normalGeometry.width()) < 20
+                && qAbs(available.height() - _normalGeometry.height()) < 20;
+            if (looksLikeStaleMaximizedGeometry) {
+                _normalGeometry = QRect(QPoint(), ::minimumSizeHint(this));
+                _normalGeometry.moveCenter(available.center());
+            }
+        }
+    }
     setMinimumSize(::minimumSizeHint(this));
 #ifdef Q_OS_MAC
     setActivationPolicy(ActivationPolicy::Accessory);
@@ -436,11 +453,38 @@ void SettingsDialog::changeEvent(QEvent *e)
     case QEvent::ThemeChange:
         customizeStyle();
         break;
+    case QEvent::WindowStateChange: {
+        auto *stateEvent = static_cast<QWindowStateChangeEvent *>(e);
+        if (stateEvent->oldState().testFlag(Qt::WindowMaximized) && !windowState().testFlag(Qt::WindowMaximized)
+            && !windowState().testFlag(Qt::WindowMinimized) && _normalGeometry.isValid()) {
+            setGeometry(_normalGeometry);
+        }
+        break;
+    }
     default:
         break;
     }
 
     QMainWindow::changeEvent(e);
+}
+
+void SettingsDialog::maybeCaptureNormalGeometry()
+{
+    if (!isMaximized() && !isMinimized() && !isFullScreen()) {
+        _normalGeometry = geometry();
+    }
+}
+
+void SettingsDialog::resizeEvent(QResizeEvent *e)
+{
+    QMainWindow::resizeEvent(e);
+    QTimer::singleShot(0, this, &SettingsDialog::maybeCaptureNormalGeometry);
+}
+
+void SettingsDialog::moveEvent(QMoveEvent *e)
+{
+    QMainWindow::moveEvent(e);
+    QTimer::singleShot(0, this, &SettingsDialog::maybeCaptureNormalGeometry);
 }
 
 void SettingsDialog::setVisible(bool visible)
