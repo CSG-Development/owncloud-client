@@ -28,10 +28,10 @@ Component.prototype.createOperations = function()
 
     component.addOperation("CreateShortcut",
         "@TargetDir@/" + WINDOWS_MAINTENANCE_TOOL,
-        "@StartMenuDir@/Uninstall " + APP_NAME + ".lnk",
-        "--start-uninstaller",
+        "@StartMenuDir@/" + APP_NAME + " Maintenance Tool.lnk",
+        "",
         "workingDirectory=@TargetDir@",
         "iconPath=@TargetDir@/" + WINDOWS_MAINTENANCE_TOOL,
         "iconId=0",
-        "description=Uninstall " + APP_NAME);
+        "description=" + APP_NAME + " Maintenance Tool");
 }

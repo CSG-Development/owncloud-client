@@ -61,6 +61,7 @@ const auto optionalDesktopNoficationsC = QStringLiteral("optionalDesktopNotifica
 const auto skipUpdateCheckC = QStringLiteral("skipUpdateCheck");
 const auto updateCheckIntervalC = QStringLiteral("updateCheckInterval");
 const auto updateChannelC = QStringLiteral("updateChannel");
+const auto updateRepositoryUrlOverrideC = QStringLiteral("updateRepositoryUrlOverride");
 const auto uiLanguageC = QStringLiteral("uiLanguage");
 const auto geometryC = QStringLiteral("geometry");
 const auto timeoutC = QStringLiteral("timeout");
@@ -505,7 +506,7 @@ chrono::milliseconds ConfigFile::updateCheckInterval(const QString &connection) 
     auto settings = makeQSettings();
     settings.beginGroup(con);
 
-    auto defaultInterval = chrono::hours(10);
+    auto defaultInterval = chrono::hours(24) * 7;
     auto interval = millisecondsValue(settings, updateCheckIntervalC, defaultInterval);
 
     auto minInterval = chrono::minutes(5);
@@ -514,6 +515,18 @@ chrono::milliseconds ConfigFile::updateCheckInterval(const QString &connection) 
         interval = minInterval;
     }
     return interval;
+}
+
+void ConfigFile::setUpdateCheckInterval(chrono::milliseconds interval, const QString &connection)
+{
+    QString con(connection);
+    if (connection.isEmpty())
+        con = defaultConnection();
+
+    auto settings = makeQSettings();
+    settings.beginGroup(con);
+    settings.setValue(updateCheckIntervalC, static_cast<qlonglong>(interval.count()));
+    settings.sync();
 }
 
 bool ConfigFile::skipUpdateCheck(const QString &connection) const
@@ -562,6 +575,18 @@ void ConfigFile::setUpdateChannel(const QString &channel)
 {
     auto settings = makeQSettings();
     settings.setValue(updateChannelC, channel);
+}
+
+QString ConfigFile::updateRepositoryUrlOverride() const
+{
+    auto settings = makeQSettings();
+    return settings.value(updateRepositoryUrlOverrideC).toString();
+}
+
+void ConfigFile::setUpdateRepositoryUrlOverride(const QString &url)
+{
+    auto settings = makeQSettings();
+    settings.setValue(updateRepositoryUrlOverrideC, url);
 }
 
 QString ConfigFile::uiLanguage() const
