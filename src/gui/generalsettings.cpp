@@ -36,6 +36,10 @@
 
 #include "ignorelisteditor.h"
 
+#ifdef WITH_IFW_UPDATER
+#include "ifwupdater/ifwupdater.h"
+#endif
+
 #include "translations.h"
 #include "customui/stylehelper.h"
 #include "customdialogs/custommessagebox.h"
@@ -45,11 +49,19 @@
 #include <QOperatingSystemVersion>
 #include <QScopedValueRollback>
 
+#ifdef WITH_IFW_UPDATER
+#include <chrono>
+#endif
+
 namespace {
 QPair<QString,QString> widgetStyle = {
     QStringLiteral(":/res/generalsettings_light.qss"),
     QStringLiteral(":/res/generalsettings_dark.qss")
 };
+
+#ifdef WITH_IFW_UPDATER
+constexpr std::chrono::hours kUpdateCheckIntervalDay{24};
+#endif
 }
 
 namespace APP {
@@ -173,6 +185,64 @@ GeneralSettings::GeneralSettings(QWidget *parent)
 #else
     _ui->updaterWidget->hide();
 #endif
+
+#ifdef WITH_IFW_UPDATER
+    _ui->ifwCheckForUpdatesBox->setDarkTheme(Theme::instance()->isDarkTheme());
+    _ui->ifwCheckForUpdatesBox->setChecked(!ConfigFile().skipUpdateCheck());
+    connect(_ui->ifwCheckForUpdatesBox, &CCheckBox::toggled, this, [](bool checked) {
+        ConfigFile().setSkipUpdateCheck(!checked, QString());
+    });
+
+    _ui->ifwUpdateServerLabel->setVisible(false);
+    _ui->ifwUpdateServerUrlEdit->setVisible(false);
+    _ui->ifwUpdateServerUrlEdit->setText(ConfigFile().updateRepositoryUrlOverride());
+    connect(_ui->ifwUpdateServerUrlEdit, &QLineEdit::editingFinished, this, [this] {
+        ConfigFile().setUpdateRepositoryUrlOverride(_ui->ifwUpdateServerUrlEdit->text().trimmed());
+        IFWUpdater::syncRepositoryOverride();
+    });
+
+    _ui->ifwUpdateIntervalSpin->setValue(static_cast<int>(std::chrono::duration_cast<std::chrono::hours>(ConfigFile().updateCheckInterval()).count() / kUpdateCheckIntervalDay.count()));
+    connect(_ui->ifwUpdateIntervalSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, [](int days) {
+        ConfigFile().setUpdateCheckInterval(kUpdateCheckIntervalDay * days);
+    });
+
+    _ifwUpdater = new IFWUpdater(this);
+    connect(_ifwUpdater, &IFWUpdater::updateAvailable, this, [this](const QString &name, const QString &version) {
+        _ui->btnCheckNow->setEnabled(true);
+        CustomMessageBox msgbox(this);
+        msgbox.setHeaderText(tr("Update Check"))
+            .setMessageText(tr("%1 %2 is available.").arg(name, version))
+            .setSingleButton(true)
+            .setSingleButtonText(tr("OK"));
+        msgbox.exec();
+    });
+    connect(_ifwUpdater, &IFWUpdater::noUpdateAvailable, this, [this] {
+        _ui->btnCheckNow->setEnabled(true);
+        CustomMessageBox msgbox(this);
+        msgbox.setHeaderText(tr("Update Check"))
+            .setMessageText(tr("You are using the latest version."))
+            .setSingleButton(true)
+            .setSingleButtonText(tr("OK"));
+        msgbox.exec();
+    });
+    connect(_ifwUpdater, &IFWUpdater::checkFailed, this, [this](const QString &reason) {
+        _ui->btnCheckNow->setEnabled(true);
+        CustomMessageBox msgbox(this);
+        msgbox.setHeaderText(tr("Update Check"))
+            .setMessageText(tr("Update check failed: %1").arg(reason))
+            .setWarningIconVisible(true)
+            .setSingleButton(true)
+            .setSingleButtonText(tr("OK"));
+        msgbox.exec();
+    });
+    connect(_ui->btnCheckNow, &QAbstractButton::clicked, this, [this] {
+        _ui->btnCheckNow->setEnabled(false);
+        _ifwUpdater->checkForUpdate();
+    });
+#else
+    _ui->ifwUpdateGroupBox->hide();
+#endif
+
     connect(_ui->about_pushButton, &QPushButton::clicked, this, &GeneralSettings::showAbout);
 
     if (!Theme::instance()->aboutShowCopyright()) {

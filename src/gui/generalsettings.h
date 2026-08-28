@@ -22,6 +22,9 @@
 namespace APP {
 class IgnoreListEditor;
 class SyncLogDialog;
+#ifdef WITH_IFW_UPDATER
+class IFWUpdater;
+#endif
 
 namespace Ui {
     class GeneralSettings;
@@ -61,6 +64,9 @@ private:
     Ui::GeneralSettings *_ui;
     QPointer<IgnoreListEditor> _ignoreEditor;
     bool _currentlyLoading;
+#ifdef WITH_IFW_UPDATER
+    IFWUpdater *_ifwUpdater = nullptr;
+#endif
 };
 
 

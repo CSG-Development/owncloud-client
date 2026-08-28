@@ -9,7 +9,8 @@
 #advancedGroupBox,
 #groupBox_non_vfs,
 #groupBox,
-#generalGroupBox {
+#generalGroupBox,
+#ifwUpdateGroupBox {
     background-color: rgba(66,66,66,120);
     border-width: 1px;
     border-style: solid;
@@ -21,7 +22,8 @@
 #advancedGroupBox::title,
 #groupBox_non_vfs::title,
 #groupBox::title,
-#generalGroupBox::title {
+#generalGroupBox::title,
+#ifwUpdateGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top left;
     left: 0px;
