@@ -28,7 +28,6 @@
 #include "customui/dimwidget.h"
 #include "customui/menu_toolbutton.h"
 #include "customui/stylehelper.h"
-#include "customdialogs/custommessagebox.h"
 #include "resources/resources.h"
 
 #include <QActionGroup>
@@ -291,15 +290,8 @@ SettingsDialog::SettingsDialog(ApplicationGui *gui, QWidget *parent)
 
     auto *quitAction = new ToolButtonAction(QStringLiteral("quit"), tr("Quit %1").arg(appNameGui), this);
     quitAction->setCheckable(false);
-    connect(quitAction, &QAction::triggered, this, [this, appNameGui] {
-        auto box = new CustomMessageBox(this);
-        box->setHeaderText(tr("Quit %1").arg(appNameGui))
-            .setMessageText(tr("Are you sure you want to quit %1?").arg(appNameGui))
-            .setAcceptButtonText(tr("Yes"))
-            .setRejectButtonText(tr("Cancel"))
-            .setDeleteOnClose(true);
-        connect(box, &CustomMessageBox::accepted, qApp, &QCoreApplication::quit, Qt::QueuedConnection);
-        box->open();
+    connect(quitAction, &QAction::triggered, this, [this] {
+        _gui->confirmQuit(QStringLiteral("settings toolbar"));
     });
     _ui->toolBar->addAction(quitAction);
 

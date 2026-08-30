@@ -76,6 +76,7 @@ public:
 
     void runNewAccountWizard(RunAccountWizardReason reason);
     bool isAccountWizardActive() const {return accountWizardActive;}
+    void confirmQuit(const QString &source);
 
 signals:
     void setupProxy();
