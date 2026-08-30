@@ -982,11 +982,10 @@ void ApplicationGui::runNewAccountWizard(RunAccountWizardReason reason)
                 _wizardController->deleteLater();
                 accountWizardActive = false;
             });
-
-        // all we have to do is show the dialog...
-        ocApp()->gui()->settingsDialog()->addModalWidget(_wizardController->window());
     }
 
+    // all we have to do is show the dialog...
+    ocApp()->gui()->settingsDialog()->addModalWidget(_wizardController->window());
 }
 
 void ApplicationGui::maybeShowOnboarding()
