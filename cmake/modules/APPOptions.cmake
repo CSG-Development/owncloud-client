@@ -7,7 +7,7 @@ option(NO_MSG_HANDLER "Don't redirect QDebug outputs to the log window/file" OFF
 option(BUILD_SHELL_INTEGRATION "BUILD_SHELL_INTEGRATION" ON)
 option(BUILD_GUI "BUILD_GUI" ON)
 option(WITH_AUTO_UPDATER "Build the legacy Sparkle/OCUpdater auto-update client" OFF)
-option(WITH_IFW_UPDATER "Build the QtIFW/MaintenanceTool-based auto-update client, independent of the legacy WITH_AUTO_UPDATER path" ON)
+option(WITH_IFW_UPDATER "Build the QtIFW/MaintenanceTool-based auto-update client, independent of the legacy WITH_AUTO_UPDATER path" OFF)
 
 if(WITH_AUTO_UPDATER AND WITH_IFW_UPDATER)
     message(FATAL_ERROR "WITH_AUTO_UPDATER (legacy Sparkle/OCUpdater) and WITH_IFW_UPDATER (QtIFW MaintenanceTool) are mutually exclusive auto-update mechanisms and must not both be enabled.")
