@@ -27,6 +27,8 @@ class QAction;
 class QActionGroup;
 class QToolBar;
 class QStandardItemModel;
+class QResizeEvent;
+class QMoveEvent;
 class OverlayController;
 
 namespace APP {
@@ -86,6 +88,8 @@ public slots:
 
 protected:
     void changeEvent(QEvent *) override;
+    void resizeEvent(QResizeEvent *) override;
+    void moveEvent(QMoveEvent *) override;
     void setVisible(bool visible) override;
 
 private slots:
@@ -96,6 +100,7 @@ private:
     void onThemeChanged();
     void customizeStyle();
     void updateToolbarTheme();
+    void maybeCaptureNormalGeometry();
 
     Ui::SettingsDialog *const _ui = nullptr;
 
@@ -115,6 +120,7 @@ private:
     ApplicationGui *_gui = nullptr;
     QList<Account *> _modalStack;
     OverlayController *_overlayController = nullptr;
+    QRect _normalGeometry;
 };
 
 }

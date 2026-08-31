@@ -47,6 +47,10 @@
 #    include "updater/ocupdater.h"
 #endif
 
+#ifdef WITH_IFW_UPDATER
+#    include "ifwupdater/ifwupdater.h"
+#endif
+
 #if defined(Q_OS_WIN)
 #    include <qt_windows.h>
 #endif
@@ -161,6 +165,12 @@ Application::Application(Platform *platform, bool debugMode)
     UpdaterScheduler *updaterScheduler = new UpdaterScheduler(this);
     connect(updaterScheduler, &UpdaterScheduler::updaterAnnouncement, _gui.data(), [this](const QString &title, const QString &msg) { _gui->slotShowTrayMessage(title, msg); });
     connect(updaterScheduler, &UpdaterScheduler::requestRestart, FolderMan::instance(), &FolderMan::slotScheduleAppRestart);
+#endif
+
+#ifdef WITH_IFW_UPDATER
+    // Update checks (QtIFW/MaintenanceTool-based)
+    IFWUpdaterScheduler *ifwUpdaterScheduler = new IFWUpdaterScheduler(this);
+    connect(ifwUpdaterScheduler, &IFWUpdaterScheduler::updaterAnnouncement, _gui.data(), [this](const QString &title, const QString &msg) { _gui->slotShowTrayMessage(title, msg); });
 #endif
 
     // Cleanup at Quit.

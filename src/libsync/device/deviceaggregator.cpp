@@ -137,8 +137,8 @@ DeviceList DeviceAggregator::build_devices(const QList<DevicePath> &records)
             if (!record.friendlyName.isEmpty()) {
                 newDevice.setFriendlyName(record.friendlyName);
             }
-            else if (!record.about.hostname.isEmpty()) {
-                newDevice.setFriendlyName(record.about.hostname);
+            else if (!cn.isEmpty()) {
+                newDevice.setFriendlyName(cn);
             }
             else {
                 qCDebug(lcDeviceAggregator) << "failed to get friendlyName";

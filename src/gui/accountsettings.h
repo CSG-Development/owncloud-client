@@ -32,6 +32,7 @@ class QLabel;
 class QSortFilterProxyModel;
 class DevWidget;
 class ProgressIndicator;
+class DeviceUnreachableBanner;
 
 namespace APP {
 
@@ -108,6 +109,8 @@ private:
     QSortFilterProxyModel *_sortModel = nullptr;
     bool _wasDisabledBefore;
     AccountStatePtr _accountState;
+    DeviceUnreachableBanner *_deviceUnreachableBanner = nullptr;
+    QTimer _deviceUnreachableRetryTimer;
     QAction *_toggleSignInOutAction = nullptr;
     QAction *_toggleReconnect = nullptr;
     QMenu* _accountToolboxMenu = nullptr;

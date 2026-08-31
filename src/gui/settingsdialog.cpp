@@ -28,7 +28,6 @@
 #include "customui/dimwidget.h"
 #include "customui/menu_toolbutton.h"
 #include "customui/stylehelper.h"
-#include "customdialogs/custommessagebox.h"
 #include "resources/resources.h"
 
 #include <QActionGroup>
@@ -36,19 +35,23 @@
 #include <QImage>
 #include <QLabel>
 #include <QLayout>
+#include <QMoveEvent>
 #include <QPainter>
 #include <QPixmap>
 #include <QPushButton>
+#include <QResizeEvent>
 #include <QScreen>
 #include <QSettings>
 #include <QShortcut>
 #include <QStackedWidget>
 #include <QStandardItemModel>
+#include <QTimer>
 #include <QToolBar>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWidgetAction>
 #include <QWindow>
+#include <QWindowStateChangeEvent>
 
 #ifdef Q_OS_MACOS
 #include "settingsdialog_mac.h"
@@ -287,15 +290,8 @@ SettingsDialog::SettingsDialog(ApplicationGui *gui, QWidget *parent)
 
     auto *quitAction = new ToolButtonAction(QStringLiteral("quit"), tr("Quit %1").arg(appNameGui), this);
     quitAction->setCheckable(false);
-    connect(quitAction, &QAction::triggered, this, [this, appNameGui] {
-        auto box = new CustomMessageBox(this);
-        box->setHeaderText(tr("Quit %1").arg(appNameGui))
-            .setMessageText(tr("Are you sure you want to quit %1?").arg(appNameGui))
-            .setAcceptButtonText(tr("Yes"))
-            .setRejectButtonText(tr("Cancel"))
-            .setDeleteOnClose(true);
-        connect(box, &CustomMessageBox::accepted, qApp, &QCoreApplication::quit, Qt::QueuedConnection);
-        box->open();
+    connect(quitAction, &QAction::triggered, this, [this] {
+        _gui->confirmQuit(QStringLiteral("settings toolbar"));
     });
     _ui->toolBar->addAction(quitAction);
 
@@ -328,6 +324,19 @@ SettingsDialog::SettingsDialog(ApplicationGui *gui, QWidget *parent)
     onThemeChanged();
 
     cfg.restoreGeometry(this);
+    _normalGeometry = normalGeometry();
+    if (windowState().testFlag(Qt::WindowMaximized)) {
+        const auto screen = windowHandle() ? windowHandle()->screen() : QApplication::screenAt(QCursor::pos());
+        if (screen) {
+            const auto available = screen->availableGeometry();
+            const bool looksLikeStaleMaximizedGeometry = qAbs(available.width() - _normalGeometry.width()) < 20
+                && qAbs(available.height() - _normalGeometry.height()) < 20;
+            if (looksLikeStaleMaximizedGeometry) {
+                _normalGeometry = QRect(QPoint(), ::minimumSizeHint(this));
+                _normalGeometry.moveCenter(available.center());
+            }
+        }
+    }
     setMinimumSize(::minimumSizeHint(this));
 #ifdef Q_OS_MAC
     setActivationPolicy(ActivationPolicy::Accessory);
@@ -436,11 +445,38 @@ void SettingsDialog::changeEvent(QEvent *e)
     case QEvent::ThemeChange:
         customizeStyle();
         break;
+    case QEvent::WindowStateChange: {
+        auto *stateEvent = static_cast<QWindowStateChangeEvent *>(e);
+        if (stateEvent->oldState().testFlag(Qt::WindowMaximized) && !windowState().testFlag(Qt::WindowMaximized)
+            && !windowState().testFlag(Qt::WindowMinimized) && _normalGeometry.isValid()) {
+            setGeometry(_normalGeometry);
+        }
+        break;
+    }
     default:
         break;
     }
 
     QMainWindow::changeEvent(e);
+}
+
+void SettingsDialog::maybeCaptureNormalGeometry()
+{
+    if (!isMaximized() && !isMinimized() && !isFullScreen()) {
+        _normalGeometry = geometry();
+    }
+}
+
+void SettingsDialog::resizeEvent(QResizeEvent *e)
+{
+    QMainWindow::resizeEvent(e);
+    QTimer::singleShot(0, this, &SettingsDialog::maybeCaptureNormalGeometry);
+}
+
+void SettingsDialog::moveEvent(QMoveEvent *e)
+{
+    QMainWindow::moveEvent(e);
+    QTimer::singleShot(0, this, &SettingsDialog::maybeCaptureNormalGeometry);
 }
 
 void SettingsDialog::setVisible(bool visible)

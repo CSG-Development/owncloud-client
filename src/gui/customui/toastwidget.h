@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QWidget>
+#include "floatingbottombanner.h"
 
 class QGraphicsDropShadowEffect;
 
@@ -8,7 +8,7 @@ namespace Ui {
 class ToastWidget;
 }
 
-class ToastWidget : public QWidget
+class ToastWidget : public FloatingBottomBanner
 {
     Q_OBJECT
 
@@ -25,17 +25,8 @@ public:
 signals:
     void dismissed();
 
-protected:
-    bool event(QEvent *event) override;
-    bool eventFilter(QObject *watched, QEvent *event) override;
-    void showEvent(QShowEvent *event) override;
-
 private:
-    void bindParent();
-    void unbindParent();
     void updateStyles(bool isDark);
-    void updatePosition();
-    void updateGeometryForParent();
 
     Ui::ToastWidget *ui = nullptr;
     QGraphicsDropShadowEffect *shadowEffect_ = nullptr;

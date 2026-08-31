@@ -2,7 +2,7 @@
 <Package>
     <DisplayName>Maintenance Tool</DisplayName>
     <Description>Installs the signed maintenance tool used to update and uninstall the application.</Description>
-    <Version>@APP_VERSION@</Version>
+    <Version>@MAINTENANCE_TOOL_PACKAGE_VERSION@</Version>
     <ReleaseDate>@APP_RELEASE_DATE@</ReleaseDate>
     <ForcedInstallation>true</ForcedInstallation>
     <Virtual>true</Virtual>

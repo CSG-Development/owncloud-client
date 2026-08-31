@@ -37,8 +37,9 @@ app_ifw_var(APP_DISPLAY_NAME       "${APPLICATION_NAME}")
 app_ifw_var(APP_DESCRIPTION        "Desktop sync client.")
 app_ifw_var(APP_PUBLISHER          "${APPLICATION_VENDOR}")
 app_ifw_var(APP_VERSION            "${MIRALL_VERSION_FULL}")
-set(_maint_name "PersonalCloudMaintenanceTool")
+set(_maint_name "${APPLICATION_MAINTENANCETOOL_EXECUTABLE}")
 app_ifw_var(MAINTENANCE_TOOL_NAME  "${_maint_name}")
+app_ifw_var(MAINTENANCE_TOOL_PACKAGE_VERSION "${MAINTENANCETOOL_VERSION}")
 
 app_ifw_var(COMPONENT_MAIN_ID        "com.personalcloud.desktopclient")
 app_ifw_var(COMPONENT_SHELL_ID       "com.personalcloud.desktopclient.shellintegration")
@@ -93,6 +94,18 @@ set(WINDOWS_STYLESHEET_ELEMENT "")
 app_ifw_var(WINDOWS_USE_CUSTOM_STYLESHEET "")
 app_ifw_var(WINDOWS_LIGHT_STYLESHEET       "")
 app_ifw_var(WINDOWS_DARK_STYLESHEET        "")
+
+if(APPLICATION_IFW_REPOSITORY_URL STREQUAL "")
+    set(IFW_REMOTE_REPOSITORIES_BLOCK "")
+else()
+    set(IFW_REMOTE_REPOSITORIES_BLOCK
+"    <RemoteRepositories>
+        <Repository>
+            <Url>${APPLICATION_IFW_REPOSITORY_URL}</Url>
+            <Enabled>1</Enabled>
+        </Repository>
+    </RemoteRepositories>")
+endif()
 
 app_ifw_var(MACOS_INSTALLER_TITLE         "Personal Cloud Files Installer")
 app_ifw_var(MACOS_RUN_PROGRAM_DESCRIPTION "Launch Personal Cloud Files after installation")
@@ -312,9 +325,16 @@ if(APPLE)
     )
 endif()
 
+if(APPLICATION_IFW_REPOSITORY_URL STREQUAL "")
+    set(_offline_mode_flag "--offline-only")
+else()
+    set(_offline_mode_flag "--hybrid")
+endif()
+
 add_custom_target(installer
     ${_installer_cmds}
     COMMAND "${IFW_BINARYCREATOR}"
+            "${_offline_mode_flag}"
             --config "${IFW_OUT}/config/config.xml"
             --packages "${IFW_OUT}/packages"
             "${CMAKE_BINARY_DIR}/${_installer_name}"

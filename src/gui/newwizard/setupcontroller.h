@@ -79,7 +79,7 @@ Q_SIGNALS:
     void handleFinishResult(APP::Wizard::SetupResult result, const QString &msg = QString(), APP::Wizard::SyncMode mode = SyncMode::Invalid);
 
     void cantFindDevice(QPrivateSignal);
-    void evaluateCredentialsError(const QString& errStr, QPrivateSignal);
+    void evaluateCredentialsError(const QString& errStr, const QString& tooltip, QPrivateSignal);
 
 private:
     enum class PendingCredentialsAction {
@@ -111,7 +111,7 @@ private:
     void evaluateCredentialsNew(const QUuid& id);
     void handleResetPassword();
     void handleResetPasswordFailure(const QString& message, const QString& tooltip = QString());
-    void onEvaluateCredError(const QString& errStr);
+    void onEvaluateCredError(const QString& errStr, const QString& tooltip = QString());
 
     void performLogin();
     void evaluateFinishPage(APP::Wizard::SyncMode mode, const QString& targetDir);

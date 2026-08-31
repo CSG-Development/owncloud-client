@@ -21,6 +21,7 @@
 #include "common/syncjournalfilerecord.h"
 #include "configfile.h"
 #include "creds/abstractcredentials.h"
+#include "customdialogs/custommessagebox.h"
 #include "folderman.h"
 #include "folderwizard/folderwizard.h"
 #include "gui/accountsettings.h"
@@ -691,7 +692,9 @@ void ApplicationGui::updateContextMenu()
         }
     }
 
-    _contextMenu->addAction(tr("Quit %1").arg(Theme::instance()->appNameGUI()), _app, &QApplication::quit);
+    _contextMenu->addAction(tr("Quit %1").arg(Theme::instance()->appNameGUI()), this, [this] {
+        confirmQuit(QStringLiteral("tray menu"));
+    });
 
     if (_workaroundShowAndHideTray) {
         _tray->show();
@@ -979,11 +982,10 @@ void ApplicationGui::runNewAccountWizard(RunAccountWizardReason reason)
                 _wizardController->deleteLater();
                 accountWizardActive = false;
             });
-
-        // all we have to do is show the dialog...
-        ocApp()->gui()->settingsDialog()->addModalWidget(_wizardController->window());
     }
 
+    // all we have to do is show the dialog...
+    ocApp()->gui()->settingsDialog()->addModalWidget(_wizardController->window());
 }
 
 void ApplicationGui::maybeShowOnboarding()
@@ -1043,6 +1045,25 @@ void ApplicationGui::slotShutdown()
 
     // those do delete on close
     _settingsDialog->close();
+}
+
+void ApplicationGui::confirmQuit(const QString &source)
+{
+    qCInfo(lcApplication) << "Quit requested from" << source;
+
+    raise();
+
+    auto *box = new CustomMessageBox(settingsDialog());
+    box->setHeaderText(tr("Quit %1").arg(Theme::instance()->appNameGUI()))
+        .setMessageText(tr("Are you sure you want to quit %1?").arg(Theme::instance()->appNameGUI()))
+        .setAcceptButtonText(tr("Yes"))
+        .setRejectButtonText(tr("Cancel"))
+        .setDeleteOnClose(true);
+    connect(box, &CustomMessageBox::accepted, qApp, [source] {
+        qCInfo(lcApplication) << "Quit confirmed from" << source;
+        QCoreApplication::quit();
+    }, Qt::QueuedConnection);
+    box->open();
 }
 
 void ApplicationGui::slotToggleLogBrowser()

@@ -135,7 +135,8 @@ Controller.prototype.handleUninstallationFinished = function()
 
 Controller.prototype.handlePcfReinstallCleanup = function()
 {
-    if (systemInfo.productType !== "windows" || installer.value("PcfReinstallMode") === "") {
+    if (systemInfo.productType !== "windows" || !installer.isInstaller()
+        || installer.value("PcfReinstallMode") === "") {
         return;
     }
 

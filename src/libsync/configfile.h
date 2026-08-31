@@ -169,12 +169,16 @@ public:
 
     // how often the check about new versions runs
     std::chrono::milliseconds updateCheckInterval(const QString &connection = QString()) const;
+    void setUpdateCheckInterval(std::chrono::milliseconds interval, const QString &connection = QString());
 
     bool skipUpdateCheck(const QString &connection = QString()) const;
     void setSkipUpdateCheck(bool, const QString &);
 
     QString updateChannel() const;
     void setUpdateChannel(const QString &channel);
+
+    QString updateRepositoryUrlOverride() const;
+    void setUpdateRepositoryUrlOverride(const QString &url);
 
     QString uiLanguage() const;
     void setUiLanguage(const QString &uiLanguage);

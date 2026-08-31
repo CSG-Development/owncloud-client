@@ -199,6 +199,11 @@ if(WITH_AUTO_UPDATER)
     target_compile_definitions(PersonalCloudCore PRIVATE WITH_AUTO_UPDATER)
 endif()
 
+if(WITH_IFW_UPDATER)
+    add_subdirectory(ifwupdater)
+    target_compile_definitions(PersonalCloudCore PRIVATE WITH_IFW_UPDATER)
+endif()
+
 add_executable(PersonalCloud main.cpp)
 set_target_properties(PersonalCloud PROPERTIES
     OUTPUT_NAME "${APPLICATION_EXECUTABLE}"
