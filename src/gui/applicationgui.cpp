@@ -126,6 +126,7 @@ ApplicationGui::ApplicationGui(Application *parent)
     _tray->setIcon(Theme::instance()->syncStateIcon(SyncResult::Status::Offline, true, false));
 
     connect(_tray, &QSystemTrayIcon::activated, this, &ApplicationGui::slotTrayClicked);
+    connect(_tray, &QSystemTrayIcon::messageClicked, this, &ApplicationGui::slotShowSyncProtocol);
 
     setupActions();
     setupContextMenu();
