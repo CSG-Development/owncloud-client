@@ -8,6 +8,7 @@ function Component()
 {
     if (systemInfo.productType === "windows") {
         component.addStopProcessForUpdateRequest(WINDOWS_EXECUTABLE);
+        installer.addWizardPageItem(component, "RebootWidget", QInstaller.InstallationFinished);
     }
 }
 
