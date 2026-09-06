@@ -96,12 +96,9 @@ public:
 
     int filterCount()
     {
-        StatusSet defaultSet = defaultFilter();
-        OC_ASSERT(defaultSet.size() == _filter.size());
-
         int count = 0;
-        // The number of filters is the number of items in the current filter that differ from the default set.
-        for (size_t i = 0, ei = defaultSet.size(); i != ei; ++i) {
+        // The number of filters is the number of status items in the current filter that are selected.
+        for (size_t i = 0, ei = _filter.size(); i != ei; ++i) {
             // All errors are shown as a single filter, and they are all turned on or off together.
             // So to show them as 1 filter, ignore the first three errors...
             switch (i) {
@@ -117,7 +114,7 @@ public:
                 Q_FALLTHROUGH();
             default:
                 // ... just like the other status items:
-                if (defaultSet[i] != _filter[i]) {
+                if (_filter[i]) {
                     count += 1;
                 }
             }
