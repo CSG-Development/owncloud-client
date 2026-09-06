@@ -42,8 +42,7 @@ void ConnectErrorPage::updateTheme()
 
     // QToolButton "icon" property does not supported in qss
     ui->btnBack->setIcon(isDark ? QIcon(backIcon.second) : QIcon(backIcon.first));
-    setStyleSheet(APP::StyleHelper::loadFileToString(widgetStyle));
-    APP::StyleHelper::setTheme(this, isDark);
+    APP::StyleHelper::applyThemedStyleSheet(this, widgetStyle, isDark);
 
     update();
 }

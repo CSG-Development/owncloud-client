@@ -29,6 +29,7 @@
 #include <QNetworkProxy>
 #include <QPushButton>
 #include <QString>
+#include <QStyle>
 #include <QtGui/QtEvents>
 
 namespace
@@ -101,8 +102,9 @@ NetworkSettings::NetworkSettings(QWidget *parent)
     connect(_ui->uploadSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &NetworkSettings::saveBWLimitSettings);
 
     // Warn about empty proxy host
-    connect(_ui->hostLineEdit, &QLineEdit::textChanged, this, &NetworkSettings::checkEmptyProxyHost);
-    checkEmptyProxyHost();
+    connect(_ui->hostLineEdit, &QLineEdit::textChanged, this, &NetworkSettings::updateProxyHostError);
+    connect(_ui->manualProxyRadioButton, &QAbstractButton::toggled, this, &NetworkSettings::updateProxyHostError);
+    updateProxyHostError();
     checkAccountLocalhost();
 
     connect(Theme::instance(), &Theme::themeChanged, this, &NetworkSettings::onThemeChanged);
@@ -191,7 +193,7 @@ void NetworkSettings::saveProxySettings()
 {
     ConfigFile cfgFile;
 
-    checkEmptyProxyHost();
+    updateProxyHostError();
     if (_ui->noProxyRadioButton->isChecked()) {
         cfgFile.setProxyType(QNetworkProxy::NoProxy);
     }
@@ -204,6 +206,9 @@ void NetworkSettings::saveProxySettings()
             type = QNetworkProxy::NoProxy;
         }
         cfgFile.setProxyType(type, _ui->hostLineEdit->text(), _ui->portSpinBox->value(), _ui->authRequiredcheckBox->isChecked(), _ui->userLineEdit->text());
+        if (_ui->hostLineEdit->text().isEmpty()) {
+            cfgFile.setProxyHostName(QString());
+        }
     }
 
     const bool storeProxyPassword = _ui->manualProxyRadioButton->isChecked() && !_ui->hostLineEdit->text().isEmpty()
@@ -247,21 +252,17 @@ void NetworkSettings::saveBWLimitSettings()
     FolderMan::instance()->setDirtyNetworkLimits();
 }
 
-void NetworkSettings::checkEmptyProxyHost()
+void NetworkSettings::updateProxyHostError()
 {
-    if (_ui->hostLineEdit->isEnabled() && _ui->hostLineEdit->text().isEmpty()) {
-        _ui->hostLineEdit->setStyleSheet(QStringLiteral("border: 1px solid red"));
-    }
-    else {
-        _ui->hostLineEdit->setStyleSheet(QString());
-    }
+    const bool hasError = _ui->manualProxyRadioButton->isChecked() && _ui->hostLineEdit->text().isEmpty();
+    StyleHelper::setErrorState(_ui->hostLineEdit, hasError);
 }
 
 void NetworkSettings::showEvent(QShowEvent *event)
 {
     if (!event->spontaneous() && _ui->manualProxyRadioButton->isChecked() && _ui->hostLineEdit->text().isEmpty()) {
         _ui->noProxyRadioButton->setChecked(true);
-        checkEmptyProxyHost();
+        updateProxyHostError();
         saveProxySettings();
     }
     checkAccountLocalhost();
@@ -272,8 +273,7 @@ void NetworkSettings::showEvent(QShowEvent *event)
 void NetworkSettings::onThemeChanged()
 {
     bool isDark = APP::Theme::instance()->isDarkTheme();
-    setStyleSheet(StyleHelper::loadFileToString(widgetStyle));
-    StyleHelper::setTheme(this, isDark);
+    StyleHelper::applyThemedStyleSheet(this, widgetStyle, isDark);
 }
 
 void NetworkSettings::checkAccountLocalhost()

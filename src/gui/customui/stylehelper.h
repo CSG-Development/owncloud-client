@@ -7,6 +7,7 @@
 class QStyleOption;
 class QStyleOptionToolButton;
 class QPushButton;
+class QMenu;
 
 namespace APP {
 
@@ -21,7 +22,11 @@ public:
     static void applyPushButtonsStyle(QWidget* root);
     static void applyPushButtonStyle(QPushButton* button);
     static void setTheme(QWidget *target, bool isDark);
-    
+    static void applyThemedStyleSheet(QWidget* target, const QString& fileName, bool isDark);
+    static void applyMenuStyle(QMenu* menu);
+    static void applyApplicationStyleSheet();
+    static void setErrorState(QWidget* target, bool hasError);
+
     static QIcon getIcon(const QString& name, bool isDark);
 
     static QIcon getDotsIcon(const QStyleOptionToolButton* opt);

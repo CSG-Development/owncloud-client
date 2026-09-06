@@ -620,6 +620,13 @@ void ConfigFile::setProxyType(QNetworkProxy::ProxyType proxyType, const QString 
     settings.sync();
 }
 
+void ConfigFile::setProxyHostName(const QString &host)
+{
+    auto settings = makeQSettings();
+    settings.setValue(proxyHostC, host);
+    settings.sync();
+}
+
 QVariant ConfigFile::getValue(const QString &param, const QString &group,
     const QVariant &defaultValue) const
 {

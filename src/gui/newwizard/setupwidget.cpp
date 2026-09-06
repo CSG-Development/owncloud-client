@@ -221,6 +221,7 @@ SetupWidget::~SetupWidget() noexcept
 
 void SetupWidget::onThemeChanged(bool isDark)
 {
+    StyleHelper::invoke_setDarkTheme_recursive(this);
     StyleHelper::setTheme(this, isDark);
     qCDebug(lcSetupWizardWidget) << isDark;
 }

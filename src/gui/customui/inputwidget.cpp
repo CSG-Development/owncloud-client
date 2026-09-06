@@ -163,11 +163,6 @@ void InputWidget::updatePromptPosition()
 
 void InputWidget::updateStyles()
 {
-    if (errorState)
-        setStyleSheet(APP::StyleHelper::loadFileToString(inputStyleError));
-    else
-        setStyleSheet(APP::StyleHelper::loadFileToString(inputStyle));
-
-    APP::StyleHelper::setTheme(this, darkTheme_.value());
+    APP::StyleHelper::applyThemedStyleSheet(this, errorState ? inputStyleError : inputStyle, darkTheme_.value());
     update();
 }

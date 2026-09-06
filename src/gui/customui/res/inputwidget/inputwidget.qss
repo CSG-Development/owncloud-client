@@ -8,7 +8,7 @@
 }
 
 [theme="light"] #inputFrame[focusedFrame=true] {
-    border: 3px solid rgba(25, 118, 210, 1);
+    border: 3px solid @inputFocusBorderLight;
 }
 
 [theme="light"] #inputFrame[focusedFrame=false] {
@@ -28,7 +28,7 @@
 
 [theme="light"] #promptLabel {
     color: rgba(0,0,0,204);
-    background: #FFFFFF;
+    background: @wizardCardBackgroundLight;
     padding-top: 1px;
     padding-bottom: 1px;
     padding-left: 4px;
@@ -37,7 +37,7 @@
 
 [theme="light"] #errorLabel {
     color: #F44336;
-    background: #FFFFFF;
+    background: transparent;
 }
 
 [theme="light"] #showPasswordButton {
@@ -54,7 +54,7 @@
 }
 
 [theme="dark"] #inputFrame[focusedFrame=true] {
-    border: 3px solid rgba(100, 181, 246, 1);
+    border: 3px solid @inputFocusBorderDark;
 }
 
 [theme="dark"] #inputFrame[focusedFrame=false] {
@@ -74,7 +74,7 @@
 
 [theme="dark"] #promptLabel {
     color: rgba(255,255,255,204);
-    background-color: #262729;
+    background-color: @wizardCardBackgroundDark;
     padding-top: 1px;
     padding-bottom: 1px;
     padding-left: 4px;

@@ -87,8 +87,7 @@ void CustomToolTip::onThemeChanged(bool isDark)
     container->style()->unpolish(container);
     label->style()->unpolish(label);
 
-    setStyleSheet(APP::StyleHelper::loadFileToString(ToolTipTheme::widgetStyle));
-    APP::StyleHelper::setTheme(this, isDark);
+    APP::StyleHelper::applyThemedStyleSheet(this, ToolTipTheme::widgetStyle, isDark);
 
     // Re-polish to apply the new rules
     this->style()->polish(this);

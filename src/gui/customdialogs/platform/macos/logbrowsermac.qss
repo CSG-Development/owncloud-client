@@ -77,21 +77,21 @@
 }
 
 [theme="light"] #btnOpenFolder {
-    border: 1px solid rgb(25, 118, 210);
-    background: rgb(25, 118, 210);
-    color: rgba(255, 255, 255, 0.87);
+    border: 1px solid @primaryLight;
+    background: @primaryLight;
+    color: @dialogOnPrimaryLight;
 }
 
 [theme="light"] #btnOpenFolder:hover {
-    border: 1px solid rgb(30, 136, 229);
-    background: rgb(30, 136, 229);
-    color: rgba(255, 255, 255, 0.87);
+    border: 1px solid @primaryHoverLight;
+    background: @primaryHoverLight;
+    color: @dialogOnPrimaryLight;
 }
 
 [theme="light"] #btnOpenFolder:pressed {
-    border: 1px solid rgb(20, 92, 164);
-    background: rgb(20, 92, 164);
-    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid @primaryPressedLight;
+    background: @primaryPressedLight;
+    color: @dialogOnPrimaryPressedLight;
 }
 
 [theme="light"] #btnClose {
@@ -140,21 +140,21 @@
 
 
 [theme="dark"] #btnOpenFolder {
-    border: 1px solid rgba(100, 181, 246, 1);
-    background: rgb(100, 181, 246);
-    color: rgba(0, 0, 0, 0.87);
+    border: 1px solid @primaryDark;
+    background: @primaryDark;
+    color: @dialogOnPrimaryDark;
 }
 
 [theme="dark"] #btnOpenFolder:hover {
-    border: 1px solid rgb(144, 202, 249);
-    background: rgb(144, 202, 249);
-    color: rgba(0, 0, 0, 0.87);
+    border: 1px solid @primaryHoverDark;
+    background: @primaryHoverDark;
+    color: @dialogOnPrimaryDark;
 }
 
 [theme="dark"] #btnOpenFolder:pressed {
-    border: 1px solid rgb(53, 158, 243);
-    background: rgb(53, 158, 243);
-    color: rgba(0, 0, 0, 0.6);
+    border: 1px solid @primaryPressedDark;
+    background: @primaryPressedDark;
+    color: @dialogOnPrimaryPressedDark;
 }
 
 [theme="dark"] #btnClose {

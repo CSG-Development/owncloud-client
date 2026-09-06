@@ -1,4 +1,5 @@
 #include "menu_toolbutton.h"
+#include "apppalette.h"
 #include "theme.h"
 
 #include <QPainter>
@@ -94,15 +95,15 @@ void MenuToolButton::mouseReleaseEvent(QMouseEvent *event)
 }
 
 
-QColor MenuToolButton::buttonFrameFocused() const {return isDark ? QColor(0x19,0x76,0xD2,0x80) : QColor(0x19,0x76,0xD2,0x80);}
+QColor MenuToolButton::buttonFrameFocused() const {return AppPalette::color(ColorToken::ToolButtonFocusRing, isDark);}
 
-QColor MenuToolButton::buttonBackgroundNormal() const {return isDark ? QColor(0,0,0,0) : QColor(0,0,0,0);}
-QColor MenuToolButton::buttonBackgroundPressed() const {return isDark ? QColor(0x4E,0x50,0x53) : QColor(0xF5,0xF5,0xF7);}
-QColor MenuToolButton::buttonBackgroundHovered() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x1A) : QColor(0xE6,0xE3,0xE6);}
-QColor MenuToolButton::buttonBackgroundDisabled() const {return isDark ? QColor(0,0,0,0) : QColor(0,0,0,0);}
+QColor MenuToolButton::buttonBackgroundNormal() const {return AppPalette::color(ColorToken::ToolButtonBackgroundNormal, isDark);}
+QColor MenuToolButton::buttonBackgroundPressed() const {return AppPalette::color(ColorToken::ToolButtonBackgroundPressed, isDark);}
+QColor MenuToolButton::buttonBackgroundHovered() const {return AppPalette::color(ColorToken::ToolButtonBackgroundHovered, isDark);}
+QColor MenuToolButton::buttonBackgroundDisabled() const {return AppPalette::color(ColorToken::ToolButtonBackgroundDisabled, isDark);}
 
-QColor MenuToolButton::buttonBackgroundCheckedNormal() const {return isDark ? QColor(0x90,0xCA,0xF9,0x1F) : QColor(0x1E,0x88,0xE5,0x1F);}
-QColor MenuToolButton::buttonBackgroundCheckedPressed() const {return isDark ? QColor(0x90,0xCA,0xF9,0x1F) : QColor(0x1E,0x88,0xE5,0x1F);}
-QColor MenuToolButton::buttonBackgroundCheckedHovered() const {return isDark ? QColor(0x64,0xB5,0xF6,0x3D) : QColor(0x19,0x76,0xD2,0x33);}
+QColor MenuToolButton::buttonBackgroundCheckedNormal() const {return AppPalette::color(ColorToken::TabCheckedBackground, isDark);}
+QColor MenuToolButton::buttonBackgroundCheckedPressed() const {return AppPalette::color(ColorToken::TabCheckedBackground, isDark);}
+QColor MenuToolButton::buttonBackgroundCheckedHovered() const {return AppPalette::color(ColorToken::TabCheckedHoverBackground, isDark);}
 
 } // namespace APP

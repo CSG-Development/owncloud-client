@@ -126,6 +126,10 @@
         <file>res/login/arrow_back_btn_dark.svg</file>
         <file>res/login/arrow_back_btn_light.svg</file>
         <file>res/networksettings.qss</file>
+        <file>res/combobox/light/normal.svg</file>
+        <file>res/combobox/light/disabled.svg</file>
+        <file>res/combobox/dark/normal.svg</file>
+        <file>res/combobox/dark/disabled.svg</file>
         <file>res/radiobutton/light/disabled/checked.svg</file>
         <file>res/radiobutton/light/disabled/unchecked.svg</file>
         <file>res/radiobutton/light/hover/checked.svg</file>
@@ -143,6 +147,7 @@
         <file>res/radiobutton/dark/pressed/checked.svg</file>
         <file>res/radiobutton/dark/pressed/unchecked.svg</file>
         <file>res/settingsdialog.qss</file>
+        <file>res/toolbar/toolbar.qss</file>
         <file>res/toolbar/light/Activity.svg</file>
         <file>res/toolbar/light/Add.svg</file>
         <file>res/toolbar/light/Power.svg</file>
@@ -170,5 +175,7 @@
         <file>res/toast/device_unreachable_banner.qss</file>
         <file>res/menu/check_dark.svg</file>
         <file>res/menu/check_light.svg</file>
+        <file>res/menu/menu.qss</file>
+        <file>res/fields/fields.qss</file>
     </qresource>
 </RCC>

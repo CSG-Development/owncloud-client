@@ -1,5 +1,6 @@
 #include "confirmdlg.h"
 #include "dlgutils.h"
+#include "gui/customui/stylehelper.h"
 #include "platform/common/confirmdlgcontroller.h"
 #include "platform/common/windowdragger.h"
 #include "platform/windows/ui_confirmdlg.h"
@@ -29,7 +30,7 @@ ConfirmDlg::ConfirmDlg(QWidget *parent)
 {
     ui->setupUi(this);
     DlgUtils::clearStyleSheet(this);
-    setStyleSheet(DlgUtils::loadFileToString(widget_style));
+    setStyleSheet(APP::StyleHelper::loadFileToString(widget_style));
 
     ui->frameAcceptBtn->setFrameData(APP::Theme::instance()->isDarkTheme() ? frame_data.second : frame_data.first);
     ui->frameRejectBtn->setFrameData(APP::Theme::instance()->isDarkTheme() ? frame_data.second : frame_data.first);

@@ -82,8 +82,7 @@ void ToastWidget::setMessage(const QString &message)
 
 void ToastWidget::updateStyles(bool isDark)
 {
-    setStyleSheet(APP::StyleHelper::loadFileToString(widgetStyle));
-    APP::StyleHelper::setTheme(this, isDark);
+    APP::StyleHelper::applyThemedStyleSheet(this, widgetStyle, isDark);
 
     ui->btnClose->setIcon(isDark ? QIcon(closeIcon.second) : QIcon(closeIcon.first));
     shadowEffect_->setColor(isDark ? QColor(0, 0, 0, 90) : QColor(0, 0, 0, 46));

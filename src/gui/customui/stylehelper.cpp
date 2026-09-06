@@ -2,7 +2,9 @@
 #include "style_tool_button_menu.h"
 #include "style_push_button.h"
 #include "libsync/theme.h"
+#include "libsync/apppalette.h"
 
+#include <QApplication>
 #include <QCoreApplication>
 #include <QGuiApplication>
 #include <QScreen>
@@ -10,7 +12,10 @@
 #include <QStyleHints>
 #include <QSettings>
 #include <QPushButton>
+#include <QMenu>
+#include <QPalette>
 #include <QFile>
+#include <QRegularExpression>
 
 #ifdef Q_OS_DARWIN
 static const qreal qstyleBaseDpi = 72;
@@ -43,6 +48,60 @@ void static unloadrc()
 }
 
 namespace APP {
+
+namespace {
+
+QString qssColor(const QColor &color)
+{
+    if (color.alpha() == 255)
+        return color.name(QColor::HexRgb);
+
+    const QString alpha = color.alpha() == 1 ? QStringLiteral("0.004") : QString::number(color.alpha());
+    return QStringLiteral("rgba(%1, %2, %3, %4)").arg(color.red()).arg(color.green()).arg(color.blue()).arg(alpha);
+}
+
+QString substitutePaletteTokens(const QString &fileName, const QString &content)
+{
+    static const QRegularExpression tokenPattern(QStringLiteral("@([A-Za-z0-9]+?)(Light|Dark)\\b"));
+
+    QString result;
+    result.reserve(content.size());
+
+    qsizetype last = 0;
+    auto it = tokenPattern.globalMatch(content);
+    while (it.hasNext()) {
+        const QRegularExpressionMatch match = it.next();
+        result += QStringView(content).mid(last, match.capturedStart() - last);
+        last = match.capturedEnd();
+
+        const auto token = AppPalette::tokenFromName(match.capturedView(1));
+        if (!token) {
+            result += match.capturedView(0);
+            continue;
+        }
+
+        const bool isDark = match.capturedView(2) == QLatin1StringView("Dark");
+        result += qssColor(isDark ? AppPalette::dark(*token) : AppPalette::light(*token));
+    }
+    result += QStringView(content).mid(last);
+
+    static const QRegularExpression unresolvedPattern(QStringLiteral("@[A-Za-z]\\w*"));
+    auto unresolved = unresolvedPattern.globalMatch(result);
+    while (unresolved.hasNext())
+        qCWarning(lcStyleHelper) << "Unresolved palette token" << unresolved.next().captured(0) << "in" << fileName;
+
+    return result;
+}
+
+QString themeName(bool isDark)
+{
+    return isDark ? QStringLiteral("dark") : QStringLiteral("light");
+}
+
+const auto menuStyle = QStringLiteral(":/res/menu/menu.qss");
+const auto fieldsStyle = QStringLiteral(":/res/fields/fields.qss");
+
+}
 
 QProxyStyle* StyleHelper::tbMenuStyle_ = nullptr;
 QProxyStyle* StyleHelper::pushButtonStyle_ = nullptr;
@@ -91,7 +150,7 @@ void StyleHelper::setTheme(QWidget* target, bool isDark)
     if (!target)
         return;
 
-    target->setProperty("theme", isDark ? QStringLiteral("dark") : QStringLiteral("light"));
+    target->setProperty("theme", themeName(isDark));
 
     target->style()->unpolish(target);
     target->style()->polish(target);
@@ -100,6 +159,50 @@ void StyleHelper::setTheme(QWidget* target, bool isDark)
         child->style()->unpolish(child);
         child->style()->polish(child);
     }
+}
+
+void StyleHelper::applyThemedStyleSheet(QWidget* target, const QString& fileName, bool isDark)
+{
+    if (!target)
+        return;
+
+    target->setProperty("theme", themeName(isDark));
+    target->setStyleSheet(loadFileToString(fileName));
+}
+
+void StyleHelper::applyMenuStyle(QMenu* menu)
+{
+    if (!menu)
+        return;
+
+    const auto apply = [menu] {
+        const bool isDark = Theme::instance()->isDarkTheme();
+        if (menu->styleSheet().isEmpty() || menu->property("theme").toString() != themeName(isDark))
+            applyThemedStyleSheet(menu, menuStyle, isDark);
+    };
+
+    apply();
+    QObject::connect(menu, &QMenu::aboutToShow, menu, apply);
+}
+
+void StyleHelper::applyApplicationStyleSheet()
+{
+    if (qApp)
+        qApp->setStyleSheet(loadFileToString(fieldsStyle));
+}
+
+void StyleHelper::setErrorState(QWidget *target, bool hasError)
+{
+    if (!target)
+        return;
+
+    if (target->property("error").toBool() == hasError)
+        return;
+
+    target->setProperty("error", hasError);
+    target->style()->unpolish(target);
+    target->style()->polish(target);
+    target->update();
 }
 
 QIcon StyleHelper::getIcon(const QString &name, bool isDark)
@@ -157,6 +260,18 @@ void StyleHelper::setDarkMode(bool dark)
         s->setDarkMode(dark);
     if (auto s = dynamic_cast<ProxyStyleBase*>(pushButtonStyle_))
         s->setDarkMode(dark);
+
+    if (qApp) {
+        const QColor linkColor = AppPalette::color(ColorToken::LinkText, dark);
+        QPalette palette;
+        palette.setColor(QPalette::Link, linkColor);
+        palette.setColor(QPalette::LinkVisited, linkColor);
+        const QColor selectionColor = AppPalette::color(ColorToken::MenuSelectionBackground, dark);
+        palette.setColor(QPalette::Highlight, selectionColor);
+        palette.setColor(QPalette::Accent, selectionColor);
+        palette.setColor(QPalette::HighlightedText, AppPalette::color(ColorToken::OnMenuSelection, dark));
+        QApplication::setPalette(palette);
+    }
 }
 
 void StyleHelper::invoke_setDarkTheme_recursive(QWidget *w)
@@ -195,7 +310,7 @@ QString StyleHelper::loadFileToString(const QString &fileName)
 
     QFile file(fileName);
     if (file.open(QIODevice::ReadOnly)) {
-        QString content = QString::fromUtf8(file.readAll());
+        const QString content = substitutePaletteTokens(fileName, QString::fromUtf8(file.readAll()));
         styleCache.insert(fileName, content);
         return content;
     }

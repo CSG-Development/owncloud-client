@@ -35,12 +35,12 @@ QAbstractItemView {
 
 [theme="light"] #_folderList::item:selected:active,
 [theme="light"] #_folderList::item:selected:!active {
-    background: rgba(25, 118, 210, 0.24);
+    background: @selectionBackgroundLight;
     color: rgba(0, 0, 0, 0.87);
 }
 
 [theme="light"] #_folderList::branch:selected {
-    background: rgba(25, 118, 210, 0.24);
+    background: @selectionBackgroundLight;
     image: none;
 }
 
@@ -61,11 +61,11 @@ QAbstractItemView {
 
 [theme="dark"] #_folderList::item:selected:active,
 [theme="dark"] #_folderList::item:selected:!active {
-    background: rgba(100, 181, 246, 0.24);
+    background: @selectionBackgroundDark;
     color: rgba(255, 255, 255, 0.87);
 }
 
 [theme="dark"] #_folderList::branch:selected {
-    background: rgba(100, 181, 246, 0.24);
+    background: @selectionBackgroundDark;
     image: none;
 }

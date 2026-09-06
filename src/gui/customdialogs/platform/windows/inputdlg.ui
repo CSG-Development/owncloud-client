@@ -369,7 +369,7 @@ font-size: 14px;
               <property name="styleSheet">
                <string notr="true">#edText {
 background: rgba(255, 255, 255, 0.7);
-border: 1px solid rgba(25, 118, 210, 1);
+border: 1px solid rgba(110, 190, 73, 1);
 border-radius: 4px;
 }</string>
               </property>
@@ -486,8 +486,8 @@ border: 1px solid rgba(0,0,0,0.1);
               <property name="styleSheet">
                <string notr="true">#btnAccept {
 border-radius: 4px;
-border: 1px solid rgba(25, 118, 210, 1);
-background: rgba(25, 118, 210, 1);
+border: 1px solid rgba(110, 190, 73, 1);
+background: rgba(110, 190, 73, 1);
 color: rgba(255, 255, 255, 0.87);
 font-size: 14px;
 }</string>

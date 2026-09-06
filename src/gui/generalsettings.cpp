@@ -283,8 +283,7 @@ void GeneralSettings::showEvent(QShowEvent *)
 
 void GeneralSettings::onThemeChanged(bool isDark)
 {
-    setStyleSheet(StyleHelper::loadFileToString(widgetStyle));
-    StyleHelper::setTheme(this, isDark);
+    StyleHelper::applyThemedStyleSheet(this, widgetStyle, isDark);
     const auto& btns = findChildren<QPushButton*>();
     for (auto* t: btns) {
         t->update();

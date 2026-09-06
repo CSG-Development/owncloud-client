@@ -131,12 +131,7 @@ bool CodeInputWidget::eventFilter(QObject *obj, QEvent *event)
 
 void CodeInputWidget::updateStyles()
 {
-    if (errorState)
-        setStyleSheet(APP::StyleHelper::loadFileToString(widgetStyleError));
-    else
-        setStyleSheet(APP::StyleHelper::loadFileToString(widgetStyle));
-
-    APP::StyleHelper::setTheme(this, darkTheme_.value());
+    APP::StyleHelper::applyThemedStyleSheet(this, errorState ? widgetStyleError : widgetStyle, darkTheme_.value());
     update();
 }
 
@@ -201,6 +196,7 @@ void CodeInputWidget::pasteCode()
 void CodeInputWidget::onContextMenuRequested(const QPoint &/*pos*/)
 {
     QMenu m;
+    APP::StyleHelper::applyMenuStyle(&m);
     m.addAction(pasteCodeAction);
     pasteCodeAction->setEnabled(validateClipboardBuffer());
     m.exec(QCursor::pos());

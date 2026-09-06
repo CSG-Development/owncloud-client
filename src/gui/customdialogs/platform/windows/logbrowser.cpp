@@ -2,6 +2,7 @@
 #include "ui_logbrowser.h"
 #include "platform/common/windowdragger.h"
 #include "gui/customui/focusproxy.h"
+#include "gui/customui/stylehelper.h"
 #include "dlgutils.h"
 #include "theme.h"
 
@@ -29,7 +30,7 @@ LogBrowser::LogBrowser(QWidget *parent)
     DlgUtils::applyDropShadowDialog(ui->frame);
 
     DlgUtils::clearStyleSheet(this);
-    setStyleSheet(DlgUtils::loadFileToString(widget_style));
+    setStyleSheet(APP::StyleHelper::loadFileToString(widget_style));
 
     ui->btnOpenFolder->setStyle(new FocusProxyStyle(ui->btnOpenFolder));
     ui->btnClose->setStyle(new FocusProxyStyle(ui->btnClose));
@@ -143,6 +144,6 @@ void LogBrowser::themeChanged()
     ui->frameCloseBtn->setFrameData(isDarkTheme ? frame_data.second : frame_data.first);
     ui->frameOpenFolderBtn->setFrameData(isDarkTheme ? frame_data.second : frame_data.first);
 
-    DlgUtils::setTheme(this, isDarkTheme);
+    APP::StyleHelper::setTheme(this, isDarkTheme);
     ui->btnHeadClose->setIcon(isDarkTheme ? QIcon(close_icon.second) : QIcon(close_icon.first));
 }

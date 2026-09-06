@@ -15,11 +15,11 @@
 }
 
 [theme="light"] QTabBar::tab:selected  {
-    background-color: #1976D2;
+    background-color: @tabSelectedBackgroundLight;
     border-color: #CBCDD3;
     margin-left: -1px;
     margin-right: -1px;
-    color: rgba(255,255,255,222);
+    color: @onTabSelectedLight;
 }
 
 [theme="light"] QTabBar::tab:!selected  {
@@ -44,11 +44,11 @@
 }
 
 [theme="dark"] QTabBar::tab:selected  {
-    background-color: #64B5F6;
+    background-color: @tabSelectedBackgroundDark;
     border-color: #616161;
     margin-left: -1px;
     margin-right: -1px;
-    color: rgba(0,0,0,222);
+    color: @onTabSelectedDark;
 }
 
 [theme="dark"] QTabBar::tab:!selected  {

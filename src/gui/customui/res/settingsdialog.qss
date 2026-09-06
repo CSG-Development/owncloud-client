@@ -1,9 +1,9 @@
 [theme="light"] #dialogStack,
 [theme="light"] #stack {
-    background-color: #F0F1F5;
+    background-color: @windowBackgroundLight;
 }
 
 [theme="dark"] #dialogStack,
 [theme="dark"] #stack {
-    background-color: #3D3E41;
+    background-color: @windowBackgroundDark;
 }

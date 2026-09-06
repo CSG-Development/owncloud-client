@@ -1,4 +1,5 @@
 #include "custompushbuttonmac.h"
+#include "apppalette.h"
 
 #include <QPainterPath>
 
@@ -9,38 +10,38 @@ const double highlightOffset = 0.5;
 const double highlightPenWidth = 1.2;
 const double radius = 8.0;
 const auto topHighlightColorAccent = std::pair<QColor,QColor> {
-    QColor(255, 255, 255, 80),
-    QColor(160, 210, 255, 180)
+    APP::AppPalette::light(APP::ColorToken::MacAccentTopHighlight),
+    APP::AppPalette::dark(APP::ColorToken::MacAccentTopHighlight)
 };
 const auto topHighlightColorStandard = std::pair<QColor,QColor> {
-    QColor(255, 255, 255, 200),
-    QColor(255, 255, 255, 25)
+    APP::AppPalette::light(APP::ColorToken::MacStandardTopHighlight),
+    APP::AppPalette::dark(APP::ColorToken::MacStandardTopHighlight)
 };
 const auto acccentBgColor0 = std::pair<QColor,QColor> {
-    QColor(50, 130, 215),
+    APP::AppPalette::light(APP::ColorToken::MacAccentGradientTop),
     //QColor(95, 170, 245)
-    QColor(123,189,246)
+    APP::AppPalette::dark(APP::ColorToken::MacAccentGradientTop)
 };
 const auto acccentBgColor1 = std::pair<QColor,QColor> {
-    QColor(20, 100, 185),
+    APP::AppPalette::light(APP::ColorToken::MacAccentGradientBottom),
     //QColor(45, 130, 230)
-    QColor(94,172,237)
+    APP::AppPalette::dark(APP::ColorToken::MacAccentGradientBottom)
 };
 const auto accentTextColor = std::pair<QColor,QColor> {
-    QColor(255, 255, 255, 223),
-    QColor(0, 0, 0, 223)
+    APP::AppPalette::light(APP::ColorToken::OnMacAccent),
+    APP::AppPalette::dark(APP::ColorToken::OnMacAccent)
 };
 const auto standardBgColorNormal = std::pair<QColor,QColor> {
-    QColor(230, 230, 235),
-    QColor(60, 60, 62)
+    APP::AppPalette::light(APP::ColorToken::MacStandardBackgroundNormal),
+    APP::AppPalette::dark(APP::ColorToken::MacStandardBackgroundNormal)
 };
 const auto standardBgColorPressed = std::pair<QColor,QColor> {
-    QColor(215, 215, 220),
-    QColor(70, 70, 72)
+    APP::AppPalette::light(APP::ColorToken::MacStandardBackgroundPressed),
+    APP::AppPalette::dark(APP::ColorToken::MacStandardBackgroundPressed)
 };
 const auto standardTextColor = std::pair<QColor,QColor> {
-    QColor(30, 30, 30),
-    QColor(230, 230, 230)
+    APP::AppPalette::light(APP::ColorToken::MacStandardText),
+    APP::AppPalette::dark(APP::ColorToken::MacStandardText)
 };
 
 }

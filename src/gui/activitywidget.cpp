@@ -29,7 +29,6 @@
 #include "theme.h"
 #include "ui_activitywidget.h"
 
-#include "gui/customdialogs/dlgutils.h"
 #include "gui/customui/stylehelper.h"
 #include "models/activitylistmodel.h"
 #include "models/expandingheaderview.h"
@@ -99,7 +98,7 @@ ActivityWidget::ActivityWidget(QWidget *parent)
     _ui->setupUi(this);
 
     StyleHelper::applyPushButtonsStyle(this);
-    setStyleSheet(DlgUtils::loadFileToString(widget_style));
+    setStyleSheet(StyleHelper::loadFileToString(widget_style));
 
     _model = new ActivityListModel(this);
     _sortModel = new Models::SignalledQSortFilterProxyModel(this);
@@ -158,7 +157,7 @@ ActivityWidget::ActivityWidget(QWidget *parent)
     });
 
     connect(_ui->_filterButton, &QAbstractButton::clicked, this, [this] {
-        ProtocolWidget::showFilterMenu(_ui->_filterButton, _sortModel, static_cast<int>(ActivityListModel::ActivityRole::Account), tr("Account"));
+        ProtocolWidget::showFilterMenu(this, _sortModel, static_cast<int>(ActivityListModel::ActivityRole::Account), tr("Account"));
     });
     connect(_sortModel, &Models::SignalledQSortFilterProxyModel::filterChanged, this, [this]() { _ui->_filterButton->setText(CommonStrings::filterButtonText(_sortModel->filterRegularExpression().pattern().isEmpty() ? 0 : 1)); });
 
@@ -516,7 +515,7 @@ bool ActivityWidget::eventFilter(QObject * /*obj*/, QEvent *event)
 
 void ActivityWidget::onThemeChanged(bool isDark)
 {
-    DlgUtils::setTheme(this, isDark);
+    StyleHelper::setTheme(this, isDark);
     APP::StyleHelper::invoke_setDarkTheme_recursive(this);
 }
 
@@ -617,8 +616,7 @@ void ActivitySettings::slotShowActivityTab()
 
 void ActivitySettings::onThemeChanged(bool isDark)
 {
-    setStyleSheet(StyleHelper::loadFileToString(widgetStyle));
-    StyleHelper::setTheme(this, isDark);
+    StyleHelper::applyThemedStyleSheet(this, widgetStyle, isDark);
 #ifdef Q_OS_MACOS
     onCurrentTabChanged(_tab->currentIndex());
 #else

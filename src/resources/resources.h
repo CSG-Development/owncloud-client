@@ -18,6 +18,8 @@
 #include <QIcon>
 
 namespace APP::Resources {
+bool APPLICATIONRESOURCES_EXPORT isSystemDarkTheme();
+
 /**
  * Whether use the dark icon theme
  * The function also ensures the theme supports the dark theme

@@ -28,7 +28,7 @@
 
 [theme="light"] #promptLabel {
     color: #F44336;
-    background: #FFFFFF;
+    background: @wizardCardBackgroundLight;
     padding-top: 1px;
     padding-bottom: 1px;
     padding-left: 4px;
@@ -38,7 +38,7 @@
 
 [theme="light"] #errorLabel {
     color: #F44336;
-    background: #FFFFFF;
+    background: transparent;
     font-size: 12px;
     padding-left: 4px;
 }
@@ -77,7 +77,7 @@
 
 [theme="dark"] #promptLabel {
     color: #F28F8C;
-    background-color: #262729;
+    background-color: @wizardCardBackgroundDark;
     padding-top: 1px;
     padding-bottom: 1px;
     padding-left: 4px;
