@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RebootWidget</class>
+ <widget class="QWidget" name="RebootWidget">
+  <layout class="QVBoxLayout" name="RebootWidgetLayout">
+   <item>
+    <widget class="QFrame" name="RebootSeparatorLine">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>1</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>1</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: none; border-top: 1px solid #cbcdd3;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="RebootTitleLabel">
+     <property name="text">
+      <string>Reboot Required</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font-weight: bold;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="RebootBodyLabel">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="RestartNowRadio">
+     <property name="text">
+      <string>Restart Now</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="RestartLaterRadio">
+     <property name="text">
+      <string>Restart Later</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
