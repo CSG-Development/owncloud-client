@@ -1,0 +1,37 @@
+#proxyGroupBox::title,
+#downloadBox::title,
+#uploadBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 0px;
+}
+
+#CUR_NetworkSettings[theme="light"] {
+    background-color: #FFFFFF;
+}
+
+[theme="light"] #proxyGroupBox,
+[theme="light"] #downloadBox,
+[theme="light"] #uploadBox {
+    background-color: #FFFFFF;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #CBCDD3;
+    margin-top: 24px;
+    font-size: 14px;
+}
+
+#CUR_NetworkSettings[theme="dark"] {
+    background-color: #FFFFFF;
+}
+
+[theme="dark"] #proxyGroupBox,
+[theme="dark"] #downloadBox,
+[theme="dark"] #uploadBox {
+    background-color: rgba(66,66,66,120);
+    border-width: 1px;
+    border-style: solid;
+    border-color: #616161;
+    margin-top: 24px;
+    font-size: 14px;
+}

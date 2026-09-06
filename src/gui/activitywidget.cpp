@@ -52,13 +52,9 @@ using namespace std::chrono_literals;
 namespace
 {
 #ifdef Q_OS_MACOS
-QPair<QString, QString> widgetStyle = {
-    QStringLiteral(":/res/activitypage/activitysettings_light_mac.qss"),
-    QStringLiteral(":/res/activitypage/activitysettings_dark_mac.qss")};
+const auto widgetStyle = QStringLiteral(":/res/activitypage/activitysettings_mac.qss");
 #else
-QPair<QString, QString> widgetStyle = {
-    QStringLiteral(":/res/activitypage/activitysettings_light.qss"),
-    QStringLiteral(":/res/activitypage/activitysettings_dark.qss")};
+const auto widgetStyle = QStringLiteral(":/res/activitypage/activitysettings.qss");
 #endif
 
 QPair<QString, QString> activityIcon = {
@@ -621,7 +617,8 @@ void ActivitySettings::slotShowActivityTab()
 
 void ActivitySettings::onThemeChanged(bool isDark)
 {
-    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    setStyleSheet(StyleHelper::loadFileToString(widgetStyle));
+    StyleHelper::setTheme(this, isDark);
 #ifdef Q_OS_MACOS
     onCurrentTabChanged(_tab->currentIndex());
 #else

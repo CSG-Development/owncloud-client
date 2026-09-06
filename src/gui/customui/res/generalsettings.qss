@@ -1,0 +1,57 @@
+#advancedGroupBox::title,
+#groupBox_non_vfs::title,
+#groupBox::title,
+#generalGroupBox::title,
+#ifwUpdateGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 0px;
+}
+
+#CUR_GeneralSettings[theme="light"] {
+    background-color: #FFFFFF;
+}
+
+[theme="light"] #scrollArea,
+[theme="light"] #scrollAreaWidgetContents_2,
+[theme="light"] #frame,
+[theme="light"] #updaterWidget {
+    background-color: #FFFFFF;
+}
+
+[theme="light"] #advancedGroupBox,
+[theme="light"] #groupBox_non_vfs,
+[theme="light"] #groupBox,
+[theme="light"] #generalGroupBox,
+[theme="light"] #ifwUpdateGroupBox {
+    background-color: #FFFFFF;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #CBCDD3;
+    margin-top: 24px;
+    font-size: 14px;
+}
+
+#CUR_GeneralSettings[theme="dark"] {
+    background-color: #262729;
+}
+
+[theme="dark"] #scrollArea,
+[theme="dark"] #scrollAreaWidgetContents_2,
+[theme="dark"] #frame,
+[theme="dark"] #updaterWidget {
+    background-color: #262729;
+}
+
+[theme="dark"] #advancedGroupBox,
+[theme="dark"] #groupBox_non_vfs,
+[theme="dark"] #groupBox,
+[theme="dark"] #generalGroupBox,
+[theme="dark"] #ifwUpdateGroupBox {
+    background-color: rgba(66,66,66,120);
+    border-width: 1px;
+    border-style: solid;
+    border-color: #616161;
+    margin-top: 24px;
+    font-size: 14px;
+}

@@ -9,14 +9,8 @@
 #include <QLabel>
 
 namespace {
-QPair<QString,QString> inputStyle = {
-    QStringLiteral(":/res/inputwidget/inputwidget_light.qss"),
-    QStringLiteral(":/res/inputwidget/inputwidget_dark.qss")
-};
-QPair<QString,QString> inputStyleError = {
-    QStringLiteral(":/res/inputwidget/inputwidget_error_light.qss"),
-    QStringLiteral(":/res/inputwidget/inputwidget_error_dark.qss")
-};
+const auto inputStyle = QStringLiteral(":/res/inputwidget/inputwidget.qss");
+const auto inputStyleError = QStringLiteral(":/res/inputwidget/inputwidget_error.qss");
 }
 
 InputWidget::InputWidget(QWidget *parent)
@@ -170,11 +164,10 @@ void InputWidget::updatePromptPosition()
 void InputWidget::updateStyles()
 {
     if (errorState)
-        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyleError.second : inputStyleError.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(inputStyleError));
     else
-        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyle.second : inputStyle.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(inputStyle));
 
-    style()->unpolish(this);
-    style()->polish(this);
+    APP::StyleHelper::setTheme(this, darkTheme_.value());
     update();
 }

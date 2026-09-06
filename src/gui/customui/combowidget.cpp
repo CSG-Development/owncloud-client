@@ -15,14 +15,8 @@
 Q_LOGGING_CATEGORY(lcDeviceComboWidget, "device.combowidget", QtDebugMsg)
 
 namespace {
-QPair<QString,QString> inputStyle = {
-    QStringLiteral(":/res/combowidget/combowidget_light.qss"),
-    QStringLiteral(":/res/combowidget/combowidget_dark.qss")
-};
-QPair<QString,QString> inputStyleError = {
-    QStringLiteral(":/res/combowidget/combowidget_error_light.qss"),
-    QStringLiteral(":/res/combowidget/combowidget_error_dark.qss")
-};
+const auto inputStyle = QStringLiteral(":/res/combowidget/combowidget.qss");
+const auto inputStyleError = QStringLiteral(":/res/combowidget/combowidget_error.qss");
 QPair<QString,QString> arrowButtonLight = {
     QStringLiteral(":/res/combowidget/triangle_down_light.svg"),
     QStringLiteral(":/res/combowidget/triangle_up_light.svg")
@@ -45,7 +39,6 @@ ComboWidget::ComboWidget(QWidget *parent)
 
     themeNotifier = darkTheme_.addNotifier([this] {
         qCDebug(lcDeviceComboWidget) << "darkTheme_ Notifier" << darkTheme_.value();
-        APP::StyleHelper::setTheme(this, darkTheme_.value());
         updateStyles();
     });
     darkTheme_.setValue(APP::Theme::instance()->isDarkTheme());
@@ -253,10 +246,11 @@ void ComboWidget::updatePromptPosition()
 void ComboWidget::updateStyles()
 {
     if (errorState)
-        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyleError.second : inputStyleError.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(inputStyleError));
     else
-        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? inputStyle.second : inputStyle.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(inputStyle));
 
+    APP::StyleHelper::setTheme(this, darkTheme_.value());
     updateButtonIcon();
 }
 

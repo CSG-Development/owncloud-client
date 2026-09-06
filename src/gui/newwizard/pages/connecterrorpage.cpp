@@ -5,10 +5,7 @@
 
 namespace {
 constexpr int fontSize = 16;
-QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/login/connect_error_page_light.qss"),
-    QStringLiteral(":/res/login/connect_error_page_dark.qss")
-};
+const auto widgetStyle = QStringLiteral(":/res/login/connect_error_page.qss");
 QPair<QString,QString> backIcon = {
     QStringLiteral(":/res/login/arrow_back_btn_light.svg"),
     QStringLiteral(":/res/login/arrow_back_btn_dark.svg")
@@ -26,6 +23,9 @@ ConnectErrorPage::ConnectErrorPage(QWidget *parent)
 
     ui->btnUnused->setEnabled(false);
 
+    connect(APP::Theme::instance(), &APP::Theme::themeChanged, this, [this] {
+        updateTheme();
+    });
     updateTheme();
 }
 
@@ -42,7 +42,8 @@ void ConnectErrorPage::updateTheme()
 
     // QToolButton "icon" property does not supported in qss
     ui->btnBack->setIcon(isDark ? QIcon(backIcon.second) : QIcon(backIcon.first));
-    setStyleSheet(APP::StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    setStyleSheet(APP::StyleHelper::loadFileToString(widgetStyle));
+    APP::StyleHelper::setTheme(this, isDark);
 
     update();
 }

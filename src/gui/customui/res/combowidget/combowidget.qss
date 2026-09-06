@@ -1,0 +1,108 @@
+[theme="light"] #mainFrame {
+    border: none;
+}
+
+[theme="light"] #inputFrame {
+    border: 1px solid rgba(203, 205, 211, 1);
+    border-radius: 20px;
+}
+
+[theme="light"] #errorFrame {
+    border: none;
+}
+
+[theme="light"] #lineEdit {
+    border: none;
+    border-radius: 0px;
+    background: transparent;
+    font-size: 16px;
+}
+
+[theme="light"] #promptLabel {
+    color: rgba(0,0,0,204);
+    background: #FFFFFF;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+[theme="light"] #errorLabel {
+    color: #F44336;
+    background: transparent;
+}
+
+[theme="light"] #arrowButton {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+[theme="light"] #arrowButton:hover {
+    background: rgba(100, 181, 246, 0.24);
+    border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+[theme="light"] #lblDeviceIcon {
+    background-image: url(:/res/combowidget/device_icon.svg);
+}
+
+[theme="light"] #btnDeviceIcon {
+    background: transparent;
+    border: none;
+    image: url(:/res/combowidget/device_icon.svg);
+}
+
+[theme="dark"] #mainFrame {
+    border: none;
+}
+
+[theme="dark"] #inputFrame {
+    border: 1px solid rgba(97, 97, 97, 1);
+    border-radius: 20px;
+}
+
+[theme="dark"] #errorFrame {
+    border: none;
+}
+
+[theme="dark"] #lineEdit {
+    border: none;
+    border-radius: 0px;
+    background: transparent;
+    font-size: 16px;
+}
+
+[theme="dark"] #promptLabel {
+    color: rgba(255,255,255,204);
+    background: #262729;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+    border: 1px solid transparent;
+}
+
+[theme="dark"] #errorLabel {
+    color: #F28F8C;
+    background: transparent;
+}
+
+[theme="dark"] #arrowButton {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+[theme="dark"] #arrowButton:hover {
+    background: rgba(30, 136, 229, 0.12);
+    border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+[theme="dark"] #btnDeviceIcon {
+    background: transparent;
+    border: none;
+    image: url(:/res/combowidget/device_icon.svg);
+}

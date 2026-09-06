@@ -68,9 +68,9 @@ namespace
 {
 
 #ifdef Q_OS_MACOS
-QPair<QString, QString> widgetStyle = {QStringLiteral(":/res/accountsettings_light_mac.qss"), QStringLiteral(":/res/accountsettings_dark_mac.qss")};
+const auto widgetStyle = QStringLiteral(":/res/accountsettings_mac.qss");
 #else
-QPair<QString, QString> widgetStyle = {QStringLiteral(":/res/accountsettings_light.qss"), QStringLiteral(":/res/accountsettings_dark.qss")};
+const auto widgetStyle = QStringLiteral(":/res/accountsettings.qss");
 #endif
 
 // constexpr auto modalWidgetStretchedMarginC = 50;
@@ -1048,7 +1048,8 @@ void AccountSettings::slotLinkActivated(const QString &link)
 
 void AccountSettings::onThemeChanged(bool isDark)
 {
-    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    setStyleSheet(StyleHelper::loadFileToString(widgetStyle));
+    StyleHelper::setTheme(this, isDark);
     ui->_folderList->setSelectionColor(isDark ? QColor(100, 181, 246, 61) : QColor(25, 118, 210, 61));
     ui->_folderList->viewport()->update();
 

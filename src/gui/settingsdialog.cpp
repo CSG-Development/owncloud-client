@@ -105,10 +105,7 @@ QString shortDisplayNameForSettings(APP::Account *account)
     return QStringLiteral("%1\n%2").arg(user, host);
 }
 
-QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/settingsdialog_light.qss"),
-    QStringLiteral(":/res/settingsdialog_dark.qss")
-};
+const auto widgetStyle = QStringLiteral(":/res/settingsdialog.qss");
 }
 
 
@@ -671,7 +668,8 @@ void SettingsDialog::accountRemoved(AccountStatePtr accountStatePtr)
 void SettingsDialog::onThemeChanged()
 {
     bool isDark = APP::Theme::instance()->isDarkTheme();
-    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    setStyleSheet(StyleHelper::loadFileToString(widgetStyle));
+    StyleHelper::setTheme(this, isDark);
 }
 
 void SettingsDialog::customizeStyle()

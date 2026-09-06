@@ -10,14 +10,8 @@
 #include <QRegularExpressionValidator>
 
 namespace {
-const QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/inputwidget/codeinputwidget_light.qss"),
-    QStringLiteral(":/res/inputwidget/codeinputwidget_dark.qss")
-};
-const QPair<QString,QString> widgetStyleError = {
-    QStringLiteral(":/res/inputwidget/codeinputwidget_error_light.qss"),
-    QStringLiteral(":/res/inputwidget/codeinputwidget_error_dark.qss")
-};
+const auto widgetStyle = QStringLiteral(":/res/inputwidget/codeinputwidget.qss");
+const auto widgetStyleError = QStringLiteral(":/res/inputwidget/codeinputwidget_error.qss");
 constexpr auto ed_count = 6;
 }
 
@@ -138,12 +132,11 @@ bool CodeInputWidget::eventFilter(QObject *obj, QEvent *event)
 void CodeInputWidget::updateStyles()
 {
     if (errorState)
-        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? widgetStyleError.second : widgetStyleError.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(widgetStyleError));
     else
-        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? widgetStyle.second : widgetStyle.first));
+        setStyleSheet(APP::StyleHelper::loadFileToString(widgetStyle));
 
-    style()->unpolish(this);
-    style()->polish(this);
+    APP::StyleHelper::setTheme(this, darkTheme_.value());
     update();
 }
 

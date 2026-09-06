@@ -23,13 +23,6 @@
 
 using namespace std::chrono_literals;
 
-namespace {
-QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/login/setupwidget_light.qss"),
-    QStringLiteral(":/res/login/setupwidget_dark.qss")
-};
-}
-
 namespace APP::Wizard {
 
 Q_LOGGING_CATEGORY(lcSetupWizardWidget, "gui.setupwizard.window")

@@ -33,9 +33,7 @@
 
 namespace
 {
-QPair<QString, QString> widgetStyle = {
-    QStringLiteral(":/res/networksettings_light.qss"),
-    QStringLiteral(":/res/networksettings_dark.qss")};
+const auto widgetStyle = QStringLiteral(":/res/networksettings.qss");
 }
 namespace APP
 {
@@ -274,7 +272,8 @@ void NetworkSettings::showEvent(QShowEvent *event)
 void NetworkSettings::onThemeChanged()
 {
     bool isDark = APP::Theme::instance()->isDarkTheme();
-    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    setStyleSheet(StyleHelper::loadFileToString(widgetStyle));
+    StyleHelper::setTheme(this, isDark);
 }
 
 void NetworkSettings::checkAccountLocalhost()
