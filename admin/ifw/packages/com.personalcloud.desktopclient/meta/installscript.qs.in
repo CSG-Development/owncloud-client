@@ -7,7 +7,7 @@ var INSTALLER_META_FILE = "@TargetDir@/" + WINDOWS_INSTALLER_META_FILE;
 function Component()
 {
     if (systemInfo.productType === "windows") {
-        component.addStopProcessForUpdateRequest(WINDOWS_EXECUTABLE);
+        component.addStopProcessForUpdateRequest("@TargetDir@/" + WINDOWS_EXECUTABLE);
         installer.addWizardPageItem(component, "RebootWidget", QInstaller.InstallationFinished);
     }
 }
@@ -89,7 +89,7 @@ function addWindowsAppRegistrationOperations()
 
     var targetDir = installer.toNativeSeparators(installer.value("TargetDir"));
     var helperPath = installer.toNativeSeparators(installer.value("TargetDir") + WINDOWS_APP_REGISTRAR_RELATIVE_PATH);
-    var productVersion = installer.value("ProductVersion");
+    var productVersion = component.value("Version");
 
     component.addElevatedOperation("Execute",
         helperPath,
