@@ -17,6 +17,24 @@ if(NOT IFW_BINARYCREATOR)
 endif()
 message(STATUS "IFW binarycreator: ${IFW_BINARYCREATOR}")
 
+if(WITH_IFW_UPDATER)
+    find_program(IFW_REPOGEN
+        NAMES repogen
+        HINTS
+            "${QTIFW_ROOT}/bin"
+            "${QTIFW_ROOT}"
+            "$ENV{QTIFW_ROOT}/bin"
+            "$ENV{QTIFW_ROOT}"
+            "${QT_ROOT}/../../Tools/QtInstallerFramework/${QTIFW_VERSION}/bin"
+            "$ENV{QT_ROOT}/../../Tools/QtInstallerFramework/${QTIFW_VERSION}/bin"
+        DOC "Qt Installer Framework repogen"
+    )
+    if(NOT IFW_REPOGEN)
+        message(FATAL_ERROR "WITH_IFW_UPDATER=ON but repogen not found next to binarycreator. Set -DQTIFW_ROOT=<path to QtInstallerFramework/<ver>>.")
+    endif()
+    message(STATUS "IFW repogen: ${IFW_REPOGEN}")
+endif()
+
 function(app_ifw_var name value)
     set(${name} "${value}" PARENT_SCOPE)
 
@@ -411,6 +429,20 @@ add_custom_command(TARGET installer POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E touch "${INSTALLER_OUTPUT_DIR}/build_success"
     VERBATIM
     COMMENT "Publishing installer artifact -> ${INSTALLER_OUTPUT_DIR}/${_artifact_name}")
+
+if(WITH_IFW_UPDATER)
+    set(_update_repo_dir "${CMAKE_BINARY_DIR}/ifw_update_repo")
+    set(_update_zip "${INSTALLER_OUTPUT_DIR}/${_artifact_base}_update.zip")
+
+    add_custom_command(TARGET installer POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E rm -rf "${_update_repo_dir}"
+        COMMAND "${IFW_REPOGEN}" --packages "${IFW_OUT}/packages" "${_update_repo_dir}"
+        COMMAND "${CMAKE_COMMAND}" -E rm -f "${_update_zip}"
+        COMMAND "${CMAKE_COMMAND}" -E tar cf "${_update_zip}" --format=zip -- .
+        WORKING_DIRECTORY "${_update_repo_dir}"
+        VERBATIM
+        COMMENT "Building online-update repository -> ${_update_zip}")
+endif()
 
 add_custom_command(TARGET installer POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E echo ""
