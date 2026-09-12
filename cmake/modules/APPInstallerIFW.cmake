@@ -438,10 +438,14 @@ if(WITH_IFW_UPDATER)
         COMMAND "${CMAKE_COMMAND}" -E rm -rf "${_update_repo_dir}"
         COMMAND "${IFW_REPOGEN}" --packages "${IFW_OUT}/packages" "${_update_repo_dir}"
         COMMAND "${CMAKE_COMMAND}" -E rm -f "${_update_zip}"
+        VERBATIM
+        COMMENT "Building online-update repository -> ${_update_repo_dir}")
+
+    add_custom_command(TARGET installer POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E tar cf "${_update_zip}" --format=zip -- .
         WORKING_DIRECTORY "${_update_repo_dir}"
         VERBATIM
-        COMMENT "Building online-update repository -> ${_update_zip}")
+        COMMENT "Packing online-update repository -> ${_update_zip}")
 endif()
 
 add_custom_command(TARGET installer POST_BUILD
