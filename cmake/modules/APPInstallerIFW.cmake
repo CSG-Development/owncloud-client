@@ -432,7 +432,7 @@ add_custom_command(TARGET installer POST_BUILD
 
 if(WITH_IFW_UPDATER)
     set(_update_repo_dir "${CMAKE_BINARY_DIR}/ifw_update_repo")
-    set(_update_zip "${INSTALLER_OUTPUT_DIR}/${_artifact_base}_update.zip")
+    set(_update_zip "${INSTALLER_OUTPUT_DIR}/${_artifact_base}_${_dbg_kind}_update.zip")
 
     add_custom_command(TARGET installer POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E rm -rf "${_update_repo_dir}"
