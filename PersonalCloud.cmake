@@ -1,7 +1,7 @@
 set( APPLICATION_NAME       "Personal Cloud Files" )
 set( APPLICATION_SHORTNAME  "PersonalCloud" )
 set( APPLICATION_EXECUTABLE "PersonalCloud" )
-set( APPLICATION_DOMAIN     "owncloud.com" )
+set( APPLICATION_DOMAIN     "www.seagate.com" )
 set( APPLICATION_VENDOR     "Seagate Technologies LLC" )
 set( APPLICATION_UPDATE_URL "https://updates.owncloud.com/client/" CACHE STRING "URL for updater" )
 if(WIN32)

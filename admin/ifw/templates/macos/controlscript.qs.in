@@ -122,6 +122,15 @@ function removeMacOSUserData()
             "\"$L/Containers/\"" + extId + " " +
             "\"$L/Group Containers/\"" + groupId + " " +
             "\"$L/Group Containers/\"" + appId + "; " +
+        "T=\"$TMPDIR\"; " +
+        "if [ \"$(id -u)\" = \"0\" ] && [ -n \"$UID_OF_HOME\" ]; then " +
+            "T=$(sudo -u \"#$UID_OF_HOME\" /usr/bin/getconf DARWIN_USER_TEMP_DIR 2>/dev/null); " +
+        "fi; " +
+        "[ -z \"$T\" ] && T=$(/usr/bin/getconf DARWIN_USER_TEMP_DIR 2>/dev/null); " +
+        "T=\"${T%/}\"; " +
+        "[ -n \"$T\" ] && rm -rf " +
+            "\"$T/\"" + userDataDir + "\"-logdir\" " +
+            "\"$T/\"" + userDataDir + "\"-crash.log\"; " +
         "exit 0";
 
     installer.execute("/bin/sh", ["-c", cleanupScript]);

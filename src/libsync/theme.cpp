@@ -396,8 +396,9 @@ QString Theme::about() const
     // Ideally, the vendor should be "Seagate Technologies LLC", but it cannot be changed without
     // changing the location of the settings and other registery keys.
     const QString vendor = isVanilla() ? QStringLiteral("Seagate Technologies LLC") : QStringLiteral(APPLICATION_VENDOR);
+    const QString supportUrl = QStringLiteral("https://") + QStringLiteral(APPLICATION_DOMAIN) + QStringLiteral("/support");
     return tr("<p>Version %1. For more information visit <a href=\"%2\">https://%3</a></p>"
-              "<p>For known issues and help, please visit: <a href=\"https://central.owncloud.com/c/desktop-client\">https://central.owncloud.com</a></p>"
+              "<p>For known issues and help, please visit: <a href=\"%7\">%7</a></p>"
               "<p>By Klaas Freitag, Daniel Molkentin, Olivier Goffart, Markus Götz, "
               " Jan-Christoph Borchardt, Thomas Müller,<br>"
               "Dominik Schmidt, Michael Stingl, Hannah von Reth, Fabian Müller and others.</p>"
@@ -410,7 +411,8 @@ QString Theme::about() const
              Utility::escape(QStringLiteral("https://" APPLICATION_DOMAIN)),
              Utility::escape(QStringLiteral(APPLICATION_DOMAIN)),
              Utility::escape(vendor), Utility::escape(appNameGUI()),
-             aboutVersions(Theme::VersionFormat::RichText));
+             aboutVersions(Theme::VersionFormat::RichText))
+        .arg(Utility::escape(supportUrl));
 }
 
 bool Theme::aboutShowCopyright() const

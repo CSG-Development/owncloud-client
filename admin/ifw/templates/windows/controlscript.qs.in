@@ -8,7 +8,32 @@ var USE_CUSTOM_STYLESHEET = @WINDOWS_USE_CUSTOM_STYLESHEET_JS@;
 var LIGHT_STYLESHEET = @WINDOWS_LIGHT_STYLESHEET_JS@;
 var DARK_STYLESHEET = @WINDOWS_DARK_STYLESHEET_JS@;
 
+var SHELL_INTEGRATION_COMPONENT_NAME = "com.personalcloud.desktopclient.shellintegration";
+var REBOOT_DELAY_SECONDS = 10;
+
+var REBOOT_TRACE_LOG_PATH = "";
+
 var invokingUserContext = null;
+
+function traceLog(message)
+{
+    var line = "[RebootTrace] " + message;
+    console.log(line);
+
+    try {
+        if (REBOOT_TRACE_LOG_PATH === "") {
+            var tempDir = installer.environmentVariable("TEMP");
+            REBOOT_TRACE_LOG_PATH = tempDir + "\\PersonalCloud-reboot-trace.log";
+        }
+        var script = "Add-Content -LiteralPath " + powerShellSingleQuote(REBOOT_TRACE_LOG_PATH) +
+            " -Value " + powerShellSingleQuote(String(line));
+        installer.execute("powershell.exe", [
+            "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", script
+        ]);
+    } catch (e) {
+        // Tracing must never break the wizard.
+    }
+}
 
 function Controller()
 {
@@ -22,6 +47,12 @@ function Controller()
         installer.uninstallationStarted.connect(this, Controller.prototype.handleUninstallationStarted);
         installer.uninstallationFinished.connect(this, Controller.prototype.handleUninstallationFinished);
         installer.installationStarted.connect(this, Controller.prototype.handlePcfReinstallCleanup);
+        try {
+            installer.finishButtonClicked.connect(this, Controller.prototype.handleFinishButtonClicked);
+            traceLog("Controller: connected to installer.finishButtonClicked");
+        } catch (e) {
+            traceLog("Controller: FAILED to connect installer.finishButtonClicked: " + e);
+        }
 
         installer.setValue("PcfUninstallRegistryKey", @WINDOWS_UNINSTALL_REGISTRY_KEY_JS@);
         installer.setValue("PcfProcessName", @WINDOWS_PROCESS_NAME_JS@);
@@ -118,7 +149,56 @@ Controller.prototype.FinishedPageCallback = function()
     if (page != null) {
         page.title = "Completed the " + APP_NAME;
         page.RunItCheckBox.setText(WINDOWS_RUN_PROGRAM_DESCRIPTION);
+        setupRebootWidget(page);
     }
+}
+
+Controller.prototype.handleFinishButtonClicked = function()
+{
+    traceLog("handleFinishButtonClicked: enter");
+
+    if (systemInfo.productType !== "windows") {
+        return;
+    }
+
+    var involved = isShellIntegrationInvolved();
+    traceLog("handleFinishButtonClicked: isShellIntegrationInvolved=" + involved);
+    if (!involved) {
+        return;
+    }
+
+    var page = gui.pageById(QInstaller.InstallationFinished);
+    if (page == null) {
+        traceLog("handleFinishButtonClicked: page is null, abort");
+        return;
+    }
+
+    // Uses page.findChild() (QObject::findChild under the hood, see GuiProxy::findChild
+    // in scriptengine.cpp) instead of the flattened page.RebootWidget.X property chain:
+    // findChild performs a live recursive search of the real widget tree on every call,
+    // independent of whichever page callback may or may not have already run.
+    var restartNowRadio = page.findChild("RestartNowRadio");
+    if (restartNowRadio == null) {
+        traceLog("handleFinishButtonClicked: RestartNowRadio not found via findChild, abort");
+        return;
+    }
+
+    var restartNow = restartNowRadio.checked;
+    traceLog("handleFinishButtonClicked: RestartNowRadio.checked=" + restartNow);
+
+    if (!restartNow) {
+        return;
+    }
+
+    var runItCheckBox = page.findChild("RunItCheckBox");
+    if (runItCheckBox != null) {
+        runItCheckBox.setChecked(false);
+        traceLog("handleFinishButtonClicked: RunItCheckBox unchecked to suppress app launch before reboot");
+    } else {
+        traceLog("handleFinishButtonClicked: RunItCheckBox not found via findChild");
+    }
+
+    scheduleReboot();
 }
 
 Controller.prototype.handleUninstallationStarted = function()
@@ -155,6 +235,85 @@ Controller.prototype.handlePcfReinstallCleanup = function()
         "$ErrorActionPreference = 'SilentlyContinue'; $d = '" + targetDir + "'; " +
         "if (Test-Path -LiteralPath $d) { Get-ChildItem -LiteralPath $d -Force | Remove-Item -Recurse -Force }; exit 0"
     ]);
+}
+
+function setupRebootWidget(page)
+{
+    traceLog("setupRebootWidget: enter, productType=" + systemInfo.productType);
+
+    if (systemInfo.productType !== "windows") {
+        return;
+    }
+
+    var rebootWidget = page.findChild("RebootWidget");
+    if (rebootWidget == null) {
+        traceLog("setupRebootWidget: RebootWidget not found via findChild");
+        return;
+    }
+
+    var involved = isShellIntegrationInvolved();
+    traceLog("setupRebootWidget: isShellIntegrationInvolved=" + involved);
+
+    if (!involved) {
+        rebootWidget.visible = false;
+        return;
+    }
+
+    var bodyText = installer.isUninstaller()
+        ? "To completely remove all system extensions, drivers, and background processes, a system restart is required."
+        : "To complete the " + APP_NAME + " installation and ensure all background components function properly, please restart your computer.";
+
+    rebootWidget.visible = true;
+
+    var restartNowRadio = page.findChild("RestartNowRadio");
+    if (restartNowRadio != null) {
+        restartNowRadio.checked = true;
+        traceLog("setupRebootWidget: RestartNowRadio.checked set OK");
+    } else {
+        traceLog("setupRebootWidget: RestartNowRadio not found via findChild");
+    }
+
+    var rebootBodyLabel = page.findChild("RebootBodyLabel");
+    if (rebootBodyLabel != null) {
+        rebootBodyLabel.setText(bodyText);
+        traceLog("setupRebootWidget: RebootBodyLabel.setText OK");
+    } else {
+        traceLog("setupRebootWidget: RebootBodyLabel not found via findChild");
+    }
+}
+
+function isShellIntegrationInvolved()
+{
+    var shellIntegration = installer.componentByName(SHELL_INTEGRATION_COMPONENT_NAME);
+    if (shellIntegration == null) {
+        traceLog("isShellIntegrationInvolved: componentByName returned null for " + SHELL_INTEGRATION_COMPONENT_NAME);
+        return false;
+    }
+
+    if (installer.isUninstaller()) {
+        traceLog("isShellIntegrationInvolved: uninstaller, installed=" + shellIntegration.installed);
+        return shellIntegration.installed;
+    }
+
+    var selected = false;
+    try {
+        selected = shellIntegration.isSelected();
+    } catch (e) {
+        traceLog("isShellIntegrationInvolved: FAILED isSelected(): " + e);
+    }
+    traceLog("isShellIntegrationInvolved: installer/updater, installed=" + shellIntegration.installed
+        + ", isSelected=" + selected);
+    return shellIntegration.installed || selected;
+}
+
+function scheduleReboot()
+{
+    var shutdownPath = installer.environmentVariable("WINDIR") + "\\System32\\shutdown.exe";
+    traceLog("scheduleReboot: executing " + shutdownPath + " /r /t " + REBOOT_DELAY_SECONDS);
+
+    var result = installer.execute(shutdownPath, ["/r", "/t", String(REBOOT_DELAY_SECONDS)]);
+    traceLog("scheduleReboot: execute returned length=" + (result ? result.length : "null")
+        + " value=" + result);
 }
 
 function stopWindowsApplication()

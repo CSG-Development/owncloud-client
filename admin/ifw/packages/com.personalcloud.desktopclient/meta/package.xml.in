@@ -8,5 +8,8 @@
     <Licenses>
         <License name="License Agreement" file="license.txt"/>
     </Licenses>
+    <UserInterfaces>
+        <UserInterface>rebootpage.ui</UserInterface>
+    </UserInterfaces>
     <Script>installscript.qs</Script>
 </Package>
