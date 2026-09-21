@@ -1,5 +1,6 @@
 #include "confirmwidedlgmac.h"
 #include "ui_confirmwidedlgmac.h"
+#include "gui/customui/stylehelper.h"
 #include "platform/common/windowdragger.h"
 #include "dlgutils.h"
 #include "theme.h"
@@ -23,7 +24,7 @@ ConfirmWideDlgMac::ConfirmWideDlgMac(QWidget *parent)
 {
     ui->setupUi(this);
     DlgUtils::clearStyleSheet(this);
-    setStyleSheet(DlgUtils::loadFileToString(widget_style));
+    setStyleSheet(APP::StyleHelper::loadFileToString(widget_style));
 
     bool isDark = APP::Theme::instance()->isDarkTheme();
     applyTheme(isDark);

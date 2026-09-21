@@ -1,0 +1,98 @@
+[theme="light"] #mainFrame {
+    border: none;
+}
+
+[theme="light"] #inputFrame {
+    border: 1px solid rgba(244, 67, 54, 1);
+    border-radius: 20px;
+}
+
+[theme="light"] #inputFrame[focusedFrame=true] {
+    border: 3px solid rgba(244, 67, 54, 1);
+}
+
+[theme="light"] #inputFrame[focusedFrame=false] {
+    border: 1px solid rgba(244, 67, 54, 1);
+}
+
+[theme="light"] #errorFrame {
+    border: none;
+}
+
+[theme="light"] #inputLineEdit {
+    border: none;
+    border-radius: 0px;
+    background: transparent;
+    font-size: 16px;
+}
+
+[theme="light"] #promptLabel {
+    color: #F44336;
+    background: @wizardCardBackgroundLight;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 12px;
+}
+
+[theme="light"] #errorLabel {
+    color: #F44336;
+    background: transparent;
+    font-size: 12px;
+    padding-left: 4px;
+}
+
+[theme="light"] #showPasswordButton {
+    border: none;
+}
+
+[theme="dark"] #mainFrame {
+    border: none;
+}
+
+[theme="dark"] #inputFrame {
+    border: 1px solid rgba(242, 143, 140, 1);
+    border-radius: 20px;
+}
+
+[theme="dark"] #inputFrame[focusedFrame=true] {
+    border: 3px solid rgba(242, 143, 140, 1);
+}
+
+[theme="dark"] #inputFrame[focusedFrame=false] {
+    border: 1px solid rgba(242, 143, 140, 1);
+}
+
+[theme="dark"] #errorFrame {
+    border: none;
+}
+
+[theme="dark"] #inputLineEdit {
+    border: none;
+    border-radius: 0px;
+    background: transparent;
+    font-size: 16px;
+}
+
+[theme="dark"] #promptLabel {
+    color: #F28F8C;
+    background-color: @wizardCardBackgroundDark;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+    border: 1px solid transparent;
+    font-size: 12px;
+}
+
+[theme="dark"] #errorLabel {
+    color: #F28F8C;
+    background: transparent;
+    font-size: 12px;
+    padding-left: 4px;
+}
+
+[theme="dark"] #showPasswordButton {
+    border: none;
+}

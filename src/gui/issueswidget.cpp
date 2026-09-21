@@ -29,7 +29,6 @@
 #include "syncfileitem.h"
 #include "theme.h"
 #include "gui/customui/stylehelper.h"
-#include "gui/customdialogs/dlgutils.h"
 
 #include "ui_issueswidget.h"
 
@@ -190,7 +189,7 @@ IssuesWidget::IssuesWidget(QWidget *parent)
     _ui->setupUi(this);
 
     StyleHelper::applyPushButtonsStyle(this);
-    setStyleSheet(DlgUtils::loadFileToString(widget_style));
+    setStyleSheet(StyleHelper::loadFileToString(widget_style));
 
     connect(ProgressDispatcher::instance(), &ProgressDispatcher::progressInfo,
         this, &IssuesWidget::slotProgressInfo);
@@ -240,7 +239,7 @@ IssuesWidget::IssuesWidget(QWidget *parent)
     });
 
     connect(_ui->_filterButton, &QAbstractButton::clicked, this, [this] {
-        showFilterMenu(_ui->_filterButton);
+        showFilterMenu(this);
     });
     filterDidChange(); // Set the appropriate label.
 
@@ -450,7 +449,7 @@ std::function<void(void)> IssuesWidget::addStatusFilter(QMenu *menu)
 
 void IssuesWidget::onThemeChanged(bool isDark)
 {
-    DlgUtils::setTheme(this, isDark);
+    StyleHelper::setTheme(this, isDark);
     APP::StyleHelper::invoke_setDarkTheme_recursive(this);
 }
 

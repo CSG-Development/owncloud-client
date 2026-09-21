@@ -1,4 +1,5 @@
 #include "style_push_button.h"
+#include "apppalette.h"
 #include "stylehelper.h"
 
 #include <QPainterPath>
@@ -28,29 +29,29 @@ constexpr int textPadding = 14;
 namespace APP {
 
 #ifdef Q_OS_MACOS
-QColor ProxyStylePushButton::buttonFrameFocused() const {return isDark ? QColor(0x64,0xB5,0xF6,0x80) : QColor(0x19,0x76,0xD2,0x80);}
+QColor ProxyStylePushButton::buttonFrameFocused() const {return AppPalette::color(ColorToken::PushButtonFocusRing, isDark);}
 
-QColor ProxyStylePushButton::buttonFrameNormal() const  {return isDark ? QColor(0x61,0x61,0x61) : QColor(0xCB,0xCD,0xD3);}
-QColor ProxyStylePushButton::buttonFramePressed() const {return isDark ? QColor(0x61,0x61,0x61) : QColor(0xCB,0xCD,0xD3);}
-QColor ProxyStylePushButton::buttonFrameHovered() const {return isDark ? QColor(0x61,0x61,0x61) : QColor(0xCB,0xCD,0xD3);}
-QColor ProxyStylePushButton::buttonFrameDisabled() const {return isDark ? QColor(0x6B,0x6C,0x6D) : QColor(0xBB,0xBB,0xBB);}
+QColor ProxyStylePushButton::buttonFrameNormal() const  {return AppPalette::color(ColorToken::MacButtonFrameNormal, isDark);}
+QColor ProxyStylePushButton::buttonFramePressed() const {return AppPalette::color(ColorToken::MacButtonFramePressed, isDark);}
+QColor ProxyStylePushButton::buttonFrameHovered() const {return AppPalette::color(ColorToken::MacButtonFrameHovered, isDark);}
+QColor ProxyStylePushButton::buttonFrameDisabled() const {return AppPalette::color(ColorToken::MacButtonFrameDisabled, isDark);}
 
-QColor ProxyStylePushButton::buttonBackgroundNormal() const {return isDark ? QColor(0x61,0x61,0x61) : QColor(0xFF,0xFF,0xFF);}
-QColor ProxyStylePushButton::buttonBackgroundPressed() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x1F) : QColor(0x61,0x61,0x61,0x08);}
-QColor ProxyStylePushButton::buttonBackgroundHovered() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x08) : QColor(0x61,0x61,0x61,0x1F);}
-QColor ProxyStylePushButton::buttonBackgroundDisabled() const {return isDark ? QColor(0x44,0x45,0x46) : QColor(0xF6,0xF6,0xF6);}
+QColor ProxyStylePushButton::buttonBackgroundNormal() const {return AppPalette::color(ColorToken::MacButtonBackgroundNormal, isDark);}
+QColor ProxyStylePushButton::buttonBackgroundPressed() const {return AppPalette::color(ColorToken::MacButtonBackgroundPressed, isDark);}
+QColor ProxyStylePushButton::buttonBackgroundHovered() const {return AppPalette::color(ColorToken::MacButtonBackgroundHovered, isDark);}
+QColor ProxyStylePushButton::buttonBackgroundDisabled() const {return AppPalette::color(ColorToken::MacButtonBackgroundDisabled, isDark);}
 #else
-QColor ProxyStylePushButton::buttonFrameFocused() const {return isDark ? QColor(0xFF,0xFF,0xFF) : QColor(0x21,0x21,0x21);}
+QColor ProxyStylePushButton::buttonFrameFocused() const {return AppPalette::color(ColorToken::ButtonFrameFocused, isDark);}
 
-QColor ProxyStylePushButton::buttonFrameNormal() const  {return isDark ? QColor(0xFF,0xFF,0xFF,0x18) : QColor(0xCB,0xCD,0xD3);}
-QColor ProxyStylePushButton::buttonFramePressed() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x12) : QColor(0xCB,0xCD,0xD3);}
-QColor ProxyStylePushButton::buttonFrameHovered() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x18) : QColor(0xCB,0xCD,0xD3);}
-QColor ProxyStylePushButton::buttonFrameDisabled() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x12) : QColor(0xCB,0xCD,0xD3);}
+QColor ProxyStylePushButton::buttonFrameNormal() const  {return AppPalette::color(ColorToken::ButtonFrameNormal, isDark);}
+QColor ProxyStylePushButton::buttonFramePressed() const {return AppPalette::color(ColorToken::ButtonFramePressed, isDark);}
+QColor ProxyStylePushButton::buttonFrameHovered() const {return AppPalette::color(ColorToken::ButtonFrameHovered, isDark);}
+QColor ProxyStylePushButton::buttonFrameDisabled() const {return AppPalette::color(ColorToken::ButtonFrameDisabled, isDark);}
 
-QColor ProxyStylePushButton::buttonBackgroundNormal() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x0F) : QColor(0xFF,0xFF,0xFF,0xB2);}
-QColor ProxyStylePushButton::buttonBackgroundPressed() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x08) : QColor(0x61,0x61,0x61,0x08);}
-QColor ProxyStylePushButton::buttonBackgroundHovered() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x15) : QColor(0x61,0x61,0x61,0x1F);}
-QColor ProxyStylePushButton::buttonBackgroundDisabled() const {return isDark ? QColor(0, 0, 0, 0) : QColor(0xF6,0xF6,0xF6);}
+QColor ProxyStylePushButton::buttonBackgroundNormal() const {return AppPalette::color(ColorToken::ButtonBackgroundNormal, isDark);}
+QColor ProxyStylePushButton::buttonBackgroundPressed() const {return AppPalette::color(ColorToken::ButtonBackgroundPressed, isDark);}
+QColor ProxyStylePushButton::buttonBackgroundHovered() const {return AppPalette::color(ColorToken::ButtonBackgroundHovered, isDark);}
+QColor ProxyStylePushButton::buttonBackgroundDisabled() const {return AppPalette::color(ColorToken::ButtonBackgroundDisabled, isDark);}
 #endif
 
 ProxyStylePushButton::ProxyStylePushButton(QStyle* baseStyle)
@@ -139,7 +140,8 @@ void ProxyStylePushButton::drawItemText(QPainter *painter, const QRect &rect, in
 QSize ProxyStylePushButton::sizeFromContents(ContentsType ct, const QStyleOption *opt, const QSize &contentsSize, const QWidget *w) const
 {
     QSize sz = QProxyStyle::sizeFromContents(ct, opt, contentsSize, w);
-    sz.rwidth() += ::textPadding;
+    if (ct == CT_PushButton)
+        sz.rwidth() += ::textPadding;
     return sz;
 }
 

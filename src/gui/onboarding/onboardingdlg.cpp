@@ -9,6 +9,7 @@
 #include "ui_onboardingdlg.h"
 
 #include "gui/customdialogs/dlgutils.h"
+#include "gui/customui/stylehelper.h"
 #include "theme.h"
 
 #include <QApplication>
@@ -165,8 +166,7 @@ void OnboardingDlg::skip()
 
 void OnboardingDlg::updateTheme(bool isDark)
 {
-    setStyleSheet(DlgUtils::loadFileToString(onboardingStylePath()));
-    DlgUtils::setTheme(this, isDark);
+    APP::StyleHelper::applyThemedStyleSheet(this, onboardingStylePath(), isDark);
 }
 
 void OnboardingDlg::updateNavigation()

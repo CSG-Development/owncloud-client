@@ -3,17 +3,17 @@
 
 #frameContent {
     border-radius: 24px;
-    background-color: #262729;
+    background-color: @wizardCardBackgroundDark;
 }
 
 #lblAppName { font-size: 34px; }
 
 /*** Light theme */
 
-[theme="light"] #frameContent { background-color: #FFFFFF; }
+[theme="light"] #frameContent { background-color: @wizardCardBackgroundLight; }
 [theme="light"] #lblAppName { color: rgba(0, 0, 0, 0.87); }
 
 /*** Dark theme */
 
-[theme="dark"] #frameContent { background-color: #262729; }
+[theme="dark"] #frameContent { background-color: @wizardCardBackgroundDark; }
 [theme="dark"] #lblAppName { color: rgba(255, 255, 255, 0.87); }

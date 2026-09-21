@@ -1,0 +1,155 @@
+[theme="light"] QLineEdit {
+    border: 1px solid #D1D1D1;
+    border-radius: 4px;
+    background: palette(base);
+}
+
+[theme="light"] QLineEdit:focus {
+    border: 1px solid @inputFocusBorderLight;
+}
+
+[theme="light"] QLineEdit:disabled {
+    border: 1px solid #E7E7E7;
+    background: palette(window);
+}
+
+[theme="light"] QLineEdit[error="true"] {
+    border: 1px solid #F44336;
+}
+
+[theme="light"] QLineEdit, [theme="light"] QTextEdit, [theme="light"] QPlainTextEdit {
+    selection-background-color: @menuSelectionBackgroundLight;
+    selection-color: @onMenuSelectionLight;
+}
+
+[theme="light"] QAbstractSpinBox QLineEdit, [theme="light"] QComboBox QLineEdit {
+    border: none;
+    border-radius: 0px;
+    background: transparent;
+}
+
+[theme="light"] QAbstractSpinBox QLineEdit:focus, [theme="light"] QComboBox QLineEdit:focus {
+    border: none;
+    border-radius: 0px;
+    background: transparent;
+}
+
+[theme="light"] QAbstractSpinBox QLineEdit:disabled, [theme="light"] QComboBox QLineEdit:disabled {
+    border: none;
+    border-radius: 0px;
+    background: transparent;
+}
+
+[theme="light"] QComboBox {
+    border: 1px solid #D1D1D1;
+    border-radius: 4px;
+    background: palette(base);
+    min-height: 20px;
+    padding: 0px 26px 0px 8px;
+}
+
+[theme="light"] QComboBox:focus {
+    border: 1px solid @inputFocusBorderLight;
+}
+
+[theme="light"] QComboBox:disabled {
+    border: 1px solid #E7E7E7;
+    background: palette(window);
+}
+
+[theme="light"] QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    width: 16px;
+    margin-right: 4px;
+    border: none;
+    background: transparent;
+}
+
+[theme="light"] QComboBox::down-arrow {
+    image: url(":/res/combobox/light/normal.svg");
+    width: 16px;
+    height: 16px;
+}
+
+[theme="light"] QComboBox::down-arrow:disabled {
+    image: url(":/res/combobox/light/disabled.svg");
+}
+
+[theme="dark"] QComboBox {
+    border: 1px solid #5D5D5D;
+    border-radius: 4px;
+    background: palette(base);
+    min-height: 20px;
+    padding: 0px 26px 0px 8px;
+}
+
+[theme="dark"] QComboBox:focus {
+    border: 1px solid @inputFocusBorderDark;
+}
+
+[theme="dark"] QComboBox:disabled {
+    border: 1px solid #4F4F4F;
+    background: palette(window);
+}
+
+[theme="dark"] QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    width: 16px;
+    margin-right: 4px;
+    border: none;
+    background: transparent;
+}
+
+[theme="dark"] QComboBox::down-arrow {
+    image: url(":/res/combobox/dark/normal.svg");
+    width: 16px;
+    height: 16px;
+}
+
+[theme="dark"] QComboBox::down-arrow:disabled {
+    image: url(":/res/combobox/dark/disabled.svg");
+}
+
+[theme="dark"] QLineEdit {
+    border: 1px solid #5D5D5D;
+    border-radius: 4px;
+    background: palette(base);
+}
+
+[theme="dark"] QLineEdit:focus {
+    border: 1px solid @inputFocusBorderDark;
+}
+
+[theme="dark"] QLineEdit:disabled {
+    border: 1px solid #4F4F4F;
+    background: palette(window);
+}
+
+[theme="dark"] QLineEdit[error="true"] {
+    border: 1px solid #F28F8C;
+}
+
+[theme="dark"] QLineEdit, [theme="dark"] QTextEdit, [theme="dark"] QPlainTextEdit {
+    selection-background-color: @menuSelectionBackgroundDark;
+    selection-color: @onMenuSelectionDark;
+}
+
+[theme="dark"] QAbstractSpinBox QLineEdit, [theme="dark"] QComboBox QLineEdit {
+    border: none;
+    border-radius: 0px;
+    background: transparent;
+}
+
+[theme="dark"] QAbstractSpinBox QLineEdit:focus, [theme="dark"] QComboBox QLineEdit:focus {
+    border: none;
+    border-radius: 0px;
+    background: transparent;
+}
+
+[theme="dark"] QAbstractSpinBox QLineEdit:disabled, [theme="dark"] QComboBox QLineEdit:disabled {
+    border: none;
+    border-radius: 0px;
+    background: transparent;
+}

@@ -54,10 +54,7 @@
 #endif
 
 namespace {
-QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/generalsettings_light.qss"),
-    QStringLiteral(":/res/generalsettings_dark.qss")
-};
+const auto widgetStyle = QStringLiteral(":/res/generalsettings.qss");
 
 #ifdef WITH_IFW_UPDATER
 constexpr std::chrono::hours kUpdateCheckIntervalDay{24};
@@ -286,7 +283,7 @@ void GeneralSettings::showEvent(QShowEvent *)
 
 void GeneralSettings::onThemeChanged(bool isDark)
 {
-    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
+    StyleHelper::applyThemedStyleSheet(this, widgetStyle, isDark);
     const auto& btns = findChildren<QPushButton*>();
     for (auto* t: btns) {
         t->update();

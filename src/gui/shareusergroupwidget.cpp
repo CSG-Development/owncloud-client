@@ -251,6 +251,7 @@ void ShareUserGroupWidget::slotAdjustScrollWidgetSize()
 void ShareUserGroupWidget::slotPrivateLinkShare()
 {
     auto menu = new QMenu(this);
+    StyleHelper::applyMenuStyle(menu);
     menu->setAttribute(Qt::WA_DeleteOnClose);
 
     menu->addAction(tr("Open link in browser"),
@@ -363,6 +364,7 @@ ShareUserLine::ShareUserLine(QSharedPointer<Share> share,
 
     // Create detailed permissions menu
     QMenu *menu = new QMenu(this);
+    StyleHelper::applyMenuStyle(menu);
     _permissionCreate = new QAction(tr("create"), this);
     _permissionCreate->setCheckable(true);
     _permissionCreate->setEnabled(maxSharingPermissions & SharePermissionCreate);

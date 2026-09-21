@@ -18,6 +18,7 @@
 #include "accountmanager.h"
 #include "accountstate.h"
 #include "application.h"
+#include "apppalette.h"
 #include "commonstrings.h"
 #include "configfile.h"
 #include "folderman.h"
@@ -68,9 +69,9 @@ namespace
 {
 
 #ifdef Q_OS_MACOS
-QPair<QString, QString> widgetStyle = {QStringLiteral(":/res/accountsettings_light_mac.qss"), QStringLiteral(":/res/accountsettings_dark_mac.qss")};
+const auto widgetStyle = QStringLiteral(":/res/accountsettings_mac.qss");
 #else
-QPair<QString, QString> widgetStyle = {QStringLiteral(":/res/accountsettings_light.qss"), QStringLiteral(":/res/accountsettings_dark.qss")};
+const auto widgetStyle = QStringLiteral(":/res/accountsettings.qss");
 #endif
 
 // constexpr auto modalWidgetStretchedMarginC = 50;
@@ -299,6 +300,7 @@ AccountSettings::AccountSettings(const AccountStatePtr &accountState, QWidget *p
 void AccountSettings::createAccountToolbox()
 {
     _accountToolboxMenu = new QMenu(ui->_accountToolbox);
+    StyleHelper::applyMenuStyle(_accountToolboxMenu);
 
     _toggleSignInOutAction = new QAction(tr("Log out"), this);
     connect(_toggleSignInOutAction, &QAction::triggered, this, &AccountSettings::slotToggleSignInState);
@@ -391,6 +393,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
     if (classification == FolderStatusModel::RootFolder && !index.siblingAtColumn(static_cast<int>(FolderStatusModel::Columns::IsReady)).data().toBool()
         && !isDeployed) {
         QMenu *menu = new QMenu(tv);
+        StyleHelper::applyMenuStyle(menu);
         menu->setAttribute(Qt::WA_DeleteOnClose);
         addRemoveFolderAction(menu);
         connect(menu, &QMenu::aboutToHide, this, [this] {
@@ -402,6 +405,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
     }
 
     QMenu *menu = new QMenu(tv);
+    StyleHelper::applyMenuStyle(menu);
     menu->setAttribute(Qt::WA_DeleteOnClose);
 
     // Add an action to open the folder in the system's file browser:
@@ -753,7 +757,7 @@ void AccountSettings::showConnectionLabel(const QString &message, QStringList er
 void AccountSettings::refreshConnectionLabel()
 {
     const bool isDark = Theme::instance()->isDarkTheme();
-    const QString linkColor = isDark ? QStringLiteral("#64b5f6") : QStringLiteral("#1976d2");
+    const QString linkColor = AppPalette::color(ColorToken::LinkText, isDark).name();
 
     // Replace href-only anchors with colored ones
     const QString colored = QString(_connectionMessage)
@@ -1048,8 +1052,8 @@ void AccountSettings::slotLinkActivated(const QString &link)
 
 void AccountSettings::onThemeChanged(bool isDark)
 {
-    setStyleSheet(StyleHelper::loadFileToString(isDark ? widgetStyle.second : widgetStyle.first));
-    ui->_folderList->setSelectionColor(isDark ? QColor(100, 181, 246, 61) : QColor(25, 118, 210, 61));
+    StyleHelper::applyThemedStyleSheet(this, widgetStyle, isDark);
+    ui->_folderList->setSelectionColor(AppPalette::color(ColorToken::SelectionBackground, isDark));
     ui->_folderList->viewport()->update();
 
     refreshConnectionLabel();

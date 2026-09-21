@@ -1,0 +1,27 @@
+[theme="light"] #ToolTipContainer {
+    background-color: rgba(78, 78, 78, 1);
+    border: 1px solid rgba(203, 205, 211, 1);
+    border-radius: 4px;
+}
+
+[theme="light"] #ToolTipLabel {
+    color: rgba(255, 255, 255, 0.87);
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 5px;
+    padding-bottom: 7px;
+}
+
+[theme="dark"] #ToolTipContainer {
+    background-color: rgba(184, 184, 184, 1);
+    border: 1px solid rgba(97, 97, 97, 1);
+    border-radius: 4px;
+}
+
+[theme="dark"] #ToolTipLabel {
+    color: rgba(0, 0, 0, 0.87);
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 5px;
+    padding-bottom: 7px;
+}

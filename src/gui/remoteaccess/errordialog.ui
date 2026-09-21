@@ -13,24 +13,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">#frameContent { border: none; background: rgba(0, 0, 0, 128); }
-#frame { 
-border-radius: 28px; 
-background: #FFFFFF;
-}
-
-.text_button {
-min-height: 40px;
-max-height: 40px;
-font-size: 14px;
-border: 1px solid transparent;
-border-radius: 20px;
-color: #1976D2;
-background: rgba(30, 136, 229, 0.12);
-}
-</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <property name="leftMargin">
     <number>0</number>

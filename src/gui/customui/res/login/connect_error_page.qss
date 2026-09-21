@@ -1,0 +1,108 @@
+#frame,
+#frameHalign,
+#frameContent,
+#frameButton,
+#frameLogo,
+#frameText,
+#frameToolbar {
+    border: none;
+}
+
+#lblHeader {
+    font-size: 22px;
+    font: "Segoe UI";
+}
+
+#lblInfo1,
+#lblInfo2,
+#lblInfo3,
+#lblInfo4,
+#lblInfo5,
+#lblInfo6,
+#lblInfo7 {
+    font-size: 14px;
+}
+
+#btnUnused {
+    background: transparent;
+    border: 1px solid transparent;
+}
+
+#btnBack {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+[theme="light"] #frameContent {
+    background-color: @wizardCardBackgroundLight;
+    border-radius: 24px;
+}
+
+/**** Retry button */
+[theme="light"] #btnRetry {
+    background: @primaryLight;
+    border-color: transparent;
+    border-width: 1px;
+    border-radius: 20px;
+    color: @onPrimaryLight;
+    font-size: 14px;
+    font: "Segoe UI";
+}
+
+[theme="light"] #btnRetry:hover {
+    background: @primaryHoverLight;
+}
+
+[theme="light"] #btnRetry:pressed {
+    background: @primaryPressedLight;
+}
+
+[theme="light"] #btnRetry:disabled {
+    background: @primaryDisabledLight;
+    color: @onPrimaryDisabledLight;
+}
+
+[theme="light"] #btnBack:hover {
+    background: @flatButtonHoverBackgroundLight;
+}
+
+[theme="light"] #btnBack:pressed {
+    background: @flatButtonPressedBackgroundLight;
+}
+
+[theme="dark"] #frameContent {
+    background-color: @wizardCardBackgroundDark;
+    border-radius: 24px;
+}
+
+/**** Retry button */
+[theme="dark"] #btnRetry {
+    background: @primaryDark;
+    border-color: transparent;
+    border-width: 1px;
+    border-radius: 20px;
+    color: @onPrimaryDark;
+    font-size: 14px;
+}
+
+[theme="dark"] #btnRetry:hover {
+    background: @primaryHoverDark;
+}
+
+[theme="dark"] #btnRetry:pressed {
+    background: @primaryPressedDark;
+}
+
+[theme="dark"] #btnRetry:disabled {
+    background: @primaryDisabledDark;
+    color: @onPrimaryDisabledDark;
+}
+
+[theme="dark"] #btnBack:hover {
+    background: @flatButtonHoverBackgroundDark;
+}
+
+[theme="dark"] #btnBack:pressed {
+    background: @flatButtonPressedBackgroundDark;
+}

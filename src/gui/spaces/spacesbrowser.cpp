@@ -17,6 +17,7 @@
 #include "spacesdelegate.h"
 #include "spacesmodel.h"
 
+#include "gui/customui/stylehelper.h"
 #include "gui/models/expandingheaderview.h"
 #include "gui/models/models.h"
 
@@ -63,6 +64,7 @@ SpacesBrowser::SpacesBrowser(QWidget *parent)
     header->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(header, &QHeaderView::customContextMenuRequested, header, [header, this] {
         auto menu = new QMenu(this);
+        APP::StyleHelper::applyMenuStyle(menu);
         menu->setAttribute(Qt::WA_DeleteOnClose);
         header->addResetActionToMenu(menu);
         menu->popup(QCursor::pos());

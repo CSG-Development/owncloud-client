@@ -31,7 +31,6 @@
 
 #include "models/expandingheaderview.h"
 #include "gui/customui/stylehelper.h"
-#include "gui/customdialogs/dlgutils.h"
 
 #include "ui_protocolwidget.h"
 
@@ -48,7 +47,7 @@ ProtocolWidget::ProtocolWidget(QWidget *parent)
     _ui->setupUi(this);
 
     StyleHelper::applyPushButtonsStyle(this);
-    setStyleSheet(DlgUtils::loadFileToString(widget_style));
+    setStyleSheet(StyleHelper::loadFileToString(widget_style));
 
     connect(ProgressDispatcher::instance(), &ProgressDispatcher::itemCompleted,
         this, &ProtocolWidget::slotItemCompleted);
@@ -79,7 +78,7 @@ ProtocolWidget::ProtocolWidget(QWidget *parent)
     });
 
     connect(_ui->_filterButton, &QAbstractButton::clicked, this, [this] {
-        showFilterMenu(_ui->_filterButton, _sortModel, static_cast<int>(ProtocolItemModel::ProtocolItemRole::Account), tr("Account"));
+        showFilterMenu(this, _sortModel, static_cast<int>(ProtocolItemModel::ProtocolItemRole::Account), tr("Account"));
     });
 
     connect(FolderMan::instance(), &FolderMan::folderRemoved, this, [this](Folder *f) {
@@ -203,7 +202,7 @@ bool ProtocolWidget::eventFilter(QObject */*obj*/, QEvent *event)
 
 void ProtocolWidget::onThemeChanged(bool isDark)
 {
-    DlgUtils::setTheme(this, isDark);
+    StyleHelper::setTheme(this, isDark);
     APP::StyleHelper::invoke_setDarkTheme_recursive(this);
 }
 

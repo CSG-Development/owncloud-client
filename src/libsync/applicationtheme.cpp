@@ -20,6 +20,7 @@
 #include <QIcon>
 #include <QCoreApplication>
 
+#include "apppalette.h"
 #include "common/utility.h"
 
 namespace APP {
@@ -31,12 +32,12 @@ ApplicationTheme::ApplicationTheme()
 
 QColor ApplicationTheme::wizardHeaderBackgroundColor() const
 {
-    return QColor(4, 30, 66);
+    return AppPalette::color(ColorToken::WizardHeaderBackground, isDarkTheme());
 }
 
 QColor ApplicationTheme::wizardHeaderTitleColor() const
 {
-    return Qt::white;
+    return AppPalette::color(ColorToken::OnWizardHeader, isDarkTheme());
 }
 
 QIcon ApplicationTheme::wizardHeaderLogo() const

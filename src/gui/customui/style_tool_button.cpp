@@ -1,4 +1,5 @@
 #include "style_tool_button.h"
+#include "apppalette.h"
 #include "stylehelper.h"
 
 #include <QPainterPath>
@@ -15,21 +16,21 @@ QSize iconSize = {40, 40};
 
 namespace APP {
 
-QColor ProxyStyleToolButton::buttonFrameFocused() const {return isDark ? QColor(0x19,0x76,0xD2,0x80) : QColor(0x19,0x76,0xD2,0x80);}
+QColor ProxyStyleToolButton::buttonFrameFocused() const {return AppPalette::color(ColorToken::ToolButtonFocusRing, isDark);}
 
 QColor ProxyStyleToolButton::buttonFrameNormal() const  {return {};}
 QColor ProxyStyleToolButton::buttonFramePressed() const {return {};}
 QColor ProxyStyleToolButton::buttonFrameHovered() const {return {};}
 QColor ProxyStyleToolButton::buttonFrameDisabled() const {return {};}
 
-QColor ProxyStyleToolButton::buttonBackgroundNormal() const {return isDark ? QColor(0,0,0,0) : QColor(0,0,0,0);}
-QColor ProxyStyleToolButton::buttonBackgroundPressed() const {return isDark ? QColor(0x4E,0x50,0x53) : QColor(0xF5,0xF5,0xF7);}
-QColor ProxyStyleToolButton::buttonBackgroundHovered() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x1A) : QColor(0xE6,0xE3,0xE6);}
-QColor ProxyStyleToolButton::buttonBackgroundDisabled() const {return isDark ? QColor(0,0,0,0) : QColor(0,0,0,0);}
+QColor ProxyStyleToolButton::buttonBackgroundNormal() const {return AppPalette::color(ColorToken::ToolButtonBackgroundNormal, isDark);}
+QColor ProxyStyleToolButton::buttonBackgroundPressed() const {return AppPalette::color(ColorToken::ToolButtonBackgroundPressed, isDark);}
+QColor ProxyStyleToolButton::buttonBackgroundHovered() const {return AppPalette::color(ColorToken::ToolButtonBackgroundHovered, isDark);}
+QColor ProxyStyleToolButton::buttonBackgroundDisabled() const {return AppPalette::color(ColorToken::ToolButtonBackgroundDisabled, isDark);}
 
-QColor ProxyStyleToolButton::buttonBackgroundCheckedNormal() const {return isDark ? QColor(0x1E,0x88,0xE5,0x1F) : QColor(0x1E,0x88,0xE5,0x1F);}
-QColor ProxyStyleToolButton::buttonBackgroundCheckedPressed() const {return isDark ? QColor(0x1E,0x88,0xE5,0x1F) : QColor(0x1E,0x88,0xE5,0x1F);}
-QColor ProxyStyleToolButton::buttonBackgroundCheckedHovered() const {return isDark ? QColor(0x19,0x76,0xD2,0x33) : QColor(0x19,0x76,0xD2,0x33);}
+QColor ProxyStyleToolButton::buttonBackgroundCheckedNormal() const {return AppPalette::color(ColorToken::ToolButtonCheckedBackground, isDark);}
+QColor ProxyStyleToolButton::buttonBackgroundCheckedPressed() const {return AppPalette::color(ColorToken::ToolButtonCheckedBackground, isDark);}
+QColor ProxyStyleToolButton::buttonBackgroundCheckedHovered() const {return AppPalette::color(ColorToken::ToolButtonCheckedHoverBackground, isDark);}
 
 ProxyStyleToolButton::ProxyStyleToolButton(QStyle* baseStyle)
     : ProxyStyleBase(baseStyle)

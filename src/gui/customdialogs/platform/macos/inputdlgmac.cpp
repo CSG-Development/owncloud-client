@@ -1,5 +1,7 @@
 #include "inputdlgmac.h"
 #include "ui_inputdlgmac.h"
+#include "apppalette.h"
+#include "gui/customui/stylehelper.h"
 #include "dlgutils.h"
 #include "platform/common/windowdragger.h"
 #include "theme.h"
@@ -13,8 +15,8 @@ const std::pair<QString,QString> close_icon = {
 };
 
 const std::pair<FrameData,FrameData> frame_data = {
-    {6, 4, QColor(25, 118, 210, 127), QColor(0, 0, 0, 0), 0},
-    {6, 4, QColor(222, 222, 222, 255), QColor(0, 0, 0, 0), 0}
+    {6, 4, APP::AppPalette::light(APP::ColorToken::DialogFocusFrame), QColor(0, 0, 0, 0), 0},
+    {6, 4, APP::AppPalette::dark(APP::ColorToken::DialogFocusFrame), QColor(0, 0, 0, 0), 0}
 };
 
 const std::pair<QString,QString> clear_icon = {
@@ -30,7 +32,7 @@ InputDlgMac::InputDlgMac(QWidget *parent)
 {
     ui->setupUi(this);
     DlgUtils::clearStyleSheet(this);
-    setStyleSheet(DlgUtils::loadFileToString(widget_style));
+    setStyleSheet(APP::StyleHelper::loadFileToString(widget_style));
 
     bool isDark = APP::Theme::instance()->isDarkTheme();
     clearAction = new QAction(isDark ? QIcon(clear_icon.second) : QIcon(clear_icon.first), tr("Clear"));

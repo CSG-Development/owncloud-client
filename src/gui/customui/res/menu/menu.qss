@@ -1,0 +1,51 @@
+QMenu::indicator {
+    width: 8px;
+    height: 8px;
+    left: 6px;
+    border: none;
+    background: transparent;
+}
+
+QMenu::item {
+    padding: 4px 16px 4px 16px;
+}
+
+QMenu::indicator:unchecked {
+    image: none;
+}
+
+QMenu[theme="light"], QMenu[theme="light"] QMenu {
+    color: rgba(0, 0, 0, 0.87);
+    background: #FFFFFF;
+}
+
+QMenu[theme="light"]::item:selected:enabled, QMenu[theme="light"] QMenu::item:selected:enabled {
+    background: @menuSelectionBackgroundLight;
+    color: @onMenuSelectionLight;
+}
+
+QMenu[theme="light"]::item:disabled, QMenu[theme="light"] QMenu::item:disabled {
+    color: rgba(158, 158, 158, 1);
+}
+
+QMenu[theme="light"]::indicator:checked, QMenu[theme="light"] QMenu::indicator:checked {
+    image: url(:/res/menu/check_light.svg);
+}
+
+QMenu[theme="dark"], QMenu[theme="dark"] QMenu {
+    color: rgba(255, 255, 255, 0.87);
+    background: #424242;
+}
+
+QMenu[theme="dark"]::item:selected:enabled, QMenu[theme="dark"] QMenu::item:selected:enabled {
+    background: @menuSelectionBackgroundDark;
+    color: @onMenuSelectionDark;
+}
+
+QMenu[theme="dark"]::item:disabled, QMenu[theme="dark"] QMenu::item:disabled {
+    color: rgba(158, 158, 158, 1);
+}
+
+QMenu[theme="dark"]::indicator:checked, QMenu[theme="dark"] QMenu::indicator:checked {
+    image: url(:/res/menu/check_dark.svg);
+}

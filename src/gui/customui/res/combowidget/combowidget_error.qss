@@ -1,0 +1,110 @@
+#comboBox::down-arrow {
+    image: url(://res/combowidget/triangle_down.svg);
+}
+
+#comboBox::down-arrow:on {
+    image: url(://res/combowidget/triangle_up.svg);
+}
+
+[theme="light"] #mainFrame {
+    border: none;
+}
+
+[theme="light"] #inputFrame {
+    border: 1px solid #F44336;
+    border-radius: 20px;
+}
+
+[theme="light"] #errorFrame {
+    border: none;
+}
+
+[theme="light"] #comboBox {
+    border: none;
+    border-radius: 0px;
+    background: transparent;
+    font-size: 16px;
+}
+
+[theme="light"] #comboBox::drop-down:button {
+    width: 32px;
+}
+
+[theme="light"] #promptLabel {
+    color: #F44336;
+    background: #FFFFFF;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 12px;
+}
+
+[theme="light"] #errorLabel {
+    color: #F44336;
+    background: #FFFFFF;
+    font-size: 12px;
+    padding-left: 4px;
+}
+
+[theme="light"] #arrowButton {
+    border: none;
+}
+
+[theme="light"] #btnDeviceIcon {
+    background: transparent;
+    border: none;
+    image: url(:/res/combowidget/device_icon.svg);
+}
+
+[theme="dark"] #mainFrame {
+    border: none;
+}
+
+[theme="dark"] #inputFrame {
+    border: 1px solid #F28F8C;
+    border-radius: 20px;
+}
+
+[theme="dark"] #errorFrame {
+    border: none;
+}
+
+[theme="dark"] #comboBox {
+    border: none;
+    border-radius: 0px;
+    background: transparent;
+    font-size: 16px;
+}
+
+[theme="dark"] #comboBox::drop-down:button {
+    width: 32px;
+}
+
+[theme="dark"] #promptLabel {
+    color: #F28F8C;
+    background-color: #262729;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+    border: 1px solid transparent;
+    font-size: 12px;
+}
+
+[theme="dark"] #errorLabel {
+    color: #F28F8C;
+    background: transparent;
+    font-size: 12px;
+    padding-left: 4px;
+}
+
+[theme="dark"] #arrowButton {
+    border: none;
+}
+
+[theme="dark"] #btnDeviceIcon {
+    background: transparent;
+    border: none;
+    image: url(:/res/combowidget/device_icon.svg);
+}

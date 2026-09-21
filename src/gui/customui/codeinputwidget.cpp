@@ -10,14 +10,8 @@
 #include <QRegularExpressionValidator>
 
 namespace {
-const QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/inputwidget/codeinputwidget_light.qss"),
-    QStringLiteral(":/res/inputwidget/codeinputwidget_dark.qss")
-};
-const QPair<QString,QString> widgetStyleError = {
-    QStringLiteral(":/res/inputwidget/codeinputwidget_error_light.qss"),
-    QStringLiteral(":/res/inputwidget/codeinputwidget_error_dark.qss")
-};
+const auto widgetStyle = QStringLiteral(":/res/inputwidget/codeinputwidget.qss");
+const auto widgetStyleError = QStringLiteral(":/res/inputwidget/codeinputwidget_error.qss");
 constexpr auto ed_count = 6;
 }
 
@@ -137,13 +131,7 @@ bool CodeInputWidget::eventFilter(QObject *obj, QEvent *event)
 
 void CodeInputWidget::updateStyles()
 {
-    if (errorState)
-        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? widgetStyleError.second : widgetStyleError.first));
-    else
-        setStyleSheet(APP::StyleHelper::loadFileToString(darkTheme_.value() ? widgetStyle.second : widgetStyle.first));
-
-    style()->unpolish(this);
-    style()->polish(this);
+    APP::StyleHelper::applyThemedStyleSheet(this, errorState ? widgetStyleError : widgetStyle, darkTheme_.value());
     update();
 }
 
@@ -208,6 +196,7 @@ void CodeInputWidget::pasteCode()
 void CodeInputWidget::onContextMenuRequested(const QPoint &/*pos*/)
 {
     QMenu m;
+    APP::StyleHelper::applyMenuStyle(&m);
     m.addAction(pasteCodeAction);
     pasteCodeAction->setEnabled(validateClipboardBuffer());
     m.exec(QCursor::pos());

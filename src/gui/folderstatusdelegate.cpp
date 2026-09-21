@@ -17,6 +17,7 @@
 #include "folderstatusdelegate.h"
 #include "folderstatusmodel.h"
 
+#include "apppalette.h"
 #include "customui/tool_button_dots.h"
 #include "resources/resources.h"
 #include "theme.h"
@@ -225,13 +226,13 @@ void FolderStatusDelegate::drawProgressOrQuota(QPainter *painter, const QStyleOp
 
     painter->setRenderHint(QPainter::Antialiasing, true);
     painter->setPen(Qt::NoPen);
-    painter->setBrush(dark ? QColor(0xFF, 0xFF, 0xFF, 51) : QColor(0x00, 0x00, 0x00, 38));
+    painter->setBrush(AppPalette::color(ColorToken::ProgressTrack, dark));
     painter->drawRoundedRect(barRect, radius, radius);
 
     if (data.overallPercent > 0) {
         QRectF fillRect = barRect;
         fillRect.setWidth(barRect.width() * data.overallPercent / 100.0);
-        painter->setBrush(dark ? QColor(100, 181, 246) : QColor(25, 118, 210));
+        painter->setBrush(AppPalette::color(ColorToken::ProgressFill, dark));
         painter->drawRoundedRect(fillRect, radius, radius);
     }
 
