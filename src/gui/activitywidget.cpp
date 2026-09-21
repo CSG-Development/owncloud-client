@@ -254,12 +254,7 @@ void ActivityWidget::watchAccountPresentation(const AccountStatePtr &accountStat
 
 void ActivityWidget::checkActivityTabVisibility()
 {
-    int accountCount = AccountManager::instance()->accounts().count();
-    bool hasAccountsWithActivity = _accountsWithoutActivities.count() != accountCount;
     bool hasNotifications = !_widgetForNotifId.isEmpty();
-
-    _ui->_headerLabel->setVisible(hasAccountsWithActivity);
-    _ui->_activityList->setVisible(hasAccountsWithActivity);
 
     _ui->_notifyLabel->setVisible(hasNotifications);
     _ui->_notifyScroll->setVisible(hasNotifications);

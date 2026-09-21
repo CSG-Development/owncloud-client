@@ -23,7 +23,7 @@
 #include "creds/abstractcredentials.h"
 #include "customdialogs/custommessagebox.h"
 #include "folderman.h"
-#include "folderwizard/folderwizard.h"
+#include "folderwizard/folderwizarddlg.h"
 #include "gui/accountsettings.h"
 #include "gui/commonstrings.h"
 #include "gui/remoteaccess/overlaycontroller.h"
@@ -923,8 +923,7 @@ void ApplicationGui::runNewAccountWizard(RunAccountWizardReason reason)
                                 case Wizard::SyncMode::ConfigureUsingFolderWizard: {
                                     Q_ASSERT(!accountStatePtr->account()->hasDefaultSyncRoot());
 
-                                    auto *folderWizard = new FolderWizard(accountStatePtr, ocApp()->gui()->settingsDialog());
-                                    folderWizard->setAttribute(Qt::WA_DeleteOnClose);
+                                    auto *folderWizard = new FolderWizardDlg(accountStatePtr, ocApp()->gui()->settingsDialog());
 
                                            // TODO: duplication of AccountSettings
                                            // adapted from AccountSettings::slotFolderWizardAccepted()
@@ -956,11 +955,7 @@ void ApplicationGui::runNewAccountWizard(RunAccountWizardReason reason)
                                         maybeShowOnboarding();
                                     });
 
-                                    ocApp()
-                                        ->gui()
-                                        ->settingsDialog()
-                                        ->accountSettings(accountStatePtr->account().get())
-                                        ->addModalWidget(folderWizard, AccountSettings::ModalWidgetSizePolicy::Expanding);
+                                    folderWizard->present();
                                     break;
                                 }
                                 case APP::Wizard::SyncMode::Invalid:

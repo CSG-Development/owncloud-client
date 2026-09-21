@@ -15,6 +15,7 @@
 #include "models.h"
 
 #include "configfile.h"
+#include "gui/customui/stylehelper.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -28,6 +29,7 @@ ExpandingHeaderView::ExpandingHeaderView(const QString &objectName, QWidget *par
 {
     setSectionsClickable(true);
     setHighlightSections(true);
+    StyleHelper::applyHeaderViewStyle(this);
 
     connect(this, &QHeaderView::sectionCountChanged, this, &ExpandingHeaderView::resizeColumns);
 

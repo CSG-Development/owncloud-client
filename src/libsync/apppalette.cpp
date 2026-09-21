@@ -96,6 +96,9 @@ TokenColors colorsFor(ColorToken token)
     case ColorToken::ToolbarBorder:                    return {QColor(0xD1, 0xD1, 0xD1), QColor(0x5D, 0x5D, 0x5D)};
     case ColorToken::OnMenuSelection:                  return {QColor(0x00, 0x00, 0x00, 0xDE), QColor(0x00, 0x00, 0x00, 0xDE)};
     case ColorToken::OnTabSelected:                    return {QColor(0xFF, 0xFF, 0xFF, 0xDE), QColor(0x00, 0x00, 0x00, 0xDE)};
+    case ColorToken::TreeItemText:                     return {QColor(0x19, 0x19, 0x19), QColor(0xF6, 0xF6, 0xF6)};
+    case ColorToken::TreeItemHover:                    return {QColor(0x00, 0x00, 0x00, 0x0A), QColor(0xFF, 0xFF, 0xFF, 0x0A)};
+    case ColorToken::TreeItemSelected:                 return {QColor(0x00, 0x00, 0x00, 0x06), QColor(0x00, 0x00, 0x00, 0x1A)};
     }
 
     return {};
@@ -191,9 +194,12 @@ constexpr TokenName tokenNames[] = {
     {"toolbarBorder", ColorToken::ToolbarBorder},
     {"onMenuSelection", ColorToken::OnMenuSelection},
     {"onTabSelected", ColorToken::OnTabSelected},
+    {"treeItemText", ColorToken::TreeItemText},
+    {"treeItemHover", ColorToken::TreeItemHover},
+    {"treeItemSelected", ColorToken::TreeItemSelected},
 };
 
-static_assert(sizeof(tokenNames) / sizeof(tokenNames[0]) == static_cast<size_t>(ColorToken::OnTabSelected) + 1,
+static_assert(sizeof(tokenNames) / sizeof(tokenNames[0]) == static_cast<size_t>(ColorToken::TreeItemSelected) + 1,
               "tokenNames must list every ColorToken");
 
 } // namespace

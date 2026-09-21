@@ -17,6 +17,8 @@
 #include "libsync/configfile.h"
 #include "libsync/networkjobs.h"
 #include "libsync/theme.h"
+#include "gui/customui/stylehelper.h"
+#include "gui/customui/wizardtreewidget.h"
 
 #include "resources/resources.h"
 
@@ -66,7 +68,7 @@ SelectiveSyncWidget::SelectiveSyncWidget(AccountPtr account, QWidget *parent)
     : QWidget(parent)
     , _account(account)
     , _inserting(false)
-    , _folderTree(new QTreeWidget(this))
+    , _folderTree(new WizardTreeWidget(this))
 {
     _loading = new QLabel(tr("Loading ..."), _folderTree);
 
@@ -90,6 +92,8 @@ SelectiveSyncWidget::SelectiveSyncWidget(AccountPtr account, QWidget *parent)
     _folderTree->header()->setStretchLastSection(true);
     _folderTree->headerItem()->setText(0, tr("Name"));
     _folderTree->headerItem()->setText(1, tr("Size"));
+    _folderTree->setObjectName(QStringLiteral("selectiveSyncTree"));
+    StyleHelper::applyHeaderViewStyle(_folderTree->header());
 
     ConfigFile::setupDefaultExcludeFilePaths(_excludedFiles);
     _excludedFiles.reloadExcludeFiles();
@@ -218,7 +222,7 @@ void SelectiveSyncWidget::slotUpdateDirectories(QStringList list)
     if (!root) {
         root = new SelectiveSyncTreeViewItem(_folderTree);
         root->setText(0, _rootName);
-        root->setIcon(0, Theme::instance()->applicationIcon());
+        root->setIcon(0, WizardTreeWidget::rootIcon());
         root->setData(0, Qt::UserRole, QString());
         root->setCheckState(0, Qt::Checked);
         qint64 size = job ? job->sizes().value(rootPath, -1) : -1;

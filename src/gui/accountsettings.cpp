@@ -46,7 +46,7 @@
 
 #include "customdialogs/custommessagebox.h"
 #include "device/devicedefines.h"
-#include "folderwizard/folderwizard.h"
+#include "folderwizard/folderwizarddlg.h"
 #include "gui/models/models.h"
 #include "socketapi/socketapi.h"
 
@@ -559,21 +559,19 @@ void AccountSettings::slotAddFolder()
 {
     FolderMan::instance()->setSyncEnabled(false);   // do not start more syncs.
 
-    FolderWizard *folderWizard = new FolderWizard(_accountState, this);
-    folderWizard->setAttribute(Qt::WA_DeleteOnClose);
-
+    FolderWizardDlg *folderWizard = new FolderWizardDlg(_accountState, this);
     connect(folderWizard, &QDialog::accepted, this, &AccountSettings::slotFolderWizardAccepted);
     connect(folderWizard, &QDialog::rejected, this, [] {
         qCInfo(lcAccountSettings) << "Folder wizard cancelled";
         FolderMan::instance()->setSyncEnabled(true);
     });
 
-    addModalWidget(folderWizard, AccountSettings::ModalWidgetSizePolicy::Expanding);
+    folderWizard->present();
 }
 
 void AccountSettings::slotFolderWizardAccepted()
 {
-    FolderWizard *folderWizard = qobject_cast<FolderWizard *>(sender());
+    FolderWizardDlg *folderWizard = qobject_cast<FolderWizardDlg *>(sender());
     qCInfo(lcAccountSettings) << "Folder wizard completed";
 
     const auto config = folderWizard->result();

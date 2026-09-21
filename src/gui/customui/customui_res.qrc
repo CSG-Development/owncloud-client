@@ -3,6 +3,17 @@
         <file>res/Files-app-icon-gradient.svg</file>
         <file>res/login_logo_dark.svg</file>
         <file>res/login_logo_light.svg</file>
+        <file>res/tree_logo.svg</file>
+        <file>res/headerview.qss</file>
+        <file>res/headerview_mac.qss</file>
+        <file>res/header_arrow_down_light.svg</file>
+        <file>res/header_arrow_down_dark.svg</file>
+        <file>res/header_arrow_up_light.svg</file>
+        <file>res/header_arrow_up_dark.svg</file>
+        <file>res/header_chevron_down_light.svg</file>
+        <file>res/header_chevron_down_dark.svg</file>
+        <file>res/header_chevron_up_light.svg</file>
+        <file>res/header_chevron_up_dark.svg</file>
         <file>res/accountsettings.qss</file>
         <file>res/accountsettings_mac.qss</file>
         <file>res/activitypage/activitysettings.qss</file>
