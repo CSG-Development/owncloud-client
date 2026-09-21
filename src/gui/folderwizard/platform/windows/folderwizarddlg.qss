@@ -1,0 +1,115 @@
+QDialog#FolderWizardDlg {
+    background: transparent;
+}
+
+#frameRoot {
+    border-radius: 8px;
+}
+
+#frameTitle {
+    border: none;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+#lblHeaderTitle {
+    background: transparent;
+    font-size: 13px;
+}
+
+#btnIconTitle,
+#btnClose {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+#frameContent {
+    border: none;
+}
+
+#frameButtons {
+    border: none;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+[theme="light"] #frameRoot {
+    background-color: #FFFFFF;
+    border: 1px solid #D1D1D1;
+}
+
+[theme="light"] #frameTitle {
+    background-color: #E7E7E7;
+    border-bottom: 1px solid #D1D1D1;
+}
+
+[theme="light"] #lblHeaderTitle {
+    color: #191919;
+}
+
+[theme="light"] #frameContent {
+    background-color: #FFFFFF;
+}
+
+[theme="light"] #frameButtons {
+    background-color: #E7E7E7;
+    border-top: 1px solid #D1D1D1;
+}
+
+[theme="dark"] #frameRoot {
+    background-color: #191919;
+    border: 1px solid #5D5D5D;
+}
+
+[theme="dark"] #frameTitle {
+    background-color: #4F4F4F;
+    border-bottom: 1px solid #5D5D5D;
+}
+
+[theme="dark"] #lblHeaderTitle {
+    color: #F6F6F6;
+}
+
+[theme="dark"] #frameContent {
+    background-color: #191919;
+}
+
+[theme="dark"] #frameButtons {
+    background-color: #4F4F4F;
+    border-top: 1px solid #5D5D5D;
+}
+
+WizardTreeWidget {
+    background: transparent;
+    border: none;
+    outline: none;
+    selection-background-color: transparent;
+}
+
+WizardTreeWidget::item,
+WizardTreeWidget::item:hover,
+WizardTreeWidget::item:selected,
+WizardTreeWidget::item:selected:active,
+WizardTreeWidget::item:selected:!active {
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+[theme="light"] #selectiveSyncTree {
+    border: 1px solid #D1D1D1;
+}
+
+[theme="light"] #selectiveSyncTree:disabled {
+    background: #E7E7E7;
+}
+
+[theme="dark"] #selectiveSyncTree {
+    border: 1px solid #5D5D5D;
+}
+
+[theme="dark"] #selectiveSyncTree:disabled {
+    background: #4F4F4F;
+}

@@ -17,6 +17,7 @@ Q_LOGGING_CATEGORY(lcDeviceComboWidget, "device.combowidget", QtDebugMsg)
 namespace {
 const auto inputStyle = QStringLiteral(":/res/combowidget/combowidget.qss");
 const auto inputStyleError = QStringLiteral(":/res/combowidget/combowidget_error.qss");
+constexpr int promptLeftOffset = 18;
 QPair<QString,QString> arrowButtonLight = {
     QStringLiteral(":/res/combowidget/triangle_down_light.svg"),
     QStringLiteral(":/res/combowidget/triangle_up_light.svg")
@@ -240,7 +241,7 @@ void ComboWidget::onTextChanged(const QString& str)
 
 void ComboWidget::updatePromptPosition()
 {
-    promptLabel->move(ui->lineEdit->pos().x() + 4, rect().top());
+    promptLabel->move(ui->inputFrame->mapTo(this, QPoint(0, 0)).x() + promptLeftOffset, rect().top());
 }
 
 void ComboWidget::updateStyles()

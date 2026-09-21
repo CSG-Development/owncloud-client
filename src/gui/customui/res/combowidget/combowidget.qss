@@ -20,7 +20,7 @@
 
 [theme="light"] #promptLabel {
     color: rgba(0,0,0,204);
-    background: #FFFFFF;
+    background: @wizardCardBackgroundLight;
     padding-top: 1px;
     padding-bottom: 1px;
     padding-left: 4px;
@@ -76,7 +76,7 @@
 
 [theme="dark"] #promptLabel {
     color: rgba(255,255,255,204);
-    background: #262729;
+    background: @wizardCardBackgroundDark;
     padding-top: 1px;
     padding-bottom: 1px;
     padding-left: 4px;

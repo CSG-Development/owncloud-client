@@ -13,6 +13,7 @@
 #include <QSettings>
 #include <QPushButton>
 #include <QMenu>
+#include <QHeaderView>
 #include <QPalette>
 #include <QFile>
 #include <QRegularExpression>
@@ -100,6 +101,11 @@ QString themeName(bool isDark)
 
 const auto menuStyle = QStringLiteral(":/res/menu/menu.qss");
 const auto fieldsStyle = QStringLiteral(":/res/fields/fields.qss");
+#ifdef Q_OS_MACOS
+const auto headerViewStyle = QStringLiteral(":/res/headerview_mac.qss");
+#else
+const auto headerViewStyle = QStringLiteral(":/res/headerview.qss");
+#endif
 
 }
 
@@ -183,6 +189,21 @@ void StyleHelper::applyMenuStyle(QMenu* menu)
 
     apply();
     QObject::connect(menu, &QMenu::aboutToShow, menu, apply);
+}
+
+void StyleHelper::applyHeaderViewStyle(QHeaderView* header)
+{
+    if (!header)
+        return;
+
+    header->setDefaultAlignment(Qt::AlignCenter);
+
+    const auto apply = [header](bool isDark) {
+        applyThemedStyleSheet(header, headerViewStyle, isDark);
+    };
+
+    apply(Theme::instance()->isDarkTheme());
+    QObject::connect(Theme::instance(), &Theme::themeChanged, header, apply);
 }
 
 void StyleHelper::applyApplicationStyleSheet()

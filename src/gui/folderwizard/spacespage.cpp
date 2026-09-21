@@ -14,19 +14,22 @@
 #include "spacespage.h"
 #include "ui_spacespage.h"
 
+#include "folderwizard.h"
+#include "gui/accountstate.h"
+
 #include <QModelIndex>
 
 using namespace APP;
 
-SpacesPage::SpacesPage(AccountPtr acc, QWidget *parent)
-    : QWizardPage(parent)
+SpacesPage::SpacesPage(FolderWizard *wizard)
+    : FolderWizardPage(wizard)
     , ui(new Ui::SpacesPage)
 {
     ui->setupUi(this);
 
-    ui->widget->setAccount(acc);
+    ui->widget->setAccount(folderWizard()->accountState()->account());
 
-    connect(ui->widget, &Spaces::SpacesBrowser::selectionChanged, this, &QWizardPage::completeChanged);
+    connect(ui->widget, &Spaces::SpacesBrowser::selectionChanged, this, &FolderWizardPage::completeChanged);
 }
 
 SpacesPage::~SpacesPage()

@@ -8,6 +8,7 @@ class QStyleOption;
 class QStyleOptionToolButton;
 class QPushButton;
 class QMenu;
+class QHeaderView;
 
 namespace APP {
 
@@ -24,6 +25,7 @@ public:
     static void setTheme(QWidget *target, bool isDark);
     static void applyThemedStyleSheet(QWidget* target, const QString& fileName, bool isDark);
     static void applyMenuStyle(QMenu* menu);
+    static void applyHeaderViewStyle(QHeaderView* header);
     static void applyApplicationStyleSheet();
     static void setErrorState(QWidget* target, bool hasError);
 

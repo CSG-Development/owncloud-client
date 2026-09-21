@@ -91,7 +91,10 @@ enum class ColorToken {
     ToolbarBackground,
     ToolbarBorder,
     OnMenuSelection,
-    OnTabSelected
+    OnTabSelected,
+    TreeItemText,
+    TreeItemHover,
+    TreeItemSelected
 };
 
 class APPLICATIONSYNC_EXPORT AppPalette

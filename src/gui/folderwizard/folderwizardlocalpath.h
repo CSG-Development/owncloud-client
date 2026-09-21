@@ -19,7 +19,7 @@
 #pragma once
 
 #include "gui/folder.h"
-#include "gui/folderwizard/folderwizard_p.h"
+#include "gui/folderwizard/folderwizardpage.h"
 
 class Ui_FolderWizardSourcePage;
 namespace APP {
@@ -33,7 +33,7 @@ class FolderWizardLocalPath : public FolderWizardPage
 {
     Q_OBJECT
 public:
-    explicit FolderWizardLocalPath(FolderWizardPrivate *parent);
+    explicit FolderWizardLocalPath(FolderWizard *wizard);
     ~FolderWizardLocalPath() override;
 
     bool isComplete() const override;
