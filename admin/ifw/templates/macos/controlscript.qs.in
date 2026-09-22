@@ -1,4 +1,5 @@
 var APP_NAME = @APP_DISPLAY_NAME_JS@;
+var MACOS_BUNDLE_NAME = @MACOS_BUNDLE_NAME_JS@;
 var MACOS_BUNDLE_EXECUTABLE = @MACOS_BUNDLE_EXECUTABLE_JS@;
 var MACOS_USER_DATA_DIR = @MACOS_USER_DATA_DIR_JS@;
 var MACOS_APP_BUNDLE_ID = @MACOS_APP_BUNDLE_ID_JS@;
@@ -16,6 +17,10 @@ function Controller()
 
         connectSignal(installer.uninstallationStarted, this, Controller.prototype.handleUninstallationStarted);
         connectSignal(installer.uninstallationFinished, this, Controller.prototype.handleUninstallationFinished);
+
+        // PCF: lets maybeOfferReinstall() (packagemanagergui.cpp) find the installed
+        // CFBundleVersion, mirroring PcfUninstallRegistryKey on Windows.
+        installer.setValue("PcfInstalledInfoPlist", "/Applications/" + MACOS_BUNDLE_NAME + "/Contents/Info.plist");
     }
 
     setupPageListTitles();
