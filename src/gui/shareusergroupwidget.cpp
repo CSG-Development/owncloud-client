@@ -174,7 +174,7 @@ void ShareUserGroupWidget::searchForSharees()
     ShareeModel::ShareeSet blacklist;
 
     // Add the current user to _sharees since we can't share with ourself
-    QSharedPointer<Sharee> currentUser(new Sharee(_account->credentials()->user(), QString(), Sharee::Type::User));
+    QSharedPointer<Sharee> currentUser(new Sharee(_account->davUser(), QString(), Sharee::Type::User));
     blacklist << currentUser;
 
     const auto &shareUserLines = _ui->scrollArea->findChildren<ShareUserLine *>();
@@ -251,6 +251,7 @@ void ShareUserGroupWidget::slotAdjustScrollWidgetSize()
 void ShareUserGroupWidget::slotPrivateLinkShare()
 {
     auto menu = new QMenu(this);
+    StyleHelper::applyMenuStyle(menu);
     menu->setAttribute(Qt::WA_DeleteOnClose);
 
     menu->addAction(tr("Open link in browser"),
@@ -363,6 +364,7 @@ ShareUserLine::ShareUserLine(QSharedPointer<Share> share,
 
     // Create detailed permissions menu
     QMenu *menu = new QMenu(this);
+    StyleHelper::applyMenuStyle(menu);
     _permissionCreate = new QAction(tr("create"), this);
     _permissionCreate->setCheckable(true);
     _permissionCreate->setEnabled(maxSharingPermissions & SharePermissionCreate);

@@ -108,7 +108,7 @@ AboutDialog::~AboutDialog()
 
 void AboutDialog::updateTheme(bool isDark)
 {
-    DlgUtils::setTheme(this, isDark);
+    StyleHelper::setTheme(this, isDark);
 #ifdef Q_OS_WINDOWS
     ui->btnHeadClose->setIcon(isDark ? QIcon(close_icon.second) : QIcon(close_icon.first));
 #endif

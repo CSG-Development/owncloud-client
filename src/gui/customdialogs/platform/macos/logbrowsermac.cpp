@@ -26,7 +26,7 @@ LogBrowserMac::LogBrowserMac(QWidget *parent)
     DlgUtils::applyDropShadowDialog(ui->frame);
 
     DlgUtils::clearStyleSheet(this);
-    setStyleSheet(DlgUtils::loadFileToString(widget_style));
+    setStyleSheet(APP::StyleHelper::loadFileToString(widget_style));
 
     connect(ui->btnClose, &QPushButton::clicked, this, &LogBrowserMac::reject);
     connect(ui->btnOpenFolder, &QPushButton::clicked, this, &LogBrowserMac::openLocation);
@@ -134,6 +134,6 @@ void LogBrowserMac::themeChanged()
     ui->frameCloseBtn->setFrameData(isDarkTheme ? frame_data.second : frame_data.first);
     ui->frameOpenFolderBtn->setFrameData(isDarkTheme ? frame_data.second : frame_data.first);
 
-    DlgUtils::setTheme(this, isDarkTheme);
+    APP::StyleHelper::setTheme(this, isDarkTheme);
     APP::StyleHelper::invoke_setDarkTheme_recursive(this);
 }

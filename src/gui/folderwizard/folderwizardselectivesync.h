@@ -19,8 +19,10 @@
 
 #pragma once
 
-#include "gui/folderwizard/folderwizard_p.h"
+#include "gui/folderwizard/folderwizardpage.h"
 #include "libsync/accountfwd.h"
+
+#include <QSet>
 
 class CCheckBox;
 
@@ -36,7 +38,7 @@ class FolderWizardSelectiveSync : public FolderWizardPage
 {
     Q_OBJECT
 public:
-    explicit FolderWizardSelectiveSync(FolderWizardPrivate *parent);
+    explicit FolderWizardSelectiveSync(FolderWizard *wizard);
     ~FolderWizardSelectiveSync() override;
 
     bool validatePage() override;

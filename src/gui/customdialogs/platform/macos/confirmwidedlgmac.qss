@@ -45,8 +45,8 @@
 [theme="light"] #lblHeader,
 [theme="light"] #lblText {color: rgba(0, 0, 0, 0.87);}
 [theme="light"] #btnAccept {
-    color: rgba(255, 255, 255, 0.87);
-    background: rgba(25, 118, 210, 1);
+    color: @dialogOnPrimaryLight;
+    background: @primaryLight;
     border: none;
 }
 [theme="light"] #btnReject {
@@ -75,8 +75,8 @@
 [theme="dark"] #lblHeader,
 [theme="dark"] #lblText {color: rgba(255, 255, 255, 0.87);}
 [theme="dark"] #btnAccept {
-    color: rgba(0, 0, 0, 0.87);
-    background: rgba(100, 181, 246, 1);
+    color: @dialogOnPrimaryDark;
+    background: @primaryDark;
     border: none;
 }
 [theme="dark"] #btnReject {

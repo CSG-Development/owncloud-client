@@ -143,7 +143,7 @@ IgnoreListEditor::~IgnoreListEditor()
 
 void IgnoreListEditor::updateTheme(bool isDark)
 {
-    DlgUtils::setTheme(this, isDark);
+    StyleHelper::setTheme(this, isDark);
     StyleHelper::applyPushButtonStyle(ui->btnOk);
     StyleHelper::applyPushButtonStyle(ui->btnCancel);
 }

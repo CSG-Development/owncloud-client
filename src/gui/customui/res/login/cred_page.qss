@@ -42,30 +42,30 @@
 
 /*** Light theme */
 
-[theme="light"] #frameContent { background-color: #FFFFFF; }
+[theme="light"] #frameContent { background-color: @wizardCardBackgroundLight; }
 [theme="light"] #lblEmail {color: rgba(0, 0, 0, 0.87);}
 
 [theme="light"] #showPasswordButton { image: url(":/res/login/eye_closed_light.svg"); }
 [theme="light"] #showPasswordButton:checked { image: url(":/res/login/eye_open_light.svg"); }
 
-[theme="light"] .button_accent {background: #1976D2; color: #FFFFFF;}
-[theme="light"] .button_accent:hover { background: rgba(30, 136, 229, 1); }
-[theme="light"] .button_accent:pressed { background: rgba(20, 92, 164, 1); }
+[theme="light"] .button_accent {background: @primaryLight; color: @onPrimaryLight;}
+[theme="light"] .button_accent:hover { background: @primaryHoverLight; }
+[theme="light"] .button_accent:pressed { background: @primaryPressedLight; }
 
-[theme="light"] .button_normal { border: 1px solid #1976D2; color: #1976D2; }
-[theme="light"] .button_normal:hover { background: rgba(30, 136, 229, 0.12); }
-[theme="light"] .button_normal:pressed { background: rgba(30, 136, 229, 0.3); }
+[theme="light"] .button_normal { border: 1px solid @outlineButtonLight; color: @outlineButtonLight; }
+[theme="light"] .button_normal:hover { background: @outlineButtonHoverBackgroundLight; border-color: @outlineButtonHoverLight; color: @outlineButtonHoverLight; }
+[theme="light"] .button_normal:pressed { background: @outlineButtonPressedBackgroundLight; border-color: @outlineButtonPressedLight; color: @outlineButtonPressedLight; }
 
-[theme="light"] .button_accent:disabled,
-[theme="light"] .button_normal:disabled { background: #EEEEEE; color: #9E9E9E; }
+[theme="light"] .button_accent:disabled { background: @primaryDisabledLight; color: @onPrimaryDisabledLight; }
+[theme="light"] .button_normal:disabled { background: transparent; border-color: @outlineButtonDisabledLight; color: @outlineButtonDisabledLight; }
 
-[theme="light"] .text_button { color: #1976D2; }
-[theme="light"] .text_button:disabled { color: #9E9E9E; }
-[theme="light"] .text_button:hover { background: rgba(30, 136, 229, 0.12); }
-[theme="light"] .text_button::pressed { background: rgba(30, 136, 229, 0.3); }
+[theme="light"] .text_button { color: @textButtonLight; }
+[theme="light"] .text_button:disabled { color: @textButtonDisabledLight; }
+[theme="light"] .text_button:hover { background: @flatButtonHoverBackgroundLight; color: @textButtonHoverLight; }
+[theme="light"] .text_button:pressed { background: @flatButtonPressedBackgroundLight; color: @textButtonPressedLight; }
 
-[theme="light"] .button_icon_tool:hover { background: rgba(30, 136, 229, 0.12); }
-[theme="light"] .button_icon_tool:pressed { background: rgba(30, 136, 229, 0.3); }
+[theme="light"] .button_icon_tool:hover { background: @flatButtonHoverBackgroundLight; }
+[theme="light"] .button_icon_tool:pressed { background: @flatButtonPressedBackgroundLight; }
 
 [theme="light"] #frameErrorMessageInternal { background: rgba(244,67,54,31); }
 [theme="light"] #lblErrorIcon { image: url(":/res/login/error_light.svg"); }
@@ -75,30 +75,30 @@
 
 /*** Dark theme */
 
-[theme="dark"] #frameContent { background-color: #262729; }
+[theme="dark"] #frameContent { background-color: @wizardCardBackgroundDark; }
 [theme="dark"] #lblEmail { color: rgba(255, 255, 255, 0.87); }
 
 [theme="dark"] #showPasswordButton { image: url(":/res/login/eye_closed_dark.svg"); }
 [theme="dark"] #showPasswordButton:checked { image: url(":/res/login/eye_open_dark.svg"); }
 
-[theme="dark"] .button_accent { background: #64B5F6; color: #212121; }
-[theme="dark"] .button_accent:hover { background: rgba(144, 202, 249, 1); }
-[theme="dark"] .button_accent:pressed { background: rgba(53, 158, 243, 1); }
+[theme="dark"] .button_accent { background: @primaryDark; color: @onPrimaryDark; }
+[theme="dark"] .button_accent:hover { background: @primaryHoverDark; }
+[theme="dark"] .button_accent:pressed { background: @primaryPressedDark; }
 
-[theme="dark"] .button_normal { border: 1px solid rgba(100, 181, 246, 1); color: rgba(100, 181, 246, 1); }
-[theme="dark"] .button_normal:hover { background: rgba(144, 202, 249, 0.12); }
-[theme="dark"] .button_normal:pressed { background: rgba(144, 202, 249, 0.3); }
+[theme="dark"] .button_normal { border: 1px solid @outlineButtonDark; color: @outlineButtonDark; }
+[theme="dark"] .button_normal:hover { background: @outlineButtonHoverBackgroundDark; border-color: @outlineButtonHoverDark; color: @outlineButtonHoverDark; }
+[theme="dark"] .button_normal:pressed { background: @outlineButtonPressedBackgroundDark; border-color: @outlineButtonPressedDark; color: @outlineButtonPressedDark; }
 
-[theme="dark"] .button_accent:disabled,
-[theme="dark"] .button_normal:disabled { background: #616161; color: #9E9E9E; }
+[theme="dark"] .button_accent:disabled { background: @primaryDisabledDark; color: @onPrimaryDisabledDark; }
+[theme="dark"] .button_normal:disabled { background: transparent; border-color: @outlineButtonDisabledDark; color: @outlineButtonDisabledDark; }
 
-[theme="dark"] .text_button { color: rgba(100, 181, 246, 1); }
-[theme="dark"] .text_button:disabled { color: rgba(158, 158, 158, 1); }
-[theme="dark"] .text_button:hover { background: rgba(144, 202, 249, 0.12); }
-[theme="dark"] .text_button:pressed { background: rgba(144, 202, 249, 0.3); }
+[theme="dark"] .text_button { color: @textButtonDark; }
+[theme="dark"] .text_button:disabled { color: @textButtonDisabledDark; }
+[theme="dark"] .text_button:hover { background: @flatButtonHoverBackgroundDark; color: @textButtonHoverDark; }
+[theme="dark"] .text_button:pressed { background: @flatButtonPressedBackgroundDark; color: @textButtonPressedDark; }
 
-[theme="dark"] .button_icon_tool:hover { background: rgba(144, 202, 249, 0.12); }
-[theme="dark"] .button_icon_tool:pressed { background: rgba(144, 202, 249, 0.3); }
+[theme="dark"] .button_icon_tool:hover { background: @flatButtonHoverBackgroundDark; }
+[theme="dark"] .button_icon_tool:pressed { background: @flatButtonPressedBackgroundDark; }
 
 [theme="dark"] #frameErrorMessageInternal { background: rgba(242,143,140,61); }
 [theme="dark"] #lblErrorIcon { image: url(":/res/login/error_dark.svg"); }

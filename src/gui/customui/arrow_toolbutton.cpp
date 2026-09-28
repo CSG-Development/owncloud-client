@@ -1,4 +1,5 @@
 #include "arrow_toolbutton.h"
+#include "apppalette.h"
 #include "theme.h"
 #include "stylehelper.h"
 
@@ -146,29 +147,29 @@ void ArrowToolButton::mouseReleaseEvent(QMouseEvent *event)
 }
 
 #ifdef Q_OS_MACOS
-QColor ArrowToolButton::buttonFrameFocused() const {return isDark ? QColor(0x64,0xB5,0xF6,0x80) : QColor(0x19,0x76,0xD2,0x80);}
+QColor ArrowToolButton::buttonFrameFocused() const {return AppPalette::color(ColorToken::PushButtonFocusRing, isDark);}
 
-QColor ArrowToolButton::buttonFrameNormal() const  {return isDark ? QColor(0x61,0x61,0x61) : QColor(0xCB,0xCD,0xD3);}
-QColor ArrowToolButton::buttonFramePressed() const {return isDark ? QColor(0x61,0x61,0x61) : QColor(0xCB,0xCD,0xD3);}
-QColor ArrowToolButton::buttonFrameHovered() const {return isDark ? QColor(0x61,0x61,0x61) : QColor(0xCB,0xCD,0xD3);}
-QColor ArrowToolButton::buttonFrameDisabled() const {return isDark ? QColor(0x26,0x27,0x29) : QColor(0xCB,0xCD,0xD3);}
+QColor ArrowToolButton::buttonFrameNormal() const  {return AppPalette::color(ColorToken::MacButtonFrameNormal, isDark);}
+QColor ArrowToolButton::buttonFramePressed() const {return AppPalette::color(ColorToken::MacButtonFramePressed, isDark);}
+QColor ArrowToolButton::buttonFrameHovered() const {return AppPalette::color(ColorToken::MacButtonFrameHovered, isDark);}
+QColor ArrowToolButton::buttonFrameDisabled() const {return AppPalette::color(ColorToken::MacArrowButtonFrameDisabled, isDark);}
 
-QColor ArrowToolButton::buttonBackgroundNormal() const {return isDark ? QColor(0x61,0x61,0x61,0xB2) : QColor(0xFF,0xFF,0xFF,0xB2);}
-QColor ArrowToolButton::buttonBackgroundPressed() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x1F) : QColor(0x61,0x61,0x61,0x08);}
-QColor ArrowToolButton::buttonBackgroundHovered() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x08) : QColor(0x61,0x61,0x61,0x1F);}
-QColor ArrowToolButton::buttonBackgroundDisabled() const {return isDark ? QColor(0x44,0x45,0x46) : QColor(0xF6,0xF6,0xF6);}
+QColor ArrowToolButton::buttonBackgroundNormal() const {return AppPalette::color(ColorToken::MacArrowButtonBackgroundNormal, isDark);}
+QColor ArrowToolButton::buttonBackgroundPressed() const {return AppPalette::color(ColorToken::MacButtonBackgroundPressed, isDark);}
+QColor ArrowToolButton::buttonBackgroundHovered() const {return AppPalette::color(ColorToken::MacButtonBackgroundHovered, isDark);}
+QColor ArrowToolButton::buttonBackgroundDisabled() const {return AppPalette::color(ColorToken::MacButtonBackgroundDisabled, isDark);}
 #else
-QColor ArrowToolButton::buttonFrameFocused() const {return isDark ? QColor(0xFF,0xFF,0xFF) : QColor(0x21,0x21,0x21);}
+QColor ArrowToolButton::buttonFrameFocused() const {return AppPalette::color(ColorToken::ButtonFrameFocused, isDark);}
 
-QColor ArrowToolButton::buttonFrameNormal() const  {return isDark ? QColor(0xFF,0xFF,0xFF,0x18) : QColor(0xCB,0xCD,0xD3);}
-QColor ArrowToolButton::buttonFramePressed() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x12) : QColor(0xCB,0xCD,0xD3);}
-QColor ArrowToolButton::buttonFrameHovered() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x18) : QColor(0xCB,0xCD,0xD3);}
-QColor ArrowToolButton::buttonFrameDisabled() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x12) : QColor(0xCB,0xCD,0xD3);}
+QColor ArrowToolButton::buttonFrameNormal() const  {return AppPalette::color(ColorToken::ButtonFrameNormal, isDark);}
+QColor ArrowToolButton::buttonFramePressed() const {return AppPalette::color(ColorToken::ButtonFramePressed, isDark);}
+QColor ArrowToolButton::buttonFrameHovered() const {return AppPalette::color(ColorToken::ButtonFrameHovered, isDark);}
+QColor ArrowToolButton::buttonFrameDisabled() const {return AppPalette::color(ColorToken::ButtonFrameDisabled, isDark);}
 
-QColor ArrowToolButton::buttonBackgroundNormal() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x0F) : QColor(0xFF,0xFF,0xFF,0xB2);}
-QColor ArrowToolButton::buttonBackgroundPressed() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x08) : QColor(0x61,0x61,0x61,0x08);}
-QColor ArrowToolButton::buttonBackgroundHovered() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x15) : QColor(0x61,0x61,0x61,0x1F);}
-QColor ArrowToolButton::buttonBackgroundDisabled() const {return isDark ? QColor(0xFF,0xFF,0xFF,0x0B) : QColor(0xF6,0xF6,0xF6);}
+QColor ArrowToolButton::buttonBackgroundNormal() const {return AppPalette::color(ColorToken::ButtonBackgroundNormal, isDark);}
+QColor ArrowToolButton::buttonBackgroundPressed() const {return AppPalette::color(ColorToken::ButtonBackgroundPressed, isDark);}
+QColor ArrowToolButton::buttonBackgroundHovered() const {return AppPalette::color(ColorToken::ButtonBackgroundHovered, isDark);}
+QColor ArrowToolButton::buttonBackgroundDisabled() const {return AppPalette::color(ColorToken::ArrowButtonBackgroundDisabled, isDark);}
 #endif
 
 } // namespace APP

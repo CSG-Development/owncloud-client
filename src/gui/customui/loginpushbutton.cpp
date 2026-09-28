@@ -1,4 +1,5 @@
 #include "loginpushbutton.h"
+#include "apppalette.h"
 #include "theme.h"
 
 #include <QPainter>
@@ -9,14 +10,6 @@ namespace {
 constexpr int iconSize = 19;
 constexpr int radius = 24;
 constexpr int iconPadding = 17;
-
-std::pair<QColor,QColor> backNormalColor   = {QColor("#1976D2"), QColor("#64B5F6")};
-std::pair<QColor,QColor> backHoverColor   = {QColor("#1E88E5"), QColor("#90CAF9")};
-std::pair<QColor,QColor> backPressedColor   = {QColor("#145CA4"), QColor("#359EF3")};
-std::pair<QColor,QColor> backDisabledColor = {QColor("#EEEEEE"), QColor("#616161")};
-std::pair<QColor,QColor> textNormalColor   = {QColor("#FFFFFF"), QColor("#212121")};
-std::pair<QColor,QColor> textDisabledColor = {QColor("#9E9E9E"), QColor("#9E9E9E")};
-
 }
 
 LoginPushButton::LoginPushButton(QWidget *parent)
@@ -43,15 +36,16 @@ void LoginPushButton::paintEvent(QPaintEvent* /*event*/)
     bool isHovered = option.state & QStyle::State_MouseOver;
     bool isPressed = option.state & QStyle::State_Sunken;
 
-    QColor currentColor = darkTheme_.value() ? backNormalColor.second : backNormalColor.first;
+    const bool isDark = darkTheme_.value();
+    QColor currentColor = APP::AppPalette::color(APP::ColorToken::Primary, isDark);
     if (isEnabled) {
         if (isPressed) {
-            currentColor = darkTheme_.value() ? backPressedColor.second : backPressedColor.first;
+            currentColor = APP::AppPalette::color(APP::ColorToken::PrimaryPressed, isDark);
         } else if (isHovered) {
-            currentColor = darkTheme_.value() ? backHoverColor.second : backHoverColor.first;
+            currentColor = APP::AppPalette::color(APP::ColorToken::PrimaryHover, isDark);
         }
     } else {
-        currentColor = darkTheme_.value() ? backDisabledColor.second : backDisabledColor.first;
+        currentColor = APP::AppPalette::color(APP::ColorToken::PrimaryDisabled, isDark);
     }
 
     painter.fillPath(pp, currentColor);
@@ -84,8 +78,7 @@ void LoginPushButton::paintEvent(QPaintEvent* /*event*/)
         alignment |= Qt::TextShowMnemonic;
     }
 
-    QColor textColor = isEnabled ? (darkTheme_.value() ? textNormalColor.second : textNormalColor.first) :
-                                   (darkTheme_.value() ? textDisabledColor.second : textDisabledColor.first);
+    QColor textColor = APP::AppPalette::color(isEnabled ? APP::ColorToken::OnPrimary : APP::ColorToken::OnPrimaryDisabled, isDark);
     painter.setPen(textColor);
     QFont f = font();
     f.setBold(true);

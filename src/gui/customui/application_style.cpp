@@ -1,4 +1,5 @@
 #include "application_style.h"
+#include "apppalette.h"
 #include "stylehelper.h"
 
 #include <QPainterPath>
@@ -17,17 +18,17 @@ constexpr qreal frameWidth = 1;
 
 namespace APP {
 
-QColor ApplicationProxyStyle::buttonFrameFocused() const {return isDark ? QColor(0xFF,0xFF,0xFF) : QColor(0x21,0x21,0x21);}
+QColor ApplicationProxyStyle::buttonFrameFocused() const {return AppPalette::color(ColorToken::ButtonFrameFocused, isDark);}
 
-QColor ApplicationProxyStyle::buttonFrameNormal() const  {return isDark ? QColor() : QColor(0xCB,0xCD,0xD3);}
-QColor ApplicationProxyStyle::buttonFramePressed() const {return isDark ? QColor() : QColor(0xCB,0xCD,0xD3);}
-QColor ApplicationProxyStyle::buttonFrameHovered() const {return isDark ? QColor() : QColor(0xCB,0xCD,0xD3);}
-QColor ApplicationProxyStyle::buttonFrameDisabled() const {return isDark ? QColor() : QColor(0xCB,0xCD,0xD3);}
+QColor ApplicationProxyStyle::buttonFrameNormal() const  {return isDark ? QColor() : AppPalette::light(ColorToken::ButtonFrameNormal);}
+QColor ApplicationProxyStyle::buttonFramePressed() const {return isDark ? QColor() : AppPalette::light(ColorToken::ButtonFramePressed);}
+QColor ApplicationProxyStyle::buttonFrameHovered() const {return isDark ? QColor() : AppPalette::light(ColorToken::ButtonFrameHovered);}
+QColor ApplicationProxyStyle::buttonFrameDisabled() const {return isDark ? QColor() : AppPalette::light(ColorToken::ButtonFrameDisabled);}
 
-QColor ApplicationProxyStyle::buttonBackgroundNormal() const {return isDark ? QColor() : QColor(0xFF,0xFF,0xFF,0xB2);}
-QColor ApplicationProxyStyle::buttonBackgroundPressed() const {return isDark ? QColor() : QColor(0x61,0x61,0x61,0x08);}
-QColor ApplicationProxyStyle::buttonBackgroundHovered() const {return isDark ? QColor() : QColor(0x61,0x61,0x61,0x1F);}
-QColor ApplicationProxyStyle::buttonBackgroundDisabled() const {return isDark ? QColor() : QColor(0xF6,0xF6,0xF6);}
+QColor ApplicationProxyStyle::buttonBackgroundNormal() const {return isDark ? QColor() : AppPalette::light(ColorToken::ButtonBackgroundNormal);}
+QColor ApplicationProxyStyle::buttonBackgroundPressed() const {return isDark ? QColor() : AppPalette::light(ColorToken::ButtonBackgroundPressed);}
+QColor ApplicationProxyStyle::buttonBackgroundHovered() const {return isDark ? QColor() : AppPalette::light(ColorToken::ButtonBackgroundHovered);}
+QColor ApplicationProxyStyle::buttonBackgroundDisabled() const {return isDark ? QColor() : AppPalette::light(ColorToken::ButtonBackgroundDisabled);}
 
 
 ApplicationProxyStyle::ApplicationProxyStyle(QStyle* baseStyle)

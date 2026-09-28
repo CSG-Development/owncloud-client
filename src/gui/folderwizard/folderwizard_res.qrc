@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>platform/windows/folderwizarddlg.qss</file>
+        <file>platform/macos/folderwizarddlg.qss</file>
+    </qresource>
+</RCC>

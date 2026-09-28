@@ -20,9 +20,9 @@
     background: #FFFFFF;
 }
 
-[theme="light"] #IssuesWidgetPopup::item:selected {
-    background: rgba(25, 118, 210, 1);
-    color: rgba(255, 255, 255, 0.87);
+[theme="light"] #IssuesWidgetPopup::item:selected:enabled {
+    background: @menuSelectionBackgroundLight;
+    color: @onMenuSelectionLight;
 }
 
 [theme="light"] #IssuesWidgetPopup::item:disabled {
@@ -33,12 +33,12 @@
 
 [theme="dark"] #IssuesWidgetPopup {
     color: rgba(255, 255, 255, 0.87);
-    background: rgba(66, 66, 66, 0.47);
+    background: #424242;
 }
 
-[theme="dark"] #IssuesWidgetPopup::item:selected {
-    background: rgba(100, 181, 246, 1);
-    color: rgba(0, 0, 0, 0.87);
+[theme="dark"] #IssuesWidgetPopup::item:selected:enabled {
+    background: @menuSelectionBackgroundDark;
+    color: @onMenuSelectionDark;
 }
 
 [theme="dark"] #IssuesWidgetPopup::item:disabled {

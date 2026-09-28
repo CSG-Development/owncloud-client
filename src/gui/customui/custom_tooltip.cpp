@@ -21,10 +21,7 @@ struct NonVisualProps {
 const NonVisualProps LightProps = { 0, 4, 8, QColor(0, 0, 0, 36), QPoint(16, 16) };
 const NonVisualProps DarkProps = { 0, 4, 8, QColor(0, 0, 0, 36), QPoint(16, 16) };
 
-const QPair<QString,QString> widgetStyle = {
-    QStringLiteral(":/res/tooltips/tooltip_light.qss"),
-    QStringLiteral(":/res/tooltips/tooltip_dark.qss")
-};
+const auto widgetStyle = QStringLiteral(":/res/tooltips/tooltip.qss");
 
 } // namespace ToolTipTheme
 
@@ -83,19 +80,14 @@ void CustomToolTip::doShow()
 
 void CustomToolTip::onThemeChanged(bool isDark)
 {
-    ToolTipTheme::NonVisualProps props = ToolTipTheme::LightProps;
-    auto qssPath = ToolTipTheme::widgetStyle.first;
-    if (isDark) {
-        props = ToolTipTheme::DarkProps;
-        qssPath = ToolTipTheme::widgetStyle.second;
-    }
+    ToolTipTheme::NonVisualProps props = isDark ? ToolTipTheme::DarkProps : ToolTipTheme::LightProps;
 
     // Unpolish the current style
     this->style()->unpolish(this);
     container->style()->unpolish(container);
     label->style()->unpolish(label);
 
-    setStyleSheet(APP::StyleHelper::loadFileToString(qssPath));
+    APP::StyleHelper::applyThemedStyleSheet(this, ToolTipTheme::widgetStyle, isDark);
 
     // Re-polish to apply the new rules
     this->style()->polish(this);

@@ -1,32 +1,10 @@
 #pragma once
 
 #include <QString>
-#include <QFile>
-#include <QHash>
 #include <QWidget>
-#include <QStyle>
 #include <QGraphicsDropShadowEffect>
 
 namespace DlgUtils {
-
-inline QString loadFileToString(const QString& fileName)
-{
-    // Static cache 'filePath' -> 'content'
-    static QHash<QString, QString> styleCache;
-
-    if (styleCache.contains(fileName)) {
-        return styleCache.value(fileName);
-    }
-
-    QFile file(fileName);
-    if (file.open(QIODevice::ReadOnly)) {
-        QString content = QString::fromUtf8(file.readAll());
-        styleCache.insert(fileName, content);
-        return content;
-    }
-
-    return {};
-}
 
 inline void setTransparent(QWidget *target)
 {
@@ -59,21 +37,6 @@ inline void applyDropShadowDialog(QWidget* target)
     // effect->setYOffset(4);
 #endif
     target->setGraphicsEffect(effect);
-}
-
-inline void setTheme(QWidget *target, bool isDark)
-{
-    if (!target) return;
-
-    target->setProperty("theme", isDark ? QStringLiteral("dark") : QStringLiteral("light"));
-
-    target->style()->unpolish(target);
-    target->style()->polish(target);
-
-    for (auto child : target->findChildren<QWidget*>()) {
-        child->style()->unpolish(child);
-        child->style()->polish(child);
-    }
 }
 
 inline void clearStyleSheet(QWidget* target)

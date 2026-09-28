@@ -17,9 +17,26 @@
 #include <QPalette>
 #include <QDebug>
 #include <QFile>
+#include <QGuiApplication>
+#include <QSettings>
+#include <QStyleHints>
 
 using namespace APP;
 using namespace Resources;
+
+bool APP::Resources::isSystemDarkTheme()
+{
+#ifdef Q_OS_WIN
+    QSettings registry(QStringLiteral("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"), QSettings::Registry64Format);
+    const auto lightTheme = registry.value(QStringLiteral("AppsUseLightTheme"), 1).toInt();
+    return lightTheme == 0;
+#elif defined Q_OS_MACOS
+    auto sh = QGuiApplication::styleHints();
+    return sh->colorScheme() == Qt::ColorScheme::Dark;
+#else
+    return QPalette().base().color().lightnessF() <= 0.5;
+#endif
+}
 
 bool APP::Resources::isUsingDarkTheme()
 {

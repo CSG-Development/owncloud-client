@@ -1,5 +1,6 @@
 #include "inputdlg.h"
 #include "ui_inputdlg.h"
+#include "gui/customui/stylehelper.h"
 #include "dlgutils.h"
 #include "platform/common/windowdragger.h"
 #include "theme.h"
@@ -26,7 +27,7 @@ InputDlg::InputDlg(QWidget *parent)
     ui->setupUi(this);
 
     DlgUtils::clearStyleSheet(this);
-    setStyleSheet(DlgUtils::loadFileToString(widget_style));
+    setStyleSheet(APP::StyleHelper::loadFileToString(widget_style));
 
     ui->frameAcceptBtn->setFrameData(APP::Theme::instance()->isDarkTheme() ? frame_data.second : frame_data.first);
     ui->frameRejectBtn->setFrameData(APP::Theme::instance()->isDarkTheme() ? frame_data.second : frame_data.first);

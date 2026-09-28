@@ -26,7 +26,7 @@ add_library(onboarding STATIC
     onboarding_res.qrc
 )
 
-target_link_libraries(onboarding PUBLIC Qt::Widgets Qt::Concurrent libsync PersonalCloudResources customdialogs)
+target_link_libraries(onboarding PUBLIC Qt::Widgets Qt::Concurrent libsync PersonalCloudResources customdialogs customui)
 
 set_target_properties(onboarding PROPERTIES AUTOUIC ON AUTORCC ON)
 target_include_directories(onboarding PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")

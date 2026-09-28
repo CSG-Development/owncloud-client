@@ -7,6 +7,7 @@
 #include "windowdragger.h"
 
 #include "gui/customui/focusproxy.h"
+#include "gui/customui/stylehelper.h"
 
 #include <QLabel>
 #include <QLineEdit>
@@ -113,7 +114,7 @@ void BaseInputDlg::setupCommonLogic(const CommonDialogWidgets &widgets)
 
     auto updateThemeFunc = [this] {
         bool isDark = APP::Theme::instance()->isDarkTheme();
-        DlgUtils::setTheme(this, isDark);
+        APP::StyleHelper::setTheme(this, isDark);
         applyTheme(isDark);
         if (_ctrl)
             _ctrl->darkTheme.setValue(isDark);

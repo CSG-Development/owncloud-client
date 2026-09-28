@@ -17,7 +17,7 @@
 
 #include "accountfwd.h"
 
-#include <QWizardPage>
+#include "gui/folderwizard/folderwizardpage.h"
 
 
 namespace Ui {
@@ -25,12 +25,12 @@ class SpacesPage;
 }
 
 namespace APP {
-class SpacesPage : public QWizardPage
+class SpacesPage : public FolderWizardPage
 {
     Q_OBJECT
 
 public:
-    explicit SpacesPage(AccountPtr acc, QWidget *parent = nullptr);
+    explicit SpacesPage(FolderWizard *wizard);
     ~SpacesPage();
 
     bool isComplete() const override;

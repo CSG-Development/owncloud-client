@@ -377,7 +377,7 @@ int main(int argc, char **argv)
 
     // Create the (Q)Application instance:
     QApplication app(argc, argv);
-
+    APP::StyleHelper::applyApplicationStyleSheet();
 
     // TODO: Can't set this without breaking current config paths
     //    setOrganizationName(QLatin1String(APPLICATION_VENDOR));

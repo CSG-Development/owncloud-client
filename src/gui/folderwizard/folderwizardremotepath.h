@@ -19,10 +19,11 @@
 #pragma once
 
 
-#include "gui/folder.h"
-#include "gui/folderwizard/folderwizard_p.h"
+#include <QNetworkReply>
+#include <QTimer>
 
-#include <QWizardPage>
+#include "gui/folder.h"
+#include "gui/folderwizard/folderwizardpage.h"
 
 
 class QTreeWidgetItem;
@@ -40,7 +41,7 @@ class FolderWizardRemotePath : public FolderWizardPage
 {
     Q_OBJECT
 public:
-    explicit FolderWizardRemotePath(FolderWizardPrivate *parent);
+    explicit FolderWizardRemotePath(FolderWizard *wizard);
     ~FolderWizardRemotePath() override;
 
     bool isComplete() const override;

@@ -130,7 +130,8 @@ void ShareeModel::fetch(const QString &search, const ShareeSet &blacklist)
                     for (const auto &sharee : std::as_const(newSharees)) {
                         bool found = false;
                         for (const auto &blacklistSharee : std::as_const(_shareeBlacklist)) {
-                            if (sharee->type() == blacklistSharee->type() && sharee->shareWith() == blacklistSharee->shareWith()) {
+                            if (sharee->type() == blacklistSharee->type()
+                                && sharee->shareWith().compare(blacklistSharee->shareWith(), Qt::CaseInsensitive) == 0) {
                                 found = true;
                                 break;
                             }

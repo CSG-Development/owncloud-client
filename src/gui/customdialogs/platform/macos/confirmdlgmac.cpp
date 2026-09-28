@@ -1,5 +1,6 @@
 #include "confirmdlgmac.h"
 #include "ui_confirmdlgmac.h"
+#include "gui/customui/stylehelper.h"
 #include "platform/common/windowdragger.h"
 #include "dlgutils.h"
 #include "theme.h"
@@ -23,7 +24,7 @@ ConfirmDlgMac::ConfirmDlgMac(QWidget *parent)
 {
     ui->setupUi(this);
     DlgUtils::clearStyleSheet(this);
-    setStyleSheet(DlgUtils::loadFileToString(widget_style));
+    setStyleSheet(APP::StyleHelper::loadFileToString(widget_style));
 
     // Enable adjustSize() works properly (macos)
     if (layout())

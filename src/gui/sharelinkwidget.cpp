@@ -168,6 +168,7 @@ ShareLinkWidget::ShareLinkWidget(AccountPtr account,
     // Prepare sharing menu
 
     _linkContextMenu = new QMenu(this);
+    StyleHelper::applyMenuStyle(_linkContextMenu);
     connect(_linkContextMenu, &QMenu::triggered,
         this, &ShareLinkWidget::slotLinkContextMenuActionTriggered);
     _openLinkAction = _linkContextMenu->addAction(tr("Open link in browser"));

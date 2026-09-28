@@ -14,5 +14,5 @@ protected:
                       const QModelIndex &index) const override;
 
 private:
-    QColor _selectionColor{25, 118, 210, 61};
+    QColor _selectionColor;
 };

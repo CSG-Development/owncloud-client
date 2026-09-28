@@ -20,12 +20,12 @@
 #include "ui_folderwizardtargetpage.h"
 
 #include "folderwizard.h"
-#include "folderwizard_p.h"
 
 #include "gui/application.h"
 #include "gui/settingsdialog.h"
 #include "gui/folderman.h"
 #include "gui/customui/stylehelper.h"
+#include "gui/customui/wizardtreewidget.h"
 #include "gui/customdialogs/custominputdlg.h"
 
 #include "libsync/theme.h"
@@ -37,8 +37,8 @@
 
 using namespace APP;
 
-FolderWizardRemotePath::FolderWizardRemotePath(FolderWizardPrivate *parent)
-    : FolderWizardPage(parent)
+FolderWizardRemotePath::FolderWizardRemotePath(FolderWizard *wizard)
+    : FolderWizardPage(wizard)
     , _ui(new Ui_FolderWizardTargetPage)
     , _warnWasVisible(false)
 
@@ -75,7 +75,7 @@ void FolderWizardRemotePath::slotAddRemoteFolder()
         parent = current->data(0, Qt::UserRole).toString();
     }
 
-    CustomInputDlg dlg(APP::ocApp()->gui()->settingsDialog());
+    CustomInputDlg dlg(window());
     dlg.setHeaderText(tr("Create Remote Folder"))
         .setPromptText(tr("Enter the name of the new folder to be created below '%1':").arg(parent))
         .setAcceptButtonText(tr("OK"))
@@ -102,7 +102,7 @@ void FolderWizardRemotePath::slotCreateRemoteFolder(const QString &folder)
     // clean user input
     fullPath = QDir::cleanPath(QStringLiteral("%1/%2").arg(fullPath, folder)).replace(QRegularExpression(QStringLiteral("/+")), QStringLiteral("/"));
 
-    MkColJob *job = new MkColJob(folderWizardPrivate()->accountState()->account(), folderWizardPrivate()->davUrl(), fullPath, {}, this);
+    MkColJob *job = new MkColJob(folderWizard()->accountState()->account(), folderWizard()->davUrl(), fullPath, {}, this);
     /* check the PersonalCloud configuration file and query the PersonalCloud */
     connect(job, &MkColJob::finishedWithoutError,
         this, &FolderWizardRemotePath::slotCreateRemoteFolderFinished);
@@ -122,7 +122,7 @@ void FolderWizardRemotePath::slotCreateRemoteFolderFinished()
 void FolderWizardRemotePath::slotHandleMkdirNetworkError(QNetworkReply *reply)
 {
     qCWarning(lcFolderWizard) << "webdav mkdir request failed:" << reply->error();
-    if (!folderWizardPrivate()->accountState()->account()->credentials()->stillValid(reply)) {
+    if (!folderWizard()->accountState()->account()->credentials()->stillValid(reply)) {
         showWarn(tr("Authentication failed accessing %1").arg(Theme::instance()->appNameGUI()));
     } else {
         showWarn(tr("Failed to create the folder on %1. Please check manually.")
@@ -220,13 +220,13 @@ const QString &FolderWizardRemotePath::targetPath() const
 
 void FolderWizardRemotePath::slotUpdateDirectories(const QStringList &list)
 {
-    QString webdavFolder = folderWizardPrivate()->davUrl().path();
+    QString webdavFolder = folderWizard()->davUrl().path();
 
     QTreeWidgetItem *root = _ui->folderTreeWidget->topLevelItem(0);
     if (!root) {
         root = new QTreeWidgetItem(_ui->folderTreeWidget);
         root->setText(0, Theme::instance()->appNameGUI());
-        root->setIcon(0, Theme::instance()->applicationIcon());
+        root->setIcon(0, WizardTreeWidget::rootIcon());
         root->setToolTip(0, tr("Choose this to sync the entire account"));
         root->setData(0, Qt::UserRole, QStringLiteral("/"));
     }
@@ -304,7 +304,7 @@ void FolderWizardRemotePath::slotTypedPathFound(const QStringList &subpaths)
 
 PropfindJob *FolderWizardRemotePath::runPropFindJob(const QString &path)
 {
-    PropfindJob *job = new PropfindJob(folderWizardPrivate()->accountState()->account(), folderWizardPrivate()->davUrl(), path, PropfindJob::Depth::One, this);
+    PropfindJob *job = new PropfindJob(folderWizard()->accountState()->account(), folderWizard()->davUrl(), path, PropfindJob::Depth::One, this);
     job->setProperties({ QByteArrayLiteral("resourcetype") });
     connect(job, &PropfindJob::directoryListingSubfolders,
         this, &FolderWizardRemotePath::slotUpdateDirectories);
@@ -335,7 +335,7 @@ bool FolderWizardRemotePath::isComplete() const
     bool ok = true;
 
     for (auto *f : std::as_const(FolderMan::instance()->folders())) {
-        if (f->accountState()->account() != folderWizardPrivate()->accountState()->account()) {
+        if (f->accountState()->account() != folderWizard()->accountState()->account()) {
             continue;
         }
         QString curDir = f->remotePathTrailingSlash();
@@ -353,7 +353,7 @@ bool FolderWizardRemotePath::isComplete() const
         }
     }
 
-    showWarn(FolderWizardPrivate::formatWarnings(warnStrings, !ok));
+    showWarn(FolderWizard::formatWarnings(warnStrings, !ok));
     return ok;
 }
 

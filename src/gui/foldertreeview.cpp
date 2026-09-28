@@ -1,4 +1,5 @@
 #include "foldertreeview.h"
+#include "apppalette.h"
 #include "folderstatusmodel.h"
 #include <QPainter>
 #include <QPainterPath>
@@ -36,6 +37,7 @@ void drawChevron(QPainter *painter, const QRect &area, bool pointDown, const QCo
 
 FolderTreeView::FolderTreeView(QWidget *parent)
     : QTreeView(parent)
+    , _selectionColor(APP::AppPalette::light(APP::ColorToken::SelectionBackground))
 {
 }
 

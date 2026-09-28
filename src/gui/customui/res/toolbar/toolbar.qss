@@ -1,0 +1,11 @@
+#toolBar[theme="light"] {
+    background-color: @toolbarBackgroundLight;
+    border: none;
+    border-bottom: 1px solid @toolbarBorderLight;
+}
+
+#toolBar[theme="dark"] {
+    background-color: @toolbarBackgroundDark;
+    border: none;
+    border-bottom: 1px solid @toolbarBorderDark;
+}

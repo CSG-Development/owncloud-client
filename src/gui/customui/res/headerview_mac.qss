@@ -1,0 +1,58 @@
+QHeaderView {
+    border: none;
+}
+
+QHeaderView::section {
+    border: none;
+    padding: 0 12px;
+    min-height: 32px;
+}
+
+QHeaderView[theme="light"]::section {
+    background-color: #E7E7E7;
+    color: #191919;
+    border-right: 1px solid #E7E7E7;
+}
+
+QHeaderView[theme="light"]::section:disabled {
+    color: #7A7A7A;
+}
+
+QHeaderView[theme="dark"]::section {
+    background-color: #4F4F4F;
+    color: #F6F6F6;
+    border-right: 1px solid #4F4F4F;
+}
+
+QHeaderView[theme="dark"]::section:disabled {
+    color: #A2A2A2;
+}
+
+QHeaderView::section:last {
+    border-right: none;
+}
+
+QHeaderView::down-arrow,
+QHeaderView::up-arrow {
+    width: 12px;
+    height: 12px;
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    right: 12px;
+}
+
+QHeaderView[theme="light"]::down-arrow {
+    image: url(:/res/header_chevron_down_light.svg);
+}
+
+QHeaderView[theme="light"]::up-arrow {
+    image: url(:/res/header_chevron_up_light.svg);
+}
+
+QHeaderView[theme="dark"]::down-arrow {
+    image: url(:/res/header_chevron_down_dark.svg);
+}
+
+QHeaderView[theme="dark"]::up-arrow {
+    image: url(:/res/header_chevron_up_dark.svg);
+}

@@ -124,6 +124,8 @@ public:
     void setProxyType(
         QNetworkProxy::ProxyType proxyType, const QString &host = QString(), int port = 0, bool needsAuth = false, const QString &user = QString());
 
+    void setProxyHostName(const QString &host);
+
     int proxyType() const;
     QString proxyHostName() const;
     int proxyPort() const;

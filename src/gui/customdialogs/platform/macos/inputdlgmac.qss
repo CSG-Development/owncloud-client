@@ -78,21 +78,21 @@
 
 /* Accept button */
 [theme="light"] #btnAccept {
-    border: 1px solid rgb(25, 118, 210);
-    background: rgb(25, 118, 210);
-    color: rgba(255, 255, 255, 0.87);
+    border: 1px solid @primaryLight;
+    background: @primaryLight;
+    color: @dialogOnPrimaryLight;
 }
 
 [theme="light"] #btnAccept:hover {
-    border: 1px solid rgb(30, 136, 229);
-    background: rgb(30, 136, 229);
-    color: rgba(255, 255, 255, 0.87);
+    border: 1px solid @primaryHoverLight;
+    background: @primaryHoverLight;
+    color: @dialogOnPrimaryLight;
 }
 
 [theme="light"] #btnAccept:pressed {
-    border: 1px solid rgb(20, 92, 164);
-    background: rgb(20, 92, 164);
-    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid @primaryPressedLight;
+    background: @primaryPressedLight;
+    color: @dialogOnPrimaryPressedLight;
 }
 
 /* Reject button */
@@ -124,7 +124,7 @@
 [theme="light"] #edText:focus {
     background: rgba(255, 255, 255, 0.7);
     color: rgba(0, 0, 0, 0.87);
-    border: 1px solid rgb(25, 118, 210);
+    border: 1px solid @inputFocusBorderLight;
 }
 
 [theme="light"] #edText:disabled {
@@ -152,21 +152,21 @@
 
 /* Accept button */
 [theme="dark"] #btnAccept {
-    border: 1px solid rgba(100, 181, 246, 1);
-    background: rgb(100, 181, 246);
-    color: rgba(0, 0, 0, 0.87);
+    border: 1px solid @primaryDark;
+    background: @primaryDark;
+    color: @dialogOnPrimaryDark;
 }
 
 [theme="dark"] #btnAccept:hover {
-    border: 1px solid rgb(144, 202, 249);
-    background: rgb(144, 202, 249);
-    color: rgba(0, 0, 0, 0.87);
+    border: 1px solid @primaryHoverDark;
+    background: @primaryHoverDark;
+    color: @dialogOnPrimaryDark;
 }
 
 [theme="dark"] #btnAccept:pressed {
-    border: 1px solid rgb(53, 158, 243);
-    background: rgb(53, 158, 243);
-    color: rgba(0, 0, 0, 0.6);
+    border: 1px solid @primaryPressedDark;
+    background: @primaryPressedDark;
+    color: @dialogOnPrimaryPressedDark;
 }
 
 /* Reject button */
@@ -198,7 +198,7 @@
 [theme="dark"] #edText:focus {
     background: rgba(97, 97, 97, 0.7);
     color: rgba(255, 255, 255, 0.87);
-    border: 1px solid rgb(100, 181, 246);
+    border: 1px solid @inputFocusBorderDark;
 }
 
 [theme="dark"] #edText:disabled {

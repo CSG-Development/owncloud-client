@@ -56,6 +56,8 @@ add_library(${LIBRARY_NAME} STATIC
     deviceunreachablebanner.cpp
     deviceunreachablebanner.h
     deviceunreachablebanner.ui
+    wizardtreewidget.cpp
+    wizardtreewidget.h
 )
 
 target_link_libraries(${LIBRARY_NAME} PUBLIC 

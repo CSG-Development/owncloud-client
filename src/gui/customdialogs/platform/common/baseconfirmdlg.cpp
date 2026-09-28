@@ -7,6 +7,7 @@
 #include "windowdragger.h"
 
 #include "gui/customui/focusproxy.h"
+#include "gui/customui/stylehelper.h"
 
 #include <QLabel>
 #include <QLayout>
@@ -124,7 +125,7 @@ void BaseConfirmDlg::setupCommonLogic(const CommonDialogWidgets &widgets)
     auto updateThemeFunc = [this] {
         bool isDark = APP::Theme::instance()->isDarkTheme();
         applyTheme(isDark);
-        DlgUtils::setTheme(this, isDark);
+        APP::StyleHelper::setTheme(this, isDark);
         if (_ctrl)
             _ctrl->darkTheme.setValue(isDark);
         update();

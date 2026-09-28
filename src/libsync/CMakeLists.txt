@@ -11,6 +11,8 @@ set_package_properties(LibreGraphAPI PROPERTIES
 
 set(SOURCES
     account.cpp
+    apppalette.cpp
+    apppalette.h
     bandwidthmanager.cpp
     capabilities.cpp
     cookiejar.cpp

@@ -1,4 +1,5 @@
 #include "tool_button_dots.h"
+#include "apppalette.h"
 
 #include <QPainterPath>
 #include <QPushButton>
@@ -7,17 +8,17 @@
 #include <QStyleOption>
 #include <QDebug>
 
-QColor tbFrameFocused(bool isDark) {return isDark ? QColor(0xFF,0xFF,0xFF) : QColor(0x21,0x21,0x21);}
+QColor tbFrameFocused(bool isDark) {return APP::AppPalette::color(APP::ColorToken::ButtonFrameFocused, isDark);}
 
-QColor tbFrameNormal(bool isDark) {return isDark ? QColor(0xFF,0xFF,0xFF,0x18) : QColor(0xCB,0xCD,0xD3);}
-QColor tbFramePressed(bool isDark) {return isDark ? QColor(0xFF,0xFF,0xFF,0x12) : QColor(0xCB,0xCD,0xD3);}
-QColor tbFrameHovered(bool isDark) {return isDark ? QColor(0xFF,0xFF,0xFF,0x18) : QColor(0xCB,0xCD,0xD3);}
-QColor tbFrameDisabled(bool isDark) {return isDark ? QColor(0xFF,0xFF,0xFF,0x12) : QColor(0xCB,0xCD,0xD3);}
+QColor tbFrameNormal(bool isDark) {return APP::AppPalette::color(APP::ColorToken::ButtonFrameNormal, isDark);}
+QColor tbFramePressed(bool isDark) {return APP::AppPalette::color(APP::ColorToken::ButtonFramePressed, isDark);}
+QColor tbFrameHovered(bool isDark) {return APP::AppPalette::color(APP::ColorToken::ButtonFrameHovered, isDark);}
+QColor tbFrameDisabled(bool isDark) {return APP::AppPalette::color(APP::ColorToken::ButtonFrameDisabled, isDark);}
 
-QColor tbBackgroundNormal(bool isDark) {return isDark ? QColor(0xFF,0xFF,0xFF,0x0F) : QColor(0xFF,0xFF,0xFF,0xB2);}
-QColor tbBackgroundPressed(bool isDark) {return isDark ? QColor(0xFF,0xFF,0xFF,0x08) : QColor(0x61,0x61,0x61,0x08);}
-QColor tbBackgroundHovered(bool isDark) {return isDark ? QColor(0xFF,0xFF,0xFF,0x15) : QColor(0x61,0x61,0x61,0x1F);}
-QColor tbBackgroundDisabled(bool isDark) {return isDark ? QColor(0,0,0,0) : QColor(0xF6,0xF6,0xF6);}
+QColor tbBackgroundNormal(bool isDark) {return APP::AppPalette::color(APP::ColorToken::ButtonBackgroundNormal, isDark);}
+QColor tbBackgroundPressed(bool isDark) {return APP::AppPalette::color(APP::ColorToken::ButtonBackgroundPressed, isDark);}
+QColor tbBackgroundHovered(bool isDark) {return APP::AppPalette::color(APP::ColorToken::ButtonBackgroundHovered, isDark);}
+QColor tbBackgroundDisabled(bool isDark) {return APP::AppPalette::color(APP::ColorToken::ButtonBackgroundDisabled, isDark);}
 
 namespace {
 #ifdef Q_OS_WINDOWS
@@ -31,12 +32,12 @@ namespace {
     QColor dotsColorForState(const QStyleOptionToolButton *opt, bool isDark)
     {
         if (!(opt->state & QStyle::State_Enabled))
-            return isDark ? QColor(0x9E, 0x9E, 0x9E) : QColor(0xBB, 0xBB, 0xBB);
+            return APP::AppPalette::color(APP::ColorToken::IconButtonDisabled, isDark);
         if (opt->state & QStyle::State_Sunken)
-            return isDark ? QColor(0x15, 0x65, 0xC0) : QColor(0x1E, 0x88, 0xE5);
+            return APP::AppPalette::color(APP::ColorToken::IconButtonPressed, isDark);
         if (opt->state & QStyle::State_MouseOver)
-            return isDark ? QColor(0x42, 0xA5, 0xF5) : QColor(0x14, 0x5C, 0xA4);
-        return isDark ? QColor(0x1E, 0x88, 0xE5) : QColor(0x19, 0x76, 0xD2);
+            return APP::AppPalette::color(APP::ColorToken::IconButtonHover, isDark);
+        return APP::AppPalette::color(APP::ColorToken::IconButton, isDark);
     }
 }
 

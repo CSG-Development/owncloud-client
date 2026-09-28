@@ -40,7 +40,7 @@
 }
 
 [theme="light"] #btnRetry {
-    color: rgba(25, 118, 210, 1);
+    color: @textButtonLight;
 }
 
 [theme="dark"] #cardFrame {
@@ -54,5 +54,5 @@
 }
 
 [theme="dark"] #btnRetry {
-    color: rgba(100, 181, 246, 1);
+    color: @textButtonDark;
 }

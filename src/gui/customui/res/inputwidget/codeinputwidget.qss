@@ -1,0 +1,41 @@
+[theme="light"] #ed1,
+[theme="light"] #ed2,
+[theme="light"] #ed3,
+[theme="light"] #ed4,
+[theme="light"] #ed5,
+[theme="light"] #ed6 {
+    border-radius: 20px;
+    border: 1px solid #CBCDD3;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+[theme="light"] #ed1:focus,
+[theme="light"] #ed2:focus,
+[theme="light"] #ed3:focus,
+[theme="light"] #ed4:focus,
+[theme="light"] #ed5:focus,
+[theme="light"] #ed6:focus {
+    border: 3px solid @inputFocusBorderLight;
+}
+
+[theme="dark"] #ed1,
+[theme="dark"] #ed2,
+[theme="dark"] #ed3,
+[theme="dark"] #ed4,
+[theme="dark"] #ed5,
+[theme="dark"] #ed6 {
+    border-radius: 20px;
+    border: 1px solid rgba(97, 97, 97, 1);
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.87);
+}
+
+[theme="dark"] #ed1:focus,
+[theme="dark"] #ed2:focus,
+[theme="dark"] #ed3:focus,
+[theme="dark"] #ed4:focus,
+[theme="dark"] #ed5:focus,
+[theme="dark"] #ed6:focus {
+    border: 3px solid @inputFocusBorderDark;
+}

@@ -19,7 +19,6 @@
 #include "folderwizardselectivesync.h"
 
 #include "folderwizard.h"
-#include "folderwizard_p.h"
 
 #include "gui/application.h"
 #include "gui/askexperimentalvirtualfilesfeaturemessagebox.h"
@@ -37,11 +36,12 @@
 
 using namespace APP;
 
-FolderWizardSelectiveSync::FolderWizardSelectiveSync(FolderWizardPrivate *parent)
-    : FolderWizardPage(parent)
+FolderWizardSelectiveSync::FolderWizardSelectiveSync(FolderWizard *wizard)
+    : FolderWizardPage(wizard)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
-    _selectiveSync = new SelectiveSyncWidget(folderWizardPrivate()->accountState()->account(), this);
+    _selectiveSync = new SelectiveSyncWidget(folderWizard()->accountState()->account(), this);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(_selectiveSync);
 
     const auto vfsMode = VfsPluginManager::instance().bestAvailableVfsMode();
@@ -66,13 +66,12 @@ FolderWizardSelectiveSync::~FolderWizardSelectiveSync()
 
 void FolderWizardSelectiveSync::initializePage()
 {
-    QString targetPath = static_cast<FolderWizard *>(wizard())->d_func()->remotePath();
+    QString targetPath = folderWizard()->remotePath();
     QString alias = QFileInfo(targetPath).fileName();
     if (alias.isEmpty())
         alias = Theme::instance()->appName();
-    _selectiveSync->setDavUrl(dynamic_cast<FolderWizard *>(wizard())->d_func()->davUrl());
+    _selectiveSync->setDavUrl(folderWizard()->davUrl());
     _selectiveSync->setFolderInfo(targetPath, alias);
-    QWizardPage::initializePage();
 }
 
 bool FolderWizardSelectiveSync::validatePage()
@@ -93,7 +92,7 @@ void FolderWizardSelectiveSync::virtualFilesCheckboxClicked()
     // The click has already had an effect on the box, so if it's
     // checked it was newly activated.
     if (_virtualFilesCheckBox->isChecked()) {
-        auto *messageBox = CreateExperimentalVirtualFilesFeatureMessageBox(ocApp()->gui()->settingsDialog());
+        auto *messageBox = CreateExperimentalVirtualFilesFeatureMessageBox(window());
         connect(messageBox, &CustomMessageBox::rejected, this, [this]() {
             _virtualFilesCheckBox->setChecked(false);
         });

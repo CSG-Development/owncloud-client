@@ -43,8 +43,7 @@ DeviceUnreachableBanner::~DeviceUnreachableBanner()
 
 void DeviceUnreachableBanner::updateStyles(bool isDark)
 {
-    setStyleSheet(APP::StyleHelper::loadFileToString(widgetStyle));
-    APP::StyleHelper::setTheme(this, isDark);
+    APP::StyleHelper::applyThemedStyleSheet(this, widgetStyle, isDark);
 
     refreshGeometryForParent();
 }

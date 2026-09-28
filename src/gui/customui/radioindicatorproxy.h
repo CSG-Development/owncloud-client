@@ -10,11 +10,27 @@ class RadioIndicatorProxy : public QProxyStyle
 {
 public:
     using QProxyStyle::QProxyStyle;
+    using QProxyStyle::polish;
+    using QProxyStyle::unpolish;
 
     explicit RadioIndicatorProxy(QWidget* parent = nullptr)
         : QProxyStyle()
     {
         setParent(parent);
+    }
+
+    void polish(QWidget* widget) override
+    {
+        QProxyStyle::polish(widget);
+        if (qobject_cast<QRadioButton*>(widget))
+            widget->setAttribute(Qt::WA_Hover, true);
+    }
+
+    void unpolish(QWidget* widget) override
+    {
+        if (qobject_cast<QRadioButton*>(widget))
+            widget->setAttribute(Qt::WA_Hover, false);
+        QProxyStyle::unpolish(widget);
     }
 
     int pixelMetric(PixelMetric metric, const QStyleOption* option = nullptr, const QWidget* widget = nullptr) const override

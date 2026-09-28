@@ -1,13 +1,9 @@
 #include "progressindicator.h"
+#include "apppalette.h"
 #include "theme.h"
 
 #include <QPainter>
 #include <QTimer>
-
-namespace {
-QPair<QColor,QColor> fgColor = {QColor("#1976D2"), QColor("#64B5F6")};
-QPair<QColor,QColor> bgColor = {QColor("#E0E0E0"), QColor("#616161")};
-}
 
 ProgressIndicator::ProgressIndicator(QWidget *parent)
     : QWidget(parent)
@@ -68,12 +64,12 @@ void ProgressIndicator::paintEvent(QPaintEvent *event)
     // Background arc: complement of foreground with gaps on both sides
     double bgStartAngle = startAngle + spanAngle + gapAngle;
     double bgSpanAngle = 360.0 - spanAngle - 2 * gapAngle;
-    pen.setColor(isDark ? bgColor.second : bgColor.first);
+    pen.setColor(APP::AppPalette::color(APP::ColorToken::SpinnerTrack, isDark));
     painter.setPen(pen);
     painter.drawArc(arcRect, bgStartAngle * 16, bgSpanAngle * 16);
 
     // Foreground arc
-    pen.setColor(isDark ? fgColor.second : fgColor.first);
+    pen.setColor(APP::AppPalette::color(APP::ColorToken::ProgressFill, isDark));
     painter.setPen(pen);
     painter.drawArc(arcRect, startAngle * 16, spanAngle * 16);
 }

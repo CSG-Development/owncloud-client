@@ -14,42 +14,40 @@
 
 #pragma once
 
-#include <QNetworkReply>
-#include <QTimer>
-#include <QWizard>
+#include <QList>
+#include <QLoggingCategory>
+#include <QSet>
+#include <QUrl>
+#include <QWidget>
 
 #include "accountfwd.h"
 
 #include "gui/folder.h"
 
-class QTreeWidgetItem;
-
-class Ui_FolderWizardTargetPage;
+class QStackedWidget;
 
 namespace APP {
 
-class FolderWizardPrivate;
+Q_DECLARE_LOGGING_CATEGORY(lcFolderWizard)
+
+class FolderWizardPage;
+class SpacesPage;
+class FolderWizardLocalPath;
+class FolderWizardRemotePath;
+class FolderWizardSelectiveSync;
 
 /**
  * @brief The FolderWizard class
  * @ingroup gui
  */
-class FolderWizard : public QWizard
+class FolderWizard : public QWidget
 {
     Q_OBJECT
 public:
-    enum PageType {
-        Page_Space,
-        Page_Source,
-        Page_Target,
-        Page_SelectiveSync
-    };
-    Q_ENUM(PageType);
-
     struct Result
     {
         /***
--         * The webdav url for the sync connection.
+         * The webdav url for the sync connection.
          */
         QUrl davUrl;
 
@@ -84,17 +82,44 @@ public:
     };
 
     explicit FolderWizard(const AccountStatePtr &account, QWidget *parent = nullptr);
-    ~FolderWizard() override;
 
     Result result();
 
-    bool eventFilter(QObject *watched, QEvent *event) override;
-    void resizeEvent(QResizeEvent *event) override;
+    bool canGoBack() const;
+    bool canGoNext() const;
+    bool isLastPage() const;
 
-    Q_DECLARE_PRIVATE(FolderWizard);
+    void back();
+    void next();
+
+    const AccountStatePtr &accountState() const;
+    QString initialLocalPath() const;
+    QString remotePath() const;
+    uint32_t priority() const;
+    QString defaultSyncRoot() const;
+    QUrl davUrl() const;
+    QString spaceId() const;
+    bool useVirtualFiles() const;
+    QString displayName() const;
+
+    static QString formatWarnings(const QStringList &warnings, bool isError = false);
+
+Q_SIGNALS:
+    void navigationChanged();
+    void completed();
 
 private:
-    QScopedPointer<FolderWizardPrivate> d_ptr;
+    void addPage(FolderWizardPage *page);
+    void showPage(int index);
+    FolderWizardPage *currentPage() const;
+
+    AccountStatePtr _account;
+    QStackedWidget *_stack = nullptr;
+    QList<FolderWizardPage *> _pages;
+    SpacesPage *_spacesPage = nullptr;
+    FolderWizardLocalPath *_sourcePage = nullptr;
+    FolderWizardRemotePath *_targetPage = nullptr;
+    FolderWizardSelectiveSync *_selectiveSyncPage = nullptr;
 };
 
 } // namespace APP

@@ -30,8 +30,8 @@
 [theme="light"] #lblHeader,
 [theme="light"] #lblText {color: rgba(0, 0, 0, 0.87);}
 [theme="light"] #btnAccept {
-    color: rgba(255, 255, 255, 0.87);
-    background: rgba(25, 118, 210, 1);
+    color: @dialogOnPrimaryLight;
+    background: @primaryLight;
     border: none;
 }
 [theme="light"] #btnReject {

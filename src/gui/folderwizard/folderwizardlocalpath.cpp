@@ -20,7 +20,6 @@
 #include "ui_folderwizardsourcepage.h"
 
 #include "folderwizard.h"
-#include "folderwizard_p.h"
 
 #include "gui/folderman.h"
 #include "gui/customui/stylehelper.h"
@@ -31,15 +30,15 @@
 
 using namespace APP;
 
-FolderWizardLocalPath::FolderWizardLocalPath(FolderWizardPrivate *parent)
-    : FolderWizardPage(parent)
+FolderWizardLocalPath::FolderWizardLocalPath(FolderWizard *wizard)
+    : FolderWizardPage(wizard)
     , _ui(new Ui_FolderWizardSourcePage)
 {
     _ui->setupUi(this);
 
     StyleHelper::applyPushButtonsStyle(this);
 
-    registerField(QStringLiteral("sourceFolder*"), _ui->localFolderLineEdit);
+    connect(_ui->localFolderLineEdit, &QLineEdit::textChanged, this, &FolderWizardPage::completeChanged);
     connect(_ui->localFolderChooseBtn, &QAbstractButton::clicked, this, &FolderWizardLocalPath::slotChooseLocalFolder);
     _ui->localFolderChooseBtn->setToolTip(tr("Click to select a local folder to sync."));
 
@@ -57,7 +56,7 @@ FolderWizardLocalPath::~FolderWizardLocalPath()
 void FolderWizardLocalPath::initializePage()
 {
     _ui->warnLabel->hide();
-    _ui->localFolderLineEdit->setText(QDir::toNativeSeparators(folderWizardPrivate()->initialLocalPath()));
+    _ui->localFolderLineEdit->setText(QDir::toNativeSeparators(folderWizard()->initialLocalPath()));
 }
 
 QString FolderWizardLocalPath::localPath() const
@@ -81,7 +80,7 @@ bool FolderWizardLocalPath::isComplete() const
         _ui->warnLabel->clear();
     } else {
         _ui->warnLabel->show();
-        QString warnings = FolderWizardPrivate::formatWarnings(warnStrings);
+        QString warnings = FolderWizard::formatWarnings(warnStrings);
         _ui->warnLabel->setText(warnings);
     }
     return isOk;
