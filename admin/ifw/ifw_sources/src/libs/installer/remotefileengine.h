@@ -1,0 +1,111 @@
+/* Copyright (C) 2026 The Qt Company Ltd.
+ *
+ * SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
+*/
+
+#ifndef REMOTEFILEENGINE_H
+#define REMOTEFILEENGINE_H
+
+#include "remoteobject.h"
+
+#include <QtCore/private/qabstractfileengine_p.h>
+#include <QtCore/private/qfsfileengine_p.h>
+
+namespace QInstaller {
+
+class INSTALLER_EXPORT RemoteFileEngineHandler : public QAbstractFileEngineHandler
+{
+    Q_DISABLE_COPY(RemoteFileEngineHandler)
+
+public:
+    RemoteFileEngineHandler() : QAbstractFileEngineHandler() {}
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    std::unique_ptr<QAbstractFileEngine> create(const QString &fileName) const override;
+#else
+    QAbstractFileEngine* create(const QString &fileName) const override;
+#endif
+};
+
+class RemoteFileEngine : public RemoteObject, public QAbstractFileEngine
+{
+    Q_DISABLE_COPY(RemoteFileEngine)
+
+public:
+    RemoteFileEngine();
+    ~RemoteFileEngine();
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
+    bool open(QIODevice::OpenMode mode) override;
+#else
+    bool open(QIODevice::OpenMode mode,
+              std::optional<QFile::Permissions> permissions = std::nullopt) override;
+#endif
+    bool close() override;
+    bool flush() override;
+    bool syncToDisk() override;
+    qint64 size() const override;
+    qint64 pos() const override;
+    bool seek(qint64 offset) override;
+    bool isSequential() const override;
+    bool remove() override;
+    bool copy(const QString &newName) override;
+    bool rename(const QString &newName) override;
+    bool renameOverwrite(const QString &newName) override;
+    bool link(const QString &newName) override;
+#if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
+    bool mkdir(const QString &dirName, bool createParentDirectories) const override;
+#else
+    bool mkdir(const QString &dirName, bool createParentDirectories,
+               std::optional<QFile::Permissions> permissions = std::nullopt) const override;
+#endif
+    bool rmdir(const QString &dirName, bool recurseParentDirectories) const override;
+    bool setSize(qint64 size) override;
+    bool caseSensitive() const override;
+    bool isRelativePath() const override;
+    FileFlags fileFlags(FileFlags type = FileInfoAll) const override;
+    bool setPermissions(uint perms) override;
+    QString fileName(FileName file = DefaultName) const override;
+    uint ownerId(FileOwner owner) const override;
+    QString owner(FileOwner owner) const override;
+#if QT_VERSION < QT_VERSION_CHECK(6, 7, 0)
+    QDateTime fileTime(FileTime time) const override;
+#else
+    QDateTime fileTime(QFile::FileTime time) const override;
+#endif
+    void setFileName(const QString &fileName) override;
+    int handle() const override;
+    bool atEnd() const;
+    uchar *map(qint64, qint64, QFile::MemoryMapFlags) { return 0; }
+    bool unmap(uchar *) { return true; }
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    IteratorUniquePtr beginEntryList(const QString &path, QDirListing::IteratorFlags filters, const QStringList &filterNames) override;
+    IteratorUniquePtr endEntryList() override;
+#if QT_VERSION < QT_VERSION_CHECK(6, 11, 0)
+    QStringList entryList(QDirListing::IteratorFlags filters, const QStringList &filterNames) const override;
+#endif
+#else
+    Iterator *beginEntryList(QDir::Filters filters, const QStringList &filterNames) override;
+    Iterator *endEntryList() override;
+#endif
+#if QT_VERSION < QT_VERSION_CHECK(6, 11, 0)
+    QStringList entryList(QDir::Filters filters, const QStringList &filterNames) const override;
+#endif
+
+    qint64 read(char *data, qint64 maxlen) override;
+    qint64 readLine(char *data, qint64 maxlen) override;
+    qint64 write(const char *data, qint64 len) override;
+
+    QFile::FileError error() const;
+    QString errorString() const;
+
+    bool extension(Extension extension, const ExtensionOption *option = 0,
+        ExtensionReturn *output = 0) override;
+    bool supportsExtension(Extension extension) const override;
+
+private:
+    QFSFileEngine m_fileEngine;
+};
+
+} // namespace QInstaller
+
+#endif // REMOTEFILEENGINE_H
